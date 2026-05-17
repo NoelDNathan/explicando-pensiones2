@@ -67,6 +67,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Buscar una fuente tabular institucional que separe pensiones de otras prestaciones sociales antes de 1995; si no existe, explicar la discontinuidad entre la serie larga BDMACRO y la serie presupuestaria de Seguridad Social 1995-2025P.
 - Elegir las siguientes metricas: numero de pensionistas, pension media, ratio afiliados/pensionista, deficit o transferencias del Estado.
 - Documentar en la narrativa que afiliacion media no equivale estrictamente a personas unicas, porque mide afiliaciones en alta laboral.
+- Para previsiones futuras de trabajadores/cotizantes, no usar una serie inventada ni interpolada: localizar una fuente institucional tabular de cotizantes/empleo proyectado, o usar como proxy separado las proyecciones de empleo/actividad/poblacion en edad de trabajar con nota metodologica.
 - Decidir si la web mostrara solo ambos sexos o tambien la brecha hombres/mujeres en esperanza de vida.
 - Revisar periodicamente Eurostat para posibles revisiones de la serie de deuda publica, especialmente el dato de 2025.
 - Decidir como se mostrara la inflacion en la web: grafico mensual completo, medias anuales, o ambas.
