@@ -199,6 +199,27 @@
 - descripcion breve: serie oficial de gasto presupuestario por rubricas economicas, organizada en cuatro ficheros que cubren desde 1995 hasta el presupuesto prorrogado 2025P.
 - uso previsto en la web: construir una serie larga de gasto en pensiones/prestaciones economicas de la Seguridad Social, manteniendo separados los datos brutos de cualquier tratamiento posterior.
 
+## Seguridad Social - Afiliacion media total al sistema
+
+- nombre de la fuente: Serie de afiliacion Media por regimenes 2001 - 2026
+- institucion: Seguridad Social
+- URL: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/Estadisticas/EST8/EST10/EST290/EST291
+- fecha de descarga: 2026-05-18
+- fecha de actualizacion indicada por la pagina: 2026-05-05
+- periodo cubierto en bruto: 2001M01-2026M04
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: XLSX
+- archivos brutos:
+  - `data/raw/seguridad-social/afiliacion/2026-05-18_seguridad-social_pagina-afiliados-medios-totales.html`
+  - `data/raw/seguridad-social/afiliacion/2026-05-18_seguridad-social_serie-afiliacion-media-regimenes_2001-2026-04.xlsx`
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-05-18_seguridad-social_afiliacion-media-total-sistema_mensual_2001-2026.csv`
+  - `data/processed/seguridad-social/2026-05-18_seguridad-social_afiliacion-media-total-sistema_anual_2001-2026.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Seguridad Social
+- descripcion breve: afiliaciones medias mensuales en alta laboral por regimenes; se extrae la columna `TOTAL SISTEMA` como aproximacion oficial al numero de trabajadores afiliados/cotizantes al sistema.
+- uso previsto en la web: construir la serie de trabajadores que aportan al sistema y calcular ratios como afiliados por pensionista, manteniendo separada la serie observada de previsiones o estimaciones.
+- nota metodologica: la fuente mide afiliaciones medias, no personas unicas; una persona con varias altas puede aparecer mas de una vez.
+
 ## IGAE/SEPG - BDMACRO, prestaciones sociales de la Seguridad Social
 
 - nombre de la fuente: Series macroeconomicas anuales BDMACRO. Abril 2026

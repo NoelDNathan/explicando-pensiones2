@@ -128,3 +128,26 @@
   - pensionistas: 2022-2070.
   - financiacion: 2020-2070.
 - Nota de definicion: estas filas son previsiones o escenarios publicados por AIReF en marzo de 2025. Deben mostrarse separadas de los datos observados y con etiqueta de fuente/escenario.
+
+## Seguridad Social - afiliacion media total al sistema 2001-2026
+
+- Fecha de transformacion: 2026-05-18.
+- Fuente bruta: `data/raw/seguridad-social/afiliacion/2026-05-18_seguridad-social_serie-afiliacion-media-regimenes_2001-2026-04.xlsx`.
+- Hoja utilizada: primera hoja del libro, `Datos totales de afiliados Medios en alta por Regimenes`.
+- Columnas utilizadas:
+  - `A`: periodo mensual.
+  - `N`: total sistema.
+- Transformacion aplicada:
+  - extraccion de las filas mensuales desde enero de 2001 hasta abril de 2026;
+  - conversion del periodo textual a fecha ISO con el primer dia del mes;
+  - conservacion de la afiliacion media mensual total del sistema;
+  - calculo de una media anual simple de los meses disponibles en la fuente;
+  - marcado de 2026 como ano parcial porque solo contiene enero-abril en la descarga actual;
+  - exportacion a CSV con punto decimal.
+- Archivos generados:
+  - `data/processed/seguridad-social/2026-05-18_seguridad-social_afiliacion-media-total-sistema_mensual_2001-2026.csv`.
+  - `data/processed/seguridad-social/2026-05-18_seguridad-social_afiliacion-media-total-sistema_anual_2001-2026.csv`.
+- Periodo resultante:
+  - mensual: 2001M01-2026M04.
+  - anual: 2001-2026, con 2026 parcial.
+- Nota de definicion: la afiliacion media mide afiliaciones en alta laboral, no necesariamente personas unicas. Debe presentarse como "afiliaciones medias" o explicarse si se usa como aproximacion al numero de trabajadores cotizantes.
