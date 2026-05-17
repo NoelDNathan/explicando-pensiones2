@@ -26,6 +26,9 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
   - indice general nacional, tabla 24077.
 - Generado un CSV procesado con la inflacion interanual mensual util para graficos, de 1962M01 a 2026M04.
 - Documentada la transformacion del IPC en `data/methodology/transformations.md`.
+- Descargada desde IGAE/SEPG la base BDMACRO de abril de 2026.
+- Extraida la serie historica de deuda publica total de las AAPP, 1975-1995, desde la hoja `CUENTA DE LAS AAPP AGREGADAS`.
+- Generado el CSV `data/processed/igae/deuda-publica-espana-bdmacro-1975-1995.csv`.
 - Descargadas desde el INE las proyecciones de esperanza de vida por edad y sexo, tabla 36775, para 2024-2073.
 - Generado un CSV procesado de proyeccion de esperanza de vida al nacimiento para hombres y mujeres, sin calcular "ambos sexos".
 
@@ -38,6 +41,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Incorporado primer indicador demografico del INE para contexto de longevidad: esperanza de vida al nacimiento.
 - Incorporado indicador fiscal agregado de Eurostat: deuda publica de Espana en millones de euros y porcentaje del PIB.
 - Incorporada la serie historica oficial de inflacion interanual mensual del IPC general nacional.
+- Incorporada una serie historica BDMACRO para deuda publica 1975-1995, marcada como separada de Eurostat hasta conciliacion metodologica.
 - Incorporada la proyeccion oficial del INE de esperanza de vida al nacimiento para hombres y mujeres hasta 2073.
 
 ## Pendiente inmediato
@@ -47,6 +51,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Decidir si la web mostrara solo ambos sexos o tambien la brecha hombres/mujeres en esperanza de vida.
 - Revisar periodicamente Eurostat para posibles revisiones de la serie de deuda publica, especialmente el dato de 2025.
 - Decidir como se mostrara la inflacion en la web: grafico mensual completo, medias anuales, o ambas.
+- Conciliar o explicar explicitamente el enlace entre BDMACRO 1975-1995 y Eurostat 1995-2025 antes de mostrar una serie continua de deuda publica.
 - Definir como diferenciar visualmente datos observados y proyecciones en los graficos.
 
 ## Nota operativa

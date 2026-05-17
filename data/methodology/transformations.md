@@ -15,6 +15,24 @@
 - Periodo resultante: 1995-2025.
 - Nota: los datos de 2025 proceden de la publicacion de Eurostat disponible el 2026-04-22 y deben revisarse si Eurostat publica revisiones posteriores.
 
+## IGAE/SEPG - BDMACRO, deuda publica historica 1975-1995
+
+- Fecha de transformacion: 2026-05-18.
+- Fuente bruta: Excel `BDMACRO_Abril_2026.xlsx`.
+- Hoja utilizada: `CUENTA DE LAS AAPP AGREGADAS`.
+- Columnas utilizadas:
+  - `A`: ano.
+  - `B`: Producto Interior Bruto a precios corrientes.
+  - `BA`: Deuda publica total de las AAPP, Procedimiento de Deficit Excesivo, Banco de Espana.
+  - `BB`: Deuda publica PDE / PIB.
+- Transformacion aplicada:
+  - extraccion de los anos 1975-1995;
+  - conservacion del PIB, deuda en millones de euros y porcentaje sobre PIB;
+  - calculo propio de `debt_billion_eur` como `debt_million_eur / 1000`;
+  - exportacion a CSV con punto decimal.
+- Periodo resultante: 1975-1995.
+- Nota de comparabilidad: esta serie procede de BDMACRO y debe mantenerse separada de Eurostat `gov_10dd_edpt1` hasta documentar una conciliacion metodologica. El tramo 1975-1994 es una serie historica enlazada hacia atras por BDMACRO.
+
 ## INE - inflacion interanual mensual del IPC
 
 - Fecha de transformacion: 2026-05-18.

@@ -54,6 +54,24 @@
 - descripcion breve: deuda bruta consolidada de las Administraciones Publicas, sector S13, indicador GD, en millones de euros y como porcentaje del PIB.
 - uso previsto en la web: contextualizar la posicion fiscal agregada de Espana al explicar el sistema publico de pensiones.
 
+## IGAE/SEPG - BDMACRO, deuda publica historica enlazada
+
+- nombre de la fuente: Base de datos anuales de la economia espanola BDMACRO, abril 2026
+- institucion: Secretaria de Estado de Presupuestos y Gastos / IGAE
+- URL pagina: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/paginas/bdmacro.aspx
+- URL archivo XLSX: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/Documents/BASES%20DE%20DATOS/ANUALES%20DE%20LA%20ECONOMIA%20ESPA%C3%91OLA%20BDMACRO/BDMACRO_Abril_2026.xlsx
+- fecha de descarga: 2026-05-18
+- fecha de actualizacion indicada por la pagina: abril de 2026
+- periodo cubierto extraido: 1975-1995
+- ambito geografico: Espana
+- formato descargado: XLSX
+- archivo bruto: `data/raw/igae/bdmacro/2026-05-18_igae-sepg_bdmacro_abril-2026.xlsx`
+- archivo procesado: `data/processed/igae/deuda-publica-espana-bdmacro-1975-1995.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Administracion Presupuestaria
+- descripcion breve: extracto de la hoja `CUENTA DE LAS AAPP AGREGADAS`, columnas B, BA y BB: PIB a precios corrientes, deuda publica total de las AAPP en el Procedimiento de Deficit Excesivo y deuda publica PDE sobre PIB.
+- uso previsto en la web: disponer de una aproximacion historica institucional para el tramo anterior a la serie Eurostat descargada.
+- nota de comparabilidad: mantener esta serie separada de Eurostat `gov_10dd_edpt1` hasta documentar una conciliacion metodologica; BDMACRO indica que las series actuales 1995-2025 se enlazan hacia atras con series publicadas para 1954-1994.
+
 ## INE - IPC, tasa de variacion del indice general nacional
 
 - nombre de la fuente: Tasa de variacion del indice general nacional. Series desde enero de 1961. IPC
