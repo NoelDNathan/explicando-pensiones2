@@ -79,20 +79,26 @@
 - URL pagina: https://www.airef.es/es/sostenibilidad/observatorio-deuda/
 - URL historico de previsiones XLSX: https://www.airef.es/wp-content/uploads/2025/03/Historico_Deuda.xlsx
 - URL informe presupuestos iniciales AAPP 2026: https://www.airef.es/wp-content/uploads/2026/04/Presupuestos-iniciales-2026/Informe-Presupuestos-Iniciales-2026.pdf
+- URL opinion sostenibilidad AAPP largo plazo 2025: https://www.airef.es/wp-content/uploads/2025/03/Opini%C3%B3n_sobre_la_sostenibilidad_de_las_AAPP_largo_plazo/Opinion.pdf
+- URL observatorio deuda junio 2025: https://www.airef.es/wp-content/uploads/2025/06/Observatorio-de-deuda/Observatorio.pdf
 - fecha de descarga: 2026-05-18
 - periodo cubierto extraido en historico: anos objetivo 2014-2029, con publicaciones de AIReF entre 2019-05-01 y 2024-10-01
 - prevision puntual mas reciente extraida: 2026, 99,9% del PIB, publicada en el informe de presupuestos iniciales de las AAPP 2026
+- proyecciones de largo plazo extraidas: anclas del escenario inercial para 2030, 2040, 2050, 2060 y 2070; ancla del escenario de ajuste fiscal para 2050
 - ambito geografico: Espana
 - formatos descargados: HTML, XLSX y PDF
 - archivos brutos:
   - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_pagina-observatorio-deuda.html`
   - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_historico-previsiones-deuda.xlsx`
   - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf`
+  - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_opinion-sostenibilidad-aapp-largo-plazo-2025.pdf`
+  - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_observatorio-deuda-junio-2025.pdf`
 - archivos procesados:
   - `data/processed/airef/deuda-publica-previsiones-airef-historico-2014-2029.csv`
   - `data/processed/airef/deuda-publica-prevision-airef-2026.csv`
+  - `data/processed/airef/deuda-publica-proyeccion-largo-plazo-airef-2030-2070.csv`
 - licencia o condiciones de uso: reutilizacion segun condiciones generales de AIReF
-- descripcion breve: historico de previsiones de ratio deuda/PIB de AIReF y prevision puntual vigente para 2026.
+- descripcion breve: historico de previsiones de ratio deuda/PIB de AIReF, prevision puntual vigente para 2026 y anclas de proyecciones de largo plazo hasta 2070.
 - uso previsto en la web: mostrar escenarios/previsiones de deuda separados de los datos observados.
 - nota metodologica: no mezclar directamente con series observadas; estas filas representan previsiones publicadas en fechas concretas.
 

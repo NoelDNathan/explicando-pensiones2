@@ -58,6 +58,21 @@
 - Transformacion aplicada: registro manual de la prevision puntual publicada por AIReF en un CSV separado.
 - Nota: mantener separada del historico observado y del historico de previsiones, porque representa una publicacion posterior.
 
+## AIReF - proyecciones de deuda publica a largo plazo
+
+- Fecha de transformacion: 2026-05-18.
+- Fuentes brutas:
+  - PDF `Opinion.pdf`, Opinion sobre la sostenibilidad de las AAPP a largo plazo 2025.
+  - PDF `Observatorio.pdf`, Observatorio de Deuda de junio de 2025.
+- Valores extraidos:
+  - escenario inercial AIReF: 2030 = 97% del PIB, 2040 = 104%, 2050 = 129%, 2060 = 157%, 2070 = 181%;
+  - escenario de ajuste fiscal AIReF: 2050 = 62% del PIB.
+- Transformacion aplicada:
+  - registro de anclas de largo plazo publicadas explicitamente por AIReF;
+  - separacion por escenario;
+  - exportacion a CSV con punto decimal.
+- Nota: no se ha interpolado una serie anual. El CSV solo contiene anclas publicadas y debe representarse como puntos/escenarios, no como datos observados.
+
 ## INE - inflacion interanual mensual del IPC
 
 - Fecha de transformacion: 2026-05-18.

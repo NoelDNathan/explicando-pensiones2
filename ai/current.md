@@ -39,6 +39,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Generado el CSV `data/processed/airef/deuda-publica-prevision-airef-2026.csv` con la prevision puntual de deuda 2026.
 - Descargado desde AIReF el informe sobre la regla de gasto de pensiones, junto con el Excel de cuadros y graficos.
 - Generados tres CSV de previsiones de pensiones: gasto en pensiones como porcentaje del PIB 2022-2070, numero de pensionistas 2022-2070 y fuentes de financiacion del sistema publico de pensiones 2020-2070.
+- Descargadas desde AIReF la Opinion sobre sostenibilidad de las AAPP a largo plazo 2025 y el Observatorio de Deuda de junio de 2025.
+- Generado el CSV `data/processed/airef/deuda-publica-proyeccion-largo-plazo-airef-2030-2070.csv` con anclas de deuda a largo plazo por escenario.
 
 ## Cambios recientes
 
@@ -54,6 +56,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Incorporada la proyeccion oficial del INE de esperanza de vida al nacimiento para hombres y mujeres hasta 2073.
 - Incorporadas previsiones de deuda publica de AIReF, separadas de los datos observados.
 - Incorporadas previsiones de pensiones de AIReF hasta 2070, separadas de los datos observados.
+- Incorporadas anclas de proyeccion de deuda publica de AIReF hasta 2070: escenario inercial y escenario de ajuste fiscal.
 
 ## Pendiente inmediato
 
@@ -67,6 +70,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Definir como diferenciar visualmente datos observados y proyecciones en los graficos.
 - Decidir como mostrar las previsiones de deuda: ultima prevision vigente, abanico historico de previsiones o comparacion entre organismos.
 - Decidir si las previsiones de pensiones se mostraran como escenario AIReF principal, comparativa con Informe de Envejecimiento 2024, o ambas.
+- Si se quiere una curva anual de deuda 2030-2070, buscar datos tabulares de AIReF o digitalizar la fuente con una metodologia documentada; no interpolar automaticamente.
 
 ## Nota operativa
 
