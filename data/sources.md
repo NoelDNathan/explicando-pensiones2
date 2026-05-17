@@ -72,6 +72,30 @@
 - uso previsto en la web: disponer de una aproximacion historica institucional para el tramo anterior a la serie Eurostat descargada.
 - nota de comparabilidad: mantener esta serie separada de Eurostat `gov_10dd_edpt1` hasta documentar una conciliacion metodologica; BDMACRO indica que las series actuales 1995-2025 se enlazan hacia atras con series publicadas para 1954-1994.
 
+## AIReF - Previsiones de deuda publica
+
+- nombre de la fuente: Observatorio Interactivo de Deuda Publica e historico de previsiones de deuda
+- institucion: Autoridad Independiente de Responsabilidad Fiscal (AIReF)
+- URL pagina: https://www.airef.es/es/sostenibilidad/observatorio-deuda/
+- URL historico de previsiones XLSX: https://www.airef.es/wp-content/uploads/2025/03/Historico_Deuda.xlsx
+- URL informe presupuestos iniciales AAPP 2026: https://www.airef.es/wp-content/uploads/2026/04/Presupuestos-iniciales-2026/Informe-Presupuestos-Iniciales-2026.pdf
+- fecha de descarga: 2026-05-18
+- periodo cubierto extraido en historico: anos objetivo 2014-2029, con publicaciones de AIReF entre 2019-05-01 y 2024-10-01
+- prevision puntual mas reciente extraida: 2026, 99,9% del PIB, publicada en el informe de presupuestos iniciales de las AAPP 2026
+- ambito geografico: Espana
+- formatos descargados: HTML, XLSX y PDF
+- archivos brutos:
+  - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_pagina-observatorio-deuda.html`
+  - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_historico-previsiones-deuda.xlsx`
+  - `data/raw/airef/deuda-publica-previsiones/2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf`
+- archivos procesados:
+  - `data/processed/airef/deuda-publica-previsiones-airef-historico-2014-2029.csv`
+  - `data/processed/airef/deuda-publica-prevision-airef-2026.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales de AIReF
+- descripcion breve: historico de previsiones de ratio deuda/PIB de AIReF y prevision puntual vigente para 2026.
+- uso previsto en la web: mostrar escenarios/previsiones de deuda separados de los datos observados.
+- nota metodologica: no mezclar directamente con series observadas; estas filas representan previsiones publicadas en fechas concretas.
+
 ## INE - IPC, tasa de variacion del indice general nacional
 
 - nombre de la fuente: Tasa de variacion del indice general nacional. Series desde enero de 1961. IPC
@@ -139,3 +163,23 @@
 - licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Seguridad Social
 - descripcion breve: serie oficial de gasto presupuestario por rubricas economicas, organizada en cuatro ficheros que cubren desde 1995 hasta el presupuesto prorrogado 2025P.
 - uso previsto en la web: construir una serie larga de gasto en pensiones/prestaciones economicas de la Seguridad Social, manteniendo separados los datos brutos de cualquier tratamiento posterior.
+
+## IGAE/SEPG - BDMACRO, prestaciones sociales de la Seguridad Social
+
+- nombre de la fuente: Series macroeconomicas anuales BDMACRO. Abril 2026
+- institucion: Secretaria de Estado de Presupuestos y Gastos; fuente estadistica IGAE para ingresos y gastos de Administraciones Publicas
+- URL: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/paginas/bdmacro.aspx
+- fecha de descarga: 2026-05-18
+- periodo cubierto en la fuente: 1954-2025 para principales magnitudes; ingresos y gastos de Administraciones Publicas desde 1958 para el sector AAPP agregado y desde 1995 para subsectores
+- periodo procesado: 1975-2025
+- ambito geografico: Espana
+- formato descargado: XLSX y PDF
+- archivos brutos:
+  - `data/raw/igae-bdmacro/2026-05-18_sepg_bdmacro_pagina.html`
+  - `data/raw/igae-bdmacro/2026-05-18_sepg-igae_bdmacro_1954-2025.xlsx`
+  - `data/raw/igae-bdmacro/2026-05-18_sepg-igae_bdmacro_nota-explicativa_abril-2026.pdf`
+- archivo procesado: `data/processed/igae/2026-05-18_igae-bdmacro_prestaciones-sociales-seguridad-social_1975-2025.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Administracion Presupuestaria
+- descripcion breve: serie anual de prestaciones sociales del subsector Seguridad Social, con PIB corriente para calcular porcentaje del PIB.
+- uso previsto en la web: ofrecer una serie larga desde 1975 como contexto de gasto social de la Seguridad Social.
+- nota metodologica: no debe presentarse como serie pura de gasto en pensiones; BDMACRO indica que las prestaciones sociales incluyen pensiones, desempleo y otras prestaciones sociales.
