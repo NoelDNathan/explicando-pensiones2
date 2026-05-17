@@ -96,6 +96,35 @@
 - uso previsto en la web: mostrar escenarios/previsiones de deuda separados de los datos observados.
 - nota metodologica: no mezclar directamente con series observadas; estas filas representan previsiones publicadas en fechas concretas.
 
+## AIReF - Previsiones de gasto de pensiones
+
+- nombre de la fuente: Informe sobre la regla de gasto de pensiones
+- institucion: Autoridad Independiente de Responsabilidad Fiscal (AIReF)
+- URL pagina: https://www.airef.es/es/centro-documental/informes/informe-sobre-la-regla-de-gasto-de-pensiones/
+- URL Excel cuadros y graficos: https://www.airef.es/wp-content/uploads/2025/03/Informe_regla_de_gasto_de_pensiones/Graficos-y-cuadros.-Informe-regla-de-gasto-de-pensiones.xlsx
+- URL informe PDF: https://www.airef.es/wp-content/uploads/2025/03/Informe_regla_de_gasto_de_pensiones/Informe.pdf
+- fecha de publicacion indicada en la pagina: 2025-03-31
+- fecha de descarga: 2026-05-18
+- periodo cubierto extraido:
+  - gasto en pensiones: 2022-2070
+  - numero de pensionistas: 2022-2070
+  - fuentes de financiacion del sistema publico de pensiones: 2020-2070
+- ambito geografico: Espana
+- formatos descargados: HTML, XLSX y PDF
+- archivos brutos:
+  - `data/raw/airef/pensiones-previsiones/2026-05-18_airef_pagina-informe-regla-gasto-pensiones.html`
+  - `data/raw/airef/pensiones-previsiones/2026-05-18_airef_graficos-cuadros-informe-regla-gasto-pensiones.xlsx`
+  - `data/raw/airef/pensiones-previsiones/2026-05-18_airef_informe-regla-gasto-pensiones.pdf`
+  - `data/raw/airef/pensiones-previsiones/2026-05-18_airef_resumen-ejecutivo-informe-regla-gasto-pensiones.pdf`
+- archivos procesados:
+  - `data/processed/airef/2026-05-18_airef_prevision-gasto-pensiones-pct-pib_2022-2070.csv`
+  - `data/processed/airef/2026-05-18_airef_prevision-pensionistas-millones_2022-2070.csv`
+  - `data/processed/airef/2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales de AIReF
+- descripcion breve: proyecciones de AIReF sobre gasto bruto publico en pensiones como porcentaje del PIB, numero de pensionistas y fuentes de financiacion del sistema publico de pensiones.
+- uso previsto en la web: mostrar escenarios futuros de gasto de pensiones y pensionistas, siempre separados de los datos observados.
+- nota metodologica: las series son previsiones/escenarios publicados por AIReF; no deben mezclarse con series historicas observadas salvo que se etiqueten como escenario.
+
 ## INE - IPC, tasa de variacion del indice general nacional
 
 - nombre de la fuente: Tasa de variacion del indice general nacional. Series desde enero de 1961. IPC

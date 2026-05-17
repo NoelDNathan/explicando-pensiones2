@@ -90,3 +90,26 @@
 - Archivo generado: `data/processed/igae/2026-05-18_igae-bdmacro_prestaciones-sociales-seguridad-social_1975-2025.csv`.
 - Periodo resultante: 1975-2025.
 - Nota de definicion: esta serie no es una serie pura de gasto en pensiones. BDMACRO define prestaciones sociales como prestaciones sociales en especie adquiridas en el mercado mas prestaciones sociales distintas de transferencias en especie; incluye pensiones, desempleo y otras prestaciones sociales.
+
+## AIReF - previsiones de pensiones 2020-2070
+
+- Fecha de transformacion: 2026-05-18.
+- Fuente bruta: `data/raw/airef/pensiones-previsiones/2026-05-18_airef_graficos-cuadros-informe-regla-gasto-pensiones.xlsx`.
+- Hojas utilizadas:
+  - `Grafico 3`: evolucion del gasto en pensiones (% PIB), 2022-2070.
+  - `Grafico 6`: numero de pensionistas (millones), 2022-2070.
+  - `Grafico RE_2.1`: fuentes de financiacion del sistema publico de pensiones (% PIB), 2020-2070.
+- Transformacion aplicada:
+  - lectura de las series anuales publicadas por AIReF en el Excel de cuadros y graficos;
+  - conversion de tablas en formato ancho a CSV en formato largo;
+  - conservacion del nombre del escenario o rubrica publicado;
+  - exportacion a CSV con punto decimal.
+- Archivos generados:
+  - `data/processed/airef/2026-05-18_airef_prevision-gasto-pensiones-pct-pib_2022-2070.csv`
+  - `data/processed/airef/2026-05-18_airef_prevision-pensionistas-millones_2022-2070.csv`
+  - `data/processed/airef/2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv`
+- Periodos resultantes:
+  - gasto en pensiones: 2022-2070.
+  - pensionistas: 2022-2070.
+  - financiacion: 2020-2070.
+- Nota de definicion: estas filas son previsiones o escenarios publicados por AIReF en marzo de 2025. Deben mostrarse separadas de los datos observados y con etiqueta de fuente/escenario.

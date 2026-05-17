@@ -37,6 +37,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Generado el CSV `data/processed/airef/deuda-publica-previsiones-airef-historico-2014-2029.csv`.
 - Descargado el informe de AIReF sobre presupuestos iniciales de las AAPP 2026.
 - Generado el CSV `data/processed/airef/deuda-publica-prevision-airef-2026.csv` con la prevision puntual de deuda 2026.
+- Descargado desde AIReF el informe sobre la regla de gasto de pensiones, junto con el Excel de cuadros y graficos.
+- Generados tres CSV de previsiones de pensiones: gasto en pensiones como porcentaje del PIB 2022-2070, numero de pensionistas 2022-2070 y fuentes de financiacion del sistema publico de pensiones 2020-2070.
 
 ## Cambios recientes
 
@@ -51,6 +53,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Incorporada una serie larga BDMACRO 1975-2025 de prestaciones sociales de la Seguridad Social como contexto de gasto; queda marcada como no equivalente a gasto puro en pensiones.
 - Incorporada la proyeccion oficial del INE de esperanza de vida al nacimiento para hombres y mujeres hasta 2073.
 - Incorporadas previsiones de deuda publica de AIReF, separadas de los datos observados.
+- Incorporadas previsiones de pensiones de AIReF hasta 2070, separadas de los datos observados.
 
 ## Pendiente inmediato
 
@@ -63,6 +66,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Conciliar o explicar explicitamente el enlace entre BDMACRO 1975-1995 y Eurostat 1995-2025 antes de mostrar una serie continua de deuda publica.
 - Definir como diferenciar visualmente datos observados y proyecciones en los graficos.
 - Decidir como mostrar las previsiones de deuda: ultima prevision vigente, abanico historico de previsiones o comparacion entre organismos.
+- Decidir si las previsiones de pensiones se mostraran como escenario AIReF principal, comparativa con Informe de Envejecimiento 2024, o ambas.
 
 ## Nota operativa
 
