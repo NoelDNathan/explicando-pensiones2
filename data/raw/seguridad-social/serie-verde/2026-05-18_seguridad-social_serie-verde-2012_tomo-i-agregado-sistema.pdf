@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="Página no disponible. La página no se encuentra en el servidor.">
+    <meta name="author" content="Roberto">
+    <link rel="icon" href="/mantenimiento/errores/estaticos/favicon.ico">
+
+    <title>Seguridad Social:Página no disponible</title>
+	<!--styles from portal-->
+	<link rel="stylesheet" href="/mantenimiento/errores/estaticos/mashup_ra_collection.css" type="text/css">
+	<!-- Generics styles -->
+	<link rel="stylesheet" href="/mantenimiento/errores/estaticos/bootstrap.css" type="text/css">
+	<!-- Custom styles for this example -->
+	<link rel="stylesheet" href="/mantenimiento/errores/estaticos/styles.css" type="text/css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="lotusui30dojo nav-by-keyboard">
+  
+	<div id="segsocial">
+		<header class="row-header" id="top">
+			<div class="row-container">
+				<div class="row pl0">
+					<div class="header">
+						<div class="hidden-lg hidden-md hidden-sm main-menu-mobile">
+							<div class="navbar-header">
+								<div class="logo ml20 mt20">
+									<a class="" href="#">
+										<img class="logSS" alt="Web de la Seguridad Social" src="/mantenimiento/errores/estaticos/logo.png"></a>
+								</div>
+							</div>
+						</div>
+						<!-- MAIN -->
+					</div>
+				</div>
+			</div>
+		</header>
+		
+		<main id="content" tabindex="1">
+			<section class="row-page">
+				<div class="row-container ">
+					<div class="row">
+						<div class="col-sm-12 col-md-12 col-lg-12 margen">
+							<!--<h1 class="col-md-12 mb15 h1 title">Error</h1>-->
+							<div class="col-xs-12 col-md-12 mt0 in-content">
+							<!--Contenido-->
+								<div class="col-xs-12 col-md-12 mt0 " id="NoPageAvailable">								
+									<h1 class="handy-content">Página no disponible</h1>	
+									<div class="text-block">
+										<div class="no-page-avaliable">
+											<div class="mb15 h1 title">Página no disponible</div>
+											<p>Por causas de mantenimiento, la página a la que intenta acceder no se encuentra disponible en este momento.</p><p> Disculpe las molestias.</p>
+										</div>
+									</div>
+								</div>
+							<!--fin Contenido -->
+							</div>	
+							
+						</div>
+					<!-- -----------------------------------------------  -->			
+					</div>
+				</div>	
+			</section>
+		</main>
+	</div>
+	
+ <!-- /container -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+  </body>
+</html>
