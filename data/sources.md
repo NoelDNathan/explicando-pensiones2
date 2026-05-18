@@ -1,5 +1,22 @@
 # Fuentes registradas
 
+## IGAE - Gasto publico por funciones COFOG
+
+- nombre de la fuente: Administraciones publicas. Clasificacion funcional: serie desde 1995
+- institucion: Intervencion General de la Administracion del Estado (IGAE)
+- URL pagina: https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Paginas/iacogofseries.aspx
+- URL archivo XLSX: https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Documents/AAPP_A/COFOG_A_AAPP.xlsx
+- fecha de descarga: 2026-05-18
+- fecha de actualizacion indicada por la pagina: 2025-11-28
+- periodo cubierto: 1995-2024
+- ambito geografico: Espana, sector Administraciones Publicas (S.13)
+- formato descargado: XLSX
+- archivo bruto: `data/raw/igae/cofog/2026-05-18_igae_cofog-aapp-serie-1995-2024.xlsx`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Administracion Presupuestaria
+- descripcion breve: gasto del sector Administraciones Publicas clasificado por finalidad del gasto segun COFOG y por naturaleza economica, de acuerdo con SEC 2010.
+- uso previsto en la web: construir una visualizacion tipo treemap de evolucion del gasto publico por grandes funciones oficiales.
+- nota metodologica: a primer nivel COFOG hay diez divisiones; "pensiones" no aparece como division propia, sino dentro de `10 Proteccion social`. Para aislar pensiones habria que usar el detalle COFOG de segundo nivel, especialmente vejez/supervivencia cuando proceda, o fuentes presupuestarias de Seguridad Social documentadas aparte.
+
 ## INE - Esperanza de vida al nacimiento
 
 - nombre de la fuente: Esperanza de Vida al Nacimiento según sexo. IDB

@@ -47,6 +47,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Generado el CSV `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`, conservando edades simples y la categoria "Todas las edades".
 - Descargada desde el INE la poblacion residente observada por fecha, sexo y edad, tabla 56934, con fuente bruta desde 1971.
 - Generados dos CSV procesados para 1975-2025: uno normalizado con todas las fechas disponibles y otro anual a 1 de enero preparado para piramides de poblacion por sexo y edad.
+- Localizada y descargada la serie oficial IGAE COFOG de gasto del sector Administraciones Publicas (S.13) por funciones desde 1995 hasta 2024.
+- Documentada una metodologia inicial para generar cuatro vistas del gasto por funciones: nominal, real, porcentaje sobre total y per capita real.
 
 ## Cambios recientes
 
@@ -85,6 +87,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Decidir como mostrar las previsiones de deuda: ultima prevision vigente, abanico historico de previsiones o comparacion entre organismos.
 - Decidir si las previsiones de pensiones se mostraran como escenario AIReF principal, comparativa con Informe de Envejecimiento 2024, o ambas.
 - Si se quiere una curva anual de deuda 2030-2070, buscar datos tabulares de AIReF o digitalizar la fuente con una metodologia documentada; no interpolar automaticamente.
+- Procesar el XLSX COFOG de IGAE a un CSV largo de divisiones de primer nivel y validar los totales.
+- Decidir si la visualizacion principal muestra solo las 10 divisiones COFOG o si se anade una vista separada de pensiones con una fuente distinta, porque "pensiones" no es division COFOG de primer nivel.
 
 ## Nota operativa
 
