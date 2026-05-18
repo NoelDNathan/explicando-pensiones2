@@ -1,5 +1,28 @@
 # Transformaciones de datos
 
+## IGAE - COFOG, detalle de proteccion social 1995-2024
+
+- Fecha de transformacion: 2026-05-18.
+- Fuente bruta: `data/raw/igae/cofog/2026-05-18_igae_cofog-aapp-serie-1995-2024.xlsx`.
+- Hojas utilizadas: hojas anuales `1995` a `2024`.
+- Filas utilizadas: `GASTO TOTAL`.
+- Columnas utilizadas:
+  - `10.1` a `10.9`: grupos COFOG de segundo nivel dentro de Proteccion social.
+  - `Total 10`: total de Proteccion social.
+  - total general de Administraciones Publicas del mismo ano para porcentajes sobre gasto total.
+- Transformacion aplicada:
+  - extraccion de gasto nominal en millones de euros corrientes;
+  - calculo de porcentaje sobre gasto publico total;
+  - calculo de porcentaje sobre el total de Proteccion social;
+  - calculo de euros reales de 2024 con el indice general nacional del IPC del INE;
+  - calculo de euros reales per capita con poblacion residente total del INE a 1 de enero;
+  - generacion de una aproximacion separada a pensiones como `10.2 Vejez + 10.3 Supervivientes`.
+- Archivos generados:
+  - `data/processed/igae/2026-05-18_igae_cofog-proteccion-social-detalle-aapp_1995-2024.csv`.
+  - `data/processed/igae/2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv`.
+- Nota sobre IPC: para 1995-2001 se reconstruye el indice mensual hacia atras desde los niveles disponibles desde 2002 usando la tasa de variacion interanual mensual publicada por el INE.
+- Nota de definicion: la aproximacion `10.2 + 10.3` no equivale exactamente a una serie presupuestaria de pensiones contributivas. Debe etiquetarse como aproximacion COFOG de vejez y supervivencia.
+
 ## Eurostat - deuda publica de Espana
 
 - Fecha de transformacion: 2026-05-18.

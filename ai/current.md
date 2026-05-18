@@ -49,6 +49,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Generados dos CSV procesados para 1975-2025: uno normalizado con todas las fechas disponibles y otro anual a 1 de enero preparado para piramides de poblacion por sexo y edad.
 - Localizada y descargada la serie oficial IGAE COFOG de gasto del sector Administraciones Publicas (S.13) por funciones desde 1995 hasta 2024.
 - Documentada una metodologia inicial para generar cuatro vistas del gasto por funciones: nominal, real, porcentaje sobre total y per capita real.
+- Procesado el detalle COFOG de `10 Proteccion social` para 1995-2024, con grupos `10.1` a `10.9`, total de proteccion social y cuatro metricas: nominal, real 2024, porcentaje y per capita real.
+- Generada una serie separada de aproximacion COFOG a pensiones como `10.2 Vejez + 10.3 Supervivientes`, con advertencia metodologica.
 
 ## Cambios recientes
 
@@ -88,7 +90,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Decidir si las previsiones de pensiones se mostraran como escenario AIReF principal, comparativa con Informe de Envejecimiento 2024, o ambas.
 - Si se quiere una curva anual de deuda 2030-2070, buscar datos tabulares de AIReF o digitalizar la fuente con una metodologia documentada; no interpolar automaticamente.
 - Procesar el XLSX COFOG de IGAE a un CSV largo de divisiones de primer nivel y validar los totales.
-- Decidir si la visualizacion principal muestra solo las 10 divisiones COFOG o si se anade una vista separada de pensiones con una fuente distinta, porque "pensiones" no es division COFOG de primer nivel.
+- Decidir si la web usara la aproximacion COFOG `10.2 + 10.3` para una vista de pensiones o si se priorizara una serie presupuestaria estricta de Seguridad Social.
 
 ## Nota operativa
 

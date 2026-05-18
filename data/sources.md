@@ -12,6 +12,9 @@
 - ambito geografico: Espana, sector Administraciones Publicas (S.13)
 - formato descargado: XLSX
 - archivo bruto: `data/raw/igae/cofog/2026-05-18_igae_cofog-aapp-serie-1995-2024.xlsx`
+- archivos procesados:
+  - `data/processed/igae/2026-05-18_igae_cofog-proteccion-social-detalle-aapp_1995-2024.csv`
+  - `data/processed/igae/2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv`
 - licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Administracion Presupuestaria
 - descripcion breve: gasto del sector Administraciones Publicas clasificado por finalidad del gasto segun COFOG y por naturaleza economica, de acuerdo con SEC 2010.
 - uso previsto en la web: construir una visualizacion tipo treemap de evolucion del gasto publico por grandes funciones oficiales.

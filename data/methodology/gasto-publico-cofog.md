@@ -41,5 +41,21 @@ Partiendo de una tabla anual larga con `year`, `cofog_code`, `cofog_name` y `nom
 
 - No mezclar COFOG con clasificaciones presupuestarias: COFOG mide finalidad del gasto en Contabilidad Nacional, no programas presupuestarios.
 - A nivel de division COFOG no existe "Pensiones" como bloque separado. Ese bloque queda incluido en `10 Proteccion social`.
-- Si la web necesita un bloque especifico de pensiones, hay que generar una vista separada con fuente y definicion propias, o bajar a grupos COFOG de segundo nivel cuando el fichero lo permita.
+- Para una aproximacion COFOG a pensiones se puede usar `10.2 Vejez + 10.3 Supervivientes`, siempre etiquetada como aproximacion. No equivale exactamente a la contabilidad presupuestaria de pensiones contributivas: otras pensiones, como incapacidad, pueden estar en `10.1 Enfermedad e incapacidad`.
+- Si la web necesita una serie estrictamente presupuestaria de pensiones contributivas, hay que generar una vista separada con fuente y definicion propias de Seguridad Social.
 - Mantener los datos brutos de IGAE en `data/raw/igae/cofog/` y los CSV derivados en `data/processed/igae/`.
+
+## CSV generados
+
+- `data/processed/igae/2026-05-18_igae_cofog-proteccion-social-detalle-aapp_1995-2024.csv`: detalle anual de `10 Proteccion social`, con `10.1` a `10.9` y `Total 10`.
+- `data/processed/igae/2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv`: suma calculada de `10.2 Vejez + 10.3 Supervivientes`.
+
+Ambos CSV incluyen:
+
+- `nominal_million_eur`: dato publicado por IGAE en millones de euros corrientes.
+- `real_2024_million_eur`: calculo propio ajustado con IPC general nacional del INE, euros de 2024.
+- `pct_total_public_spending`: calculo propio sobre el gasto total de Administraciones Publicas del mismo fichero IGAE.
+- `pct_social_protection`: calculo propio sobre el total de `10 Proteccion social`.
+- `real_2024_eur_per_capita`: calculo propio usando poblacion residente total del INE a 1 de enero.
+
+Para 1995-2001, el CSV bruto del indice IPC descargado del INE no trae nivel de indice. Se reconstruye hacia atras desde los indices mensuales disponibles desde 2002 usando la tasa de variacion interanual mensual del INE.
