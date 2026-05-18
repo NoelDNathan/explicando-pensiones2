@@ -51,6 +51,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Documentada una metodologia inicial para generar cuatro vistas del gasto por funciones: nominal, real, porcentaje sobre total y per capita real.
 - Procesado el detalle COFOG de `10 Proteccion social` para 1995-2024, con grupos `10.1` a `10.9`, total de proteccion social y cuatro metricas: nominal, real 2024, porcentaje y per capita real.
 - Generada una serie separada de aproximacion COFOG a pensiones como `10.2 Vejez + 10.3 Supervivientes`, con advertencia metodologica.
+- Verificado que no hay una continuacion oficial 1975-1994 con la misma metodologia y granularidad COFOG; BDMACRO sirve para contexto macro anterior, pero no como extension directa del detalle COFOG de proteccion social.
 
 ## Cambios recientes
 
@@ -91,6 +92,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se quiere una curva anual de deuda 2030-2070, buscar datos tabulares de AIReF o digitalizar la fuente con una metodologia documentada; no interpolar automaticamente.
 - Procesar el XLSX COFOG de IGAE a un CSV largo de divisiones de primer nivel y validar los totales.
 - Decidir si la web usara la aproximacion COFOG `10.2 + 10.3` para una vista de pensiones o si se priorizara una serie presupuestaria estricta de Seguridad Social.
+- Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 
 ## Nota operativa
 

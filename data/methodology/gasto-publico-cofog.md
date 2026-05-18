@@ -45,6 +45,14 @@ Partiendo de una tabla anual larga con `year`, `cofog_code`, `cofog_name` y `nom
 - Si la web necesita una serie estrictamente presupuestaria de pensiones contributivas, hay que generar una vista separada con fuente y definicion propias de Seguridad Social.
 - Mantener los datos brutos de IGAE en `data/raw/igae/cofog/` y los CSV derivados en `data/processed/igae/`.
 
+## Cobertura antes de 1995
+
+No se ha localizado una fuente oficial que permita extender el detalle COFOG de IGAE/Eurostat hacia 1975 manteniendo la misma metodologia y granularidad.
+
+La propia IGAE indica que la comparabilidad temporal de esta estadistica queda garantizada desde 1995, porque el Programa de Transmisiones SEC 2010 exige homogeneidad desde ese ano. Eurostat documenta tambien que el requisito legal para COFOG de primer nivel empieza en 1995, y que el nivel II es obligatorio para administraciones publicas desde 2001, aunque Espana lo publica desde 1995.
+
+BDMACRO puede servir para contexto macro anterior a 1995: sus series enlazan hacia atras magnitudes oficiales de Contabilidad Nacional, y las series de ingresos y gastos del sector Administraciones Publicas comienzan en 1958. Pero BDMACRO no debe presentarse como una continuacion COFOG detallada de `10 Proteccion social` o de `10.2 + 10.3`, porque no conserva esa misma clasificacion funcional detallada para 1975-1994.
+
 ## CSV generados
 
 - `data/processed/igae/2026-05-18_igae_cofog-proteccion-social-detalle-aapp_1995-2024.csv`: detalle anual de `10 Proteccion social`, con `10.1` a `10.9` y `Total 10`.
