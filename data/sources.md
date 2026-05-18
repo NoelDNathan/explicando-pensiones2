@@ -34,6 +34,24 @@
 - uso previsto en la web: mostrar el escenario demografico futuro oficial del INE para hombres y mujeres, separado de la serie historica observada.
 - nota metodologica: la tabla proyectada no publica la categoria "Ambos sexos"; no se ha calculado un total propio.
 
+## INE - Proyeccion de poblacion residente por sexo y edad
+
+- nombre de la fuente: Poblacion residente a 1 de enero por sexo, edad y ano. Proyecciones de poblacion
+- institucion: Instituto Nacional de Estadistica (INE)
+- URL: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36643?tip=AM
+- pagina de tabla: https://www.ine.es/jaxiT3/Tabla.htm?t=36643
+- pagina de operacion: https://www.ine.es/dyngs/INEbase/operacion.htm?c=Estadistica_C&cid=1254736176953&idp=1254735572981&menu=ultiDatos
+- fecha de descarga: 2026-05-18
+- periodo cubierto: 2024-2074
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivo bruto: `data/raw/ine/proyecciones-poblacion/poblacion-residente/2026-05-18_ine_proyecciones-poblacion_poblacion-residente-sexo-edad_2024-2074.json`
+- archivo procesado: `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: poblacion residente proyectada a 1 de enero para Total Nacional, por sexo y edades simples, incluyendo la categoria "Todas las edades".
+- uso previsto en la web: explicar la evolucion prevista de la poblacion total y de la estructura por edades en Espana, manteniendo la proyeccion separada de los datos observados.
+- nota metodologica: la descarga conserva la serie oficial del INE sin calcular escenarios alternativos ni interpolaciones propias.
+
 ## Eurostat - Deuda publica de Espana
 
 - nombre de la fuente: Government deficit/surplus, debt and associated data

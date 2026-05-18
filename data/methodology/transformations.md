@@ -88,6 +88,21 @@
 - Periodo resultante: 1962M01-2026M04.
 - Resultado: 772 observaciones mensuales de inflacion interanual del IPC general nacional.
 
+## INE - proyeccion de poblacion residente por sexo y edad 2024-2074
+
+- Fecha de transformacion: 2026-05-18.
+- Fuente bruta: INE, tabla 36643, `data/raw/ine/proyecciones-poblacion/poblacion-residente/2026-05-18_ine_proyecciones-poblacion_poblacion-residente-sexo-edad_2024-2074.json`.
+- Archivo generado: `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`.
+- Transformacion aplicada:
+  - lectura del JSON de la API del INE;
+  - extraccion de ano, ambito geografico, sexo, edad, valor, naturaleza, escenario y tipo de dato;
+  - conservacion de edades simples y de la categoria agregada "Todas las edades";
+  - redondeo del valor de poblacion a personas enteras, sin agregaciones propias;
+  - exportacion a CSV con punto decimal y codificacion UTF-8.
+- Periodo resultante: 2024-2074.
+- Resultado: 15.606 observaciones, correspondientes a 306 series por 51 anos.
+- Nota de definicion: los valores son proyecciones de poblacion residente a 1 de enero y deben representarse separados de datos observados.
+
 ## IGAE/SEPG - BDMACRO, prestaciones sociales de la Seguridad Social 1975-2025
 
 - Fecha de transformacion: 2026-05-18.
