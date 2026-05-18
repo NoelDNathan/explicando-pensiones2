@@ -103,6 +103,26 @@
 - Resultado: 15.606 observaciones, correspondientes a 306 series por 51 anos.
 - Nota de definicion: los valores son proyecciones de poblacion residente a 1 de enero y deben representarse separados de datos observados.
 
+## INE - poblacion residente observada por sexo y edad 1975-2025
+
+- Fecha de transformacion: 2026-05-18.
+- Fuente bruta: INE, tabla 56934, `data/raw/ine/estadistica-continua-poblacion/poblacion-residente/2026-05-18_ine_ecp_poblacion-residente-sexo-edad_1971-2025.json`.
+- Archivos generados:
+  - `data/processed/ine/2026-05-18_ine_ecp_poblacion-residente-espana-sexo-edad_1975-2025.csv`.
+  - `data/processed/ine/2026-05-18_ine_ecp_piramide-poblacion-espana-sexo-edad_1975-2025.csv`.
+- Transformacion aplicada:
+  - lectura del JSON de la API del INE con codificacion UTF-8;
+  - extraccion de fecha, ano, periodo INE, ambito geografico, sexo, edad, valor, naturaleza del dato, concepto y tipo de dato;
+  - filtrado del periodo desde 1975, aunque el bruto conserva datos desde 1971;
+  - creacion de `edad_num` a partir de la etiqueta publicada por el INE y marcado de edades abiertas en `edad_grupo_abierto`;
+  - exportacion de un CSV normalizado completo con todas las fechas disponibles desde 1975;
+  - exportacion de un CSV especifico para piramides con solo datos a 1 de enero, hombres y mujeres, excluyendo la categoria "Todas las edades", descartando edades simples con valor cero y evitando categorias abiertas solapadas cuando el INE publica mas detalle de edades avanzadas.
+- Periodo resultante:
+  - CSV normalizado: 1975-2025, 34.032 observaciones.
+  - CSV para piramides: 1975-2025, 10.252 observaciones.
+- Nota de definicion: es una serie observada de poblacion residente. Debe mantenerse separada de la proyeccion INE 2024-2074.
+- Nota tecnica: el numero de edades publicadas cambia en la serie historica; el tramo antiguo agrupa edades superiores antes que el tramo reciente. Para el CSV de piramides se conserva la edad abierta compatible con el maximo detalle disponible en cada fecha y sexo. No se desagregan edades abiertas ni se interpolan valores.
+
 ## IGAE/SEPG - BDMACRO, prestaciones sociales de la Seguridad Social 1975-2025
 
 - Fecha de transformacion: 2026-05-18.

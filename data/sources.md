@@ -52,6 +52,27 @@
 - uso previsto en la web: explicar la evolucion prevista de la poblacion total y de la estructura por edades en Espana, manteniendo la proyeccion separada de los datos observados.
 - nota metodologica: la descarga conserva la serie oficial del INE sin calcular escenarios alternativos ni interpolaciones propias.
 
+## INE - Poblacion residente observada por sexo y edad
+
+- nombre de la fuente: Poblacion residente por fecha, sexo y edad desde 1971. Estadistica Continua de Poblacion
+- institucion: Instituto Nacional de Estadistica (INE)
+- URL: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/56934?tip=AM
+- pagina de tabla: https://www.ine.es/jaxiT3/Tabla.htm?t=56934
+- referencia catalogo: https://datos.gob.es/es/catalogo/ea0042823-poblacion-residente-por-fecha-sexo-y-edad-ecp-identificador-api-569342
+- fecha de descarga: 2026-05-18
+- periodo cubierto en la fuente descargada: 1971-2025
+- periodo procesado: 1975-2025
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivo bruto: `data/raw/ine/estadistica-continua-poblacion/poblacion-residente/2026-05-18_ine_ecp_poblacion-residente-sexo-edad_1971-2025.json`
+- archivos procesados:
+  - `data/processed/ine/2026-05-18_ine_ecp_poblacion-residente-espana-sexo-edad_1975-2025.csv`
+  - `data/processed/ine/2026-05-18_ine_ecp_piramide-poblacion-espana-sexo-edad_1975-2025.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: poblacion residente observada de Espana por fecha, sexo y edad, con valores definitivos en la descarga actual.
+- uso previsto en la web: construir piramides de poblacion historicas desde 1975 y compararlas, de forma separada, con las proyecciones oficiales.
+- nota metodologica: el CSV para piramides conserva solo datos a 1 de enero, hombres y mujeres, edades publicadas por el INE; no se calculan agregados propios.
+
 ## Eurostat - Deuda publica de Espana
 
 - nombre de la fuente: Government deficit/surplus, debt and associated data
