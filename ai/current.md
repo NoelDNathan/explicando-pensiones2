@@ -52,6 +52,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Procesado el detalle COFOG de `10 Proteccion social` para 1995-2024, con grupos `10.1` a `10.9`, total de proteccion social y cuatro metricas: nominal, real 2024, porcentaje y per capita real.
 - Generada una serie separada de aproximacion COFOG a pensiones como `10.2 Vejez + 10.3 Supervivientes`, con advertencia metodologica.
 - Verificado que no hay una continuacion oficial 1975-1994 con la misma metodologia y granularidad COFOG; BDMACRO sirve para contexto macro anterior, pero no como extension directa del detalle COFOG de proteccion social.
+- Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
 
@@ -72,6 +73,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Incorporadas anclas de proyeccion de deuda publica de AIReF hasta 2070: escenario inercial y escenario de ajuste fiscal.
 - Incorporada la proyeccion oficial del INE de poblacion residente por sexo y edad hasta 2074, util para construir graficos de poblacion total, poblacion en edad de trabajar y poblacion mayor, siempre separada de datos observados.
 - Incorporada la serie observada del INE de poblacion residente por sexo y edad desde 1975 hasta 2025, util para construir la evolucion historica de piramides de poblacion.
+- Creado en Figma un prototipo visual de pruebas con cabecera, hero, tarjetas de indicadores, modulo de grafico y panel metodologico. No incorpora datos numericos nuevos; usa placeholders visuales y textos de estructura.
 
 ## Pendiente inmediato
 
@@ -93,6 +95,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Procesar el XLSX COFOG de IGAE a un CSV largo de divisiones de primer nivel y validar los totales.
 - Decidir si la web usara la aproximacion COFOG `10.2 + 10.3` para una vista de pensiones o si se priorizara una serie presupuestaria estricta de Seguridad Social.
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
+- Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
 ## Nota operativa
 
