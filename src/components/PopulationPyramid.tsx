@@ -354,27 +354,18 @@ function AgeAxisLabels({
         const active = isWorkingAge(group, workingAgeMin, workingAgeMax)
 
         return (
-          <g key={group.ageGroup}>
-            <line
-              x1={LAYOUT.centerX - 5}
-              x2={LAYOUT.centerX + 5}
-              y1={y}
-              y2={y}
-              stroke={COLORS.axis}
-              strokeWidth={1}
-            />
-            <text
-              x={LAYOUT.centerX}
-              y={y}
-              fill={active ? COLORS.textTitle : COLORS.textMuted}
-              fontSize={8.5}
-              fontWeight={active ? 600 : 400}
-              textAnchor="middle"
-              dominantBaseline="middle"
-            >
-              {group.ageGroup}
-            </text>
-          </g>
+          <text
+            key={group.ageGroup}
+            x={LAYOUT.centerX}
+            y={y}
+            fill={active ? COLORS.textTitle : COLORS.textMuted}
+            fontSize={8.5}
+            fontWeight={active ? 600 : 400}
+            textAnchor="middle"
+            dominantBaseline="middle"
+          >
+            {group.ageGroup}
+          </text>
         )
       })}
     </g>
