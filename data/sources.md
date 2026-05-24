@@ -110,6 +110,96 @@
 - uso previsto en la web: enlazar la serie historica observada con el escenario demografico futuro oficial del INE.
 - nota metodologica: el JSON bruto incluye 2024 proyectado. El CSV proyectado principal empieza en 2025 y el CSV combinado usa 2024 solo como observado, para no mezclar 2024 observado y 2024 proyectado como equivalentes.
 
+## INE - Indicadores de fecundidad y mortalidad observados y proyectados
+
+- nombre de la fuente: indicadores demograficos anuales de fecundidad y mortalidad para Espana
+- institucion: Instituto Nacional de Estadistica (INE)
+- URLs observadas IDB:
+  - indicador coyuntural de fecundidad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/1407?tip=AM
+  - edad media a la maternidad por orden de nacimiento: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/48879?tip=AM
+  - tasa bruta de mortalidad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/1411?tip=AM
+- URLs proyectadas, Proyecciones de Poblacion 2024-2074:
+  - indicador coyuntural de fecundidad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36655?tip=AM
+  - edad media a la maternidad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36656?tip=AM
+  - tasa bruta de mortalidad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36657?tip=AM
+- paginas de tabla:
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=1407
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=48879
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=1411
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=36655
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=36656
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=36657
+- fecha de descarga: 2026-05-24
+- periodo cubierto observado: 1975-2024
+- periodo cubierto proyectado en bruto: 2024-2073
+- periodo procesado combinado: 1975-2070, con 2025-2070 como proyeccion
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivos brutos:
+  - `data/raw/ine/indicadores-demograficos-basicos/2026-05-24_ine_idb_indicador-coyuntural-fecundidad-total-nacional_1975-2024.json`
+  - `data/raw/ine/indicadores-demograficos-basicos/2026-05-24_ine_idb_edad-media-maternidad-orden-nacimiento-total-nacional_1975-2024.json`
+  - `data/raw/ine/indicadores-demograficos-basicos/2026-05-24_ine_idb_tasa-bruta-mortalidad-total-nacional_1975-2024.json`
+  - `data/raw/ine/proyecciones-poblacion/componentes-demograficos/2026-05-24_ine_proyecciones-poblacion_indicador-coyuntural-fecundidad-total-nacional_2024-2073.json`
+  - `data/raw/ine/proyecciones-poblacion/componentes-demograficos/2026-05-24_ine_proyecciones-poblacion_edad-media-maternidad-total-nacional_2024-2073.json`
+  - `data/raw/ine/proyecciones-poblacion/componentes-demograficos/2026-05-24_ine_proyecciones-poblacion_tasa-bruta-mortalidad-total-nacional_2024-2073.json`
+- archivos procesados principales:
+  - `data/processed/ine/2026-05-24_ine_indicador-coyuntural-fecundidad-espana-observado-proyectado_1975-2070.csv`
+  - `data/processed/ine/2026-05-24_ine_edad-media-maternidad-espana-observada-proyectada_1975-2070.csv`
+  - `data/processed/ine/2026-05-24_ine_tasa-bruta-mortalidad-espana-observada-proyectada_1975-2070.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: series nacionales anuales de fecundidad, edad media a la maternidad y mortalidad, enlazando datos observados con proyecciones oficiales cuando existen.
+- nota metodologica: la proyeccion oficial no publica edad media al primer hijo; esa serie queda observada hasta 2024 y no se estima para 2025-2070.
+
+## INE - Nacimientos y defunciones observados y proyectados
+
+- nombre de la fuente: nacimientos y defunciones anuales de Espana
+- institucion: Instituto Nacional de Estadistica (INE)
+- URLs observadas MNP:
+  - nacimientos por residencia de la madre y sexo: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/6506?tip=AM
+  - defunciones por residencia y sexo: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/6545?tip=AM
+- URLs proyectadas, Proyecciones de Poblacion 2024-2074:
+  - nacimientos por sexo y generacion de la madre: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36644?tip=AM
+  - defunciones por sexo y generacion: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36646?tip=AM
+- paginas de tabla:
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=6506
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=6545
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=36644
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=36646
+- fecha de descarga: 2026-05-24
+- periodo cubierto observado: 1975-2024
+- periodo cubierto proyectado en bruto: 2024-2073
+- periodo procesado combinado: 1975-2070, con 2025-2070 como proyeccion
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivos brutos:
+  - `data/raw/ine/movimiento-natural-poblacion/2026-05-24_ine_mnp_nacimientos-residencia-madre-sexo-total-nacional_1975-2024.json`
+  - `data/raw/ine/movimiento-natural-poblacion/2026-05-24_ine_mnp_defunciones-residencia-sexo-total-nacional_1975-2024.json`
+  - `data/raw/ine/proyecciones-poblacion/componentes-demograficos/2026-05-24_ine_proyecciones-poblacion_nacimientos-sexo-generacion-madre-total-nacional_2024-2073.json`
+  - `data/raw/ine/proyecciones-poblacion/componentes-demograficos/2026-05-24_ine_proyecciones-poblacion_defunciones-sexo-generacion-total-nacional_2024-2073.json`
+- archivos procesados principales:
+  - `data/processed/ine/2026-05-24_ine_nacimientos-espana-observados-proyectados_1975-2070.csv`
+  - `data/processed/ine/2026-05-24_ine_defunciones-espana-observadas-proyectadas_1975-2070.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: conteos nacionales anuales de nacimientos y defunciones, con datos observados del MNP y proyecciones oficiales del INE.
+- nota metodologica: los CSV combinados excluyen el 2024 proyectado y conservan 2024 como observado para evitar duplicar el ano de solape.
+
+## INE - Esperanza de vida al nacimiento observada y proyectada por sexo
+
+- nombre de la fuente: esperanza de vida al nacimiento por sexo, observada y proyectada
+- institucion: Instituto Nacional de Estadistica (INE)
+- URLs:
+  - observada IDB: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/1414?tip=AM
+  - proyectada Proyecciones de Poblacion 2024-2074: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36775?tip=AM
+- fecha de descarga de las fuentes brutas: 2026-05-18
+- fecha de generacion del combinado: 2026-05-24
+- periodo procesado combinado: 1975-2070
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivo procesado combinado: `data/processed/ine/2026-05-24_ine_esperanza-vida-nacimiento-sexo-espana-observada-proyectada_1975-2070.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: union de esperanza de vida al nacimiento observada y proyectada para hombres y mujeres.
+- nota metodologica: la proyeccion no publica "Ambos sexos"; el combinado solo contiene hombres y mujeres para mantener trazabilidad sin calcular un total propio.
+
 ## INE - Proyeccion de poblacion residente por sexo y edad
 
 - nombre de la fuente: Poblacion residente a 1 de enero por sexo, edad y ano. Proyecciones de poblacion

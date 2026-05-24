@@ -26,6 +26,63 @@
   - combinada: 1975-2070, 96 observaciones.
 - Nota de definicion: la tabla 36653 descargada incluye 2024 proyectado. Para evitar tratar 2024 observado y 2024 proyectado como equivalentes, el CSV proyectado principal empieza en 2025 y el CSV combinado conserva 2024 solo como observado.
 
+## INE - fecundidad, maternidad, mortalidad, nacimientos y defunciones 1975-2070
+
+- Fecha de transformacion: 2026-05-24.
+- Script reproducible: `scripts/process-ine-demografia-1975-2070.ps1`.
+- Fuentes brutas observadas:
+  - IDB tabla 1407, indicador coyuntural de fecundidad.
+  - IDB tabla 48879, edad media a la maternidad por orden del nacimiento.
+  - IDB tabla 1411, tasa bruta de mortalidad.
+  - MNP tabla 6506, nacimientos por residencia de la madre y sexo.
+  - MNP tabla 6545, defunciones por residencia y sexo.
+- Fuentes brutas proyectadas:
+  - Proyecciones de poblacion tabla 36655, indicador coyuntural de fecundidad.
+  - Proyecciones de poblacion tabla 36656, edad media a la maternidad.
+  - Proyecciones de poblacion tabla 36657, tasa bruta de mortalidad.
+  - Proyecciones de poblacion tabla 36644, nacimientos por sexo y generacion de la madre.
+  - Proyecciones de poblacion tabla 36646, defunciones por sexo y generacion.
+- Transformacion aplicada:
+  - descarga de JSON oficiales con `tip=AM`;
+  - filtrado a `Total Nacional`;
+  - para nacimientos y defunciones, filtrado a sexo `Total` y generacion total en proyecciones;
+  - para fecundidad y edad media a la maternidad, filtrado a `Ambas nacionalidades`;
+  - para edad media a la maternidad observada, conservacion de `Todos` y `Primero` en `orden_nacimiento`;
+  - recorte de observados a 1975-2024 y de proyecciones a 2025-2070;
+  - generacion de CSV separados observado/proyectado y CSV combinados con columna `estado_dato`;
+  - normalizacion a punto decimal, codificacion UTF-8 y recalculo de checksums.
+- Archivos combinados generados:
+  - `data/processed/ine/2026-05-24_ine_indicador-coyuntural-fecundidad-espana-observado-proyectado_1975-2070.csv`.
+  - `data/processed/ine/2026-05-24_ine_edad-media-maternidad-espana-observada-proyectada_1975-2070.csv`.
+  - `data/processed/ine/2026-05-24_ine_tasa-bruta-mortalidad-espana-observada-proyectada_1975-2070.csv`.
+  - `data/processed/ine/2026-05-24_ine_nacimientos-espana-observados-proyectados_1975-2070.csv`.
+  - `data/processed/ine/2026-05-24_ine_defunciones-espana-observadas-proyectadas_1975-2070.csv`.
+- Periodos resultantes:
+  - indicador coyuntural de fecundidad: 96 observaciones, 1975-2070.
+  - tasa bruta de mortalidad: 96 observaciones, 1975-2070.
+  - nacimientos: 96 observaciones, 1975-2070.
+  - defunciones: 96 observaciones, 1975-2070.
+  - edad media a la maternidad: 146 observaciones; `Todos` cubre 1975-2070 y `Primero` cubre 1975-2024.
+- Nota de definicion: no se estima la edad media al primer hijo para 2025-2070 porque la proyeccion oficial del INE localizada no publica esa dimension por orden de nacimiento.
+- Nota de solape: las tablas proyectadas incluyen 2024; los CSV combinados empiezan la proyeccion en 2025 para conservar 2024 como observado.
+
+## INE - esperanza de vida al nacimiento combinada por sexo 1975-2070
+
+- Fecha de transformacion: 2026-05-24.
+- Script reproducible: `scripts/process-ine-demografia-1975-2070.ps1`.
+- Fuentes procesadas de partida:
+  - `data/processed/ine/esperanza-vida-nacimiento-espana-1975-2024.csv`.
+  - `data/processed/ine/2026-05-18_ine_proyeccion-esperanza-vida-nacimiento-espana_2024-2073.csv`.
+- Transformacion aplicada:
+  - filtrado a hombres y mujeres para mantener continuidad con la proyeccion;
+  - recorte de proyecciones a 2025-2070;
+  - union con columna `estado_dato`;
+  - normalizacion del decimal observado a punto.
+- Archivo generado:
+  - `data/processed/ine/2026-05-24_ine_esperanza-vida-nacimiento-sexo-espana-observada-proyectada_1975-2070.csv`.
+- Periodo resultante: 1975-2070, 192 observaciones: hombres y mujeres, observado 1975-2024 y proyectado 2025-2070.
+- Nota de definicion: no se calcula la categoria `Ambos sexos` para la proyeccion porque la tabla 36775 no la publica.
+
 ## IGAE - COFOG, detalle de proteccion social 1995-2024
 
 - Fecha de transformacion: 2026-05-18.

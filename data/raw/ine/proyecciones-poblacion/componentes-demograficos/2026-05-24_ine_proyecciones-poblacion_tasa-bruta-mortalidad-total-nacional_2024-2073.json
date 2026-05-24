@@ -1,0 +1,58 @@
+﻿[{"COD":"PROP5321", "Nombre":"Tasa Bruta de Mortalidad. Proyección a largo plazo. Total Nacional. ", "T3_Unidad":"Defunciones por mil habitantes", "T3_Escala":" ", "MetaData":[{"Id":381962, "T3_Variable":"Conceptos demógraficos", "Nombre":"Tasa Bruta de Mortalidad", "Codigo":""}
+,{"Id":23184, "T3_Variable":"Tipo de dato", "Nombre":"Proyección a largo plazo", "Codigo":""}
+,{"Id":16473, "T3_Variable":"Total Nacional", "Nombre":"Total Nacional", "Codigo":"00"}
+]
+, "Data":[{"Fecha":"2073-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2073, "Valor":12.629285}
+,{"Fecha":"2072-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2072, "Valor":12.707038}
+,{"Fecha":"2071-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2071, "Valor":12.776065}
+,{"Fecha":"2070-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2070, "Valor":12.835685}
+,{"Fecha":"2069-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2069, "Valor":12.884673}
+,{"Fecha":"2068-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2068, "Valor":12.921556}
+,{"Fecha":"2067-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2067, "Valor":12.945572}
+,{"Fecha":"2066-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2066, "Valor":12.953819}
+,{"Fecha":"2065-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2065, "Valor":12.948531}
+,{"Fecha":"2064-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2064, "Valor":12.928142}
+,{"Fecha":"2063-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2063, "Valor":12.889431}
+,{"Fecha":"2062-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2062, "Valor":12.849498}
+,{"Fecha":"2061-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2061, "Valor":12.796939}
+,{"Fecha":"2060-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2060, "Valor":12.731852}
+,{"Fecha":"2059-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2059, "Valor":12.652643}
+,{"Fecha":"2058-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2058, "Valor":12.561563}
+,{"Fecha":"2057-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2057, "Valor":12.458807}
+,{"Fecha":"2056-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2056, "Valor":12.344632}
+,{"Fecha":"2055-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2055, "Valor":12.223764}
+,{"Fecha":"2054-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2054, "Valor":12.095535}
+,{"Fecha":"2053-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2053, "Valor":11.962928}
+,{"Fecha":"2052-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2052, "Valor":11.824798}
+,{"Fecha":"2051-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2051, "Valor":11.682275}
+,{"Fecha":"2050-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2050, "Valor":11.539844}
+,{"Fecha":"2049-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2049, "Valor":11.398321}
+,{"Fecha":"2048-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2048, "Valor":11.255121}
+,{"Fecha":"2047-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2047, "Valor":11.10872}
+,{"Fecha":"2046-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2046, "Valor":10.966562}
+,{"Fecha":"2045-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2045, "Valor":10.827559}
+,{"Fecha":"2044-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2044, "Valor":10.687449}
+,{"Fecha":"2043-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2043, "Valor":10.549482}
+,{"Fecha":"2042-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2042, "Valor":10.420296}
+,{"Fecha":"2041-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2041, "Valor":10.296762}
+,{"Fecha":"2040-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2040, "Valor":10.17839}
+,{"Fecha":"2039-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2039, "Valor":10.052727}
+,{"Fecha":"2038-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2038, "Valor":9.941636}
+,{"Fecha":"2037-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2037, "Valor":9.83428}
+,{"Fecha":"2036-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2036, "Valor":9.730181}
+,{"Fecha":"2035-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2035, "Valor":9.630037}
+,{"Fecha":"2034-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2034, "Valor":9.539604}
+,{"Fecha":"2033-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2033, "Valor":9.45757}
+,{"Fecha":"2032-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2032, "Valor":9.386697}
+,{"Fecha":"2031-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2031, "Valor":9.329188}
+,{"Fecha":"2030-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2030, "Valor":9.28633}
+,{"Fecha":"2029-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2029, "Valor":9.258558}
+,{"Fecha":"2028-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2028, "Valor":9.247679}
+,{"Fecha":"2027-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2027, "Valor":9.2555}
+,{"Fecha":"2026-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2026, "Valor":9.276262}
+,{"Fecha":"2025-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2025, "Valor":9.308906}
+,{"Fecha":"2024-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2024, "Valor":9.350577}
+]
+}
+]
+

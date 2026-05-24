@@ -59,6 +59,16 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Descargadas y procesadas desde fuentes oficiales INE nuevas series demograficas nacionales para 1975-2070:
+  - indicador coyuntural de fecundidad, observado 1975-2024 y proyectado 2025-2070;
+  - edad media a la maternidad, observada 1975-2024 y proyectada 2025-2070;
+  - edad media a la maternidad al primer hijo, observada 1975-2024 sin proyeccion oficial localizada;
+  - tasa bruta de mortalidad, observada 1975-2024 y proyectada 2025-2070;
+  - nacimientos y defunciones anuales, observados 1975-2024 y proyectados 2025-2070;
+  - esperanza de vida al nacimiento por sexo, combinada 1975-2070 desde series ya existentes.
+- Creado el script reproducible `scripts/process-ine-demografia-1975-2070.ps1` para descargar JSON del API INE, generar CSVs separados y combinados, y recalcular `data/checksums.sha256`.
+- Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md` y `data/methodology/transformations.md` con fuentes, transformaciones, limitaciones y notas de comparabilidad de las nuevas series.
+- Documentado que los CSV combinados empiezan las proyecciones en 2025 para no duplicar el ano 2024, que aparece como observado y tambien existe en los brutos proyectados.
 - Anadido el JSON `data/processed/boe/2026-05-24_boe_edad-minima-legal-trabajar-espana_antes-1976-2026.json` con la edad minima legal general para trabajar en Espana por periodos normativos: hasta 1976, 1976-1980 y 1980-actualidad (2026).
 - Documentada la fuente BOE en `data/sources.md`, el inventario en `data/inventory.md` y la ficha de metadata en `data/metadata.md`.
 - El tramo anterior a 1976 queda marcado como resumen historico con cautela, porque la normativa previa era heterogenea y puede requerir comprobacion por sector o regimen.
@@ -118,6 +128,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
 - Usar la nueva serie de tasa bruta de natalidad solo con etiqueta de `estado_dato`: observado 1975-2024 y proyectado 2025-2070. Si se necesita mostrar 2024 proyectado, tomarlo del JSON bruto de tabla 36653 y etiquetarlo explicitamente como proyectado.
+- Si se necesita edad media al primer hijo despues de 2024, localizar una fuente oficial adicional o documentar una metodologia de estimacion; por ahora no se ha generado ninguna proyeccion propia.
+- Decidir que series demograficas nuevas se conectaran primero a la web y como se diferenciara visualmente observado/proyectado.
 - Si se necesita analizar inmigracion o poblacion nacida fuera de Espana antes de 2002, extraer anclas censales 1981 y 1991 y documentar cualquier interpolacion como estimada, no observada.
 - Para 2026-2070 por pais/lugar de nacimiento, no hay una tabla oficial cruzada nacimiento + sexo + edad localizada; usar 36642 y 36643 solo como fuentes separadas salvo que se defina una metodologia explicita de modelizacion.
 - Localizar y procesar una fuente oficial/institucional para gasto publico total por grandes funciones o politicas, idealmente COFOG/IGAE/Eurostat, que permita separar pensiones, intereses de deuda, sanidad, educacion y otras areas con trazabilidad anual.
