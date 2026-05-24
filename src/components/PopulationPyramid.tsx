@@ -8,10 +8,11 @@
  * while non-working-age groups use a slightly muted variant of the same
  * base hue.
  *
- * The component is purely presentational: data, working-age range and
- * scale max are received as props with sensible defaults. It is intended
- * to live inside any container; the SVG keeps its aspect ratio thanks to
- * the explicit viewBox.
+ * The component is purely presentational: data, working-age range,
+ * scale max and age label density are received as props with sensible
+ * defaults. Age ranges are drawn on the central axis (one label per row
+ * by default). It is intended to live inside any container; the SVG
+ * keeps its aspect ratio thanks to the explicit viewBox.
  */
 
 type Nationality = 'native' | 'foreign'
@@ -28,11 +29,15 @@ export type PyramidAgeGroup = {
   female: SexBreakdown
 }
 
+export type AgeLabelMode = 'all' | 'decade' | false
+
 export type PopulationPyramidProps = {
   data?: PyramidAgeGroup[]
   workingAgeMin?: number
   workingAgeMax?: number
   scaleMax?: number
+  /** Show age range labels on the central axis. Default: every row. */
+  ageLabels?: AgeLabelMode
   className?: string
   title?: string
   subtitle?: string
@@ -115,6 +120,12 @@ const isWorkingAge = (group: PyramidAgeGroup, min: number, max: number): boolean
   const startInside = group.ageStart >= min && group.ageStart <= max
   const endInside = group.ageEnd === null ? false : group.ageEnd >= min && group.ageEnd <= max
   return startInside || endInside
+}
+
+const shouldShowAgeLabel = (group: PyramidAgeGroup, mode: AgeLabelMode): boolean => {
+  if (mode === false) return false
+  if (mode === 'all') return true
+  return group.ageStart % 10 === 0
 }
 
 const pickBarColor = (
@@ -250,6 +261,57 @@ function PyramidBars({
               height={LAYOUT.barHeight}
               fill={pickBarColor('female', 'foreign', active)}
             />
+          </g>
+        )
+      })}
+    </g>
+  )
+}
+
+function AgeAxisLabels({
+  data,
+  geometry,
+  mode,
+  workingAgeMin,
+  workingAgeMax,
+}: {
+  data: PyramidAgeGroup[]
+  geometry: Geometry
+  mode: AgeLabelMode
+  workingAgeMin: number
+  workingAgeMax: number
+}) {
+  if (mode === false) return null
+
+  return (
+    <g aria-hidden="true">
+      {data.map((group, i) => {
+        if (!shouldShowAgeLabel(group, mode)) return null
+
+        const y = geometry.rowY(i) + LAYOUT.barHeight / 2
+        const active = isWorkingAge(group, workingAgeMin, workingAgeMax)
+
+        return (
+          <g key={group.ageGroup}>
+            <line
+              x1={LAYOUT.centerX - 5}
+              x2={LAYOUT.centerX + 5}
+              y1={y}
+              y2={y}
+              stroke={COLORS.axis}
+              strokeWidth={1}
+            />
+            <text
+              x={LAYOUT.centerX}
+              y={y}
+              fill={active ? COLORS.textTitle : COLORS.textMuted}
+              fontSize={8.5}
+              fontWeight={active ? 600 : 400}
+              textAnchor="middle"
+              dominantBaseline="middle"
+            >
+              {group.ageGroup}
+            </text>
           </g>
         )
       })}
@@ -402,6 +464,7 @@ export function PopulationPyramid({
   workingAgeMin = 20,
   workingAgeMax = 64,
   scaleMax = 500,
+  ageLabels = 'all',
   className,
   title = 'Piramide poblacional de Espana',
   subtitle = 'Poblacion por edad, sexo y nacionalidad',
@@ -508,6 +571,14 @@ export function PopulationPyramid({
         <PyramidBars
           data={data}
           geometry={geometry}
+          workingAgeMin={workingAgeMin}
+          workingAgeMax={workingAgeMax}
+        />
+
+        <AgeAxisLabels
+          data={data}
+          geometry={geometry}
+          mode={ageLabels}
           workingAgeMin={workingAgeMin}
           workingAgeMax={workingAgeMax}
         />

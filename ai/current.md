@@ -95,8 +95,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Incorporada la serie observada del INE de poblacion residente por sexo y edad desde 1975 hasta 2025, util para construir la evolucion historica de piramides de poblacion.
 - Creado en Figma un prototipo visual de pruebas con cabecera, hero, tarjetas de indicadores, modulo de grafico y panel metodologico. No incorpora datos numericos nuevos; usa placeholders visuales y textos de estructura.
 - Incorporado Tailwind CSS v4 con tokens propios del proyecto definidos via `@theme` en `src/index.css`. Los primeros tokens cubren superficies oscuras (`--color-surface-deep`, `--color-text-inverted`, etc.), eje sobre oscuro, franja de edad de trabajar y paleta de la piramide poblacional con variantes activa/apagada por categoria.
-- Creado el componente `PopulationPyramid` (`src/components/PopulationPyramid.tsx`) en SVG reutilizable y responsive, con datos de ejemplo internos. Diferencia visualmente los grupos en edad de trabajar (tono mas saturado) y fuera de ella (tono mas apagado), conserva la base cromatica por sexo y nacionalidad, e incluye franja de resalte de edad laboral, ejes invertidos para hombres y leyenda.
+- Creado el componente `PopulationPyramid` (`src/components/PopulationPyramid.tsx`) en SVG reutilizable y responsive, con datos de ejemplo internos. Diferencia visualmente los grupos en edad de trabajar (tono mas saturado) y fuera de ella (tono mas apagado), conserva la base cromatica por sexo y nacionalidad, e incluye franja de resalte de edad laboral, ejes invertidos para hombres, leyenda y etiquetas de edad en el eje central (prop `ageLabels`: `'all'`, `'decade'` o `false`).
 - Anadida al laboratorio `/componentes` la seccion `Componente 02 - Piramide poblacional` con marco de previsualizacion oscuro (`.component-preview--dark`).
+- Creado el componente `InfoButton` (`src/components/InfoButton.tsx`) con variantes `on-dark` (tokens de la piramide) y `on-light` (paleta editorial), popover accesible y tamanos `sm`/`md`.
+- Anadida al laboratorio `/componentes` la seccion `Componente 03 - Boton de informacion`.
 - Descargada desde el INE la tabla 56937 de poblacion residente por fecha, sexo, grupo de edad y pais de nacimiento.
 - Generado el CSV observado `data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv`, filtrado a Total, nacidos en Espana y nacidos en el extranjero.
 - Generada la tabla metodologica `data/processed/ine/2026-05-24_ine_poblacion-residente-nacimiento-cobertura-interpolacion_1975-2070.csv` con tramos observados, anclas censales y tramos pendientes de interpolacion o no cruzados.
@@ -107,7 +109,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
 - Conectar `PopulationPyramid` con datos reales del INE cuando se decida la primera vista publica, usando la tabla 56937 si se quiere diferenciar nacidos en Espana y nacidos en el extranjero desde 2002.
-- Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico.
+- Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico (el boton de informacion ya cubre parte de las notas contextuales).
+- Integrar `InfoButton` en cabeceras de graficos como la piramide poblacional cuando se definan los textos metodologicos finales.
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
 - Usar la nueva serie de tasa bruta de natalidad solo con etiqueta de `estado_dato`: observado 1975-2024 y proyectado 2025-2070. Si se necesita mostrar 2024 proyectado, tomarlo del JSON bruto de tabla 36653 y etiquetarlo explicitamente como proyectado.
