@@ -203,12 +203,14 @@ function ComponentLab() {
 
         <div className="component-preview">
           <TimeSeriesChart
-            title="Sistema Público de Pensiones · España"
-            subtitle="Evolución histórica y proyecciones 2000–2070"
+            title="Evolución histórica de indicadores clave"
+            infoLabel="Fuentes y metodología del sistema de pensiones"
+            projectionBadge="2025"
             categories={CHART_CATEGORIES}
             series={CHART_SERIES}
             milestones={CHART_MILESTONES}
-            footnote="Fuentes: AIReF (Opinión A/2025/1), IGAE BDMACRO, Seguridad Social · Proyecciones: escenario base AIReF 2025 · Datos históricos 2000–2024"
+            footnote="Fuente: AIReF (Opinión A/2025/1), IGAE BDMACRO, Seguridad Social"
+            variant="dark"
           />
         </div>
       </section>

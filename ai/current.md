@@ -59,6 +59,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Rediseñado `TimeSeriesChart` al estilo editorial oscuro institucional (imagen de referencia): fondo navy `--color-surface-deep`, paleta de colores para fondo oscuro (teal, rojo, ámbar, púrpura), cabecera de dos filas (título + icono ⓘ / badge año; leyenda con swatches cuadrados), etiquetas de unidad horizontales sobre el eje (no rotadas), sistema de tokens CSS (`--tsc-*`) para soportar variantes `light` y `dark`, badge de proyección configurable, eliminación del relleno de zona de proyección. El componente mantiene compatibilidad total con la API anterior; la variante por defecto pasa a ser `dark`.
 - Creado canvas `institutional-time-series-chart.canvas.tsx` en la carpeta gestionada por el IDE (`.cursor/projects/.../canvases/`). Implementa un grafico temporal de lineas multiples premium con: curvas suave Catmull-Rom, doble eje vertical (izquierdo/derecho), zonas de proyeccion con tramado y lineas discontinuas, marcadores de hito con etiquetas, leyenda horizontal automatica, tooltip interactivo al hover, paleta cromatica del SDK de cursor/canvas, y arquitectura completamente reutilizable con el tipo `Dataset`. El canvas usa datos de demostracion del sistema publico de pensiones de Espana (AIReF, IGAE BDMACRO, Seguridad Social). No se ha modificado ningun archivo del repositorio git.
 
 

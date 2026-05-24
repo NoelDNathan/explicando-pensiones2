@@ -1,40 +1,93 @@
 /* TimeSeriesChart — component styles */
 
+/* ── Theme tokens ────────────────────────────────────────────────────────────── */
+
 .tsc {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  /* Light variant defaults (uses project root CSS variables) */
+  --tsc-bg:      var(--surface);
+  --tsc-title:   var(--heading);
+  --tsc-label:   var(--muted);
+  --tsc-border:  var(--border);
+  --tsc-surface: var(--surface);
+  --tsc-badge-bg:   var(--accent);
+  --tsc-badge-text: #fff;
+
+  background: var(--tsc-bg);
+  border: 1px solid var(--tsc-border);
   border-radius: 8px;
   overflow: hidden;
+}
+
+.tsc--dark {
+  /* Dark variant (uses project dark palette tokens) */
+  --tsc-bg:      var(--color-surface-deep);
+  --tsc-title:   var(--color-text-inverted);
+  --tsc-label:   var(--color-text-inverted-muted);
+  --tsc-border:  var(--color-axis-on-dark);
+  --tsc-surface: var(--color-surface-deep-2);
+  --tsc-badge-bg:   #2d6fa8;
+  --tsc-badge-text: #fff;
+
+  border-color: var(--color-axis-on-dark);
 }
 
 /* ── Header ─────────────────────────────────────────────────────────────────── */
 
 .tsc__header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-  padding: 22px 28px 18px;
-  border-bottom: 1px solid var(--border);
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 28px 16px;
+  border-bottom: 1px solid var(--tsc-border);
 }
 
-.tsc__title-block {
-  display: grid;
-  gap: 5px;
-  flex-shrink: 0;
+/* Title row: title+icon on left, badge on right */
+.tsc__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tsc__title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
 .tsc__title {
   margin: 0;
-  font: 600 16px/1.2 var(--sans);
-  color: var(--heading);
+  font: 700 17px/1.2 var(--sans);
+  color: var(--tsc-title);
   letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.tsc__subtitle {
-  margin: 0;
-  font: 400 12.5px/1.4 var(--sans);
-  color: var(--muted);
+/* Info icon button */
+.tsc__info-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--tsc-label);
+  cursor: default;
+  opacity: 0.75;
+}
+
+/* Projection badge (e.g. "2025") */
+.tsc__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font: 600 12px/1 var(--sans);
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--tsc-badge-bg);
+  color: var(--tsc-badge-text);
 }
 
 /* ── Legend ─────────────────────────────────────────────────────────────────── */
@@ -42,9 +95,8 @@
 .tsc__legend {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   flex-wrap: wrap;
-  justify-content: flex-end;
 }
 
 .tsc__legend-item {
@@ -60,20 +112,14 @@
 
 .tsc__legend-name {
   font: 400 12px/1 var(--sans);
-  color: var(--muted);
+  color: var(--tsc-label);
   white-space: nowrap;
-}
-
-.tsc__legend-unit {
-  font: 400 11px/1 var(--sans);
-  color: var(--muted);
-  opacity: 0.6;
 }
 
 .tsc__legend-sep {
   width: 1px;
-  height: 18px;
-  background: var(--border);
+  height: 16px;
+  background: var(--tsc-border);
   flex-shrink: 0;
 }
 
@@ -85,34 +131,19 @@
   cursor: crosshair;
 }
 
-/* ── Dual-axis strip ────────────────────────────────────────────────────────── */
-
-.tsc__axis-strip {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 28px 0;
-}
-
-.tsc__axis-label {
-  font: 400 11px/1 var(--sans);
-  color: var(--muted);
-  opacity: 0.55;
-}
-
 /* ── Footnote ───────────────────────────────────────────────────────────────── */
 
 .tsc__footer {
-  padding: 11px 28px 17px;
-  border-top: 1px solid var(--border);
+  padding: 10px 28px 16px;
+  border-top: 1px solid var(--tsc-border);
   margin: 0;
 }
 
 .tsc__footnote {
   margin: 0;
   font: 400 11px/1.5 var(--sans);
-  color: var(--muted);
+  color: var(--tsc-label);
   opacity: 0.7;
-  /* Override the global max-width set on <p> in index.css */
   max-width: none;
 }
 
@@ -120,21 +151,19 @@
 
 @media (max-width: 760px) {
   .tsc__header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 18px 20px 16px;
+    padding: 16px 18px 14px;
+    gap: 10px;
+  }
+
+  .tsc__title {
+    font-size: 15px;
   }
 
   .tsc__legend {
-    justify-content: flex-start;
-  }
-
-  .tsc__axis-strip {
-    padding: 5px 20px 0;
+    gap: 12px;
   }
 
   .tsc__footer {
-    padding: 10px 20px 16px;
+    padding: 9px 18px 14px;
   }
 }
