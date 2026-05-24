@@ -56,6 +56,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Creado `data/inventory.md` con una tabla ordenada de los datos recogidos hasta ahora, agrupando juntas las series que representan el mismo valor y separando observados, proyecciones, previsiones y aproximaciones metodologicas.
 - Respondida consulta de alcance sobre disponibilidad de datos de evolucion del gasto publico por apartados: el proyecto contiene datos oficiales parciales, pero aun no una serie procesada de gasto publico total por funciones o politicas.
 - Definido que cada interaccion debe dejar un resumen corto en `ai/history/`.
 - Definido que cada interaccion debe actualizar este archivo.
@@ -77,6 +78,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
 - Localizar y procesar una fuente oficial/institucional para gasto publico total por grandes funciones o politicas, idealmente COFOG/IGAE/Eurostat, que permita separar pensiones, intereses de deuda, sanidad, educacion y otras areas con trazabilidad anual.
 - Inicializar Git o confirmar si ya existe otro repositorio remoto a usar.
 - Buscar una fuente tabular institucional que separe pensiones de otras prestaciones sociales antes de 1995; si no existe, explicar la discontinuidad entre la serie larga BDMACRO y la serie presupuestaria de Seguridad Social 1995-2025P.
