@@ -1,4 +1,5 @@
 import './App.css'
+import { PopulationPyramid } from './components/PopulationPyramid'
 
 type PlayButtonProps = {
   label?: string
@@ -56,6 +57,25 @@ function ComponentLab() {
           <PlayButton label="Reproducir" />
           <PlayButton label="Vista ligera" variant="ghost" />
           <PlayButton label="No disponible" disabled />
+        </div>
+      </section>
+
+      <section className="component-section" aria-labelledby="pyramid-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 02</p>
+          <h2 id="pyramid-title">Piramide poblacional</h2>
+          <p>
+            Visualizacion de poblacion por edad, sexo y nacionalidad. Resalta
+            la franja en edad de trabajar y diferencia con un tono mas
+            saturado los grupos que aportan al sistema.
+          </p>
+        </div>
+
+        <div
+          className="component-preview component-preview--dark"
+          aria-label="Vista previa de la piramide poblacional"
+        >
+          <PopulationPyramid />
         </div>
       </section>
     </main>

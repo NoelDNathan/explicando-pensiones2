@@ -90,12 +90,15 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Incorporada la proyeccion oficial del INE de poblacion residente por sexo y edad hasta 2074, util para construir graficos de poblacion total, poblacion en edad de trabajar y poblacion mayor, siempre separada de datos observados.
 - Incorporada la serie observada del INE de poblacion residente por sexo y edad desde 1975 hasta 2025, util para construir la evolucion historica de piramides de poblacion.
 - Creado en Figma un prototipo visual de pruebas con cabecera, hero, tarjetas de indicadores, modulo de grafico y panel metodologico. No incorpora datos numericos nuevos; usa placeholders visuales y textos de estructura.
+- Incorporado Tailwind CSS v4 con tokens propios del proyecto definidos via `@theme` en `src/index.css`. Los primeros tokens cubren superficies oscuras (`--color-surface-deep`, `--color-text-inverted`, etc.), eje sobre oscuro, franja de edad de trabajar y paleta de la piramide poblacional con variantes activa/apagada por categoria.
+- Creado el componente `PopulationPyramid` (`src/components/PopulationPyramid.tsx`) en SVG reutilizable y responsive, con datos de ejemplo internos. Diferencia visualmente los grupos en edad de trabajar (tono mas saturado) y fuera de ella (tono mas apagado), conserva la base cromatica por sexo y nacionalidad, e incluye franja de resalte de edad laboral, ejes invertidos para hombres y leyenda.
+- Anadida al laboratorio `/componentes` la seccion `Componente 02 - Piramide poblacional` con marco de previsualizacion oscuro (`.component-preview--dark`).
 
 ## Pendiente inmediato
 
-- Si se decide incorporar Tailwind, definir primero tokens propios del proyecto y mapearlos en su configuracion antes de migrar componentes.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
+- Conectar `PopulationPyramid` con datos reales del INE cuando se decida la primera vista publica (por ahora la serie observada anual no segrega por nacionalidad; cuando se incorpore la ECP por pais de nacimiento, ampliar el modelo de datos del componente).
 - Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico.
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.

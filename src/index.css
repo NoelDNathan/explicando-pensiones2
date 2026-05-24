@@ -1,3 +1,30 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Dark surface tokens used by chart panels and dashboards */
+  --color-surface-deep: #0e1b2e;
+  --color-surface-deep-2: #142339;
+  --color-text-inverted: #ffffff;
+  --color-text-inverted-muted: #9db6d9;
+  --color-text-inverted-faint: #6f829f;
+  --color-axis-on-dark: #4d6688;
+
+  /* Working-age band highlight (semi-transparent dark teal-green) */
+  --color-working-age-band: #2a8a78;
+
+  /* Population pyramid bar colors - working age (vivid, more saturated) */
+  --color-pyramid-male-native-active: #36d9e0;
+  --color-pyramid-male-foreign-active: #5b95f2;
+  --color-pyramid-female-native-active: #6ce3bd;
+  --color-pyramid-female-foreign-active: #b370ea;
+
+  /* Population pyramid bar colors - non-working age (muted, less saturated) */
+  --color-pyramid-male-native-rest: #5fa6ab;
+  --color-pyramid-male-foreign-rest: #6f88b5;
+  --color-pyramid-female-native-rest: #82b6a3;
+  --color-pyramid-female-foreign-rest: #9d7fb1;
+}
+
 :root {
   --bg: #f7f4ed;
   --surface: #fffdf8;

@@ -79,6 +79,13 @@
     var(--surface);
 }
 
+.component-preview--dark {
+  justify-content: center;
+  padding: 20px;
+  background: #07111f;
+  border-color: #1d2b44;
+}
+
 .play-button {
   --play-size: 44px;
   --play-gap: 12px;
