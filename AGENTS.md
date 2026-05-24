@@ -33,6 +33,7 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
 5. Mantener los estilos cerca del sistema existente: preferir clases y variables compartidas; si se crea una variante visual, documentar su proposito mediante el nombre del componente o sus props.
 6. Evitar estilos puntuales no reutilizables en paginas finales. Si una pagina necesita un boton, tarjeta, aviso, etiqueta de fuente, control de grafico o modulo repetible, debe usar o ampliar un componente existente.
 7. Cada cambio visual debe comprobarse en escritorio y movil cuando afecte layout, tamanos, interaccion o legibilidad.
+8. Considerar Tailwind cuando haya mas UI repetida: es una buena opcion si se crean muchas tarjetas, botones, layouts, estados responsive y paginas narrativas, pero debe configurarse con tokens propios del proyecto y no con colores sueltos como `bg-blue-500`.
 
 ## Norma de commit y push
 

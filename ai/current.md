@@ -56,6 +56,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadida en `AGENTS.md` una regla para considerar Tailwind cuando haya mas UI repetida, siempre configurado con tokens propios del proyecto y evitando colores sueltos como `bg-blue-500`.
 - Anadida en `AGENTS.md` una seccion de reglas de diseno frontend para mantener colores/tokens coherentes, crear componentes reutilizables, probar variantes en `/componentes`, cuidar accesibilidad y comprobar escritorio/movil.
 - Creada una primera base web en React/Vite para el proyecto.
 - Sustituida la plantilla inicial por una portada minima de `Explicando pensiones`.
@@ -92,6 +93,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Si se decide incorporar Tailwind, definir primero tokens propios del proyecto y mapearlos en su configuracion antes de migrar componentes.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
 - Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico.
