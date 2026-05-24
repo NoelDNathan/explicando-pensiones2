@@ -56,6 +56,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Respondida consulta sobre metadata de datasets: el proyecto guarda parte de la trazabilidad en `data/sources.md`, `data/inventory.md` y `data/methodology/transformations.md`, pero no existe aun una plantilla obligatoria completa con checksums, estado del dato y rupturas metodologicas por dataset.
 - Localizadas fuentes INE candidatas para poblacion por edad, sexo y pais/lugar de nacimiento: la ECP ofrece tabla 56937 por pais de nacimiento, grupo quinquenal de edad, sexo y fecha desde 2002, y tabla 69795 con agrupaciones de paises hasta 2026; no se ha incorporado aun al repositorio.
 - Respondida consulta sobre disponibilidad de datos de poblacion por edad, sexo y lugar de nacimiento: el proyecto ya contiene poblacion por edad y sexo, observada y proyectada, pero no lugar/pais de nacimiento.
 - Creado `data/inventory.md` con una tabla ordenada de los datos recogidos hasta ahora, agrupando juntas las series que representan el mismo valor y separando observados, proyecciones, previsiones y aproximaciones metodologicas.
@@ -80,6 +81,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Decidir si la checklist de metadata de datasets se convierte en regla formal del proyecto; si se aprueba, incorporarla a `AGENTS.md` y crear una plantilla por dataset con fuente, institucion, URL, fecha de descarga, periodo, unidad, licencia, metodologia, estado del dato, transformaciones, checksums y notas de ruptura metodologica.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
 - Si se necesita analizar inmigracion o poblacion nacida fuera de Espana, localizar una fuente oficial del INE que cruce edad, sexo y lugar/pais de nacimiento, y mantenerla separada de las series actuales de poblacion residente por edad y sexo.
 - Para 1975-2050 por pais/lugar de nacimiento, asumir de partida tres tramos separados: observado general 1975-2001 sin pais de nacimiento en la serie ya usada; observado por pais/grupo de nacimiento desde 2002 en ECP; proyeccion futura solo si se localiza tabla INE especifica con Espana/extranjero o pais de nacimiento, evitando interpolar o reconstruir paises sin fuente oficial.
