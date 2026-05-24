@@ -54,6 +54,20 @@ Ejemplo:
 - descripcion breve;
 - uso previsto en la web.
 
+## Metadata obligatoria de datasets
+
+Antes de usar un dataset en contenido editorial o visualizaciones, registrar una ficha en `data/metadata.md` con:
+
+- fuente, institucion, URL y fecha de descarga;
+- periodo cubierto y periodo procesado si difieren;
+- unidad de medida;
+- licencia o condiciones de uso;
+- metodologia o definicion operativa;
+- estado del dato: observado, estimado, proyectado, muestra, pendiente o no estimado;
+- transformaciones aplicadas o referencia a `data/methodology/transformations.md`;
+- checksums SHA-256 de archivos brutos y procesados, registrados en `data/checksums.sha256`;
+- notas de ruptura metodologica, comparabilidad y limites de uso.
+
 ## Principio editorial
 
 La web debe distinguir entre:
@@ -63,4 +77,3 @@ La web debe distinguir entre:
 - interpretacion;
 - proyeccion;
 - opinion o contexto editorial.
-

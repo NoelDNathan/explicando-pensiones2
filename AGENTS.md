@@ -16,6 +16,13 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
 5. Si el proyecto tiene Git y remoto configurado, hacer commit y push al terminar cada interaccion.
 6. No mezclar datos descargados, datos procesados y contenido editorial.
 7. Cada dato usado en la web debe poder rastrearse hasta su fuente original.
+8. Cada dataset usado o candidato debe tener metadata documentada antes de usarse editorialmente. La metadata minima obligatoria incluye:
+   - fuente, institucion, URL y fecha de descarga;
+   - periodo, unidad, licencia o condiciones de uso y metodologia;
+   - estado del dato: observado, estimado, proyectado, muestra, pendiente o no estimado;
+   - transformaciones aplicadas;
+   - checksums de los archivos brutos y procesados cuando existan;
+   - notas de ruptura metodologica, comparabilidad o limitaciones.
 
 ## Norma de commit y push
 
@@ -41,4 +48,3 @@ Usar solamente fuentes oficiales o institucionales:
 - IGAE;
 - Eurostat;
 - OCDE, solo para comparativas internacionales.
-
