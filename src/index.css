@@ -11,6 +11,7 @@
 
   /* Working-age band highlight (semi-transparent dark teal-green) */
   --color-working-age-band: #2a8a78;
+  --color-working-age-boundary: #5ee4c8;
 
   /* Population pyramid bar colors - working age (vivid, more saturated) */
   --color-pyramid-male-native-active: #36d9e0;

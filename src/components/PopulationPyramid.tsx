@@ -70,6 +70,7 @@ const COLORS = {
   textFaint: 'var(--color-text-inverted-faint)',
   axis: 'var(--color-axis-on-dark)',
   workingAgeBand: 'var(--color-working-age-band)',
+  workingAgeBoundary: 'var(--color-working-age-boundary)',
   bars: {
     male: {
       native: {
@@ -164,6 +165,10 @@ type WorkingBand = {
   bottomY: number
   height: number
   midY: number
+  /** Y position of the minimum working-age boundary (top of first in-range row). */
+  minBoundaryY: number
+  /** Y position of the maximum working-age boundary (bottom of last in-range row). */
+  maxBoundaryY: number
   hasAny: boolean
 } | null
 
@@ -181,15 +186,70 @@ const computeWorkingBand = (
   const firstIndex = indices[0]
   const lastIndex = indices[indices.length - 1]
   const padding = 2
-  const topY = geometry.rowY(firstIndex) - padding
-  const bottomY = geometry.rowY(lastIndex) + LAYOUT.barHeight + padding
+  const minBoundaryY = geometry.rowY(firstIndex)
+  const maxBoundaryY = geometry.rowY(lastIndex) + LAYOUT.barHeight
+  const topY = minBoundaryY - padding
+  const bottomY = maxBoundaryY + padding
   return {
     topY,
     bottomY,
     height: bottomY - topY,
     midY: (topY + bottomY) / 2,
+    minBoundaryY,
+    maxBoundaryY,
     hasAny: true,
   }
+}
+
+function WorkingAgeBoundaryLines({
+  workingBand,
+  workingAgeMin,
+  workingAgeMax,
+}: {
+  workingBand: WorkingBand
+  workingAgeMin: number
+  workingAgeMax: number
+}) {
+  if (!workingBand) return null
+
+  const chartLeft = LAYOUT.padding.left
+  const chartRight = LAYOUT.rightLabelsX - 8
+  const lineProps = {
+    x1: chartLeft,
+    x2: chartRight,
+    stroke: COLORS.workingAgeBoundary,
+    strokeWidth: 2,
+    strokeOpacity: 0.9,
+  }
+
+  const labelX = chartLeft + 4
+
+  return (
+    <g aria-hidden="true">
+      <line y1={workingBand.minBoundaryY} y2={workingBand.minBoundaryY} {...lineProps} />
+      <line y1={workingBand.maxBoundaryY} y2={workingBand.maxBoundaryY} {...lineProps} />
+      <text
+        x={labelX}
+        y={workingBand.minBoundaryY}
+        fill={COLORS.workingAgeBoundary}
+        fontSize={9}
+        fontWeight={600}
+        dominantBaseline="middle"
+      >
+        {workingAgeMin} anos
+      </text>
+      <text
+        x={labelX}
+        y={workingBand.maxBoundaryY}
+        fill={COLORS.workingAgeBoundary}
+        fontSize={9}
+        fontWeight={600}
+        dominantBaseline="middle"
+      >
+        {workingAgeMax} anos
+      </text>
+    </g>
+  )
 }
 
 type LegendItem = {
@@ -579,6 +639,12 @@ export function PopulationPyramid({
           data={data}
           geometry={geometry}
           mode={ageLabels}
+          workingAgeMin={workingAgeMin}
+          workingAgeMax={workingAgeMax}
+        />
+
+        <WorkingAgeBoundaryLines
+          workingBand={workingBand}
           workingAgeMin={workingAgeMin}
           workingAgeMax={workingAgeMax}
         />
