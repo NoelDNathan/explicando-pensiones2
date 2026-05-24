@@ -56,6 +56,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Localizadas fuentes INE candidatas para poblacion por edad, sexo y pais/lugar de nacimiento: la ECP ofrece tabla 56937 por pais de nacimiento, grupo quinquenal de edad, sexo y fecha desde 2002, y tabla 69795 con agrupaciones de paises hasta 2026; no se ha incorporado aun al repositorio.
 - Respondida consulta sobre disponibilidad de datos de poblacion por edad, sexo y lugar de nacimiento: el proyecto ya contiene poblacion por edad y sexo, observada y proyectada, pero no lugar/pais de nacimiento.
 - Creado `data/inventory.md` con una tabla ordenada de los datos recogidos hasta ahora, agrupando juntas las series que representan el mismo valor y separando observados, proyecciones, previsiones y aproximaciones metodologicas.
 - Respondida consulta de alcance sobre disponibilidad de datos de evolucion del gasto publico por apartados: el proyecto contiene datos oficiales parciales, pero aun no una serie procesada de gasto publico total por funciones o politicas.
@@ -81,6 +82,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
 - Si se necesita analizar inmigracion o poblacion nacida fuera de Espana, localizar una fuente oficial del INE que cruce edad, sexo y lugar/pais de nacimiento, y mantenerla separada de las series actuales de poblacion residente por edad y sexo.
+- Para 1975-2050 por pais/lugar de nacimiento, asumir de partida tres tramos separados: observado general 1975-2001 sin pais de nacimiento en la serie ya usada; observado por pais/grupo de nacimiento desde 2002 en ECP; proyeccion futura solo si se localiza tabla INE especifica con Espana/extranjero o pais de nacimiento, evitando interpolar o reconstruir paises sin fuente oficial.
 - Localizar y procesar una fuente oficial/institucional para gasto publico total por grandes funciones o politicas, idealmente COFOG/IGAE/Eurostat, que permita separar pensiones, intereses de deuda, sanidad, educacion y otras areas con trazabilidad anual.
 - Inicializar Git o confirmar si ya existe otro repositorio remoto a usar.
 - Buscar una fuente tabular institucional que separe pensiones de otras prestaciones sociales antes de 1995; si no existe, explicar la discontinuidad entre la serie larga BDMACRO y la serie presupuestaria de Seguridad Social 1995-2025P.
