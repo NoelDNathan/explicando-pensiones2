@@ -183,14 +183,16 @@ const computeWorkingBand = (
   )
   if (indices.length === 0) return null
 
-  // Data runs oldest→youngest (90+ at top). First in-range row holds max age; last holds min age.
+  // Data runs oldest→youngest (90+ at top). First in-range index = max age row; last = min age row.
   const oldestWorkingIndex = indices[0]
   const youngestWorkingIndex = indices[indices.length - 1]
   const padding = 2
+  // Upper boundary: top edge of oldest working-age row (divides it from the row above).
   const upperBoundaryY = geometry.rowY(oldestWorkingIndex)
-  const lowerBoundaryY = geometry.rowY(youngestWorkingIndex)
+  // Lower boundary: bottom edge of youngest working-age row (divides it from the row below).
+  const lowerBoundaryY = geometry.rowY(youngestWorkingIndex) + LAYOUT.barHeight
   const topY = upperBoundaryY - padding
-  const bottomY = lowerBoundaryY + LAYOUT.barHeight + padding
+  const bottomY = lowerBoundaryY + padding
   return {
     topY,
     bottomY,
@@ -213,57 +215,41 @@ function WorkingAgeBoundaryLines({
 }) {
   if (!workingBand) return null
 
-  const chartLeft = LAYOUT.padding.left
-  const chartRight = LAYOUT.rightLabelsX - 8
-  const centerGap = LAYOUT.axisGap + 6
-  const leftEndX = LAYOUT.centerX - centerGap
-  const rightStartX = LAYOUT.centerX + centerGap
+  const lineX1 = LAYOUT.padding.left
+  // Line ends just before the annotation column so the number sits clearly outside.
+  const lineX2 = LAYOUT.rightLabelsX - 6
+  const labelX = LAYOUT.rightLabelsX
   const stroke = COLORS.workingAgeBoundary
 
-  const renderSplitLine = (y: number) => (
-    <g key={`boundary-${y}`}>
+  const renderBoundary = (y: number, age: number) => (
+    <g key={`boundary-${age}`}>
       <line
-        x1={chartLeft}
-        x2={leftEndX}
+        x1={lineX1}
+        x2={lineX2}
         y1={y}
         y2={y}
         stroke={stroke}
-        strokeWidth={2}
+        strokeWidth={1.5}
         strokeOpacity={0.9}
       />
-      <line
-        x1={rightStartX}
-        x2={chartRight}
-        y1={y}
-        y2={y}
-        stroke={stroke}
-        strokeWidth={2}
-        strokeOpacity={0.9}
-      />
+      <text
+        x={labelX}
+        y={y}
+        fill={stroke}
+        fontSize={9}
+        fontWeight={700}
+        textAnchor="start"
+        dominantBaseline="middle"
+      >
+        {age}
+      </text>
     </g>
-  )
-
-  const renderAgeLabel = (y: number, age: number) => (
-    <text
-      key={`label-${age}`}
-      x={chartRight - 2}
-      y={y}
-      fill={stroke}
-      fontSize={8.5}
-      fontWeight={600}
-      textAnchor="end"
-      dominantBaseline="middle"
-    >
-      {age}
-    </text>
   )
 
   return (
     <g aria-hidden="true">
-      {renderSplitLine(workingBand.upperBoundaryY)}
-      {renderSplitLine(workingBand.lowerBoundaryY)}
-      {renderAgeLabel(workingBand.upperBoundaryY, workingAgeMax)}
-      {renderAgeLabel(workingBand.lowerBoundaryY, workingAgeMin)}
+      {renderBoundary(workingBand.upperBoundaryY, workingAgeMax)}
+      {renderBoundary(workingBand.lowerBoundaryY, workingAgeMin)}
     </g>
   )
 }
