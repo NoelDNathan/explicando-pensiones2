@@ -1,4 +1,4 @@
-d5ede0cc0e159fad8cd941a3db0e7674de486b00b377040ead78df0ac4f87dd2  data\processed\airef\2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv
+﻿d5ede0cc0e159fad8cd941a3db0e7674de486b00b377040ead78df0ac4f87dd2  data\processed\airef\2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv
 d4bc0e6d4fc3b8cedfffab6e2c33d710e5d609ef42a7c1f8b2a534d6ab1354fd  data\processed\airef\2026-05-18_airef_prevision-gasto-pensiones-pct-pib_2022-2070.csv
 27639a2811b58398c9c7b60997ae6eeef2f8a18f8d2b3ce48082bfde6b434d3d  data\processed\airef\2026-05-18_airef_prevision-pensionistas-millones_2022-2070.csv
 3852419c014620f0e66d002805a1339db2146b7492f062203ab19e8b7deeef4a  data\processed\airef\deuda-publica-prevision-airef-2026.csv
@@ -14,6 +14,8 @@ dbb6cb169ffead7105e48d626aca02086c54c2f10cf0cf98c43438c0abfbc02f  data\processed
 7b53373e4f95c5e47990b8a673efc00d1880b92e055f5397d15ac4d05f21160d  data\processed\ine\2026-05-18_ine_ipc_inflacion-interanual-mensual_1962-2026.csv
 8d1a91bbea2b97d0da358557d130976ea318a1220f2b09d917cefefc402d0eb1  data\processed\ine\2026-05-18_ine_proyeccion-esperanza-vida-nacimiento-espana_2024-2073.csv
 43f9984aad027d9ef3a4c3cb379210cfd47dd77b9cefae03d54afe520a72315e  data\processed\ine\2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv
+253b28074c141f3e3d813c36b42ebffab29e44b2c1471a507046fd260a29a216  data\processed\ine\2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv
+e3f11d14887e317b32be0998492e10bd9681e3120f37b4cbf24816e53d50c2a5  data\processed\ine\2026-05-24_ine_poblacion-residente-nacimiento-cobertura-interpolacion_1975-2070.csv
 697b02142397abe031c64f2b6454a3c3e9ddf367c39c612ef3f4a1f2e59725d9  data\processed\ine\esperanza-vida-nacimiento-espana-1975-2024.csv
 64c5df62c53bcd188ab14b568909dc0285a74a4c1bdfcdbea147839f5dc71938  data\processed\seguridad-social\2026-05-18_seguridad-social_afiliacion-media-total-sistema_anual_2001-2026.csv
 d116320345244652077073be2b4baa60a8573eb622c497695cf0196696973b42  data\processed\seguridad-social\2026-05-18_seguridad-social_afiliacion-media-total-sistema_mensual_2001-2026.csv
@@ -35,6 +37,7 @@ b467aea65254f6dbe7aabfb89b0e190b5287b867b9e7e10461b5e25c4da7c7db  data\raw\igae\
 96ab805039e9c60eff52e65d750e6633d4c84bf356f97490989778f624fe7abd  data\raw\igae-bdmacro\2026-05-18_sepg-igae_bdmacro_nota-explicativa_abril-2026.pdf
 7b12c74321696f971b85a22e01f19de068bc1b477ac7cc5ff1139798b34675f4  data\raw\ine\2026-05-18_ine_ipc-indice-general-nacional.csv
 4072692bd0963a3da62790f34e383a061edea53a8abce9a5e845ed39cd8fef4b  data\raw\ine\2026-05-18_ine_ipc-tasa-variacion-indice-general-nacional.csv
+be09ff0327c0499b30d704509f106c343ab1dd0db190e663e27fbf02696e8e06  data\raw\ine\estadistica-continua-poblacion\poblacion-nacimiento\2026-05-24_ine_ecp_poblacion-residente-sexo-grupo-edad-pais-nacimiento_2002-2025.json
 62e4b00899a8b2b42f79b51b8c051e5000a97567f0fff0de495e8b5db8d26bfa  data\raw\ine\estadistica-continua-poblacion\poblacion-residente\2026-05-18_ine_ecp_poblacion-residente-sexo-edad_1971-2025.json
 34cf8b0d473241b618bd8c3a8249463a381d95cfd9a1df8db170ecfa84efd33b  data\raw\ine\indicadores-demograficos-basicos\2026-05-18_ine_idb_esperanza-vida-nacimiento_sexo_total-nacional_1975-2024.json
 cc6366cffda72fdf257a57527383ced161bab0bf88e276efcbe2ada7999b0432  data\raw\ine\proyecciones-poblacion\poblacion-residente\2026-05-18_ine_proyecciones-poblacion_poblacion-residente-sexo-edad_2024-2074.json

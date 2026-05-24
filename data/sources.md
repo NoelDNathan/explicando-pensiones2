@@ -93,6 +93,28 @@
 - uso previsto en la web: construir piramides de poblacion historicas desde 1975 y compararlas, de forma separada, con las proyecciones oficiales.
 - nota metodologica: el CSV para piramides conserva solo datos a 1 de enero, hombres y mujeres, edades publicadas por el INE; no se calculan agregados propios.
 
+## INE - Poblacion residente observada por sexo, grupo de edad y pais de nacimiento
+
+- nombre de la fuente: Poblacion residente por fecha, sexo, grupo de edad y pais de nacimiento. Estadistica Continua de Poblacion
+- institucion: Instituto Nacional de Estadistica (INE)
+- URL: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/56937?tip=AM
+- pagina de tabla: https://www.ine.es/jaxiT3/Tabla.htm?t=56937
+- referencia catalogo: https://datos.gob.es/es/catalogo/ea0010587-poblacion-residente-por-fecha-sexo-grupo-de-edad-y-pais-de-nacimiento-ecp-identificador-api-569372
+- descarga XLSX publicada en datos.gob.es: https://www.ine.es/jaxiT3/files/t/xlsx/56937.xlsx
+- fecha de descarga: 2026-05-24
+- periodo cubierto en la fuente descargada: 2002-2025
+- periodo procesado: 2002-2025
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivo bruto: `data/raw/ine/estadistica-continua-poblacion/poblacion-nacimiento/2026-05-24_ine_ecp_poblacion-residente-sexo-grupo-edad-pais-nacimiento_2002-2025.json`
+- archivos procesados:
+  - `data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv`
+  - `data/processed/ine/2026-05-24_ine_poblacion-residente-nacimiento-cobertura-interpolacion_1975-2070.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: poblacion residente observada de Espana por fecha, sexo, grupo quinquenal de edad y pais de nacimiento. El CSV procesado conserva las categorias `Total`, `Espana` y `Extranjero`.
+- uso previsto en la web: construir piramides o perfiles de poblacion nacida en Espana y nacida en el extranjero desde 2002.
+- nota metodologica: no se han creado valores interpolados. La tabla de cobertura documenta los tramos donde solo hay anclas censales o proyecciones no cruzadas.
+
 ## Eurostat - Deuda publica de Espana
 
 - nombre de la fuente: Government deficit/surplus, debt and associated data

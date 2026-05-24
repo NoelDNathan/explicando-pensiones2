@@ -146,6 +146,29 @@
 - Nota de definicion: es una serie observada de poblacion residente. Debe mantenerse separada de la proyeccion INE 2024-2074.
 - Nota tecnica: el numero de edades publicadas cambia en la serie historica; el tramo antiguo agrupa edades superiores antes que el tramo reciente. Para el CSV de piramides se conserva la edad abierta compatible con el maximo detalle disponible en cada fecha y sexo. No se desagregan edades abiertas ni se interpolan valores.
 
+## INE - poblacion residente por sexo, grupo de edad y lugar de nacimiento 2002-2025
+
+- Fecha de transformacion: 2026-05-24.
+- Fuente bruta: INE, tabla 56937, `data/raw/ine/estadistica-continua-poblacion/poblacion-nacimiento/2026-05-24_ine_ecp_poblacion-residente-sexo-grupo-edad-pais-nacimiento_2002-2025.json`.
+- Archivos generados:
+  - `data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv`.
+  - `data/processed/ine/2026-05-24_ine_poblacion-residente-nacimiento-cobertura-interpolacion_1975-2070.csv`.
+- Transformacion aplicada al CSV observado:
+  - lectura del JSON de la API del INE con codificacion UTF-8;
+  - extraccion de fecha, ano, periodo INE, ambito geografico, sexo, grupo de edad, lugar de nacimiento, valor, naturaleza del dato, concepto y tipo de dato;
+  - filtrado a `Total Nacional` y a las categorias de nacimiento `Total`, `Espana` y `Extranjero`;
+  - normalizacion de grupos quinquenales en `edad_desde`, `edad_hasta` y `edad_grupo_abierto`;
+  - redondeo del valor de poblacion a personas enteras, sin agregaciones propias;
+  - exportacion a CSV con codificacion UTF-8.
+- Transformacion aplicada a la tabla de cobertura:
+  - registro manual de tramos 1975-2070 con estado de disponibilidad;
+  - separacion entre puntos censales observados, tramo ECP observado, tramos pendientes de interpolar y proyecciones no cruzadas;
+  - inclusion de URL oficiales de INE para anclas censales, ECP y proyecciones.
+- Periodo resultante:
+  - CSV observado: 2002-2025, 9.900 observaciones.
+  - tabla de cobertura: 1975-2070, 7 tramos metodologicos.
+- Nota de definicion: el CSV observado permite diferenciar poblacion nacida en Espana y nacida en el extranjero por sexo y grupo de edad desde 2002. No se han creado interpolaciones numericas para 1975-2001 ni una matriz proyectada nacimiento + sexo + edad para 2026-2070.
+
 ## IGAE/SEPG - BDMACRO, prestaciones sociales de la Seguridad Social 1975-2025
 
 - Fecha de transformacion: 2026-05-18.
