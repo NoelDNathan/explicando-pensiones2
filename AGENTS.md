@@ -24,6 +24,16 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
    - checksums de los archivos brutos y procesados cuando existan;
    - notas de ruptura metodologica, comparabilidad o limitaciones.
 
+## Reglas de diseno frontend
+
+1. Mantener una identidad visual coherente: usar los colores, tipografias, espaciados y radios definidos como variables o tokens globales antes de introducir nuevos valores.
+2. No duplicar patrones de interfaz: cuando una pieza se repita o pueda repetirse, crear un componente reutilizable con props claras en lugar de copiar markup y estilos.
+3. Antes de integrar un nuevo componente en una pagina publica, anadirlo o revisarlo en `/componentes` con sus variantes principales, estados interactivos y estado deshabilitado cuando aplique.
+4. Los componentes deben ser accesibles por defecto: HTML semantico, etiquetas `aria` solo cuando aporten claridad, foco visible, contraste suficiente y textos que no dependan solo del color.
+5. Mantener los estilos cerca del sistema existente: preferir clases y variables compartidas; si se crea una variante visual, documentar su proposito mediante el nombre del componente o sus props.
+6. Evitar estilos puntuales no reutilizables en paginas finales. Si una pagina necesita un boton, tarjeta, aviso, etiqueta de fuente, control de grafico o modulo repetible, debe usar o ampliar un componente existente.
+7. Cada cambio visual debe comprobarse en escritorio y movil cuando afecte layout, tamanos, interaccion o legibilidad.
+
 ## Norma de commit y push
 
 Despues de cada interaccion con la IA:
