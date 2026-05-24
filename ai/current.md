@@ -59,6 +59,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Creado canvas `institutional-time-series-chart.canvas.tsx` en la carpeta gestionada por el IDE (`.cursor/projects/.../canvases/`). Implementa un grafico temporal de lineas multiples premium con: curvas suave Catmull-Rom, doble eje vertical (izquierdo/derecho), zonas de proyeccion con tramado y lineas discontinuas, marcadores de hito con etiquetas, leyenda horizontal automatica, tooltip interactivo al hover, paleta cromatica del SDK de cursor/canvas, y arquitectura completamente reutilizable con el tipo `Dataset`. El canvas usa datos de demostracion del sistema publico de pensiones de Espana (AIReF, IGAE BDMACRO, Seguridad Social). No se ha modificado ningun archivo del repositorio git.
+
+
+
 - Descargadas y procesadas desde fuentes oficiales INE nuevas series demograficas nacionales para 1975-2070:
   - indicador coyuntural de fecundidad, observado 1975-2024 y proyectado 2025-2070;
   - edad media a la maternidad, observada 1975-2024 y proyectada 2025-2070;

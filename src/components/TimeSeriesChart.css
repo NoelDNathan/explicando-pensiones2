@@ -1,0 +1,140 @@
+/* TimeSeriesChart — component styles */
+
+.tsc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+
+.tsc__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 22px 28px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tsc__title-block {
+  display: grid;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.tsc__title {
+  margin: 0;
+  font: 600 16px/1.2 var(--sans);
+  color: var(--heading);
+  letter-spacing: -0.2px;
+}
+
+.tsc__subtitle {
+  margin: 0;
+  font: 400 12.5px/1.4 var(--sans);
+  color: var(--muted);
+}
+
+/* ── Legend ─────────────────────────────────────────────────────────────────── */
+
+.tsc__legend {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.tsc__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.tsc__legend-swatch {
+  display: block;
+  flex-shrink: 0;
+}
+
+.tsc__legend-name {
+  font: 400 12px/1 var(--sans);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.tsc__legend-unit {
+  font: 400 11px/1 var(--sans);
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.tsc__legend-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* ── SVG chart ──────────────────────────────────────────────────────────────── */
+
+.tsc__chart {
+  width: 100%;
+  display: block;
+  cursor: crosshair;
+}
+
+/* ── Dual-axis strip ────────────────────────────────────────────────────────── */
+
+.tsc__axis-strip {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 28px 0;
+}
+
+.tsc__axis-label {
+  font: 400 11px/1 var(--sans);
+  color: var(--muted);
+  opacity: 0.55;
+}
+
+/* ── Footnote ───────────────────────────────────────────────────────────────── */
+
+.tsc__footer {
+  padding: 11px 28px 17px;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+.tsc__footnote {
+  margin: 0;
+  font: 400 11px/1.5 var(--sans);
+  color: var(--muted);
+  opacity: 0.7;
+  /* Override the global max-width set on <p> in index.css */
+  max-width: none;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .tsc__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px 16px;
+  }
+
+  .tsc__legend {
+    justify-content: flex-start;
+  }
+
+  .tsc__axis-strip {
+    padding: 5px 20px 0;
+  }
+
+  .tsc__footer {
+    padding: 10px 20px 16px;
+  }
+}
