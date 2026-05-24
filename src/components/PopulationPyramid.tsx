@@ -165,10 +165,10 @@ type WorkingBand = {
   bottomY: number
   height: number
   midY: number
-  /** Y position of the minimum working-age boundary (top of first in-range row). */
-  minBoundaryY: number
-  /** Y position of the maximum working-age boundary (bottom of last in-range row). */
-  maxBoundaryY: number
+  /** Upper edge of the working-age band (max working age; smaller Y, higher on chart). */
+  upperBoundaryY: number
+  /** Lower edge of the working-age band (min working age; larger Y, lower on chart). */
+  lowerBoundaryY: number
   hasAny: boolean
 } | null
 
@@ -183,20 +183,21 @@ const computeWorkingBand = (
   )
   if (indices.length === 0) return null
 
-  const firstIndex = indices[0]
-  const lastIndex = indices[indices.length - 1]
+  // Data runs oldest→youngest (90+ at top). First in-range row holds max age; last holds min age.
+  const oldestWorkingIndex = indices[0]
+  const youngestWorkingIndex = indices[indices.length - 1]
   const padding = 2
-  const minBoundaryY = geometry.rowY(firstIndex)
-  const maxBoundaryY = geometry.rowY(lastIndex) + LAYOUT.barHeight
-  const topY = minBoundaryY - padding
-  const bottomY = maxBoundaryY + padding
+  const upperBoundaryY = geometry.rowY(oldestWorkingIndex)
+  const lowerBoundaryY = geometry.rowY(youngestWorkingIndex)
+  const topY = upperBoundaryY - padding
+  const bottomY = lowerBoundaryY + LAYOUT.barHeight + padding
   return {
     topY,
     bottomY,
     height: bottomY - topY,
     midY: (topY + bottomY) / 2,
-    minBoundaryY,
-    maxBoundaryY,
+    upperBoundaryY,
+    lowerBoundaryY,
     hasAny: true,
   }
 }
@@ -214,40 +215,55 @@ function WorkingAgeBoundaryLines({
 
   const chartLeft = LAYOUT.padding.left
   const chartRight = LAYOUT.rightLabelsX - 8
-  const lineProps = {
-    x1: chartLeft,
-    x2: chartRight,
-    stroke: COLORS.workingAgeBoundary,
-    strokeWidth: 2,
-    strokeOpacity: 0.9,
-  }
+  const centerGap = LAYOUT.axisGap + 6
+  const leftEndX = LAYOUT.centerX - centerGap
+  const rightStartX = LAYOUT.centerX + centerGap
+  const stroke = COLORS.workingAgeBoundary
 
-  const labelX = chartLeft + 4
+  const renderSplitLine = (y: number) => (
+    <g key={`boundary-${y}`}>
+      <line
+        x1={chartLeft}
+        x2={leftEndX}
+        y1={y}
+        y2={y}
+        stroke={stroke}
+        strokeWidth={2}
+        strokeOpacity={0.9}
+      />
+      <line
+        x1={rightStartX}
+        x2={chartRight}
+        y1={y}
+        y2={y}
+        stroke={stroke}
+        strokeWidth={2}
+        strokeOpacity={0.9}
+      />
+    </g>
+  )
+
+  const renderAgeLabel = (y: number, age: number) => (
+    <text
+      key={`label-${age}`}
+      x={chartRight - 2}
+      y={y}
+      fill={stroke}
+      fontSize={8.5}
+      fontWeight={600}
+      textAnchor="end"
+      dominantBaseline="middle"
+    >
+      {age}
+    </text>
+  )
 
   return (
     <g aria-hidden="true">
-      <line y1={workingBand.minBoundaryY} y2={workingBand.minBoundaryY} {...lineProps} />
-      <line y1={workingBand.maxBoundaryY} y2={workingBand.maxBoundaryY} {...lineProps} />
-      <text
-        x={labelX}
-        y={workingBand.minBoundaryY}
-        fill={COLORS.workingAgeBoundary}
-        fontSize={9}
-        fontWeight={600}
-        dominantBaseline="middle"
-      >
-        {workingAgeMin} anos
-      </text>
-      <text
-        x={labelX}
-        y={workingBand.maxBoundaryY}
-        fill={COLORS.workingAgeBoundary}
-        fontSize={9}
-        fontWeight={600}
-        dominantBaseline="middle"
-      >
-        {workingAgeMax} anos
-      </text>
+      {renderSplitLine(workingBand.upperBoundaryY)}
+      {renderSplitLine(workingBand.lowerBoundaryY)}
+      {renderAgeLabel(workingBand.upperBoundaryY, workingAgeMax)}
+      {renderAgeLabel(workingBand.lowerBoundaryY, workingAgeMin)}
     </g>
   )
 }
@@ -635,16 +651,16 @@ export function PopulationPyramid({
           workingAgeMax={workingAgeMax}
         />
 
-        <AgeAxisLabels
-          data={data}
-          geometry={geometry}
-          mode={ageLabels}
+        <WorkingAgeBoundaryLines
+          workingBand={workingBand}
           workingAgeMin={workingAgeMin}
           workingAgeMax={workingAgeMax}
         />
 
-        <WorkingAgeBoundaryLines
-          workingBand={workingBand}
+        <AgeAxisLabels
+          data={data}
+          geometry={geometry}
+          mode={ageLabels}
           workingAgeMin={workingAgeMin}
           workingAgeMax={workingAgeMax}
         />
