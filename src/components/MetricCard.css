@@ -1,0 +1,62 @@
+/* MetricCard — single indicator card for dark dashboards */
+
+.metric-card {
+  background: var(--color-surface-deep-2);
+  border: 1px solid color-mix(in srgb, var(--color-axis-on-dark) 70%, transparent);
+  border-radius: 8px;
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Header: icon + label ────────────────────────────────────────────────────── */
+
+.metric-card__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.metric-card__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin-top: 1px;
+}
+
+.metric-card__label {
+  margin: 0;
+  font: 400 12px/1.35 var(--sans);
+  color: var(--color-text-inverted-muted);
+  /* Override the global max-width set on <p> in index.css */
+  max-width: none;
+}
+
+/* ── Value ───────────────────────────────────────────────────────────────────── */
+
+.metric-card__value {
+  margin: 0;
+  font: 800 20px/1.05 var(--sans);
+  color: var(--color-text-inverted);
+  letter-spacing: -0.5px;
+}
+
+/* ── Secondary metric ────────────────────────────────────────────────────────── */
+
+.metric-card__secondary {
+  margin: 0;
+  font: 400 12px/1 var(--sans);
+  color: var(--color-text-inverted-muted);
+  max-width: none;
+}
+
+/* ── Annotation note ─────────────────────────────────────────────────────────── */
+
+.metric-card__note {
+  margin: 0;
+  font: 400 11px/1 var(--sans);
+  color: var(--color-text-inverted-faint);
+  max-width: none;
+}

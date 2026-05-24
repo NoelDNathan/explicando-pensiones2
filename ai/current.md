@@ -59,6 +59,15 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Creado `MetricCard` (`src/components/MetricCard.tsx` + `.css`): tarjeta de indicador reutilizable para dashboards oscuros. Acepta `icon: ReactNode`, `label`, `value`, `secondary`/`secondaryColor` y `note`/`noteColor`. Sin logica de dominio interna.
+- Creado `KeyIndicatorsPanel` (`src/components/KeyIndicatorsPanel.tsx` + `.css`): panel que compone `MetricCard` en una cuadricula de 2 columnas con titulo, grid accesible (`<ul>`) y boton CTA opcional tipo ghost. Reflow a 1 columna por debajo de 480 px.
+- Anadida demo `INDICATORS_2025` en `App.tsx` con 10 indicadores del sistema de pensiones (ingresos, gasto, deficit, deuda publica, ratio presupuesto, relacion cotizantes/pensionistas, hucha, edad efectiva, esperanza de vida y tasa de reemplazo), con iconos SVG inline tematicos por indicador.
+- Anadida la seccion `Componente 05` al laboratorio `/componentes`.
+- Anadido `.component-preview--panel` en `App.css` para previsualizacion sin altura minima forzada.
+- `tsc --noEmit` y ESLint: cero errores, cero warnings.
+
+
+
 - Respondida consulta sobre "Gasto publico en pensiones": el proyecto contiene previsiones AIReF de gasto bruto publico en pensiones como % del PIB, una aproximacion COFOG observada `10.2 Vejez + 10.3 Supervivientes`, una serie BDMACRO de prestaciones sociales de Seguridad Social y brutos pendientes de Seguridad Social; no hay aun una serie observada procesada estricta de gasto publico en pensiones.
 
 - Rediseñado `TimeSeriesChart` al estilo editorial oscuro institucional (imagen de referencia): fondo navy `--color-surface-deep`, paleta de colores para fondo oscuro (teal, rojo, ámbar, púrpura), cabecera de dos filas (título + icono ⓘ / badge año; leyenda con swatches cuadrados), etiquetas de unidad horizontales sobre el eje (no rotadas), sistema de tokens CSS (`--tsc-*`) para soportar variantes `light` y `dark`, badge de proyección configurable, eliminación del relleno de zona de proyección. El componente mantiene compatibilidad total con la API anterior; la variante por defecto pasa a ser `dark`.

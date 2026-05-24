@@ -1,0 +1,78 @@
+/* KeyIndicatorsPanel — dark dashboard panel containing a grid of MetricCards */
+
+.kip {
+  background: var(--color-surface-deep);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ── Title ───────────────────────────────────────────────────────────────────── */
+
+.kip__title {
+  margin: 0;
+  font: 800 19px/1.15 var(--sans);
+  color: var(--color-text-inverted);
+  letter-spacing: -0.3px;
+}
+
+/* ── Grid ────────────────────────────────────────────────────────────────────── */
+
+.kip__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.kip__grid-item {
+  display: contents;
+}
+
+/* ── Footer / CTA ────────────────────────────────────────────────────────────── */
+
+.kip__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.kip__cta {
+  padding: 10px 28px;
+  border: 1px solid color-mix(in srgb, var(--color-axis-on-dark) 80%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-inverted);
+  font: 500 13px/1 var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.kip__cta:hover {
+  background: color-mix(in srgb, var(--color-axis-on-dark) 30%, transparent);
+  border-color: var(--color-text-inverted-muted);
+}
+
+.kip__cta:focus-visible {
+  outline: 2px solid var(--color-axis-on-dark);
+  outline-offset: 3px;
+}
+
+/* ── Narrow viewport ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .kip__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kip__title {
+    font-size: 16px;
+  }
+}

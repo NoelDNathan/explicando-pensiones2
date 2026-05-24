@@ -11,6 +11,7 @@
 
 import React, { useState, useMemo } from 'react'
 import './TimeSeriesChart.css'
+import { InfoButton } from './InfoButton'
 
 // ─── Public types ─────────────────────────────────────────────────────────────
 
@@ -41,8 +42,6 @@ export interface ChartMilestone {
 export interface TimeSeriesChartProps {
   title?: string
   subtitle?: string
-  /** Label shown as a small badge (e.g. "2025") marking the projection start. */
-  projectionBadge?: string
   /** Optional accessible description for a contextual info icon beside the title. */
   infoLabel?: string
   categories: string[]
@@ -260,16 +259,7 @@ function InfoIcon({ label }: { label: string }) {
       title={label}
       role="img"
     >
-      <svg width={16} height={16} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <circle cx={8} cy={8} r={7} stroke="currentColor" strokeWidth={1.3} />
-        <text
-          x={8} y={12}
-          textAnchor="middle"
-          style={{ fontSize: 10, fontFamily: FONT, fontWeight: 700, fill: 'currentColor' }}
-        >
-          i
-        </text>
-      </svg>
+      <InfoButton label={label} />
     </span>
   )
 }
@@ -279,7 +269,6 @@ function InfoIcon({ label }: { label: string }) {
 export function TimeSeriesChart({
   title,
   subtitle,
-  projectionBadge,
   infoLabel,
   categories,
   series,
@@ -392,11 +381,6 @@ export function TimeSeriesChart({
             {title && <h3 className="tsc__title">{title}</h3>}
             {infoLabel && <InfoIcon label={infoLabel} />}
           </div>
-          {projectionBadge && (
-            <span className="tsc__badge" aria-label={`Inicio proyección: ${projectionBadge}`}>
-              {projectionBadge}
-            </span>
-          )}
         </div>
 
         {/* Row 2: legend */}

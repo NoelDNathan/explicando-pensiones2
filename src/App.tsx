@@ -1,8 +1,11 @@
+import React from 'react'
 import './App.css'
 import { InfoButton } from './components/InfoButton'
 import { PopulationPyramid } from './components/PopulationPyramid'
 import { TimeSeriesChart } from './components/TimeSeriesChart'
 import type { ChartSeries, ChartMilestone } from './components/TimeSeriesChart'
+import { KeyIndicatorsPanel } from './components/KeyIndicatorsPanel'
+import type { IndicatorItem } from './components/KeyIndicatorsPanel'
 
 type PlayButtonProps = {
   label?: string
@@ -79,6 +82,167 @@ const CHART_MILESTONES: ChartMilestone[] = [
   { index: 13, label: 'Factor sostenibilidad' },
   { index: 21, label: 'Acuerdo Toledo' },
   { index: 24, label: 'Inicio proyección' },
+]
+
+// ─── Shared SVG wrapper for demo icons ───────────────────────────────────────
+
+function Ico({ children }: { children: React.ReactNode }) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" width={32} height={32} aria-hidden="true">
+      {children}
+    </svg>
+  )
+}
+
+// ─── Demo data for KeyIndicatorsPanel (Componente 05) ─────────────────────────
+
+const INDICATORS_2025: IndicatorItem[] = [
+  {
+    label: 'Ingresos por cotizaciones',
+    value: '129.408 M€',
+    icon: (
+      <Ico>
+        <rect x={4} y={20} width={5} height={8} rx={1} fill="#36d9e0" opacity={0.55} />
+        <rect x={11} y={14} width={5} height={14} rx={1} fill="#36d9e0" opacity={0.75} />
+        <rect x={18} y={8} width={5} height={20} rx={1} fill="#36d9e0" />
+        <polyline points="6,19 14,13 21,7 27,3" stroke="#36d9e0" strokeWidth={2} strokeLinecap="round" fill="none" />
+        <circle cx={27} cy={3} r={2} fill="#36d9e0" />
+      </Ico>
+    ),
+    secondary: '1,1% del PIB',
+    secondaryColor: '#36d9e0',
+  },
+  {
+    label: 'Gasto en pensiones',
+    value: '190.607 M€',
+    icon: (
+      <Ico>
+        <polygon points="4,13 16,4 28,13" stroke="#e86060" strokeWidth={1.5} fill="none" />
+        <rect x={7}  y={14} width={2.5} height={11} rx={0.5} fill="#e86060" />
+        <rect x={12} y={14} width={2.5} height={11} rx={0.5} fill="#e86060" />
+        <rect x={17} y={14} width={2.5} height={11} rx={0.5} fill="#e86060" />
+        <rect x={22} y={14} width={2.5} height={11} rx={0.5} fill="#e86060" />
+        <rect x={4}  y={25} width={24} height={2.5} rx={0.5} fill="#e86060" />
+      </Ico>
+    ),
+    secondary: '12,6% del PIB',
+    secondaryColor: '#e86060',
+  },
+  {
+    label: 'Déficit del sistema',
+    value: '-61.199 M€',
+    icon: (
+      <Ico>
+        <line x1={16} y1={5}  x2={16} y2={27} stroke="#e86060" strokeWidth={1.5} />
+        <line x1={5}  y1={12} x2={27} y2={12} stroke="#e86060" strokeWidth={1.5} strokeLinecap="round" />
+        <line x1={5}  y1={12} x2={7}  y2={20} stroke="#e86060" strokeWidth={1} />
+        <line x1={12} y1={12} x2={10} y2={20} stroke="#e86060" strokeWidth={1} />
+        <path d="M4,20 Q8,23.5 12,20"   stroke="#e86060" strokeWidth={1.5} fill="none" />
+        <line x1={20} y1={12} x2={22} y2={20} stroke="#e86060" strokeWidth={1} />
+        <line x1={27} y1={12} x2={25} y2={20} stroke="#e86060" strokeWidth={1} />
+        <path d="M20,20 Q24,23.5 28,20" stroke="#e86060" strokeWidth={1.5} fill="none" />
+        <circle cx={16} cy={8} r={2} stroke="#e86060" strokeWidth={1.5} />
+        <line x1={13} y1={27} x2={19} y2={27} stroke="#e86060" strokeWidth={1.5} strokeLinecap="round" />
+      </Ico>
+    ),
+    secondary: '-4,1% del PIB',
+    secondaryColor: '#e86060',
+  },
+  {
+    label: 'Deuda pública',
+    value: '1.593.623 M€',
+    icon: (
+      <Ico>
+        <rect x={7} y={4} width={18} height={24} rx={2} stroke="#d4a017" strokeWidth={1.5} />
+        <rect x={10} y={6.5} width={4} height={4} rx={0.5} fill="#d4a017" opacity={0.5} />
+        <line x1={10} y1={14} x2={22} y2={14} stroke="#d4a017" strokeWidth={1.5} strokeLinecap="round" />
+        <line x1={10} y1={18} x2={22} y2={18} stroke="#d4a017" strokeWidth={1.5} strokeLinecap="round" />
+        <line x1={10} y1={22} x2={18} y2={22} stroke="#d4a017" strokeWidth={1.5} strokeLinecap="round" />
+      </Ico>
+    ),
+    secondary: '105,4% del PIB',
+    secondaryColor: '#d4a017',
+  },
+  {
+    label: 'Gasto en pensiones / Presupuesto del Estado',
+    value: '43,2%',
+    icon: (
+      <Ico>
+        <circle cx={16} cy={16} r={11} stroke="#7b5eab" strokeWidth={2.5} opacity={0.25} />
+        <circle cx={16} cy={16} r={11} stroke="#7b5eab" strokeWidth={2.5}
+          strokeDasharray="31 38" strokeDashoffset={0} strokeLinecap="round" />
+        <text x={16} y={20} textAnchor="middle" fontSize={10} fontWeight={700}
+          fill="#7b5eab" fontFamily="system-ui, sans-serif">%</text>
+      </Ico>
+    ),
+  },
+  {
+    label: 'Relación cotizantes / pensionistas',
+    value: '2,15',
+    icon: (
+      <Ico>
+        <circle cx={11} cy={10} r={3.5} stroke="#36d9e0" strokeWidth={1.5} />
+        <path d="M4,26 Q6,18 11,18 Q16,18 18,26" stroke="#36d9e0" strokeWidth={1.5} fill="none" />
+        <circle cx={21} cy={9} r={3} stroke="#36d9e0" strokeWidth={1.5} opacity={0.6} />
+        <path d="M15,26 Q17,19 21,19 Q25,19 27,26" stroke="#36d9e0" strokeWidth={1.5} fill="none" opacity={0.6} />
+      </Ico>
+    ),
+  },
+  {
+    label: 'Hucha de las pensiones',
+    value: '6.815 M€',
+    icon: (
+      <Ico>
+        <rect x={4} y={9} width={24} height={17} rx={2} stroke="#d4a017" strokeWidth={1.5} />
+        <polyline points="4,9 16,18 28,9"
+          stroke="#d4a017" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <circle cx={16} cy={21.5} r={2} fill="#d4a017" opacity={0.6} />
+      </Ico>
+    ),
+    secondary: '0,4% del PIB',
+    secondaryColor: '#d4a017',
+  },
+  {
+    label: 'Edad efectiva de jubilación',
+    value: '64,2 años',
+    icon: (
+      <Ico>
+        <circle cx={16} cy={16} r={12} stroke="#5b95f2" strokeWidth={1.5} />
+        <line x1={16} y1={16} x2={16} y2={8}  stroke="#5b95f2" strokeWidth={2} strokeLinecap="round" />
+        <line x1={16} y1={16} x2={22} y2={19} stroke="#5b95f2" strokeWidth={2} strokeLinecap="round" />
+        <circle cx={16} cy={16} r={1.5} fill="#5b95f2" />
+      </Ico>
+    ),
+    note: 'Edad legal: 66,0',
+    noteColor: '#5b95f2',
+  },
+  {
+    label: 'Esperanza de vida (65 años)',
+    value: '22,6 años',
+    icon: (
+      <Ico>
+        <path
+          d="M16,26 C16,26 5,18.5 5,12 C5,8.5 8,6.5 11.5,6.5 C13.5,6.5 15.2,7.5 16,9 C16.8,7.5 18.5,6.5 20.5,6.5 C24,6.5 27,8.5 27,12 C27,18.5 16,26 16,26Z"
+          stroke="#e86060" strokeWidth={1.5} fill="none"
+        />
+      </Ico>
+    ),
+    note: 'Total población',
+    noteColor: '#e86060',
+  },
+  {
+    label: 'Tasa de reemplazo',
+    value: '78,3%',
+    icon: (
+      <Ico>
+        <circle cx={10} cy={10} r={4} stroke="#b370ea" strokeWidth={1.8} />
+        <circle cx={22} cy={22} r={4} stroke="#b370ea" strokeWidth={1.8} />
+        <line x1={6} y1={26} x2={26} y2={6} stroke="#b370ea" strokeWidth={1.8} strokeLinecap="round" />
+      </Ico>
+    ),
+    note: 'Pensión inicial / último salario',
+    noteColor: '#b370ea',
+  },
 ]
 
 // ─── Component lab ────────────────────────────────────────────────────────────
@@ -205,12 +369,32 @@ function ComponentLab() {
           <TimeSeriesChart
             title="Evolución histórica de indicadores clave"
             infoLabel="Fuentes y metodología del sistema de pensiones"
-            projectionBadge="2025"
             categories={CHART_CATEGORIES}
             series={CHART_SERIES}
             milestones={CHART_MILESTONES}
             footnote="Fuente: AIReF (Opinión A/2025/1), IGAE BDMACRO, Seguridad Social"
             variant="dark"
+          />
+        </div>
+      </section>
+
+      <section className="component-section" aria-labelledby="kip-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 05</p>
+          <h2 id="kip-title">Panel de indicadores clave</h2>
+          <p>
+            Panel compuesto por tarjetas de indicador. Cada tarjeta acepta
+            icono, etiqueta, valor principal, métrica secundaria y nota
+            de contexto. El panel organiza las tarjetas en dos columnas
+            y ofrece un botón de acción configurable al pie.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--panel">
+          <KeyIndicatorsPanel
+            title="Indicadores clave (2025)"
+            indicators={INDICATORS_2025}
+            ctaLabel="Ver todos los indicadores"
           />
         </div>
       </section>

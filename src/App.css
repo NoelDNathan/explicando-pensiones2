@@ -98,6 +98,13 @@
   min-height: 140px;
 }
 
+/* Panel preview: natural size, no forced min-height */
+.component-preview--panel {
+  align-items: flex-start;
+  min-height: 0;
+  padding: 24px;
+}
+
 .play-button {
   --play-size: 44px;
   --play-gap: 12px;
