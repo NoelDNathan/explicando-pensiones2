@@ -71,6 +71,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Respondida consulta sobre disponibilidad de datos de poblacion por edad, sexo y lugar de nacimiento: el proyecto ya contiene poblacion por edad y sexo, observada y proyectada, pero no lugar/pais de nacimiento.
 - Creado `data/inventory.md` con una tabla ordenada de los datos recogidos hasta ahora, agrupando juntas las series que representan el mismo valor y separando observados, proyecciones, previsiones y aproximaciones metodologicas.
 - Respondida consulta de alcance sobre disponibilidad de datos de evolucion del gasto publico por apartados: el proyecto contiene datos oficiales parciales, pero aun no una serie procesada de gasto publico total por funciones o politicas.
+- Respondida consulta sobre tasa de natalidad: no hay dataset registrado ni procesado en `data/inventory.md`, `data/sources.md` ni en los archivos actuales; si se usa, debe incorporarse desde fuente oficial y con metadata completa.
 - Definido que cada interaccion debe dejar un resumen corto en `ai/history/`.
 - Definido que cada interaccion debe actualizar este archivo.
 - Definido que debe hacerse commit y push despues de cada interaccion cuando Git este configurado.
@@ -96,6 +97,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico.
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
+- Si se necesita tasa de natalidad, localizar y procesar una fuente oficial del INE, preferiblemente Indicadores Demograficos Basicos, antes de usarla editorialmente.
 - Si se necesita analizar inmigracion o poblacion nacida fuera de Espana, localizar una fuente oficial del INE que cruce edad, sexo y lugar/pais de nacimiento, y mantenerla separada de las series actuales de poblacion residente por edad y sexo.
 - Para 1975-2050 por pais/lugar de nacimiento, asumir de partida tres tramos separados: observado general 1975-2001 sin pais de nacimiento en la serie ya usada; observado por pais/grupo de nacimiento desde 2002 en ECP; proyeccion futura solo si se localiza tabla INE especifica con Espana/extranjero o pais de nacimiento, evitando interpolar o reconstruir paises sin fuente oficial.
 - Localizar y procesar una fuente oficial/institucional para gasto publico total por grandes funciones o politicas, idealmente COFOG/IGAE/Eurostat, que permita separar pensiones, intereses de deuda, sanidad, educacion y otras areas con trazabilidad anual.
