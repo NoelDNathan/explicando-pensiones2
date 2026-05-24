@@ -54,6 +54,43 @@
 - uso previsto en la web: mostrar el escenario demografico futuro oficial del INE para hombres y mujeres, separado de la serie historica observada.
 - nota metodologica: la tabla proyectada no publica la categoria "Ambos sexos"; no se ha calculado un total propio.
 
+## INE - Tasa bruta de natalidad observada
+
+- nombre de la fuente: Tasa Bruta de Natalidad. Indicadores Demograficos Basicos
+- institucion: Instituto Nacional de Estadistica (INE)
+- URL: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/1381?tip=AM
+- pagina de tabla: https://www.ine.es/jaxiT3/Tabla.htm?t=1381
+- fecha de descarga: 2026-05-24
+- periodo cubierto: 1975-2024
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivo bruto: `data/raw/ine/indicadores-demograficos-basicos/2026-05-24_ine_idb_tasa-bruta-natalidad-total-nacional_1975-2024.json`
+- archivo procesado: `data/processed/ine/2026-05-24_ine_idb_tasa-bruta-natalidad-espana-observada_1975-2024.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: tasa bruta de natalidad anual de Espana, medida como nacidos por mil habitantes.
+- uso previsto en la web: explicar la evolucion historica observada de la natalidad en Espana.
+- nota metodologica: serie observada; no mezclar como equivalente con la proyeccion de la tabla 36653.
+
+## INE - Tasa bruta de natalidad proyectada
+
+- nombre de la fuente: Tasa Bruta de Natalidad. Proyeccion a largo plazo
+- institucion: Instituto Nacional de Estadistica (INE)
+- URL: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36653?tip=AM
+- pagina de tabla: https://www.ine.es/jaxiT3/Tabla.htm?t=36653
+- fecha de descarga: 2026-05-24
+- periodo cubierto en la fuente descargada: 2024-2073
+- periodo procesado principal: 2025-2070
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivo bruto: `data/raw/ine/proyecciones-poblacion/natalidad/2026-05-24_ine_proyecciones-poblacion_tasa-bruta-natalidad-total-nacional_2024-2073.json`
+- archivos procesados:
+  - `data/processed/ine/2026-05-24_ine_proyeccion-tasa-bruta-natalidad-espana_2025-2070.csv`
+  - `data/processed/ine/2026-05-24_ine_tasa-bruta-natalidad-espana-observada-proyectada_1975-2070.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: tasa bruta de natalidad anual proyectada de Espana, medida como nacidos por mil habitantes.
+- uso previsto en la web: enlazar la serie historica observada con el escenario demografico futuro oficial del INE.
+- nota metodologica: el JSON bruto incluye 2024 proyectado. El CSV proyectado principal empieza en 2025 y el CSV combinado usa 2024 solo como observado, para no mezclar 2024 observado y 2024 proyectado como equivalentes.
+
 ## INE - Proyeccion de poblacion residente por sexo y edad
 
 - nombre de la fuente: Poblacion residente a 1 de enero por sexo, edad y ano. Proyecciones de poblacion

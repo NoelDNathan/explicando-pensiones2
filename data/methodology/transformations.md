@@ -1,5 +1,31 @@
 # Transformaciones de datos
 
+## INE - tasa bruta de natalidad observada y proyectada 1975-2070
+
+- Fecha de transformacion: 2026-05-24.
+- Fuentes brutas:
+  - `data/raw/ine/indicadores-demograficos-basicos/2026-05-24_ine_idb_tasa-bruta-natalidad-total-nacional_1975-2024.json`.
+  - `data/raw/ine/proyecciones-poblacion/natalidad/2026-05-24_ine_proyecciones-poblacion_tasa-bruta-natalidad-total-nacional_2024-2073.json`.
+- Tablas API INE:
+  - observada: `DATOS_TABLA/1381`, Indicadores Demograficos Basicos, tasa bruta de natalidad.
+  - proyectada: `DATOS_TABLA/36653`, Proyecciones de poblacion, tasa bruta de natalidad a largo plazo.
+- Transformacion aplicada:
+  - lectura de ambos JSON oficiales con codificacion UTF-8;
+  - extraccion de ano, ambito geografico, indicador, valor, estado del dato, tipo de dato INE, fuente y URL API;
+  - orden ascendente por ano;
+  - exportacion de un CSV observado 1975-2024;
+  - exportacion de un CSV proyectado principal 2025-2070;
+  - exportacion de un CSV combinado 1975-2070 con columna `estado_dato`.
+- Archivos generados:
+  - `data/processed/ine/2026-05-24_ine_idb_tasa-bruta-natalidad-espana-observada_1975-2024.csv`.
+  - `data/processed/ine/2026-05-24_ine_proyeccion-tasa-bruta-natalidad-espana_2025-2070.csv`.
+  - `data/processed/ine/2026-05-24_ine_tasa-bruta-natalidad-espana-observada-proyectada_1975-2070.csv`.
+- Periodos resultantes:
+  - observada: 1975-2024, 50 observaciones.
+  - proyectada principal: 2025-2070, 46 observaciones.
+  - combinada: 1975-2070, 96 observaciones.
+- Nota de definicion: la tabla 36653 descargada incluye 2024 proyectado. Para evitar tratar 2024 observado y 2024 proyectado como equivalentes, el CSV proyectado principal empieza en 2025 y el CSV combinado conserva 2024 solo como observado.
+
 ## IGAE - COFOG, detalle de proteccion social 1995-2024
 
 - Fecha de transformacion: 2026-05-18.

@@ -17,6 +17,9 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Guardado el JSON bruto en `data/raw/ine/indicadores-demograficos-basicos/`.
 - Generado un CSV limpio en `data/processed/ine/esperanza-vida-nacimiento-espana-1975-2024.csv`.
 - Registrada la fuente en `data/sources.md`.
+- Descargada desde el INE la tasa bruta de natalidad observada, tabla 1381, para Total Nacional 1975-2024.
+- Descargada desde el INE la tasa bruta de natalidad proyectada, tabla 36653, para Total Nacional 2024-2073.
+- Generados tres CSV de natalidad: observado 1975-2024, proyectado 2025-2070 y combinado 1975-2070 con columna `estado_dato`.
 - Descargada desde Eurostat la serie anual de deuda bruta consolidada de las Administraciones Publicas de Espana, 1995-2025.
 - Guardados los JSON brutos en `data/raw/eurostat/deuda-publica/`.
 - Generado el CSV limpio `data/processed/eurostat/deuda-publica-espana-1995-2025.csv`.
@@ -67,6 +70,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Anadida la checklist de metadata como regla formal en `AGENTS.md`.
 - Creado `data/metadata.md` con ficha de metadata para los datasets inventariados: fuente, institucion, URL de referencia, fecha de descarga, periodo, unidad, licencia, metodologia, estado del dato, transformaciones, archivos verificables y notas de ruptura o comparabilidad.
 - Generado `data/checksums.sha256` con hashes SHA-256 de los archivos en `data/raw/` y `data/processed/`.
+- Descargadas y procesadas las fuentes oficiales INE de tasa bruta de natalidad: tabla 1381 observada 1975-2024 y tabla 36653 proyectada. El CSV proyectado principal empieza en 2025 y el combinado conserva 2024 solo como observado para no mezclar dato observado y proyeccion.
 - Respondida consulta sobre metadata de datasets: el proyecto guarda parte de la trazabilidad en `data/sources.md`, `data/inventory.md` y `data/methodology/transformations.md`, pero no existe aun una plantilla obligatoria completa con checksums, estado del dato y rupturas metodologicas por dataset.
 - Localizadas fuentes INE candidatas para poblacion por edad, sexo y pais/lugar de nacimiento: la ECP ofrece tabla 56937 por pais de nacimiento, grupo quinquenal de edad, sexo y fecha desde 2002, y tabla 69795 con agrupaciones de paises hasta 2026. La tabla 56937 ya esta incorporada como dataset observado desde 2002.
 - Respondida consulta sobre disponibilidad de datos de poblacion por edad, sexo y lugar de nacimiento: el proyecto ya contiene poblacion por edad y sexo, observada y proyectada, pero no lugar/pais de nacimiento.
@@ -106,7 +110,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico.
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
-- Si se necesita tasa de natalidad, localizar y procesar una fuente oficial del INE, preferiblemente Indicadores Demograficos Basicos, antes de usarla editorialmente.
+- Usar la nueva serie de tasa bruta de natalidad solo con etiqueta de `estado_dato`: observado 1975-2024 y proyectado 2025-2070. Si se necesita mostrar 2024 proyectado, tomarlo del JSON bruto de tabla 36653 y etiquetarlo explicitamente como proyectado.
 - Si se necesita analizar inmigracion o poblacion nacida fuera de Espana antes de 2002, extraer anclas censales 1981 y 1991 y documentar cualquier interpolacion como estimada, no observada.
 - Para 2026-2070 por pais/lugar de nacimiento, no hay una tabla oficial cruzada nacimiento + sexo + edad localizada; usar 36642 y 36643 solo como fuentes separadas salvo que se defina una metodologia explicita de modelizacion.
 - Localizar y procesar una fuente oficial/institucional para gasto publico total por grandes funciones o politicas, idealmente COFOG/IGAE/Eurostat, que permita separar pensiones, intereses de deuda, sanidad, educacion y otras areas con trazabilidad anual.

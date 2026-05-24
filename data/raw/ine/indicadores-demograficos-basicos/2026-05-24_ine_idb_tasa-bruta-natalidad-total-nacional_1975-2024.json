@@ -1,0 +1,60 @@
+[{"COD":"IDB37106", "Nombre":"Fecundidad. Total Nacional.", "T3_Unidad":"Nacidos por mil habitantes", "T3_Escala":" ", "MetaData":[{"Id":16473, "T3_Variable":"Totales Territoriales", "Nombre":"Total Nacional", "Codigo":"00"}
+,{"Id":12542, "T3_Variable":"Fecundidad, Nupcialidad, Mortalidad, Indicadores de población e Indicadores de migraciones", "Nombre":"Fecundidad", "Codigo":""}
+,{"Id":22186, "T3_Variable":"Conceptos demógraficos", "Nombre":"Tasa de natalidad", "Codigo":""}
+,{"Id":14954, "T3_Variable":"Periodicidad", "Nombre":"Anual", "Codigo":""}
+,{"Id":72, "T3_Variable":"Tipo de dato", "Nombre":"Dato base", "Codigo":"0"}
+,{"Id":11013, "T3_Variable":"Nacionalidad", "Nombre":"Ambas nacionalidades", "Codigo":"0"}
+]
+, "Data":[{"Fecha":"2024-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2024, "Valor":6.49}
+,{"Fecha":"2023-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2023, "Valor":6.61}
+,{"Fecha":"2022-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2022, "Valor":6.88}
+,{"Fecha":"2021-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2021, "Valor":7.1}
+,{"Fecha":"2020-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2020, "Valor":7.19}
+,{"Fecha":"2019-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2019, "Valor":7.62}
+,{"Fecha":"2018-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2018, "Valor":7.94}
+,{"Fecha":"2017-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2017, "Valor":8.41}
+,{"Fecha":"2016-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2016, "Valor":8.8}
+,{"Fecha":"2015-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2015, "Valor":9.02}
+,{"Fecha":"2014-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2014, "Valor":9.18}
+,{"Fecha":"2013-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2013, "Valor":9.11}
+,{"Fecha":"2012-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2012, "Valor":9.7}
+,{"Fecha":"2011-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2011, "Valor":10.07}
+,{"Fecha":"2010-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2010, "Valor":10.42}
+,{"Fecha":"2009-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2009, "Valor":10.65}
+,{"Fecha":"2008-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2008, "Valor":11.28}
+,{"Fecha":"2007-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2007, "Valor":10.86}
+,{"Fecha":"2006-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2006, "Valor":10.85}
+,{"Fecha":"2005-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2005, "Valor":10.65}
+,{"Fecha":"2004-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2004, "Valor":10.57}
+,{"Fecha":"2003-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2003, "Valor":10.44}
+,{"Fecha":"2002-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2002, "Valor":10.08}
+,{"Fecha":"2001-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2001, "Valor":9.94}
+,{"Fecha":"2000-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":2000, "Valor":9.78}
+,{"Fecha":"1999-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1999, "Valor":9.39}
+,{"Fecha":"1998-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1998, "Valor":9.06}
+,{"Fecha":"1997-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1997, "Valor":9.2}
+,{"Fecha":"1996-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1996, "Valor":9.07}
+,{"Fecha":"1995-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1995, "Valor":9.15}
+,{"Fecha":"1994-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1994, "Valor":9.35}
+,{"Fecha":"1993-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1993, "Valor":9.8}
+,{"Fecha":"1992-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1992, "Valor":10.13}
+,{"Fecha":"1991-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1991, "Valor":10.16}
+,{"Fecha":"1990-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1990, "Valor":10.32}
+,{"Fecha":"1989-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1989, "Valor":10.51}
+,{"Fecha":"1988-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1988, "Valor":10.79}
+,{"Fecha":"1987-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1987, "Valor":11.02}
+,{"Fecha":"1986-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1986, "Valor":11.36}
+,{"Fecha":"1985-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1985, "Valor":11.85}
+,{"Fecha":"1984-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1984, "Valor":12.34}
+,{"Fecha":"1983-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1983, "Valor":12.71}
+,{"Fecha":"1982-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1982, "Valor":13.57}
+,{"Fecha":"1981-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1981, "Valor":14.1}
+,{"Fecha":"1980-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1980, "Valor":15.22}
+,{"Fecha":"1979-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1979, "Valor":16.17}
+,{"Fecha":"1978-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1978, "Valor":17.25}
+,{"Fecha":"1977-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1977, "Valor":17.96}
+,{"Fecha":"1976-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1976, "Valor":18.73}
+,{"Fecha":"1975-01-01T00:00:00.000+01:00", "T3_TipoDato":"Definitivo", "T3_Periodo":"A", "Anyo":1975, "Valor":18.7}
+]
+}
+]
