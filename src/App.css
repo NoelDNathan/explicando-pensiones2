@@ -221,6 +221,15 @@
   min-height: 0;
 }
 
+/* HUD preview: full-width dark container (restores dark bg inside --wide sections) */
+.component-preview--hud {
+  background: #07111f;
+  border: 1px solid #1d2b44;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 0;
+}
+
 @media (max-width: 760px) {
   .home,
   .component-lab {

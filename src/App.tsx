@@ -400,7 +400,7 @@ function ComponentLab() {
         </div>
       </section>
 
-      <section className="component-section" aria-labelledby="year-selector-title">
+      <section className="component-section component-section--wide" aria-labelledby="year-selector-title">
         <div className="component-section__intro">
           <p className="eyebrow">Componente 06</p>
           <h2 id="year-selector-title">Selector de año</h2>
@@ -412,8 +412,8 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark">
-          <YearSelector />
+        <div className="component-preview component-preview--dark component-preview--hud">
+          <YearSelector style={{ width: '100%' }} />
         </div>
       </section>
     </main>
