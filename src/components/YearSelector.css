@@ -1,0 +1,252 @@
+/* YearSelector — component styles
+   Futuristic sci-fi dashboard card with glassmorphism, neon teal palette
+   and premium fintech aesthetics. Follows the --ysl-* token convention
+   mirroring TimeSeriesChart's --tsc-* system. */
+
+/* ── Theme tokens ─────────────────────────────────────────────────────────────── */
+
+.ysl {
+  --ysl-bg:         rgba(7, 13, 24, 0.82);
+  --ysl-border:     rgba(54, 217, 224, 0.22);
+  --ysl-border-hi:  rgba(54, 217, 224, 0.55);
+  --ysl-accent:     #36d9e0;
+  --ysl-accent-dim: rgba(54, 217, 224, 0.12);
+  --ysl-text:       #dff4f6;
+  --ysl-muted:      rgba(160, 210, 220, 0.45);
+  --ysl-radius:     14px;
+  --ysl-play-size:  46px;
+}
+
+/* ── Container ────────────────────────────────────────────────────────────────── */
+
+.ysl {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 20px 24px 18px;
+  background: var(--ysl-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--ysl-border);
+  border-radius: var(--ysl-radius);
+  box-shadow:
+    0 0 0 1px rgba(54, 217, 224, 0.04) inset,
+    0 8px 40px rgba(0, 0, 0, 0.45),
+    0 2px 12px rgba(0, 0, 0, 0.3),
+    0 0 64px rgba(54, 217, 224, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Decorative edge glow on top border ──────────────────────────────────────── */
+
+.ysl__edge-glow {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(54, 217, 224, 0.5) 40%,
+    rgba(54, 217, 224, 0.7) 50%,
+    rgba(54, 217, 224, 0.5) 60%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Faint inner reflection at the very bottom of the card */
+.ysl::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(54, 217, 224, 0.1),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────────── */
+
+.ysl__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 18px;
+}
+
+.ysl__label {
+  font: 500 10px/1 var(--sans, 'Avenir Next', 'Segoe UI', system-ui, sans-serif);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ysl-muted);
+}
+
+.ysl__year-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.ysl__year {
+  font: 700 42px/1 var(--sans, 'Avenir Next', 'Segoe UI', system-ui, sans-serif);
+  letter-spacing: -0.025em;
+  color: var(--ysl-text);
+  font-variant-numeric: tabular-nums;
+  text-shadow:
+    0 0 24px rgba(54, 217, 224, 0.18),
+    0 0 8px  rgba(54, 217, 224, 0.08);
+}
+
+.ysl__chevron {
+  color: var(--ysl-muted);
+  flex-shrink: 0;
+  margin-bottom: 8px;
+  opacity: 0.65;
+  transition: opacity 0.15s ease;
+}
+
+.ysl__chevron:hover {
+  opacity: 1;
+}
+
+/* ── Controls row: play button + timeline ────────────────────────────────────── */
+
+.ysl__controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ── Play / pause button ──────────────────────────────────────────────────────── */
+
+.ysl__play-btn {
+  position: relative;
+  width: var(--ysl-play-size);
+  height: var(--ysl-play-size);
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(54, 217, 224, 0.38);
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(54, 217, 224, 0.22) 0%,
+    rgba(54, 217, 224, 0.06) 55%,
+    transparent 100%
+  );
+  color: var(--ysl-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow:
+    0 0 14px rgba(54, 217, 224, 0.16),
+    0 0 0 1px rgba(54, 217, 224, 0.06) inset,
+    0 3px 10px rgba(0, 0, 0, 0.35);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+  overflow: visible;
+}
+
+.ysl__play-btn:hover {
+  border-color: rgba(54, 217, 224, 0.65);
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(54, 217, 224, 0.3) 0%,
+    rgba(54, 217, 224, 0.1) 55%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 22px rgba(54, 217, 224, 0.28),
+    0 0 0 1px rgba(54, 217, 224, 0.1) inset,
+    0 3px 14px rgba(0, 0, 0, 0.4);
+}
+
+.ysl__play-btn--active {
+  border-color: rgba(54, 217, 224, 0.75);
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(54, 217, 224, 0.35) 0%,
+    rgba(54, 217, 224, 0.12) 55%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 28px rgba(54, 217, 224, 0.38),
+    0 0 0 1px rgba(54, 217, 224, 0.15) inset,
+    0 3px 16px rgba(0, 0, 0, 0.4);
+}
+
+.ysl__play-btn:focus-visible {
+  outline: 2px solid var(--ysl-accent);
+  outline-offset: 3px;
+}
+
+/* Expanding pulse ring when playing */
+.ysl__pulse {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(54, 217, 224, 0.45);
+  animation: ysl-pulse 1.9s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes ysl-pulse {
+  0%   { transform: scale(1);    opacity: 0.6; }
+  70%  { transform: scale(1.55); opacity: 0.05; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* ── Timeline SVG ─────────────────────────────────────────────────────────────── */
+
+.ysl__timeline {
+  flex: 1;
+  display: block;
+  min-width: 0;
+  cursor: grab;
+  touch-action: none;
+  /* Subtle vertical centering of the label row */
+  overflow: visible;
+}
+
+.ysl__timeline:active {
+  cursor: grabbing;
+}
+
+.ysl__timeline:focus-visible {
+  outline: 1px solid rgba(54, 217, 224, 0.35);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .ysl {
+    padding: 16px 18px 15px;
+    --ysl-play-size: 40px;
+  }
+
+  .ysl__year {
+    font-size: 34px;
+  }
+
+  .ysl__controls {
+    gap: 12px;
+  }
+
+  .ysl__header {
+    margin-bottom: 14px;
+  }
+}

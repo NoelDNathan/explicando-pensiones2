@@ -59,6 +59,17 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Creado el componente `YearSelector` (`src/components/YearSelector.tsx` +
+  `src/components/YearSelector.css`): selector de año con estética de panel
+  futurista sci-fi. Glassmorphism con `backdrop-filter: blur`, borde luminoso
+  neon teal, línea de tiempo SVG con indicador circular de efecto LED (halo +
+  glow + core + punto blanco), fill de progreso, tick marks con opacidad
+  diferenciada por estado (pasado/actual/futuro), botón play/pause circular
+  con anillo de pulse animado, auto-avance por RAF y soporte completo de estado
+  controlado/no controlado. Teclado accesible (`←` / `→` / `Space`).
+- Añadida la sección "Componente 06 - Selector de año" al laboratorio en `App.tsx`.
+
+
 - Creado `MetricCard` (`src/components/MetricCard.tsx` + `.css`): tarjeta de indicador reutilizable para dashboards oscuros. Acepta `icon: ReactNode`, `label`, `value`, `secondary`/`secondaryColor` y `note`/`noteColor`. Sin logica de dominio interna.
 - Creado `KeyIndicatorsPanel` (`src/components/KeyIndicatorsPanel.tsx` + `.css`): panel que compone `MetricCard` en una cuadricula de 2 columnas con titulo, grid accesible (`<ul>`) y boton CTA opcional tipo ghost. Reflow a 1 columna por debajo de 480 px.
 - Anadida demo `INDICATORS_2025` en `App.tsx` con 10 indicadores del sistema de pensiones (ingresos, gasto, deficit, deuda publica, ratio presupuesto, relacion cotizantes/pensionistas, hucha, edad efectiva, esperanza de vida y tasa de reemplazo), con iconos SVG inline tematicos por indicador.

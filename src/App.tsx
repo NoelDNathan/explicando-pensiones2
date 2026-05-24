@@ -6,6 +6,7 @@ import { TimeSeriesChart } from './components/TimeSeriesChart'
 import type { ChartSeries, ChartMilestone } from './components/TimeSeriesChart'
 import { KeyIndicatorsPanel } from './components/KeyIndicatorsPanel'
 import type { IndicatorItem } from './components/KeyIndicatorsPanel'
+import { YearSelector } from './components/YearSelector'
 
 type PlayButtonProps = {
   label?: string
@@ -396,6 +397,23 @@ function ComponentLab() {
             indicators={INDICATORS_2025}
             ctaLabel="Ver todos los indicadores"
           />
+        </div>
+      </section>
+
+      <section className="component-section" aria-labelledby="year-selector-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 06</p>
+          <h2 id="year-selector-title">Selector de año</h2>
+          <p>
+            Control deslizante de año con estética de panel de control futurista.
+            Glassmorphism, borde luminoso, indicador circular con efecto LED y
+            botón de reproducción animado. Soporta estado controlado y no controlado,
+            y avanza automáticamente año a año al pulsar play.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark">
+          <YearSelector />
         </div>
       </section>
     </main>
