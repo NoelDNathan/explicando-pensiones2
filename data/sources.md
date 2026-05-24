@@ -1,5 +1,24 @@
 # Fuentes registradas
 
+## BOE - Edad minima legal para trabajar en Espana
+
+- nombre de la fuente: edad minima legal general de admision al trabajo por periodo normativo
+- institucion: Boletin Oficial del Estado (BOE)
+- URL Ley de Relaciones Laborales 1976: https://www.boe.es/buscar/doc.php?id=BOE-A-1976-8373
+- URL Estatuto de los Trabajadores 1980: https://www.boe.es/diario_boe/txt.php?id=BOE-A-1980-5683
+- URL Estatuto de los Trabajadores consolidado 2015: https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430
+- URL referencia sectorial historica, Ordenanza General de Trabajo en el Campo 1975: https://www.boe.es/buscar/doc.php?id=BOE-A-1975-14347
+- URL referencia historica, Decreto 1119/1960: https://www.boe.es/buscar/doc.php?id=BOE-A-1960-8648
+- fecha de consulta: 2026-05-24
+- periodo cubierto: hasta 1976, 1976-1980 y 1980-actualidad (2026)
+- ambito geografico: Espana
+- formato generado: JSON codificado manualmente desde normativa oficial
+- archivo procesado: `data/processed/boe/2026-05-24_boe_edad-minima-legal-trabajar-espana_antes-1976-2026.json`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del BOE
+- descripcion breve: tabla normativa de referencia sobre la edad minima legal general para trabajar en Espana por grandes periodos.
+- uso previsto en la web: contextualizar graficos de poblacion en edad de trabajar, explicando que la edad legal minima cambia historicamente y que desde 1976 se fija en 16 anos.
+- nota metodologica: el tramo anterior a 1976 resume una situacion normativa historica heterogenea; usar con cautela si se requiere detalle juridico por sector o regimen.
+
 ## IGAE - Gasto publico por funciones COFOG
 
 - nombre de la fuente: Administraciones publicas. Clasificacion funcional: serie desde 1995

@@ -59,6 +59,9 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadido el JSON `data/processed/boe/2026-05-24_boe_edad-minima-legal-trabajar-espana_antes-1976-2026.json` con la edad minima legal general para trabajar en Espana por periodos normativos: hasta 1976, 1976-1980 y 1980-actualidad (2026).
+- Documentada la fuente BOE en `data/sources.md`, el inventario en `data/inventory.md` y la ficha de metadata en `data/metadata.md`.
+- El tramo anterior a 1976 queda marcado como resumen historico con cautela, porque la normativa previa era heterogenea y puede requerir comprobacion por sector o regimen.
 - Anadida en `AGENTS.md` una regla para considerar Tailwind cuando haya mas UI repetida, siempre configurado con tokens propios del proyecto y evitando colores sueltos como `bg-blue-500`.
 - Anadida en `AGENTS.md` una seccion de reglas de diseno frontend para mantener colores/tokens coherentes, crear componentes reutilizables, probar variantes en `/componentes`, cuidar accesibilidad y comprobar escritorio/movil.
 - Creada una primera base web en React/Vite para el proyecto.
@@ -106,6 +109,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
 - Conectar `PopulationPyramid` con datos reales del INE cuando se decida la primera vista publica, usando la tabla 56937 si se quiere diferenciar nacidos en Espana y nacidos en el extranjero desde 2002.

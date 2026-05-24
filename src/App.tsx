@@ -1,4 +1,5 @@
 import './App.css'
+import { InfoButton } from './components/InfoButton'
 import { PopulationPyramid } from './components/PopulationPyramid'
 
 type PlayButtonProps = {
@@ -76,6 +77,62 @@ function ComponentLab() {
           aria-label="Vista previa de la piramide poblacional"
         >
           <PopulationPyramid />
+        </div>
+      </section>
+
+      <section className="component-section" aria-labelledby="info-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 03</p>
+          <h2 id="info-title">Boton de informacion</h2>
+          <p>
+            Control circular para notas metodologicas o definiciones junto a
+            graficos. La variante oscura reutiliza los tokens de la piramide
+            poblacional.
+          </p>
+        </div>
+
+        <div className="component-preview-stack">
+          <div
+            className="component-preview component-preview--dark component-preview--info"
+            aria-label="Variantes del boton de informacion sobre fondo oscuro"
+          >
+            <InfoButton
+              label="Informacion sobre la piramide poblacional"
+              placement="bottom"
+            >
+              <p>
+                Muestra poblacion por edad, sexo y lugar de nacimiento. La franja
+                central marca la edad de trabajar (20-64 en este ejemplo).
+              </p>
+              <p>
+                Los tonos mas saturados corresponden a grupos en edad laboral;
+                los apagados, a quienes estan fuera de ella.
+              </p>
+            </InfoButton>
+
+            <InfoButton label="Tamano pequeno" size="sm">
+              <p>Variante compacta para cabeceras de panel o leyendas.</p>
+            </InfoButton>
+
+            <InfoButton label="No disponible" disabled>
+              <p>Este panel no deberia mostrarse.</p>
+            </InfoButton>
+          </div>
+
+          <div
+            className="component-preview component-preview--info"
+            aria-label="Boton de informacion sobre fondo claro"
+          >
+            <InfoButton
+              label="Informacion sobre indicadores"
+              variant="on-light"
+            >
+              <p>
+                Variante para tarjetas y modulos sobre el fondo editorial claro
+                de la web.
+              </p>
+            </InfoButton>
+          </div>
         </div>
       </section>
     </main>

@@ -1,0 +1,107 @@
+{
+  "dataset_id": "boe-edad-minima-legal-trabajar-espana",
+  "title": "Edad minima legal general para trabajar en Espana por periodo normativo",
+  "created_at": "2026-05-24",
+  "created_by": "codificacion manual a partir de normativa oficial BOE",
+  "geography": "Espana",
+  "unit": "anos cumplidos",
+  "status": "observado normativo",
+  "scope_note": "Referencia legal general para admision al trabajo por cuenta ajena. No sustituye asesoramiento juridico ni recoge todos los regimenes especiales o excepciones sectoriales.",
+  "periods": [
+    {
+      "period_label": "Hasta 1976",
+      "start_year": null,
+      "end_year": 1975,
+      "minimum_working_age_years": 14,
+      "legal_basis": "Legislacion laboral anterior a la reforma democratica",
+      "source_refs": [
+        "boe-1975-ordenanza-general-trabajo-campo",
+        "boe-1960-decreto-servicio-domestico-menores-catorce"
+      ],
+      "observations": "Era posible incorporarse antes al mercado laboral. La cifra de 14 anos se documenta como referencia historica general en normas laborales sectoriales previas a 1976; debe usarse con cautela si se requiere detalle por sector o regimen.",
+      "data_status": "observado normativo historico"
+    },
+    {
+      "period_label": "1976-1980",
+      "start_year": 1976,
+      "end_year": 1979,
+      "minimum_working_age_years": 16,
+      "legal_basis": "Ley 16/1976, de 8 de abril, de Relaciones Laborales, articulo sexto",
+      "source_refs": [
+        "boe-ley-relaciones-laborales-1976"
+      ],
+      "observations": "Se fijo la edad minima de admision al trabajo en 16 anos cumplidos.",
+      "data_status": "observado normativo"
+    },
+    {
+      "period_label": "1980-actualidad (2026)",
+      "start_year": 1980,
+      "end_year": null,
+      "minimum_working_age_years": 16,
+      "legal_basis": "Estatuto de los Trabajadores, articulo 6",
+      "source_refs": [
+        "boe-estatuto-trabajadores-1980",
+        "boe-estatuto-trabajadores-2015-consolidado"
+      ],
+      "observations": "Sigue vigente en 2026. Los menores de 16 anos tienen prohibida la admision al trabajo, salvo excepciones muy concretas como espectaculos publicos autorizados por la autoridad laboral.",
+      "data_status": "observado normativo vigente"
+    }
+  ],
+  "sources": [
+    {
+      "id": "boe-ley-relaciones-laborales-1976",
+      "institution": "Boletin Oficial del Estado",
+      "name": "Ley 16/1976, de 8 de abril, de Relaciones Laborales",
+      "url": "https://www.boe.es/buscar/doc.php?id=BOE-A-1976-8373",
+      "publication_date": "1976-04-21",
+      "relevant_article": "Articulo sexto",
+      "condition": "Disposicion derogada; fuente historica"
+    },
+    {
+      "id": "boe-estatuto-trabajadores-1980",
+      "institution": "Boletin Oficial del Estado",
+      "name": "Ley 8/1980, de 10 de marzo, del Estatuto de los Trabajadores",
+      "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1980-5683",
+      "publication_date": "1980-03-14",
+      "relevant_article": "Articulo sexto",
+      "condition": "Disposicion historica"
+    },
+    {
+      "id": "boe-estatuto-trabajadores-2015-consolidado",
+      "institution": "Boletin Oficial del Estado",
+      "name": "Real Decreto Legislativo 2/2015, de 23 de octubre, texto refundido de la Ley del Estatuto de los Trabajadores",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430",
+      "publication_date": "2015-10-24",
+      "relevant_article": "Articulo 6",
+      "condition": "Legislacion consolidada vigente consultada el 2026-05-24"
+    },
+    {
+      "id": "boe-1975-ordenanza-general-trabajo-campo",
+      "institution": "Boletin Oficial del Estado",
+      "name": "Orden de 1 de julio de 1975 por la que se aprueba la Ordenanza General de Trabajo en el Campo",
+      "url": "https://www.boe.es/buscar/doc.php?id=BOE-A-1975-14347",
+      "publication_date": "1975-07-05",
+      "relevant_article": "Seccion 2, sujetos del contrato de trabajo",
+      "condition": "Fuente sectorial historica para documentar la referencia de 14 anos antes de 1976"
+    },
+    {
+      "id": "boe-1960-decreto-servicio-domestico-menores-catorce",
+      "institution": "Boletin Oficial del Estado",
+      "name": "Decreto 1119/1960, de 2 de junio, sobre prohibicion de actuar como servidores domesticos a los menores de catorce anos o sometidos a la obligacion escolar primaria",
+      "url": "https://www.boe.es/buscar/doc.php?id=BOE-A-1960-8648",
+      "publication_date": "1960-06-15",
+      "relevant_article": "Titulo de la disposicion y referencias BOE",
+      "condition": "Fuente historica sectorial; texto completo disponible en PDF del BOE"
+    }
+  ],
+  "transformations": [
+    "Codificacion manual de periodos normativos y edades minimas en formato JSON.",
+    "Normalizacion de los periodos a start_year/end_year para facilitar consultas por ano.",
+    "Conservacion de observaciones y referencias normativas por tramo."
+  ],
+  "limitations": [
+    "El tramo anterior a 1976 resume una situacion normativa historica heterogenea y debe verificarse por sector si se usa con precision juridica fina.",
+    "No se incluyen restricciones laborales de menores de 18 anos salvo cuando explican la excepcion principal de menores de 16 anos en espectaculos publicos.",
+    "No se incluyen regimenes especiales no laborales, trabajo autonomo, practicas formativas no laborales ni normativa educativa."
+  ]
+}
