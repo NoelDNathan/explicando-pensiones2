@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-05-18
+Fecha: 2026-05-24
 
 ## Situacion
 
@@ -56,6 +56,12 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Creada una primera base web en React/Vite para el proyecto.
+- Sustituida la plantilla inicial por una portada minima de `Explicando pensiones`.
+- Creada la ruta interna `/componentes` como laboratorio visual no orientado al usuario final.
+- Creado el primer componente de interfaz, `PlayButton`, con variantes de tamano, variante solida o ligera, y estado deshabilitado.
+- Verificado el frontend con `tsc --noEmit` y `vite build`; `pnpm` y `npm` no estan disponibles como comandos directos en el entorno, pero los binarios locales de `node_modules` si permiten la verificacion.
+- Iniciado un servidor local de Vite en `http://127.0.0.1:5173/componentes` para revisar la pagina de componentes.
 - Anadida la checklist de metadata como regla formal en `AGENTS.md`.
 - Creado `data/metadata.md` con ficha de metadata para los datasets inventariados: fuente, institucion, URL de referencia, fecha de descarga, periodo, unidad, licencia, metodologia, estado del dato, transformaciones, archivos verificables y notas de ruptura o comparabilidad.
 - Generado `data/checksums.sha256` con hashes SHA-256 de los archivos en `data/raw/` y `data/processed/`.
@@ -84,6 +90,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
+- Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico.
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
 - Mantener `data/inventory.md` actualizado cuando se incorporen o procesen nuevas series.
 - Si se necesita analizar inmigracion o poblacion nacida fuera de Espana, localizar una fuente oficial del INE que cruce edad, sexo y lugar/pais de nacimiento, y mantenerla separada de las series actuales de poblacion residente por edad y sexo.
