@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Ajustado el margen izquierdo de `PopulationPyramid`: los totales del lado masculino pasan a una columna fija y la longitud maxima de las barras masculinas reserva espacio para evitar solapamientos con las etiquetas internas de nacidos en el extranjero. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
+
 - Anadidas etiquetas numericas a `PopulationPyramid`: cada tramo muestra el total por sexo en el exterior de la barra y, en la variante con desglose por nacimiento, los valores internos de nacidos en Espana y nacidos en el extranjero cuando el segmento tiene ancho suficiente para ser legible. Se desplazo la columna de anotaciones de edad laboral para evitar solapamientos. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido; queda pendiente revision visual en navegador por bloqueo de localhost en el navegador integrado.
 
 - Creado `data/methodology/fuentes-series-fiscales-1970-2070.md` como mapa de fuentes candidatas para construir series 1970-2070 de gasto publico total, intereses, deficit/saldo publico, deuda publica, gasto en pensiones, gasto sanitario y PIB. El documento distingue fuentes historicas, fuentes de proyeccion, posibilidad real de cubrir 1970-2070 y cautelas metodologicas. No incorpora valores numericos nuevos ni convierte escenarios en datos observados. Quedan pendientes de procesamiento especifico intereses, deficit, gasto publico total, sanidad y una serie propia de PIB inventariada.
