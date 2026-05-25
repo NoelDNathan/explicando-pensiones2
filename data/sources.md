@@ -1,5 +1,30 @@
 # Fuentes registradas
 
+## Seguridad Social - Pensionistas-personas y modelo demografico
+
+- nombre de la fuente observada: Libro "Evolucion mensual de las pensiones", hoja `Pnes y ptas`
+- institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones
+- URL pagina estadisticas: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/Estadisticas/EST23
+- URL pagina pensionistas: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/Estadisticas/EST23/26bce586-014b-4c4e-9484-009cee21e271
+- URL eSTADISS: https://sede.seg-social.gob.es/wps/portal/sede/sede/Ciudadanos/Pensiones/201944
+- fecha de descarga del bruto local: 2026-05-18
+- fecha de transformacion: 2026-05-25
+- periodo observado procesado: 2006-2026; diciembre para 2006-2025 y abril para 2026
+- periodo modelizado: 2027-2070
+- periodo de cobertura del CSV combinado: 1975-2070, con 1975-2005 marcado como `no_estimado`
+- ambito geografico: Espana
+- formato descargado: XLSX
+- archivo bruto: `data/raw/seguridad-social/pensiones/2026-05-18_seguridad-social_libro-evolucion-mensual-pensiones_2026-04.xlsx`
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-05-25_seguridad-social_pensionistas-personas-observado_2006-2026.csv`
+  - `data/processed/seguridad-social/2026-05-25_modelo-demografico_pensionistas-personas_2027-2070.csv`
+  - `data/processed/seguridad-social/2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv`
+- fuente auxiliar para el modelo: INE Proyecciones de poblacion, tabla 36643, archivo `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Seguridad Social y del INE
+- descripcion breve: serie de personas pensionistas, no numero de pensiones, observada desde el libro mensual; extension 2027-2070 como proxy demografica calibrada al ultimo dato oficial disponible.
+- uso previsto en la web: explicar la diferencia entre pensionistas-personas y pensiones, y permitir una vista demografica de largo plazo con `estado_dato` visible.
+- nota metodologica: no se rellenan 1975-2005 con numero de pensiones porque una persona puede cobrar varias pensiones; eSTADISS requiere consulta/exportacion parametrizada y captcha, por lo que queda pendiente incorporar una descarga manual si publica personas para ese tramo.
+
 ## IGAE/SEPG - BDMACRO, principales series fiscales de AAPP
 
 - nombre de la fuente: Base de datos anuales de la economia espanola BDMACRO, cuadro 23-A Cuentas de las AAPP agregadas

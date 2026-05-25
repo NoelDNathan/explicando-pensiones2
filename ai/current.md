@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Procesada una serie de pensionistas-personas con cobertura 1975-2070: `data/processed/seguridad-social/2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv`. El tramo oficial observado disponible en el libro mensual de Seguridad Social cubre 2006-2025 a diciembre y 2026 a abril; 1975-2005 queda marcado como `no_estimado` para no sustituir personas por numero de pensiones. El tramo 2027-2070 se modeliza con INE Proyecciones de poblacion 36643, aplicando la evolucion de la poblacion de 67 anos o mas al ancla oficial de abril de 2026. Script reproducible: `scripts/process-seguridad-social-pensionistas-1975-2070.ps1`. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`.
+
 - Anadidos totales en el encabezado de `PopulationPyramid`, arriba a la derecha junto al titulo/subtitulo: total de personas de 20-64 anos y total fuera de esa edad. Las cifras se calculan desde los datos visibles de la piramide y suman ambos sexos y ambas categorias de nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
 
 - Generado el primer paquete de series fiscales solicitadas 1975-2070. Se creo el script reproducible `scripts/process-fiscal-series-1975-2070.ps1` y cuatro CSV:
@@ -199,6 +201,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Si se necesita cubrir 1975-2005 con personas pensionistas observadas, hacer una exportacion manual desde eSTADISS y documentar el CSV bruto; no usar numero de pensiones como sustituto.
 - Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y que huecos deben mantenerse visibles como `no_estimado` en la interfaz. No interpolar PIB, gasto publico total, intereses o saldo publico para 2025-2070 sin una fuente tabular adicional.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.

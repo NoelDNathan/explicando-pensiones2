@@ -417,3 +417,33 @@
   - mensual: 2001M01-2026M04.
   - anual: 2001-2026, con 2026 parcial.
 - Nota de definicion: la afiliacion media mide afiliaciones en alta laboral, no necesariamente personas unicas. Debe presentarse como "afiliaciones medias" o explicarse si se usa como aproximacion al numero de trabajadores cotizantes.
+
+## Seguridad Social / INE - pensionistas-personas 1975-2070
+
+- Fecha de transformacion: 2026-05-25.
+- Script reproducible: `scripts/process-seguridad-social-pensionistas-1975-2070.ps1`.
+- Fuente bruta observada: `data/raw/seguridad-social/pensiones/2026-05-18_seguridad-social_libro-evolucion-mensual-pensiones_2026-04.xlsx`.
+- Hoja observada utilizada: `Pnes y ptas`.
+- Columnas observadas utilizadas:
+  - `A`: ano.
+  - `B`: mes.
+  - `C`: pensionistas, personas.
+  - `D`: pensiones, conservada solo como comprobacion conceptual en la fuente, no usada para estimar personas.
+- Fuente auxiliar para el tramo futuro: `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`, derivada de INE Proyecciones de poblacion tabla 36643.
+- Transformacion aplicada:
+  - extraccion directa de `PENSIONISTAS` como personas, no pensiones;
+  - seleccion de diciembre para 2006-2025 y abril para 2026, ultimo mes disponible en el libro bruto local;
+  - creacion de filas 1975-2005 con `estado_dato = no_estimado`, sin usar pensiones como proxy;
+  - agregacion de poblacion proyectada INE de 67 anos o mas para 2026-2070;
+  - calculo del ratio ancla `pensionistas oficiales abril 2026 / poblacion INE 67+ en 2026`;
+  - modelizacion 2027-2070 como `ratio ancla * poblacion INE 67+ del ano`;
+  - exportacion de tres CSV: observado, modelizado y combinado.
+- Archivos generados:
+  - `data/processed/seguridad-social/2026-05-25_seguridad-social_pensionistas-personas-observado_2006-2026.csv`.
+  - `data/processed/seguridad-social/2026-05-25_modelo-demografico_pensionistas-personas_2027-2070.csv`.
+  - `data/processed/seguridad-social/2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv`.
+- Periodo resultante:
+  - observado: 2006-2026.
+  - modelizado: 2027-2070.
+  - cobertura combinada: 1975-2070.
+- Nota de definicion: la serie observada mide personas pensionistas. Una persona con varias pensiones cuenta una vez. El tramo 2027-2070 es una proxy demografica propia calibrada al ultimo dato oficial, no una prevision oficial; no modela carreras de cotizacion, jubilacion anticipada/demorada, pensionistas menores de 67 por clase de pension, mortalidad diferencial ni cambios normativos futuros.
