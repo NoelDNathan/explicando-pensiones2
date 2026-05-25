@@ -1,5 +1,58 @@
 # Fuentes registradas
 
+## IGAE/SEPG - BDMACRO, principales series fiscales de AAPP
+
+- nombre de la fuente: Base de datos anuales de la economia espanola BDMACRO, cuadro 23-A Cuentas de las AAPP agregadas
+- institucion: Secretaria de Estado de Presupuestos y Gastos / IGAE
+- URL pagina: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/paginas/bdmacro.aspx
+- URL archivo XLSX: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/Documents/BASES%20DE%20DATOS/ANUALES%20DE%20LA%20ECONOMIA%20ESPA%C3%91OLA%20BDMACRO/BDMACRO_Abril_2026.xlsx
+- fecha de descarga: 2026-05-18
+- fecha de transformacion: 2026-05-25
+- periodo procesado: 1975-2024
+- ambito geografico: Espana, sector Administraciones Publicas
+- formato descargado: XLSX
+- archivo bruto: `data/raw/igae/bdmacro/2026-05-18_igae-sepg_bdmacro_abril-2026.xlsx`
+- archivo procesado: `data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Administracion Presupuestaria
+- descripcion breve: serie historica anual de PIB, gasto publico total, intereses y otras rentas de la propiedad, saldo publico, deuda publica PDE y prestaciones sociales agregadas de las AAPP.
+- uso previsto en la web: base historica para los indicadores fiscales generales solicitados, con la cautela de que `intereses_deuda` usa la columna BDMACRO `Intereses + Otras rentas de la propiedad`.
+- nota metodologica: BDMACRO indica que las series actuales 1995-2025 se enlazan hacia atras con series publicadas para 1954-1994; la hoja usada contiene valores completos hasta 2024 para estas variables.
+
+## IGAE - Gasto publico en salud COFOG
+
+- nombre de la fuente: Administraciones publicas. Clasificacion funcional: serie desde 1995, division 07 Salud
+- institucion: Intervencion General de la Administracion del Estado (IGAE)
+- URL pagina: https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Paginas/iacogofseries.aspx
+- URL archivo XLSX: https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Documents/AAPP_A/COFOG_A_AAPP.xlsx
+- fecha de descarga: 2026-05-18
+- fecha de transformacion: 2026-05-25
+- periodo procesado: 1995-2024
+- ambito geografico: Espana, sector Administraciones Publicas (S.13)
+- formato descargado: XLSX
+- archivo bruto: `data/raw/igae/cofog/2026-05-18_igae_cofog-aapp-serie-1995-2024.xlsx`
+- archivo procesado: `data/processed/igae/2026-05-25_igae-cofog_gasto-salud-aapp-espana_1995-2024.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Administracion Presupuestaria
+- descripcion breve: gasto publico funcional COFOG `07 Salud` de las Administraciones Publicas.
+- uso previsto en la web: serie observada de gasto publico en sanidad desde 1995, separada de las proyecciones del Ageing Report.
+- nota metodologica: COFOG `07 Salud` no equivale necesariamente al gasto sanitario total ni a la definicion OCDE de gasto sanitario publico/obligatorio.
+
+## Comision Europea - Ageing Report 2024, anexos estadisticos
+
+- nombre de la fuente: 2024 Ageing Report - Statistical annexes all country fiches
+- institucion: Comision Europea, Directorate-General for Economic and Financial Affairs; Economic Policy Committee
+- URL pagina: https://economy-finance.ec.europa.eu/publications/2024-ageing-report-economic-and-budgetary-projections-eu-member-states-2022-2070_en
+- fecha de publicacion indicada: 2024-04-18
+- fecha de descarga: 2026-05-25
+- periodo cubierto: 2022-2070
+- ambito geografico procesado: Espana
+- formato descargado: XLSX
+- archivo bruto: `data/raw/comision-europea/ageing-report-2024/2026-05-25_ec_2024-ageing-report_statistical-annex-country-fiches.xlsx`
+- archivo procesado: `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones y aviso legal de la Comision Europea
+- descripcion breve: anexos estadisticos por pais con proyecciones 2022-2070; para Espana se extraen pensiones publicas brutas, gasto sanitario publico y coste total del envejecimiento, todos como porcentaje del PIB.
+- uso previsto en la web: completar escenarios de largo plazo para sanidad y servir de contraste institucional para pensiones.
+- nota metodologica: son proyecciones bajo metodologia comun europea; no deben mezclarse con datos observados.
+
 ## BOE - Edad minima legal para trabajar en Espana
 
 - nombre de la fuente: edad minima legal general de admision al trabajo por periodo normativo

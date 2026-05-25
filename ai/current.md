@@ -59,6 +59,13 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Generado el primer paquete de series fiscales solicitadas 1975-2070. Se creo el script reproducible `scripts/process-fiscal-series-1975-2070.ps1` y cuatro CSV:
+  - `data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv` con PIB, gasto publico total, intereses + otras rentas de la propiedad, saldo publico, deuda PDE y prestaciones sociales agregadas de AAPP desde BDMACRO;
+  - `data/processed/igae/2026-05-25_igae-cofog_gasto-salud-aapp-espana_1995-2024.csv` con gasto publico en sanidad COFOG `07 Salud`;
+  - `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv` con proyecciones del Ageing Report 2024 para pensiones publicas brutas, sanidad y coste total de envejecimiento;
+  - `data/processed/fiscal/2026-05-25_series-fiscales-espana_1975-2070.csv` como CSV maestro largo de 672 filas, 7 variables por ano, con `estado_dato`.
+  Cobertura: PIB/gasto publico/intereses/saldo publico observados 1975-2024 y no estimados 2025-2070; deuda observada 1975-2025, prevision/anclas AIReF para 2026, 2030, 2040, 2050, 2060 y 2070; pensiones no estimadas 1975-1994, aproximacion COFOG 1995-2024 y escenario AIReF 2025-2070; sanidad no estimada 1975-1994, COFOG 1995-2024 y proyeccion Ageing Report 2025-2070. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`.
+
 - Refinado el margen izquierdo de `PopulationPyramid`: se elimino la columna fija de totales masculinos y el total vuelve a colocarse junto al extremo real de cada barra, con una separacion de 8 px y una reserva suave de margen izquierdo para evitar solapamientos con las etiquetas internas. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
 
 - Ajustado el margen izquierdo de `PopulationPyramid`: los totales del lado masculino pasan a una columna fija y la longitud maxima de las barras masculinas reserva espacio para evitar solapamientos con las etiquetas internas de nacidos en el extranjero. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
@@ -190,7 +197,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
-- Descargar/procesar, si se decide avanzar, las series fiscales del nuevo mapa de fuentes: gasto publico total, intereses, deficit/saldo publico, gasto sanitario y PIB, documentando metadata y checksums antes de usarlas en la web.
+- Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y que huecos deben mantenerse visibles como `no_estimado` en la interfaz. No interpolar PIB, gasto publico total, intereses o saldo publico para 2025-2070 sin una fuente tabular adicional.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Procesar y documentar la edad media de altas iniciales de jubilacion desde el libro mensual de Seguridad Social antes de mostrarla en la web; decidir si se presenta como edad efectiva de nuevas jubilaciones, por modalidad o por sexo.

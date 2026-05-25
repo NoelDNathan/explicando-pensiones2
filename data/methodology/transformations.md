@@ -1,5 +1,43 @@
 # Transformaciones de datos
 
+## Series fiscales solicitadas 1975-2070
+
+- Fecha de transformacion: 2026-05-25.
+- Script reproducible: `scripts/process-fiscal-series-1975-2070.ps1`.
+- Fuentes brutas:
+  - `data/raw/igae/bdmacro/2026-05-18_igae-sepg_bdmacro_abril-2026.xlsx`.
+  - `data/raw/igae/cofog/2026-05-18_igae_cofog-aapp-serie-1995-2024.xlsx`.
+  - `data/raw/comision-europea/ageing-report-2024/2026-05-25_ec_2024-ageing-report_statistical-annex-country-fiches.xlsx`.
+- Fuentes procesadas reutilizadas:
+  - `data/processed/igae/2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv`.
+  - `data/processed/eurostat/deuda-publica-espana-1995-2025.csv`.
+  - `data/processed/airef/2026-05-18_airef_prevision-gasto-pensiones-pct-pib_2022-2070.csv`.
+  - `data/processed/airef/deuda-publica-prevision-airef-2026.csv`.
+  - `data/processed/airef/deuda-publica-proyeccion-largo-plazo-airef-2030-2070.csv`.
+- Transformacion aplicada:
+  - extraccion desde BDMACRO, hoja `CUENTA DE LAS AAPP AGREGADAS`, de PIB, empleos no financieros de AAPP, intereses + otras rentas, capacidad/necesidad de financiacion, deuda PDE y prestaciones sociales de AAPP para 1975-2024;
+  - calculo de porcentajes sobre PIB para gasto publico total, intereses + otras rentas y prestaciones sociales agregadas;
+  - extraccion desde COFOG de la division `07 Salud`, fila `GASTO TOTAL`, para 1995-2024;
+  - extraccion desde el Ageing Report 2024 de las hojas `ESb` y `ESc` para pensiones publicas brutas, gasto sanitario publico y coste total del envejecimiento, baseline, 2022-2070;
+  - incorporacion de la deuda observada Eurostat para 2025, al no estar completo 2025 en la hoja BDMACRO usada;
+  - construccion de un CSV maestro en formato largo para 1975-2070 y siete variables solicitadas;
+  - marcado explicito de huecos como `no_estimado`, sin ceros ficticios ni interpolaciones.
+- Archivos generados:
+  - `data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv`.
+  - `data/processed/igae/2026-05-25_igae-cofog_gasto-salud-aapp-espana_1995-2024.csv`.
+  - `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv`.
+  - `data/processed/fiscal/2026-05-25_series-fiscales-espana_1975-2070.csv`.
+- Periodo resultante del maestro: 1975-2070, 672 filas: 96 anos por 7 variables.
+- Cobertura principal:
+  - PIB, gasto publico total, intereses y saldo publico: observado 1975-2024; 2025-2070 no estimado.
+  - deuda publica total: observado 1975-2025; 2026 y anclas 2030/2040/2050/2060/2070 como escenario AIReF; anos intermedios no estimados.
+  - gasto en pensiones: 1995-2024 como aproximacion COFOG `10.2 Vejez + 10.3 Supervivientes`; 2025-2070 como escenario AIReF; 1975-1994 no estimado.
+  - gasto en sanidad: 1995-2024 observado COFOG `07 Salud`; 2025-2070 proyectado Ageing Report; 1975-1994 no estimado.
+- Notas de definicion:
+  - `intereses_deuda` usa la columna BDMACRO `Intereses + Otras rentas de la propiedad`, no D.41 puro.
+  - `deficit_saldo_publico` usa capacidad/necesidad de financiacion: negativo = deficit.
+  - las proyecciones no contienen importes en millones de euros cuando la fuente solo publica porcentaje del PIB.
+
 ## IGAE/SEPG - BDMACRO, salario medio macro 1970-2070
 
 - Fecha de transformacion: 2026-05-25.
