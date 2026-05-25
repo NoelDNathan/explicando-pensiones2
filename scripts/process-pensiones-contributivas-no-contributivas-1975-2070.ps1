@@ -133,6 +133,11 @@ function Parse-Integer($value) {
   return [int][math]::Round($number)
 }
 
+function Convert-PesetasToEuro($value) {
+  if ($null -eq $value) { return $null }
+  return [double]$value / 166.386
+}
+
 function Get-AgeNumber([string]$ageLabel) {
   if ($ageLabel -match "^(\d+)") { return [int]$Matches[1] }
   return $null
@@ -292,10 +297,79 @@ foreach ($row in $populationRows) {
 }
 
 $pncObserved = @{}
-$pncBelSource = "MITES - Boletin de Estadisticas Laborales, PNC-1"
-$pncObserved[2016] = New-PncRow 2016 "media anual" 254741 $null $null 199762 $null $null 454503 $null $null "observado" $pncBelSource "Transcripcion del cuadro PNC-1 del BEL MITES. La fuente denomina la magnitud beneficiarios, no importe de nomina." "Pensiones no contributivas de la Seguridad Social, total, invalidez y jubilacion." "Dato observado de beneficiarios a primer dia de cada mes, media anual; usar con cautela junto al fichero Imserso de numero de pensiones."
-$pncObserved[2017] = New-PncRow 2017 "media anual" 256187 $null $null 199120 $null $null 455306 $null $null "observado" $pncBelSource "Transcripcion del cuadro PNC-1 del BEL MITES. La fuente denomina la magnitud beneficiarios, no importe de nomina." "Pensiones no contributivas de la Seguridad Social, total, invalidez y jubilacion." "Dato observado de beneficiarios a primer dia de cada mes, media anual; usar con cautela junto al fichero Imserso de numero de pensiones."
-$pncObserved[2018] = New-PncRow 2018 "media anual" 256842 $null $null 196375 $null $null 453216 $null $null "observado" $pncBelSource "Transcripcion del cuadro PNC-1 del BEL MITES. La fuente denomina la magnitud beneficiarios, no importe de nomina." "Pensiones no contributivas de la Seguridad Social, total, invalidez y jubilacion." "Dato observado de beneficiarios a primer dia de cada mes, media anual; usar con cautela junto al fichero Imserso de numero de pensiones."
+
+$pncImserso1991Source = "Imserso - Informe de evolucion de las nominas PNC y PSPD 1991-2000"
+$pncImserso1991Method = "Transcripcion controlada de tablas del PDF oficial escaneado 1991-2000, renderizado localmente con Ghostscript; importes y medias originales en pesetas convertidos a euros con tipo irrevocable 1 EUR = 166,386 pesetas."
+$pncImserso1991Coverage = "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual."
+$pncHistoric1991 = @(
+  @{ Year = 1991; Jub = 24733; Inv = 3836; Total = 28569; JubGrossPts = 5534774365; InvGrossPts = 922068322; TotalGrossPts = 6456842687; JubAvgPts = 88802; InvAvgPts = 102557; TotalAvgPts = 90475 },
+  @{ Year = 1992; Jub = 87891; Inv = 41256; Total = 129147; JubGrossPts = 38737281773; InvGrossPts = 21031660630; TotalGrossPts = 59768942403; JubAvgPts = 47431; InvAvgPts = 72756; TotalAvgPts = 53560 },
+  @{ Year = 1993; Jub = 139062; Inv = 93480; Total = 232542; JubGrossPts = 62132745737; InvGrossPts = 51754893756; TotalGrossPts = 113887639493; JubAvgPts = 37436; InvAvgPts = 53082; TotalAvgPts = 43147 },
+  @{ Year = 1994; Jub = 163404; Inv = 129871; Total = 293275; JubGrossPts = 72945036367; InvGrossPts = 67440223524; TotalGrossPts = 140385259891; JubAvgPts = 33634; InvAvgPts = 41922; TotalAvgPts = 37150 },
+  @{ Year = 1995; Jub = 185963; Inv = 162456; Total = 348419; JubGrossPts = 85072598587; InvGrossPts = 85068897853; TotalGrossPts = 170141496440; JubAvgPts = 34442; InvAvgPts = 40973; TotalAvgPts = 37418 },
+  @{ Year = 1996; Jub = 201579; Inv = 189549; Total = 391128; JubGrossPts = 95986660119; InvGrossPts = 101448287597; TotalGrossPts = 197434947716; JubAvgPts = 34927; InvAvgPts = 40567; TotalAvgPts = 37612 },
+  @{ Year = 1997; Jub = 212330; Inv = 210174; Total = 422504; JubGrossPts = 102838183154; InvGrossPts = 114029169730; TotalGrossPts = 216867352884; JubAvgPts = 35261; InvAvgPts = 40272; TotalAvgPts = 37729 },
+  @{ Year = 1998; Jub = 221122; Inv = 228412; Total = 449534; JubGrossPts = 108705866555; InvGrossPts = 125020270717; TotalGrossPts = 233726137272; JubAvgPts = 35760; InvAvgPts = 40420; TotalAvgPts = 39109 },
+  @{ Year = 1999; Jub = 225984; Inv = 238352; Total = 464336; JubGrossPts = 112686616455; InvGrossPts = 132697275329; TotalGrossPts = 245383891784; JubAvgPts = 36003; InvAvgPts = 40437; TotalAvgPts = 38275 },
+  @{ Year = 2000; Jub = 231400; Inv = 244802; Total = 476202; JubGrossPts = 124633117459; InvGrossPts = 148366734952; TotalGrossPts = 272999852411; JubAvgPts = 38013; InvAvgPts = 42723; TotalAvgPts = 40598 }
+)
+foreach ($item in $pncHistoric1991) {
+  $pncObserved[$item.Year] = New-PncRow `
+    $item.Year `
+    "Diciembre" `
+    $item.Jub `
+    (Convert-PesetasToEuro $item.JubGrossPts) `
+    (Convert-PesetasToEuro $item.JubAvgPts) `
+    $item.Inv `
+    (Convert-PesetasToEuro $item.InvGrossPts) `
+    (Convert-PesetasToEuro $item.InvAvgPts) `
+    $item.Total `
+    (Convert-PesetasToEuro $item.TotalGrossPts) `
+    (Convert-PesetasToEuro $item.TotalAvgPts) `
+    "observado" `
+    $pncImserso1991Source `
+    $pncImserso1991Method `
+    $pncImserso1991Coverage `
+    "Dato de tablas del informe 1991-2000. La magnitud es diciembre; los importes originales estan publicados en pesetas."
+}
+
+$pncImserso2001Source = "Imserso - Informe de evolucion de las nominas PNC y PSPD 2001-2007"
+$pncImserso2001Method = "Transcripcion de tablas textuales del PDF oficial Imserso 2001-2007."
+$pncImserso2001Coverage = "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual."
+$pncHistoric2001 = @(
+  @{ Year = 2001; Jub = 276216; Inv = 207620; Total = 483836; JubGross = 928317851.29; InvGross = 781680464.59; TotalGross = 1709998315.88; JubAvg = 239.65; InvAvg = 272.35; TotalAvg = 253.57 },
+  @{ Year = 2002; Jub = 279432; Inv = 206814; Total = 486246; JubGross = 960591776.46; InvGross = 817289555.72; TotalGross = 1777881332.18; JubAvg = 242.88; InvAvg = 277.29; TotalAvg = 257.58 },
+  @{ Year = 2003; Jub = 282063; Inv = 207273; Total = 489336; JubGross = 995517618.75; InvGross = 838991498.71; TotalGross = 1834509117.46; JubAvg = 251.27; InvAvg = 287.43; TotalAvg = 265.75 },
+  @{ Year = 2004; Jub = 280338; Inv = 206953; Total = 487291; JubGross = 1018808143.43; InvGross = 859701119.41; TotalGross = 1878509262.84; JubAvg = 255.46; InvAvg = 293.25; TotalAvg = 271.48 },
+  @{ Year = 2005; Jub = 278556; Inv = 204686; Total = 483242; JubGross = 1056521365.48; InvGross = 889294393.94; TotalGross = 1945815759.42; JubAvg = 267.35; InvAvg = 306.15; TotalAvg = 283.79 },
+  @{ Year = 2006; Jub = 274266; Inv = 204373; Total = 478639; JubGross = 1082941167.54; InvGross = 918806461.89; TotalGross = 2001747629.43; JubAvg = 278.11; InvAvg = 318.92; TotalAvg = 295.46 },
+  @{ Year = 2007; Jub = 267702; Inv = 201751; Total = 469453; JubGross = 1120586681.01; InvGross = 956197098.26; TotalGross = 2076783779.27; JubAvg = 290.43; InvAvg = 330.26; TotalAvg = 307.51 }
+)
+foreach ($item in $pncHistoric2001) {
+  $pncObserved[$item.Year] = New-PncRow $item.Year "Diciembre" $item.Jub $item.JubGross $item.JubAvg $item.Inv $item.InvGross $item.InvAvg $item.Total $item.TotalGross $item.TotalAvg "observado" $pncImserso2001Source $pncImserso2001Method $pncImserso2001Coverage "Dato anual de diciembre; importes en euros."
+}
+
+$pncImserso2008Source = "Imserso - Informe de evolucion de las nominas PNC y PSPD 2008-2014"
+$pncObserved[2008] = New-PncRow 2008 "Diciembre" 262960 1147960868.04 307.71 197884 977108236.72 348.50 460844 2125069104.76 325.21 "observado" $pncImserso2008Source "Transcripcion de tablas textuales del PDF oficial Imserso 2008-2014." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual." "Dato anual de diciembre; importes en euros."
+
+$pncImserso2009Source = "Imserso - Informe de evolucion de las nominas PNC y PSPD 2009-2015"
+$pncHistoric2009 = @(
+  @{ Year = 2009; Jub = 258873; Inv = 196782; Total = 455655; JubGross = 1154017053.22; InvGross = 989070138.79; TotalGross = 2143087192.01; JubAvg = 315.45; InvAvg = 357.57; TotalAvg = 333.58 },
+  @{ Year = 2010; Jub = 254989; Inv = 195962; Total = 450951; JubGross = 1169985060.79; InvGross = 1008786982.67; TotalGross = 2178772043.46; JubAvg = 320.59; InvAvg = 362.05; TotalAvg = 338.53 },
+  @{ Year = 2011; Jub = 253259; Inv = 194704; Total = 447963; JubGross = 1198528621.70; InvGross = 1032928211.15; TotalGross = 2231456832.85; JubAvg = 330.35; InvAvg = 371.81; TotalAvg = 348.33 },
+  @{ Year = 2012; Jub = 250382; Inv = 194896; Total = 445278; JubGross = 1207880233.51; InvGross = 1048153446.96; TotalGross = 2256033680.47; JubAvg = 342.37; InvAvg = 383.12; TotalAvg = 360.16 },
+  @{ Year = 2013; Jub = 250527; Inv = 196626; Total = 447153; JubGross = 1237019394.93; InvGross = 1081897251.32; TotalGross = 2318916646.25; JubAvg = 351.14; InvAvg = 393.56; TotalAvg = 369.72 },
+  @{ Year = 2014; Jub = 253450; Inv = 198366; Total = 451816; JubGross = 1255674508.93; InvGross = 1099220775.90; TotalGross = 2354895284.83; JubAvg = 354.15; InvAvg = 396.18; TotalAvg = 372.59 },
+  @{ Year = 2015; Jub = 254029; Inv = 199518; Total = 453547; JubGross = 1264554826.45; InvGross = 1106555954.72; TotalGross = 2371110781.17; JubAvg = 354.00; InvAvg = 395.03; TotalAvg = 372.03 }
+)
+foreach ($item in $pncHistoric2009) {
+  $pncObserved[$item.Year] = New-PncRow $item.Year "Diciembre" $item.Jub $item.JubGross $item.JubAvg $item.Inv $item.InvGross $item.InvAvg $item.Total $item.TotalGross $item.TotalAvg "observado" $pncImserso2009Source "Transcripcion de tablas textuales del PDF oficial Imserso 2009-2015." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual." "Dato anual de diciembre; importes en euros."
+}
+
+$pncImserso2016Source = "Imserso - Informe de evolucion de las nominas PNC y PSPD 2016-2022"
+$pncObserved[2016] = New-PncRow 2016 "Diciembre" 255165 1276742499.55 355.99 199912 1113917052.89 395.78 455077 2390659552.44 373.48 "observado" $pncImserso2016Source "Transcripcion de tablas textuales del PDF oficial Imserso 2016-2022." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual." "Dato anual de diciembre; importes en euros."
+$pncObserved[2017] = New-PncRow 2017 "Diciembre" 256690 1288968509.10 357.50 197988 1114654667.02 397.64 454678 2403623176.12 375.05 "observado" $pncImserso2016Source "Transcripcion de tablas textuales del PDF oficial Imserso 2016-2022." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual." "Dato anual de diciembre; importes en euros."
+$pncObserved[2018] = New-PncRow 2018 "Diciembre" 257023 1332591432.33 368.74 194757 1132835599.81 410.02 451780 2465427032.14 386.62 "observado" $pncImserso2016Source "Transcripcion de tablas textuales del PDF oficial Imserso 2016-2022." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual e importe medio mensual." "Dato anual de diciembre; importes en euros."
 $pncSource = "Imserso - Informe de evolucion de las nominas PNC y PSPD 2019-2025, Anexo 7 Total Espana"
 $pncObserved[2019] = New-PncRow 2019 "Diciembre" 261044 1399861375.29 382.84 191113 1152150277.32 423.75 452157 2552011652.61 386.62 "observado" $pncSource "Transcripcion del Anexo 7 del PDF oficial Imserso 2019-2025." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual y pension media mensual." "Dato anual de diciembre."
 $pncObserved[2020] = New-PncRow 2020 "Diciembre" 260169 1429951491.95 389.08 185852 1139436029.68 429.63 446021 2569387521.63 400.28 "observado" $pncSource "Transcripcion del Anexo 7 del PDF oficial Imserso 2019-2025." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual y pension media mensual." "Dato anual de diciembre."

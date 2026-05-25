@@ -582,18 +582,22 @@
 - institucion: Instituto de Mayores y Servicios Sociales (Imserso)
 - URL: https://imserso.es/el-imserso/documentacion/estadisticas/pensiones-no-contributivas-jubilacion-invalidez-pnc/historico-informes-publicados-pnc-pspd/evolucion-nominas-pnc-pspd
 - fecha de descarga: 2026-05-25
-- periodo cubierto por la coleccion: desde 1991; el informe 2019-2025 cubre datos anuales y mensuales del periodo 2019-2025
+- periodo cubierto por la coleccion: desde 1991; los informes solapados usados cubren 1991-2025
 - ambito geografico: Espana, comunidades autonomas y provincias
 - formato descargado: HTML y PDF
 - archivos brutos:
   - `data/raw/imserso/pnc/2026-05-25_imserso_pagina-evolucion-nominas-pnc-pspd.html`
-  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20192025.pdf`
   - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom19912000.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20012007.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20082014.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20092015.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20162022.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20192025.pdf`
 - archivo procesado: `data/processed/pensiones/2026-05-25_imserso_pensiones-no-contributivas-observado-modelizado_1991-2070.csv`
 - licencia o condiciones de uso: reutilizacion segun condiciones generales del Imserso
 - descripcion breve: informes oficiales con numero de pensiones no contributivas de jubilacion e invalidez, importes brutos abonados y pension media.
-- uso previsto en la web: construir la serie de pensiones no contributivas y su coste bruto, separando observado, pendiente historico y modelo futuro.
-- nota metodologica: el CSV actual transcribe el Anexo 7 del informe 2019-2025 para Total Espana y deja 1991-2018 pendiente de extraccion reproducible desde PDFs historicos solapados.
+- uso previsto en la web: construir la serie de pensiones no contributivas y su coste bruto, separando observado y modelo futuro.
+- nota metodologica: el CSV transcribe Total Espana para jubilacion, invalidez y total. El tramo 1991-2000 procede de tablas escaneadas del PDF oficial, renderizadas localmente con Ghostscript; los importes originales en pesetas se convierten a euros con el tipo irrevocable 1 EUR = 166,386 pesetas. Desde 2001 se usan tablas textuales de PDFs oficiales Imserso.
 
 ## MITES - Anuarios, pensiones contributivas
 
@@ -622,13 +626,13 @@
 - institucion: Ministerio de Trabajo y Economia Social
 - URL: https://www.mites.gob.es/estadisticas/bel/PNC/pnc1.pdf
 - fecha de descarga: 2026-05-25
-- periodo usado: 2016-2018
+- periodo revisado: 2016-2018
 - ambito geografico: Espana
 - formato descargado: PDF
 - archivo bruto: `data/raw/mites/bel-pnc/2026-05-25_mites_bel_pnc1_beneficiarios.pdf`
-- archivo procesado derivado: `data/processed/pensiones/2026-05-25_imserso_pensiones-no-contributivas-observado-modelizado_1991-2070.csv`
-- descripcion breve: beneficiarios de prestaciones no contributivas por modalidad y clase; se usa para cubrir 2016-2018 antes del tramo transcrito directamente desde Imserso.
-- nota metodologica: la magnitud publicada es `beneficiarios`, no importe bruto de nomina; no sustituye al Anexo 7 de Imserso para importes.
+- archivo procesado derivado: no se usa en la version actual del CSV PNC, que toma 2016-2018 del Imserso para mantener numero, importe bruto y pension media en la misma fuente de nominas.
+- descripcion breve: beneficiarios de prestaciones no contributivas por modalidad y clase; se conserva como fuente de contraste.
+- nota metodologica: la magnitud publicada es `beneficiarios`, no importe bruto de nomina; no sustituye al informe de evolucion de nominas del Imserso para importes.
 
 ## Seguridad Social - Presupuesto aprobado, gastos por rubricas economicas
 
