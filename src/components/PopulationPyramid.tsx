@@ -789,15 +789,6 @@ export function PopulationPyramid({
           />
         )}
 
-        <line
-          x1={LAYOUT.centerX}
-          x2={LAYOUT.centerX}
-          y1={LAYOUT.barsTopY - 4}
-          y2={geometry.barsBottomY + 4}
-          stroke={COLORS.axis}
-          strokeWidth={1}
-        />
-
         <PyramidBars
           data={data}
           geometry={geometry}

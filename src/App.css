@@ -380,6 +380,13 @@
   min-height: 0;
 }
 
+/* Dashboard preview: no internal padding so the component owns its frame */
+.component-preview--dashboard {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
 @media (max-width: 760px) {
   .home,
   .component-lab,

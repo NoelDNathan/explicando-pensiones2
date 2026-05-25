@@ -1,0 +1,60 @@
+/* FooterNote — slim footer with disclaimer + source */
+
+.fn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(77, 102, 136, 0.22);
+  font-family: var(--sans);
+}
+
+.fn__left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.fn__glyph {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-inverted-muted);
+}
+
+.fn__glyph svg {
+  width: 13px;
+  height: 13px;
+}
+
+.fn__text {
+  margin: 0;
+  color: var(--color-text-inverted-muted);
+  font: 500 11.5px/1.45 var(--sans);
+  max-width: none;
+}
+
+.fn__source {
+  margin: 0;
+  color: var(--color-text-inverted-faint);
+  font: 500 11.5px/1.45 var(--sans);
+  text-align: right;
+  white-space: nowrap;
+  max-width: none;
+}
+
+@media (max-width: 880px) {
+  .fn {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .fn__source {
+    text-align: left;
+    white-space: normal;
+  }
+}

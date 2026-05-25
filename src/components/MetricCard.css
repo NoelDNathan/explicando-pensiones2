@@ -1,13 +1,36 @@
 /* MetricCard — single indicator card for dark dashboards */
 
 .metric-card {
+  --mc-pad-x: 16px;
+  --mc-pad-y: 14px;
+  --mc-radius: 8px;
+  --mc-value-size: 20px;
+  --mc-label-size: 12px;
+  --mc-secondary-size: 12px;
+
   background: var(--color-surface-deep-2);
   border: 1px solid color-mix(in srgb, var(--color-axis-on-dark) 70%, transparent);
-  border-radius: 8px;
-  padding: 14px 16px 16px;
+  border-radius: var(--mc-radius);
+  padding: var(--mc-pad-y) var(--mc-pad-x) calc(var(--mc-pad-y) + 2px);
   display: flex;
   flex-direction: column;
   gap: 5px;
+  transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+}
+
+.metric-card:hover {
+  border-color: color-mix(in srgb, var(--color-axis-on-dark) 100%, white 5%);
+  transform: translateY(-1px);
+}
+
+.metric-card--lg {
+  --mc-pad-x: 18px;
+  --mc-pad-y: 16px;
+  --mc-radius: 12px;
+  --mc-value-size: 28px;
+  --mc-label-size: 12.5px;
+  --mc-secondary-size: 12.5px;
+  gap: 8px;
 }
 
 /* ── Header: icon + label ────────────────────────────────────────────────────── */
@@ -28,7 +51,7 @@
 
 .metric-card__label {
   margin: 0;
-  font: 400 12px/1.35 var(--sans);
+  font: 400 var(--mc-label-size) / 1.35 var(--sans);
   color: var(--color-text-inverted-muted);
   /* Override the global max-width set on <p> in index.css */
   max-width: none;
@@ -38,7 +61,7 @@
 
 .metric-card__value {
   margin: 0;
-  font: 800 20px/1.05 var(--sans);
+  font: 800 var(--mc-value-size) / 1.05 var(--sans);
   color: var(--color-text-inverted);
   letter-spacing: -0.5px;
 }
@@ -47,7 +70,7 @@
 
 .metric-card__secondary {
   margin: 0;
-  font: 400 12px/1 var(--sans);
+  font: 600 var(--mc-secondary-size) / 1.2 var(--sans);
   color: var(--color-text-inverted-muted);
   max-width: none;
 }

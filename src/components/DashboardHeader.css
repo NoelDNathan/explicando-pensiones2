@@ -1,0 +1,63 @@
+/* DashboardHeader — top bar with title + controls slot */
+
+.dh {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  color: var(--color-text-inverted);
+  font-family: var(--sans);
+}
+
+.dh__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.dh__eyebrow {
+  margin: 0;
+  color: #22d3ee;
+  font: 800 11px/1 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dh__title {
+  margin: 0;
+  color: var(--color-text-inverted);
+  font: 800 clamp(22px, 2.4vw, 30px) / 1.15 var(--sans);
+  letter-spacing: -0.015em;
+  max-width: 720px;
+}
+
+.dh__subtitle {
+  margin: 0;
+  color: var(--color-text-inverted-muted);
+  font: 500 13px/1.4 var(--sans);
+  max-width: 640px;
+}
+
+.dh__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ── Narrow viewport ───────────────────────────────────────────────────── */
+
+@media (max-width: 880px) {
+  .dh {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dh__controls {
+    justify-content: flex-start;
+  }
+}

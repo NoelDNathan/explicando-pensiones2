@@ -8,6 +8,7 @@ import { KeyIndicatorsPanel } from './components/KeyIndicatorsPanel'
 import type { IndicatorItem } from './components/KeyIndicatorsPanel'
 import { YearSelector } from './components/YearSelector'
 import { ReformSimulator } from './components/ReformSimulator'
+import { HealthExpenditureDashboard } from './components/HealthExpenditureDashboard'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -437,6 +438,27 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dark" style={{ justifyContent: 'center' }}>
           <ReformSimulator />
+        </div>
+      </section>
+
+      <section
+        className="component-section component-section--wide"
+        aria-labelledby="health-dashboard-title"
+      >
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 08</p>
+          <h2 id="health-dashboard-title">Panel de gasto sanitario por edad</h2>
+          <p>
+            Dashboard compuesto que combina varias piezas reutilizables: banda
+            informativa, paneles oscuros con cabecera y botón de información,
+            barras horizontales 100%-apiladas por categoría y grupo de edad,
+            curva acumulada con marcador, lista de interpretación, ranking de
+            categorías y fila de tarjetas de indicador (`MetricCard`).
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--hud component-preview--dashboard">
+          <HealthExpenditureDashboard />
         </div>
       </section>
     </main>

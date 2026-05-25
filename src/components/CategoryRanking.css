@@ -1,0 +1,73 @@
+/* CategoryRanking — ranked list with mini horizontal bars */
+
+.crank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.crank__row {
+  display: grid;
+  grid-template-columns: 18px minmax(80px, 1fr) minmax(48px, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.crank__icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-inverted-muted);
+}
+
+.crank__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.crank__label {
+  color: var(--color-text-inverted-muted);
+  font: 500 12.5px/1.2 var(--sans);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.crank__bar {
+  position: relative;
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-axis-on-dark) 35%, transparent);
+  overflow: hidden;
+}
+
+.crank__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-working-age-boundary);
+  transition: width 240ms ease;
+}
+
+.crank__value {
+  color: var(--color-text-inverted);
+  font: 700 12.5px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.crank__share {
+  color: var(--color-text-inverted-muted);
+  font: 600 11.5px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+  min-width: 38px;
+}

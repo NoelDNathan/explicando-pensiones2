@@ -1,0 +1,43 @@
+/* InterpretationList — qualitative reading items for dark dashboards */
+
+.ilist {
+  --ilist-bullet: var(--color-working-age-boundary);
+  --ilist-fg: var(--color-text-inverted-muted);
+  --ilist-strong: var(--color-text-inverted);
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ilist__item {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  align-items: start;
+  gap: 9px;
+}
+
+.ilist__dot {
+  display: inline-block;
+  margin-top: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ilist-bullet);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ilist-bullet) 18%, transparent);
+}
+
+.ilist__text {
+  margin: 0;
+  color: var(--ilist-fg);
+  font: 500 12.5px/1.5 var(--sans);
+  max-width: none;
+}
+
+.ilist__lead {
+  color: var(--ilist-strong);
+  font-weight: 700;
+}

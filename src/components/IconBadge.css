@@ -1,0 +1,36 @@
+/* IconBadge — coloured rounded backdrop for inline icons */
+
+.icon-badge {
+  --ib-size: 38px;
+  --ib-icon-size: 20px;
+  --ib-radius: 10px;
+
+  display: inline-grid;
+  place-items: center;
+  width: var(--ib-size);
+  height: var(--ib-size);
+  border-radius: var(--ib-radius);
+  flex: 0 0 auto;
+}
+
+.icon-badge--sm {
+  --ib-size: 28px;
+  --ib-icon-size: 14px;
+  --ib-radius: 8px;
+}
+
+.icon-badge--lg {
+  --ib-size: 48px;
+  --ib-icon-size: 24px;
+  --ib-radius: 12px;
+}
+
+.icon-badge--circle {
+  --ib-radius: 50%;
+}
+
+.icon-badge svg {
+  width: var(--ib-icon-size);
+  height: var(--ib-icon-size);
+  color: currentColor;
+}

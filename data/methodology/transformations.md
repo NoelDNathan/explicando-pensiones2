@@ -1,5 +1,19 @@
 # Transformaciones de datos
 
+## AIReF/INE, gasto sanitario por edad 2022
+
+- Fecha de transformacion: 2026-05-25.
+- Fuente de gasto: Excel oficial de AIReF `Graficos-y-Cuadros-DT-Sanidad-Educ-CLD.xlsx`, grafico 11, "Perfil del gasto sanitario por genero y grupo de edad (per capita). Ano 2022".
+- Fuente de supervivencia: INE Tablas de Mortalidad, tabla API 27153, concepto `Poblacion estacionaria`, ano 2022.
+- Script reproducible: `scripts/process-airef-health-age-profile-2022.ps1`.
+- Salidas:
+  - `data/processed/airef/2026-05-25_airef_perfil-gasto-sanitario-edad-sexo-percapita_2022.csv`;
+  - `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-edad-sexo_2022.csv`;
+  - `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv`.
+- Transformacion: se normaliza el perfil AIReF a formato largo por sexo y grupo quinquenal. Para el calculo vital esperado, cada gasto per capita de 2022 se multiplica por los anos-persona de la poblacion estacionaria INE 2022 del mismo sexo y edad, dividido por el radix 100.000 de la tabla de mortalidad. Las bandas de dashboard agregan tramos quinquenales con ponderacion por anos-persona.
+- Estado del dato: `estimado`; el perfil base procede de AIReF y el calculo vital esperado es una derivacion propia de periodo.
+- Limitacion: no representa una cohorte real ni un escenario futuro. No se ha localizado una tabla completa por categoria sanitaria, edad y sexo en el Excel AIReF 2025; por tanto no se genera desglose apilado por categorias sanitarias.
+
 ## Pensiones contributivas y no contributivas 1975-2070
 
 - Fecha de transformacion: 2026-05-25.

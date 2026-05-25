@@ -1,0 +1,237 @@
+/* StackedAgeBarChart — 100%-stacked horizontal bars by category × age */
+
+.sab {
+  --sab-category-col: 200px;
+  --sab-total-col: 86px;
+  --sab-row-gap: 12px;
+  --sab-bar-height: 24px;
+  --sab-axis-height: 22px;
+  --sab-axis-tick-color: var(--color-text-inverted-faint);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  font-family: var(--sans);
+  color: var(--color-text-inverted);
+}
+
+/* ── Legend ──────────────────────────────────────────────────────────────
+   Layout: chips spanning the bar column, total header at the right
+   matching the totals column width. */
+
+.sab__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: var(--sab-category-col) 1fr var(--sab-total-col);
+  align-items: center;
+  gap: 12px;
+}
+
+.sab__legend-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+}
+
+.sab__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-inverted-muted);
+  font: 500 11px/1 var(--sans);
+}
+
+.sab__legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.sab__legend-total {
+  justify-self: end;
+  text-align: right;
+  color: var(--color-text-inverted-muted);
+  font: 600 11px/1.3 var(--sans);
+}
+
+.sab__legend-total small {
+  display: block;
+  color: var(--color-text-inverted-faint);
+  font-weight: 500;
+  font-size: 10.5px;
+  margin-top: 2px;
+}
+
+/* ── Rows ────────────────────────────────────────────────────────────── */
+
+.sab__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sab-row-gap);
+}
+
+.sab__row {
+  display: grid;
+  grid-template-columns: var(--sab-category-col) 1fr var(--sab-total-col);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sab__category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--color-text-inverted-muted);
+}
+
+.sab__category-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+}
+
+.sab__category-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sab__category-label {
+  font: 500 12.5px/1.2 var(--sans);
+  color: var(--color-text-inverted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  min-width: 0;
+}
+
+.sab__bar-track {
+  position: relative;
+  width: 100%;
+  height: var(--sab-bar-height);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sab__bar {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.sab__segment {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  color: #ffffff;
+  font: 700 10.5px/1 var(--sans);
+  letter-spacing: 0.01em;
+  transition: filter 140ms ease;
+  container-type: inline-size;
+}
+
+.sab__bar:hover .sab__segment {
+  filter: brightness(0.78);
+}
+
+.sab__bar:hover .sab__segment:hover {
+  filter: brightness(1.12);
+}
+
+.sab__segment-label {
+  display: inline-block;
+  padding: 0 6px;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.28);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Hide labels in segments that are too narrow to render the text */
+@container (max-width: 22px) {
+  .sab__segment-label {
+    opacity: 0;
+  }
+}
+
+/* ── Totals column ───────────────────────────────────────────────────── */
+
+.sab__total {
+  text-align: right;
+  color: var(--color-text-inverted);
+  font: 700 13px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ── X axis ──────────────────────────────────────────────────────────── */
+
+.sab__axis {
+  display: grid;
+  grid-template-columns: var(--sab-category-col) 1fr var(--sab-total-col);
+  align-items: center;
+  gap: 12px;
+  height: var(--sab-axis-height);
+}
+
+.sab__axis-track {
+  position: relative;
+  height: 100%;
+  border-top: 1px solid color-mix(in srgb, var(--color-axis-on-dark) 50%, transparent);
+}
+
+.sab__axis-tick {
+  position: absolute;
+  top: 6px;
+  transform: translateX(-50%);
+  color: var(--sab-axis-tick-color);
+  font: 500 11px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sab__axis-tick--first {
+  transform: translateX(0);
+}
+
+.sab__axis-tick--last {
+  transform: translateX(-100%);
+}
+
+/* ── Narrow viewport ─────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .sab {
+    --sab-category-col: 150px;
+    --sab-total-col: 72px;
+  }
+
+  .sab__category-label {
+    font-size: 11.5px;
+  }
+}

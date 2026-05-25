@@ -14,6 +14,8 @@ import './MetricCard.css'
 
 // ─── Public types ─────────────────────────────────────────────────────────────
 
+export type MetricCardSize = 'md' | 'lg'
+
 export interface MetricCardProps {
   /** Indicator name (e.g. "Gasto en pensiones"). */
   label: string
@@ -29,6 +31,8 @@ export interface MetricCardProps {
   note?: string
   /** CSS color for the note text. */
   noteColor?: string
+  /** Visual density. `lg` shows a bigger value for KPI rows. */
+  size?: MetricCardSize
   className?: string
 }
 
@@ -42,10 +46,19 @@ export function MetricCard({
   secondaryColor,
   note,
   noteColor,
+  size = 'md',
   className,
 }: MetricCardProps) {
+  const rootClass = [
+    'metric-card',
+    `metric-card--${size}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <div className={`metric-card${className ? ` ${className}` : ''}`}>
+    <div className={rootClass}>
       <div className="metric-card__header">
         <span className="metric-card__icon" aria-hidden="true">
           {icon}

@@ -95,6 +95,31 @@
 - uso previsto en la web: completar una capa de escenario derivado 2025-2070 para PIB, gasto publico total, intereses y saldo publico, siempre etiquetada como estimada.
 - nota metodologica: las anclas no son una tabla anual completa; la serie anual intermedia se obtiene por interpolacion lineal desde 2024 observado BDMACRO hasta las anclas AIReF. Los importes en millones se calculan con un PIB corriente estimado desde Ageing Report, por lo que no son cifras oficiales publicadas.
 
+## AIReF - Perfil de gasto sanitario por edad y sexo 2022
+
+- nombre de la fuente: Graficos y cuadros del Documento tecnico sobre la metodologia de los modelos de sanidad, educacion y cuidados de larga duracion
+- institucion: Autoridad Independiente de Responsabilidad Fiscal (AIReF)
+- URL pagina: https://www.airef.es/es/centro-documental/documentos-tecnicos/metodologia-de-los-modelos-de-sanidad-educacion-y-cuidados-de-larga-duracion/
+- URL Excel: https://www.airef.es/wp-content/uploads/2025/04/Documentos-tecnicos-segunda-opinion-sostenibilidad-a-largo-plazo-AAPP/Graficos-y-Cuadros-DT-Sanidad-Educ-CLD.xlsx
+- URL PDF: https://www.airef.es/wp-content/uploads/2025/04/Documentos-tecnicos-segunda-opinion-sostenibilidad-a-largo-plazo-AAPP/DT-sanidad-educacion-cuidados-2025.pdf
+- fecha de publicacion indicada por AIReF: 2025-04-24
+- fecha de descarga local: 2026-05-25
+- periodo procesado: 2022
+- ambito geografico: Espana
+- formato descargado: XLSX y PDF
+- archivos brutos:
+  - `data/raw/airef/sanidad-educacion-cuidados/2026-05-25_airef_graficos-cuadros-dt-sanidad-educacion-cuidados.xlsx`
+  - `data/raw/airef/sanidad-educacion-cuidados/2026-05-25_airef_dt-sanidad-educacion-cuidados-2025.pdf`
+- archivos procesados:
+  - `data/processed/airef/2026-05-25_airef_perfil-gasto-sanitario-edad-sexo-percapita_2022.csv`
+  - `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-edad-sexo_2022.csv`
+  - `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv`
+- fuente auxiliar para calculo vital: INE Tablas de Mortalidad, tabla API 27153, archivo bruto `data/raw/ine/tablas-mortalidad/2026-05-25_ine_tm_tablas-mortalidad-nacional-1991-2024.json`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales de AIReF e INE
+- descripcion breve: perfil estimado de gasto sanitario publico per capita por grupos quinquenales de edad y sexo para 2022; se combina con la poblacion estacionaria INE 2022 para calcular gasto sanitario vital esperado por tramo.
+- uso previsto en la web: construir una vista de gasto sanitario a lo largo de la vida, limitada a total sanidad por edad/sexo mientras no exista un cruce oficial completo por categoria sanitaria.
+- nota metodologica: no se ha localizado en el Excel 2025 un cruce completo categoria sanitaria x edad x sexo para replicar barras apiladas por hospitalaria, primaria, farmacia, urgencias, salud mental y cuidados de larga duracion. El calculo vital es derivado y debe etiquetarse como estimacion de periodo.
+
 ## BOE - Edad minima legal para trabajar en Espana
 
 - nombre de la fuente: edad minima legal general de admision al trabajo por periodo normativo

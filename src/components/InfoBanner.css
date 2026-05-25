@@ -1,0 +1,64 @@
+/* InfoBanner — slim top note for dashboards */
+
+.info-banner {
+  --ib-bg: color-mix(in srgb, var(--color-surface-deep-2) 95%, #1d68fa 5%);
+  --ib-border: rgba(59, 126, 248, 0.22);
+  --ib-fg: var(--color-text-inverted-muted);
+  --ib-icon-bg: rgba(59, 126, 248, 0.18);
+  --ib-icon-fg: #6da4ff;
+  --ib-strong: var(--color-text-inverted);
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--ib-border);
+  border-radius: 10px;
+  background: var(--ib-bg);
+}
+
+.info-banner--light {
+  --ib-bg: var(--surface);
+  --ib-border: var(--border);
+  --ib-fg: var(--muted);
+  --ib-icon-bg: var(--accent-wash);
+  --ib-icon-fg: var(--accent);
+  --ib-strong: var(--heading);
+}
+
+.info-banner--neutral {
+  --ib-icon-bg: rgba(157, 182, 217, 0.18);
+  --ib-icon-fg: var(--color-text-inverted-muted);
+  --ib-border: rgba(77, 102, 136, 0.32);
+}
+
+.info-banner__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ib-icon-bg);
+  color: var(--ib-icon-fg);
+}
+
+.info-banner__glyph {
+  width: 13px;
+  height: 13px;
+}
+
+.info-banner__text {
+  margin: 0;
+  flex: 1 1 auto;
+  color: var(--ib-fg);
+  font: 500 12.5px/1.45 var(--sans);
+  max-width: none;
+}
+
+.info-banner__text strong,
+.info-banner__text b {
+  color: var(--ib-strong);
+  font-weight: 700;
+}
