@@ -553,6 +553,30 @@
 - licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Seguridad Social
 - descripcion breve: libro oficial con pensiones contributivas en vigor, importe de la nomina mensual, pension media y desgloses por clase, regimen, sexo, territorio y otros criterios.
 - uso previsto en la web: mostrar el dato mensual mas reciente de gasto/nomina de pensiones contributivas y sus desgloses.
+- archivos procesados derivados:
+  - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
+  - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`
+  - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`
+- nota metodologica: la serie anual observada local de numero de pensiones procede de la hoja `Pnes y ptas` y cubre 2006-2026. El tramo 2027-2070 se modeliza con pensionistas AIReF y ratio pensiones/pensionista de abril de 2026; 1975-2005 queda pendiente de Anuarios/eSTADISS.
+
+## Imserso - Evolucion de nominas de PNC y PSPD
+
+- nombre de la fuente: Evolucion de las nominas de las PNC y PSPD
+- institucion: Instituto de Mayores y Servicios Sociales (Imserso)
+- URL: https://imserso.es/el-imserso/documentacion/estadisticas/pensiones-no-contributivas-jubilacion-invalidez-pnc/historico-informes-publicados-pnc-pspd/evolucion-nominas-pnc-pspd
+- fecha de descarga: 2026-05-25
+- periodo cubierto por la coleccion: desde 1991; el informe 2019-2025 cubre datos anuales y mensuales del periodo 2019-2025
+- ambito geografico: Espana, comunidades autonomas y provincias
+- formato descargado: HTML y PDF
+- archivos brutos:
+  - `data/raw/imserso/pnc/2026-05-25_imserso_pagina-evolucion-nominas-pnc-pspd.html`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20192025.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom19912000.pdf`
+- archivo procesado: `data/processed/pensiones/2026-05-25_imserso_pensiones-no-contributivas-observado-modelizado_1991-2070.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del Imserso
+- descripcion breve: informes oficiales con numero de pensiones no contributivas de jubilacion e invalidez, importes brutos abonados y pension media.
+- uso previsto en la web: construir la serie de pensiones no contributivas y su coste bruto, separando observado, pendiente historico y modelo futuro.
+- nota metodologica: el CSV actual transcribe el Anexo 7 del informe 2019-2025 para Total Espana y deja 1991-2018 pendiente de extraccion reproducible desde PDFs historicos solapados.
 
 ## Seguridad Social - Presupuesto aprobado, gastos por rubricas economicas
 

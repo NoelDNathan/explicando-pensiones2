@@ -1,0 +1,21 @@
+# Interaccion: pensiones contributivas y PNC 1975-2070
+
+- Fecha: 2026-05-25
+- Objetivo: obtener una primera base trazable para numero de pensiones contributivas y no contributivas, con desgloses disponibles y estimaciones futuras hasta 2070.
+- Archivos modificados:
+  - `scripts/process-pensiones-contributivas-no-contributivas-1975-2070.ps1`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_pagina-evolucion-nominas-pnc-pspd.html`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20192025.pdf`
+  - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom19912000.pdf`
+  - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
+  - `data/processed/pensiones/2026-05-25_imserso_pensiones-no-contributivas-observado-modelizado_1991-2070.csv`
+  - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`
+  - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`
+  - `data/sources.md`
+  - `data/inventory.md`
+  - `data/metadata.md`
+  - `data/methodology/transformations.md`
+  - `data/checksums.sha256`
+  - `ai/current.md`
+- Resumen de cambios: se proceso el libro mensual de Seguridad Social para pensiones contributivas observadas 2006-2026, desgloses abril 2026 y altas/bajas marzo 2026; se transcribio el Anexo 7 del informe Imserso 2019-2025 para PNC; se modelizaron tramos futuros con AIReF/INE y se dejaron huecos historicos como `no_estimado`.
+- Estado siguiente: extraer PNC 1991-2018 desde PDFs historicos y localizar Anuarios/eSTADISS para contributivas 1975-2005 antes de presentar esas series como completas.

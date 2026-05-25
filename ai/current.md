@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Generado un primer paquete de datos sobre numero de pensiones contributivas y no contributivas. Se creo `scripts/process-pensiones-contributivas-no-contributivas-1975-2070.ps1` y cuatro CSV en `data/processed/pensiones/`: pensiones contributivas 1975-2070 con observado 2006-2026, modelo 2027-2070 y 1975-2005 `no_estimado`; PNC 1991-2070 con observado transcrito 2019-2025, modelo demografico 2026-2070 y 1991-2018 `no_estimado`; desglose puntual contributivo abril 2026 por regimen y clase; y altas/bajas contributivas marzo 2026 con pension media de altas iniciales. Descargados brutos Imserso HTML, PDF 2019-2025 y PDF 1991-2000 en `data/raw/imserso/pnc/`. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`. Cautela: quedan pendientes las extracciones historicas completas desde Anuarios/eSTADISS e Imserso; las filas futuras son modelizadas, no oficiales.
+
 - Revisada la coherencia de supuestos de las estimaciones AIReF ya procesadas. Criterio: gasto en pensiones y pensionistas del informe de regla de gasto de pensiones son comparables solo dentro del mismo escenario/vintage; el CSV maestro fiscal usa `AIReF Opinion 2025` para pensiones y el escenario inercial para deuda de largo plazo, pero mezcla ademas una prevision puntual de deuda 2026 publicada en 2026 y una fuente europea Ageing Report para sanidad, por lo que la narrativa debe etiquetar cada bloque como escenario/fuente y no presentarlo como una unica simulacion homogenea.
 
 - Revisada disponibilidad historica de pensiones vs pensionistas antes de 2006. El libro mensual/eSTADISS usado localmente publica `PENSIONISTAS`, `PENSIONES` y ratio `PENSIONES / PENSIONISTAS` desde 2006. Los Anuarios MITES muestran que hay tablas historicas con `pensionistas` alrededor de 2004-2006 y tablas de `pensiones` en anos anteriores; por tanto, la ratio antes de 2006 no esta localizada como serie continua, pero puede calcularse en los anos donde existan ambas magnitudes. Cautela: los anuarios usan media anual en miles, mientras el libro mensual usa datos de diciembre o mes concreto.
@@ -207,6 +209,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Extraer de forma reproducible el historico PNC 1991-2018 desde los PDFs solapados del Imserso antes de usarlo editorialmente como serie completa; el bruto 1991-2000 ya esta descargado, pero no parseado a tabla.
+- Localizar/procesar Anuarios MITES o exportacion eSTADISS para cubrir numero de pensiones contributivas 1975-2005; no interpolar ese tramo ni sustituirlo por personas pensionistas.
 - Si se necesita cubrir 1975-2005 con personas pensionistas observadas, hacer una exportacion manual desde eSTADISS y documentar el CSV bruto; no usar numero de pensiones como sustituto.
 - Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y que huecos deben mantenerse visibles como `no_estimado` en la interfaz. No interpolar PIB, gasto publico total, intereses o saldo publico para 2025-2070 sin una fuente tabular adicional.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.
