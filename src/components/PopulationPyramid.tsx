@@ -59,7 +59,7 @@ const LAYOUT = {
   bottomAxisY: 380,
   tickLabelY: 394,
   axisCaptionY: 410,
-  rightLabelsX: 470,
+  rightLabelsX: 505,
   legendY: 448,
 } as const
 
@@ -138,6 +138,11 @@ const pickBarColor = (
   const variant = active ? 'active' : 'rest'
   return COLORS.bars[sex][nationality][variant]
 }
+
+const formatPyramidValue = (value: number): string =>
+  value.toLocaleString('es-ES', {
+    maximumFractionDigits: 0,
+  })
 
 type Geometry = {
   rowY: (index: number) => number
@@ -277,22 +282,55 @@ function PyramidBars({
   geometry,
   workingAgeMin,
   workingAgeMax,
+  showBirthplaceLabels,
 }: {
   data: PyramidAgeGroup[]
   geometry: Geometry
   workingAgeMin: number
   workingAgeMax: number
+  showBirthplaceLabels: boolean
 }) {
+  const renderSegmentLabel = (
+    key: string,
+    x: number,
+    y: number,
+    width: number,
+    value: number,
+    anchor: 'start' | 'middle' | 'end' = 'middle',
+  ) => {
+    if (!showBirthplaceLabels || value <= 0 || width < 26) return null
+
+    return (
+      <text
+        key={key}
+        x={x}
+        y={y + LAYOUT.barHeight / 2}
+        fill={COLORS.textTitle}
+        fontSize={6.6}
+        fontWeight={700}
+        textAnchor={anchor}
+        dominantBaseline="middle"
+        opacity={0.92}
+        pointerEvents="none"
+      >
+        {formatPyramidValue(value)}
+      </text>
+    )
+  }
+
   return (
     <g>
       {data.map((group, i) => {
         const active = isWorkingAge(group, workingAgeMin, workingAgeMax)
         const y = geometry.rowY(i)
+        const labelY = y + LAYOUT.barHeight / 2
 
         const maleNativeWidth = group.male.native * geometry.scale
         const maleForeignWidth = group.male.foreign * geometry.scale
         const femaleNativeWidth = group.female.native * geometry.scale
         const femaleForeignWidth = group.female.foreign * geometry.scale
+        const maleTotal = group.male.native + group.male.foreign
+        const femaleTotal = group.female.native + group.female.foreign
 
         const maleNativeX = geometry.maleBarBaseX - maleNativeWidth
         const maleForeignX = maleNativeX - maleForeignWidth
@@ -329,6 +367,58 @@ function PyramidBars({
               height={LAYOUT.barHeight}
               fill={pickBarColor('female', 'foreign', active)}
             />
+            <text
+              x={Math.max(42, maleForeignX - 4)}
+              y={labelY}
+              fill={active ? COLORS.textTitle : COLORS.textMuted}
+              fontSize={7}
+              fontWeight={active ? 700 : 500}
+              textAnchor="end"
+              dominantBaseline="middle"
+              pointerEvents="none"
+            >
+              {formatPyramidValue(maleTotal)}
+            </text>
+            <text
+              x={Math.min(VIEWBOX.width - 3, femaleForeignX + femaleForeignWidth + 4)}
+              y={labelY}
+              fill={active ? COLORS.textTitle : COLORS.textMuted}
+              fontSize={7}
+              fontWeight={active ? 700 : 500}
+              textAnchor="start"
+              dominantBaseline="middle"
+              pointerEvents="none"
+            >
+              {formatPyramidValue(femaleTotal)}
+            </text>
+            {renderSegmentLabel(
+              `${group.ageGroup}-male-foreign-label`,
+              maleForeignX + maleForeignWidth / 2,
+              y,
+              maleForeignWidth,
+              group.male.foreign,
+            )}
+            {renderSegmentLabel(
+              `${group.ageGroup}-male-native-label`,
+              maleNativeX + maleNativeWidth / 2,
+              y,
+              maleNativeWidth,
+              group.male.native,
+            )}
+            {renderSegmentLabel(
+              `${group.ageGroup}-female-native-label`,
+              femaleNativeX + femaleNativeWidth / 2,
+              y,
+              femaleNativeWidth,
+              group.female.native,
+            )}
+            {renderSegmentLabel(
+              `${group.ageGroup}-female-foreign-label`,
+              femaleForeignX + femaleForeignWidth / 2,
+              y,
+              femaleForeignWidth,
+              group.female.foreign,
+            )}
           </g>
         )
       })}
@@ -634,6 +724,7 @@ export function PopulationPyramid({
           geometry={geometry}
           workingAgeMin={workingAgeMin}
           workingAgeMax={workingAgeMax}
+          showBirthplaceLabels={legendVariant === 'birthplace'}
         />
 
         <WorkingAgeBoundaryLines
