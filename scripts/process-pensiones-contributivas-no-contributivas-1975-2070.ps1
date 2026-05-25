@@ -181,6 +181,28 @@ $pnesRows = Read-XlsxSheet $ssWorkbookPath "Pnes y ptas"
 $observedContrib = @{}
 $lastRatio = $null
 $currentPnesYear = $null
+
+$historicalMitesContrib = @(
+  @{ Year = 2001; PensionsThousand = 7677.9; Source = "MITES - Anuario 2001, PEN-01"; Note = "Media anual en miles de pensiones. Tabla HTML oficial descargada." },
+  @{ Year = 2002; PensionsThousand = 7745.8; Source = "MITES - Anuario 2002, PEN-01"; Note = "Media anual en miles de pensiones. Tabla HTML oficial descargada." },
+  @{ Year = 2003; PensionsThousand = 7878.6; Source = "MITES - Anuario 2004, PEN-01, columna 2003"; Note = "Media anual en miles de pensiones. Se toma del Anuario 2004 porque la tabla incluye el ano anterior." },
+  @{ Year = 2004; PensionsThousand = 7819.5; Source = "MITES - Anuario 2004, PEN-01"; Note = "Media anual en miles de pensiones. Tabla HTML oficial descargada." },
+  @{ Year = 2005; PensionsThousand = 7979.7; Source = "MITES - Anuario 2006, PEN-01, columna 2005"; Note = "Media anual en miles de pensiones. Se toma del Anuario 2006 porque la tabla incluye el ano anterior." }
+)
+foreach ($item in $historicalMitesContrib) {
+  $observedContrib[$item.Year] = New-ContributiveRow `
+    $item.Year `
+    "media anual" `
+    ([int][math]::Round($item.PensionsThousand * 1000)) `
+    "observado" `
+    $item.Source `
+    "Transcripcion de tabla PEN-01 de Anuario MITES. Unidad original: miles de pensiones, media anual." `
+    "Pensiones contributivas del sistema de la Seguridad Social por clase." `
+    $null `
+    $null `
+    $item.Note
+}
+
 foreach ($rowNumber in $pnesRows.Keys | Sort-Object) {
   $cells = $pnesRows[$rowNumber]
   if ($cells.ContainsKey("A") -and $cells["A"] -match "^\d{4}$") {
@@ -241,10 +263,10 @@ for ($year = 1975; $year -le 2070; $year++) {
       "no_estimado" `
       "Seguridad Social / Anuario MITES / eSTADISS" `
       "No se genera valor sin procesar una fuente historica tabular compatible." `
-      "Fila de cobertura para el periodo solicitado; pendiente localizar/procesar Anuarios o exportacion eSTADISS para 1975-2005." `
+      "Fila de cobertura para el periodo solicitado; pendiente localizar/procesar Anuarios o exportacion eSTADISS para los anos sin tabla online fiable." `
       $null `
       $null `
-      "No usar como cero. Hueco documental pendiente."
+      "No usar como cero. Hueco documental pendiente: las rutas MITES 1975-2000 comprobadas devuelven pagina 404 moderna, no tabla estadistica."
   }
 }
 $contribRows | Export-Csv -Path $contribOut -NoTypeInformation -Encoding utf8
@@ -270,6 +292,10 @@ foreach ($row in $populationRows) {
 }
 
 $pncObserved = @{}
+$pncBelSource = "MITES - Boletin de Estadisticas Laborales, PNC-1"
+$pncObserved[2016] = New-PncRow 2016 "media anual" 254741 $null $null 199762 $null $null 454503 $null $null "observado" $pncBelSource "Transcripcion del cuadro PNC-1 del BEL MITES. La fuente denomina la magnitud beneficiarios, no importe de nomina." "Pensiones no contributivas de la Seguridad Social, total, invalidez y jubilacion." "Dato observado de beneficiarios a primer dia de cada mes, media anual; usar con cautela junto al fichero Imserso de numero de pensiones."
+$pncObserved[2017] = New-PncRow 2017 "media anual" 256187 $null $null 199120 $null $null 455306 $null $null "observado" $pncBelSource "Transcripcion del cuadro PNC-1 del BEL MITES. La fuente denomina la magnitud beneficiarios, no importe de nomina." "Pensiones no contributivas de la Seguridad Social, total, invalidez y jubilacion." "Dato observado de beneficiarios a primer dia de cada mes, media anual; usar con cautela junto al fichero Imserso de numero de pensiones."
+$pncObserved[2018] = New-PncRow 2018 "media anual" 256842 $null $null 196375 $null $null 453216 $null $null "observado" $pncBelSource "Transcripcion del cuadro PNC-1 del BEL MITES. La fuente denomina la magnitud beneficiarios, no importe de nomina." "Pensiones no contributivas de la Seguridad Social, total, invalidez y jubilacion." "Dato observado de beneficiarios a primer dia de cada mes, media anual; usar con cautela junto al fichero Imserso de numero de pensiones."
 $pncSource = "Imserso - Informe de evolucion de las nominas PNC y PSPD 2019-2025, Anexo 7 Total Espana"
 $pncObserved[2019] = New-PncRow 2019 "Diciembre" 261044 1399861375.29 382.84 191113 1152150277.32 423.75 452157 2552011652.61 386.62 "observado" $pncSource "Transcripcion del Anexo 7 del PDF oficial Imserso 2019-2025." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual y pension media mensual." "Dato anual de diciembre."
 $pncObserved[2020] = New-PncRow 2020 "Diciembre" 260169 1429951491.95 389.08 185852 1139436029.68 429.63 446021 2569387521.63 400.28 "observado" $pncSource "Transcripcion del Anexo 7 del PDF oficial Imserso 2019-2025." "PNC de jubilacion e invalidez. Numero de pensiones, importe bruto anual y pension media mensual." "Dato anual de diciembre."

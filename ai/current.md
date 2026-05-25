@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Mejorada la cobertura observada del paquete de pensiones solicitado. Para contributivas se incorporaron Anuarios MITES PEN-01 2001-2005 (media anual en miles de pensiones, convertida a pensiones), dejando el hueco real reducido a 1975-2000. Para PNC se incorporo BEL MITES PNC-1 2016-2018 como beneficiarios observados por invalidez/jubilacion, dejando el hueco real reducido a 1991-2015 para extraccion desde PDFs historicos Imserso. Problema localizado: las rutas MITES probadas para Anuarios 1975-2000 bajo el patron `ANUARIOAAAA/PEN/pen01.html` devuelven una pagina 404 moderna, no una tabla estadistica; no se usan como datos.
+
 - Anadida en `AGENTS.md` una regla explicita para revisar la coherencia de supuestos antes de crear, actualizar o usar estimaciones, modelizaciones, proyecciones propias o combinaciones de escenarios. La regla exige identificar fuente/escenario/vintage, comprobar compatibilidad de poblacion, PIB, precios, edad, definicion, unidad y periodo base, y documentar la revision antes de uso editorial.
 
 - Generado un primer paquete de datos sobre numero de pensiones contributivas y no contributivas. Se creo `scripts/process-pensiones-contributivas-no-contributivas-1975-2070.ps1` y cuatro CSV en `data/processed/pensiones/`: pensiones contributivas 1975-2070 con observado 2006-2026, modelo 2027-2070 y 1975-2005 `no_estimado`; PNC 1991-2070 con observado transcrito 2019-2025, modelo demografico 2026-2070 y 1991-2018 `no_estimado`; desglose puntual contributivo abril 2026 por regimen y clase; y altas/bajas contributivas marzo 2026 con pension media de altas iniciales. Descargados brutos Imserso HTML, PDF 2019-2025 y PDF 1991-2000 en `data/raw/imserso/pnc/`. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`. Cautela: quedan pendientes las extracciones historicas completas desde Anuarios/eSTADISS e Imserso; las filas futuras son modelizadas, no oficiales.
@@ -211,8 +213,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
-- Extraer de forma reproducible el historico PNC 1991-2018 desde los PDFs solapados del Imserso antes de usarlo editorialmente como serie completa; el bruto 1991-2000 ya esta descargado, pero no parseado a tabla.
-- Localizar/procesar Anuarios MITES o exportacion eSTADISS para cubrir numero de pensiones contributivas 1975-2005; no interpolar ese tramo ni sustituirlo por personas pensionistas.
+- Extraer de forma reproducible el historico PNC 1991-2015 desde los PDFs solapados del Imserso antes de usarlo editorialmente como serie completa; el bruto 1991-2000 ya esta descargado, pero no parseado a tabla.
+- Localizar/procesar una fuente tabular alternativa para cubrir numero de pensiones contributivas 1975-2000; las rutas MITES probadas devuelven 404, asi que puede requerir Anuarios en PDF, WebFOCUS/eSTADISS o descarga manual. No interpolar ese tramo ni sustituirlo por personas pensionistas.
 - Si se necesita cubrir 1975-2005 con personas pensionistas observadas, hacer una exportacion manual desde eSTADISS y documentar el CSV bruto; no usar numero de pensiones como sustituto.
 - Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y que huecos deben mantenerse visibles como `no_estimado` en la interfaz. No interpolar PIB, gasto publico total, intereses o saldo publico para 2025-2070 sin una fuente tabular adicional.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.

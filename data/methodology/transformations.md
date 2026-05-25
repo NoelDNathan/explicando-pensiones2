@@ -12,8 +12,10 @@
   - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom19912000.pdf`.
   - `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`.
 - Transformaciones aplicadas:
+  - incorporacion manual documentada de Anuarios MITES PEN-01 para pensiones contributivas 2001-2005, en unidad original `miles de pensiones`, convertida a pensiones;
   - extraccion de `PENSIONES` de la hoja `Pnes y ptas` para pensiones contributivas: diciembre 2006-2025 y abril 2026;
   - modelizacion 2027-2070 de pensiones contributivas como pensionistas AIReF escenario `AIReF` multiplicados por el ratio pensiones/pensionista observado en abril de 2026;
+  - incorporacion manual documentada del BEL MITES PNC-1 para 2016-2018, donde la fuente publica `beneficiarios` por invalidez y jubilacion;
   - transcripcion del Anexo 7 del informe Imserso 2019-2025 para PNC de jubilacion e invalidez, Total Espana;
   - modelizacion PNC 2026-2070: jubilacion escala con poblacion INE de 67 anos o mas; invalidez escala con poblacion INE de 18 a 66 anos; importes brutos futuros quedan vacios;
   - extraccion del desglose puntual abril 2026 por regimen y clase de pension desde `Regimen_clase`;
@@ -25,8 +27,9 @@
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`.
   - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`.
 - Limitaciones:
-  - contributivas 1975-2005 queda pendiente de procesar desde Anuarios MITES/eSTADISS;
-  - PNC 1991-2018 queda pendiente de extraccion reproducible desde PDFs historicos solapados del Imserso;
+  - contributivas 1975-2000 queda pendiente: las rutas MITES comprobadas con el patron de Anuarios devuelven pagina 404 moderna, no tabla;
+  - PNC 1991-2015 queda pendiente de extraccion reproducible desde PDFs historicos solapados del Imserso;
+  - PNC 2016-2018 usa beneficiarios publicados por BEL MITES, no importe bruto de nomina;
   - las modelizaciones no son proyecciones oficiales y solo sirven como proxy demografica inicial.
 
 ## Series fiscales solicitadas 1975-2070

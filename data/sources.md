@@ -578,6 +578,41 @@
 - uso previsto en la web: construir la serie de pensiones no contributivas y su coste bruto, separando observado, pendiente historico y modelo futuro.
 - nota metodologica: el CSV actual transcribe el Anexo 7 del informe 2019-2025 para Total Espana y deja 1991-2018 pendiente de extraccion reproducible desde PDFs historicos solapados.
 
+## MITES - Anuarios, pensiones contributivas
+
+- nombre de la fuente: Anuario de Estadisticas, Pensiones contributivas del sistema de la Seguridad Social, cuadro PEN-01
+- institucion: Ministerio de Trabajo y Economia Social
+- URL principal: https://www.mites.gob.es/es/estadisticas/anuarios/index.htm
+- URLs de cuadros descargados:
+  - https://www.mites.gob.es/estadisticas/ANUARIO2001/HTML/PEN/pen01.html
+  - https://www.mites.gob.es/estadisticas/ANUARIO2002/PEN/pen01.htm
+  - https://www.mites.gob.es/estadisticas/ANUARIO2003/PEN/pen01.html
+  - https://www.mites.gob.es/estadisticas/ANUARIO2004/PEN/pen01.html
+  - https://www.mites.gob.es/estadisticas/ANUARIO2005/PEN/pen01.html
+  - https://www.mites.gob.es/estadisticas/ANUARIO2006/PEN/pen01_HTML.htm
+- fecha de descarga: 2026-05-25
+- periodo usado: 2001-2005
+- ambito geografico: Espana
+- formato descargado: HTML
+- archivos brutos: `data/raw/mites/anuario-pensiones-contributivas/`
+- archivo procesado derivado: `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
+- descripcion breve: tablas anuales oficiales con pensiones contributivas, importes medios y, en anos recientes, pensionistas.
+- nota metodologica: las rutas probadas para 1975-2000 bajo el mismo patron devuelven pagina 404 moderna; no se usan como fuente de dato.
+
+## MITES - BEL, prestaciones no contributivas
+
+- nombre de la fuente: Boletin de Estadisticas Laborales, PNC-1
+- institucion: Ministerio de Trabajo y Economia Social
+- URL: https://www.mites.gob.es/estadisticas/bel/PNC/pnc1.pdf
+- fecha de descarga: 2026-05-25
+- periodo usado: 2016-2018
+- ambito geografico: Espana
+- formato descargado: PDF
+- archivo bruto: `data/raw/mites/bel-pnc/2026-05-25_mites_bel_pnc1_beneficiarios.pdf`
+- archivo procesado derivado: `data/processed/pensiones/2026-05-25_imserso_pensiones-no-contributivas-observado-modelizado_1991-2070.csv`
+- descripcion breve: beneficiarios de prestaciones no contributivas por modalidad y clase; se usa para cubrir 2016-2018 antes del tramo transcrito directamente desde Imserso.
+- nota metodologica: la magnitud publicada es `beneficiarios`, no importe bruto de nomina; no sustituye al Anexo 7 de Imserso para importes.
+
 ## Seguridad Social - Presupuesto aprobado, gastos por rubricas economicas
 
 - nombre de la fuente: Cuadro 10. Evolucion de los gastos por rubricas economicas
