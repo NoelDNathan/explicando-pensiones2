@@ -87,6 +87,49 @@
   white-space: nowrap;
 }
 
+.sbc__tooltip {
+  min-width: 142px;
+  padding: 8px 10px;
+  border: 1px solid rgba(34, 211, 238, 0.34);
+  border-radius: 7px;
+  background: rgba(8, 18, 34, 0.96);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36);
+  color: var(--color-text-inverted);
+  font-family: var(--sans);
+}
+
+.sbc__tooltip-topline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-inverted-muted);
+  font: 600 11px/1.1 var(--sans);
+  white-space: nowrap;
+}
+
+.sbc__tooltip-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+.sbc__tooltip strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--color-text-inverted);
+  font: 800 14px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.sbc__tooltip small {
+  display: block;
+  margin-top: 5px;
+  color: var(--color-text-inverted-faint);
+  font: 600 10px/1.15 var(--sans);
+  white-space: nowrap;
+}
+
 @media (max-width: 720px) {
   .sbc__legend {
     padding-right: 0;

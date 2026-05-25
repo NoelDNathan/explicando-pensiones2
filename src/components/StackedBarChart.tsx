@@ -12,6 +12,7 @@ import {
   CartesianGrid,
   LabelList,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
@@ -40,6 +41,18 @@ type SegmentLabelProps = {
   value?: number
   index?: number
   dataKey?: string
+}
+
+type TooltipPayloadItem = {
+  dataKey?: string
+  value?: number
+  payload?: StackedBarRow
+}
+
+type SegmentTooltipProps = {
+  active?: boolean
+  payload?: TooltipPayloadItem[]
+  label?: string
 }
 
 function formatEuro(value: number): string {
@@ -126,6 +139,33 @@ function CategoryTick({
   )
 }
 
+function SegmentTooltip({ active, payload, label }: SegmentTooltipProps) {
+  const item = payload?.[0]
+  if (!active || !item?.dataKey || !item.payload || typeof item.value !== 'number') return null
+
+  const groupIndex = AGE_GROUPS.findIndex((group) => group.key === item.dataKey)
+  const group = AGE_GROUPS[groupIndex]
+  const percent = item.payload.segments[groupIndex] ?? 0
+
+  return (
+    <div className="sbc__tooltip">
+      <div className="sbc__tooltip-topline">
+        <span
+          className="sbc__tooltip-swatch"
+          style={{ background: group?.color ?? '#22d3ee' }}
+          aria-hidden="true"
+        />
+        <span>{group?.label ?? 'Grupo de edad'}</span>
+      </div>
+      <strong>{formatEuro(item.value)}</strong>
+      <small>
+        {label}
+        {percent ? ` · ${percent.toLocaleString('es-ES', { maximumFractionDigits: 1 })}%` : ''}
+      </small>
+    </div>
+  )
+}
+
 export function StackedBarChart({
   categories,
   icons,
@@ -185,6 +225,13 @@ export function StackedBarChart({
               )}
               axisLine={false}
               tickLine={false}
+            />
+            <Tooltip
+              content={<SegmentTooltip />}
+              cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }}
+              wrapperStyle={{ outline: 'none', pointerEvents: 'none' }}
+              allowEscapeViewBox={{ x: true, y: true }}
+              offset={12}
             />
             {AGE_GROUPS.map((group) => (
               <Bar
