@@ -213,19 +213,14 @@ export function buildLifetimeCurve(total = LIFETIME_TOTAL): LifetimePoint[] {
 
   for (const row of selectedAgeRows) {
     const start = Number(row.edad_inicio)
-    const end = Number(row.edad_fin)
+    const end = Number(row.edad_fin || 100)
     const bandTotal = Number(row.gasto_vital_esperado_tramo_euros_2022)
-    const span = Math.max(1, end - start + 1)
-
-    for (let age = start; age <= end; age += 1) {
-      const progress = (age - start + 1) / span
-      points.push({
-        age,
-        cumulative: Math.round(Math.min(cumulative + bandTotal * progress, total)),
-      })
-    }
 
     cumulative += bandTotal
+    points.push({
+      age: Math.min(100, Math.max(start, end + 1)),
+      cumulative: Math.round(Math.min(cumulative, total)),
+    })
   }
 
   return points

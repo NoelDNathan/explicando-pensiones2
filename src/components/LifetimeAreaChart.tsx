@@ -36,15 +36,22 @@ function formatEuro(value: number): string {
 }
 
 function buildTicks(max: number): number[] {
-  const step = Math.max(20_000, Math.ceil(max / 5 / 10_000) * 10_000)
-  return [0, step, step * 2, step * 3, step * 4, step * 5]
+  const step = 40_000
+  const ticks: number[] = []
+
+  for (let value = 0; value < max; value += step) {
+    ticks.push(value)
+  }
+
+  if (ticks[ticks.length - 1] !== max) ticks.push(max)
+  return ticks
 }
 
 export function LifetimeAreaChart({
   points = LIFETIME_POINTS,
   total = LIFETIME_TOTAL,
   totalFormatted = LIFETIME_TOTAL_FORMATTED,
-  markerAge = 87,
+  markerAge = 100,
   className,
 }: LifetimeAreaChartProps) {
   const rootClass = ['lac', className].filter(Boolean).join(' ')
@@ -106,7 +113,7 @@ export function LifetimeAreaChart({
           />
 
           <Area
-            type="monotone"
+            type="linear"
             dataKey="cumulative"
             stroke="#22d3ee"
             strokeWidth={2.2}

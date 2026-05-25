@@ -42,6 +42,7 @@ function Age-End($label) {
   $clean = Normalize-Age-Label $label
   if ($clean -eq "Total") { return $null }
   if ($clean -match "(\d+)\s+a\s+(\d+)") { return [int]$Matches[2] }
+  if ([string]$label -match "(\d+)\s+y\s+m") { return 100 }
   if ($clean -match "(\d+)\s+y\s+mas") { return 100 }
   return $null
 }
@@ -163,7 +164,8 @@ foreach ($row in $stationaryRows) {
 $lifetimeRows = @()
 foreach ($profile in $profileRows) {
   $personYears = 0.0
-  for ($age = [int]$profile.edad_inicio; $age -le [int]$profile.edad_fin; $age++) {
+  $ageEnd = if ($null -eq $profile.edad_fin -or [string]::IsNullOrWhiteSpace([string]$profile.edad_fin)) { 100 } else { [int]$profile.edad_fin }
+  for ($age = [int]$profile.edad_inicio; $age -le $ageEnd; $age++) {
     $key = "$($profile.sexo)|$age"
     if ($stationaryBySexAge.ContainsKey($key)) {
       $personYears += [double]$stationaryBySexAge[$key]
@@ -176,7 +178,7 @@ foreach ($profile in $profileRows) {
     sexo = $profile.sexo
     grupo_edad = $profile.grupo_edad
     edad_inicio = $profile.edad_inicio
-    edad_fin = $profile.edad_fin
+    edad_fin = $ageEnd
     categoria_sanitaria = "Total sanidad"
     estado_dato = "estimado"
     fuente_gasto = $profile.fuente
