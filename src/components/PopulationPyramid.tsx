@@ -144,6 +144,18 @@ const formatPyramidValue = (value: number): string =>
     maximumFractionDigits: 0,
   })
 
+const formatPyramidMillions = (thousands: number): string =>
+  `${(thousands / 1000).toLocaleString('es-ES', {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+  })} M`
+
+const groupTotal = (group: PyramidAgeGroup): number =>
+  group.male.native
+  + group.male.foreign
+  + group.female.native
+  + group.female.foreign
+
 type Geometry = {
   rowY: (index: number) => number
   maleBarBaseX: number
@@ -609,6 +621,69 @@ function Legend({ variant }: { variant: NonNullable<PopulationPyramidProps['lege
   )
 }
 
+function HeaderStats({
+  data,
+  workingAgeMin,
+  workingAgeMax,
+}: {
+  data: PyramidAgeGroup[]
+  workingAgeMin: number
+  workingAgeMax: number
+}) {
+  const workingAgeTotal = data
+    .filter((group) => isWorkingAge(group, workingAgeMin, workingAgeMax))
+    .reduce((sum, group) => sum + groupTotal(group), 0)
+  const total = data.reduce((sum, group) => sum + groupTotal(group), 0)
+  const outsideWorkingAgeTotal = total - workingAgeTotal
+
+  return (
+    <g aria-hidden="true">
+      <text
+        x={VIEWBOX.width - LAYOUT.padding.right}
+        y={LAYOUT.titleY - 4}
+        fill={COLORS.textMuted}
+        fontSize={8.5}
+        fontWeight={700}
+        textAnchor="end"
+        letterSpacing={0.5}
+      >
+        20-64 ANOS
+      </text>
+      <text
+        x={VIEWBOX.width - LAYOUT.padding.right}
+        y={LAYOUT.titleY + 10}
+        fill={COLORS.textTitle}
+        fontSize={14}
+        fontWeight={800}
+        textAnchor="end"
+      >
+        {formatPyramidMillions(workingAgeTotal)}
+      </text>
+      <text
+        x={VIEWBOX.width - LAYOUT.padding.right - 86}
+        y={LAYOUT.titleY - 4}
+        fill={COLORS.textMuted}
+        fontSize={8.5}
+        fontWeight={700}
+        textAnchor="end"
+        letterSpacing={0.5}
+      >
+        FUERA EDAD LAB.
+      </text>
+      <text
+        x={VIEWBOX.width - LAYOUT.padding.right - 86}
+        y={LAYOUT.titleY + 10}
+        fill={COLORS.textTitle}
+        fontSize={14}
+        fontWeight={800}
+        textAnchor="end"
+      >
+        {formatPyramidMillions(outsideWorkingAgeTotal)}
+      </text>
+    </g>
+  )
+}
+
 export function PopulationPyramid({
   data = DEFAULT_DATA,
   workingAgeMin = 20,
@@ -667,6 +742,11 @@ export function PopulationPyramid({
         >
           {subtitle}
         </text>
+        <HeaderStats
+          data={data}
+          workingAgeMin={workingAgeMin}
+          workingAgeMax={workingAgeMax}
+        />
 
         <text
           x={LAYOUT.centerX - 80}

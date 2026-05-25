@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadidos totales en el encabezado de `PopulationPyramid`, arriba a la derecha junto al titulo/subtitulo: total de personas de 20-64 anos y total fuera de esa edad. Las cifras se calculan desde los datos visibles de la piramide y suman ambos sexos y ambas categorias de nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
+
 - Generado el primer paquete de series fiscales solicitadas 1975-2070. Se creo el script reproducible `scripts/process-fiscal-series-1975-2070.ps1` y cuatro CSV:
   - `data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv` con PIB, gasto publico total, intereses + otras rentas de la propiedad, saldo publico, deuda PDE y prestaciones sociales agregadas de AAPP desde BDMACRO;
   - `data/processed/igae/2026-05-25_igae-cofog_gasto-salud-aapp-espana_1995-2024.csv` con gasto publico en sanidad COFOG `07 Salud`;
