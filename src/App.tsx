@@ -7,6 +7,11 @@ import type { ChartSeries, ChartMilestone } from './components/TimeSeriesChart'
 import { KeyIndicatorsPanel } from './components/KeyIndicatorsPanel'
 import type { IndicatorItem } from './components/KeyIndicatorsPanel'
 import { YearSelector } from './components/YearSelector'
+import {
+  POPULATION_SCALE_MAX,
+  POPULATION_YEAR_RANGE,
+  POPULATION_YEAR_SUMMARIES,
+} from './data/populationPyramidData'
 
 type PlayButtonProps = {
   label?: string
@@ -427,16 +432,120 @@ function Home() {
       <h1>Una web didactica sobre las pensiones en Espana</h1>
       <p>
         Este proyecto esta preparando sus componentes visuales. Puedes abrir el
-        laboratorio interno en <a href="/componentes">/componentes</a>.
+        laboratorio interno en <a href="/componentes">/componentes</a> o ver la
+        nueva pagina de poblacion en <a href="/poblacion">/poblacion</a>.
       </p>
+    </main>
+  )
+}
+
+const formatMillions = (value: number): string =>
+  `${(value / 1_000_000).toLocaleString('es-ES', {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+  })} M`
+
+const formatPercent = (part: number, total: number): string =>
+  `${((part / total) * 100).toLocaleString('es-ES', {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+  })}%`
+
+function PopulationPage() {
+  const [year, setYear] = React.useState(2025)
+  const currentSummary = React.useMemo(
+    () => POPULATION_YEAR_SUMMARIES.find((summary) => summary.year === year)
+      ?? POPULATION_YEAR_SUMMARIES[0],
+    [year],
+  )
+
+  if (!currentSummary) return null
+
+  const sourceLabel = currentSummary.status === 'observed'
+    ? 'INE ECP, dato observado a 1 de enero'
+    : 'INE Proyecciones de Poblacion, escenario a largo plazo'
+
+  return (
+    <main className="population-page">
+      <section className="population-hero" aria-labelledby="population-title">
+        <div className="population-hero__copy">
+          <p className="eyebrow">Demografia</p>
+          <h1 id="population-title">Como cambia la poblacion espanola</h1>
+          <p>
+            Piramide por sexo y edad construida con datos oficiales del INE.
+            Pulsa reproducir para ver la evolucion completa desde 1975 hasta 2074.
+          </p>
+        </div>
+
+        <div className="population-stat-grid" aria-label="Indicadores del ano seleccionado">
+          <article className="population-stat">
+            <span>Total</span>
+            <strong>{formatMillions(currentSummary.totalPopulation)}</strong>
+          </article>
+          <article className="population-stat">
+            <span>20-64 anos</span>
+            <strong>{formatPercent(
+              currentSummary.workingAgePopulation,
+              currentSummary.totalPopulation,
+            )}</strong>
+          </article>
+          <article className="population-stat">
+            <span>65+ anos</span>
+            <strong>{formatPercent(
+              currentSummary.olderPopulation,
+              currentSummary.totalPopulation,
+            )}</strong>
+          </article>
+        </div>
+      </section>
+
+      <section className="population-stage" aria-label="Piramide poblacional animada">
+        <div className="population-stage__header">
+          <div>
+            <p className="eyebrow">Ano seleccionado</p>
+            <h2>{currentSummary.year}</h2>
+          </div>
+          <span className={`population-badge population-badge--${currentSummary.status}`}>
+            {currentSummary.status === 'observed' ? 'Observado' : 'Proyectado'}
+          </span>
+        </div>
+
+        <PopulationPyramid
+          data={currentSummary.data}
+          scaleMax={POPULATION_SCALE_MAX}
+          legendVariant="sex"
+          title={`Piramide poblacional de Espana, ${currentSummary.year}`}
+          subtitle="Poblacion por sexo y edad, en miles de personas"
+        />
+
+        <YearSelector
+          year={year}
+          onYearChange={setYear}
+          minYear={POPULATION_YEAR_RANGE.min}
+          maxYear={POPULATION_YEAR_RANGE.max}
+          marks={[1975, 1990, 2005, 2025, 2050, 2074]}
+          playIntervalMs={180}
+          style={{ width: '100%' }}
+        />
+
+        <p className="population-source">
+          Fuente: {sourceLabel}. Los anos 1975-2025 son observados; desde 2026
+          se muestran proyecciones oficiales. No se mezclan desgloses por
+          nacimiento con la proyeccion, por eso esta vista representa solo sexo
+          y edad.
+        </p>
+      </section>
     </main>
   )
 }
 
 function App() {
   const isComponentLab = window.location.pathname === '/componentes'
+  const isPopulationPage = window.location.pathname === '/poblacion'
 
-  return isComponentLab ? <ComponentLab /> : <Home />
+  if (isComponentLab) return <ComponentLab />
+  if (isPopulationPage) return <PopulationPage />
+  return <Home />
 }
 
 export default App

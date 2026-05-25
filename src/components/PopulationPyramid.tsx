@@ -38,6 +38,7 @@ export type PopulationPyramidProps = {
   scaleMax?: number
   /** Show age range labels on the central axis. Default: every row. */
   ageLabels?: AgeLabelMode
+  legendVariant?: 'birthplace' | 'sex'
   className?: string
   title?: string
   subtitle?: string
@@ -259,11 +260,16 @@ type LegendItem = {
   color: string
 }
 
-const LEGEND_ITEMS: LegendItem[] = [
+const BIRTHPLACE_LEGEND_ITEMS: LegendItem[] = [
   { label: 'Hombre espanol',         color: COLORS.bars.male.native.active },
   { label: 'Hombre espanol fuera',   color: COLORS.bars.male.foreign.active },
   { label: 'Mujer espanol',          color: COLORS.bars.female.native.active },
   { label: 'Mujer espanol fuera',    color: COLORS.bars.female.foreign.active },
+]
+
+const SEX_LEGEND_ITEMS: LegendItem[] = [
+  { label: 'Hombres', color: COLORS.bars.male.native.active },
+  { label: 'Mujeres', color: COLORS.bars.female.native.active },
 ]
 
 function PyramidBars({
@@ -485,14 +491,15 @@ function BottomAxes({
   )
 }
 
-function Legend() {
+function Legend({ variant }: { variant: NonNullable<PopulationPyramidProps['legendVariant']> }) {
+  const items = variant === 'sex' ? SEX_LEGEND_ITEMS : BIRTHPLACE_LEGEND_ITEMS
   const startX = LAYOUT.padding.left + 6
   const usableWidth = VIEWBOX.width - LAYOUT.padding.left - LAYOUT.padding.right - 12
-  const step = usableWidth / LEGEND_ITEMS.length
+  const step = usableWidth / items.length
 
   return (
     <g>
-      {LEGEND_ITEMS.map((item, index) => {
+      {items.map((item, index) => {
         const itemX = startX + index * step
         return (
           <g key={item.label} transform={`translate(${itemX}, ${LAYOUT.legendY})`}>
@@ -518,6 +525,7 @@ export function PopulationPyramid({
   workingAgeMax = 64,
   scaleMax = 500,
   ageLabels = 'all',
+  legendVariant = 'birthplace',
   className,
   title = 'Piramide poblacional de Espana',
   subtitle = 'Poblacion por edad, sexo y nacionalidad',
@@ -673,7 +681,7 @@ export function PopulationPyramid({
         )}
 
         <BottomAxes geometry={geometry} scaleMax={scaleMax} />
-        <Legend />
+        <Legend variant={legendVariant} />
       </svg>
     </div>
   )

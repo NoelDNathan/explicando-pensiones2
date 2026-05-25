@@ -59,6 +59,12 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Creada la pagina publica `/poblacion` con una piramide poblacional animable mediante `YearSelector`.
+- Conectado `PopulationPyramid` con datos oficiales procesados del INE: poblacion observada 1975-2025 y proyeccion 2026-2074, agregando edades simples en grupos quinquenales y manteniendo separado el estado observado/proyectado.
+- Creado `src/data/populationPyramidData.ts` como adaptador de datos para la vista: parsea CSV, calcula total poblacional, porcentaje 20-64, porcentaje 65+ y escala comun de la piramide.
+- Ampliado `PopulationPyramid` con `legendVariant="sex"` para mostrar solo Hombres/Mujeres cuando no hay desglose por nacimiento o nacionalidad en la fuente usada.
+- Verificacion: `tsc --noEmit` correcto; `vite build` correcto con aviso de chunk grande por importar CSV; `/poblacion` responde HTTP 200; ESLint correcto en archivos tocados. ESLint global queda bloqueado por errores previos en `TimeSeriesChart.tsx` (`subtitle` y `projStart` sin uso).
+
 - Creado el componente `YearSelector` (`src/components/YearSelector.tsx` +
   `src/components/YearSelector.css`): selector de año con estética de panel
   futurista sci-fi. Glassmorphism con `backdrop-filter: blur`, borde luminoso
@@ -149,7 +155,9 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
-- Conectar `PopulationPyramid` con datos reales del INE cuando se decida la primera vista publica, usando la tabla 56937 si se quiere diferenciar nacidos en Espana y nacidos en el extranjero desde 2002.
+- Revisar visualmente `/poblacion` en escritorio y movil cuando haya navegador/captura disponible; la comprobacion automatizada actual solo valido build y respuesta HTTP.
+- Valorar si se compactan los CSV de poblacion para reducir el tamano del bundle de la pagina `/poblacion`.
+- Si se quiere diferenciar nacidos en Espana y nacidos en el extranjero, limitarlo al tramo observado con tabla 56937 o documentar una metodologia explicita, porque la proyeccion usada en `/poblacion` solo cruza sexo y edad.
 - Ampliar `/componentes` con los siguientes elementos de interfaz: tarjetas de indicadores, etiquetas de fuente, avisos metodologicos y controles de grafico (el boton de informacion ya cubre parte de las notas contextuales).
 - Integrar `InfoButton` en cabeceras de graficos como la piramide poblacional cuando se definan los textos metodologicos finales.
 - Mantener `data/metadata.md` y `data/checksums.sha256` actualizados cuando se incorporen o procesen nuevas series.
