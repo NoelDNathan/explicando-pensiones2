@@ -23,6 +23,12 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
    - transformaciones aplicadas;
    - checksums de los archivos brutos y procesados cuando existan;
    - notas de ruptura metodologica, comparabilidad o limitaciones.
+9. Antes de crear, actualizar o usar una estimacion, modelizacion, proyeccion propia o combinacion de escenarios, revisar y documentar la coherencia de supuestos:
+   - identificar fuente, escenario, vintage o fecha de publicacion de cada entrada;
+   - comprobar que poblacion, PIB, precios, edad, definicion institucional, unidad y periodo base son compatibles;
+   - no mezclar supuestos de fuentes distintas como si fueran un unico escenario salvo que se justifique y etiquete explicitamente;
+   - si los supuestos no son comparables, mantener las series separadas como contraste o marcar el dato como `no_estimado`;
+   - registrar la revision en `data/metadata.md` o `data/methodology/transformations.md` antes de uso editorial.
 
 ## Reglas de diseno frontend
 
