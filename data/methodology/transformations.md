@@ -271,6 +271,29 @@
   - tabla de cobertura: 1975-2070, 7 tramos metodologicos.
 - Nota de definicion: el CSV observado permite diferenciar poblacion nacida en Espana y nacida en el extranjero por sexo y grupo de edad desde 2002. No se han creado interpolaciones numericas para 1975-2001 ni una matriz proyectada nacimiento + sexo + edad para 2026-2070.
 
+## INE - modelo de cohortes para poblacion por nacimiento 2026-2070
+
+- Fecha de transformacion: 2026-05-25.
+- Script: `scripts/process-ine-migrant-cohort-model-2026-2070.ps1`.
+- Fuentes brutas oficiales:
+  - stock observado inicial 2025: `data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv`;
+  - poblacion proyectada por lugar de nacimiento: tabla INE 36642;
+  - poblacion proyectada por sexo y edad: tabla INE 36643;
+  - defunciones proyectadas por sexo y edad: tabla INE 36647;
+  - inmigraciones procedentes del extranjero por sexo y edad: tabla INE 36649;
+  - emigraciones con destino al extranjero por sexo y edad: tabla INE 36651.
+- Transformacion aplicada:
+  - se toma como ancla el stock observado de nacidos en el extranjero a 1 de enero de 2025 por sexo y grupo quinquenal de edad;
+  - cada ano se envejece el stock en grupos quinquenales moviendo una quinta parte del grupo al siguiente tramo;
+  - se aplica mortalidad usando la tasa media de defunciones proyectadas de toda la poblacion por sexo y grupo de edad;
+  - se resta una salida estimada de nacidos en el extranjero aplicando a la emigracion proyectada por sexo y edad la cuota de nacidos en el extranjero del grupo;
+  - se suman inmigraciones procedentes del extranjero por sexo y edad como perfil de entrada;
+  - el resultado se calibra cada ano al total oficial INE de poblacion nacida en el extranjero de la tabla 36642;
+  - la poblacion nacida en Espana se calcula como poblacion total proyectada por sexo y edad menos nacidos en el extranjero modelizados.
+- Archivo generado: `data/processed/ine/2026-05-25_ine_modelo-cohortes-poblacion-nacimiento-sexo-grupo-edad_2026-2070.csv`.
+- Periodo resultante: 2026-2070, 3.420 observaciones.
+- Nota de definicion: el resultado es una estimacion propia, no una tabla oficial del INE. Los flujos migratorios son entradas/salidas anuales, no stock residente acumulado. El modelo usa lugar de nacimiento, no nacionalidad, y no incorpora nacionalizaciones porque estas no cambian el lugar de nacimiento.
+
 ## IGAE/SEPG - BDMACRO, prestaciones sociales de la Seguridad Social 1975-2025
 
 - Fecha de transformacion: 2026-05-18.

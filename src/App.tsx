@@ -469,6 +469,12 @@ const formatPercent = (part: number, total: number): string =>
     minimumFractionDigits: 1,
   })}%`
 
+const populationStatusLabel = (status: 'observed' | 'projected' | 'modeled'): string => {
+  if (status === 'observed') return 'Observado'
+  if (status === 'modeled') return 'Modelizado'
+  return 'Proyectado'
+}
+
 function PopulationPage() {
   const [year, setYear] = React.useState(2025)
   const currentSummary = React.useMemo(
@@ -480,7 +486,9 @@ function PopulationPage() {
   if (!currentSummary) return null
 
   const sourceLabel = currentSummary.hasBirthplaceBreakdown
-    ? 'INE ECP, poblacion por sexo, grupo de edad y lugar de nacimiento'
+    ? currentSummary.status === 'modeled'
+      ? 'INE ECP + Proyecciones INE, modelo propio por cohortes'
+      : 'INE ECP, poblacion por sexo, grupo de edad y lugar de nacimiento'
     : currentSummary.status === 'observed'
       ? 'INE ECP, dato observado a 1 de enero'
       : 'INE Proyecciones de Poblacion, escenario a largo plazo'
@@ -529,8 +537,10 @@ function PopulationPage() {
             <p className="eyebrow">Ano seleccionado</p>
             <h2>{currentSummary.year}</h2>
           </div>
-          <span className={`population-badge population-badge--${currentSummary.status}`}>
-            {currentSummary.status === 'observed' ? 'Observado' : 'Proyectado'}
+          <span className={`population-badge population-badge--${
+            currentSummary.status === 'observed' ? 'observed' : 'projected'
+          }`}>
+            {populationStatusLabel(currentSummary.status)}
           </span>
         </div>
 
@@ -585,9 +595,12 @@ function PopulationPage() {
 
         <p className="population-source">
           Fuente: {sourceLabel}. Los anos 2002-2025 muestran nacidos en Espana
-          y nacidos en el extranjero; 1975-2001 se representa solo por sexo y
-          edad. Desde 2026 se muestran proyecciones oficiales sin desglose por
-          nacimiento.
+          y nacidos en el extranjero como dato observado. Desde 2026 la capa por
+          nacimiento es una estimacion propia por cohortes: envejece el stock de
+          2025, incorpora flujos proyectados de inmigracion y emigracion, aplica
+          mortalidad por edad y sexo y calibra cada ano al total oficial INE de
+          nacidos en el extranjero. La poblacion total por edad y sexo sigue la
+          proyeccion oficial INE.
         </p>
       </section>
     </main>

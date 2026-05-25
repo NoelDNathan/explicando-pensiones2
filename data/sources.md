@@ -280,6 +280,26 @@
 - uso previsto en la web: construir piramides o perfiles de poblacion nacida en Espana y nacida en el extranjero desde 2002.
 - nota metodologica: no se han creado valores interpolados. La tabla de cobertura documenta los tramos donde solo hay anclas censales o proyecciones no cruzadas.
 
+## INE - Modelo propio de poblacion por nacimiento, sexo y edad proyectada
+
+- nombre de la fuente: modelo propio por cohortes para poblacion residente por lugar de nacimiento, sexo y grupo quinquenal de edad
+- institucion: Instituto Nacional de Estadistica (INE), con transformacion propia del proyecto
+- URL API usadas:
+  - poblacion proyectada por lugar de nacimiento: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36642?tip=AM
+  - poblacion proyectada por sexo y edad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36643?tip=AM
+  - defunciones proyectadas por sexo y edad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36647?tip=AM
+  - inmigraciones procedentes del extranjero por sexo y edad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36649?tip=AM
+  - emigraciones con destino al extranjero por sexo y edad: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36651?tip=AM
+- fecha de descarga: 2026-05-25
+- periodo procesado: 2026-2070
+- unidad: personas residentes a 1 de enero, por sexo, grupo quinquenal de edad y lugar de nacimiento `Espana`/`Extranjero`
+- estado del dato: modelizado / estimado
+- archivo bruto: `data/raw/ine/proyecciones-poblacion/poblacion-nacimiento-modelo/`
+- archivo procesado: `data/processed/ine/2026-05-25_ine_modelo-cohortes-poblacion-nacimiento-sexo-grupo-edad_2026-2070.csv`
+- script reproducible: `scripts/process-ine-migrant-cohort-model-2026-2070.ps1`
+- descripcion breve: modelo por cohortes quinquenales que parte del stock observado 2025 de nacidos en el extranjero, lo envejece, aplica mortalidad y flujos migratorios proyectados, y calibra cada ano al total oficial de poblacion nacida en el extranjero.
+- nota metodologica: el INE no publica una tabla oficial proyectada que cruce lugar de nacimiento, sexo y edad. Este CSV debe presentarse como estimacion propia, no como proyeccion oficial directa.
+
 ## Eurostat - Deuda publica de Espana
 
 - nombre de la fuente: Government deficit/surplus, debt and associated data
