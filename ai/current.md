@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Avanzada la busqueda alternativa para pensiones contributivas 1975-2000. Se localizaron y descargaron tablas oficiales de INEbase Historia / Anuario Estadistico de Espana en `data/raw/inebase-historia/pensiones-contributivas/`. Se incorporo al CSV maestro el tramo observado 1986-2000 como media anual en miles de pensiones, convertida a pensiones: 1986-1994 desde INEbase Historia y 1995-2000 desde Anuarios INE 1999/2004. El hueco real baja de 1975-2000 a 1975-1985. Quedan como candidatos pendientes, no usados editorialmente todavia, PDFs de 1976-1979 y 1981-1982 porque publican cortes a 31 de diciembre con estructura antigua por regimen/ramas y requieren extraccion/validacion separada antes de mezclarse con medias anuales.
+
 - Anadida en `AGENTS.md` una regla metodologica especifica para inflacion/precios futuros: IPC observado del INE para historico, Banco de Espana o AIReF para corto plazo y HICP del Ageing Report/Comision Europea solo como supuesto macro de largo plazo. La regla exige etiquetar cada tramo con indicador, fuente, horizonte, `estado_dato` y ruptura metodologica, y evita llamar "inflacion INE" a supuestos HICP futuros.
 
 - Respondida consulta sobre que fuente usar para estimaciones futuras de inflacion/precios. Recomendacion: no buscar una fuente unica 1975-2070; usar IPC observado INE para historico, previsiones Banco de Espana o AIReF para corto plazo y HICP del Ageing Report solo como supuesto macro de largo plazo para escenarios, con ruptura metodologica y etiqueta separada. Si se genera un dataset 1975-2070, debe distinguir `IPC observado`, `prevision macro corto plazo` y `supuesto HICP largo plazo`.
@@ -223,7 +225,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
-- Localizar/procesar una fuente tabular alternativa para cubrir numero de pensiones contributivas 1975-2000; las rutas MITES probadas devuelven 404, asi que puede requerir Anuarios en PDF, WebFOCUS/eSTADISS o descarga manual. No interpolar ese tramo ni sustituirlo por personas pensionistas.
+- Localizar/procesar una fuente tabular alternativa para cubrir numero de pensiones contributivas 1975-1985. Las rutas MITES probadas devuelven 404. INEbase Historia ya aporta candidatos 1976-1979 y 1981-1982, pero son cortes a 31 de diciembre y requieren extraccion/validacion separada; no interpolar ni sustituir por personas pensionistas.
 - Si se necesita cubrir 1975-2005 con personas pensionistas observadas, hacer una exportacion manual desde eSTADISS y documentar el CSV bruto; no usar numero de pensiones como sustituto.
 - Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y diferenciar en la interfaz las filas `observado`, `proyectado`, `escenario`, `estimado` y `no_estimado`. PIB, gasto publico total, intereses y saldo publico 2025-2070 ya estan completados como escenario derivado, no como dato oficial tabulado.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.

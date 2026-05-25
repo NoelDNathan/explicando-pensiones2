@@ -188,6 +188,21 @@ $lastRatio = $null
 $currentPnesYear = $null
 
 $historicalMitesContrib = @(
+  @{ Year = 1986; PensionsThousand = 5456.1; Source = "INEbase Historia - Anuario Estadistico de Espana 1991, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1987; PensionsThousand = 5615.6; Source = "INEbase Historia - Anuario Estadistico de Espana 1992, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1988; PensionsThousand = 5785.6; Source = "INEbase Historia - Anuario Estadistico de Espana 1992, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1989; PensionsThousand = 5942.8; Source = "INEbase Historia - Anuario Estadistico de Espana 1994, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1990; PensionsThousand = 6102.1; Source = "INEbase Historia - Anuario Estadistico de Espana 1994, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1991; PensionsThousand = 6253.4; Source = "INEbase Historia - Anuario Estadistico de Espana 1994, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1992; PensionsThousand = 6422.6; Source = "INEbase Historia - Anuario Estadistico de Espana 1994, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1993; PensionsThousand = 6605.6; Source = "INEbase Historia - Anuario Estadistico de Espana 1994, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1994; PensionsThousand = 6822.4; Source = "INEbase Historia - Anuario Estadistico de Espana 1995, pensiones contributivas por clases"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales 1989, Ministerio de Trabajo y Seguridad Social." },
+  @{ Year = 1995; PensionsThousand = 6966.1; Source = "INE - Anuario Estadistico de Espana 1999, tabla 3.3.3"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales y de Asuntos Sociales." },
+  @{ Year = 1996; PensionsThousand = 7110.2; Source = "INE - Anuario Estadistico de Espana 1999, tabla 3.3.3"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales y de Asuntos Sociales." },
+  @{ Year = 1997; PensionsThousand = 7279.3; Source = "INE - Anuario Estadistico de Espana 1999, tabla 3.3.3"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales y de Asuntos Sociales." },
+  @{ Year = 1998; PensionsThousand = 7410.7; Source = "INE - Anuario Estadistico de Espana 1999, tabla 3.3.3"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales y de Asuntos Sociales." },
+  @{ Year = 1999; PensionsThousand = 7509.3; Source = "INE - Anuario Estadistico de Espana 2004, tabla 7.3.5"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales y de Asuntos Sociales." },
+  @{ Year = 2000; PensionsThousand = 7598.9; Source = "INE - Anuario Estadistico de Espana 2004, tabla 7.3.5"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales y de Asuntos Sociales." },
   @{ Year = 2001; PensionsThousand = 7677.9; Source = "MITES - Anuario 2001, PEN-01"; Note = "Media anual en miles de pensiones. Tabla HTML oficial descargada." },
   @{ Year = 2002; PensionsThousand = 7745.8; Source = "MITES - Anuario 2002, PEN-01"; Note = "Media anual en miles de pensiones. Tabla HTML oficial descargada." },
   @{ Year = 2003; PensionsThousand = 7878.6; Source = "MITES - Anuario 2004, PEN-01, columna 2003"; Note = "Media anual en miles de pensiones. Se toma del Anuario 2004 porque la tabla incluye el ano anterior." },
@@ -201,7 +216,7 @@ foreach ($item in $historicalMitesContrib) {
     ([int][math]::Round($item.PensionsThousand * 1000)) `
     "observado" `
     $item.Source `
-    "Transcripcion de tabla PEN-01 de Anuario MITES. Unidad original: miles de pensiones, media anual." `
+    "Transcripcion de tabla oficial de Anuario INEbase/INE/MITES. Unidad original: miles de pensiones, media anual." `
     "Pensiones contributivas del sistema de la Seguridad Social por clase." `
     $null `
     $null `
@@ -271,7 +286,7 @@ for ($year = 1975; $year -le 2070; $year++) {
       "Fila de cobertura para el periodo solicitado; pendiente localizar/procesar Anuarios o exportacion eSTADISS para los anos sin tabla online fiable." `
       $null `
       $null `
-      "No usar como cero. Hueco documental pendiente: las rutas MITES 1975-2000 comprobadas devuelven pagina 404 moderna, no tabla estadistica."
+      "No usar como cero. Hueco documental pendiente para 1975-1985: las rutas MITES comprobadas devuelven pagina 404 moderna; existen PDFs INEbase candidatos para algunos anos, pero requieren extraccion compatible antes de uso editorial."
   }
 }
 $contribRows | Export-Csv -Path $contribOut -NoTypeInformation -Encoding utf8
