@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Explicados los terminos recomendados para la narrativa de edad de jubilacion: edad ordinaria/legal, edad efectiva, jubilacion anticipada, jubilacion demorada, jubilacion forzosa y edad minima de acceso. Criterio editorial: no mezclar reglas normativas con comportamiento observado.
+
 - Corregida la pagina `/poblacion` para que los anos proyectados 2026-2070 se muestren correctamente al seleccionarlos: el parser de `populationPyramidData.ts` limpia marcas BOM/encoding en cabeceras CSV y descarta campos numericos vacios en vez de convertirlos a `0`. Se anadieron accesos rapidos visibles a 2025, inicio de proyeccion, 2050 y 2070. Verificado en navegador que 2070 muestra badge `Proyectado`, selector `2070`, total `54,3 M` y fuente de proyeccion; `tsc --noEmit` y `vite build` correctos, con aviso ya conocido de chunk grande por importar CSV.
 
 - Aclarado criterio narrativo sobre "edad maxima de jubilacion": no debe usarse como etiqueta principal salvo que se documente una norma concreta de jubilacion forzosa. Para la web conviene separar edad ordinaria/legal, edad anticipada, edad demorada y edad efectiva observada de las altas iniciales de jubilacion.
