@@ -29,8 +29,11 @@
   - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20092015.pdf`.
   - `data/raw/imserso/pnc/2026-05-25_imserso_evolnom20162022.pdf`.
   - `data/raw/inebase-historia/pensiones-contributivas/`.
+  - `data/raw/mites/principales-series-pensiones-contributivas/`.
   - `data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv`.
 - Transformaciones aplicadas:
+  - incorporacion manual documentada de INEbase Historia para 1980: suma controlada de los regimenes con total impreso en la tabla de pensiones en vigor a 31 de diciembre;
+  - incorporacion de MITES Principales Series para 1981-1985: consulta WebFOCUS de `PENSIONES`, clase TOTAL, regimen TOTAL y mes diciembre;
   - incorporacion manual documentada de INEbase Historia/Anuarios INE para pensiones contributivas 1986-2000, en unidad original `miles de pensiones`, media anual, convertida a pensiones;
   - incorporacion manual documentada de Anuarios MITES PEN-01 para pensiones contributivas 2001-2005, en unidad original `miles de pensiones`, convertida a pensiones;
   - extraccion de `PENSIONES` de la hoja `Pnes y ptas` para pensiones contributivas: diciembre 2006-2025 y abril 2026;
@@ -47,7 +50,8 @@
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`.
   - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`.
 - Limitaciones:
-  - contributivas 1975-1985 queda pendiente de extraccion compatible: las rutas MITES comprobadas con el patron de Anuarios devuelven pagina 404 moderna; INEbase aporta PDFs candidatos para 1976-1979 y 1981-1982, pero son cortes a 31 de diciembre con estructura antigua y no se mezclan todavia con las medias anuales;
+  - contributivas 1975-1979 queda pendiente de extraccion compatible: las rutas MITES comprobadas con el patron de Anuarios devuelven pagina 404 moderna; INEbase aporta PDFs candidatos para 1976-1979, pero son cortes a 31 de diciembre con estructura antigua y requieren validacion separada;
+  - 1980-1985 son cortes de diciembre y no medias anuales; la columna `mes_referencia` conserva esa ruptura frente a las medias anuales 1986-2005;
   - PNC 1991-2000 procede de tablas escaneadas transcritas visualmente desde el PDF oficial renderizado; no hay capa de texto embebida en ese PDF;
   - las modelizaciones no son proyecciones oficiales y solo sirven como proxy demografica inicial.
 

@@ -599,7 +599,7 @@
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`
   - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`
-- nota metodologica: la serie anual observada local de numero de pensiones procede de INEbase/Anuarios INE y MITES para medias anuales 1986-2005 y de la hoja `Pnes y ptas` para 2006-2026. El tramo 2027-2070 se modeliza con pensionistas AIReF y ratio pensiones/pensionista de abril de 2026; 1975-1985 queda pendiente de extraccion historica compatible.
+- nota metodologica: la serie anual observada local de numero de pensiones procede de INEbase/MITES para cortes de diciembre 1980-1985, de INEbase/Anuarios INE y MITES para medias anuales 1986-2005 y de la hoja `Pnes y ptas` para 2006-2026. El tramo 2027-2070 se modeliza con pensionistas AIReF y ratio pensiones/pensionista de abril de 2026; 1975-1979 queda pendiente de extraccion historica compatible.
 
 ## Imserso - Evolucion de nominas de PNC y PSPD
 
@@ -645,6 +645,21 @@
 - descripcion breve: tablas anuales oficiales con pensiones contributivas, importes medios y, en anos recientes, pensionistas.
 - nota metodologica: las rutas probadas para 1975-2000 bajo el mismo patron devuelven pagina 404 moderna; para 1986-2000 se usa la alternativa oficial de INEbase Historia/Anuarios INE.
 
+## MITES - Principales Series, pensiones contributivas
+
+- nombre de la fuente: Principales Series, Pensiones contributivas del sistema de la Seguridad Social
+- institucion: Ministerio de Trabajo y Economia Social
+- URL de consulta: https://expinterweb.mites.gob.es/ibi_apps/WFServlet?IBIF_ex=SEFCNT01&OPC_PAD=24&OPC_PRN=3&VTIP_LLA=R
+- parametros usados: `SELANA=0000000000040` (PENSIONES), `SELCLA=0000000000146`, `SEL1RES=417` (clase TOTAL), `SEL2RES=451` (regimen TOTAL), `VAL_PER_INF=12` (diciembre), anos 1981-1985
+- fecha de descarga: 2026-05-25
+- periodo usado: 1981-1985
+- ambito geografico: Espana
+- formato descargado: HTML WebFOCUS
+- archivos brutos: `data/raw/mites/principales-series-pensiones-contributivas/`
+- archivo procesado derivado: `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
+- descripcion breve: consulta oficial que publica numero de pensiones contributivas por ano, mes, clase y regimen. Se usa total de clase y total de regimen para diciembre.
+- nota metodologica: son cortes mensuales de diciembre, no medias anuales. Por eso se etiquetan con `mes_referencia = Diciembre` y no se mezclan como si fueran medias.
+
 ## INEbase Historia / Anuario Estadistico de Espana - pensiones contributivas
 
 - nombre de la fuente: Anuario Estadistico de Espana, tablas de pensiones contributivas del sistema de la Seguridad Social
@@ -656,17 +671,18 @@
   - https://www.ine.es/inebaseweb/pdfDispacher.do?td=155864
   - https://www.ine.es/inebaseweb/pdfDispacher.do?td=153939
   - https://www.ine.es/inebaseweb/pdfDispacher.do?td=151306
+  - https://www.ine.es/inebaseweb/pdfDispacher.do?td=132980
   - https://www.ine.es/prodyser/pubweb/anuario99/99condi.pdf
   - https://www.ine.es/prodyser/pubweb/anuario04/anu04_7nivel.pdf
 - fecha de descarga: 2026-05-25
-- periodo usado en el CSV: 1986-2000
-- periodo localizado como candidato pendiente: 1976-1979, 1981-1982, 1986-1997 mediante PDFs INEbase descargados en bruto
+- periodo usado en el CSV: 1980 y 1986-2000
+- periodo localizado como candidato pendiente: 1976-1979 mediante PDFs INEbase descargados en bruto
 - ambito geografico: Espana
 - formato descargado: PDF
 - archivos brutos: `data/raw/inebase-historia/pensiones-contributivas/`
 - archivo procesado derivado: `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
-- descripcion breve: tablas del Anuario Estadistico de Espana que reproducen series de pensiones contributivas por regimen/clase y pension media, con unidad original `miles` y referencia de media anual para el tramo usado.
-- nota metodologica: se incorporan solo 1986-2000 porque las tablas usadas publican medias anuales en miles, compatibles con MITES 2001-2005. Los PDFs localizados para 1976-1979 y 1981-1982 son cortes a 31 de diciembre con estructura antigua por regimen/ramas y quedan como candidatos pendientes antes de mezclarlos con la serie editorial.
+- descripcion breve: tablas del Anuario Estadistico de Espana que reproducen series de pensiones contributivas por regimen/clase y pension media. El tramo 1986-2000 usa medias anuales en miles; 1980 usa una tabla antigua de pensiones en vigor a 31 de diciembre.
+- nota metodologica: 1980 se incorpora como suma controlada de los regimenes con total impreso en el PDF oficial. 1986-2000 se incorpora porque las tablas usadas publican medias anuales en miles, compatibles con MITES 2001-2005. Los PDFs localizados para 1976-1979 son cortes a 31 de diciembre con estructura antigua por regimen/ramas y quedan como candidatos pendientes antes de mezclarlos con la serie editorial.
 
 ## MITES - BEL, prestaciones no contributivas
 

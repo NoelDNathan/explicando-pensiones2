@@ -188,6 +188,12 @@ $lastRatio = $null
 $currentPnesYear = $null
 
 $historicalMitesContrib = @(
+  @{ Year = 1980; Pensions = 4398434; Month = "31 diciembre"; Source = "INEbase Historia - Anuario Estadistico de Espana 1982, pensiones en vigor a 31 de diciembre de 1980"; Method = "Transcripcion controlada desde PDF oficial INEbase. Suma de regimenes con total impreso en la columna TOTAL."; Note = "Corte a 31 de diciembre. La tabla antigua publica el detalle por regimen y clase; SOVI aparece sin total propio en la tabla visual usada para la suma." },
+  @{ Year = 1981; Pensions = 4599341; Month = "Diciembre"; Source = "MITES - Principales Series, pensiones contributivas, total clase y total regimen"; Method = "Consulta WebFOCUS oficial: variable PENSIONES, clase TOTAL, regimen TOTAL, mes diciembre."; Note = "Corte mensual de diciembre; no es media anual." },
+  @{ Year = 1982; Pensions = 4815854; Month = "Diciembre"; Source = "MITES - Principales Series, pensiones contributivas, total clase y total regimen"; Method = "Consulta WebFOCUS oficial: variable PENSIONES, clase TOTAL, regimen TOTAL, mes diciembre."; Note = "Corte mensual de diciembre; no es media anual." },
+  @{ Year = 1983; Pensions = 5036196; Month = "Diciembre"; Source = "MITES - Principales Series, pensiones contributivas, total clase y total regimen"; Method = "Consulta WebFOCUS oficial: variable PENSIONES, clase TOTAL, regimen TOTAL, mes diciembre."; Note = "Corte mensual de diciembre; no es media anual." },
+  @{ Year = 1984; Pensions = 5242867; Month = "Diciembre"; Source = "MITES - Principales Series, pensiones contributivas, total clase y total regimen"; Method = "Consulta WebFOCUS oficial: variable PENSIONES, clase TOTAL, regimen TOTAL, mes diciembre."; Note = "Corte mensual de diciembre; no es media anual." },
+  @{ Year = 1985; Pensions = 5377118; Month = "Diciembre"; Source = "MITES - Principales Series, pensiones contributivas, total clase y total regimen"; Method = "Consulta WebFOCUS oficial: variable PENSIONES, clase TOTAL, regimen TOTAL, mes diciembre."; Note = "Corte mensual de diciembre; no es media anual." },
   @{ Year = 1986; PensionsThousand = 5456.1; Source = "INEbase Historia - Anuario Estadistico de Espana 1991, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
   @{ Year = 1987; PensionsThousand = 5615.6; Source = "INEbase Historia - Anuario Estadistico de Espana 1992, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
   @{ Year = 1988; PensionsThousand = 5785.6; Source = "INEbase Historia - Anuario Estadistico de Espana 1992, tabla 3.3.1"; Note = "Media anual en miles de pensiones. Fuente original indicada por INE: Anuario de Estadisticas Laborales, Ministerio de Trabajo y Seguridad Social." },
@@ -210,6 +216,20 @@ $historicalMitesContrib = @(
   @{ Year = 2005; PensionsThousand = 7979.7; Source = "MITES - Anuario 2006, PEN-01, columna 2005"; Note = "Media anual en miles de pensiones. Se toma del Anuario 2006 porque la tabla incluye el ano anterior." }
 )
 foreach ($item in $historicalMitesContrib) {
+  if ($item.ContainsKey("Pensions")) {
+    $observedContrib[$item.Year] = New-ContributiveRow `
+      $item.Year `
+      $item.Month `
+      $item.Pensions `
+      "observado" `
+      $item.Source `
+      $item.Method `
+      "Pensiones contributivas del sistema de la Seguridad Social por clase y regimen total." `
+      $null `
+      $null `
+      $item.Note
+    continue
+  }
   $observedContrib[$item.Year] = New-ContributiveRow `
     $item.Year `
     "media anual" `
@@ -286,7 +306,7 @@ for ($year = 1975; $year -le 2070; $year++) {
       "Fila de cobertura para el periodo solicitado; pendiente localizar/procesar Anuarios o exportacion eSTADISS para los anos sin tabla online fiable." `
       $null `
       $null `
-      "No usar como cero. Hueco documental pendiente para 1975-1985: las rutas MITES comprobadas devuelven pagina 404 moderna; existen PDFs INEbase candidatos para algunos anos, pero requieren extraccion compatible antes de uso editorial."
+      "No usar como cero. Hueco documental pendiente para 1975-1979: las rutas MITES de Anuarios comprobadas devuelven pagina 404 moderna; existen PDFs INEbase candidatos para 1976-1979, pero requieren extraccion compatible antes de uso editorial."
   }
 }
 $contribRows | Export-Csv -Path $contribOut -NoTypeInformation -Encoding utf8
