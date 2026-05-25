@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Respondida consulta sobre edad de jubilacion: el proyecto no tiene todavia un CSV procesado ni una entrada especifica en inventario/metadata, pero el libro bruto de Seguridad Social `data/raw/seguridad-social/pensiones/2026-05-18_seguridad-social_libro-evolucion-mensual-pensiones_2026-04.xlsx` contiene datos utilizables en las hojas `AJ_ambos_sexos`, `AJ_hombres`, `AJ_mujeres`, `EVO_acumula_altas_jub_edad` y `EVO_acumula_altas_jub_modalidad`. Se localizaron edad media y distribucion por edad de altas iniciales de jubilacion; queda pendiente procesarlas antes de usarlas editorialmente.
+
 - Ajustada la pagina `/poblacion` para que la animacion de la piramide llegue hasta 2070: datos observados 1975-2025 y datos proyectados 2026-2070. Se actualizaron las marcas del `YearSelector` y el texto visible de la pagina.
 
 - Creada la pagina publica `/poblacion` con una piramide poblacional animable mediante `YearSelector`.
@@ -155,6 +157,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 ## Pendiente inmediato
 
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
+- Procesar y documentar la edad media de altas iniciales de jubilacion desde el libro mensual de Seguridad Social antes de mostrarla en la web; decidir si se presenta como edad efectiva de nuevas jubilaciones, por modalidad o por sexo.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
 - Revisar visualmente `/poblacion` en escritorio y movil cuando haya navegador/captura disponible; la comprobacion automatizada actual solo valido build y respuesta HTTP.
