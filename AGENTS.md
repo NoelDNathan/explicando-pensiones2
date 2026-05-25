@@ -29,6 +29,12 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
    - no mezclar supuestos de fuentes distintas como si fueran un unico escenario salvo que se justifique y etiquete explicitamente;
    - si los supuestos no son comparables, mantener las series separadas como contraste o marcar el dato como `no_estimado`;
    - registrar la revision en `data/metadata.md` o `data/methodology/transformations.md` antes de uso editorial.
+10. Para inflacion o precios futuros, no tratar una unica serie 1975-2070 como homogenea si combina observados, previsiones y supuestos:
+   - usar IPC observado del INE para datos historicos y de presente;
+   - usar Banco de Espana o AIReF para previsiones macro de corto plazo cuando proceda;
+   - usar HICP del Ageing Report/Comision Europea solo como supuesto macro de largo plazo para escenarios, no como continuidad directa del IPC INE ni como "inflacion INE";
+   - etiquetar cada tramo con indicador, fuente, horizonte, `estado_dato` y ruptura metodologica;
+   - para deflactar importes historicos o explicar poder adquisitivo pasado, priorizar IPC observado del INE.
 
 ## Reglas de diseno frontend
 
@@ -63,5 +69,6 @@ Usar solamente fuentes oficiales o institucionales:
 - Banco de Espana;
 - Ministerio de Inclusion, Seguridad Social y Migraciones;
 - IGAE;
+- Comision Europea, solo para Ageing Report, supuestos macro europeos y proyecciones fiscales o demograficas de largo plazo;
 - Eurostat;
 - OCDE, solo para comparativas internacionales.

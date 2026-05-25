@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadida en `AGENTS.md` una regla metodologica especifica para inflacion/precios futuros: IPC observado del INE para historico, Banco de Espana o AIReF para corto plazo y HICP del Ageing Report/Comision Europea solo como supuesto macro de largo plazo. La regla exige etiquetar cada tramo con indicador, fuente, horizonte, `estado_dato` y ruptura metodologica, y evita llamar "inflacion INE" a supuestos HICP futuros.
+
 - Respondida consulta sobre que fuente usar para estimaciones futuras de inflacion/precios. Recomendacion: no buscar una fuente unica 1975-2070; usar IPC observado INE para historico, previsiones Banco de Espana o AIReF para corto plazo y HICP del Ageing Report solo como supuesto macro de largo plazo para escenarios, con ruptura metodologica y etiqueta separada. Si se genera un dataset 1975-2070, debe distinguir `IPC observado`, `prevision macro corto plazo` y `supuesto HICP largo plazo`.
 
 - Respondida consulta sobre si el supuesto HICP 2025-2070 del Ageing Report puede usarse como inflacion. Criterio recomendado: no usarlo como continuidad directa del IPC observado del INE ni llamarlo "inflacion INE"; si se usa, debe aparecer como supuesto macro de precios de la Comision Europea/Ageing Report, separado del IPC historico y con ruptura metodologica explicita. Para deflactar importes o contar una historia historica de precios, usar el IPC observado; para escenarios fiscales largos, HICP puede usarse solo como supuesto de escenario.
