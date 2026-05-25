@@ -1,0 +1,306 @@
+/*
+ * ReformSimulator
+ * Mobile-format dark dashboard card for the pension reform simulator.
+ * All tokens are scoped to .rs-card to avoid leaking into other components.
+ */
+
+/* ── Card container ──────────────────────────────────────────────────────── */
+
+.rs-card {
+  /* Local design tokens */
+  --rs-bg-from:     #0f1e33;
+  --rs-bg-to:       #091422;
+  --rs-row-bg:      rgba(255, 255, 255, 0.03);
+  --rs-border:      rgba(66, 110, 200, 0.18);
+  --rs-accent:      #3b7ef8;
+  --rs-accent-glow: rgba(59, 126, 248, 0.28);
+  --rs-text:        #eef4ff;
+  --rs-muted:       #8ba3c4;
+  --rs-faint:       #4e6888;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, var(--rs-bg-from) 0%, var(--rs-bg-to) 100%);
+  border: 1px solid var(--rs-border);
+  box-shadow:
+    0 0 0 1px rgba(59, 126, 248, 0.07),
+    0 24px 56px rgba(0, 0, 0, 0.65),
+    0 0 80px rgba(59, 126, 248, 0.06) inset;
+  overflow: hidden;
+  font-family: var(--sans);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.rs-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 16px;
+}
+
+.rs-header-copy {
+  display: grid;
+  gap: 5px;
+}
+
+.rs-title {
+  margin: 0;
+  color: var(--rs-text);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.rs-subtitle {
+  margin: 0;
+  color: var(--rs-muted);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.rs-info-btn {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--rs-border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--rs-muted);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.rs-info-btn:hover {
+  color: var(--rs-text);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(66, 110, 200, 0.42);
+}
+
+.rs-info-btn:focus-visible {
+  outline: 2px solid var(--rs-accent);
+  outline-offset: 2px;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+
+.rs-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--rs-border);
+}
+
+.rs-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 0;
+  margin-right: 24px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--rs-faint);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  transition:
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.rs-tab:last-child {
+  margin-right: 0;
+}
+
+.rs-tab:hover {
+  color: var(--rs-muted);
+}
+
+.rs-tab--active {
+  color: var(--rs-text);
+  border-bottom-color: var(--rs-accent);
+}
+
+.rs-tab:focus-visible {
+  outline: 2px solid var(--rs-accent);
+  outline-offset: -2px;
+}
+
+.rs-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--rs-accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ── Measures list ───────────────────────────────────────────────────────── */
+
+.rs-measures-list {
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+}
+
+.rs-measure-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: var(--rs-row-bg);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition:
+    background 140ms ease,
+    border-color 140ms ease;
+}
+
+.rs-measure-row:hover {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(66, 110, 200, 0.2);
+}
+
+.rs-measure-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  /* background set inline per variant */
+}
+
+.rs-measure-text {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rs-measure-title {
+  color: var(--rs-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rs-measure-value {
+  color: var(--rs-text);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.rs-measure-date {
+  flex: 0 0 auto;
+  color: var(--rs-faint);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rs-measure-menu-btn {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--rs-faint);
+  cursor: pointer;
+  transition:
+    color 130ms ease,
+    background 130ms ease;
+}
+
+.rs-measure-menu-btn:hover {
+  color: var(--rs-muted);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.rs-measure-menu-btn:focus-visible {
+  outline: 2px solid var(--rs-accent);
+  outline-offset: 2px;
+}
+
+/* ── CTA button ──────────────────────────────────────────────────────────── */
+
+.rs-cta-wrapper {
+  padding: 8px 16px 20px;
+}
+
+.rs-cta-btn {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1d68fa 0%, #0d9cf5 100%);
+  box-shadow:
+    0 8px 24px rgba(29, 104, 250, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 120ms ease;
+}
+
+.rs-cta-btn:hover {
+  background: linear-gradient(135deg, #2b74fc 0%, #19aeff 100%);
+  box-shadow:
+    0 12px 32px rgba(29, 104, 250, 0.48),
+    0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+  transform: translateY(-1px);
+}
+
+.rs-cta-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 6px 18px rgba(29, 104, 250, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.rs-cta-btn:focus-visible {
+  outline: 3px solid var(--rs-accent);
+  outline-offset: 3px;
+}

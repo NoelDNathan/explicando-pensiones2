@@ -7,6 +7,7 @@ import type { ChartSeries, ChartMilestone } from './components/TimeSeriesChart'
 import { KeyIndicatorsPanel } from './components/KeyIndicatorsPanel'
 import type { IndicatorItem } from './components/KeyIndicatorsPanel'
 import { YearSelector } from './components/YearSelector'
+import { ReformSimulator } from './components/ReformSimulator'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -419,6 +420,23 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dark component-preview--hud">
           <YearSelector style={{ width: '100%' }} />
+        </div>
+      </section>
+
+      <section className="component-section" aria-labelledby="reform-sim-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 07</p>
+          <h2 id="reform-sim-title">Simulador de reformas</h2>
+          <p>
+            Tarjeta móvil de estilo fintech/govtech para explorar reformas del
+            sistema de pensiones. Muestra una lista de medidas activas con icono,
+            valor y fecha de entrada en vigor, pestañas para gestionar el conjunto
+            de medidas y un botón de acción que lanza la proyección de impacto.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark" style={{ justifyContent: 'center' }}>
+          <ReformSimulator />
         </div>
       </section>
     </main>

@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-05-24
+Fecha: 2026-05-25
 
 ## Situacion
 
@@ -58,6 +58,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Creado `ReformSimulator` (`src/components/ReformSimulator.tsx` + `.css`): tarjeta móvil de estilo fintech/govtech (max-width 360 px) para un simulador de reformas del sistema de pensiones. Incluye cabecera con título/subtítulo/botón de información, barra de pestañas con badge de medidas activas, lista de medidas con iconos circulares de color (persona/porcentaje/grupo/maletín), valor y fecha por fila, menú de tres puntos por medida, y botón CTA con gradiente azul y glow. Tokens CSS locales con prefijo `--rs-`. API completamente tipada y puramente presentacional. Añadida la sección "Componente 07" al laboratorio `/componentes`.
+
+
 
 - Anadida a `/poblacion` una capa observada de nacidos en Espana y nacidos en el extranjero para 2002-2025 usando el CSV INE 56937 (`data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv`). La piramide cambia automaticamente a leyenda por nacimiento cuando el ano seleccionado tiene ese desglose; 1975-2001 y 2026-2070 se mantienen como sexo y edad sin nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande; el navegador integrado bloqueo la interaccion con localhost, asi que queda pendiente revision visual interactiva.
 
