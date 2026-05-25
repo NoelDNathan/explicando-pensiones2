@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import categoryBandsCsv from '../../data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv?raw'
 import lifetimeBandsCsv from '../../data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv?raw'
 import lifetimeByAgeCsv from '../../data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-edad-sexo_2022.csv?raw'
 
@@ -47,6 +48,21 @@ type DashboardBandCsvRow = {
   anos_persona_esperados: string
   gasto_vital_esperado_banda_euros_2022: string
   porcentaje_sobre_gasto_vital_esperado: string
+}
+
+type CategoryBandCsvRow = {
+  anio: string
+  sexo: string
+  categoria_id: string
+  categoria_sanitaria: string
+  banda_dashboard: string
+  edad_inicio: string
+  edad_fin: string
+  estado_dato: string
+  gasto_vital_esperado_categoria_banda_euros_2022: string
+  porcentaje_sobre_categoria: string
+  total_categoria_euros_2022: string
+  porcentaje_categoria_sobre_total: string
 }
 
 type LifetimeAgeCsvRow = {
@@ -116,6 +132,14 @@ const selectedAgeRows = parseCsv<LifetimeAgeCsvRow>(lifetimeByAgeCsv)
   .filter((row) => row.sexo === selectedSex)
   .sort((a, b) => Number(a.edad_inicio) - Number(b.edad_inicio))
 
+const selectedCategoryBands = parseCsv<CategoryBandCsvRow>(categoryBandsCsv)
+  .filter((row) => row.sexo === selectedSex)
+  .sort((a, b) => {
+    const categoryDiff = a.categoria_id.localeCompare(b.categoria_id)
+    if (categoryDiff !== 0) return categoryDiff
+    return Number(a.edad_inicio) - Number(b.edad_inicio)
+  })
+
 const ageGroupColors = ['#3b82f6', '#22d3ee', '#a855f7', '#d946ef', '#f43f5e', '#f97316', '#eab308']
 
 export const AGE_GROUPS: AgeGroupDef[] = selectedBands.map((row, index) => ({
@@ -134,10 +158,6 @@ const olderShare = selectedBands
   .filter((row) => Number(row.edad_inicio) >= 65)
   .reduce((sum, row) => sum + Number(row.porcentaje_sobre_gasto_vital_esperado), 0)
 
-const highIntensityShare = selectedBands
-  .filter((row) => Number(row.edad_inicio) >= 65)
-  .reduce((sum, row) => sum + Number(row.porcentaje_sobre_gasto_vital_esperado), 0)
-
 const peakAnnualRow = selectedAgeRows.reduce<LifetimeAgeCsvRow | undefined>((best, row) => {
   if (!best) return row
   return Number(row.gasto_per_capita_euros_2022) > Number(best.gasto_per_capita_euros_2022)
@@ -153,16 +173,36 @@ const biggestBand = selectedBands.reduce<DashboardBandCsvRow | undefined>((best,
     : best
 }, undefined)
 
-export const HEALTH_CATEGORIES: HealthCategoryDef[] = [
-  {
-    id: 'total-health',
-    label: 'Total sanidad',
-    totalValue: Math.round(lifetimeTotal),
-    totalFormatted: formatEuro(lifetimeTotal),
-    segments: selectedBands.map((row) => Number(row.porcentaje_sobre_gasto_vital_esperado)),
-    shareOfTotal: 100,
-  },
+const categoryOrder = [
+  'hospitalaria_especializada',
+  'atencion_primaria',
+  'farmacia',
+  'salud_publica_colectivos_capital',
+  'protesis_traslados',
 ]
+
+export const HEALTH_CATEGORIES: HealthCategoryDef[] = categoryOrder
+  .map((categoryId) => {
+    const rows = selectedCategoryBands.filter((row) => row.categoria_id === categoryId)
+    const first = rows[0]
+    if (!first) return null
+
+    return {
+      id: categoryId,
+      label: first.categoria_sanitaria,
+      totalValue: Math.round(Number(first.total_categoria_euros_2022)),
+      totalFormatted: formatEuro(Number(first.total_categoria_euros_2022)),
+      segments: selectedBands.map((band) => {
+        const row = rows.find((candidate) => candidate.banda_dashboard === band.banda_dashboard)
+        return row ? Number(row.porcentaje_sobre_categoria) : 0
+      }),
+      shareOfTotal: Number(first.porcentaje_categoria_sobre_total),
+    }
+  })
+  .filter((category): category is HealthCategoryDef => Boolean(category))
+
+const biggestCategory = HEALTH_CATEGORIES[0]
+const pharmacyCategory = HEALTH_CATEGORIES.find((category) => category.id === 'farmacia')
 
 export const LIFETIME_TOTAL = Math.round(lifetimeTotal)
 export const LIFETIME_TOTAL_FORMATTED = formatEuro(LIFETIME_TOTAL)
@@ -211,13 +251,13 @@ export const INTERPRETATION_POINTS: InterpretationPoint[] = [
   },
   {
     id: 'i4',
-    lead: 'El dato conectado es total sanidad',
-    body: 'no se desagrega por hospitalaria, primaria o farmacia porque AIReF no publica ese cruce completo por edad y sexo en el Excel revisado.',
+    lead: 'El desglose por categoria es estimado',
+    body: 'usa pesos funcionales de EGSP 2022 y perfiles relativos del informe ministerial 2005 para repartir el total AIReF por edad.',
   },
   {
     id: 'i5',
-    lead: 'La metrica es de periodo',
-    body: 'combina perfil de gasto 2022 con tabla de mortalidad 2022; no es una cohorte real ni una proyeccion futura.',
+    lead: 'No se separan urgencias ni salud mental',
+    body: 'no se ha localizado un cruce institucional compatible para tratarlas como categorias independientes.',
   },
 ]
 
@@ -237,26 +277,26 @@ export const KPI_ITEMS: KpiDef[] = [
     tone: 'purple',
   },
   {
-    id: 'peak',
-    label: 'Pico de gasto anual',
-    value: formatEuro(Number(peakAnnualRow?.gasto_per_capita_euros_2022 ?? 0)),
-    secondary: peakAnnualRow ? `grupo ${peakAnnualRow.grupo_edad}` : 'perfil AIReF 2022',
+    id: 'category',
+    label: 'Categoria principal',
+    value: biggestCategory?.label ?? 'Hospitalaria',
+    secondary: biggestCategory
+      ? `${formatPercent(biggestCategory.shareOfTotal)} del gasto vital estimado`
+      : 'estimacion por categorias',
     tone: 'amber',
   },
   {
-    id: 'age',
-    label: 'Banda de mayor gasto acumulado',
-    value: biggestBand?.banda_dashboard ?? '45-64',
-    secondary: biggestBand
-      ? `${formatEuro(Number(biggestBand.gasto_vital_esperado_banda_euros_2022))} acumulados`
-      : 'calculo derivado',
+    id: 'pharmacy',
+    label: 'Peso de farmacia',
+    value: pharmacyCategory ? formatPercent(pharmacyCategory.shareOfTotal) : 'n.d.',
+    secondary: pharmacyCategory ? pharmacyCategory.totalFormatted : 'sin dato separado',
     tone: 'blue',
   },
   {
-    id: 'intensity',
-    label: 'Concentracion 65+',
-    value: formatPercent(highIntensityShare),
-    secondary: 'suma de bandas 65-74, 75-84 y 85+',
+    id: 'peak',
+    label: 'Pico de gasto anual total',
+    value: formatEuro(Number(peakAnnualRow?.gasto_per_capita_euros_2022 ?? 0)),
+    secondary: peakAnnualRow ? `grupo ${peakAnnualRow.grupo_edad}` : 'perfil AIReF 2022',
     tone: 'rose',
   },
 ]

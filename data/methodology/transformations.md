@@ -512,3 +512,24 @@
   - modelizado: 2027-2070.
   - cobertura combinada: 1975-2070.
 - Nota de definicion: la serie observada mide personas pensionistas. Una persona con varias pensiones cuenta una vez. El tramo 2027-2070 es una proxy demografica propia calibrada al ultimo dato oficial, no una prevision oficial; no modela carreras de cotizacion, jubilacion anticipada/demorada, pensionistas menores de 67 por clase de pension, mortalidad diferencial ni cambios normativos futuros.
+
+## AIReF / INE / Ministerio de Sanidad - estimacion categoria sanitaria x edad 2022
+
+- Fecha de transformacion: 2026-05-25.
+- Script reproducible: `scripts/process-health-category-age-profile-2022.ps1`.
+- Fuentes utilizadas:
+  - total por edad: `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-edad-sexo_2022.csv`;
+  - pesos funcionales: Ministerio de Sanidad, EGSP principales resultados, ano 2022;
+  - perfiles relativos por edad: Ministerio de Sanidad, IGTGS 2005.
+- Transformacion aplicada:
+  - se toma solo `Ambos sexos`, porque el desglose por sexo no es necesario para la vista actual;
+  - se definen cinco categorias: hospitalaria y especializada, atencion primaria, farmacia, protesis y traslados, salud publica/colectivos/capital;
+  - los pesos funcionales EGSP 2022 se ajustan en cada edad con indices relativos IGTGS 2005 para hospitalaria, farmacia y ambulatoria;
+  - atencion primaria usa el perfil ambulatorio como proxy;
+  - protesis/traslados y salud publica/colectivos/capital usan perfil plano por falta de perfil institucional compatible;
+  - los pesos ajustados se normalizan dentro de cada grupo de edad para que las categorias sumen el total AIReF/INE;
+  - se genera una tabla larga por grupo quinquenal y una tabla agregada a bandas de dashboard.
+- Archivos generados:
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`.
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv`.
+- Nota de definicion: el resultado es `estimado`, no observado. Urgencias y salud mental no se separan como categorias independientes porque no se ha localizado un cruce institucional compatible por edad.

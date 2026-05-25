@@ -58,6 +58,11 @@ export type HealthExpenditureDashboardProps = {
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   'total-health': <HeartPulse size={16} strokeWidth={1.8} />,
+  hospitalaria_especializada: <Building2 size={16} strokeWidth={1.8} />,
+  atencion_primaria: <Stethoscope size={16} strokeWidth={1.8} />,
+  farmacia: <Pill size={16} strokeWidth={1.8} />,
+  protesis_traslados: <Ambulance size={16} strokeWidth={1.8} />,
+  salud_publica_colectivos_capital: <Layers size={16} strokeWidth={1.8} />,
   hospital: <Building2 size={16} strokeWidth={1.8} />,
   primary: <Stethoscope size={16} strokeWidth={1.8} />,
   pharmacy: <Pill size={16} strokeWidth={1.8} />,
@@ -68,6 +73,11 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 
 const RANKING_COLORS: Record<string, string> = {
   'total-health': '#22d3ee',
+  hospitalaria_especializada: '#22d3ee',
+  atencion_primaria: '#3b82f6',
+  farmacia: '#d946ef',
+  protesis_traslados: '#f97316',
+  salud_publica_colectivos_capital: '#a855f7',
   hospital: '#22d3ee',
   primary: '#3b82f6',
   longterm: '#a855f7',
@@ -79,6 +89,7 @@ const RANKING_COLORS: Record<string, string> = {
 const KPI_ICONS: Record<string, React.ReactNode> = {
   total: <Wallet size={18} strokeWidth={1.8} />,
   older: <Users size={18} strokeWidth={1.8} />,
+  category: <Building2 size={18} strokeWidth={1.8} />,
   pharmacy: <Pill size={18} strokeWidth={1.8} />,
   peak: <TrendingUp size={18} strokeWidth={1.8} />,
   age: <User size={18} strokeWidth={1.8} />,
@@ -189,18 +200,20 @@ export function HealthExpenditureDashboard({
 
         <InfoBanner>
           El gasto se expresa en euros de 2022 por individuo y representa el{' '}
-          <strong>consumo acumulado esperado a lo largo de toda la vida.</strong>
+          <strong>consumo acumulado esperado a lo largo de toda la vida.</strong>{' '}
+          El desglose por categoria es una estimacion documentada.
         </InfoBanner>
 
         <div className="hed__grid">
           <DashboardPanel
             className="hed__panel hed__panel--main"
-            title="Gasto sanitario acumulado esperado por individuo, por grupos de edad"
+            title="Gasto sanitario acumulado esperado por individuo y categoria"
             subtitle="euros de 2022"
             info={
               <p>
-                Reparto por bandas de edad del gasto sanitario publico esperado a lo largo
-                de la vida. La fuente conectada no ofrece desglose completo por categoria.
+                Reparto estimado por categoria y bandas de edad. Combina perfil total por
+                edad de AIReF 2022, mortalidad INE 2022, pesos funcionales EGSP 2022 y
+                perfiles relativos ministeriales publicados en 2005.
               </p>
             }
             infoLabel="Metodologia del gasto sanitario acumulado"
@@ -254,7 +267,7 @@ export function HealthExpenditureDashboard({
 
         <FooterNote
           left={`Los importes estan expresados en euros de 2022 y en terminos per capita. Total esperado conectado: ${LIFETIME_TOTAL_FORMATTED}.`}
-          right="Fuente: AIReF 2025 e INE Tablas de Mortalidad 2022; calculo propio de periodo."
+          right="Fuente: AIReF 2025, INE 2022 y Ministerio de Sanidad EGSP/IGTGS; categorias estimadas."
         />
       </div>
     </div>

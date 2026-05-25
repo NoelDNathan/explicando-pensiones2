@@ -757,3 +757,24 @@
 - descripcion breve: serie anual de prestaciones sociales del subsector Seguridad Social, con PIB corriente para calcular porcentaje del PIB.
 - uso previsto en la web: ofrecer una serie larga desde 1975 como contexto de gasto social de la Seguridad Social.
 - nota metodologica: no debe presentarse como serie pura de gasto en pensiones; BDMACRO indica que las prestaciones sociales incluyen pensiones, desempleo y otras prestaciones sociales.
+
+## Ministerio de Sanidad - EGSP e IGTGS para desglose sanitario por categoria y edad
+
+- nombre de la fuente 1: Estadistica de Gasto Sanitario Publico, principales resultados
+- institucion: Ministerio de Sanidad
+- URL: https://www.sanidad.gob.es/estadEstudios/estadisticas/inforRecopilaciones/gastoSanitario2005/tablasEstEGSP/Principales_resultados.pdf
+- fecha de descarga: 2026-05-25
+- periodo usado: 2022 para pesos funcionales del gasto sanitario publico
+- nombre de la fuente 2: Informe del Grupo de Trabajo de Analisis del Gasto Sanitario
+- institucion: Ministerio de Sanidad
+- URL: https://www.sanidad.gob.es/estadEstudios/estadisticas/sisInfSanSNS/pdf/IGTGS2005.pdf
+- fecha de descarga: 2026-05-25
+- periodo usado: perfiles relativos por edad publicados en 2005
+- archivos brutos:
+  - `data/raw/ministerio-sanidad/gasto-sanitario-edad/2026-05-25_ministerio-sanidad_egsp-principales-resultados-2024.pdf`
+  - `data/raw/ministerio-sanidad/gasto-sanitario-edad/2026-05-25_ministerio-sanidad_igtgs2005_perfiles-gasto-sanitario-edad.pdf`
+- archivos procesados derivados:
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv`
+- descripcion breve: la EGSP aporta pesos funcionales recientes y el IGTGS aporta perfiles relativos por edad para funciones sanitarias.
+- nota metodologica: el CSV derivado no es una tabla oficial categoria x edad. Reparte el total por edad AIReF/INE usando pesos EGSP 2022 e indices relativos IGTGS 2005; urgencias y salud mental no se separan por falta de cruce institucional compatible.

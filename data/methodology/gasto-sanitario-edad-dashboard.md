@@ -25,6 +25,10 @@ Construir una vista didactica tipo "gasto sanitario a lo largo de la vida" para 
 - `data/processed/airef/2026-05-25_airef_perfil-gasto-sanitario-edad-sexo-percapita_2022.csv`
 - `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-edad-sexo_2022.csv`
 - `data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv`
+- `data/raw/ministerio-sanidad/gasto-sanitario-edad/2026-05-25_ministerio-sanidad_igtgs2005_perfiles-gasto-sanitario-edad.pdf`
+- `data/raw/ministerio-sanidad/gasto-sanitario-edad/2026-05-25_ministerio-sanidad_egsp-principales-resultados-2024.pdf`
+- `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`
+- `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv`
 
 ## Metodologia aplicada
 
@@ -39,9 +43,25 @@ gasto esperado tramo = gasto per capita AIReF 2022 x anos-persona INE 2022 / 100
 
 5. Se genera una vista adicional agregada a bandas de dashboard. Esta agregacion es una transformacion propia y no debe presentarse como tabla publicada directamente por AIReF.
 
+## Estimacion por categoria sanitaria
+
+Ante la ausencia de un cruce institucional reciente categoria x edad, se genera una capa estimada separada para poder aproximar las barras por categoria sin inventar datos no documentados:
+
+1. Se mantiene el total de gasto vital esperado por edad calculado con AIReF 2022 e INE 2022.
+2. Se usan pesos funcionales de la EGSP 2022 del Ministerio de Sanidad para cinco bloques:
+   hospitalaria y especializada; atencion primaria; farmacia; protesis y traslados; salud publica, servicios colectivos y capital.
+3. Se aplican perfiles relativos por edad del informe ministerial IGTGS 2005 para hospitalaria, farmacia y ambulatoria.
+4. La atencion primaria usa el perfil ambulatorio como proxy, con advertencia metodologica.
+5. Protesis/traslados y salud publica/colectivos/capital se reparten con perfil plano al no haber localizado un perfil compatible.
+6. En cada grupo de edad, los pesos funcionales se ajustan por el indice relativo de edad y se normalizan para que las categorias sumen el total AIReF de ese grupo.
+
+Categorias no separadas: urgencias y salud mental. No se han localizado como cruce institucional compatible por edad, asi que no se muestran como categorias independientes en el dashboard.
+
 ## Limitaciones
 
 - El calculo vital esperado es un ejercicio de periodo con perfil de gasto 2022 y tabla de mortalidad 2022. No representa una cohorte real nacida en 2022 ni incorpora cambios futuros en tecnologia, precios relativos, morbilidad o cartera de servicios.
 - AIReF etiqueta el perfil como estimacion. Por tanto, los CSV se marcan como `estado_dato = estimado`.
 - El Excel revisado no contiene una tabla completa por edad, sexo y categoria sanitaria para replicar de forma trazable las barras apiladas de la imagen de referencia.
+- El desglose por categoria generado aqui tambien se marca como `estado_dato = estimado`: no es una tabla oficial categoria x edad, sino una combinacion documentada de AIReF, INE y Ministerio de Sanidad.
+- Los perfiles relativos del IGTGS 2005 son antiguos. Sirven como forma institucional de edad relativa por funcion, no como nivel actual observado.
 - No mezclar sanidad y cuidados de larga duracion en una sola categoria sin etiquetar la definicion, porque AIReF los modeliza como bloques distintos.
