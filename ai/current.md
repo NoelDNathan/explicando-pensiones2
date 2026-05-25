@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Sustituidas las etiquetas laterales de `PopulationPyramid` por tres metricas en formato compacto: `PENSIONISTAS`, `20-64 AÑOS` y `NIÑOS`. Se elimino el bloque superior derecho de dos totales; ahora las cifras viven en la columna derecha del grafico y se calculan desde los datos visibles, sumando ambos sexos y categorias de nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
+
 - Procesada una serie de pensionistas-personas con cobertura 1975-2070: `data/processed/seguridad-social/2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv`. El tramo oficial observado disponible en el libro mensual de Seguridad Social cubre 2006-2025 a diciembre y 2026 a abril; 1975-2005 queda marcado como `no_estimado` para no sustituir personas por numero de pensiones. El tramo 2027-2070 se modeliza con INE Proyecciones de poblacion 36643, aplicando la evolucion de la poblacion de 67 anos o mas al ancla oficial de abril de 2026. Script reproducible: `scripts/process-seguridad-social-pensionistas-1975-2070.ps1`. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`.
 
 - Anadidos totales en el encabezado de `PopulationPyramid`, arriba a la derecha junto al titulo/subtitulo: total de personas de 20-64 anos y total fuera de esa edad. Las cifras se calculan desde los datos visibles de la piramide y suman ambos sexos y ambas categorias de nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.

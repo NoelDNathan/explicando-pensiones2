@@ -621,65 +621,69 @@ function Legend({ variant }: { variant: NonNullable<PopulationPyramidProps['lege
   )
 }
 
-function HeaderStats({
+function SideAgeStats({
   data,
   workingAgeMin,
   workingAgeMax,
+  geometry,
+  workingBand,
 }: {
   data: PyramidAgeGroup[]
   workingAgeMin: number
   workingAgeMax: number
+  geometry: Geometry
+  workingBand: WorkingBand
 }) {
+  if (!workingBand) return null
+
+  const childrenTotal = data
+    .filter((group) => group.ageEnd !== null && group.ageEnd < workingAgeMin)
+    .reduce((sum, group) => sum + groupTotal(group), 0)
   const workingAgeTotal = data
     .filter((group) => isWorkingAge(group, workingAgeMin, workingAgeMax))
     .reduce((sum, group) => sum + groupTotal(group), 0)
-  const total = data.reduce((sum, group) => sum + groupTotal(group), 0)
-  const outsideWorkingAgeTotal = total - workingAgeTotal
+  const pensionerTotal = data
+    .filter((group) => group.ageStart > workingAgeMax)
+    .reduce((sum, group) => sum + groupTotal(group), 0)
+
+  const statX = LAYOUT.rightLabelsX + 48
+
+  const renderStat = (
+    label: string,
+    value: number,
+    y: number,
+    emphasis = false,
+  ) => (
+    <g key={label}>
+      <text
+        x={statX}
+        y={y - 9}
+        fill={emphasis ? COLORS.textTitle : COLORS.textMuted}
+        fontSize={11}
+        fontWeight={800}
+        textAnchor="middle"
+        letterSpacing={0.5}
+      >
+        {label}
+      </text>
+      <text
+        x={statX}
+        y={y + 13}
+        fill={COLORS.textTitle}
+        fontSize={20}
+        fontWeight={900}
+        textAnchor="middle"
+      >
+        {formatPyramidMillions(value)}
+      </text>
+    </g>
+  )
 
   return (
     <g aria-hidden="true">
-      <text
-        x={VIEWBOX.width - LAYOUT.padding.right}
-        y={LAYOUT.titleY - 4}
-        fill={COLORS.textMuted}
-        fontSize={8.5}
-        fontWeight={700}
-        textAnchor="end"
-        letterSpacing={0.5}
-      >
-        20-64 ANOS
-      </text>
-      <text
-        x={VIEWBOX.width - LAYOUT.padding.right}
-        y={LAYOUT.titleY + 10}
-        fill={COLORS.textTitle}
-        fontSize={14}
-        fontWeight={800}
-        textAnchor="end"
-      >
-        {formatPyramidMillions(workingAgeTotal)}
-      </text>
-      <text
-        x={VIEWBOX.width - LAYOUT.padding.right - 86}
-        y={LAYOUT.titleY - 4}
-        fill={COLORS.textMuted}
-        fontSize={8.5}
-        fontWeight={700}
-        textAnchor="end"
-        letterSpacing={0.5}
-      >
-        FUERA EDAD LAB.
-      </text>
-      <text
-        x={VIEWBOX.width - LAYOUT.padding.right - 86}
-        y={LAYOUT.titleY + 10}
-        fill={COLORS.textTitle}
-        fontSize={14}
-        fontWeight={800}
-        textAnchor="end"
-      >
-        {formatPyramidMillions(outsideWorkingAgeTotal)}
-      </text>
+      {renderStat('PENSIONISTAS', pensionerTotal, (LAYOUT.barsTopY + workingBand.topY) / 2)}
+      {renderStat('20-64 AÑOS', workingAgeTotal, workingBand.midY, true)}
+      {renderStat('NIÑOS', childrenTotal, (workingBand.bottomY + geometry.barsBottomY) / 2)}
     </g>
   )
 }
@@ -742,11 +746,6 @@ export function PopulationPyramid({
         >
           {subtitle}
         </text>
-        <HeaderStats
-          data={data}
-          workingAgeMin={workingAgeMin}
-          workingAgeMax={workingAgeMax}
-        />
 
         <text
           x={LAYOUT.centerX - 80}
@@ -821,35 +820,13 @@ export function PopulationPyramid({
           workingAgeMax={workingAgeMax}
         />
 
-        {workingBand && (
-          <g>
-            <text
-              x={LAYOUT.rightLabelsX}
-              y={(LAYOUT.barsTopY + workingBand.topY) / 2 + 3}
-              fill={COLORS.textMuted}
-              fontSize={9.5}
-            >
-              Fuera de edad de trabajar
-            </text>
-            <text
-              x={LAYOUT.rightLabelsX}
-              y={workingBand.midY + 3}
-              fill={COLORS.textTitle}
-              fontSize={9.5}
-              fontWeight={600}
-            >
-              En edad de trabajar
-            </text>
-            <text
-              x={LAYOUT.rightLabelsX}
-              y={(workingBand.bottomY + geometry.barsBottomY) / 2 + 3}
-              fill={COLORS.textMuted}
-              fontSize={9.5}
-            >
-              Fuera de edad de trabajar
-            </text>
-          </g>
-        )}
+        <SideAgeStats
+          data={data}
+          geometry={geometry}
+          workingAgeMin={workingAgeMin}
+          workingAgeMax={workingAgeMax}
+          workingBand={workingBand}
+        />
 
         <BottomAxes geometry={geometry} scaleMax={scaleMax} />
         <Legend variant={legendVariant} />
