@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-05-25
+Fecha: 2026-05-26
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Respondida consulta sobre disponibilidad de salario medio de inmigrantes. Revision de inventario, fuentes, metadata y CSV procesados: el proyecto contiene `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`, una serie de salario medio macro total de Espana, pero no una serie salarial desagregada para inmigrantes, extranjeros o nacidos en el extranjero. Tambien existe poblacion por lugar de nacimiento, pero no debe combinarse con salario total para inferir salarios de inmigrantes sin fuente salarial especifica.
 
 - Anadida vista colectiva al dashboard de gasto sanitario. Se creo `scripts/process-health-collective-age-profile-2022.ps1`, que multiplica el gasto anual per capita estimado por categoria y edad por la poblacion residente media trimestral INE 2022. Genera dos CSV en `data/processed/ministerio-sanidad/` para detalle por edad y bandas de dashboard. La interfaz permite alternar entre vista individual y vista colectiva desde la cabecera y la barra lateral; en vista colectiva las barras, ranking y KPIs muestran gasto anual estimado del sistema. Verificacion: `tsc --noEmit` correcto.
 
@@ -248,6 +250,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se necesita cubrir 1975-2005 con personas pensionistas observadas, hacer una exportacion manual desde eSTADISS y documentar el CSV bruto; no usar numero de pensiones como sustituto.
 - Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y diferenciar en la interfaz las filas `observado`, `proyectado`, `escenario`, `estimado` y `no_estimado`. PIB, gasto publico total, intereses y saldo publico 2025-2070 ya estan completados como escenario derivado, no como dato oficial tabulado.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.
+- Si se necesita salario medio de inmigrantes, localizar una fuente oficial/institucional con cruce salarial por nacionalidad, lugar de nacimiento u origen migratorio y documentar metadata antes de usarlo. No derivarlo del salario medio macro total ni de la poblacion por lugar de nacimiento.
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Procesar y documentar la edad media de altas iniciales de jubilacion desde el libro mensual de Seguridad Social antes de mostrarla en la web; decidir si se presenta como edad efectiva de nuevas jubilaciones, por modalidad o por sexo.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
