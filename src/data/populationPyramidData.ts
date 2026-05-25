@@ -145,8 +145,14 @@ const projectedRows = normalizeRows(projectedPopulationCsv, 'projected', {
   population: 'poblacion_residente_1_enero_personas',
 })
 
+const FIRST_PROJECTED_YEAR = 2026
+const LAST_PROJECTED_YEAR = 2070
+
 const rowsByYear = [...observedRows, ...projectedRows]
-  .filter((row) => row.status === 'observed' || row.year > 2025)
+  .filter((row) =>
+    row.status === 'observed'
+    || (row.year >= FIRST_PROJECTED_YEAR && row.year <= LAST_PROJECTED_YEAR),
+  )
   .reduce((years, row) => {
     const yearRows = years.get(row.year) ?? []
     yearRows.push(row)
@@ -211,7 +217,7 @@ export const POPULATION_YEAR_SUMMARIES: PopulationYearSummary[] = [...rowsByYear
 
 export const POPULATION_YEAR_RANGE = {
   min: POPULATION_YEAR_SUMMARIES[0]?.year ?? 1975,
-  max: POPULATION_YEAR_SUMMARIES.at(-1)?.year ?? 2074,
+  max: POPULATION_YEAR_SUMMARIES.at(-1)?.year ?? LAST_PROJECTED_YEAR,
 }
 
 export const POPULATION_SCALE_MAX = roundToTens(

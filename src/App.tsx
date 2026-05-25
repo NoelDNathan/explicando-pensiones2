@@ -473,7 +473,7 @@ function PopulationPage() {
           <h1 id="population-title">Como cambia la poblacion espanola</h1>
           <p>
             Piramide por sexo y edad construida con datos oficiales del INE.
-            Pulsa reproducir para ver la evolucion completa desde 1975 hasta 2074.
+            Pulsa reproducir para ver la evolucion completa desde 1975 hasta 2070.
           </p>
         </div>
 
@@ -523,7 +523,7 @@ function PopulationPage() {
           onYearChange={setYear}
           minYear={POPULATION_YEAR_RANGE.min}
           maxYear={POPULATION_YEAR_RANGE.max}
-          marks={[1975, 1990, 2005, 2025, 2050, 2074]}
+          marks={[1975, 1990, 2005, 2025, 2050, 2070]}
           playIntervalMs={180}
           style={{ width: '100%' }}
         />

@@ -59,8 +59,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Ajustada la pagina `/poblacion` para que la animacion de la piramide llegue hasta 2070: datos observados 1975-2025 y datos proyectados 2026-2070. Se actualizaron las marcas del `YearSelector` y el texto visible de la pagina.
+
 - Creada la pagina publica `/poblacion` con una piramide poblacional animable mediante `YearSelector`.
-- Conectado `PopulationPyramid` con datos oficiales procesados del INE: poblacion observada 1975-2025 y proyeccion 2026-2074, agregando edades simples en grupos quinquenales y manteniendo separado el estado observado/proyectado.
+- Conectado `PopulationPyramid` con datos oficiales procesados del INE: poblacion observada 1975-2025 y proyeccion 2026-2070, agregando edades simples en grupos quinquenales y manteniendo separado el estado observado/proyectado.
 - Creado `src/data/populationPyramidData.ts` como adaptador de datos para la vista: parsea CSV, calcula total poblacional, porcentaje 20-64, porcentaje 65+ y escala comun de la piramide.
 - Ampliado `PopulationPyramid` con `legendVariant="sex"` para mostrar solo Hombres/Mujeres cuando no hay desglose por nacimiento o nacionalidad en la fuente usada.
 - Verificacion: `tsc --noEmit` correcto; `vite build` correcto con aviso de chunk grande por importar CSV; `/poblacion` responde HTTP 200; ESLint correcto en archivos tocados. ESLint global queda bloqueado por errores previos en `TimeSeriesChart.tsx` (`subtitle` y `projStart` sin uso).
