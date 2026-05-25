@@ -541,21 +541,21 @@ function PopulationPage() {
             className="population-jump population-jump--projected"
             onClick={() => setYear(2026)}
           >
-            Inicio proyeccion 2026
+            Inicio proyeccion
           </button>
           <button
             type="button"
             className="population-jump population-jump--projected"
             onClick={() => setYear(2050)}
           >
-            Ver 2050
+            2050
           </button>
           <button
             type="button"
             className="population-jump population-jump--projected"
             onClick={() => setYear(2070)}
           >
-            Ver 2070
+            2070
           </button>
         </div>
 

@@ -99,6 +99,17 @@ const getField = (
   field: string,
 ): string => row[header.get(field) ?? -1] ?? ''
 
+const normalizeHeaderField = (field: string): string =>
+  field.replace(/^\uFEFF/, '').replace(/^ï»¿/, '')
+
+const parseRequiredNumber = (value: string): number | null => {
+  const trimmed = value.trim()
+  if (trimmed.length === 0) return null
+
+  const number = Number(trimmed)
+  return Number.isNaN(number) ? null : number
+}
+
 const normalizeRows = (
   csv: string,
   status: PopulationRow['status'],
@@ -110,15 +121,17 @@ const normalizeRows = (
   },
 ): PopulationRow[] => {
   const [headerRow, ...dataRows] = parseCsv(csv)
-  const header = new Map(headerRow?.map((field, index) => [field, index]) ?? [])
+  const header = new Map(
+    headerRow?.map((field, index) => [normalizeHeaderField(field), index]) ?? [],
+  )
 
   return dataRows.flatMap((row) => {
     const age = parseAge(getField(row, header, fields.age))
     const sexLabel = getField(row, header, fields.sex)
-    const population = Number(getField(row, header, fields.population))
-    const year = Number(getField(row, header, fields.year))
+    const population = parseRequiredNumber(getField(row, header, fields.population))
+    const year = parseRequiredNumber(getField(row, header, fields.year))
 
-    if (age === null || Number.isNaN(population) || Number.isNaN(year)) return []
+    if (age === null || population === null || year === null) return []
     if (sexLabel !== 'Hombres' && sexLabel !== 'Mujeres') return []
 
     return [{
