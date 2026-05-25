@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Obtenido un dataset trazable para salario medio de Espana desde BDMACRO abril 2026: `Salario Medio (SM) = remuneracion de asalariados / asalariados`, hoja `Remuneracion Asalariados`, columna `U`. Se creo el script reproducible `scripts/process-igae-bdmacro-salario-medio.ps1` y el CSV `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`. El archivo cubre 1970-2070 en filas anuales, pero solo contiene valores observados para 1970-2024; 2025-2070 queda sin valor y con `estado_dato = no_estimado` al no localizarse una proyeccion oficial/institucional permitida. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`.
+
 - Respondida consulta sobre nacimientos: los datos si contienen una serie de numero de nacimientos de Espana, con observado 1975-2024 y proyectado 2025-2070 en `data/processed/ine/2026-05-24_ine_nacimientos-espana-observados-proyectados_1975-2070.csv`. Tambien existe un dataset distinto de poblacion residente por lugar de nacimiento 2002-2025, que no debe confundirse con nacimientos anuales.
 
 - Analizada la posibilidad de proyectar poblacion nacida en el extranjero por sexo y edad hasta 2070 mediante un modelo demografico por cohortes. Es tecnicamente posible, pero debe etiquetarse como serie `modelizada` o `estimada`, no como proyeccion oficial INE, porque los flujos migratorios proyectados son entradas/salidas anuales y no equivalen directamente al stock residente por edad. Antes de usarlo editorialmente haria falta una metodologia formal separada y un dataset derivado con trazabilidad.
@@ -136,6 +138,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Anadida la checklist de metadata como regla formal en `AGENTS.md`.
 - Creado `data/metadata.md` con ficha de metadata para los datasets inventariados: fuente, institucion, URL de referencia, fecha de descarga, periodo, unidad, licencia, metodologia, estado del dato, transformaciones, archivos verificables y notas de ruptura o comparabilidad.
 - Generado `data/checksums.sha256` con hashes SHA-256 de los archivos en `data/raw/` y `data/processed/`.
+- Extraida desde BDMACRO de IGAE/SEPG la serie de salario medio macro de Espana, definida como remuneracion de asalariados / asalariados, para 1970-2024.
+- Generado el CSV `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`, con 2025-2070 marcado como `no_estimado` porque no se ha localizado una proyeccion oficial permitida.
 - Descargadas y procesadas las fuentes oficiales INE de tasa bruta de natalidad: tabla 1381 observada 1975-2024 y tabla 36653 proyectada. El CSV proyectado principal empieza en 2025 y el combinado conserva 2024 solo como observado para no mezclar dato observado y proyeccion.
 - Respondida consulta sobre metadata de datasets: el proyecto guarda parte de la trazabilidad en `data/sources.md`, `data/inventory.md` y `data/methodology/transformations.md`, pero no existe aun una plantilla obligatoria completa con checksums, estado del dato y rupturas metodologicas por dataset.
 - Localizadas fuentes INE candidatas para poblacion por edad, sexo y pais/lugar de nacimiento: la ECP ofrece tabla 56937 por pais de nacimiento, grupo quinquenal de edad, sexo y fecha desde 2002, y tabla 69795 con agrupaciones de paises hasta 2026. La tabla 56937 ya esta incorporada como dataset observado desde 2002.
@@ -172,6 +176,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Procesar y documentar la edad media de altas iniciales de jubilacion desde el libro mensual de Seguridad Social antes de mostrarla en la web; decidir si se presenta como edad efectiva de nuevas jubilaciones, por modalidad o por sexo.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.

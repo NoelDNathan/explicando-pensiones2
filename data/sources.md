@@ -19,6 +19,25 @@
 - uso previsto en la web: contextualizar graficos de poblacion en edad de trabajar, explicando que la edad legal minima cambia historicamente y que desde 1976 se fija en 16 anos.
 - nota metodologica: el tramo anterior a 1976 resume una situacion normativa historica heterogenea; usar con cautela si se requiere detalle juridico por sector o regimen.
 
+## IGAE/SEPG - BDMACRO, salario medio macro
+
+- nombre de la fuente: Base de datos anuales de la economia espanola BDMACRO, cuadro 29 Salario Medio por ramas de actividad
+- institucion: Secretaria de Estado de Presupuestos y Gastos / IGAE
+- URL pagina: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/paginas/bdmacro.aspx
+- URL archivo XLSX: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/DocumentacionEstadisticas/Documentacion/Documents/BASES%20DE%20DATOS/ANUALES%20DE%20LA%20ECONOMIA%20ESPA%C3%91OLA%20BDMACRO/BDMACRO_Abril_2026.xlsx
+- fecha de descarga: 2026-05-18
+- fecha de transformacion: 2026-05-25
+- periodo cubierto en la fuente: 1954-2024 para la columna de salario medio total con valores utiles en BDMACRO abril 2026
+- periodo procesado: 1970-2070; valores observados 1970-2024 y filas 2025-2070 marcadas como `no_estimado`
+- ambito geografico: Espana
+- formato descargado: XLSX
+- archivo bruto: `data/raw/igae/bdmacro/2026-05-18_igae-sepg_bdmacro_abril-2026.xlsx`
+- archivo procesado: `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Administracion Presupuestaria
+- descripcion breve: salario medio macro calculado por BDMACRO como remuneracion de asalariados dividida entre asalariados.
+- uso previsto en la web: contexto de largo plazo para comparar magnitudes de pensiones y salarios, siempre explicando que es una definicion macro y no una encuesta salarial.
+- nota metodologica: no se ha localizado una proyeccion oficial de salario medio hasta 2070 en las fuentes permitidas; por eso 2025-2070 queda sin valor numerico y no se interpola.
+
 ## IGAE - Gasto publico por funciones COFOG
 
 - nombre de la fuente: Administraciones publicas. Clasificacion funcional: serie desde 1995

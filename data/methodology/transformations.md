@@ -1,5 +1,24 @@
 # Transformaciones de datos
 
+## IGAE/SEPG - BDMACRO, salario medio macro 1970-2070
+
+- Fecha de transformacion: 2026-05-25.
+- Script reproducible: `scripts/process-igae-bdmacro-salario-medio.ps1`.
+- Fuente bruta: `data/raw/igae/bdmacro/2026-05-18_igae-sepg_bdmacro_abril-2026.xlsx`.
+- Hoja utilizada: `Remuneracion Asalariados`.
+- Columnas utilizadas:
+  - `A`: ano.
+  - `U`: Salario Medio (SM), definido en el libro como remuneracion de asalariados / asalariados.
+- Transformacion aplicada:
+  - lectura directa del XLSX BDMACRO mediante el XML interno del libro;
+  - extraccion de los anos 1970-2024 con valor publicado en la columna `U`;
+  - generacion de filas 2025-2070 sin valor numerico, marcadas como `no_estimado`;
+  - exportacion a CSV con punto decimal, unidad y nota de trazabilidad por fila.
+- Archivo generado: `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`.
+- Periodo resultante: 101 filas, 55 observadas (1970-2024) y 46 no estimadas (2025-2070).
+- Nota de definicion: esta serie es una medida macro de salario medio, no una encuesta de salario bruto anual. Para uso editorial debe nombrarse como "salario medio macro" o explicarse la formula.
+- Nota de proyeccion: no se ha localizado una proyeccion oficial/institucional permitida para salario medio 2025-2070; no se inventa, interpola ni extrapola.
+
 ## INE - tasa bruta de natalidad observada y proyectada 1975-2070
 
 - Fecha de transformacion: 2026-05-24.
