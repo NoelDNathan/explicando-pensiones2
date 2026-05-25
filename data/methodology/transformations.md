@@ -533,3 +533,21 @@
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`.
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv`.
 - Nota de definicion: el resultado es `estimado`, no observado. Urgencias y salud mental no se separan como categorias independientes porque no se ha localizado un cruce institucional compatible por edad.
+
+## AIReF / INE / Ministerio de Sanidad - vista colectiva de gasto sanitario por edad 2022
+
+- Fecha de transformacion: 2026-05-25.
+- Script reproducible: `scripts/process-health-collective-age-profile-2022.ps1`.
+- Fuentes utilizadas:
+  - gasto anual per capita por categoria y edad: `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`;
+  - poblacion residente observada por sexo y edad: `data/processed/ine/2026-05-18_ine_ecp_poblacion-residente-espana-sexo-edad_1975-2025.csv`.
+- Transformacion aplicada:
+  - se filtra 2022, sexo `Total` y edades simples del CSV INE;
+  - se calcula la poblacion media trimestral de 2022 para cada edad simple;
+  - se suma esa poblacion dentro de cada grupo de edad usado por AIReF;
+  - se multiplica `gasto_per_capita_categoria_euros_2022` por la poblacion media del tramo;
+  - se agrega a las mismas bandas de dashboard: 0-14, 15-24, 25-44, 45-64, 65-74, 75-84 y 85+.
+- Archivos generados:
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-edad_airef-egsp-ine_2022.csv`.
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv`.
+- Nota de definicion: esta vista es gasto anual estimado del sistema, no gasto vital esperado. No sustituye a la EGSP oficial, porque el reparto edad x categoria sigue siendo una estimacion propia.

@@ -776,5 +776,7 @@
 - archivos procesados derivados:
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv`
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-edad_airef-egsp-ine_2022.csv`
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv`
 - descripcion breve: la EGSP aporta pesos funcionales recientes y el IGTGS aporta perfiles relativos por edad para funciones sanitarias.
 - nota metodologica: el CSV derivado no es una tabla oficial categoria x edad. Reparte el total por edad AIReF/INE usando pesos EGSP 2022 e indices relativos IGTGS 2005; urgencias y salud mental no se separan por falta de cruce institucional compatible.

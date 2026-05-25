@@ -29,6 +29,8 @@ Construir una vista didactica tipo "gasto sanitario a lo largo de la vida" para 
 - `data/raw/ministerio-sanidad/gasto-sanitario-edad/2026-05-25_ministerio-sanidad_egsp-principales-resultados-2024.pdf`
 - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv`
 - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv`
+- `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-edad_airef-egsp-ine_2022.csv`
+- `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv`
 
 ## Metodologia aplicada
 
@@ -56,6 +58,17 @@ Ante la ausencia de un cruce institucional reciente categoria x edad, se genera 
 6. En cada grupo de edad, los pesos funcionales se ajustan por el indice relativo de edad y se normalizan para que las categorias sumen el total AIReF de ese grupo.
 
 Categorias no separadas: urgencias y salud mental. No se han localizado como cruce institucional compatible por edad, asi que no se muestran como categorias independientes en el dashboard.
+
+## Vista colectiva
+
+La vista colectiva responde a otra pregunta: cuanto representa cada rango de edad en el gasto anual del sistema. Para construirla:
+
+1. Se toma el gasto anual per capita por categoria y edad de la estimacion AIReF/EGSP/IGTGS.
+2. Se calcula la poblacion media trimestral INE 2022 por edad simple.
+3. Se multiplica gasto per capita x poblacion del mismo tramo.
+4. Se agregan los resultados a las mismas bandas visuales del dashboard.
+
+Esta vista no es gasto vital ni gasto ejecutado observado por edad. Es una estimacion de sistema para comparar volumen colectivo entre edades.
 
 ## Limitaciones
 

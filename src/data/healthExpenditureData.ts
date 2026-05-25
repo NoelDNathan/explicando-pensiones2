@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import categoryBandsCsv from '../../data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv?raw'
+import collectiveCategoryBandsCsv from '../../data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv?raw'
 import lifetimeBandsCsv from '../../data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv?raw'
 import lifetimeByAgeCsv from '../../data/processed/airef/2026-05-25_airef_ine_gasto-sanitario-vital-esperado-edad-sexo_2022.csv?raw'
 
@@ -18,6 +19,8 @@ export type HealthCategoryDef = {
   segments: number[]
   shareOfTotal: number
 }
+
+export type HealthViewMode = 'individual' | 'collective'
 
 export type LifetimePoint = {
   age: number
@@ -60,6 +63,22 @@ type CategoryBandCsvRow = {
   edad_fin: string
   estado_dato: string
   gasto_vital_esperado_categoria_banda_euros_2022: string
+  porcentaje_sobre_categoria: string
+  total_categoria_euros_2022: string
+  porcentaje_categoria_sobre_total: string
+}
+
+type CollectiveCategoryBandCsvRow = {
+  anio: string
+  sexo: string
+  categoria_id: string
+  categoria_sanitaria: string
+  banda_dashboard: string
+  edad_inicio: string
+  edad_fin: string
+  estado_dato: string
+  poblacion_media_2022: string
+  gasto_sistema_categoria_banda_euros_2022: string
   porcentaje_sobre_categoria: string
   total_categoria_euros_2022: string
   porcentaje_categoria_sobre_total: string
@@ -122,6 +141,18 @@ function formatPercent(value: number): string {
   return `${value.toLocaleString('es-ES', { maximumFractionDigits: 1 })}%`
 }
 
+export function formatSystemEuro(value: number): string {
+  if (Math.abs(value) >= 1_000_000_000) {
+    return `${(value / 1_000_000_000).toLocaleString('es-ES', { maximumFractionDigits: 1 })} mil M€`
+  }
+
+  if (Math.abs(value) >= 1_000_000) {
+    return `${(value / 1_000_000).toLocaleString('es-ES', { maximumFractionDigits: 0 })} M€`
+  }
+
+  return formatEuro(value)
+}
+
 const selectedSex = 'Ambos sexos'
 
 const selectedBands = parseCsv<DashboardBandCsvRow>(lifetimeBandsCsv)
@@ -133,6 +164,14 @@ const selectedAgeRows = parseCsv<LifetimeAgeCsvRow>(lifetimeByAgeCsv)
   .sort((a, b) => Number(a.edad_inicio) - Number(b.edad_inicio))
 
 const selectedCategoryBands = parseCsv<CategoryBandCsvRow>(categoryBandsCsv)
+  .filter((row) => row.sexo === selectedSex)
+  .sort((a, b) => {
+    const categoryDiff = a.categoria_id.localeCompare(b.categoria_id)
+    if (categoryDiff !== 0) return categoryDiff
+    return Number(a.edad_inicio) - Number(b.edad_inicio)
+  })
+
+const selectedCollectiveCategoryBands = parseCsv<CollectiveCategoryBandCsvRow>(collectiveCategoryBandsCsv)
   .filter((row) => row.sexo === selectedSex)
   .sort((a, b) => {
     const categoryDiff = a.categoria_id.localeCompare(b.categoria_id)
@@ -201,8 +240,33 @@ export const HEALTH_CATEGORIES: HealthCategoryDef[] = categoryOrder
   })
   .filter((category): category is HealthCategoryDef => Boolean(category))
 
+export const COLLECTIVE_HEALTH_CATEGORIES: HealthCategoryDef[] = categoryOrder
+  .map((categoryId) => {
+    const rows = selectedCollectiveCategoryBands.filter((row) => row.categoria_id === categoryId)
+    const first = rows[0]
+    if (!first) return null
+
+    return {
+      id: categoryId,
+      label: first.categoria_sanitaria,
+      totalValue: Math.round(Number(first.total_categoria_euros_2022)),
+      totalFormatted: formatSystemEuro(Number(first.total_categoria_euros_2022)),
+      segments: selectedBands.map((band) => {
+        const row = rows.find((candidate) => candidate.banda_dashboard === band.banda_dashboard)
+        return row ? Number(row.porcentaje_sobre_categoria) : 0
+      }),
+      shareOfTotal: Number(first.porcentaje_categoria_sobre_total),
+    }
+  })
+  .filter((category): category is HealthCategoryDef => Boolean(category))
+
 const biggestCategory = HEALTH_CATEGORIES[0]
 const pharmacyCategory = HEALTH_CATEGORIES.find((category) => category.id === 'farmacia')
+const collectiveTotal = COLLECTIVE_HEALTH_CATEGORIES.reduce((sum, category) => sum + category.totalValue, 0)
+const collectiveOlderShare = selectedCollectiveCategoryBands
+  .filter((row) => Number(row.edad_inicio) >= 65)
+  .reduce((sum, row) => sum + Number(row.gasto_sistema_categoria_banda_euros_2022), 0) / collectiveTotal * 100
+const biggestCollectiveCategory = COLLECTIVE_HEALTH_CATEGORIES[0]
 
 export const LIFETIME_TOTAL = Math.round(lifetimeTotal)
 export const LIFETIME_TOTAL_FORMATTED = formatEuro(LIFETIME_TOTAL)
@@ -292,6 +356,46 @@ export const KPI_ITEMS: KpiDef[] = [
     label: 'Pico de gasto anual total',
     value: formatEuro(Number(peakAnnualRow?.gasto_per_capita_euros_2022 ?? 0)),
     secondary: peakAnnualRow ? `grupo ${peakAnnualRow.grupo_edad}` : 'perfil AIReF 2022',
+    tone: 'rose',
+  },
+]
+
+export const COLLECTIVE_KPI_ITEMS: KpiDef[] = [
+  {
+    id: 'total',
+    label: 'Gasto anual estimado del sistema',
+    value: formatSystemEuro(collectiveTotal),
+    secondary: 'poblacion media 2022 x gasto per capita',
+    tone: 'teal',
+  },
+  {
+    id: 'older',
+    label: 'Peso del sistema desde los 65 anos',
+    value: formatPercent(collectiveOlderShare),
+    secondary: 'del gasto anual estimado',
+    tone: 'purple',
+  },
+  {
+    id: 'category',
+    label: 'Categoria principal',
+    value: biggestCollectiveCategory?.label ?? 'Hospitalaria',
+    secondary: biggestCollectiveCategory
+      ? `${formatPercent(biggestCollectiveCategory.shareOfTotal)} del gasto del sistema`
+      : 'estimacion colectiva',
+    tone: 'amber',
+  },
+  {
+    id: 'pharmacy',
+    label: 'Peso de farmacia',
+    value: formatPercent(COLLECTIVE_HEALTH_CATEGORIES.find((category) => category.id === 'farmacia')?.shareOfTotal ?? 0),
+    secondary: COLLECTIVE_HEALTH_CATEGORIES.find((category) => category.id === 'farmacia')?.totalFormatted ?? 'sin dato separado',
+    tone: 'blue',
+  },
+  {
+    id: 'peak',
+    label: 'Base poblacional',
+    value: '2022',
+    secondary: 'media trimestral INE por edad',
     tone: 'rose',
   },
 ]

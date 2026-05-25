@@ -29,6 +29,8 @@ export type StackedBarChartProps = {
   categories?: HealthCategoryDef[]
   /** Map category id → icon node shown beside the label. */
   icons?: Record<string, ReactNode>
+  valueFormatter?: (value: number) => string
+  totalUnitLabel?: string
   xMax?: number
   className?: string
 }
@@ -53,6 +55,7 @@ type SegmentTooltipProps = {
   active?: boolean
   payload?: TooltipPayloadItem[]
   label?: string
+  valueFormatter: (value: number) => string
 }
 
 function formatEuro(value: number): string {
@@ -139,7 +142,7 @@ function CategoryTick({
   )
 }
 
-function SegmentTooltip({ active, payload, label }: SegmentTooltipProps) {
+function SegmentTooltip({ active, payload, label, valueFormatter }: SegmentTooltipProps) {
   const item = payload?.[0]
   if (!active || !item?.dataKey || !item.payload || typeof item.value !== 'number') return null
 
@@ -157,7 +160,7 @@ function SegmentTooltip({ active, payload, label }: SegmentTooltipProps) {
         />
         <span>{group?.label ?? 'Grupo de edad'}</span>
       </div>
-      <strong>{formatEuro(item.value)}</strong>
+      <strong>{valueFormatter(item.value)}</strong>
       <small>
         {label}
         {percent ? ` · ${percent.toLocaleString('es-ES', { maximumFractionDigits: 1 })}%` : ''}
@@ -169,6 +172,8 @@ function SegmentTooltip({ active, payload, label }: SegmentTooltipProps) {
 export function StackedBarChart({
   categories,
   icons,
+  valueFormatter = formatEuro,
+  totalUnitLabel = '€ por persona',
   xMax,
   className,
 }: StackedBarChartProps) {
@@ -189,6 +194,7 @@ export function StackedBarChart({
           </li>
         ))}
         <li className="sbc__legend-total" aria-hidden="true">
+          <small>{totalUnitLabel}</small>
           <span>Total por categoría</span>
           <small>(€ por persona)</small>
         </li>
@@ -211,7 +217,7 @@ export function StackedBarChart({
               type="number"
               domain={[0, ticks[ticks.length - 1] ?? axisMax]}
               ticks={ticks}
-              tickFormatter={formatEuro}
+              tickFormatter={valueFormatter}
               tick={{ fill: '#6f829f', fontSize: 11 }}
               axisLine={{ stroke: 'rgba(77, 102, 136, 0.45)' }}
               tickLine={false}
@@ -227,7 +233,7 @@ export function StackedBarChart({
               tickLine={false}
             />
             <Tooltip
-              content={<SegmentTooltip />}
+              content={<SegmentTooltip valueFormatter={valueFormatter} />}
               cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }}
               wrapperStyle={{ outline: 'none', pointerEvents: 'none' }}
               allowEscapeViewBox={{ x: true, y: true }}

@@ -1,0 +1,21 @@
+# 2026-05-25 - Vista colectiva de gasto sanitario
+
+- fecha: 2026-05-25
+- objetivo: anadir una vista colectiva que estime el gasto anual del sistema por rango de edad.
+- archivos modificados:
+  - `scripts/process-health-collective-age-profile-2022.ps1`
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-edad_airef-egsp-ine_2022.csv`
+  - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv`
+  - `src/data/healthExpenditureData.ts`
+  - `src/components/HealthExpenditureDashboard.tsx`
+  - `src/components/StackedBarChart.tsx`
+  - `src/components/StackedBarChart.css`
+  - `data/sources.md`
+  - `data/inventory.md`
+  - `data/metadata.md`
+  - `data/methodology/transformations.md`
+  - `data/methodology/gasto-sanitario-edad-dashboard.md`
+  - `data/checksums.sha256`
+  - `ai/current.md`
+- resumen de cambios: se calcula gasto anual colectivo como gasto per capita estimado por edad/categoria multiplicado por poblacion media trimestral INE 2022. El dashboard alterna entre vista individual y colectiva, actualizando barras, ranking, KPIs y textos.
+- estado siguiente: revisar visualmente la alternancia de vistas en escritorio y movil cuando haya captura disponible.

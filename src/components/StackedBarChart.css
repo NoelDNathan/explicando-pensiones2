@@ -47,6 +47,10 @@
   font: 500 10px/1 var(--sans);
 }
 
+.sbc__legend-total small + small {
+  display: none;
+}
+
 .sbc__chart-wrap {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 88px;
