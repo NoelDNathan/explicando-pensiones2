@@ -60,7 +60,6 @@ const LAYOUT = {
   tickLabelY: 394,
   axisCaptionY: 410,
   rightLabelsX: 505,
-  maleTotalLabelX: 62,
   legendY: 448,
 } as const
 
@@ -156,7 +155,7 @@ type Geometry = {
 const buildGeometry = (rowCount: number, scaleMax: number): Geometry => {
   const maleBarBaseX = LAYOUT.centerX - LAYOUT.axisGap
   const femaleBarBaseX = LAYOUT.centerX + LAYOUT.axisGap
-  const maleMaxLength = maleBarBaseX - LAYOUT.maleTotalLabelX - 24
+  const maleMaxLength = maleBarBaseX - LAYOUT.padding.left - 24
   const femaleMaxLength = LAYOUT.rightLabelsX - femaleBarBaseX - 6
   const maxBarLength = Math.min(maleMaxLength, femaleMaxLength)
   const scale = maxBarLength / scaleMax
@@ -369,7 +368,7 @@ function PyramidBars({
               fill={pickBarColor('female', 'foreign', active)}
             />
             <text
-              x={LAYOUT.maleTotalLabelX}
+              x={maleForeignX - 8}
               y={labelY}
               fill={active ? COLORS.textTitle : COLORS.textMuted}
               fontSize={7}

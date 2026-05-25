@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Refinado el margen izquierdo de `PopulationPyramid`: se elimino la columna fija de totales masculinos y el total vuelve a colocarse junto al extremo real de cada barra, con una separacion de 8 px y una reserva suave de margen izquierdo para evitar solapamientos con las etiquetas internas. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
+
 - Ajustado el margen izquierdo de `PopulationPyramid`: los totales del lado masculino pasan a una columna fija y la longitud maxima de las barras masculinas reserva espacio para evitar solapamientos con las etiquetas internas de nacidos en el extranjero. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
 
 - Anadidas etiquetas numericas a `PopulationPyramid`: cada tramo muestra el total por sexo en el exterior de la barra y, en la variante con desglose por nacimiento, los valores internos de nacidos en Espana y nacidos en el extranjero cuando el segmento tiene ancho suficiente para ser legible. Se desplazo la columna de anotaciones de edad laboral para evitar solapamientos. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido; queda pendiente revision visual en navegador por bloqueo de localhost en el navegador integrado.
