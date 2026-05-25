@@ -528,6 +528,37 @@ function PopulationPage() {
           style={{ width: '100%' }}
         />
 
+        <div className="population-jump-controls" aria-label="Saltos rapidos de ano">
+          <button
+            type="button"
+            className="population-jump"
+            onClick={() => setYear(2025)}
+          >
+            2025 observado
+          </button>
+          <button
+            type="button"
+            className="population-jump population-jump--projected"
+            onClick={() => setYear(2026)}
+          >
+            Inicio proyeccion 2026
+          </button>
+          <button
+            type="button"
+            className="population-jump population-jump--projected"
+            onClick={() => setYear(2050)}
+          >
+            Ver 2050
+          </button>
+          <button
+            type="button"
+            className="population-jump population-jump--projected"
+            onClick={() => setYear(2070)}
+          >
+            Ver 2070
+          </button>
+        </div>
+
         <p className="population-source">
           Fuente: {sourceLabel}. Los anos 1975-2025 son observados; desde 2026
           se muestran proyecciones oficiales. No se mezclan desgloses por

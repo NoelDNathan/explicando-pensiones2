@@ -132,6 +132,56 @@
   font-size: 14px;
 }
 
+.population-jump-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.population-jump {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(157, 182, 217, 0.34);
+  border-radius: 999px;
+  color: var(--color-text-inverted-muted);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.population-jump:hover {
+  color: var(--color-text-inverted);
+  border-color: rgba(157, 182, 217, 0.68);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+.population-jump:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.population-jump--projected {
+  color: #f4cf6a;
+  border-color: rgba(212, 160, 23, 0.58);
+  background: rgba(212, 160, 23, 0.08);
+}
+
+.population-jump--projected:hover {
+  color: #ffe092;
+  border-color: rgba(244, 207, 106, 0.82);
+  background: rgba(212, 160, 23, 0.14);
+}
+
 .component-lab {
   padding: 56px 0 80px;
 }
