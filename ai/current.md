@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Revisada la coherencia de supuestos de las estimaciones AIReF ya procesadas. Criterio: gasto en pensiones y pensionistas del informe de regla de gasto de pensiones son comparables solo dentro del mismo escenario/vintage; el CSV maestro fiscal usa `AIReF Opinion 2025` para pensiones y el escenario inercial para deuda de largo plazo, pero mezcla ademas una prevision puntual de deuda 2026 publicada en 2026 y una fuente europea Ageing Report para sanidad, por lo que la narrativa debe etiquetar cada bloque como escenario/fuente y no presentarlo como una unica simulacion homogenea.
+
 - Revisada disponibilidad historica de pensiones vs pensionistas antes de 2006. El libro mensual/eSTADISS usado localmente publica `PENSIONISTAS`, `PENSIONES` y ratio `PENSIONES / PENSIONISTAS` desde 2006. Los Anuarios MITES muestran que hay tablas historicas con `pensionistas` alrededor de 2004-2006 y tablas de `pensiones` en anos anteriores; por tanto, la ratio antes de 2006 no esta localizada como serie continua, pero puede calcularse en los anos donde existan ambas magnitudes. Cautela: los anuarios usan media anual en miles, mientras el libro mensual usa datos de diciembre o mes concreto.
 
 - Sustituidas las etiquetas laterales de `PopulationPyramid` por tres metricas en formato compacto: `PENSIONISTAS`, `20-64 AÑOS` y `NIÑOS`. Se elimino el bloque superior derecho de dos totales; ahora las cifras viven en la columna derecha del grafico y se calculan desde los datos visibles, sumando ambos sexos y categorias de nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande ya conocido.
