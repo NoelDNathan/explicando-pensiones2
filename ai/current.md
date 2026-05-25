@@ -59,7 +59,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
-- Anadidos en `/poblacion` botones de salto rapido para hacer visible la parte proyectada de la piramide: `Inicio proyeccion 2026`, `Ver 2050` y `Ver 2070`, ademas del retorno a `2025 observado`.
+- Aclarado criterio narrativo sobre "edad maxima de jubilacion": no debe usarse como etiqueta principal salvo que se documente una norma concreta de jubilacion forzosa. Para la web conviene separar edad ordinaria/legal, edad anticipada, edad demorada y edad efectiva observada de las altas iniciales de jubilacion.
 
 - Respondida consulta sobre edad de jubilacion: el proyecto no tiene todavia un CSV procesado ni una entrada especifica en inventario/metadata, pero el libro bruto de Seguridad Social `data/raw/seguridad-social/pensiones/2026-05-18_seguridad-social_libro-evolucion-mensual-pensiones_2026-04.xlsx` contiene datos utilizables en las hojas `AJ_ambos_sexos`, `AJ_hombres`, `AJ_mujeres`, `EVO_acumula_altas_jub_edad` y `EVO_acumula_altas_jub_modalidad`. Se localizaron edad media y distribucion por edad de altas iniciales de jubilacion; queda pendiente procesarlas antes de usarlas editorialmente.
 
