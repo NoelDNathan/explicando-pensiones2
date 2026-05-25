@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Respondida consulta sobre esperanza de vida despues de la jubilacion: no hay todavia un CSV procesado/inventariado de esperanza de vida restante a los 65 o 67 anos. Si existe materia prima oficial en bruto: el JSON de INE Proyecciones tabla 36775 contiene esperanza de vida por edad y sexo, incluidas edades 65 y 67 para 2024-2073. La serie historica procesada actual solo cubre esperanza de vida al nacimiento; el valor visible de demo en `App.tsx` debe tratarse como placeholder hasta procesar y documentar una serie trazable.
+
 - Obtenido un dataset trazable para salario medio de Espana desde BDMACRO abril 2026: `Salario Medio (SM) = remuneracion de asalariados / asalariados`, hoja `Remuneracion Asalariados`, columna `U`. Se creo el script reproducible `scripts/process-igae-bdmacro-salario-medio.ps1` y el CSV `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`. El archivo cubre 1970-2070 en filas anuales, pero solo contiene valores observados para 1970-2024; 2025-2070 queda sin valor y con `estado_dato = no_estimado` al no localizarse una proyeccion oficial/institucional permitida. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`.
 
 - Respondida consulta sobre nacimientos: los datos si contienen una serie de numero de nacimientos de Espana, con observado 1975-2024 y proyectado 2025-2070 en `data/processed/ine/2026-05-24_ine_nacimientos-espana-observados-proyectados_1975-2070.csv`. Tambien existe un dataset distinto de poblacion residente por lugar de nacimiento 2002-2025, que no debe confundirse con nacimientos anuales.
