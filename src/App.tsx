@@ -457,7 +457,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--hud component-preview--dashboard">
+        <div className="component-preview component-preview--dashboard component-preview--bleed">
           <HealthExpenditureDashboard />
         </div>
       </section>
@@ -472,8 +472,9 @@ function Home() {
       <h1>Una web didactica sobre las pensiones en Espana</h1>
       <p>
         Este proyecto esta preparando sus componentes visuales. Puedes abrir el
-        laboratorio interno en <a href="/componentes">/componentes</a> o ver la
-        nueva pagina de poblacion en <a href="/poblacion">/poblacion</a>.
+        laboratorio interno en <a href="/componentes">/componentes</a>, ver la
+        pagina de poblacion en <a href="/poblacion">/poblacion</a> o el panel
+        de gasto sanitario en <a href="/gasto-sanitario">/gasto-sanitario</a>.
       </p>
     </main>
   )
@@ -629,12 +630,23 @@ function PopulationPage() {
   )
 }
 
+function HealthExpenditurePage() {
+  return (
+    <main className="health-page">
+      <HealthExpenditureDashboard />
+    </main>
+  )
+}
+
 function App() {
-  const isComponentLab = window.location.pathname === '/componentes'
-  const isPopulationPage = window.location.pathname === '/poblacion'
+  const path = window.location.pathname
+  const isComponentLab = path === '/componentes'
+  const isPopulationPage = path === '/poblacion'
+  const isHealthPage = path === '/gasto-sanitario'
 
   if (isComponentLab) return <ComponentLab />
   if (isPopulationPage) return <PopulationPage />
+  if (isHealthPage) return <HealthExpenditurePage />
   return <Home />
 }
 

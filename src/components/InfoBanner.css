@@ -58,7 +58,15 @@
 }
 
 .info-banner__text strong,
-.info-banner__text b {
-  color: var(--ib-strong);
-  font-weight: 700;
+.info-banner__text b,
+.info-banner__text em {
+  color: #6da4ff;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.info-banner--light .info-banner__text strong,
+.info-banner--light .info-banner__text b,
+.info-banner--light .info-banner__text em {
+  color: var(--accent);
 }

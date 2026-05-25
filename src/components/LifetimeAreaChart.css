@@ -1,0 +1,35 @@
+/* LifetimeAreaChart — Recharts cumulative area curve */
+
+.lac {
+  position: relative;
+  width: 100%;
+}
+
+.lac__callout {
+  position: absolute;
+  top: 6px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  border-radius: 6px;
+  background: rgba(14, 27, 46, 0.92);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.lac__callout-label {
+  color: var(--color-text-inverted-muted);
+  font: 500 10px/1 var(--sans);
+}
+
+.lac__callout-value {
+  color: var(--color-text-inverted);
+  font: 800 12px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+}

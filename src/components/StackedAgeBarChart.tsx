@@ -92,7 +92,6 @@ export function StackedAgeBarChart({
     <div className={rootClass}>
       {/* ── Legend ────────────────────────────────────────────────────── */}
       <div className="sab__legend" aria-label="Grupos de edad">
-        <span aria-hidden="true" />
         <ul className="sab__legend-chips">
           {ageGroups.map((g) => (
             <li key={g.id} className="sab__legend-item">
@@ -151,6 +150,7 @@ export function StackedAgeBarChart({
                         className="sab__segment"
                         style={{
                           flexGrow: pct,
+                          flexBasis: 0,
                           background: group.color,
                         }}
                         title={`${group.label}: ${formatSegmentLabel(pct)}`}

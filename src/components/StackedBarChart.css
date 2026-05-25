@@ -1,0 +1,109 @@
+/* StackedBarChart — Recharts horizontal stacked bars */
+
+.sbc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.sbc__legend {
+  list-style: none;
+  margin: 0;
+  padding: 0 170px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+}
+
+.sbc__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-inverted-muted);
+  font: 500 11px/1 var(--sans);
+}
+
+.sbc__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.sbc__legend-total {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  color: var(--color-text-inverted-muted);
+  font: 600 11px/1.2 var(--sans);
+  text-align: right;
+}
+
+.sbc__legend-total small {
+  color: var(--color-text-inverted-faint);
+  font: 500 10px/1 var(--sans);
+}
+
+.sbc__chart-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  gap: 8px;
+  align-items: start;
+}
+
+.sbc__tick-icon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-inverted-muted);
+}
+
+.sbc__tick-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sbc__totals {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sbc__total-row {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--color-text-inverted);
+  font: 700 13px/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .sbc__legend {
+    padding-right: 0;
+  }
+
+  .sbc__chart-wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .sbc__totals {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 8px;
+  }
+
+  .sbc__total-row {
+    height: auto;
+  }
+}

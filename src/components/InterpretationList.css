@@ -30,6 +30,32 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ilist-bullet) 18%, transparent);
 }
 
+.ilist--check .ilist__item {
+  grid-template-columns: 18px 1fr;
+}
+
+.ilist--check .ilist__dot {
+  margin-top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.14);
+  box-shadow: none;
+  position: relative;
+}
+
+.ilist--check .ilist__dot::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  width: 4px;
+  height: 7px;
+  border-right: 1.8px solid #34d399;
+  border-bottom: 1.8px solid #34d399;
+  transform: rotate(45deg);
+}
+
 .ilist__text {
   margin: 0;
   color: var(--ilist-fg);

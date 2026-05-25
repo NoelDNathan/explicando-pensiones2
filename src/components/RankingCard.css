@@ -1,0 +1,31 @@
+/* RankingCard — CTA button */
+
+.rc__cta {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid rgba(157, 182, 217, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-inverted);
+  font: 600 12.5px/1 var(--sans);
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 120ms ease;
+}
+
+.rc__cta:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(157, 182, 217, 0.55);
+  transform: translateY(-1px);
+}
+
+.rc__cta:focus-visible {
+  outline: 3px solid rgba(34, 211, 238, 0.4);
+  outline-offset: 2px;
+}

@@ -18,8 +18,12 @@ export type InterpretationItem = {
   body: ReactNode
 }
 
+export type InterpretationMarkerVariant = 'dot' | 'check'
+
 export type InterpretationListProps = {
   items: InterpretationItem[]
+  /** Marker style: coloured dot (default) or green check (reference design). */
+  variant?: InterpretationMarkerVariant
   /** Override the dot colour (default: working-age boundary teal). */
   bulletColor?: string
   className?: string
@@ -27,10 +31,17 @@ export type InterpretationListProps = {
 
 export function InterpretationList({
   items,
+  variant = 'dot',
   bulletColor,
   className,
 }: InterpretationListProps) {
-  const rootClass = ['ilist', className].filter(Boolean).join(' ')
+  const rootClass = [
+    'ilist',
+    variant === 'check' ? 'ilist--check' : '',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <ul
