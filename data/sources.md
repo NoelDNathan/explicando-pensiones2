@@ -74,9 +74,26 @@
 - archivo bruto: `data/raw/comision-europea/ageing-report-2024/2026-05-25_ec_2024-ageing-report_statistical-annex-country-fiches.xlsx`
 - archivo procesado: `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv`
 - licencia o condiciones de uso: reutilizacion segun condiciones y aviso legal de la Comision Europea
-- descripcion breve: anexos estadisticos por pais con proyecciones 2022-2070; para Espana se extraen pensiones publicas brutas, gasto sanitario publico y coste total del envejecimiento, todos como porcentaje del PIB.
-- uso previsto en la web: completar escenarios de largo plazo para sanidad y servir de contraste institucional para pensiones.
+- descripcion breve: anexos estadisticos por pais con proyecciones 2022-2070; para Espana se extraen pensiones publicas brutas, gasto sanitario publico, coste total del envejecimiento y supuestos macro anuales de la hoja `ESa`.
+- uso previsto en la web: completar escenarios de largo plazo para sanidad, servir de contraste institucional para pensiones y alimentar una estimacion tecnica de PIB corriente futuro.
 - nota metodologica: son proyecciones bajo metodologia comun europea; no deben mezclarse con datos observados.
+
+## AIReF - Anclas fiscales de la Opinion de sostenibilidad AAPP 2025
+
+- nombre de la fuente: Presentacion de los Documentos Tecnicos de la Opinion sobre la Sostenibilidad de las AAPP
+- institucion: Autoridad Independiente de Responsabilidad Fiscal (AIReF)
+- URL PDF: https://www.airef.es/wp-content/uploads/2025/04/Documentos-tecnicos-segunda-opinion-sostenibilidad-a-largo-plazo-AAPP/Presentacion.pdf
+- fecha de publicacion indicada por AIReF: 2025
+- fecha de descarga local: 2026-05-25
+- periodo cubierto por anclas utilizadas: 2029, 2041, 2050 y 2070
+- ambito geografico: Espana, Administraciones Publicas
+- formato descargado: PDF
+- archivo bruto: `data/raw/airef/deuda-publica-previsiones/2026-05-25_airef_documentos-tecnicos-opinion-sostenibilidad-aapp-2025_presentacion.pdf`
+- archivo procesado derivado: `data/processed/fiscal/2026-05-25_series-fiscales-espana_escenario-derivado-pib-y-aapp_2025-2070.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales de AIReF
+- descripcion breve: anclas publicadas para empleos no financieros, intereses y deficit/saldo publico en porcentaje del PIB dentro del escenario base a politicas constantes.
+- uso previsto en la web: completar una capa de escenario derivado 2025-2070 para PIB, gasto publico total, intereses y saldo publico, siempre etiquetada como estimada.
+- nota metodologica: las anclas no son una tabla anual completa; la serie anual intermedia se obtiene por interpolacion lineal desde 2024 observado BDMACRO hasta las anclas AIReF. Los importes en millones se calculan con un PIB corriente estimado desde Ageing Report, por lo que no son cifras oficiales publicadas.
 
 ## BOE - Edad minima legal para trabajar en Espana
 

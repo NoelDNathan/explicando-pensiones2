@@ -40,6 +40,7 @@
   - `data/raw/igae/bdmacro/2026-05-18_igae-sepg_bdmacro_abril-2026.xlsx`.
   - `data/raw/igae/cofog/2026-05-18_igae_cofog-aapp-serie-1995-2024.xlsx`.
   - `data/raw/comision-europea/ageing-report-2024/2026-05-25_ec_2024-ageing-report_statistical-annex-country-fiches.xlsx`.
+  - `data/raw/airef/deuda-publica-previsiones/2026-05-25_airef_documentos-tecnicos-opinion-sostenibilidad-aapp-2025_presentacion.pdf`.
 - Fuentes procesadas reutilizadas:
   - `data/processed/igae/2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv`.
   - `data/processed/eurostat/deuda-publica-espana-1995-2025.csv`.
@@ -51,24 +52,33 @@
   - calculo de porcentajes sobre PIB para gasto publico total, intereses + otras rentas y prestaciones sociales agregadas;
   - extraccion desde COFOG de la division `07 Salud`, fila `GASTO TOTAL`, para 1995-2024;
   - extraccion desde el Ageing Report 2024 de las hojas `ESb` y `ESc` para pensiones publicas brutas, gasto sanitario publico y coste total del envejecimiento, baseline, 2022-2070;
+  - extraccion desde el Ageing Report 2024, hoja `ESa`, de supuestos macro anuales de Espana para crecimiento del PIB potencial e HICP 2025-2070;
+  - estimacion tecnica del PIB corriente 2025-2070 partiendo del PIB BDMACRO 2024 y aplicando crecimiento de PIB potencial e HICP del Ageing Report; HICP se usa como proxy de deflactor y no equivale a PIB nominal oficial;
+  - interpolacion lineal anual de ratios fiscales entre 2024 observado BDMACRO y anclas AIReF publicadas para 2029, 2041, 2050 y 2070:
+    - gasto publico total: 44,8%, 48,4%, 51,0% y 52,2% del PIB;
+    - intereses: 2,9%, 3,7%, 4,7% y 6,8% del PIB;
+    - saldo publico: -2,9%, -5,0%, -7,0% y -7,7% del PIB;
+  - calculo de importes futuros en millones como ratio sobre el PIB corriente estimado;
   - incorporacion de la deuda observada Eurostat para 2025, al no estar completo 2025 en la hoja BDMACRO usada;
   - construccion de un CSV maestro en formato largo para 1975-2070 y siete variables solicitadas;
-  - marcado explicito de huecos como `no_estimado`, sin ceros ficticios ni interpolaciones.
+  - marcado explicito de huecos restantes como `no_estimado`, sin ceros ficticios.
 - Archivos generados:
   - `data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv`.
   - `data/processed/igae/2026-05-25_igae-cofog_gasto-salud-aapp-espana_1995-2024.csv`.
   - `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv`.
+  - `data/processed/fiscal/2026-05-25_series-fiscales-espana_escenario-derivado-pib-y-aapp_2025-2070.csv`.
   - `data/processed/fiscal/2026-05-25_series-fiscales-espana_1975-2070.csv`.
 - Periodo resultante del maestro: 1975-2070, 672 filas: 96 anos por 7 variables.
 - Cobertura principal:
-  - PIB, gasto publico total, intereses y saldo publico: observado 1975-2024; 2025-2070 no estimado.
+  - PIB, gasto publico total, intereses y saldo publico: observado 1975-2024; estimado 2025-2070 mediante supuestos macro Ageing Report y ratios/anclas AIReF interpoladas.
   - deuda publica total: observado 1975-2025; 2026 y anclas 2030/2040/2050/2060/2070 como escenario AIReF; anos intermedios no estimados.
   - gasto en pensiones: 1995-2024 como aproximacion COFOG `10.2 Vejez + 10.3 Supervivientes`; 2025-2070 como escenario AIReF; 1975-1994 no estimado.
   - gasto en sanidad: 1995-2024 observado COFOG `07 Salud`; 2025-2070 proyectado Ageing Report; 1975-1994 no estimado.
 - Notas de definicion:
   - `intereses_deuda` usa la columna BDMACRO `Intereses + Otras rentas de la propiedad`, no D.41 puro.
   - `deficit_saldo_publico` usa capacidad/necesidad de financiacion: negativo = deficit.
-  - las proyecciones no contienen importes en millones de euros cuando la fuente solo publica porcentaje del PIB.
+  - los importes 2025-2070 de PIB, gasto publico total, intereses y saldo publico son estimaciones tecnicas, no cifras oficiales publicadas; deben mostrarse como escenario derivado.
+  - las proyecciones restantes no contienen importes en millones de euros cuando la fuente solo publica porcentaje del PIB.
 
 ## IGAE/SEPG - BDMACRO, salario medio macro 1970-2070
 

@@ -7,7 +7,8 @@ e27ca69f25d16d6a712bfc4a0587772605ce63222b04380a057a3abc3c184f72  data\processed
 7486cff4a8b0ecd7c5fb69d1aeeb88759bb9c66d927c4c83f8f2c2ac0ba2554f  data\processed\boe\2026-05-24_boe_edad-minima-legal-trabajar-espana_antes-1976-2026.json
 46f595a8a9229db21d6ddeb83e8134e669f26c5999c963699dd8bac8f6b23d8b  data\processed\comision-europea\2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv
 f9e949ce622d4cf6ef784d9ac0b3d5c8f31f7692139ce0271c8c0adbb42c90eb  data\processed\eurostat\deuda-publica-espana-1995-2025.csv
-586798192aa91329875232e4a4c748b9189841e68c52610e9be3a0e51b92b17b  data\processed\fiscal\2026-05-25_series-fiscales-espana_1975-2070.csv
+d99db95b4f74989bbc94cf9a3bfae741869a6ed159f571119b5161e2e1ebb058  data\processed\fiscal\2026-05-25_series-fiscales-espana_1975-2070.csv
+13edaa56c7343ce7a5c75149c32ff06556e26b2919d313c55fe6346a696ffbc4  data\processed\fiscal\2026-05-25_series-fiscales-espana_escenario-derivado-pib-y-aapp_2025-2070.csv
 df3fbe854827f3ab1fcdae03c45ff8b5acb5131d31bd823b8bd6978ce3f6928e  data\processed\igae\2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv
 a0074c0a6e91f13922c5832ae6d38890981bc3796662d75569f01c1f97f973ba  data\processed\igae\2026-05-18_igae_cofog-proteccion-social-detalle-aapp_1995-2024.csv
 dbb6cb169ffead7105e48d626aca02086c54c2f10cf0cf98c43438c0abfbc02f  data\processed\igae\2026-05-18_igae-bdmacro_prestaciones-sociales-seguridad-social_1975-2025.csv
@@ -60,6 +61,7 @@ a9848ac163d229702c531c5300ff57ccd6f636d859874099d079f231afb03878  data\processed
 610017bc051835329829d942340cfc2275a9b338eca74bcd9513f5a862eeec40  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_observatorio-deuda-junio-2025.pdf
 883dfbe9b09eb2c414208c2adf944944cc7a663b33f7797b8aa3e393abb501da  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_opinion-sostenibilidad-aapp-largo-plazo-2025.pdf
 b4748ddfeb3afb0c49ae664a93edc49006819b5190df0c015c27ea907715afee  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_pagina-observatorio-deuda.html
+4ee34b015907cf8e91e1cb25573715a59089c629ff6a66eb6301b4bb57889089  data\raw\airef\deuda-publica-previsiones\2026-05-25_airef_documentos-tecnicos-opinion-sostenibilidad-aapp-2025_presentacion.pdf
 34a7fe1e8390a222f2d8a03991cbc7b13ccecf0feff0639726cd5c51b3b09d84  data\raw\airef\pensiones-previsiones\2026-05-18_airef_graficos-cuadros-informe-regla-gasto-pensiones.xlsx
 da01e503038d9c0aa810b24ea7df92101a31141c9f88a52a48bc35c8053979e5  data\raw\airef\pensiones-previsiones\2026-05-18_airef_informe-regla-gasto-pensiones.pdf
 c96cebb2e39277e20be39375ba92672c83dd60283d5101b7267d7cd88e896336  data\raw\airef\pensiones-previsiones\2026-05-18_airef_pagina-informe-regla-gasto-pensiones.html

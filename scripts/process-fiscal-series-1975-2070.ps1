@@ -8,6 +8,7 @@ $ageingPath = Join-Path $repoRoot "data/raw/comision-europea/ageing-report-2024/
 $historicalOut = Join-Path $repoRoot "data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv"
 $healthOut = Join-Path $repoRoot "data/processed/igae/2026-05-25_igae-cofog_gasto-salud-aapp-espana_1995-2024.csv"
 $ageingOut = Join-Path $repoRoot "data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv"
+$derivedFiscalOut = Join-Path $repoRoot "data/processed/fiscal/2026-05-25_series-fiscales-espana_escenario-derivado-pib-y-aapp_2025-2070.csv"
 $masterOut = Join-Path $repoRoot "data/processed/fiscal/2026-05-25_series-fiscales-espana_1975-2070.csv"
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -275,6 +276,134 @@ function New-MasterRow($year, $variable, $label, $valueMillion, $valuePct, $unit
   }
 }
 
+function Interpolate-AnchorValue($anchors, [int]$year) {
+  if ($anchors.ContainsKey($year)) { return [double]$anchors[$year] }
+  $years = @($anchors.Keys | Sort-Object)
+  $previous = $null
+  $next = $null
+  foreach ($anchorYear in $years) {
+    if ($anchorYear -lt $year) { $previous = $anchorYear }
+    if ($anchorYear -gt $year) {
+      $next = $anchorYear
+      break
+    }
+  }
+  if ($null -eq $previous -or $null -eq $next) { return $null }
+  $share = ($year - $previous) / ($next - $previous)
+  return [double]$anchors[$previous] + (([double]$anchors[$next] - [double]$anchors[$previous]) * $share)
+}
+
+$ageingMacroRows = Read-XlsxSheet $ageingPath "ESa"
+$macroHeader = $ageingMacroRows[22]
+$potentialGdpGrowth = @{}
+$hicpGrowth = @{}
+foreach ($column in $macroHeader.Keys) {
+  if ($macroHeader[$column] -match "^\d{4}$") {
+    $year = [int]$macroHeader[$column]
+    if ($year -lt 2025 -or $year -gt 2070) { continue }
+    if ($ageingMacroRows[23].ContainsKey($column) -and (Is-NumberText $ageingMacroRows[23][$column])) {
+      $potentialGdpGrowth[$year] = [double]$ageingMacroRows[23][$column]
+    }
+    if ($ageingMacroRows[31].ContainsKey($column) -and (Is-NumberText $ageingMacroRows[31][$column])) {
+      $hicpGrowth[$year] = [double]$ageingMacroRows[31][$column]
+    }
+  }
+}
+
+$lastHistorical = $historicalByYear[2024]
+$derivedGdp = @{}
+$derivedFiscal = @{}
+$previousGdp = [double]$lastHistorical.pib_corriente_millones_eur
+
+$spendingAnchors = @{
+  2024 = [double]$lastHistorical.gasto_publico_total_pct_pib
+  2029 = 44.8
+  2041 = 48.4
+  2050 = 51.0
+  2070 = 52.2
+}
+$interestAnchors = @{
+  2024 = [double]$lastHistorical.intereses_y_otras_rentas_propiedad_pct_pib
+  2029 = 2.9
+  2041 = 3.7
+  2050 = 4.7
+  2070 = 6.8
+}
+$balanceAnchors = @{
+  2024 = [double]$lastHistorical.saldo_publico_pct_pib
+  2029 = -2.9
+  2041 = -5.0
+  2050 = -7.0
+  2070 = -7.7
+}
+
+for ($year = 2025; $year -le 2070; $year++) {
+  if (-not ($potentialGdpGrowth.ContainsKey($year) -and $hicpGrowth.ContainsKey($year))) {
+    throw "Missing Ageing Report macro assumptions for year $year"
+  }
+  $nominalGrowthFactor = (1 + ($potentialGdpGrowth[$year] / 100)) * (1 + ($hicpGrowth[$year] / 100))
+  $gdp = $previousGdp * $nominalGrowthFactor
+  $previousGdp = $gdp
+  $derivedGdp[$year] = $gdp
+
+  $spendingPct = Interpolate-AnchorValue $spendingAnchors $year
+  $interestPct = Interpolate-AnchorValue $interestAnchors $year
+  $balancePct = Interpolate-AnchorValue $balanceAnchors $year
+  $derivedFiscal[$year] = [pscustomobject]@{
+    ano = $year
+    pib_corriente_millones_eur_estimado = $gdp
+    crecimiento_pib_potencial_pct = $potentialGdpGrowth[$year]
+    inflacion_hicp_pct = $hicpGrowth[$year]
+    gasto_publico_total_pct_pib = $spendingPct
+    gasto_publico_total_millones_eur = $gdp * $spendingPct / 100
+    intereses_deuda_pct_pib = $interestPct
+    intereses_deuda_millones_eur = $gdp * $interestPct / 100
+    deficit_saldo_publico_pct_pib = $balancePct
+    deficit_saldo_publico_millones_eur = $gdp * $balancePct / 100
+  }
+}
+
+$derivedRows = @()
+foreach ($year in $derivedFiscal.Keys | Sort-Object) {
+  $d = $derivedFiscal[$year]
+  $derivedRows += [pscustomobject]@{
+    ano = $year
+    variable = "pib"
+    valor_millones_eur = To-DecimalString $d.pib_corriente_millones_eur_estimado
+    valor_pct_pib = ""
+    estado_dato = "estimado"
+    fuente = "Comision Europea Ageing Report 2024 + IGAE/SEPG BDMACRO"
+    metodologia = "PIB corriente estimado desde PIB BDMACRO 2024, crecimiento de PIB potencial Ageing Report y HICP Ageing Report. HICP se usa como proxy de deflactor; no es nivel oficial de PIB nominal."
+  }
+  $derivedRows += [pscustomobject]@{
+    ano = $year
+    variable = "gasto_publico_total"
+    valor_millones_eur = To-DecimalString $d.gasto_publico_total_millones_eur
+    valor_pct_pib = To-DecimalString $d.gasto_publico_total_pct_pib
+    estado_dato = "estimado"
+    fuente = "AIReF Opinion sostenibilidad AAPP 2025 + Comision Europea Ageing Report 2024"
+    metodologia = "Ratio gasto/PIB interpolado linealmente entre 2024 observado BDMACRO y anclas AIReF 2029, 2041, 2050 y 2070; importe calculado con PIB corriente estimado."
+  }
+  $derivedRows += [pscustomobject]@{
+    ano = $year
+    variable = "intereses_deuda"
+    valor_millones_eur = To-DecimalString $d.intereses_deuda_millones_eur
+    valor_pct_pib = To-DecimalString $d.intereses_deuda_pct_pib
+    estado_dato = "estimado"
+    fuente = "AIReF Opinion sostenibilidad AAPP 2025 + Comision Europea Ageing Report 2024"
+    metodologia = "Ratio intereses/PIB interpolado linealmente entre 2024 observado BDMACRO y anclas AIReF 2029, 2041, 2050 y 2070; importe calculado con PIB corriente estimado."
+  }
+  $derivedRows += [pscustomobject]@{
+    ano = $year
+    variable = "deficit_saldo_publico"
+    valor_millones_eur = To-DecimalString $d.deficit_saldo_publico_millones_eur
+    valor_pct_pib = To-DecimalString $d.deficit_saldo_publico_pct_pib
+    estado_dato = "estimado"
+    fuente = "AIReF Opinion sostenibilidad AAPP 2025 + Comision Europea Ageing Report 2024"
+    metodologia = "Ratio saldo/PIB interpolado linealmente entre 2024 observado BDMACRO y anclas AIReF 2029, 2041, 2050 y 2070; negativo significa deficit; importe calculado con PIB corriente estimado."
+  }
+}
+
 $masterRows = @()
 for ($year = 1975; $year -le 2070; $year++) {
   $hist = if ($historicalByYear.ContainsKey($year)) { $historicalByYear[$year] } else { $null }
@@ -286,10 +415,18 @@ for ($year = 1975; $year -le 2070; $year++) {
     $masterRows += New-MasterRow $year "deficit_saldo_publico" "Deficit o saldo publico" $hist.saldo_publico_millones_eur $hist.saldo_publico_pct_pib "millones de euros corrientes y porcentaje del PIB" "observado" $hist.fuente "Capacidad (+) o necesidad (-) de financiacion de las AAPP." "Negativo significa deficit; positivo significa superavit."
     $masterRows += New-MasterRow $year "deuda_publica_total" "Deuda publica total" $hist.deuda_publica_millones_eur $hist.deuda_publica_pct_pib "millones de euros corrientes y porcentaje del PIB" "observado" $hist.fuente "Deuda publica total de las AAPP segun Procedimiento de Deficit Excesivo." "BDMACRO remite a Banco de Espana para la deuda PDE."
   } else {
-    $masterRows += New-MasterRow $year "pib" "PIB" "" "" "millones de euros corrientes" "no_estimado" "" "Producto Interior Bruto a precios corrientes." "Sin nivel de PIB proyectado en fuente tabular procesada; no se estima."
-    $masterRows += New-MasterRow $year "gasto_publico_total" "Gasto publico total" "" "" "millones de euros corrientes y porcentaje del PIB" "no_estimado" "" "Empleos no financieros de las Administraciones Publicas." "Sin proyeccion tabular procesada de gasto publico total; no se estima."
-    $masterRows += New-MasterRow $year "intereses_deuda" "Intereses de la deuda" "" "" "millones de euros corrientes y porcentaje del PIB" "no_estimado" "" "Intereses de la deuda publica." "Sin proyeccion tabular procesada de intereses; no se estima."
-    $masterRows += New-MasterRow $year "deficit_saldo_publico" "Deficit o saldo publico" "" "" "millones de euros corrientes y porcentaje del PIB" "no_estimado" "" "Capacidad (+) o necesidad (-) de financiacion de las AAPP." "Sin proyeccion tabular procesada de saldo publico; no se estima."
+    if ($derivedFiscal.ContainsKey($year)) {
+      $d = $derivedFiscal[$year]
+      $masterRows += New-MasterRow $year "pib" "PIB" (To-DecimalString $d.pib_corriente_millones_eur_estimado) "" "millones de euros corrientes" "estimado" "Comision Europea Ageing Report 2024 + IGAE/SEPG BDMACRO" "Producto Interior Bruto a precios corrientes." "Estimacion tecnica: PIB 2024 BDMACRO actualizado con crecimiento de PIB potencial y HICP del Ageing Report. HICP no es deflactor del PIB."
+      $masterRows += New-MasterRow $year "gasto_publico_total" "Gasto publico total" (To-DecimalString $d.gasto_publico_total_millones_eur) (To-DecimalString $d.gasto_publico_total_pct_pib) "millones de euros corrientes y porcentaje del PIB" "estimado" "AIReF Opinion sostenibilidad AAPP 2025 + Comision Europea Ageing Report 2024" "Empleos no financieros de las Administraciones Publicas." "Ratio interpolado linealmente entre 2024 observado BDMACRO y anclas AIReF 2029, 2041, 2050 y 2070; importe calculado con PIB estimado."
+      $masterRows += New-MasterRow $year "intereses_deuda" "Intereses de la deuda" (To-DecimalString $d.intereses_deuda_millones_eur) (To-DecimalString $d.intereses_deuda_pct_pib) "millones de euros corrientes y porcentaje del PIB" "estimado" "AIReF Opinion sostenibilidad AAPP 2025 + Comision Europea Ageing Report 2024" "Intereses de la deuda publica." "Ratio interpolado linealmente entre 2024 observado BDMACRO y anclas AIReF 2029, 2041, 2050 y 2070; importe calculado con PIB estimado."
+      $masterRows += New-MasterRow $year "deficit_saldo_publico" "Deficit o saldo publico" (To-DecimalString $d.deficit_saldo_publico_millones_eur) (To-DecimalString $d.deficit_saldo_publico_pct_pib) "millones de euros corrientes y porcentaje del PIB" "estimado" "AIReF Opinion sostenibilidad AAPP 2025 + Comision Europea Ageing Report 2024" "Capacidad (+) o necesidad (-) de financiacion de las AAPP." "Ratio interpolado linealmente entre 2024 observado BDMACRO y anclas AIReF 2029, 2041, 2050 y 2070; negativo significa deficit; importe calculado con PIB estimado."
+    } else {
+      $masterRows += New-MasterRow $year "pib" "PIB" "" "" "millones de euros corrientes" "no_estimado" "" "Producto Interior Bruto a precios corrientes." "Sin nivel de PIB proyectado en fuente tabular procesada; no se estima."
+      $masterRows += New-MasterRow $year "gasto_publico_total" "Gasto publico total" "" "" "millones de euros corrientes y porcentaje del PIB" "no_estimado" "" "Empleos no financieros de las Administraciones Publicas." "Sin proyeccion tabular procesada de gasto publico total; no se estima."
+      $masterRows += New-MasterRow $year "intereses_deuda" "Intereses de la deuda" "" "" "millones de euros corrientes y porcentaje del PIB" "no_estimado" "" "Intereses de la deuda publica." "Sin proyeccion tabular procesada de intereses; no se estima."
+      $masterRows += New-MasterRow $year "deficit_saldo_publico" "Deficit o saldo publico" "" "" "millones de euros corrientes y porcentaje del PIB" "no_estimado" "" "Capacidad (+) o necesidad (-) de financiacion de las AAPP." "Sin proyeccion tabular procesada de saldo publico; no se estima."
+    }
     if ($debtEurostat.ContainsKey($year)) {
       $d = $debtEurostat[$year]
       $masterRows += New-MasterRow $year "deuda_publica_total" "Deuda publica total" $d.debt_million_eur $d.debt_percent_gdp "millones de euros corrientes y porcentaje del PIB" "observado" "Eurostat gov_10dd_edpt1" "Deuda bruta consolidada de las Administraciones Publicas, sector S13." "Dato observado Eurostat; fuente actualizada $($d.source_updated)."
@@ -323,14 +460,17 @@ for ($year = 1975; $year -le 2070; $year++) {
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $historicalOut) | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $healthOut) | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $ageingOut) | Out-Null
+New-Item -ItemType Directory -Force -Path (Split-Path -Parent $derivedFiscalOut) | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $masterOut) | Out-Null
 
 $historicalRows | Sort-Object ano | Export-Csv -Path $historicalOut -NoTypeInformation -Encoding UTF8
 $healthRows | Sort-Object ano | Export-Csv -Path $healthOut -NoTypeInformation -Encoding UTF8
 $ageingRows | Sort-Object variable, ano | Export-Csv -Path $ageingOut -NoTypeInformation -Encoding UTF8
+$derivedRows | Sort-Object ano, variable | Export-Csv -Path $derivedFiscalOut -NoTypeInformation -Encoding UTF8
 $masterRows | Sort-Object ano, variable | Export-Csv -Path $masterOut -NoTypeInformation -Encoding UTF8
 
 Write-Host "Generated $historicalOut"
 Write-Host "Generated $healthOut"
 Write-Host "Generated $ageingOut"
+Write-Host "Generated $derivedFiscalOut"
 Write-Host "Generated $masterOut"
