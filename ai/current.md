@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Analizada la posibilidad de proyectar poblacion nacida en el extranjero por sexo y edad hasta 2070 mediante un modelo demografico por cohortes. Es tecnicamente posible, pero debe etiquetarse como serie `modelizada` o `estimada`, no como proyeccion oficial INE, porque los flujos migratorios proyectados son entradas/salidas anuales y no equivalen directamente al stock residente por edad. Antes de usarlo editorialmente haria falta una metodologia formal separada y un dataset derivado con trazabilidad.
+
 - Creado `ReformSimulator` (`src/components/ReformSimulator.tsx` + `.css`): tarjeta móvil de estilo fintech/govtech (max-width 360 px) para un simulador de reformas del sistema de pensiones. Incluye cabecera con título/subtítulo/botón de información, barra de pestañas con badge de medidas activas, lista de medidas con iconos circulares de color (persona/porcentaje/grupo/maletín), valor y fecha por fila, menú de tres puntos por medida, y botón CTA con gradiente azul y glow. Tokens CSS locales con prefijo `--rs-`. API completamente tipada y puramente presentacional. Añadida la sección "Componente 07" al laboratorio `/componentes`.
 
 
