@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Respondida consulta sobre nacimientos: los datos si contienen una serie de numero de nacimientos de Espana, con observado 1975-2024 y proyectado 2025-2070 en `data/processed/ine/2026-05-24_ine_nacimientos-espana-observados-proyectados_1975-2070.csv`. Tambien existe un dataset distinto de poblacion residente por lugar de nacimiento 2002-2025, que no debe confundirse con nacimientos anuales.
+
 - Analizada la posibilidad de proyectar poblacion nacida en el extranjero por sexo y edad hasta 2070 mediante un modelo demografico por cohortes. Es tecnicamente posible, pero debe etiquetarse como serie `modelizada` o `estimada`, no como proyeccion oficial INE, porque los flujos migratorios proyectados son entradas/salidas anuales y no equivalen directamente al stock residente por edad. Antes de usarlo editorialmente haria falta una metodologia formal separada y un dataset derivado con trazabilidad.
 
 - Creado `ReformSimulator` (`src/components/ReformSimulator.tsx` + `.css`): tarjeta móvil de estilo fintech/govtech (max-width 360 px) para un simulador de reformas del sistema de pensiones. Incluye cabecera con título/subtítulo/botón de información, barra de pestañas con badge de medidas activas, lista de medidas con iconos circulares de color (persona/porcentaje/grupo/maletín), valor y fecha por fila, menú de tres puntos por medida, y botón CTA con gradiente azul y glow. Tokens CSS locales con prefijo `--rs-`. API completamente tipada y puramente presentacional. Añadida la sección "Componente 07" al laboratorio `/componentes`.
