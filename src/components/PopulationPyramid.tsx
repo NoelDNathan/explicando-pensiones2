@@ -261,10 +261,10 @@ type LegendItem = {
 }
 
 const BIRTHPLACE_LEGEND_ITEMS: LegendItem[] = [
-  { label: 'Hombre espanol',         color: COLORS.bars.male.native.active },
-  { label: 'Hombre espanol fuera',   color: COLORS.bars.male.foreign.active },
-  { label: 'Mujer espanol',          color: COLORS.bars.female.native.active },
-  { label: 'Mujer espanol fuera',    color: COLORS.bars.female.foreign.active },
+  { label: 'H nac. Espana',      color: COLORS.bars.male.native.active },
+  { label: 'H nac. extranjero',  color: COLORS.bars.male.foreign.active },
+  { label: 'M nac. Espana',      color: COLORS.bars.female.native.active },
+  { label: 'M nac. extranjero',  color: COLORS.bars.female.foreign.active },
 ]
 
 const SEX_LEGEND_ITEMS: LegendItem[] = [

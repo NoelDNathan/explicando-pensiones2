@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadida a `/poblacion` una capa observada de nacidos en Espana y nacidos en el extranjero para 2002-2025 usando el CSV INE 56937 (`data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv`). La piramide cambia automaticamente a leyenda por nacimiento cuando el ano seleccionado tiene ese desglose; 1975-2001 y 2026-2070 se mantienen como sexo y edad sin nacimiento. Verificacion: `tsc --noEmit` correcto y `vite build` correcto con aviso de chunk grande; el navegador integrado bloqueo la interaccion con localhost, asi que queda pendiente revision visual interactiva.
+
 - Explicados los terminos recomendados para la narrativa de edad de jubilacion: edad ordinaria/legal, edad efectiva, jubilacion anticipada, jubilacion demorada, jubilacion forzosa y edad minima de acceso. Criterio editorial: no mezclar reglas normativas con comportamiento observado.
 
 - Corregida la pagina `/poblacion` para que los anos proyectados 2026-2070 se muestren correctamente al seleccionarlos: el parser de `populationPyramidData.ts` limpia marcas BOM/encoding en cabeceras CSV y descarta campos numericos vacios en vez de convertirlos a `0`. Se anadieron accesos rapidos visibles a 2025, inicio de proyeccion, 2050 y 2070. Verificado en navegador que 2070 muestra badge `Proyectado`, selector `2070`, total `54,3 M` y fuente de proyeccion; `tsc --noEmit` y `vite build` correctos, con aviso ya conocido de chunk grande por importar CSV.

@@ -2,6 +2,7 @@ import type { PyramidAgeGroup } from '../components/PopulationPyramid'
 
 import observedPopulationCsv from '../../data/processed/ine/2026-05-18_ine_ecp_piramide-poblacion-espana-sexo-edad_1975-2025.csv?raw'
 import projectedPopulationCsv from '../../data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv?raw'
+import birthplacePopulationCsv from '../../data/processed/ine/2026-05-24_ine_ecp_poblacion-residente-espana-sexo-grupo-edad-nacimiento_2002-2025.csv?raw'
 
 type PopulationRow = {
   year: number
@@ -11,9 +12,14 @@ type PopulationRow = {
   status: 'observed' | 'projected'
 }
 
+type BirthplacePopulationRow = PopulationRow & {
+  birthplace: 'native' | 'foreign'
+}
+
 export type PopulationYearSummary = {
   year: number
   status: 'observed' | 'projected'
+  hasBirthplaceBreakdown: boolean
   totalPopulation: number
   workingAgePopulation: number
   olderPopulation: number
@@ -144,6 +150,36 @@ const normalizeRows = (
   })
 }
 
+const normalizeBirthplaceRows = (csv: string): BirthplacePopulationRow[] => {
+  const [headerRow, ...dataRows] = parseCsv(csv)
+  const header = new Map(
+    headerRow?.map((field, index) => [normalizeHeaderField(field), index]) ?? [],
+  )
+
+  return dataRows.flatMap((row) => {
+    const date = getField(row, header, 'fecha')
+    const sexLabel = getField(row, header, 'sexo')
+    const birthplaceLabel = getField(row, header, 'lugar_nacimiento_categoria')
+    const age = parseRequiredNumber(getField(row, header, 'edad_desde'))
+    const population = parseRequiredNumber(getField(row, header, 'poblacion'))
+    const year = parseRequiredNumber(getField(row, header, 'anio'))
+
+    if (!date.endsWith('-01-01')) return []
+    if (age === null || population === null || year === null) return []
+    if (sexLabel !== 'Hombres' && sexLabel !== 'Mujeres') return []
+    if (birthplaceLabel !== 'nacido_en_espana' && birthplaceLabel !== 'nacido_en_extranjero') return []
+
+    return [{
+      year,
+      sex: sexLabel === 'Hombres' ? 'male' : 'female',
+      age,
+      population,
+      status: 'observed',
+      birthplace: birthplaceLabel === 'nacido_en_espana' ? 'native' : 'foreign',
+    }]
+  })
+}
+
 const observedRows = normalizeRows(observedPopulationCsv, 'observed', {
   year: 'anio',
   sex: 'sexo',
@@ -157,6 +193,8 @@ const projectedRows = normalizeRows(projectedPopulationCsv, 'projected', {
   age: 'edad',
   population: 'poblacion_residente_1_enero_personas',
 })
+
+const birthplaceRows = normalizeBirthplaceRows(birthplacePopulationCsv)
 
 const FIRST_PROJECTED_YEAR = 2026
 const LAST_PROJECTED_YEAR = 2070
@@ -180,10 +218,60 @@ const inAgeGroup = (
 
 const roundToTens = (value: number): number => Math.ceil(value / 10) * 10
 
+const buildBirthplaceData = (rows: BirthplacePopulationRow[]): {
+  data: PyramidAgeGroup[]
+  maxFiveYearSexPopulationThousands: number
+} => {
+  let maxFiveYearSexPopulationThousands = 0
+
+  const data = AGE_GROUPS.map((group) => {
+    const sum = (
+      sex: BirthplacePopulationRow['sex'],
+      birthplace: BirthplacePopulationRow['birthplace'],
+    ) => rows
+      .filter((row) =>
+        row.sex === sex
+        && row.birthplace === birthplace
+        && inAgeGroup(row.age, group),
+      )
+      .reduce((total, row) => total + row.population, 0) / 1000
+
+    const maleNative = sum('male', 'native')
+    const maleForeign = sum('male', 'foreign')
+    const femaleNative = sum('female', 'native')
+    const femaleForeign = sum('female', 'foreign')
+
+    maxFiveYearSexPopulationThousands = Math.max(
+      maxFiveYearSexPopulationThousands,
+      maleNative + maleForeign,
+      femaleNative + femaleForeign,
+    )
+
+    return {
+      ageGroup: group.label,
+      ageStart: group.start,
+      ageEnd: group.end,
+      male: { native: maleNative, foreign: maleForeign },
+      female: { native: femaleNative, foreign: femaleForeign },
+    }
+  })
+
+  return { data, maxFiveYearSexPopulationThousands }
+}
+
+const birthplaceDataByYear = birthplaceRows.reduce((years, row) => {
+  const yearRows = years.get(row.year) ?? []
+  yearRows.push(row)
+  years.set(row.year, yearRows)
+  return years
+}, new Map<number, BirthplacePopulationRow[]>())
+
 export const POPULATION_YEAR_SUMMARIES: PopulationYearSummary[] = [...rowsByYear.entries()]
   .sort(([a], [b]) => a - b)
   .map(([year, rows]) => {
     const status = rows.some((row) => row.status === 'projected') ? 'projected' : 'observed'
+    const birthplaceData = birthplaceDataByYear.get(year)
+    const birthplaceSummary = birthplaceData ? buildBirthplaceData(birthplaceData) : null
     const totalPopulation = rows.reduce((sum, row) => sum + row.population, 0)
     const workingAgePopulation = rows
       .filter((row) => row.age >= 20 && row.age <= 64)
@@ -220,11 +308,13 @@ export const POPULATION_YEAR_SUMMARIES: PopulationYearSummary[] = [...rowsByYear
     return {
       year,
       status,
+      hasBirthplaceBreakdown: Boolean(birthplaceSummary),
       totalPopulation,
       workingAgePopulation,
       olderPopulation,
-      maxFiveYearSexPopulationThousands,
-      data,
+      maxFiveYearSexPopulationThousands:
+        birthplaceSummary?.maxFiveYearSexPopulationThousands ?? maxFiveYearSexPopulationThousands,
+      data: birthplaceSummary?.data ?? data,
     }
   })
 

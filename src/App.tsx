@@ -461,9 +461,15 @@ function PopulationPage() {
 
   if (!currentSummary) return null
 
-  const sourceLabel = currentSummary.status === 'observed'
-    ? 'INE ECP, dato observado a 1 de enero'
-    : 'INE Proyecciones de Poblacion, escenario a largo plazo'
+  const sourceLabel = currentSummary.hasBirthplaceBreakdown
+    ? 'INE ECP, poblacion por sexo, grupo de edad y lugar de nacimiento'
+    : currentSummary.status === 'observed'
+      ? 'INE ECP, dato observado a 1 de enero'
+      : 'INE Proyecciones de Poblacion, escenario a largo plazo'
+
+  const pyramidSubtitle = currentSummary.hasBirthplaceBreakdown
+    ? 'Poblacion por sexo, edad y lugar de nacimiento, en miles de personas'
+    : 'Poblacion por sexo y edad, en miles de personas'
 
   return (
     <main className="population-page">
@@ -513,9 +519,9 @@ function PopulationPage() {
         <PopulationPyramid
           data={currentSummary.data}
           scaleMax={POPULATION_SCALE_MAX}
-          legendVariant="sex"
+          legendVariant={currentSummary.hasBirthplaceBreakdown ? 'birthplace' : 'sex'}
           title={`Piramide poblacional de Espana, ${currentSummary.year}`}
-          subtitle="Poblacion por sexo y edad, en miles de personas"
+          subtitle={pyramidSubtitle}
         />
 
         <YearSelector
@@ -560,10 +566,10 @@ function PopulationPage() {
         </div>
 
         <p className="population-source">
-          Fuente: {sourceLabel}. Los anos 1975-2025 son observados; desde 2026
-          se muestran proyecciones oficiales. No se mezclan desgloses por
-          nacimiento con la proyeccion, por eso esta vista representa solo sexo
-          y edad.
+          Fuente: {sourceLabel}. Los anos 2002-2025 muestran nacidos en Espana
+          y nacidos en el extranjero; 1975-2001 se representa solo por sexo y
+          edad. Desde 2026 se muestran proyecciones oficiales sin desglose por
+          nacimiento.
         </p>
       </section>
     </main>
