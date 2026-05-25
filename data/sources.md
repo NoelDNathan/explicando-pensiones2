@@ -92,6 +92,36 @@
 - uso previsto en la web: mostrar el escenario demografico futuro oficial del INE para hombres y mujeres, separado de la serie historica observada.
 - nota metodologica: la tabla proyectada no publica la categoria "Ambos sexos"; no se ha calculado un total propio.
 
+## INE - Esperanza de vida restante a edades de jubilacion
+
+- nombre de la fuente: Tablas de mortalidad por ano, sexo, edad y funciones; Tablas de mortalidad proyectadas 2024-2073
+- institucion: Instituto Nacional de Estadistica (INE)
+- URLs observadas:
+  - 1975-1990: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/27150?tip=AM
+  - 1991-2024: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/27153?tip=AM
+- URL proyectada: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/36775?tip=AM
+- paginas de tabla:
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=27150
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=27153
+  - https://www.ine.es/jaxiT3/Tabla.htm?t=36775
+- fecha de descarga observada: 2026-05-25
+- fecha de descarga proyectada: 2026-05-18
+- periodo procesado combinado: 1975-2070
+- ambito geografico: Total Nacional
+- formato descargado: JSON
+- archivos brutos:
+  - `data/raw/ine/tablas-mortalidad/2026-05-25_ine_tm_tablas-mortalidad-nacional-1975-1990.json`
+  - `data/raw/ine/tablas-mortalidad/2026-05-25_ine_tm_tablas-mortalidad-nacional-1991-2024.json`
+  - `data/raw/ine/proyecciones-poblacion/tablas-mortalidad-proyectadas/2026-05-18_ine_proyecciones-poblacion_esperanza-vida-edad-sexo_2024-2073.json`
+- archivos procesados:
+  - `data/processed/ine/2026-05-25_ine_tm_esperanza-vida-restante-65-66-67-sexo-espana-observada_1975-2024.csv`
+  - `data/processed/ine/2026-05-25_ine_proyeccion-esperanza-vida-restante-65-66-67-sexo-espana_2025-2070.csv`
+  - `data/processed/ine/2026-05-25_ine_esperanza-vida-restante-65-66-67-sexo-espana-observada-proyectada_1975-2070.csv`
+- licencia o condiciones de uso: aviso legal del INE, https://www.ine.es/aviso_legal
+- descripcion breve: esperanza de vida restante, en anos, para hombres y mujeres que alcanzan 65, 66 o 67 anos.
+- uso previsto en la web: contextualizar cuantos anos de vida media quedan despues de edades habituales de jubilacion.
+- nota metodologica: no se calcula `Ambos sexos` para el tramo proyectado porque la tabla 36775 no lo publica; la serie combinada usa 2024 observado y empieza la proyeccion en 2025.
+
 ## INE - Tasa bruta de natalidad observada
 
 - nombre de la fuente: Tasa Bruta de Natalidad. Indicadores Demograficos Basicos

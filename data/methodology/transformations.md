@@ -102,6 +102,28 @@
 - Periodo resultante: 1975-2070, 192 observaciones: hombres y mujeres, observado 1975-2024 y proyectado 2025-2070.
 - Nota de definicion: no se calcula la categoria `Ambos sexos` para la proyeccion porque la tabla 36775 no la publica.
 
+## INE - esperanza de vida restante a edades de jubilacion 1975-2070
+
+- Fecha de transformacion: 2026-05-25.
+- Script reproducible: `scripts/process-ine-esperanza-vida-jubilacion-1975-2070.ps1`.
+- Fuentes procesadas:
+  - INE Tablas de Mortalidad, tabla API 27150, 1975-1990.
+  - INE Tablas de Mortalidad, tabla API 27153, 1991-2024.
+  - INE Proyecciones de Poblacion 2024-2074, tabla API 36775, bruto 2024-2073.
+- Transformacion aplicada:
+  - filtrado a la funcion `Esperanza de vida`;
+  - filtrado a edades simples 65, 66 y 67 anos;
+  - filtrado a hombres y mujeres para mantener continuidad con la proyeccion;
+  - recorte del tramo observado a 1975-2024;
+  - recorte de la proyeccion a 2025-2070 para no duplicar el ano 2024;
+  - union con columna `estado_dato`.
+- Archivos generados:
+  - `data/processed/ine/2026-05-25_ine_tm_esperanza-vida-restante-65-66-67-sexo-espana-observada_1975-2024.csv`.
+  - `data/processed/ine/2026-05-25_ine_proyeccion-esperanza-vida-restante-65-66-67-sexo-espana_2025-2070.csv`.
+  - `data/processed/ine/2026-05-25_ine_esperanza-vida-restante-65-66-67-sexo-espana-observada-proyectada_1975-2070.csv`.
+- Periodo resultante: 1975-2070, 576 observaciones: 96 anos por 3 edades de referencia por 2 sexos.
+- Nota de definicion: esta serie mide anos medios restantes al alcanzar 65, 66 o 67 anos. No calcula una edad legal dinamica de jubilacion ni `Ambos sexos` proyectado.
+
 ## IGAE - COFOG, detalle de proteccion social 1995-2024
 
 - Fecha de transformacion: 2026-05-18.
