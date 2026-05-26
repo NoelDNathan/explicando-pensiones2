@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Respondida consulta sobre fuentes para tasa de reemplazo de jubilacion 1975-2070. Fuente recomendada para proyeccion: 2024 Ageing Report, Country Fiche Spain, tabla 13, `Public scheme: old-age earnings related (RR)`, que define la tasa como pension inicial media de nuevos pensionistas sobre salario final medio antes de la jubilacion. Para historico 1975-actualidad no se ha localizado una tabla oficial publica continua con esa definicion exacta; las fuentes candidatas son Seguridad Social/MITES para pension media de altas iniciales de jubilacion y MCVL/INE EES/EPA para salarios cercanos a jubilacion, con cautela metodologica.
+
 - Respondida consulta sobre disponibilidad de salario medio de inmigrantes. Revision de inventario, fuentes, metadata y CSV procesados: el proyecto contiene `data/processed/igae/2026-05-25_igae-bdmacro_salario-medio-espana_1970-2070.csv`, una serie de salario medio macro total de Espana, pero no una serie salarial desagregada para inmigrantes, extranjeros o nacidos en el extranjero. Tambien existe poblacion por lugar de nacimiento, pero no debe combinarse con salario total para inferir salarios de inmigrantes sin fuente salarial especifica.
 
 - Anadida vista colectiva al dashboard de gasto sanitario. Se creo `scripts/process-health-collective-age-profile-2022.ps1`, que multiplica el gasto anual per capita estimado por categoria y edad por la poblacion residente media trimestral INE 2022. Genera dos CSV en `data/processed/ministerio-sanidad/` para detalle por edad y bandas de dashboard. La interfaz permite alternar entre vista individual y vista colectiva desde la cabecera y la barra lateral; en vista colectiva las barras, ranking y KPIs muestran gasto anual estimado del sistema. Verificacion: `tsc --noEmit` correcto.
@@ -243,6 +245,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
+- Si se construye una serie historica de tasa de reemplazo, decidir antes el nivel de fidelidad: exacta con microdatos MCVL desde 2004 aprox.; aproximada con altas iniciales de jubilacion Seguridad Social/MITES y salario INE por edad desde 1995/2004/2006; o proxy larga 1975-actualidad usando salario medio macro, etiquetada explicitamente como no equivalente a salario final medio.
 - Revisar visualmente `/gasto-sanitario` en escritorio y movil con navegador disponible; la comprobacion actual cubre TypeScript, build y respuesta HTTP 200, pero no captura visual.
 - Mantener claramente etiquetado el desglose sanitario por categorias como `estimado`: combina AIReF/INE 2022, pesos EGSP 2022 y perfiles relativos IGTGS 2005, no una tabla oficial categoria x edad.
 - Si se quiere separar urgencias, salud mental o cuidados de larga duracion en el panel sanitario, localizar una fuente institucional especifica y compatible por edad antes de incorporarlas.
