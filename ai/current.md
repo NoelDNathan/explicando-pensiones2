@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-05-26
+Fecha: 2026-05-27
 
 ## Situacion
 
@@ -58,6 +58,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Localizado y procesado un paquete oficial INE sobre salario medio bruto por nacionalidad. Se creo `scripts/process-ine-eaes-salario-nacionalidad-2023.ps1`, se descargaron las tablas EAES 28190 y 28202 desde el API del INE y se generaron dos CSV 2023: `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-areas_2023.csv` y `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv`. La tabla 28190 incluye Total Nacional por sexo y nacionalidad/area: Total, Espanola, UE27 sin Espana, resto de Europa, Africa, America y Otros paises. La tabla 28202 incluye comunidades autonomas por sexo y nacionalidad total/espanola/extranjera. Limitacion: no se ha localizado en tablas agregadas un desglose por pais individual; la variable es nacionalidad, no lugar de nacimiento ni condicion migratoria. Actualizados fuentes, inventario, metadata, metodologia y checksums.
+
+- Incorporada la proyeccion del Ageing Report 2024 para tasa de reemplazo de jubilacion en Espana. Se creo `scripts/process-ageing-report-replacement-rate.ps1`, que extrae del XLSX oficial ya descargado la hoja `ESb`, fila 24, `Gross replacement rate at retirement (earnings-related public pensions)`, y genera `data/processed/comision-europea/2026-05-27_ec-ageing-report_espana-tasa-reemplazo-jubilacion_2022-2070.csv`. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y `data/checksums.sha256`. Cautela: es proyeccion baseline, no historico observado, y debe mantenerse separada de cualquier reconstruccion historica.
 
 - Localizadas fuentes oficiales para tasa de paro en Espana. Fuente primaria recomendada: INE, Encuesta de Poblacion Activa (EPA), resultados nacionales de tasa de paro, con serie digital desde 1976T3 y datos actuales en INEbase/CONSUL. El INE documenta que la EPA se publica desde 1964 y es trimestral desde 1975, pero tambien que desde 1964 hasta 1976T2 solo hay datos publicados en papel y que las bases online difunden series trimestrales desde 1976T3. Criterio recomendado: usar INE EPA desde 1976T3 como serie trazable digital; si se necesita 1975, extraerlo de publicacion oficial en papel y marcarlo como tramo historico no homogeneo/no enlazado automaticamente. Eurostat puede servir como fuente armonizada/comparativa, no como fuente principal para reconstruir 1975.
 
@@ -257,7 +261,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se necesita cubrir 1975-2005 con personas pensionistas observadas, hacer una exportacion manual desde eSTADISS y documentar el CSV bruto; no usar numero de pensiones como sustituto.
 - Decidir como visualizar el nuevo CSV maestro fiscal 1975-2070 y diferenciar en la interfaz las filas `observado`, `proyectado`, `escenario`, `estimado` y `no_estimado`. PIB, gasto publico total, intereses y saldo publico 2025-2070 ya estan completados como escenario derivado, no como dato oficial tabulado.
 - Decidir si la web usara el salario medio macro BDMACRO como contexto de largo plazo o si se prefiere una serie de encuesta salarial mas estricta aunque cubra menos anos. No usar 2025-2070 como salario proyectado salvo que se localice una fuente oficial/institucional especifica o se documente una metodologia de estimacion separada.
-- Si se necesita salario medio de inmigrantes, localizar una fuente oficial/institucional con cruce salarial por nacionalidad, lugar de nacimiento u origen migratorio y documentar metadata antes de usarlo. No derivarlo del salario medio macro total ni de la poblacion por lugar de nacimiento.
+- Si se necesitan paises concretos para salario de inmigrantes/extranjeros, revisar los microdatos de la Encuesta Cuatrienal de Estructura Salarial 2022 o solicitar explotacion especifica al INE. Las tablas agregadas procesadas el 2026-05-27 solo ofrecen grandes areas de nacionalidad y nacionalidad extranjera total por comunidad autonoma.
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Procesar y documentar la edad media de altas iniciales de jubilacion desde el libro mensual de Seguridad Social antes de mostrarla en la web; decidir si se presenta como edad efectiva de nuevas jubilaciones, por modalidad o por sexo.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.

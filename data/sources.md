@@ -72,10 +72,12 @@
 - ambito geografico procesado: Espana
 - formato descargado: XLSX
 - archivo bruto: `data/raw/comision-europea/ageing-report-2024/2026-05-25_ec_2024-ageing-report_statistical-annex-country-fiches.xlsx`
-- archivo procesado: `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv`
+- archivos procesados:
+  - `data/processed/comision-europea/2026-05-25_ec-ageing-report_espana-pensiones-sanidad-coste-envejecimiento_2022-2070.csv`
+  - `data/processed/comision-europea/2026-05-27_ec-ageing-report_espana-tasa-reemplazo-jubilacion_2022-2070.csv`
 - licencia o condiciones de uso: reutilizacion segun condiciones y aviso legal de la Comision Europea
-- descripcion breve: anexos estadisticos por pais con proyecciones 2022-2070; para Espana se extraen pensiones publicas brutas, gasto sanitario publico, coste total del envejecimiento y supuestos macro anuales de la hoja `ESa`.
-- uso previsto en la web: completar escenarios de largo plazo para sanidad, servir de contraste institucional para pensiones y alimentar una estimacion tecnica de PIB corriente futuro.
+- descripcion breve: anexos estadisticos por pais con proyecciones 2022-2070; para Espana se extraen pensiones publicas brutas, gasto sanitario publico, coste total del envejecimiento, tasa de reemplazo de jubilacion y supuestos macro anuales de la hoja `ESa`.
+- uso previsto en la web: completar escenarios de largo plazo para sanidad, servir de contraste institucional para pensiones, mostrar la tasa de reemplazo proyectada y alimentar una estimacion tecnica de PIB corriente futuro.
 - nota metodologica: son proyecciones bajo metodologia comun europea; no deben mezclarse con datos observados.
 
 ## AIReF - Anclas fiscales de la Opinion de sostenibilidad AAPP 2025
@@ -780,3 +782,27 @@
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv`
 - descripcion breve: la EGSP aporta pesos funcionales recientes y el IGTGS aporta perfiles relativos por edad para funciones sanitarias.
 - nota metodologica: el CSV derivado no es una tabla oficial categoria x edad. Reparte el total por edad AIReF/INE usando pesos EGSP 2022 e indices relativos IGTGS 2005; urgencias y salud mental no se separan por falta de cruce institucional compatible.
+
+## INE - Encuesta Anual de Estructura Salarial, salario por nacionalidad
+
+- nombre de la fuente: Encuesta Anual de Estructura Salarial. Ganancia media anual por trabajador. Sexo y nacionalidad
+- institucion: Instituto Nacional de Estadistica
+- URL tabla 28190: https://www.ine.es/jaxiT3/Tabla.htm?t=28190
+- URL API tabla 28190: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/28190?tip=AM
+- URL tabla 28202: https://www.ine.es/jaxiT3/Tabla.htm?t=28202
+- URL API tabla 28202: https://servicios.ine.es/wstempus/js/ES/DATOS_TABLA/28202?tip=AM
+- fecha de descarga: 2026-05-27
+- periodo cubierto en bruto: 2008-2023
+- periodo procesado: 2023
+- ambito geografico: Espana; tabla 28202 tambien comunidades autonomas
+- formato descargado: JSON API INE
+- archivos brutos:
+  - `data/raw/ine/encuesta-anual-estructura-salarial/salario-nacionalidad/2026-05-27_ine_eaes_tabla-28190_salario-medio-nacionalidad_2008-2023.json`
+  - `data/raw/ine/encuesta-anual-estructura-salarial/salario-nacionalidad/2026-05-27_ine_eaes_tabla-28202_salario-medio-nacionalidad-ccaa_2008-2023.json`
+- archivos procesados:
+  - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-areas_2023.csv`
+  - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv`
+- licencia o condiciones de uso: condiciones de reutilizacion de INE
+- descripcion breve: salario medio bruto anual por trabajador segun nacionalidad. La tabla 28190 permite areas de nacionalidad en Total Nacional; la tabla 28202 permite comunidades autonomas con nacionalidad total, espanola y extranjera.
+- uso previsto en la web: explicar diferencias salariales observadas entre trabajadores de nacionalidad espanola y extranjera, y entre grandes areas de nacionalidad.
+- nota metodologica: la fuente mide nacionalidad juridica, no lugar de nacimiento ni condicion migratoria. No se ha localizado en las tablas agregadas una desagregacion por pais individual; para paises concretos harian falta microdatos o una explotacion a medida y control de secreto estadistico.

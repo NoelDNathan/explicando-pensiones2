@@ -1,5 +1,21 @@
 # Transformaciones de datos
 
+## Comision Europea Ageing Report 2024 - tasa de reemplazo de jubilacion 2022-2070
+
+- Fecha de transformacion: 2026-05-27.
+- Script reproducible: `scripts/process-ageing-report-replacement-rate.ps1`.
+- Fuente bruta: `data/raw/comision-europea/ageing-report-2024/2026-05-25_ec_2024-ageing-report_statistical-annex-country-fiches.xlsx`.
+- Hoja utilizada: `ESb`.
+- Fila utilizada: 24, `Gross replacement rate at retirement (earnings-related public pensions)`.
+- Columnas utilizadas: anos 2022-2070 de la fila de cabecera 6.
+- Transformacion aplicada:
+  - lectura directa del XLSX mediante el XML interno del libro;
+  - validacion de la etiqueta de fila esperada antes de exportar;
+  - exportacion anual a CSV con `valor_pct`, `estado_dato = proyectado`, escenario `Ageing Report 2024 baseline` y nota de definicion.
+- Archivo generado: `data/processed/comision-europea/2026-05-27_ec-ageing-report_espana-tasa-reemplazo-jubilacion_2022-2070.csv`.
+- Definicion: pension inicial media de nuevos pensionistas sobre salario final medio antes de la jubilacion.
+- Limitacion: proyeccion europea baseline; no es dato observado historico, no incluye planes privados y no debe unirse a una reconstruccion historica sin marcar ruptura metodologica.
+
 ## AIReF/INE, gasto sanitario por edad 2022
 
 - Fecha de transformacion: 2026-05-25.
@@ -551,3 +567,22 @@
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-edad_airef-egsp-ine_2022.csv`.
   - `data/processed/ministerio-sanidad/2026-05-25_estimacion-gasto-sanitario-sistema-categoria-bandas-dashboard_airef-egsp-ine_2022.csv`.
 - Nota de definicion: esta vista es gasto anual estimado del sistema, no gasto vital esperado. No sustituye a la EGSP oficial, porque el reparto edad x categoria sigue siendo una estimacion propia.
+
+## INE - salario medio bruto por nacionalidad 2023
+
+- Fecha de transformacion: 2026-05-27.
+- Script reproducible: `scripts/process-ine-eaes-salario-nacionalidad-2023.ps1`.
+- Fuente bruta:
+  - INE Encuesta Anual de Estructura Salarial, tabla 28190, salario medio bruto por sexo y nacionalidad para Total Nacional.
+  - INE Encuesta Anual de Estructura Salarial, tabla 28202, salario medio bruto por comunidad autonoma, sexo y nacionalidad.
+- Transformacion aplicada:
+  - descarga de JSON desde el API oficial del INE;
+  - conservacion de brutos en `data/raw/ine/encuesta-anual-estructura-salarial/salario-nacionalidad/`;
+  - filtrado al ano 2023, ultimo dato definitivo disponible en la EAES descargada;
+  - normalizacion de campos `ano`, `ambito`, `territorio`, `sexo`, `nacionalidad`, `salario_medio_bruto_eur_anuales`, `unidad`, `estado_dato`, `tipo_dato_ine` y `fuente`;
+  - conversion a punto decimal;
+  - cuando INE publica un valor con signo negativo para senalar entre 100 y 500 observaciones muestrales, se guarda el valor absoluto como salario y se marca `nota_muestral = observaciones_100_500_cifra_gran_variabilidad`, conservando el valor original en `valor_original_ine`.
+- Archivos generados:
+  - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-areas_2023.csv`.
+  - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv`.
+- Nota de definicion: es salario medio bruto anual por trabajador segun nacionalidad juridica. No es salario por pais de nacimiento, origen migratorio ni inmigracion observada. Las tablas agregadas localizadas no ofrecen pais individual; solo Espana y grandes areas de nacionalidad en Total Nacional, y espanola/extranjera por comunidad autonoma.
