@@ -9,6 +9,7 @@ import type { IndicatorItem } from './components/KeyIndicatorsPanel'
 import { YearSelector } from './components/YearSelector'
 import { ReformSimulator } from './components/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/HealthExpenditureDashboard'
+import { SalaryNationalityDashboard } from './components/SalaryNationalityDashboard'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -475,6 +476,8 @@ function Home() {
         laboratorio interno en <a href="/componentes">/componentes</a>, ver la
         pagina de poblacion en <a href="/poblacion">/poblacion</a> o el panel
         de gasto sanitario en <a href="/gasto-sanitario">/gasto-sanitario</a>.
+        Tambien puedes abrir la infografia salarial en{' '}
+        <a href="/salario-nacionalidad">/salario-nacionalidad</a>.
       </p>
     </main>
   )
@@ -643,10 +646,12 @@ function App() {
   const isComponentLab = path === '/componentes'
   const isPopulationPage = path === '/poblacion'
   const isHealthPage = path === '/gasto-sanitario'
+  const isSalaryNationalityPage = path === '/salario-nacionalidad'
 
   if (isComponentLab) return <ComponentLab />
   if (isPopulationPage) return <PopulationPage />
   if (isHealthPage) return <HealthExpenditurePage />
+  if (isSalaryNationalityPage) return <SalaryNationalityDashboard />
   return <Home />
 }
 
