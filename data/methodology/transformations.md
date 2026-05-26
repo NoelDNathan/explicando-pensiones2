@@ -586,3 +586,20 @@
   - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-areas_2023.csv`.
   - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv`.
 - Nota de definicion: es salario medio bruto anual por trabajador segun nacionalidad juridica. No es salario por pais de nacimiento, origen migratorio ni inmigracion observada. Las tablas agregadas localizadas no ofrecen pais individual; solo Espana y grandes areas de nacionalidad en Total Nacional, y espanola/extranjera por comunidad autonoma.
+
+## INE - tasa de paro anual EPA 1977-2025
+
+- Fecha de transformacion: 2026-05-27.
+- Script reproducible: `scripts/process-ine-epa-tasa-paro-anual-1977-2025.ps1`.
+- Fuente principal:
+  - INE EPA, tabla anual 65995, `Tasas de paro por sexo y grupo de edad`, media de los cuatro trimestres del ano.
+  - INE CONSUL, serie trimestral `EPA423474`, tasa de paro de la poblacion, Total Nacional, ambos sexos, total.
+  - INE, series anteriores a 2005 y reestimacion de series de paro 1976-2000 como fuentes historicas candidatas.
+- Transformacion aplicada:
+  - se genera una tabla de cobertura anual completa de 1977 a 2025;
+  - se rellenan 2006-2023 con valores anuales INE ya localizados en la serie anual;
+  - se calculan 2024 y 2025 como media aritmetica simple de las cuatro tasas trimestrales INE disponibles;
+  - se dejan 1977-2005 sin valor numerico y con `estado_dato = pendiente`.
+- Archivo generado:
+  - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv`.
+- Nota de definicion: el bruto historico descargado `epa_enla7600_tot.xls` contiene parados reestimados 1976-2000, pero no contiene tasas de paro ni activos; por tanto no basta para calcular una tasa de paro anual. El tramo 1977-2005 no debe usarse editorialmente hasta extraer una tabla oficial de tasas o combinar parados y activos oficiales con metodologia documentada.

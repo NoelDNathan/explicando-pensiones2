@@ -25,6 +25,24 @@
 - uso previsto en la web: explicar la diferencia entre pensionistas-personas y pensiones, y permitir una vista demografica de largo plazo con `estado_dato` visible.
 - nota metodologica: no se rellenan 1975-2005 con numero de pensiones porque una persona puede cobrar varias pensiones; eSTADISS requiere consulta/exportacion parametrizada y captcha, por lo que queda pendiente incorporar una descarga manual si publica personas para ese tramo.
 
+## Seguridad Social - Muestra Continua de Vidas Laborales (MCVL)
+
+- nombre de la fuente candidata: Muestra Continua de Vidas Laborales (MCVL)
+- institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones
+- URL pagina: https://portaldatos.seg-social.gob.es/mcvl
+- URL guia MCVL: https://www.seg-social.es/descarga/es/190489
+- URL ediciones disponibles: https://www.seg-social.es/descarga/es/176283
+- fecha de revision: 2026-05-27
+- periodo candidato: 2004-2024 para MCVL sin datos fiscales, segun documento oficial de ediciones disponibles
+- ambito geografico: Espana
+- formato: microdatos anonimizados bajo solicitud/acceso de investigacion; no hay microdatos locales en el repositorio
+- archivo procesado de cobertura: `data/processed/seguridad-social/2026-05-27_mcvl_tasa-reemplazo-cobertura-candidata_2004-2024.csv`
+- metodologia preparada: `data/methodology/mcvl-tasa-reemplazo.md`
+- licencia o condiciones de uso: acceso a microdatos bajo condiciones de Seguridad Social; no reutilizar datos individuales ni intentar identificar personas
+- descripcion breve: fuente candidata para reconstruir una tasa observada de reemplazo enlazando pension inicial o pension efectiva reconocida con bases de cotizacion previas de la misma persona.
+- uso previsto en la web: posible tramo observado reconstruido de tasa de reemplazo, separado del escenario Ageing Report.
+- nota metodologica: sin microdatos no se calcula ningun valor. La guia indica que la tabla de bases de cotizacion recoge bases mensuales y que la variable de pension efectiva se conserva desde 1996 en la base administrativa, con advertencia especifica para la edicion 2004.
+
 ## IGAE/SEPG - BDMACRO, principales series fiscales de AAPP
 
 - nombre de la fuente: Base de datos anuales de la economia espanola BDMACRO, cuadro 23-A Cuentas de las AAPP agregadas
@@ -806,3 +824,26 @@
 - descripcion breve: salario medio bruto anual por trabajador segun nacionalidad. La tabla 28190 permite areas de nacionalidad en Total Nacional; la tabla 28202 permite comunidades autonomas con nacionalidad total, espanola y extranjera.
 - uso previsto en la web: explicar diferencias salariales observadas entre trabajadores de nacionalidad espanola y extranjera, y entre grandes areas de nacionalidad.
 - nota metodologica: la fuente mide nacionalidad juridica, no lugar de nacimiento ni condicion migratoria. No se ha localizado en las tablas agregadas una desagregacion por pais individual; para paises concretos harian falta microdatos o una explotacion a medida y control de secreto estadistico.
+
+## INE - Encuesta de Poblacion Activa, tasa de paro anual
+
+- nombre de la fuente: Encuesta de Poblacion Activa. Media de los cuatro trimestres del ano. Tasas de paro por sexo y grupo de edad
+- institucion: Instituto Nacional de Estadistica
+- URL tabla anual actual 65995: https://www.ine.es/jaxiT3/Tabla.htm?t=65995
+- URL tabla anual comunidades 66055: https://www.ine.es/jaxiT3/Tabla.htm?t=66055
+- URL serie trimestral CONSUL EPA423474: https://ine.es/consul/serie.do?d=true&s=EPA423474
+- URL series anteriores a 2005: https://www.ine.es/inebaseDYN/epa30308_p2001/epa_series_anteriores2005.htm
+- URL reestimacion paro EPA 1976-2000: https://www.ine.es/daco/daco42/daco4211/epa_reest_paro.htm
+- URL bruto descargado reestimacion 1976-2000: https://www.ine.es/daco/daco42/daco4211/epa_enla7600_tot.xls
+- fecha de descarga/extraccion: 2026-05-27
+- periodo objetivo: 1977-2025, anos completos con cuatro trimestres disponibles conceptualmente
+- periodo con valores extraidos localmente: 2006-2025
+- ambito geografico: Total Nacional, Espana
+- formato: XLS historico descargado; valores anuales y trimestrales documentados desde INEbase/CONSUL
+- archivo bruto:
+  - `data/raw/ine/epa/tasa-paro/2026-05-27_ine_epa_reestimacion-paro-1976-2000_total-nacional.xls`
+- archivo procesado:
+  - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv`
+- licencia o condiciones de uso: condiciones generales de reutilizacion del INE
+- descripcion breve: tasa de paro EPA, Total Nacional, ambos sexos y edad total. La tabla anual del INE se define como media de los cuatro trimestres del ano.
+- nota metodologica: el bruto historico de reestimacion 1976-2000 contiene parados, no tasas ni activos. Por eso el CSV deja 1977-2005 como `pendiente` hasta extraer una fuente historica oficial de tasa o los activos necesarios para calcularla.

@@ -50,6 +50,9 @@ f05560e042b1425dd6d56e9472b6f7a95f0c4542efcb7362a2c02224abb00e75  data\processed
 a6898822456f1766b656317d097d8c3f4c7865c866c94b9258c29539f75bb4ba  data\processed\ine\2026-05-25_ine_modelo-cohortes-poblacion-nacimiento-sexo-grupo-edad_2026-2070.csv
 ef08019aa7afb2105916cdb415677a6f2a9fb6ebf6471c6788b449bc8337a55e  data\processed\ine\2026-05-25_ine_proyeccion-esperanza-vida-restante-65-66-67-sexo-espana_2025-2070.csv
 f2c78fe2ef211033ef96463eed2ceed572f1497c171cfb5d6a9bb28e6d921749  data\processed\ine\2026-05-25_ine_tm_esperanza-vida-restante-65-66-67-sexo-espana-observada_1975-2024.csv
+8bb4d226ccf308d8299e556d9b978a5460db3865466cf644dc5b1f954949b353  data\processed\ine\2026-05-27_ine_eaes_salario-medio-nacionalidad-areas_2023.csv
+f8f1c91973967d3e53806cfaba50dc3b38624fc1c583b8d5015f27c3041d0418  data\processed\ine\2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv
+1c6ee7cd50f5dbf6f79d32139cf8cfad04a496a0ab81c721a6692144d64febe6  data\processed\ine\2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv
 697b02142397abe031c64f2b6454a3c3e9ddf367c39c612ef3f4a1f2e59725d9  data\processed\ine\esperanza-vida-nacimiento-espana-1975-2024.csv
 bba4586f583ccd69967ff97c200fc610f85b43f6069a699075f89ccf345f6ef9  data\processed\ministerio-sanidad\2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv
 98a0b2d3a82f993fdd7ad11a30a9fed245c9cd423ddba1973275d0c5de062cc3  data\processed\ministerio-sanidad\2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv
@@ -64,6 +67,7 @@ d116320345244652077073be2b4baa60a8573eb622c497695cf0196696973b42  data\processed
 75fc7f1887a312a406c6b32d2eddf2944d0f72f9efe78d2b9df30deacbf16855  data\processed\seguridad-social\2026-05-25_modelo-demografico_pensionistas-personas_2027-2070.csv
 126b990077cf9885986d9c299396d0d95c3bb8b7a0faca749b647f9431531084  data\processed\seguridad-social\2026-05-25_seguridad-social_pensionistas-personas-observado_2006-2026.csv
 a9848ac163d229702c531c5300ff57ccd6f636d859874099d079f231afb03878  data\processed\seguridad-social\2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv
+1584990756d20c46c85ab7ff882e89df475ffc1e83be38ac1a55c408b5ec8e8c  data\processed\seguridad-social\2026-05-27_mcvl_tasa-reemplazo-cobertura-candidata_2004-2024.csv
 0f646f4d6d9a15f54de5be8e2c46bb68747d8c2193308ecc19284f232e9d6bbb  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_historico-previsiones-deuda.xlsx
 64aa5cd10873b8d490104070a1a5e6871f4f9645d9fc9639f6b89dbaa0e97c16  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf
 610017bc051835329829d942340cfc2275a9b338eca74bcd9513f5a862eeec40  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_observatorio-deuda-junio-2025.pdf
@@ -93,6 +97,9 @@ d11fc41cee490ba2652f87ff76ed0649098513f7aaa18e761174e5dc90858c95  data\raw\imser
 4108f2a5ba14e3054a9d78a86180760a6c21f54d37b6f0b6dac5aa9f5c09c569  data\raw\imserso\pnc\2026-05-25_imserso_pagina-evolucion-nominas-pnc-pspd.html
 7b12c74321696f971b85a22e01f19de068bc1b477ac7cc5ff1139798b34675f4  data\raw\ine\2026-05-18_ine_ipc-indice-general-nacional.csv
 4072692bd0963a3da62790f34e383a061edea53a8abce9a5e845ed39cd8fef4b  data\raw\ine\2026-05-18_ine_ipc-tasa-variacion-indice-general-nacional.csv
+1cd6e9c1291bd3ced9be0820b8faebdd504e90b90e42a011e28ff29104e1f267  data\raw\ine\encuesta-anual-estructura-salarial\salario-nacionalidad\2026-05-27_ine_eaes_tabla-28190_salario-medio-nacionalidad_2008-2023.json
+8ba19ac458844a5e2399220c3df0d0d3c8a4672f0579088c1fd927e6b5c77328  data\raw\ine\encuesta-anual-estructura-salarial\salario-nacionalidad\2026-05-27_ine_eaes_tabla-28202_salario-medio-nacionalidad-ccaa_2008-2023.json
+c8d551f5d272b7e4410260791a90935c6de784952c5c21abf7fe224b64671311  data\raw\ine\epa\tasa-paro\2026-05-27_ine_epa_reestimacion-paro-1976-2000_total-nacional.xls
 be09ff0327c0499b30d704509f106c343ab1dd0db190e663e27fbf02696e8e06  data\raw\ine\estadistica-continua-poblacion\poblacion-nacimiento\2026-05-24_ine_ecp_poblacion-residente-sexo-grupo-edad-pais-nacimiento_2002-2025.json
 62e4b00899a8b2b42f79b51b8c051e5000a97567f0fff0de495e8b5db8d26bfa  data\raw\ine\estadistica-continua-poblacion\poblacion-residente\2026-05-18_ine_ecp_poblacion-residente-sexo-edad_1971-2025.json
 34cf8b0d473241b618bd8c3a8249463a381d95cfd9a1df8db170ecfa84efd33b  data\raw\ine\indicadores-demograficos-basicos\2026-05-18_ine_idb_esperanza-vida-nacimiento_sexo_total-nacional_1975-2024.json
