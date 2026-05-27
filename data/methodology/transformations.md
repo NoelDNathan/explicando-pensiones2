@@ -606,6 +606,26 @@
   - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv`.
 - Nota de definicion: el CSV trimestral es la base recomendada para web. La columna `fuente_segmento` debe conservarse o explicarse porque la serie combina segmentos oficiales historicos y actuales. La media anual se calcula con tasas trimestrales publicadas ya redondeadas, por lo que puede diferir en una centesima de tablas anuales INE calculadas internamente.
 
+## Seguridad Social - Fondo de Reserva 2000-2024
+
+- Fecha de transformacion: 2026-05-27.
+- Script reproducible: `scripts/process-seguridad-social-fondo-reserva-2000-2024.ps1`.
+- Fuentes brutas:
+  - Seguridad Social, Informe a las Cortes Generales del Fondo de Reserva 2011.
+  - Seguridad Social, Informe a las Cortes Generales del Fondo de Reserva 2017.
+  - Seguridad Social, Informe a las Cortes Generales del Fondo de Reserva 2024.
+- Transformacion aplicada:
+  - descarga y conservacion de los PDFs oficiales en `data/raw/seguridad-social/fondo-reserva/`;
+  - transcripcion de la evolucion anual de dotaciones, rendimientos netos, disposiciones y saldo de cierre;
+  - calculo de `entradas_total_millones_eur` como suma de dotaciones y rendimientos netos;
+  - calculo de `variacion_saldo_millones_eur` como entradas menos disposiciones;
+  - conservacion de la fuente usada para cada tramo anual;
+  - recalculo de `data/checksums.sha256`.
+- Archivo generado:
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_fondo-reserva-dotaciones-disposiciones-saldo_2000-2024.csv`.
+- Periodo resultante: 2000-2024.
+- Nota de definicion: los importes estan redondeados a millones de euros. El Fondo de Reserva se crea en 2000, por lo que no se generan filas anteriores. El saldo es el valor del Fondo a precio de adquisicion al cierre del ejercicio.
+
 ## Seguridad Social / BOE - edad legal y efectiva de jubilacion 1975-2026
 
 - Fecha de transformacion: 2026-05-27.

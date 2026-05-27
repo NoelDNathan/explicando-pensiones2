@@ -49,7 +49,8 @@ function Get-LegalAge($year) {
   $item = $transition[$year]
   $wholeYears = 65 + [math]::Floor($item.Months / 12)
   $months = $item.Months % 12
-  $text = if ($months -eq 0) { "$wholeYears anos" } else { "$wholeYears anos y $months meses" }
+  $monthText = if ($months -eq 1) { "1 mes" } else { "$months meses" }
+  $text = if ($months -eq 0) { "$wholeYears anos" } else { "$wholeYears anos y $monthText" }
 
   return @{
     GeneralYears = 65 + ($item.Months / 12)
