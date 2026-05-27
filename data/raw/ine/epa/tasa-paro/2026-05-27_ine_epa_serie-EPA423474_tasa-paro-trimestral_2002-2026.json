@@ -1,0 +1,295 @@
+{"COD":"EPA423474", "Nombre":"Total Nacional. Tasa de paro de la población. Ambos sexos. Total. ", "Unidad":{"Id":135, "Nombre":"Tasas", "Codigo":null, "Abrev":null}
+, "Escala":{"Id":1, "Nombre":" ", "Factor":"1E0", "Codigo":null, "Abrev":null}
+, "Notas":[{"texto" : "https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176918&menu=ultiDatos&idp=1254735976595#~#https://www.ine.es/consul/serie.do?s=EPA815&nult=100&TB_iframe=true&position=center&width=700&height=500&L=0&nocab=1", "Fk_TipoNota" : 6, "Nombre_TipoNota" : "URLFMI", "textoTipo" : null}], "Data":[{"Fecha":1009839600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2002, "NombrePeriodo":"2002T1", "CodigoPeriodo":"2002I", "Valor":11.55, "Secreto":false}
+,{"Fecha":1017612000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2002, "NombrePeriodo":"2002T2", "CodigoPeriodo":"2002II", "Valor":11.15, "Secreto":false}
+,{"Fecha":1025474400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2002, "NombrePeriodo":"2002T3", "CodigoPeriodo":"2002III", "Valor":11.49, "Secreto":false}
+,{"Fecha":1033423200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2002, "NombrePeriodo":"2002T4", "CodigoPeriodo":"2002IV", "Valor":11.61, "Secreto":false}
+,{"Fecha":1041375600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2003, "NombrePeriodo":"2003T1", "CodigoPeriodo":"2003I", "Valor":11.99, "Secreto":false}
+,{"Fecha":1049148000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2003, "NombrePeriodo":"2003T2", "CodigoPeriodo":"2003II", "Valor":11.28, "Secreto":false}
+,{"Fecha":1057010400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2003, "NombrePeriodo":"2003T3", "CodigoPeriodo":"2003III", "Valor":11.3, "Secreto":false}
+,{"Fecha":1064959200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2003, "NombrePeriodo":"2003T4", "CodigoPeriodo":"2003IV", "Valor":11.37, "Secreto":false}
+,{"Fecha":1072911600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2004, "NombrePeriodo":"2004T1", "CodigoPeriodo":"2004I", "Valor":11.5, "Secreto":false}
+,{"Fecha":1080770400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2004, "NombrePeriodo":"2004T2", "CodigoPeriodo":"2004II", "Valor":11.09, "Secreto":false}
+,{"Fecha":1088632800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2004, "NombrePeriodo":"2004T3", "CodigoPeriodo":"2004III", "Valor":10.74, "Secreto":false}
+,{"Fecha":1096581600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2004, "NombrePeriodo":"2004T4", "CodigoPeriodo":"2004IV", "Valor":10.53, "Secreto":false}
+,{"Fecha":1104534000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2005, "NombrePeriodo":"2005T1", "CodigoPeriodo":"2005I", "Valor":10.17, "Secreto":false}
+,{"Fecha":1112306400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2005, "NombrePeriodo":"2005T2", "CodigoPeriodo":"2005II", "Valor":9.32, "Secreto":false}
+,{"Fecha":1120168800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2005, "NombrePeriodo":"2005T3", "CodigoPeriodo":"2005III", "Valor":8.41, "Secreto":false}
+,{"Fecha":1128117600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2005, "NombrePeriodo":"2005T4", "CodigoPeriodo":"2005IV", "Valor":8.71, "Secreto":false}
+,{"Fecha":1136070000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2006, "NombrePeriodo":"2006T1", "CodigoPeriodo":"2006I", "Valor":9.03, "Secreto":false}
+,{"Fecha":1143842400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2006, "NombrePeriodo":"2006T2", "CodigoPeriodo":"2006II", "Valor":8.44, "Secreto":false}
+,{"Fecha":1151704800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2006, "NombrePeriodo":"2006T3", "CodigoPeriodo":"2006III", "Valor":8.08, "Secreto":false}
+,{"Fecha":1159653600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2006, "NombrePeriodo":"2006T4", "CodigoPeriodo":"2006IV", "Valor":8.26, "Secreto":false}
+,{"Fecha":1167606000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2007, "NombrePeriodo":"2007T1", "CodigoPeriodo":"2007I", "Valor":8.42, "Secreto":false}
+,{"Fecha":1175378400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2007, "NombrePeriodo":"2007T2", "CodigoPeriodo":"2007II", "Valor":7.93, "Secreto":false}
+,{"Fecha":1183240800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2007, "NombrePeriodo":"2007T3", "CodigoPeriodo":"2007III", "Valor":8.01, "Secreto":false}
+,{"Fecha":1191189600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2007, "NombrePeriodo":"2007T4", "CodigoPeriodo":"2007IV", "Valor":8.57, "Secreto":false}
+,{"Fecha":1199142000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2008, "NombrePeriodo":"2008T1", "CodigoPeriodo":"2008I", "Valor":9.6, "Secreto":false}
+,{"Fecha":1207000800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2008, "NombrePeriodo":"2008T2", "CodigoPeriodo":"2008II", "Valor":10.36, "Secreto":false}
+,{"Fecha":1214863200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2008, "NombrePeriodo":"2008T3", "CodigoPeriodo":"2008III", "Valor":11.23, "Secreto":false}
+,{"Fecha":1222812000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2008, "NombrePeriodo":"2008T4", "CodigoPeriodo":"2008IV", "Valor":13.79, "Secreto":false}
+,{"Fecha":1230764400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2009, "NombrePeriodo":"2009T1", "CodigoPeriodo":"2009I", "Valor":17.24, "Secreto":false}
+,{"Fecha":1238536800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2009, "NombrePeriodo":"2009T2", "CodigoPeriodo":"2009II", "Valor":17.77, "Secreto":false}
+,{"Fecha":1246399200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2009, "NombrePeriodo":"2009T3", "CodigoPeriodo":"2009III", "Valor":17.75, "Secreto":false}
+,{"Fecha":1254348000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2009, "NombrePeriodo":"2009T4", "CodigoPeriodo":"2009IV", "Valor":18.66, "Secreto":false}
+,{"Fecha":1262300400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2010, "NombrePeriodo":"2010T1", "CodigoPeriodo":"2010I", "Valor":19.84, "Secreto":false}
+,{"Fecha":1270072800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2010, "NombrePeriodo":"2010T2", "CodigoPeriodo":"2010II", "Valor":19.89, "Secreto":false}
+,{"Fecha":1277935200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2010, "NombrePeriodo":"2010T3", "CodigoPeriodo":"2010III", "Valor":19.59, "Secreto":false}
+,{"Fecha":1285884000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2010, "NombrePeriodo":"2010T4", "CodigoPeriodo":"2010IV", "Valor":20.11, "Secreto":false}
+,{"Fecha":1293836400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2011, "NombrePeriodo":"2011T1", "CodigoPeriodo":"2011I", "Valor":21.08, "Secreto":false}
+,{"Fecha":1301608800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2011, "NombrePeriodo":"2011T2", "CodigoPeriodo":"2011II", "Valor":20.64, "Secreto":false}
+,{"Fecha":1309471200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2011, "NombrePeriodo":"2011T3", "CodigoPeriodo":"2011III", "Valor":21.28, "Secreto":false}
+,{"Fecha":1317420000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2011, "NombrePeriodo":"2011T4", "CodigoPeriodo":"2011IV", "Valor":22.56, "Secreto":false}
+,{"Fecha":1325372400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2012, "NombrePeriodo":"2012T1", "CodigoPeriodo":"2012I", "Valor":24.19, "Secreto":false}
+,{"Fecha":1333231200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2012, "NombrePeriodo":"2012T2", "CodigoPeriodo":"2012II", "Valor":24.4, "Secreto":false}
+,{"Fecha":1341093600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2012, "NombrePeriodo":"2012T3", "CodigoPeriodo":"2012III", "Valor":24.79, "Secreto":false}
+,{"Fecha":1349042400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2012, "NombrePeriodo":"2012T4", "CodigoPeriodo":"2012IV", "Valor":25.77, "Secreto":false}
+,{"Fecha":1356994800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2013, "NombrePeriodo":"2013T1", "CodigoPeriodo":"2013I", "Valor":26.94, "Secreto":false}
+,{"Fecha":1364767200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2013, "NombrePeriodo":"2013T2", "CodigoPeriodo":"2013II", "Valor":26.06, "Secreto":false}
+,{"Fecha":1372629600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2013, "NombrePeriodo":"2013T3", "CodigoPeriodo":"2013III", "Valor":25.65, "Secreto":false}
+,{"Fecha":1380578400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2013, "NombrePeriodo":"2013T4", "CodigoPeriodo":"2013IV", "Valor":25.73, "Secreto":false}
+,{"Fecha":1388530800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2014, "NombrePeriodo":"2014T1", "CodigoPeriodo":"2014I", "Valor":25.93, "Secreto":false}
+,{"Fecha":1396303200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2014, "NombrePeriodo":"2014T2", "CodigoPeriodo":"2014II", "Valor":24.47, "Secreto":false}
+,{"Fecha":1404165600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2014, "NombrePeriodo":"2014T3", "CodigoPeriodo":"2014III", "Valor":23.67, "Secreto":false}
+,{"Fecha":1412114400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2014, "NombrePeriodo":"2014T4", "CodigoPeriodo":"2014IV", "Valor":23.7, "Secreto":false}
+,{"Fecha":1420066800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2015, "NombrePeriodo":"2015T1", "CodigoPeriodo":"2015I", "Valor":23.78, "Secreto":false}
+,{"Fecha":1427839200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2015, "NombrePeriodo":"2015T2", "CodigoPeriodo":"2015II", "Valor":22.37, "Secreto":false}
+,{"Fecha":1435701600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2015, "NombrePeriodo":"2015T3", "CodigoPeriodo":"2015III", "Valor":21.18, "Secreto":false}
+,{"Fecha":1443650400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2015, "NombrePeriodo":"2015T4", "CodigoPeriodo":"2015IV", "Valor":20.9, "Secreto":false}
+,{"Fecha":1451602800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2016, "NombrePeriodo":"2016T1", "CodigoPeriodo":"2016I", "Valor":21.0, "Secreto":false}
+,{"Fecha":1459461600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2016, "NombrePeriodo":"2016T2", "CodigoPeriodo":"2016II", "Valor":20.0, "Secreto":false}
+,{"Fecha":1467324000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2016, "NombrePeriodo":"2016T3", "CodigoPeriodo":"2016III", "Valor":18.91, "Secreto":false}
+,{"Fecha":1475272800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2016, "NombrePeriodo":"2016T4", "CodigoPeriodo":"2016IV", "Valor":18.63, "Secreto":false}
+,{"Fecha":1483225200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2017, "NombrePeriodo":"2017T1", "CodigoPeriodo":"2017I", "Valor":18.75, "Secreto":false}
+,{"Fecha":1490997600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2017, "NombrePeriodo":"2017T2", "CodigoPeriodo":"2017II", "Valor":17.22, "Secreto":false}
+,{"Fecha":1498860000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2017, "NombrePeriodo":"2017T3", "CodigoPeriodo":"2017III", "Valor":16.38, "Secreto":false}
+,{"Fecha":1506808800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2017, "NombrePeriodo":"2017T4", "CodigoPeriodo":"2017IV", "Valor":16.55, "Secreto":false}
+,{"Fecha":1514761200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2018, "NombrePeriodo":"2018T1", "CodigoPeriodo":"2018I", "Valor":16.74, "Secreto":false}
+,{"Fecha":1522533600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2018, "NombrePeriodo":"2018T2", "CodigoPeriodo":"2018II", "Valor":15.28, "Secreto":false}
+,{"Fecha":1530396000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2018, "NombrePeriodo":"2018T3", "CodigoPeriodo":"2018III", "Valor":14.55, "Secreto":false}
+,{"Fecha":1538344800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2018, "NombrePeriodo":"2018T4", "CodigoPeriodo":"2018IV", "Valor":14.45, "Secreto":false}
+,{"Fecha":1546297200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2019, "NombrePeriodo":"2019T1", "CodigoPeriodo":"2019I", "Valor":14.7, "Secreto":false}
+,{"Fecha":1554069600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2019, "NombrePeriodo":"2019T2", "CodigoPeriodo":"2019II", "Valor":14.02, "Secreto":false}
+,{"Fecha":1561932000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2019, "NombrePeriodo":"2019T3", "CodigoPeriodo":"2019III", "Valor":13.92, "Secreto":false}
+,{"Fecha":1569880800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2019, "NombrePeriodo":"2019T4", "CodigoPeriodo":"2019IV", "Valor":13.78, "Secreto":false}
+,{"Fecha":1577833200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2020, "NombrePeriodo":"2020T1", "CodigoPeriodo":"2020I", "Valor":14.41, "Secreto":false}
+,{"Fecha":1585692000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2020, "NombrePeriodo":"2020T2", "CodigoPeriodo":"2020II", "Valor":15.33, "Secreto":false}
+,{"Fecha":1593554400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2020, "NombrePeriodo":"2020T3", "CodigoPeriodo":"2020III", "Valor":16.26, "Secreto":false}
+,{"Fecha":1601503200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2020, "NombrePeriodo":"2020T4", "CodigoPeriodo":"2020IV", "Valor":16.13, "Secreto":false}
+,{"Fecha":1609455600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2021, "NombrePeriodo":"2021T1", "CodigoPeriodo":"2021I", "Valor":16.14, "Secreto":false}
+,{"Fecha":1617228000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2021, "NombrePeriodo":"2021T2", "CodigoPeriodo":"2021II", "Valor":15.39, "Secreto":false}
+,{"Fecha":1625090400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2021, "NombrePeriodo":"2021T3", "CodigoPeriodo":"2021III", "Valor":14.71, "Secreto":false}
+,{"Fecha":1633039200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2021, "NombrePeriodo":"2021T4", "CodigoPeriodo":"2021IV", "Valor":13.44, "Secreto":false}
+,{"Fecha":1640991600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2022, "NombrePeriodo":"2022T1", "CodigoPeriodo":"2022I", "Valor":13.73, "Secreto":false}
+,{"Fecha":1648764000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2022, "NombrePeriodo":"2022T2", "CodigoPeriodo":"2022II", "Valor":12.69, "Secreto":false}
+,{"Fecha":1656626400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2022, "NombrePeriodo":"2022T3", "CodigoPeriodo":"2022III", "Valor":12.73, "Secreto":false}
+,{"Fecha":1664575200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2022, "NombrePeriodo":"2022T4", "CodigoPeriodo":"2022IV", "Valor":12.99, "Secreto":false}
+,{"Fecha":1672527600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2023, "NombrePeriodo":"2023T1", "CodigoPeriodo":"2023I", "Valor":13.38, "Secreto":false}
+,{"Fecha":1680300000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2023, "NombrePeriodo":"2023T2", "CodigoPeriodo":"2023II", "Valor":11.67, "Secreto":false}
+,{"Fecha":1688162400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2023, "NombrePeriodo":"2023T3", "CodigoPeriodo":"2023III", "Valor":11.89, "Secreto":false}
+,{"Fecha":1696111200000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2023, "NombrePeriodo":"2023T4", "CodigoPeriodo":"2023IV", "Valor":11.8, "Secreto":false}
+,{"Fecha":1704063600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2024, "NombrePeriodo":"2024T1", "CodigoPeriodo":"2024I", "Valor":12.29, "Secreto":false}
+,{"Fecha":1711922400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2024, "NombrePeriodo":"2024T2", "CodigoPeriodo":"2024II", "Valor":11.27, "Secreto":false}
+,{"Fecha":1719784800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2024, "NombrePeriodo":"2024T3", "CodigoPeriodo":"2024III", "Valor":11.21, "Secreto":false}
+,{"Fecha":1727733600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2024, "NombrePeriodo":"2024T4", "CodigoPeriodo":"2024IV", "Valor":10.61, "Secreto":false}
+,{"Fecha":1735686000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2025, "NombrePeriodo":"2025T1", "CodigoPeriodo":"2025I", "Valor":11.36, "Secreto":false}
+,{"Fecha":1743458400000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":20, "Valor":2, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"4", "Codigo":"II", "Nombre":"T2", "Nombre_largo":"Trimestre 2/"}
+, "Anyo":2025, "NombrePeriodo":"2025T2", "CodigoPeriodo":"2025II", "Valor":10.29, "Secreto":false}
+,{"Fecha":1751320800000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":21, "Valor":3, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"7", "Codigo":"III", "Nombre":"T3", "Nombre_largo":"Trimestre 3/"}
+, "Anyo":2025, "NombrePeriodo":"2025T3", "CodigoPeriodo":"2025III", "Valor":10.45, "Secreto":false}
+,{"Fecha":1759269600000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":22, "Valor":4, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"10", "Codigo":"IV", "Nombre":"T4", "Nombre_largo":"Trimestre 4/"}
+, "Anyo":2025, "NombrePeriodo":"2025T4", "CodigoPeriodo":"2025IV", "Valor":9.93, "Secreto":false}
+,{"Fecha":1767222000000, "TipoDato":{"Id":1, "Nombre":"Definitivo", "Codigo":"D"}
+, "Periodo":{"Id":19, "Valor":1, "FK_Periodicidad":3, "Dia_inicio":"1", "Mes_inicio":"1", "Codigo":"I", "Nombre":"T1", "Nombre_largo":"Trimestre 1/"}
+, "Anyo":2026, "NombrePeriodo":"2026T1", "CodigoPeriodo":"2026I", "Valor":10.83, "Secreto":false}
+]
+}

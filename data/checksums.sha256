@@ -52,7 +52,8 @@ ef08019aa7afb2105916cdb415677a6f2a9fb6ebf6471c6788b449bc8337a55e  data\processed
 f2c78fe2ef211033ef96463eed2ceed572f1497c171cfb5d6a9bb28e6d921749  data\processed\ine\2026-05-25_ine_tm_esperanza-vida-restante-65-66-67-sexo-espana-observada_1975-2024.csv
 8bb4d226ccf308d8299e556d9b978a5460db3865466cf644dc5b1f954949b353  data\processed\ine\2026-05-27_ine_eaes_salario-medio-nacionalidad-areas_2023.csv
 f8f1c91973967d3e53806cfaba50dc3b38624fc1c583b8d5015f27c3041d0418  data\processed\ine\2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv
-1c6ee7cd50f5dbf6f79d32139cf8cfad04a496a0ab81c721a6692144d64febe6  data\processed\ine\2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv
+cc5c4b132359e5a8d98112b5a0367a6d9d95e19e64ca24a9413c1cfa664e7631  data\processed\ine\2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv
+1a8c624e2c27211e97ea08c1759cd78623f7a353d92ab55389a16f42db522f3d  data\processed\ine\2026-05-27_ine_epa_tasa-paro-trimestral-espana_1976T3-2026T1.csv
 697b02142397abe031c64f2b6454a3c3e9ddf367c39c612ef3f4a1f2e59725d9  data\processed\ine\esperanza-vida-nacimiento-espana-1975-2024.csv
 bba4586f583ccd69967ff97c200fc610f85b43f6069a699075f89ccf345f6ef9  data\processed\ministerio-sanidad\2026-05-25_estimacion-gasto-sanitario-categoria-bandas-dashboard_airef-egsp-igtgs_2022.csv
 98a0b2d3a82f993fdd7ad11a30a9fed245c9cd423ddba1973275d0c5de062cc3  data\processed\ministerio-sanidad\2026-05-25_estimacion-gasto-sanitario-categoria-edad_airef-egsp-igtgs_2022.csv
@@ -68,6 +69,8 @@ d116320345244652077073be2b4baa60a8573eb622c497695cf0196696973b42  data\processed
 126b990077cf9885986d9c299396d0d95c3bb8b7a0faca749b647f9431531084  data\processed\seguridad-social\2026-05-25_seguridad-social_pensionistas-personas-observado_2006-2026.csv
 a9848ac163d229702c531c5300ff57ccd6f636d859874099d079f231afb03878  data\processed\seguridad-social\2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv
 1584990756d20c46c85ab7ff882e89df475ffc1e83be38ac1a55c408b5ec8e8c  data\processed\seguridad-social\2026-05-27_mcvl_tasa-reemplazo-cobertura-candidata_2004-2024.csv
+7bf3a87ffdc71c5c5065954d7bd36816daf600762b04336d8d8e2854121fe5cf  data\processed\seguridad-social\2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv
+aa36a8d3071de17dc5086c2264c4d0fdc2e072408f41d9088cfc93463b267bee  data\processed\seguridad-social\2026-05-27_seguridad-social_fondo-reserva-dotaciones-disposiciones-saldo_2000-2024.csv
 0f646f4d6d9a15f54de5be8e2c46bb68747d8c2193308ecc19284f232e9d6bbb  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_historico-previsiones-deuda.xlsx
 64aa5cd10873b8d490104070a1a5e6871f4f9645d9fc9639f6b89dbaa0e97c16  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf
 610017bc051835329829d942340cfc2275a9b338eca74bcd9513f5a862eeec40  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_observatorio-deuda-junio-2025.pdf
@@ -100,6 +103,9 @@ d11fc41cee490ba2652f87ff76ed0649098513f7aaa18e761174e5dc90858c95  data\raw\imser
 1cd6e9c1291bd3ced9be0820b8faebdd504e90b90e42a011e28ff29104e1f267  data\raw\ine\encuesta-anual-estructura-salarial\salario-nacionalidad\2026-05-27_ine_eaes_tabla-28190_salario-medio-nacionalidad_2008-2023.json
 8ba19ac458844a5e2399220c3df0d0d3c8a4672f0579088c1fd927e6b5c77328  data\raw\ine\encuesta-anual-estructura-salarial\salario-nacionalidad\2026-05-27_ine_eaes_tabla-28202_salario-medio-nacionalidad-ccaa_2008-2023.json
 c8d551f5d272b7e4410260791a90935c6de784952c5c21abf7fe224b64671311  data\raw\ine\epa\tasa-paro\2026-05-27_ine_epa_reestimacion-paro-1976-2000_total-nacional.xls
+8abdba1121284d7761b5ffa01e052615c0449d18d526dba71c25b155fb055e46  data\raw\ine\epa\tasa-paro\2026-05-27_ine_epa_serie-EPA423474_tasa-paro-trimestral_2002-2026.json
+4c13d841cecf980fee0afb2afbfb3a778fb73e32cb942f30f94eeafdcc342ace  data\raw\ine\epa\tasa-paro\2026-05-27_ine_epa_tabla-01011_tasas-actividad-paro-empleo_1976-1995.csv
+1912c781ce5d206b0aef336e8e8491cb4e988b710966c619e35cd858c8a11989  data\raw\ine\epa\tasa-paro\2026-05-27_ine_epa_tabla-01011_tasas-actividad-paro-empleo_1996-2004.csv
 be09ff0327c0499b30d704509f106c343ab1dd0db190e663e27fbf02696e8e06  data\raw\ine\estadistica-continua-poblacion\poblacion-nacimiento\2026-05-24_ine_ecp_poblacion-residente-sexo-grupo-edad-pais-nacimiento_2002-2025.json
 62e4b00899a8b2b42f79b51b8c051e5000a97567f0fff0de495e8b5db8d26bfa  data\raw\ine\estadistica-continua-poblacion\poblacion-residente\2026-05-18_ine_ecp_poblacion-residente-sexo-edad_1971-2025.json
 34cf8b0d473241b618bd8c3a8249463a381d95cfd9a1df8db170ecfa84efd33b  data\raw\ine\indicadores-demograficos-basicos\2026-05-18_ine_idb_esperanza-vida-nacimiento_sexo_total-nacional_1975-2024.json
@@ -162,8 +168,12 @@ ff8b07d4c9b55091dc799387137cea0d27fb97e1aea00393db9e75e100c43b56  data\raw\mites
 7782797661cec2008c55c15c2124aeb1d7037b8fd8b8d8aa44edebdcbaf6de2e  data\raw\mites\principales-series-pensiones-contributivas\2026-05-25_mites_principales-series_pensiones-total-diciembre-1981-1985.html
 b795d14436d3be06fd465c5e3b7ec2f46e2e792ef088f0d45ca4f2acd76d55e6  data\raw\seguridad-social\afiliacion\2026-05-18_seguridad-social_pagina-afiliados-medios-totales.html
 99ff7609da6dc8816b7a149055d856bfaeaa835f73a8b8d9b2d01cb24632da04  data\raw\seguridad-social\afiliacion\2026-05-18_seguridad-social_serie-afiliacion-media-regimenes_2001-2026-04.xlsx
+7ee1da0ab97314a8451d5124d57f90ced43829360a5763f1c0744f2e38440480  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2011.pdf
+b9bb7c5b638d33d6a6b56cb45a1159be3569dfd584479c007e31b29408d9b06c  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2017.pdf
+e7a117649be893faac68978d9a3d657074a1ddc815a7dba433dfb296a46b5c5c  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2024.pdf
 ab8f3f271bbd7e58ca9cf757336440874e19642a6368431f8aa48e3835721a9f  data\raw\seguridad-social\pensiones\2026-05-18_seguridad-social_libro-evolucion-mensual-pensiones_2026-04.xlsx
 494e0a1afd9e89c30f7355cfd803bbb104a4b5f9a57f023c23b07a44fc3ceb0b  data\raw\seguridad-social\pensiones\2026-05-18_seguridad-social_pagina-libro-evolucion-mensual-pensiones.html
+0e2755929311bbfd9147ecde9ba52abdfef75019220578e44140f176fa98d18e  data\raw\seguridad-social\pensiones\2026-05-27_seguridad-social_catalogo-evolucion-altas-jubilacion-edad_2022-2026.csv
 b6db06c82106a40038a223b68e66a4f7c2eb1dee33d92b30fd9a4475ef4f57a5  data\raw\seguridad-social\presupuesto-aprobado\gastos\2026-05-18_seguridad-social_c10-1_gastos-rubricas_1995-2002.xlsx
 12f31b5f27403f273da36575e386f6d30ad2057156880c9d26a24caa35a0d618  data\raw\seguridad-social\presupuesto-aprobado\gastos\2026-05-18_seguridad-social_c10-2_gastos-rubricas_2003-2010.xlsx
 648f660d5d01904da45b582334cf3a8bda87128750bfaaedbf98f0d0faedff4e  data\raw\seguridad-social\presupuesto-aprobado\gastos\2026-05-18_seguridad-social_c10-3_gastos-rubricas_2011-2018.xlsx

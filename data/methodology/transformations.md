@@ -587,19 +587,39 @@
   - `data/processed/ine/2026-05-27_ine_eaes_salario-medio-nacionalidad-ccaa_2023.csv`.
 - Nota de definicion: es salario medio bruto anual por trabajador segun nacionalidad juridica. No es salario por pais de nacimiento, origen migratorio ni inmigracion observada. Las tablas agregadas localizadas no ofrecen pais individual; solo Espana y grandes areas de nacionalidad en Total Nacional, y espanola/extranjera por comunidad autonoma.
 
-## INE - tasa de paro anual EPA 1977-2025
+## INE - tasa de paro EPA trimestral y anual 1976-2026
 
 - Fecha de transformacion: 2026-05-27.
-- Script reproducible: `scripts/process-ine-epa-tasa-paro-anual-1977-2025.ps1`.
+- Script reproducible: `scripts/process-ine-epa-tasa-paro-1976-2026.ps1`.
 - Fuente principal:
-  - INE EPA, tabla anual 65995, `Tasas de paro por sexo y grupo de edad`, media de los cuatro trimestres del ano.
+  - INE EPA, tabla historica 01011, `Tasas de actividad, paro y empleo por sexo, distintos grupos de edad y tipo de tasa`, serie 1976-1995.
+  - INE EPA, tabla historica 01011, mismo indicador, serie 1996-2004.
   - INE CONSUL, serie trimestral `EPA423474`, tasa de paro de la poblacion, Total Nacional, ambos sexos, total.
-  - INE, series anteriores a 2005 y reestimacion de series de paro 1976-2000 como fuentes historicas candidatas.
 - Transformacion aplicada:
-  - se genera una tabla de cobertura anual completa de 1977 a 2025;
-  - se rellenan 2006-2023 con valores anuales INE ya localizados en la serie anual;
-  - se calculan 2024 y 2025 como media aritmetica simple de las cuatro tasas trimestrales INE disponibles;
-  - se dejan 1977-2005 sin valor numerico y con `estado_dato = pendiente`.
-- Archivo generado:
+  - descarga de CSV PC-Axis oficiales para las dos series historicas y JSON oficial para `EPA423474`;
+  - filtrado a `ambos sexos`, `total` y `tasas de paro`;
+  - normalizacion de periodos romanizados (`TIII`, `TIV`) a `T3`, `T4`;
+  - union de segmentos: 1976T3-1995T4, 1996T1-2004T4 y 2005T1-2026T1;
+  - calculo de media anual simple solo para anos con cuatro trimestres completos, 1977-2025.
+- Archivos generados:
+  - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-trimestral-espana_1976T3-2026T1.csv`.
   - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv`.
-- Nota de definicion: el bruto historico descargado `epa_enla7600_tot.xls` contiene parados reestimados 1976-2000, pero no contiene tasas de paro ni activos; por tanto no basta para calcular una tasa de paro anual. El tramo 1977-2005 no debe usarse editorialmente hasta extraer una tabla oficial de tasas o combinar parados y activos oficiales con metodologia documentada.
+- Nota de definicion: el CSV trimestral es la base recomendada para web. La columna `fuente_segmento` debe conservarse o explicarse porque la serie combina segmentos oficiales historicos y actuales. La media anual se calcula con tasas trimestrales publicadas ya redondeadas, por lo que puede diferir en una centesima de tablas anuales INE calculadas internamente.
+
+## Seguridad Social / BOE - edad legal y efectiva de jubilacion 1975-2026
+
+- Fecha de transformacion: 2026-05-27.
+- Script reproducible: `scripts/process-seguridad-social-edad-jubilacion-1975-2026.ps1`.
+- Fuente bruta:
+  - Seguridad Social, catalogo de datos `Edad de jubilacion en el acceso a la prestacion`, CSV `Evolucion de altas iniciales de jubilacion por edades`, periodo 2022-2026.
+  - BOE, Ley 27/2011, disposicion transitoria vigesima, para el calendario gradual 2013-2027.
+- Transformacion aplicada:
+  - se descarga y conserva el CSV oficial de Seguridad Social en `data/raw/seguridad-social/pensiones/`;
+  - se extrae la fila `Edad media` para los anos publicados: 2022, 2023, 2024, 2025 y 2026 acumulado a marzo;
+  - se reconstruye la edad legal ordinaria general: 65 anos hasta 2012 y calendario gradual desde 2013;
+  - desde 2013 se conserva tambien la edad ordinaria de 65 anos condicionada a carrera larga y la cotizacion exigida para esa via;
+  - se calcula `diferencia_efectiva_menos_legal_general_anios` solo donde hay edad efectiva observada;
+  - 1975-2021 se deja sin valor efectivo y con `estado_edad_efectiva = pendiente`.
+- Archivo generado:
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv`.
+- Nota de definicion: la edad efectiva procesada mide edad media de altas iniciales de jubilacion contributiva, no edad de salida del mercado laboral ni edad media de todos los pensionistas. No se mezcla con OCDE u otras definiciones para rellenar 1975-2021. El dato de 2026 es parcial y debe presentarse como acumulado a marzo.

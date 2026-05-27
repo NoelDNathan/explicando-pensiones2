@@ -43,6 +43,24 @@
 - uso previsto en la web: posible tramo observado reconstruido de tasa de reemplazo, separado del escenario Ageing Report.
 - nota metodologica: sin microdatos no se calcula ningun valor. La guia indica que la tabla de bases de cotizacion recoge bases mensuales y que la variable de pension efectiva se conserva desde 1996 en la base administrativa, con advertencia especifica para la edicion 2004.
 
+## Seguridad Social / BOE - Edad legal y efectiva de jubilacion
+
+- nombre de la fuente observada: Edad de jubilacion en el acceso a la prestacion, evolucion de altas iniciales de jubilacion por edades
+- institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones
+- URL catalogo de datos: https://www.seg-social.es/wps/portal/wss/internet/InformacionUtil/596/2266/176210
+- URL CSV descargado: https://www.seg-social.es/descarga/es/177612
+- fecha de descarga del bruto local: 2026-05-27
+- periodo observado procesado: 2022-2026; 2026 acumulado a marzo
+- ambito geografico: Espana
+- formato descargado: CSV
+- archivo bruto: `data/raw/seguridad-social/pensiones/2026-05-27_seguridad-social_catalogo-evolucion-altas-jubilacion-edad_2022-2026.csv`
+- archivo procesado: `data/processed/seguridad-social/2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv`
+- fuente normativa: BOE, Ley 27/2011, disposicion transitoria vigesima, https://www.boe.es/buscar/act.php?id=BOE-A-2011-13242
+- licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Seguridad Social y del BOE
+- descripcion breve: tabla de cobertura anual 1975-2026 que combina edad legal ordinaria general con la edad media observada de altas iniciales de jubilacion cuando Seguridad Social la publica en el catalogo descargado.
+- uso previsto en la web: explicar la distancia entre norma y comportamiento observado reciente, dejando visibles los anos sin edad efectiva comparable.
+- nota metodologica: no se rellena 1975-2021 con OCDE ni con edad de salida del mercado laboral, porque esa variable mide otra cosa. Desde 2013 la edad legal ordinaria depende de carrera de cotizacion; el CSV conserva edad general y edad a 65 anos con carrera larga.
+
 ## IGAE/SEPG - BDMACRO, principales series fiscales de AAPP
 
 - nombre de la fuente: Base de datos anuales de la economia espanola BDMACRO, cuadro 23-A Cuentas de las AAPP agregadas
@@ -825,25 +843,53 @@
 - uso previsto en la web: explicar diferencias salariales observadas entre trabajadores de nacionalidad espanola y extranjera, y entre grandes areas de nacionalidad.
 - nota metodologica: la fuente mide nacionalidad juridica, no lugar de nacimiento ni condicion migratoria. No se ha localizado en las tablas agregadas una desagregacion por pais individual; para paises concretos harian falta microdatos o una explotacion a medida y control de secreto estadistico.
 
-## INE - Encuesta de Poblacion Activa, tasa de paro anual
+## INE - Encuesta de Poblacion Activa, tasa de paro
 
-- nombre de la fuente: Encuesta de Poblacion Activa. Media de los cuatro trimestres del ano. Tasas de paro por sexo y grupo de edad
+- nombre de la fuente: Encuesta de Poblacion Activa. Tasas de actividad, paro y empleo por sexo, distintos grupos de edad y tipo de tasa
 - institucion: Instituto Nacional de Estadistica
-- URL tabla anual actual 65995: https://www.ine.es/jaxiT3/Tabla.htm?t=65995
-- URL tabla anual comunidades 66055: https://www.ine.es/jaxiT3/Tabla.htm?t=66055
-- URL serie trimestral CONSUL EPA423474: https://ine.es/consul/serie.do?d=true&s=EPA423474
 - URL series anteriores a 2005: https://www.ine.es/inebaseDYN/epa30308_p2001/epa_series_anteriores2005.htm
-- URL reestimacion paro EPA 1976-2000: https://www.ine.es/daco/daco42/daco4211/epa_reest_paro.htm
-- URL bruto descargado reestimacion 1976-2000: https://www.ine.es/daco/daco42/daco4211/epa_enla7600_tot.xls
+- URL tabla historica 01011, serie 1976-1995: https://www.ine.es/dynt3/inebase/index.htm?type=pcaxis&path=/t22/e308/meto_02/pae/px/&file=pcaxis
+- URL CSV tabla historica 01011, serie 1976-1995: https://www.ine.es/jaxi/files/_px/es/csv_bdsc/t22/e308/meto_02/pae/px/l0/01011.csv_bdsc?nocab=1
+- URL tabla historica 01011, serie 1996-2004: https://www.ine.es/dynt3/inebase/index.htm?type=pcaxis&path=/t22/e308/meto_05/pae/px/&file=pcaxis
+- URL CSV tabla historica 01011, serie 1996-2004: https://www.ine.es/jaxi/files/_px/es/csv_bdsc/t22/e308/meto_05/pae/px/l0/01011.csv_bdsc?nocab=1
+- URL serie trimestral CONSUL EPA423474: https://ine.es/consul/serie.do?d=true&s=EPA423474
+- URL API serie trimestral CONSUL EPA423474: https://servicios.ine.es/wstempus/js/ES/DATOS_SERIE/EPA423474?det=2&nult=200
+- URL reestimacion paro EPA 1976-2000, bruto auxiliar no usado para tasas: https://www.ine.es/daco/daco42/daco4211/epa_reest_paro.htm
 - fecha de descarga/extraccion: 2026-05-27
-- periodo objetivo: 1977-2025, anos completos con cuatro trimestres disponibles conceptualmente
-- periodo con valores extraidos localmente: 2006-2025
+- periodo procesado:
+  - trimestral: 1976T3-2026T1
+  - anual: 1977-2025
 - ambito geografico: Total Nacional, Espana
-- formato: XLS historico descargado; valores anuales y trimestrales documentados desde INEbase/CONSUL
-- archivo bruto:
+- formato: CSV PC-Axis oficial INE y JSON API INE
+- archivos brutos:
+  - `data/raw/ine/epa/tasa-paro/2026-05-27_ine_epa_tabla-01011_tasas-actividad-paro-empleo_1976-1995.csv`
+  - `data/raw/ine/epa/tasa-paro/2026-05-27_ine_epa_tabla-01011_tasas-actividad-paro-empleo_1996-2004.csv`
+  - `data/raw/ine/epa/tasa-paro/2026-05-27_ine_epa_serie-EPA423474_tasa-paro-trimestral_2002-2026.json`
   - `data/raw/ine/epa/tasa-paro/2026-05-27_ine_epa_reestimacion-paro-1976-2000_total-nacional.xls`
-- archivo procesado:
+- archivos procesados:
+  - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-trimestral-espana_1976T3-2026T1.csv`
   - `data/processed/ine/2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv`
 - licencia o condiciones de uso: condiciones generales de reutilizacion del INE
-- descripcion breve: tasa de paro EPA, Total Nacional, ambos sexos y edad total. La tabla anual del INE se define como media de los cuatro trimestres del ano.
-- nota metodologica: el bruto historico de reestimacion 1976-2000 contiene parados, no tasas ni activos. Por eso el CSV deja 1977-2005 como `pendiente` hasta extraer una fuente historica oficial de tasa o los activos necesarios para calcularla.
+- descripcion breve: tasa de paro EPA, Total Nacional, ambos sexos y edad total. El CSV trimestral es la serie principal para web; el anual se calcula como media simple de los cuatro trimestres oficiales.
+- nota metodologica: la serie procesada combina segmentos oficiales con columna `fuente_segmento`: historica 1976-1995, historica 1996-2004 y CONSUL desde 2005. El XLS de reestimacion de paro 1976-2000 queda como bruto auxiliar porque contiene parados, no tasas.
+
+## Seguridad Social - Fondo de Reserva
+
+- nombre de la fuente: Informes a las Cortes Generales del Fondo de Reserva de la Seguridad Social
+- institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones
+- pagina oficial: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/FondoReserva
+- URL informe 2024: https://www.seg-social.es/descarga/en/15072025_Report%20to%20Parliament%202024
+- URL informe 2011: https://www.seg-social.es/descarga/es/166080
+- URL informe 2017: https://www.seg-social.es/descarga/es/20180719FR2017DI
+- fecha de descarga: 2026-05-27
+- periodo procesado: 2000-2024
+- formato descargado: PDF
+- archivos brutos:
+  - `data/raw/seguridad-social/fondo-reserva/2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2011.pdf`
+  - `data/raw/seguridad-social/fondo-reserva/2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2017.pdf`
+  - `data/raw/seguridad-social/fondo-reserva/2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2024.pdf`
+- archivo procesado:
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_fondo-reserva-dotaciones-disposiciones-saldo_2000-2024.csv`
+- licencia o condiciones de uso: condiciones de reutilizacion de la Seguridad Social y del Ministerio.
+- descripcion breve: evolucion anual de dotaciones, rendimientos netos, disposiciones y saldo de cierre del Fondo de Reserva de la Seguridad Social.
+- nota metodologica: los importes estan redondeados a millones de euros. El saldo es el valor del Fondo de Reserva a precio de adquisicion al cierre de cada ejercicio. `entradas_total_millones_eur` suma dotaciones y rendimientos netos; puede ser negativa si los rendimientos netos del ejercicio son negativos.
