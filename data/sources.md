@@ -946,6 +946,36 @@
 - descripcion breve: tomos presupuestarios con desarrollo detallado de ingresos y gastos del agregado del sistema para ejercicios concretos.
 - nota metodologica: revisada como candidata para cubrir 1975-1994. La inspeccion del Tomo I 2012 no localiza anos 1975, 1994 ni 1995 en el texto extraido y muestra pormenor del presupuesto del ejercicio 2012. La edicion 2022 tambien es un tomo de presupuesto del ejercicio, no una tabla historica homologada 1975-1994. Por ahora no sirve para extender automaticamente la serie moderna de ingresos por rubricas 1995-2025P.
 
+## SEPG/PGE - Libro Amarillo 1996, ingresos Seguridad Social
+
+- nombre de la fuente: Libro Amarillo de los Presupuestos Generales del Estado para 1996
+- institucion: Secretaria de Estado de Presupuestos y Gastos / Ministerio de Hacienda
+- URL: https://www.sepg.pap.hacienda.gob.es/sitios/sepg/es-ES/Presupuestos/PGE/PresupuestosEjerciciosAnteriores/Documents/EJERCICIO%201996/PROYECTO%201996/LIBRO%20AMARILLO%201996%20v2.pdf
+- fecha de descarga: 2026-05-28
+- periodo revisado: presupuesto inicial 1995 y presupuesto inicial 1996
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: PDF
+- archivo bruto:
+  - `data/raw/seguridad-social/ingresos-historicos-candidatos/2026-05-28_sepg-pge_libro-amarillo-1996_ingresos-seguridad-social.pdf`
+- archivo procesado derivado: ninguno.
+- descripcion breve: el apartado `VII.2. Ingresos` del presupuesto de Seguridad Social compara el presupuesto inicial 1995 y 1996 por capitulos economicos y por conceptos agregados: cotizaciones sociales, aportaciones del Estado y otros ingresos.
+- nota metodologica: fuente oficial util como ancla para 1995/1996 y para entender categorias, pero no contiene una serie anual 1975-1994. Los importes se publican en millones de pesetas.
+
+## Seguridad Social / Congreso - Informe Economico-Financiero 2017, estructura de recursos
+
+- nombre de la fuente: Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2017
+- institucion: Seguridad Social / Congreso de los Diputados
+- URL: https://www.congreso.es/docu/pge2017/seg-social/Proyecto_2017/V5T01.pdf
+- fecha de descarga: 2026-05-27
+- periodo revisado: 1980, 1990 y 2000-2017 en tabla de participacion de recursos
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: PDF
+- archivo bruto:
+  - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_congreso-pge2017_seguridad-social_informe-economico-financiero-edad-altas-jubilacion_2006-2016.pdf`
+- archivo procesado derivado: ninguno para ingresos historicos.
+- descripcion breve: contiene una tabla de participacion en el total de recursos de cotizaciones sociales, transferencias corrientes, suma de ambas y resto de ingresos.
+- nota metodologica: la tabla aporta porcentajes para 1980 y 1990, y anualmente desde 2000 hasta 2017; no aporta importes anuales 1975-1994. Sirve como contraste de estructura de financiacion, no como serie monetaria de ingresos.
+
 ## Seguridad Social - altas de jubilacion por anos cotizados
 
 - nombre de la fuente: Informes Economico-Financieros a los Presupuestos de la Seguridad Social, cuadros de altas de pensiones de jubilacion por regimenes y anos cotizados.
