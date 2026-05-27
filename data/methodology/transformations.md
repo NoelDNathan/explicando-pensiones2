@@ -679,3 +679,22 @@
 - Archivo generado:
   - `data/processed/seguridad-social/2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv`.
 - Nota de definicion: la edad efectiva procesada mide edad media de acceso/alta de jubilacion contributiva, no edad de salida del mercado laboral ni edad media de todos los pensionistas. No se mezcla con OCDE u otras definiciones para rellenar 1975-1979. El tramo 1980-2003 es una reconstruccion institucional para Regimen General con MCVL 2005 y no debe presentarse como total sistema. El dato de 2026 es parcial y debe presentarse como acumulado a marzo. EVOMOD202501 se ha localizado como PDF oficial indexado, pero la URL dinamica no se pudo descargar localmente; queda pendiente sustituir la transcripcion 2017-2021 por bruto local estable si se localiza.
+
+## Seguridad Social - altas de jubilacion por anos cotizados 2013-2021
+
+- Fecha de transformacion: 2026-05-28.
+- Script reproducible: `scripts/process-seguridad-social-carreras-cotizacion-altas-2013-2021.ps1`.
+- Fuente bruta:
+  - Informes Economico-Financieros a los Presupuestos de la Seguridad Social de 2015, 2016, 2017, 2018, 2019, 2021, 2022 y 2023.
+  - Los informes proceden de Seguridad Social o de documentacion PGE servida por Congreso de los Diputados.
+- Transformacion aplicada:
+  - descarga y conservacion de los PDFs oficiales en `data/raw/seguridad-social/carreras-cotizacion/`;
+  - transcripcion de los cuadros de altas de pensiones de jubilacion por regimenes y anos cotizados;
+  - normalizacion a formato largo con columnas de ano, corte, regimen, tramo original, porcentaje, fuente, institucion, URL y archivo bruto;
+  - conservacion de los tramos tal como aparecen en cada informe, sin estimar media ni convertir intervalos a puntos medios;
+  - creacion de una tabla de cobertura 1975-2026 para diferenciar datos procesados, tramos pendientes y tramos no localizados.
+- Archivos generados:
+  - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv`.
+  - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv`.
+- Periodo resultante: valores procesados para 2013, 2014 y 2016-2021; 2018 es dato a 30 de septiembre; 2015 y 2022-2026 quedan pendientes de extraccion/localizacion publica equivalente.
+- Nota de definicion: este dataset mide distribucion porcentual agregada de altas de jubilacion por tramos de anos cotizados. No contiene `dias cotizados`, `anos trabajados`, media exacta, mediana ni microdatos. Para dias cotizados exactos la via correcta sigue siendo microdato administrativo Seguridad Social/MCVL desde 1996, sujeto a acceso y documentacion separada.

@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-05-27
+Fecha: 2026-05-28
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Incorporada una primera extraccion oficial sobre carreras de cotizacion al jubilarse desde Informes Economico-Financieros de la Seguridad Social. Se descargaron los PDFs oficiales de los informes con tablas de altas de pensiones de jubilacion por regimenes y anos cotizados para 2013, 2014 y 2016-2021. Se creo `scripts/process-seguridad-social-carreras-cotizacion-altas-2013-2021.ps1` y el CSV largo `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv` con 245 filas. Tambien se creo `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv` para documentar que 1975-1995 no esta localizado como serie comparable, 1996-2012 queda como viable administrativo pendiente, 2015 queda pendiente y 2022-2026 requiere eSTADISS o informes recientes. La fuente publica solo da tramos porcentuales, no dias cotizados ni media exacta.
 
 - Revisada directamente la `Serie Verde: Desarrollo de ingresos y gastos` como posible fuente para extender ingresos de Seguridad Social a 1975-1994. Se descargaron los Tomos I de agregado del sistema de 2012 y 2022 en `data/raw/seguridad-social/serie-verde/`. Resultado: no resuelve la serie historica 1975-1994; el Tomo I revisado desarrolla el presupuesto del ejercicio, no una tabla anual historica homologada. En el Tomo I 2012 no aparecen 1975, 1994 ni 1995 en el texto extraido; contiene pormenor de ingresos del ejercicio 2012. Actualizados `data/sources.md` y `data/metadata.md`.
 
@@ -295,7 +297,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
-- Si se quiere un indicador de carrera laboral/cotizacion al jubilarse, decidir entre: distribucion agregada por tramos de anos cotizados desde Informes Economico-Financieros/eSTADISS; microdato MCVL desde 1996/2004 segun disponibilidad; o solicitud/acceso a sala segura para dias cotizados exactos. No construir una serie continua 1975-hoy sin fuente historica comparable para 1975-1995.
+- Para ampliar carreras de cotizacion al jubilarse, localizar/exportar 2015 y 2022-2026 en eSTADISS o informes recientes. Mantener claro que el dataset publico actual es distribucion porcentual por tramos, no dias cotizados ni media exacta. Para dias cotizados exactos, preparar una via separada con microdato administrativo/MCVL desde 1996, si se obtiene acceso.
 
 - Si se construye una serie historica de tasa de reemplazo, decidir antes el nivel de fidelidad: exacta con microdatos MCVL desde 2004 aprox.; aproximada con altas iniciales de jubilacion Seguridad Social/MITES y salario INE por edad desde 1995/2004/2006; o proxy larga 1975-actualidad usando salario medio macro, etiquetada explicitamente como no equivalente a salario final medio.
 - Revisar visualmente `/gasto-sanitario` en escritorio y movil con navegador disponible; la comprobacion actual cubre TypeScript, build y respuesta HTTP 200, pero no captura visual.

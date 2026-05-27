@@ -39,9 +39,18 @@ Buscar una fuente oficial para saber cuantos anos ha trabajado o cotizado una pe
 - 2004-hoy: viable como investigacion con MCVL anual, si se dispone de microdatos y se documentan sesgos.
 - 1975-1995: no se ha localizado una serie oficial homogenea y directamente comparable de dias cotizados o anos computables al jubilarse. Puede haber informacion historica en anuarios o publicaciones impresas, pero habria que tratarla como tramo separado y con ruptura metodologica.
 
+## Primera extraccion incorporada
+
+- Fecha: 2026-05-28.
+- Dataset procesado: `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv`.
+- Cobertura de disponibilidad: `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv`.
+- Fuente usada: Informes Economico-Financieros a los Presupuestos de la Seguridad Social, cuadros de altas de pensiones de jubilacion por regimenes y anos cotizados.
+- Anos con valores transcritos: 2013, 2014 y 2016-2021. El dato de 2018 se publica a 30 de septiembre.
+- Pendiente: localizar o exportar una tabla equivalente para 2015 y para 2022-2026, preferiblemente desde eSTADISS o informes recientes.
+- Limitacion: es distribucion agregada por tramos, no dias cotizados ni media exacta. No permite responder literalmente "cuantos anos ha trabajado de media" sin introducir una estimacion adicional.
+
 ## Criterio editorial
 
 No presentar una serie continua 1975-hoy de "anos trabajados antes de jubilarse" salvo que se documente una fuente historica oficial comparable para 1975-1995. Para la web, la formulacion mas segura es:
 
 > "La Seguridad Social registra los dias/anos cotizados usados para reconocer la jubilacion. La serie administrativa moderna es trazable desde 1996; antes de esa fecha no se ha localizado una fuente comparable."
-

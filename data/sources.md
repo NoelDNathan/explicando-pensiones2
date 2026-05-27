@@ -945,3 +945,27 @@
 - archivo procesado derivado: ninguno.
 - descripcion breve: tomos presupuestarios con desarrollo detallado de ingresos y gastos del agregado del sistema para ejercicios concretos.
 - nota metodologica: revisada como candidata para cubrir 1975-1994. La inspeccion del Tomo I 2012 no localiza anos 1975, 1994 ni 1995 en el texto extraido y muestra pormenor del presupuesto del ejercicio 2012. La edicion 2022 tambien es un tomo de presupuesto del ejercicio, no una tabla historica homologada 1975-1994. Por ahora no sirve para extender automaticamente la serie moderna de ingresos por rubricas 1995-2025P.
+
+## Seguridad Social - altas de jubilacion por anos cotizados
+
+- nombre de la fuente: Informes Economico-Financieros a los Presupuestos de la Seguridad Social, cuadros de altas de pensiones de jubilacion por regimenes y anos cotizados.
+- institucion: Seguridad Social, Ministerio de Inclusion/Empleo segun ejercicio; algunos PDFs servidos por Congreso de los Diputados dentro de documentacion PGE.
+- URL informe 2015, datos 2013: https://www.congreso.es/docu/pge2015/ppss2015/Proyecto_2015/V5T01.pdf
+- URL informe 2016, datos 2014: https://www.seg-social.es/descarga/en/207673
+- URL informe 2017, datos 2016: https://www.congreso.es/docu/pge2017/seg-social/Proyecto_2017/V5T01.pdf
+- URL informe 2018, datos 2017: https://www.seg-social.es/descarga/es/Infor_Econ_FinanDEF2018.pdf
+- URL informe 2019, datos 2018: https://www.seg-social.es/wps/wcm/connect/wss/3aa925cb-ece2-4477-acbf-7e3f853d8977/TOMO%2BIII.-%2BINFORME%2BECONOMICO-FINANCIERO-P.pdf?MOD=AJPERES
+- URL informe 2021, datos 2019: https://www.seg-social.es/wps/wcm/connect/wss/7fad23dd-65cf-4ff4-baf3-50c5d2fabf61/202120003.pdf?MOD=AJPERES
+- URL informe 2022, datos 2020: https://www.seg-social.es/wps/wcm/connect/wss/1dbab921-a626-43cb-84f2-8ecdeadce91a/20223SNT3.pdf?MOD=AJPERES
+- URL informe 2023, datos 2021: https://www.seg-social.es/descarga/es/Pres2023SNT3
+- fecha de descarga/extraccion: 2026-05-28
+- periodo procesado: 2013, 2014 y 2016-2021; 2018 corresponde a datos a 30 de septiembre.
+- ambito: Espana, altas de pensiones de jubilacion contributiva por regimen.
+- formato descargado: PDF.
+- archivos brutos: `data/raw/seguridad-social/carreras-cotizacion/`.
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv`
+  - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv`
+- licencia o condiciones de uso: condiciones de reutilizacion de Seguridad Social y Congreso de los Diputados.
+- descripcion breve: distribucion porcentual de las altas de pensiones de jubilacion por tramos de anos cotizados y regimen.
+- nota metodologica: no contiene dias cotizados ni media exacta de carrera. Los tramos se conservan como aparecen en cada informe; no se fuerza una media ni una serie continua 1975-hoy. 2015 y 2022-2026 quedan pendientes de localizacion/exportacion publica equivalente.
