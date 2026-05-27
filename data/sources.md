@@ -928,3 +928,20 @@
 - licencia o condiciones de uso: condiciones de reutilizacion de la Seguridad Social y del Ministerio.
 - descripcion breve: evolucion anual de dotaciones, rendimientos netos, disposiciones y saldo de cierre del Fondo de Reserva de la Seguridad Social.
 - nota metodologica: los importes estan redondeados a millones de euros. El saldo es el valor del Fondo de Reserva a precio de adquisicion al cierre de cada ejercicio. `entradas_total_millones_eur` suma dotaciones y rendimientos netos; puede ser negativa si los rendimientos netos del ejercicio son negativos.
+
+## Seguridad Social - Serie Verde, ingresos y gastos
+
+- nombre de la fuente: Serie Verde. Desarrollo de ingresos y gastos. Tomo I - Agregado del Sistema
+- institucion: Seguridad Social
+- URL pagina 2012: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/PresupuestosEstudios/48546/2380/2333/2335?changeLanguage=es
+- URL pagina 2022: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/PresupuestosEstudios/48546/2380/0acf1fe5-6a7c-484b-bd3e-245c5b119f63/7e7f6ac3-9d41-414a-a9dc-699043cca4eb
+- fecha de descarga: 2026-05-28
+- periodo revisado: ejercicios presupuestarios 2012 y 2022
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: PDF
+- archivos brutos:
+  - `data/raw/seguridad-social/serie-verde/2026-05-28_seguridad-social_serie-verde-tomo-i-agregado-sistema_2012.pdf`
+  - `data/raw/seguridad-social/serie-verde/2026-05-28_seguridad-social_serie-verde-tomo-i-agregado-sistema_2022.pdf`
+- archivo procesado derivado: ninguno.
+- descripcion breve: tomos presupuestarios con desarrollo detallado de ingresos y gastos del agregado del sistema para ejercicios concretos.
+- nota metodologica: revisada como candidata para cubrir 1975-1994. La inspeccion del Tomo I 2012 no localiza anos 1975, 1994 ni 1995 en el texto extraido y muestra pormenor del presupuesto del ejercicio 2012. La edicion 2022 tambien es un tomo de presupuesto del ejercicio, no una tabla historica homologada 1975-1994. Por ahora no sirve para extender automaticamente la serie moderna de ingresos por rubricas 1995-2025P.
