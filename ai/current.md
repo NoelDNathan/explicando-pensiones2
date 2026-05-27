@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Aclarada la diferencia entre disponibilidad y extraccion efectiva de la tasa de paro EPA: la serie trimestral digital/homogenea recomendada sigue siendo 1976T3-2026T1 y permite una vista anual completa 1977-2025, pero el CSV generado en esta sesion solo rellena 2006-2025 porque aun falta extraer una tabla historica oficial de tasa o activos/parados para 1977-2005. No es una contradiccion: es una limitacion de la extraccion materializada, no de la cobertura conceptual recomendada.
+
 - Extraida una primera tabla de cobertura anual para la tasa de paro EPA en Espana, `data/processed/ine/2026-05-27_ine_epa_tasa-paro-anual-espana_1977-2025.csv`, con todos los anos completos 1977-2025. El tramo 2006-2023 queda rellenado con valores anuales INE y 2024-2025 como media de cuatro trimestres INE; 1977-2005 queda marcado `pendiente` porque el bruto historico INE descargado de reestimacion 1976-2000 contiene parados, no tasas ni activos. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md`, `data/methodology/transformations.md` y checksums.
 
 - Iniciada la opcion MCVL para reconstruir historico de tasa de reemplazo. Se creo `scripts/process-mcvl-replacement-rate-coverage.ps1`, `data/methodology/mcvl-tasa-reemplazo.md` y el CSV `data/processed/seguridad-social/2026-05-27_mcvl_tasa-reemplazo-cobertura-candidata_2004-2024.csv`. Resultado: 21 ediciones MCVL candidatas (2004-2024) y 0 anos con valor calculado localmente, porque los microdatos `PRESTAC`, `COTIZA` y `AFILIAD` no estan en el repositorio. Actualizados `data/sources.md`, `data/inventory.md`, `data/metadata.md` y `data/checksums.sha256`.
