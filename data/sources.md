@@ -51,21 +51,25 @@
 - URL CSV descargado: https://www.seg-social.es/descarga/es/177612
 - fecha de descarga del bruto local: 2026-05-27
 - fuente historica 2006-2016: Congreso de los Diputados / Seguridad Social, Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2017, https://www.congreso.es/docu/pge2017/seg-social/Proyecto_2017/V5T01.pdf
+- fuente historica 2004-2010: Congreso de los Diputados / Pacto de Toledo, Informe de evaluacion y reforma del Pacto de Toledo 2011, anexo estadistico cuadro 19, https://revista.seg-social.es/documents/39386/1361426/BOC-Informe-2011.pdf/a1ba9e77-c084-476c-3f13-dc2d75e081ee
+- fuente reconstruida 1980-2004: Ministerio de Trabajo e Inmigracion, `Extension de la vida laboral o insercion temprana de jovenes`, cuadro 2.7, elaborado a partir de Seguridad Social MCVL 2005, https://docpublicos.ccoo.es/cendoc/066630InsercionTemprabaJovenes.pdf
 - fuente historica 2017-2021: Seguridad Social, EVOMOD202501, `Evolucion de las altas iniciales de jubilacion por modalidades`, localizado en el portal estadistico de Seguridad Social
 - fuente puntual de contraste 2012-2013: Ministerio de Empleo y Seguridad Social, nota de prensa sobre edad real de jubilacion, https://www.inclusion.gob.es/documents/20121/1094001/Nota%2Bde%2Bprensa_2137-1260.pdf/ba277a18-3a1b-3075-a6a3-721babf44a98?t=1390308294000
-- periodo observado procesado: 2006-2026; 2026 acumulado a marzo
+- periodo procesado: 1980-2026 con edad efectiva; 1975-1979 `no_localizado`; 2026 acumulado a marzo
 - ambito geografico: Espana
 - formato descargado: CSV y PDF
 - archivo bruto: `data/raw/seguridad-social/pensiones/2026-05-27_seguridad-social_catalogo-evolucion-altas-jubilacion-edad_2022-2026.csv`
 - brutos auxiliares:
   - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_congreso-pge2017_seguridad-social_informe-economico-financiero-edad-altas-jubilacion_2006-2016.pdf`
+  - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_pacto-toledo_informe-evaluacion-2011_edad-media-jubilacion_2004-2010.pdf`
+  - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_ministerio-trabajo_insercion-temprana-jovenes_mcvl-edad-jubilacion-rg_1980-2004.pdf`
   - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_inclusion_nota-prensa-edad-real-jubilacion-2012-2013.pdf`
 - archivo procesado: `data/processed/seguridad-social/2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv`
 - fuente normativa: BOE, Ley 27/2011, disposicion transitoria vigesima, https://www.boe.es/buscar/act.php?id=BOE-A-2011-13242
 - licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Seguridad Social y del BOE
-- descripcion breve: tabla de cobertura anual 1975-2026 que combina edad legal ordinaria general con la edad media observada de altas iniciales de jubilacion cuando se ha localizado fuente oficial comparable.
-- uso previsto en la web: explicar la distancia entre norma y comportamiento observado reciente, dejando visibles los anos sin edad efectiva comparable.
-- nota metodologica: no se rellena 1975-2005 con OCDE ni con edad de salida del mercado laboral, porque esa variable mide otra cosa. Desde 2013 la edad legal ordinaria depende de carrera de cotizacion; el CSV conserva edad general y edad a 65 anos con carrera larga. EVOMOD202501 no se pudo descargar localmente por URL dinamica del gestor documental, pero sus valores 2017-2021 se transcriben de la version oficial indexada del PDF; queda pendiente sustituir esa transcripcion por bruto local si se localiza una URL estable.
+- descripcion breve: tabla de cobertura anual 1975-2026 que combina edad legal ordinaria general con edad media de jubilacion de fuentes oficiales/institucionales, separando la cobertura por fila.
+- uso previsto en la web: explicar la distancia entre norma y comportamiento observado. El tramo 1980-2003 debe tratarse como proxy institucional de Regimen General, no como total sistema.
+- nota metodologica: no se rellena 1975-1979 con OCDE ni con edad de salida del mercado laboral, porque esa variable mide otra cosa. Desde 2013 la edad legal ordinaria depende de carrera de cotizacion; el CSV conserva edad general y edad a 65 anos con carrera larga. El tramo MCVL 1980-2003 no es directamente comparable con el total sistema 2004-2026. EVOMOD202501 no se pudo descargar localmente por URL dinamica del gestor documental, pero sus valores 2017-2021 se transcriben de la version oficial indexada del PDF; queda pendiente sustituir esa transcripcion por bruto local si se localiza una URL estable.
 
 ## IGAE/SEPG - BDMACRO, principales series fiscales de AAPP
 

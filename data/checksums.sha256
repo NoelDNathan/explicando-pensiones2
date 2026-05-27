@@ -69,7 +69,7 @@ d116320345244652077073be2b4baa60a8573eb622c497695cf0196696973b42  data\processed
 126b990077cf9885986d9c299396d0d95c3bb8b7a0faca749b647f9431531084  data\processed\seguridad-social\2026-05-25_seguridad-social_pensionistas-personas-observado_2006-2026.csv
 a9848ac163d229702c531c5300ff57ccd6f636d859874099d079f231afb03878  data\processed\seguridad-social\2026-05-25_seguridad-social-pensionistas-personas-observado-modelizado_1975-2070.csv
 1584990756d20c46c85ab7ff882e89df475ffc1e83be38ac1a55c408b5ec8e8c  data\processed\seguridad-social\2026-05-27_mcvl_tasa-reemplazo-cobertura-candidata_2004-2024.csv
-ee8f873bb1c1c2f40bb6df42a75b8f5b65c9dd119b5d73aba4c0b88033adc65f  data\processed\seguridad-social\2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv
+d5d31a16ee7d49191b413ecb9982a7f6dc6ed0e0e3c5f41a428469c866a3889a  data\processed\seguridad-social\2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv
 1ff798ce0233501c4a3a946a40d975038488cb3d10eaba8c6a8288735e359bbe  data\processed\seguridad-social\2026-05-27_seguridad-social_fondo-reserva-dotaciones-disposiciones-saldo_2000-2024.csv
 0f646f4d6d9a15f54de5be8e2c46bb68747d8c2193308ecc19284f232e9d6bbb  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_historico-previsiones-deuda.xlsx
 64aa5cd10873b8d490104070a1a5e6871f4f9645d9fc9639f6b89dbaa0e97c16  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf
@@ -170,6 +170,8 @@ b795d14436d3be06fd465c5e3b7ec2f46e2e792ef088f0d45ca4f2acd76d55e6  data\raw\segur
 99ff7609da6dc8816b7a149055d856bfaeaa835f73a8b8d9b2d01cb24632da04  data\raw\seguridad-social\afiliacion\2026-05-18_seguridad-social_serie-afiliacion-media-regimenes_2001-2026-04.xlsx
 b5c0625abf5ed2fcea018b6bfb5a5d3c1c787964e04398d233862db45f92e430  data\raw\seguridad-social\edad-jubilacion\2026-05-27_congreso-pge2017_seguridad-social_informe-economico-financiero-edad-altas-jubilacion_2006-2016.pdf
 bef97287936226538819ab03b249716a42269d9072338aca27f913bc0c5b272e  data\raw\seguridad-social\edad-jubilacion\2026-05-27_inclusion_nota-prensa-edad-real-jubilacion-2012-2013.pdf
+d0326f62e5cfa1089d1f4f71477938559b09ab23172b563649e51bc772a3e6f0  data\raw\seguridad-social\edad-jubilacion\2026-05-27_ministerio-trabajo_insercion-temprana-jovenes_mcvl-edad-jubilacion-rg_1980-2004.pdf
+23a59b71985bc08b07148f08840062370d67e59a3d3f6abe6a2423d757307e39  data\raw\seguridad-social\edad-jubilacion\2026-05-27_pacto-toledo_informe-evaluacion-2011_edad-media-jubilacion_2004-2010.pdf
 7ee1da0ab97314a8451d5124d57f90ced43829360a5763f1c0744f2e38440480  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2011.pdf
 b9bb7c5b638d33d6a6b56cb45a1159be3569dfd584479c007e31b29408d9b06c  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2017.pdf
 e7a117649be893faac68978d9a3d657074a1ddc815a7dba433dfb296a46b5c5c  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2024.pdf
