@@ -8,13 +8,14 @@ import {
   SALARY_INTERPRETATION_POINTS,
   SALARY_KPIS,
   SALARY_NATIONALITY_DATA,
+  SALARY_PANEL_MAX,
   SALARY_PANEL_TOTAL,
   SALARY_SOURCE_ICON,
 } from '../data/salaryNationalityDashboardData'
 import './SalaryNationalityDashboard.css'
 
 const formatEuro = (value: number): string =>
-  `${value.toLocaleString('es-ES')} €`
+  `${Math.round(value).toLocaleString('es-ES')} €`
 
 function SalaryHeader() {
   const HeaderIcon = SALARY_HEADER_ICON
@@ -29,7 +30,7 @@ function SalaryHeader() {
           <p>
             <strong>España</strong>
             <span aria-hidden="true">·</span>
-            Comparativa ilustrativa de salario medio bruto mensual por grupos de nacionalidad
+            INE EAES 2023 · salario medio bruto anual convertido a mensual
           </p>
         </div>
       </div>
@@ -37,8 +38,9 @@ function SalaryHeader() {
       <aside className="snd__info-note" aria-label="Nota metodológica">
         <Info size={26} strokeWidth={1.9} aria-hidden="true" />
         <p>
-          El salario se expresa en euros brutos mensuales y representa una
-          comparación ilustrativa por nacionalidad dentro de España.
+          Importes calculados a partir del salario medio bruto anual de la
+          Encuesta Anual de Estructura Salarial del INE, dividido entre 12 meses.
+          La variable es nacionalidad, no país de nacimiento.
         </p>
       </aside>
     </header>
@@ -61,7 +63,7 @@ function HorizontalBars() {
     <section className="snd-panel snd-panel--bars" aria-labelledby="salary-bars-title">
       <div className="snd-panel__header">
         <h2 id="salary-bars-title">Salario medio mensual por nacionalidad</h2>
-        <p>€ brutos mensuales · España</p>
+        <p>€ brutos mensuales · España · INE EAES 2023</p>
       </div>
 
       <div className="snd-bars" role="list">
@@ -160,7 +162,7 @@ function LineComparison() {
         <foreignObject x={points[0].x + 18} y={points[0].y - 52} width="150" height="64">
           <div className="snd-line-chart__callout">
             <span>Máximo observado</span>
-            <strong>2.450 €</strong>
+            <strong>{formatEuro(SALARY_PANEL_MAX.value)}</strong>
           </div>
         </foreignObject>
 

@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Corregida la pagina `/salario-nacionalidad` para sustituir los valores ilustrativos del mockup por datos observados del INE, Encuesta Anual de Estructura Salarial 2023, tabla 28190. Los importes mensuales se calculan como salario medio bruto anual dividido entre 12. Se eliminaron categorias no publicadas en esa tabla agregada (`Española y doble nacionalidad`, `America Latina`, `Asia`) y se usan solo las areas disponibles: Española, resto de Europa, UE27 sin España, Africa, America y Otros paises. La pantalla documenta que la variable es nacionalidad juridica y que la fuente no permite desglose por pais individual.
+
 - Respondida consulta sobre datos importantes que faltan para entender las pensiones. Se priorizaron huecos alrededor del mecanismo del sistema: personas pensionistas, pension media y distribucion, ingresos por cotizaciones, ratio cotizantes/pensionista, altas iniciales, edad efectiva de jubilacion, tasa de reemplazo historica, transferencias del Estado, carreras laborales y comparativas internacionales oficiales.
 
 - Aclarada la diferencia entre disponibilidad y extraccion efectiva de la tasa de paro EPA: la serie trimestral digital/homogenea recomendada sigue siendo 1976T3-2026T1 y permite una vista anual completa 1977-2025, pero el CSV generado en esta sesion solo rellena 2006-2025 porque aun falta extraer una tabla historica oficial de tasa o activos/parados para 1977-2005. No es una contradiccion: es una limitacion de la extraccion materializada, no de la cobertura conceptual recomendada.
