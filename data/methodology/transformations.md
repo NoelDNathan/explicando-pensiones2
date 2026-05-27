@@ -626,6 +626,32 @@
 - Periodo resultante: 2000-2024.
 - Nota de definicion: los importes estan redondeados a millones de euros. El Fondo de Reserva se crea en 2000, por lo que no se generan filas anteriores. El saldo es el valor del Fondo a precio de adquisicion al cierre del ejercicio.
 
+## Seguridad Social - ingresos por rubricas economicas 1995-2025P
+
+- Fecha de transformacion: 2026-05-27.
+- Script reproducible: `scripts/process-seguridad-social-ingresos-1995-hoy.ps1`.
+- Fuente bruta:
+  - Seguridad Social, Presupuesto aprobado, Ingresos, Cuadro 4.1, serie historica por rubricas economicas 1995-2002.
+  - Seguridad Social, Presupuesto aprobado, Ingresos, Cuadro 4.2, serie historica por rubricas economicas 2003-2010.
+  - Seguridad Social, Presupuesto aprobado, Ingresos, Cuadro 4.3, serie historica por rubricas economicas 2011-2018.
+  - Seguridad Social, Presupuesto aprobado, Ingresos, Cuadro 4.4, serie historica por rubricas economicas 2019-2025P.
+- Transformacion aplicada:
+  - descarga y conservacion de la pagina HTML y los cuatro XLSX oficiales en `data/raw/seguridad-social/presupuesto-aprobado/ingresos/`;
+  - lectura directa de los XLSX como OpenXML para no depender de Excel instalado;
+  - extraccion de las columnas anuales y de las 13 rubricas economicas;
+  - normalizacion de rubricas a `rubrica_id`;
+  - conservacion de importes originales en miles de euros y calculo de millones de euros;
+  - generacion de un CSV auxiliar con todas las columnas fuente, incluyendo la columna comparativa 2024P;
+  - generacion de un CSV principal que elige liquidacion consolidada cuando existe y deja 2025P como presupuesto;
+  - cruce con la afiliacion media total anual ya procesada para calcular euros por afiliacion media entre 2001 y 2025P;
+  - recalculo de `data/checksums.sha256`.
+- Archivos generados:
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_ingresos-rubricas-presupuesto_1995-2025P.csv`.
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_ingresos-rubricas-columnas-fuente_1995-2025P.csv`.
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_ingresos-rubricas-por-afiliacion-media_2001-2025P.csv`.
+- Periodo resultante: ingresos 1995-2025P; indicador por afiliacion media 2001-2025P.
+- Nota de definicion: el presupuesto incluye ingresos que no proceden de cotizaciones, como transferencias corrientes, tasas, ingresos patrimoniales y operaciones financieras. Para explicar ingresos vinculados al trabajo se debe usar `cotizaciones_sociales` o una subpartida compatible, no `total_ingresos`. El indicador por afiliacion media no mide euros por persona trabajadora unica; mide euros por afiliacion media. 2025P no es liquidacion observada.
+
 ## Seguridad Social / BOE / Congreso - edad legal y efectiva de jubilacion 1975-2026
 
 - Fecha de transformacion: 2026-05-27.

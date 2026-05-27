@@ -765,6 +765,31 @@
 - descripcion breve: serie oficial de gasto presupuestario por rubricas economicas, organizada en cuatro ficheros que cubren desde 1995 hasta el presupuesto prorrogado 2025P.
 - uso previsto en la web: construir una serie larga de gasto en pensiones/prestaciones economicas de la Seguridad Social, manteniendo separados los datos brutos de cualquier tratamiento posterior.
 
+## Seguridad Social - Presupuesto aprobado, ingresos por rubricas economicas
+
+- nombre de la fuente: Cuadro 4. Evolucion de los ingresos por rubricas economicas
+- institucion: Seguridad Social
+- URL: https://www.seg-social.es/wps/portal/wss/internet/EstadisticasPresupuestosEstudios/Estadisticas/EST66/EST67?changeLanguage=es
+- fecha de descarga: 2026-05-27
+- fecha indicada por la pagina: 2026-01-02
+- periodo cubierto: 1995-2025P
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: XLSX y HTML
+- archivos brutos:
+  - `data/raw/seguridad-social/presupuesto-aprobado/ingresos/2026-05-27_seguridad-social_pagina-ingresos-presupuesto-aprobado.html`
+  - `data/raw/seguridad-social/presupuesto-aprobado/ingresos/2026-05-27_seguridad-social_c4-1_ingresos-rubricas_1995-2002.xlsx`
+  - `data/raw/seguridad-social/presupuesto-aprobado/ingresos/2026-05-27_seguridad-social_c4-2_ingresos-rubricas_2003-2010.xlsx`
+  - `data/raw/seguridad-social/presupuesto-aprobado/ingresos/2026-05-27_seguridad-social_c4-3_ingresos-rubricas_2011-2018.xlsx`
+  - `data/raw/seguridad-social/presupuesto-aprobado/ingresos/2026-05-27_seguridad-social_c4-4_ingresos-rubricas_2019-2025P.xlsx`
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_ingresos-rubricas-presupuesto_1995-2025P.csv`
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_ingresos-rubricas-columnas-fuente_1995-2025P.csv`
+  - `data/processed/seguridad-social/2026-05-27_seguridad-social_ingresos-rubricas-por-afiliacion-media_2001-2025P.csv`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Seguridad Social
+- descripcion breve: serie oficial de ingresos del presupuesto del Sistema de Seguridad Social por rubricas economicas, homologada a la estructura presupuestaria de 2023.
+- uso previsto en la web: explicar de donde vienen los recursos del sistema y calcular importes por afiliacion media, separando cotizaciones sociales de transferencias, tasas, ingresos patrimoniales y operaciones financieras.
+- nota metodologica: el CSV principal usa liquidacion consolidada cuando existe y deja 2025P como presupuesto/prorroga. El CSV de columnas fuente conserva tambien la columna comparativa 2024P publicada junto a la liquidacion 2024. No usar ingresos totales como equivalente a cotizaciones.
+
 ## Seguridad Social - Afiliacion media total al sistema
 
 - nombre de la fuente: Serie de afiliacion Media por regimenes 2001 - 2026
