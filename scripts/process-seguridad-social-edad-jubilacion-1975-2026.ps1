@@ -75,21 +75,66 @@ function Read-EffectiveAgeRows($path) {
   return $rows
 }
 
+function Add-EffectiveAge($target, [int]$year, [double]$value, [string]$status, [string]$source, [string]$method, [string]$note) {
+  $target[$year] = @{
+    Value = $value
+    Status = $status
+    Source = $source
+    Method = $method
+    Note = $note
+  }
+}
+
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $outPath) | Out-Null
 
-$effectiveAges = Read-EffectiveAgeRows $rawEffectivePath
-$outRows = @()
-for ($year = 1975; $year -le 2026; $year++) {
-  $legal = Get-LegalAge $year
-  $effective = if ($effectiveAges.ContainsKey($year)) { $effectiveAges[$year] } else { $null }
-  $effectiveStatus = if ($year -eq 2026 -and $null -ne $effective) { "observado_parcial" } elseif ($null -ne $effective) { "observado" } else { "pendiente" }
-  $difference = if ($null -ne $effective) { $effective - [double]$legal.GeneralYears } else { $null }
-  $note = if ($year -le 2021) {
-    "Seguridad Social no publica en el catalogo descargado una serie anual completa de edad efectiva de altas iniciales para este ano; no se rellena con otra definicion."
-  } elseif ($year -eq 2026) {
+$effectiveAges = @{}
+
+$pge2017Source = "Congreso de los Diputados / Seguridad Social, Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2017, cuadro de edad media de altas de jubilacion por genero"
+$pge2017Method = "Transcripcion del cuadro oficial que publica la edad media total de altas de jubilacion para 2006-2016."
+@(
+  @(2006, 63.47), @(2007, 63.57), @(2008, 63.65), @(2009, 63.73), @(2010, 63.84), @(2011, 63.87),
+  @(2012, 63.90), @(2013, 64.33), @(2014, 64.14), @(2015, 64.09), @(2016, 64.08)
+) | ForEach-Object {
+  Add-EffectiveAge $effectiveAges $_[0] $_[1] "observado" $pge2017Source $pge2017Method "Edad media de nuevas altas de jubilacion del total del sistema, ambos sexos."
+}
+
+$evomodSource = "Seguridad Social, EVOMOD202501, Evolucion de las altas iniciales de jubilacion por modalidades, Total Sistema"
+$evomodMethod = "Transcripcion de la fila TOTAL ALTAS del bloque EDAD MEDIA DE ACCESO A LA JUBILACION POR MODALIDADES, ambos sexos."
+@(
+  @(2017, 64.2), @(2018, 64.2), @(2019, 64.4), @(2020, 64.6), @(2021, 64.7)
+) | ForEach-Object {
+  Add-EffectiveAge $effectiveAges $_[0] $_[1] "observado" $evomodSource $evomodMethod "Edad media anual de acceso a la jubilacion por modalidades, total altas."
+}
+
+$catalogAges = Read-EffectiveAgeRows $rawEffectivePath
+foreach ($year in $catalogAges.Keys) {
+  $status = if ($year -eq 2026) { "observado_parcial" } else { "observado" }
+  $note = if ($year -eq 2026) {
     "Edad efectiva acumulada a marzo de 2026; no comparable como cierre anual hasta disponer de diciembre."
   } else {
     "Edad media de altas iniciales de jubilacion acumuladas del ano."
+  }
+  Add-EffectiveAge `
+    $effectiveAges `
+    $year `
+    $catalogAges[$year] `
+    $status `
+    "Seguridad Social, catalogo de datos, Evolucion de altas iniciales de jubilacion por edades 2022-2026" `
+    "Extraccion de la fila Edad media del CSV oficial descargado del catalogo de datos de Seguridad Social." `
+    $note
+}
+
+$outRows = @()
+for ($year = 1975; $year -le 2026; $year++) {
+  $legal = Get-LegalAge $year
+  $effectiveInfo = if ($effectiveAges.ContainsKey($year)) { $effectiveAges[$year] } else { $null }
+  $effective = if ($effectiveInfo) { $effectiveInfo.Value } else { $null }
+  $effectiveStatus = if ($effectiveInfo) { $effectiveInfo.Status } else { "pendiente" }
+  $difference = if ($null -ne $effective) { $effective - [double]$legal.GeneralYears } else { $null }
+  $note = if ($effectiveInfo) {
+    $effectiveInfo.Note
+  } else {
+    "No se ha localizado todavia una fuente anual oficial comparable de edad media de altas iniciales para este ano; no se rellena con otra definicion."
   }
 
   $outRows += [pscustomobject][ordered]@{
@@ -104,7 +149,8 @@ for ($year = 1975; $year -le 2026; $year++) {
     estado_edad_efectiva = $effectiveStatus
     diferencia_efectiva_menos_legal_general_anios = Format-Decimal $difference
     fuente_edad_legal = $legal.LegalSource
-    fuente_edad_efectiva = if ($null -ne $effective) { "Seguridad Social, catalogo de datos, Evolucion de altas iniciales de jubilacion por edades 2022-2026" } else { "pendiente de fuente anual historica comparable" }
+    fuente_edad_efectiva = if ($effectiveInfo) { $effectiveInfo.Source } else { "pendiente de fuente anual historica comparable" }
+    metodo_edad_efectiva = if ($effectiveInfo) { $effectiveInfo.Method } else { "" }
     nota = $note
   }
 }

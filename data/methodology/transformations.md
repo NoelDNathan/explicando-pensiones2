@@ -626,20 +626,25 @@
 - Periodo resultante: 2000-2024.
 - Nota de definicion: los importes estan redondeados a millones de euros. El Fondo de Reserva se crea en 2000, por lo que no se generan filas anteriores. El saldo es el valor del Fondo a precio de adquisicion al cierre del ejercicio.
 
-## Seguridad Social / BOE - edad legal y efectiva de jubilacion 1975-2026
+## Seguridad Social / BOE / Congreso - edad legal y efectiva de jubilacion 1975-2026
 
 - Fecha de transformacion: 2026-05-27.
 - Script reproducible: `scripts/process-seguridad-social-edad-jubilacion-1975-2026.ps1`.
 - Fuente bruta:
+  - Congreso de los Diputados / Seguridad Social, Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2017, cuadro de edad media de altas de jubilacion por genero, periodo 2006-2016.
+  - Seguridad Social, EVOMOD202501, `Evolucion de las altas iniciales de jubilacion por modalidades`, periodo 2016-2025.
   - Seguridad Social, catalogo de datos `Edad de jubilacion en el acceso a la prestacion`, CSV `Evolucion de altas iniciales de jubilacion por edades`, periodo 2022-2026.
+  - Ministerio de Empleo y Seguridad Social, nota de prensa de 2014, usada como contraste puntual de los valores 2012 y 2013.
   - BOE, Ley 27/2011, disposicion transitoria vigesima, para el calendario gradual 2013-2027.
 - Transformacion aplicada:
-  - se descarga y conserva el CSV oficial de Seguridad Social en `data/raw/seguridad-social/pensiones/`;
-  - se extrae la fila `Edad media` para los anos publicados: 2022, 2023, 2024, 2025 y 2026 acumulado a marzo;
+  - se descarga y conserva el PDF oficial PGE 2017, el PDF de nota de prensa de Inclusion y el CSV oficial de Seguridad Social en `data/raw/`;
+  - se transcribe del PGE 2017 la serie total de edad media de altas de jubilacion para 2006-2016;
+  - se transcribe de EVOMOD202501 la fila `TOTAL ALTAS` del bloque de edad media de acceso para 2017-2021;
+  - se extrae del CSV oficial del catalogo la fila `Edad media` para los anos publicados: 2022, 2023, 2024, 2025 y 2026 acumulado a marzo;
   - se reconstruye la edad legal ordinaria general: 65 anos hasta 2012 y calendario gradual desde 2013;
   - desde 2013 se conserva tambien la edad ordinaria de 65 anos condicionada a carrera larga y la cotizacion exigida para esa via;
   - se calcula `diferencia_efectiva_menos_legal_general_anios` solo donde hay edad efectiva observada;
-  - 1975-2021 se deja sin valor efectivo y con `estado_edad_efectiva = pendiente`.
+  - 1975-2005 se deja sin valor efectivo y con `estado_edad_efectiva = pendiente`.
 - Archivo generado:
   - `data/processed/seguridad-social/2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv`.
-- Nota de definicion: la edad efectiva procesada mide edad media de altas iniciales de jubilacion contributiva, no edad de salida del mercado laboral ni edad media de todos los pensionistas. No se mezcla con OCDE u otras definiciones para rellenar 1975-2021. El dato de 2026 es parcial y debe presentarse como acumulado a marzo.
+- Nota de definicion: la edad efectiva procesada mide edad media de altas iniciales de jubilacion contributiva, no edad de salida del mercado laboral ni edad media de todos los pensionistas. No se mezcla con OCDE u otras definiciones para rellenar 1975-2005. El dato de 2026 es parcial y debe presentarse como acumulado a marzo. EVOMOD202501 se ha localizado como PDF oficial indexado, pero la URL dinamica no se pudo descargar localmente; queda pendiente sustituir la transcripcion 2017-2021 por bruto local estable si se localiza.

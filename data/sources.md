@@ -43,23 +43,29 @@
 - uso previsto en la web: posible tramo observado reconstruido de tasa de reemplazo, separado del escenario Ageing Report.
 - nota metodologica: sin microdatos no se calcula ningun valor. La guia indica que la tabla de bases de cotizacion recoge bases mensuales y que la variable de pension efectiva se conserva desde 1996 en la base administrativa, con advertencia especifica para la edicion 2004.
 
-## Seguridad Social / BOE - Edad legal y efectiva de jubilacion
+## Seguridad Social / BOE / Congreso - Edad legal y efectiva de jubilacion
 
 - nombre de la fuente observada: Edad de jubilacion en el acceso a la prestacion, evolucion de altas iniciales de jubilacion por edades
 - institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones
 - URL catalogo de datos: https://www.seg-social.es/wps/portal/wss/internet/InformacionUtil/596/2266/176210
 - URL CSV descargado: https://www.seg-social.es/descarga/es/177612
 - fecha de descarga del bruto local: 2026-05-27
-- periodo observado procesado: 2022-2026; 2026 acumulado a marzo
+- fuente historica 2006-2016: Congreso de los Diputados / Seguridad Social, Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2017, https://www.congreso.es/docu/pge2017/seg-social/Proyecto_2017/V5T01.pdf
+- fuente historica 2017-2021: Seguridad Social, EVOMOD202501, `Evolucion de las altas iniciales de jubilacion por modalidades`, localizado en el portal estadistico de Seguridad Social
+- fuente puntual de contraste 2012-2013: Ministerio de Empleo y Seguridad Social, nota de prensa sobre edad real de jubilacion, https://www.inclusion.gob.es/documents/20121/1094001/Nota%2Bde%2Bprensa_2137-1260.pdf/ba277a18-3a1b-3075-a6a3-721babf44a98?t=1390308294000
+- periodo observado procesado: 2006-2026; 2026 acumulado a marzo
 - ambito geografico: Espana
-- formato descargado: CSV
+- formato descargado: CSV y PDF
 - archivo bruto: `data/raw/seguridad-social/pensiones/2026-05-27_seguridad-social_catalogo-evolucion-altas-jubilacion-edad_2022-2026.csv`
+- brutos auxiliares:
+  - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_congreso-pge2017_seguridad-social_informe-economico-financiero-edad-altas-jubilacion_2006-2016.pdf`
+  - `data/raw/seguridad-social/edad-jubilacion/2026-05-27_inclusion_nota-prensa-edad-real-jubilacion-2012-2013.pdf`
 - archivo procesado: `data/processed/seguridad-social/2026-05-27_seguridad-social_edad-legal-efectiva-jubilacion-espana_1975-2026.csv`
 - fuente normativa: BOE, Ley 27/2011, disposicion transitoria vigesima, https://www.boe.es/buscar/act.php?id=BOE-A-2011-13242
 - licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Seguridad Social y del BOE
-- descripcion breve: tabla de cobertura anual 1975-2026 que combina edad legal ordinaria general con la edad media observada de altas iniciales de jubilacion cuando Seguridad Social la publica en el catalogo descargado.
+- descripcion breve: tabla de cobertura anual 1975-2026 que combina edad legal ordinaria general con la edad media observada de altas iniciales de jubilacion cuando se ha localizado fuente oficial comparable.
 - uso previsto en la web: explicar la distancia entre norma y comportamiento observado reciente, dejando visibles los anos sin edad efectiva comparable.
-- nota metodologica: no se rellena 1975-2021 con OCDE ni con edad de salida del mercado laboral, porque esa variable mide otra cosa. Desde 2013 la edad legal ordinaria depende de carrera de cotizacion; el CSV conserva edad general y edad a 65 anos con carrera larga.
+- nota metodologica: no se rellena 1975-2005 con OCDE ni con edad de salida del mercado laboral, porque esa variable mide otra cosa. Desde 2013 la edad legal ordinaria depende de carrera de cotizacion; el CSV conserva edad general y edad a 65 anos con carrera larga. EVOMOD202501 no se pudo descargar localmente por URL dinamica del gestor documental, pero sus valores 2017-2021 se transcriben de la version oficial indexada del PDF; queda pendiente sustituir esa transcripcion por bruto local si se localiza una URL estable.
 
 ## IGAE/SEPG - BDMACRO, principales series fiscales de AAPP
 
