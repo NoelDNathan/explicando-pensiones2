@@ -710,3 +710,22 @@
   - la guia advierte que el periodo computado para pension puede diferir del recuento directo de dias en alta por convenios, clases pasivas, subregistro historico, bonificaciones y reglas de parcialidad;
   - `porcentaje por anos cotizados` se incorpora a MCVL desde la edicion 2013.
 - Resultado: no se incorporan nuevos valores 2022-2026 en esta revision. Queda como siguiente paso una exportacion manual eSTADISS o una extraccion microdato MCVL si se obtiene acceso.
+
+## Seguridad Social - MCVL carreras de cotizacion 1996-2012
+
+- Fecha de preparacion: 2026-06-01.
+- Script reproducible: `scripts/process-mcvl-carreras-cotizacion-1996-2012-coverage.ps1`.
+- Fuente bruta:
+  - Seguridad Social, guia MCVL 2025, tabla 4 de pensiones.
+  - Seguridad Social, guia MCVL 2021 como evidencia previa ya conservada.
+- Transformacion aplicada:
+  - descarga de la guia MCVL 2025 en `data/raw/seguridad-social/carreras-cotizacion/`;
+  - creacion de una metodologia especifica para el tramo 1996-2012;
+  - generacion de una tabla de cobertura candidata por ano de alta;
+  - escaneo de `data/raw/seguridad-social/mcvl/` para detectar ficheros locales de pensiones/prestaciones (`PRESTAC` o `PENSION`);
+  - no se calculan valores de anos o dias cotizados porque no hay microdatos locales autorizados.
+- Archivo generado:
+  - `data/processed/seguridad-social/2026-06-01_mcvl_carreras-cotizacion-jubilacion-cobertura-candidata_1996-2012.csv`.
+- Metodologia:
+  - `data/methodology/mcvl-carreras-cotizacion-1996-2012.md`.
+- Nota de comparabilidad: 1996-2003 no tiene edicion MCVL del mismo ano, porque las ediciones disponibles empiezan en 2004. Una edicion posterior puede observar pensiones antiguas supervivientes, pero no representa automaticamente todas las altas originales. Para una serie completa 1996-2012 hace falta Base de Datos de Prestaciones/sala segura; MCVL serviria como reconstruccion muestral, especialmente desde 2004.

@@ -61,6 +61,16 @@ Buscar una fuente oficial para saber cuantos anos ha trabajado o cotizado una pe
 - Tambien advierte que el periodo computado para pension puede diferir del recuento de dias en alta por reglas, convenios, bonificaciones, subregistro historico y parcialidad. Por eso no debe etiquetarse sin mas como "anos trabajados".
 - Busqueda de informes recientes: no se ha localizado una tabla publica posterior al dato 2021 con la misma estructura de altas de jubilacion por anos cotizados. Los informes/PGE 2023 localizados publican el cuadro IV.19 con ano 2021 y otros cuadros de modalidades hasta 2022, pero no una tabla equivalente de cotizacion para 2022.
 
+## Desarrollo especifico 1996-2012
+
+- Archivo de metodologia: `data/methodology/mcvl-carreras-cotizacion-1996-2012.md`.
+- CSV de cobertura: `data/processed/seguridad-social/2026-06-01_mcvl_carreras-cotizacion-jubilacion-cobertura-candidata_1996-2012.csv`.
+- Script: `scripts/process-mcvl-carreras-cotizacion-1996-2012-coverage.ps1`.
+- La guia MCVL 2025 se ha descargado como referencia actualizada de campos de tabla 4 de pensiones.
+- Resultado local: 0 anos con valor calculado porque no hay microdatos MCVL en `data/raw/seguridad-social/mcvl/`.
+- Criterio para 1996-2003: no usar MCVL posterior como equivalente a todas las altas originales; tendria sesgo de supervivencia. La via editorialmente limpia es acceso administrativo completo.
+- Criterio para 2004-2012: MCVL tiene ediciones candidatas, pero se debe etiquetar como reconstruccion muestral si se calcula, separada de los informes agregados.
+
 ## Criterio editorial
 
 No presentar una serie continua 1975-hoy de "anos trabajados antes de jubilarse" salvo que se documente una fuente historica oficial comparable para 1975-1995. Para la web, la formulacion mas segura es:

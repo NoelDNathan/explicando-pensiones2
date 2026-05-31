@@ -990,6 +990,7 @@
 - URL informe 2023, datos 2021: https://www.seg-social.es/descarga/es/Pres2023SNT3
 - URL eSTADISS, pagina de servicio: https://sede.seg-social.gob.es/wps/portal/sede/sede/Ciudadanos/Pensiones/201944
 - URL MCVL guia de contenido 2021: https://portaldatos.seg-social.gob.es/documents/44402/0/MCVLGuia20210727.pdf/43fe1a83-68a3-e408-3041-09b9c8efddbf?t=1629381600728
+- URL MCVL guia de contenido 2025: https://www.seg-social.es/wps/wcm/connect/wss/320b09c6-dc33-42be-b532-08880e618742/MCVLGuia20250908.pdf?MOD=AJPERES
 - fecha de descarga/extraccion: 2026-05-28
 - fecha de ampliacion de evidencia eSTADISS/MCVL: 2026-06-01
 - periodo procesado: 2013, 2014 y 2016-2021; 2018 corresponde a datos a 30 de septiembre.
@@ -997,9 +998,30 @@
 - formato descargado: PDF.
 - archivos brutos: `data/raw/seguridad-social/carreras-cotizacion/`.
   - `data/raw/seguridad-social/carreras-cotizacion/2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2021.pdf`
+  - `data/raw/seguridad-social/carreras-cotizacion/2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2025.pdf`
 - archivos procesados:
   - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv`
   - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv`
+  - `data/processed/seguridad-social/2026-06-01_mcvl_carreras-cotizacion-jubilacion-cobertura-candidata_1996-2012.csv`
 - licencia o condiciones de uso: condiciones de reutilizacion de Seguridad Social y Congreso de los Diputados.
 - descripcion breve: distribucion porcentual de las altas de pensiones de jubilacion por tramos de anos cotizados y regimen.
 - nota metodologica: no contiene dias cotizados ni media exacta de carrera. Los tramos se conservan como aparecen en cada informe; no se fuerza una media ni una serie continua 1975-hoy. 2015 queda pendiente de localizacion. Para 2022-2026, la pagina oficial de eSTADISS confirma que permite exportar Excel/CSV, pero la consulta requiere captcha, por lo que debe hacerse como exportacion manual documentada si se usa. La guia MCVL confirma campos administrativos de anos/periodo cotizado, pero como microdato sujeto a solicitud.
+
+## Seguridad Social - MCVL, cobertura candidata de carreras de cotizacion 1996-2012
+
+- nombre de la fuente candidata: Muestra Continua de Vidas Laborales (MCVL), tabla de pensiones/prestaciones.
+- institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones.
+- URL pagina MCVL: https://portaldatos.seg-social.gob.es/mcvl
+- URL guia MCVL 2025: https://www.seg-social.es/wps/wcm/connect/wss/320b09c6-dc33-42be-b532-08880e618742/MCVLGuia20250908.pdf?MOD=AJPERES
+- fecha de preparacion: 2026-06-01
+- periodo candidato: altas de jubilacion 1996-2012.
+- ambito: pensiones contributivas de jubilacion; cobertura completa solo con Base de Datos de Prestaciones/sala segura.
+- archivos brutos:
+  - `data/raw/seguridad-social/carreras-cotizacion/2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2025.pdf`
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-06-01_mcvl_carreras-cotizacion-jubilacion-cobertura-candidata_1996-2012.csv`
+- metodologia preparada:
+  - `data/methodology/mcvl-carreras-cotizacion-1996-2012.md`
+- licencia o condiciones de uso: condiciones de acceso y reutilizacion de MCVL; microdatos sujetos a solicitud/autorizacion.
+- descripcion breve: tabla de cobertura candidata que indica para cada ano 1996-2012 si hay edicion MCVL del mismo ano y si existen microdatos locales detectados.
+- nota metodologica: no contiene valores de anos cotizados. Para 1996-2003, MCVL solo podria observar supervivientes en ediciones posteriores, no todas las altas originales. Para 2004-2012 hay ediciones MCVL candidatas, pero sin microdatos locales no se calcula ningun agregado.
