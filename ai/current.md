@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Aclarado el significado de MCVL como materia prima para aportaciones vitalicias: contiene trayectorias administrativas con bases de cotizacion por periodos/meses de la vida laboral, pero no publica directamente una media acumulada de cuanto aporto cada trabajador. Para transformar bases en aportaciones habria que aplicar tipos de cotizacion, topes, regimenes, periodos y reglas de cada ano, y documentarlo como reconstruccion.
+
 - Ampliada la busqueda sobre aportacion media vitalicia a fuentes externas y literatura. Se localizaron trabajos del Banco de Espana, FEDEA/Estudios sobre la Economia Espanola e Instituto de Actuarios Espanoles que calculan relaciones actuariales entre cotizaciones de carrera laboral y pensiones esperadas para cohortes o anos concretos usando MCVL y supuestos de mortalidad/tipos de descuento. Conclusion: son utiles como metodologia o contraste, pero no sustituyen una serie oficial anual 1975-actualidad; no deben incorporarse como dato editorial base sin ficha propia, supuestos y etiqueta de estimacion de terceros.
 
 - Respondida consulta sobre si existe una serie oficial de aportacion media acumulada de los trabajadores a lo largo de su vida laboral desde 1975. Conclusion: no se ha localizado una serie publica ya construida con esa definicion. Existen fuentes oficiales parciales para bases medias, ingresos por cotizaciones, MCVL y carreras de cotizacion, pero cualquier indicador de aportacion vitalicia media requeriria definir si se miden cuotas del trabajador, cuotas totales trabajador+empresa, bases acumuladas o dias/anos cotizados, y documentar supuestos y rupturas antes de uso editorial.
