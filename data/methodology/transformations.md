@@ -652,6 +652,31 @@
 - Periodo resultante: ingresos 1995-2025P; indicador por afiliacion media 2001-2025P.
 - Nota de definicion: el presupuesto incluye ingresos que no proceden de cotizaciones, como transferencias corrientes, tasas, ingresos patrimoniales y operaciones financieras. Para explicar ingresos vinculados al trabajo se debe usar `cotizaciones_sociales` o una subpartida compatible, no `total_ingresos`. El indicador por afiliacion media no mide euros por persona trabajadora unica; mide euros por afiliacion media. 2025P no es liquidacion observada.
 
+## Seguridad Social/FIPROS - candidato de recursos del sistema 1990-2007
+
+- Fecha de transformacion: 2026-06-01.
+- Script reproducible: `scripts/process-seguridad-social-ingresos-fipros-candidato-1990-2007.ps1`.
+- Fuente bruta:
+  - Seguridad Social/FIPROS, `Analisis prospectivo de los factores que inciden en la sostenibilidad del sistema publico de pensiones`, PDF servido por Seguridad Social en `https://www.seg-social.es/descarga/116336`.
+  - La propia tabla indica como fuente original una elaboracion a partir del Anuario de Estadisticas Laborales y del Observatorio Social de Espana, Informe 2007.
+- Transformacion aplicada:
+  - descarga y conservacion del PDF oficial en `data/raw/seguridad-social/ingresos-historicos-candidatos/`;
+  - transcripcion manual de la tabla 2.3, `Evolucion de la estructura de los recursos del sistema de Seguridad Social. 1990-2007`;
+  - normalizacion a CSV largo con cuatro variables: `cotizaciones_sociales`, `transferencias_corrientes`, `otros_ingresos` y `total_neto_consolidado`;
+  - conservacion del porcentaje sobre total publicado;
+  - calculo de una comprobacion interna entre suma de componentes y total publicado;
+  - validacion del solape 1995-2007 contra la serie moderna liquidada 1995-2025P;
+  - para la validacion, `otros_ingresos` de la serie moderna se calcula como `total_ingresos - cotizaciones_sociales - transferencias_corrientes`.
+- Archivos generados:
+  - `data/processed/seguridad-social/2026-06-01_seguridad-social_fipros_recursos-sistema-candidato_1990-2007.csv`.
+  - `data/processed/seguridad-social/2026-06-01_seguridad-social_fipros_validacion-solape-serie-moderna_1995-2007.csv`.
+- Resultado de validacion:
+  - `transferencias_corrientes`: coincide por redondeo en los 13 anos del solape.
+  - `cotizaciones_sociales`: coincide por redondeo en 1995-1996 y muestra diferencias menores en 1997-2007.
+  - `total_neto_consolidado`: muestra diferencias menores en la mayoria del solape, pero diferencias relevantes en 2002, 2006 y 2007.
+  - `otros_ingresos`: muestra una diferencia relevante en 2007.
+- Nota metodologica: es el candidato mas util localizado hasta ahora para extender ingresos de Seguridad Social a 1990-1994, especialmente en cotizaciones y transferencias. No debe presentarse como continuidad editorial final de la serie 1995-2025P hasta localizar o documentar mejor la fuente primaria original y resolver las discrepancias de `total_neto_consolidado`/`otros_ingresos`. El ano 2002 queda especialmente marcado: el total publicado en la tabla candidata no cuadra con la suma de componentes ni con la serie moderna.
+
 ## Seguridad Social / BOE / Congreso - edad legal y efectiva de jubilacion 1975-2026
 
 - Fecha de transformacion: 2026-05-27.

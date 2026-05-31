@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Validada una fuente candidata oficial/institucional para ingresos historicos de Seguridad Social: PDF Seguridad Social/FIPROS `Analisis prospectivo de los factores que inciden en la sostenibilidad del sistema publico de pensiones`, tabla 2.3, con recursos del sistema 1990-2007. Se descargo el bruto en `data/raw/seguridad-social/ingresos-historicos-candidatos/`, se creo `scripts/process-seguridad-social-ingresos-fipros-candidato-1990-2007.ps1` y se generaron dos CSV: candidato 1990-2007 y validacion de solape 1995-2007 contra la serie moderna. Resultado: transferencias corrientes coinciden por redondeo en todo el solape; cotizaciones coinciden en 1995-1996 y presentan diferencias menores en 1997-2007; total neto/otros ingresos tienen discrepancias relevantes, especialmente 2002. Recomendacion provisional: usar como candidato para 1990-1994 solo con cautela, priorizando cotizaciones y transferencias, y buscar/documentar la fuente primaria original antes de uso editorial.
+
 - Respondida prueba metodologica de aportacion anual sumando trabajador y empresa: para 2025, con base mensual hipotetica de 2.000 euros durante 12 meses, contingencias comunes del Regimen General implican 28,30% de la base, es decir 6.792 euros anuales; si se incluye MEI 2025 como ingreso adicional al sistema, el total seria 29,10%, es decir 6.984 euros. Se aclaro que MCVL es representativa del ano de referencia para personas con relacion con Seguridad Social, pero sus historicos no representan automaticamente todos los trabajadores de cada ano pasado sin ajustes.
 
 - Aclarado el significado de MCVL como materia prima para aportaciones vitalicias: contiene trayectorias administrativas con bases de cotizacion por periodos/meses de la vida laboral, pero no publica directamente una media acumulada de cuanto aporto cada trabajador. Para transformar bases en aportaciones habria que aplicar tipos de cotizacion, topes, regimenes, periodos y reglas de cada ano, y documentarlo como reconstruccion.
@@ -314,6 +316,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Actualizadas fuentes, inventario, metadata y transformaciones para el nuevo dataset de poblacion por nacimiento.
 
 ## Pendiente inmediato
+
+- Para ingresos de Seguridad Social 1990-1994, localizar la fuente primaria indicada por el PDF FIPROS: Anuario de Estadisticas Laborales y Observatorio Social de Espana, Informe 2007. Antes de uso editorial, resolver la discrepancia del total 2002 y decidir si se incorpora solo `cotizaciones_sociales`/`transferencias_corrientes` como serie candidata separada o si se encuentra una liquidacion primaria mas limpia.
 
 - Para ampliar carreras de cotizacion al jubilarse, las vias abiertas son: solicitar/acceder a Base de Datos de Prestaciones o sala segura para 1996-2012 completo; incorporar microdatos MCVL autorizados para reconstruccion muestral, especialmente 2004-2012; y hacer exportacion manual de eSTADISS para 2022-2026 si ofrece la dimension de anos cotizados. Mantener claro que el dataset publico actual es distribucion porcentual por tramos, no dias cotizados ni media exacta. El ano 2015 sigue sin tabla publica localizada.
 

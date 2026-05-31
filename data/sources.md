@@ -976,6 +976,24 @@
 - descripcion breve: contiene una tabla de participacion en el total de recursos de cotizaciones sociales, transferencias corrientes, suma de ambas y resto de ingresos.
 - nota metodologica: la tabla aporta porcentajes para 1980 y 1990, y anualmente desde 2000 hasta 2017; no aporta importes anuales 1975-1994. Sirve como contraste de estructura de financiacion, no como serie monetaria de ingresos.
 
+## Seguridad Social/FIPROS - Recursos del sistema de Seguridad Social 1990-2007
+
+- nombre de la fuente: `Análisis prospectivo de los factores que inciden en la sostenibilidad del sistema público de pensiones`
+- institucion: Seguridad Social / FIPROS
+- URL: https://www.seg-social.es/descarga/116336
+- fecha de descarga: 2026-06-01
+- periodo revisado: 1990-2007
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: PDF
+- archivo bruto:
+  - `data/raw/seguridad-social/ingresos-historicos-candidatos/2026-06-01_seguridad-social_fipros-recursos-sistema-ss_1990-2007.pdf`
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-06-01_seguridad-social_fipros_recursos-sistema-candidato_1990-2007.csv`
+  - `data/processed/seguridad-social/2026-06-01_seguridad-social_fipros_validacion-solape-serie-moderna_1995-2007.csv`
+- descripcion breve: la tabla 2.3 publica la evolucion de la estructura de los recursos del Sistema de Seguridad Social: cotizaciones, transferencias corrientes, otros ingresos y total neto consolidado, en millones de euros y porcentaje sobre total.
+- fuente original indicada en el PDF: elaboracion propia a partir del Anuario de Estadisticas Laborales y del Observatorio Social de Espana, Informe 2007.
+- nota metodologica: es la fuente candidata mas prometedora localizada para 1990-1994, pero es secundaria. La validacion contra la serie moderna 1995-2007 muestra coincidencia por redondeo para transferencias corrientes; cotizaciones difieren menos de 0,5% en 1997-2007; total neto/otros ingresos no coinciden plenamente y presentan diferencias relevantes en 2002, 2006 y 2007. No usar editorialmente antes de localizar o documentar la fuente primaria original.
+
 ## Seguridad Social - altas de jubilacion por anos cotizados
 
 - nombre de la fuente: Informes Economico-Financieros a los Presupuestos de la Seguridad Social, cuadros de altas de pensiones de jubilacion por regimenes y anos cotizados.
