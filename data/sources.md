@@ -988,14 +988,18 @@
 - URL informe 2021, datos 2019: https://www.seg-social.es/wps/wcm/connect/wss/7fad23dd-65cf-4ff4-baf3-50c5d2fabf61/202120003.pdf?MOD=AJPERES
 - URL informe 2022, datos 2020: https://www.seg-social.es/wps/wcm/connect/wss/1dbab921-a626-43cb-84f2-8ecdeadce91a/20223SNT3.pdf?MOD=AJPERES
 - URL informe 2023, datos 2021: https://www.seg-social.es/descarga/es/Pres2023SNT3
+- URL eSTADISS, pagina de servicio: https://sede.seg-social.gob.es/wps/portal/sede/sede/Ciudadanos/Pensiones/201944
+- URL MCVL guia de contenido 2021: https://portaldatos.seg-social.gob.es/documents/44402/0/MCVLGuia20210727.pdf/43fe1a83-68a3-e408-3041-09b9c8efddbf?t=1629381600728
 - fecha de descarga/extraccion: 2026-05-28
+- fecha de ampliacion de evidencia eSTADISS/MCVL: 2026-06-01
 - periodo procesado: 2013, 2014 y 2016-2021; 2018 corresponde a datos a 30 de septiembre.
 - ambito: Espana, altas de pensiones de jubilacion contributiva por regimen.
 - formato descargado: PDF.
 - archivos brutos: `data/raw/seguridad-social/carreras-cotizacion/`.
+  - `data/raw/seguridad-social/carreras-cotizacion/2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2021.pdf`
 - archivos procesados:
   - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv`
   - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv`
 - licencia o condiciones de uso: condiciones de reutilizacion de Seguridad Social y Congreso de los Diputados.
 - descripcion breve: distribucion porcentual de las altas de pensiones de jubilacion por tramos de anos cotizados y regimen.
-- nota metodologica: no contiene dias cotizados ni media exacta de carrera. Los tramos se conservan como aparecen en cada informe; no se fuerza una media ni una serie continua 1975-hoy. 2015 y 2022-2026 quedan pendientes de localizacion/exportacion publica equivalente.
+- nota metodologica: no contiene dias cotizados ni media exacta de carrera. Los tramos se conservan como aparecen en cada informe; no se fuerza una media ni una serie continua 1975-hoy. 2015 queda pendiente de localizacion. Para 2022-2026, la pagina oficial de eSTADISS confirma que permite exportar Excel/CSV, pero la consulta requiere captcha, por lo que debe hacerse como exportacion manual documentada si se usa. La guia MCVL confirma campos administrativos de anos/periodo cotizado, pero como microdato sujeto a solicitud.

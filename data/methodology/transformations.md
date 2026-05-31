@@ -698,3 +698,15 @@
   - `data/processed/seguridad-social/2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv`.
 - Periodo resultante: valores procesados para 2013, 2014 y 2016-2021; 2018 es dato a 30 de septiembre; 2015 y 2022-2026 quedan pendientes de extraccion/localizacion publica equivalente.
 - Nota de definicion: este dataset mide distribucion porcentual agregada de altas de jubilacion por tramos de anos cotizados. No contiene `dias cotizados`, `anos trabajados`, media exacta, mediana ni microdatos. Para dias cotizados exactos la via correcta sigue siendo microdato administrativo Seguridad Social/MCVL desde 1996, sujeto a acceso y documentacion separada.
+
+### Revision adicional eSTADISS/MCVL
+
+- Fecha de revision: 2026-06-01.
+- eSTADISS: la pagina oficial del servicio indica que permite exportar los datos consultados como hoja de calculo o CSV, pero tambien que la consulta exige responder un captcha para evitar consultas masivas. Por tanto, no se automatiza como descarga en script; si se usa para 2022-2026 debe guardarse el CSV/Excel exportado manualmente como bruto y documentar los parametros exactos.
+- MCVL: se descarga la guia oficial de contenido 2021 en `data/raw/seguridad-social/carreras-cotizacion/2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2021.pdf`.
+- Evidencia MCVL relevante:
+  - tabla 4 de pensiones incluye `4.015 Anos considerados cotizados para la jubilacion`, `4.040 Periodo cotizado en edad ordinaria de jubilacion`, `4.041 Periodo de cotizacion` y `4.042 Porcentaje por anos cotizados`;
+  - para `periodo de cotizacion`, la guia indica disponibilidad en pensiones de jubilacion reconocidas despues de 1996 y datos historicos desde 1996, ano de creacion de la Base de Datos;
+  - la guia advierte que el periodo computado para pension puede diferir del recuento directo de dias en alta por convenios, clases pasivas, subregistro historico, bonificaciones y reglas de parcialidad;
+  - `porcentaje por anos cotizados` se incorpora a MCVL desde la edicion 2013.
+- Resultado: no se incorporan nuevos valores 2022-2026 en esta revision. Queda como siguiente paso una exportacion manual eSTADISS o una extraccion microdato MCVL si se obtiene acceso.

@@ -49,6 +49,18 @@ Buscar una fuente oficial para saber cuantos anos ha trabajado o cotizado una pe
 - Pendiente: localizar o exportar una tabla equivalente para 2015 y para 2022-2026, preferiblemente desde eSTADISS o informes recientes.
 - Limitacion: es distribucion agregada por tramos, no dias cotizados ni media exacta. No permite responder literalmente "cuantos anos ha trabajado de media" sin introducir una estimacion adicional.
 
+## Revision adicional 2026-06-01
+
+- eSTADISS queda confirmado como via publica de consulta/exportacion manual: la pagina del servicio indica exportacion a Excel o CSV, pero con captcha. No se automatiza.
+- La guia oficial MCVL 2021 se conserva como bruto local para documentar los campos administrativos:
+  - `4.015 Anos considerados cotizados para la jubilacion`;
+  - `4.040 Periodo cotizado en edad ordinaria de jubilacion`;
+  - `4.041 Periodo de cotizacion`;
+  - `4.042 Porcentaje por anos cotizados`.
+- La MCVL documenta que `periodo de cotizacion` esta disponible para pensiones de jubilacion reconocidas despues de 1996 y que los datos historicos conservados empiezan en 1996, ano de creacion de la Base de Datos.
+- Tambien advierte que el periodo computado para pension puede diferir del recuento de dias en alta por reglas, convenios, bonificaciones, subregistro historico y parcialidad. Por eso no debe etiquetarse sin mas como "anos trabajados".
+- Busqueda de informes recientes: no se ha localizado una tabla publica posterior al dato 2021 con la misma estructura de altas de jubilacion por anos cotizados. Los informes/PGE 2023 localizados publican el cuadro IV.19 con ano 2021 y otros cuadros de modalidades hasta 2022, pero no una tabla equivalente de cotizacion para 2022.
+
 ## Criterio editorial
 
 No presentar una serie continua 1975-hoy de "anos trabajados antes de jubilarse" salvo que se documente una fuente historica oficial comparable para 1975-1995. Para la web, la formulacion mas segura es:

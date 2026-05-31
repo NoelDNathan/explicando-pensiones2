@@ -74,7 +74,7 @@ d5d31a16ee7d49191b413ecb9982a7f6dc6ed0e0e3c5f41a428469c866a3889a  data\processed
 a42bf2532c0b438d1ad72e258b3a4e4e4dfa5eef66c25e41f71bd865683670b0  data\processed\seguridad-social\2026-05-27_seguridad-social_ingresos-rubricas-columnas-fuente_1995-2025P.csv
 d1ed0743a9246f4227ed690f96d7d0106f6a12295971b0eda027dd2837725cdc  data\processed\seguridad-social\2026-05-27_seguridad-social_ingresos-rubricas-por-afiliacion-media_2001-2025P.csv
 b6b91bfc098752e7846e920ac6c533cf889846c1d416c434cfc954e0e30979db  data\processed\seguridad-social\2026-05-27_seguridad-social_ingresos-rubricas-presupuesto_1995-2025P.csv
-8bba65ae89ce71eaf130a7872150482e3a1dd28edc1fb40aaec4bffd51ff2755  data\processed\seguridad-social\2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv
+8048b034f24699975e40875886f0d104c7683a681fdf008abd8ef4eb2d728cc6  data\processed\seguridad-social\2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-cobertura_1975-2026.csv
 976344b433751c035d62f36aa35a0ac001c6ae63a0406919688d60d41fe8ebbc  data\processed\seguridad-social\2026-05-28_seguridad-social_altas-jubilacion-anos-cotizados-tramos_2013-2021.csv
 0f646f4d6d9a15f54de5be8e2c46bb68747d8c2193308ecc19284f232e9d6bbb  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_historico-previsiones-deuda.xlsx
 64aa5cd10873b8d490104070a1a5e6871f4f9645d9fc9639f6b89dbaa0e97c16  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf
@@ -181,6 +181,7 @@ b6890e9e1e85ad76c747dea1f638643e03ff2c208ad61b109a5dd4ef37620a3a  data\raw\segur
 f61c8e03bb5d4063ee223eb2e0ac03fea96195ba8455bc7fb82ef2843f441a4d  data\raw\seguridad-social\carreras-cotizacion\2026-05-28_seguridad-social_pge2021_informe-economico-financiero-altas-jubilacion-anos-cotizados-2019.pdf
 bbabed722a44b4719b39756e411200ee95da503e6a7f0cd4d6d4142b4e9b5745  data\raw\seguridad-social\carreras-cotizacion\2026-05-28_seguridad-social_pge2022_informe-economico-financiero-altas-jubilacion-anos-cotizados-2020.pdf
 7c7a7cd1ccb33c8df23fdef00e41ee9b868e1719514c1f0f0a448cbc2b187752  data\raw\seguridad-social\carreras-cotizacion\2026-05-28_seguridad-social_pge2023_informe-economico-financiero-altas-jubilacion-anos-cotizados-2021.pdf
+91018ad53263cb4354ab6b6a5c9636ef981f8b8acd434284c2fa8f9a5f86f273  data\raw\seguridad-social\carreras-cotizacion\2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2021.pdf
 b5c0625abf5ed2fcea018b6bfb5a5d3c1c787964e04398d233862db45f92e430  data\raw\seguridad-social\edad-jubilacion\2026-05-27_congreso-pge2017_seguridad-social_informe-economico-financiero-edad-altas-jubilacion_2006-2016.pdf
 bef97287936226538819ab03b249716a42269d9072338aca27f913bc0c5b272e  data\raw\seguridad-social\edad-jubilacion\2026-05-27_inclusion_nota-prensa-edad-real-jubilacion-2012-2013.pdf
 d0326f62e5cfa1089d1f4f71477938559b09ab23172b563649e51bc772a3e6f0  data\raw\seguridad-social\edad-jubilacion\2026-05-27_ministerio-trabajo_insercion-temprana-jovenes_mcvl-edad-jubilacion-rg_1980-2004.pdf
@@ -188,6 +189,7 @@ d0326f62e5cfa1089d1f4f71477938559b09ab23172b563649e51bc772a3e6f0  data\raw\segur
 7ee1da0ab97314a8451d5124d57f90ced43829360a5763f1c0744f2e38440480  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2011.pdf
 b9bb7c5b638d33d6a6b56cb45a1159be3569dfd584479c007e31b29408d9b06c  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2017.pdf
 e7a117649be893faac68978d9a3d657074a1ddc815a7dba433dfb296a46b5c5c  data\raw\seguridad-social\fondo-reserva\2026-05-27_seguridad-social_fondo-reserva-informe-cortes-2024.pdf
+3f16f89d226bd07bea366f7e3122ec95d1dfb86d955e082fa7257cefb9afd183  data\raw\seguridad-social\ingresos-historicos-candidatos\2026-05-28_sepg-pge_libro-amarillo-1996_ingresos-seguridad-social.pdf
 ab8f3f271bbd7e58ca9cf757336440874e19642a6368431f8aa48e3835721a9f  data\raw\seguridad-social\pensiones\2026-05-18_seguridad-social_libro-evolucion-mensual-pensiones_2026-04.xlsx
 494e0a1afd9e89c30f7355cfd803bbb104a4b5f9a57f023c23b07a44fc3ceb0b  data\raw\seguridad-social\pensiones\2026-05-18_seguridad-social_pagina-libro-evolucion-mensual-pensiones.html
 0e2755929311bbfd9147ecde9ba52abdfef75019220578e44140f176fa98d18e  data\raw\seguridad-social\pensiones\2026-05-27_seguridad-social_catalogo-evolucion-altas-jubilacion-edad_2022-2026.csv
@@ -205,4 +207,3 @@ f9fab0fe84b13e80ff3c1074c49069d8ac1568300566f8f805a07a5be022fa0c  data\raw\segur
 768c38803a4e1df1b5a5d968f3bacc34d2900f909555084bcd39c78592f5a8c1  data\raw\seguridad-social\serie-verde\2026-05-18_seguridad-social_serie-verde-2012_tomo-i-agregado-sistema.pdf
 976dd31d207ca2842f71ccea39d1e6f7b84a9337bb38419d526aef1cb8e7cc9d  data\raw\seguridad-social\serie-verde\2026-05-28_seguridad-social_serie-verde-tomo-i-agregado-sistema_2012.pdf
 7fbbf8f3357bd012f422909466840c89e7f2f6abbd2896fdd8b44843e04e0eb7  data\raw\seguridad-social\serie-verde\2026-05-28_seguridad-social_serie-verde-tomo-i-agregado-sistema_2022.pdf
-3f16f89d226bd07bea366f7e3122ec95d1dfb86d955e082fa7257cefb9afd183  data\raw\seguridad-social\ingresos-historicos-candidatos\2026-05-28_sepg-pge_libro-amarillo-1996_ingresos-seguridad-social.pdf

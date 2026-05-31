@@ -4,4 +4,4 @@ periodo_inicio,periodo_fin,cobertura,estado_dato,fuente_recomendada,nota
 2013,2014,procesado en tramos,observado_agregado,Informes Economico-Financieros de los Presupuestos de la Seguridad Social,Distribucion porcentual de altas de jubilacion por regimen y tramos de anos cotizados.
 2015,2015,no localizado,pendiente,Informe Economico-Financiero/eSTADISS pendiente de revisar,No se ha incorporado tabla 2015 en este primer lote.
 2016,2021,procesado en tramos,observado_agregado,Informes Economico-Financieros de los Presupuestos de la Seguridad Social,Distribucion porcentual de altas de jubilacion por regimen y tramos de anos cotizados; 2018 se publica como dato a 30 de septiembre.
-2022,2026,pendiente de extraccion,pendiente,eSTADISS o informes economico-financieros mas recientes,Pendiente localizar/exportar una tabla publica equivalente para altas de jubilacion por anos cotizados.
+2022,2026,pendiente de exportacion manual,pendiente,eSTADISS o informes economico-financieros mas recientes,La pagina oficial de eSTADISS permite exportar Excel/CSV pero exige captcha; no se ha localizado en informes publicos recientes una tabla equivalente posterior al dato 2021.

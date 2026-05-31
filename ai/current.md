@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-05-28
+Fecha: 2026-06-01
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Continuada la investigacion de carreras de cotizacion al jubilarse. Se reviso eSTADISS y se confirma que el servicio permite exportar consultas en Excel/CSV, pero exige captcha, por lo que no se automatiza. Se descargo la guia oficial MCVL 2021 en `data/raw/seguridad-social/carreras-cotizacion/2026-06-01_seguridad-social_mcvl-guia-contenido-campos-cotizacion-jubilacion_2021.pdf` para documentar campos administrativos: anos considerados cotizados para jubilacion, periodo cotizado en edad ordinaria, periodo de cotizacion y porcentaje por anos cotizados. La guia confirma que `periodo de cotizacion` esta disponible para pensiones de jubilacion reconocidas despues de 1996 y que los historicos conservados empiezan en 1996. No se localizaron valores publicos equivalentes posteriores al dato 2021 en informes recientes; 2022-2026 queda como exportacion manual eSTADISS o microdato MCVL.
 
 - Analizada la opcion `Libro Amarillo PGE 1996` como fuente para ingresos historicos de Seguridad Social. Conclusion: no debe empalmarse con la serie principal 1995-2025P porque mide presupuesto inicial, mientras que el CSV principal ya usa liquidacion consolidada para 1995-2024. Su valor esta en servir como fuente de contraste/ancla y como posible metodologia para reconstruir una serie separada de presupuestos iniciales si se localizan Libros Amarillos de anos anteriores; no sirve por si solo para cubrir ingresos observados/liquidados 1975-1994.
 
@@ -301,7 +303,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
-- Para ampliar carreras de cotizacion al jubilarse, localizar/exportar 2015 y 2022-2026 en eSTADISS o informes recientes. Mantener claro que el dataset publico actual es distribucion porcentual por tramos, no dias cotizados ni media exacta. Para dias cotizados exactos, preparar una via separada con microdato administrativo/MCVL desde 1996, si se obtiene acceso.
+- Para ampliar carreras de cotizacion al jubilarse, hacer exportacion manual de eSTADISS para 2022-2026 si el servicio ofrece la dimension de anos cotizados y guardar el Excel/CSV bruto con parametros exactos. Mantener claro que el dataset publico actual es distribucion porcentual por tramos, no dias cotizados ni media exacta. Para dias cotizados exactos, preparar una via separada con microdato administrativo/MCVL desde 1996, si se obtiene acceso. El ano 2015 sigue sin tabla publica localizada.
 
 - Si se construye una serie historica de tasa de reemplazo, decidir antes el nivel de fidelidad: exacta con microdatos MCVL desde 2004 aprox.; aproximada con altas iniciales de jubilacion Seguridad Social/MITES y salario INE por edad desde 1995/2004/2006; o proxy larga 1975-actualidad usando salario medio macro, etiquetada explicitamente como no equivalente a salario final medio.
 - Revisar visualmente `/gasto-sanitario` en escritorio y movil con navegador disponible; la comprobacion actual cubre TypeScript, build y respuesta HTTP 200, pero no captura visual.
