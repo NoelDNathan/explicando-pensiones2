@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Respondida prueba metodologica de aportacion anual sumando trabajador y empresa: para 2025, con base mensual hipotetica de 2.000 euros durante 12 meses, contingencias comunes del Regimen General implican 28,30% de la base, es decir 6.792 euros anuales; si se incluye MEI 2025 como ingreso adicional al sistema, el total seria 29,10%, es decir 6.984 euros. Se aclaro que MCVL es representativa del ano de referencia para personas con relacion con Seguridad Social, pero sus historicos no representan automaticamente todos los trabajadores de cada ano pasado sin ajustes.
+
 - Aclarado el significado de MCVL como materia prima para aportaciones vitalicias: contiene trayectorias administrativas con bases de cotizacion por periodos/meses de la vida laboral, pero no publica directamente una media acumulada de cuanto aporto cada trabajador. Para transformar bases en aportaciones habria que aplicar tipos de cotizacion, topes, regimenes, periodos y reglas de cada ano, y documentarlo como reconstruccion.
 
 - Ampliada la busqueda sobre aportacion media vitalicia a fuentes externas y literatura. Se localizaron trabajos del Banco de Espana, FEDEA/Estudios sobre la Economia Espanola e Instituto de Actuarios Espanoles que calculan relaciones actuariales entre cotizaciones de carrera laboral y pensiones esperadas para cohortes o anos concretos usando MCVL y supuestos de mortalidad/tipos de descuento. Conclusion: son utiles como metodologia o contraste, pero no sustituyen una serie oficial anual 1975-actualidad; no deben incorporarse como dato editorial base sin ficha propia, supuestos y etiqueta de estimacion de terceros.
