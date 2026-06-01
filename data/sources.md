@@ -1106,6 +1106,36 @@
 - descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos personales/familiares estatales, minimos por descendientes propios de Madrid, gastos y reducciones de trabajo y tipos de IVA. Ademas, conserva una fuente candidata e indice de cobertura para localizar escalas autonomicas de regimen comun.
 - nota metodologica: primer paquete 2015 para caso base Madrid. No activa todas las CCAA, no parametriza deducciones autonomicas y no replica retenciones de nomina sin algoritmo oficial AEAT 2015. El indice de Hacienda es candidato: al ser texto consolidado con modificaciones posteriores, cada escala debe verificarse para vigencia 2015 antes de transcribir importes. En 2015 no existen MEI ni cotizacion adicional de solidaridad.
 
+## Calculadora fiscal del trabajador - parametros normativos 2024
+
+- nombre de la fuente: Parametros normativos 2024 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de la Presidencia, Justicia y Relaciones con las Cortes; Agencia Estatal de Administracion Tributaria.
+- URLs:
+  - BOE, Orden PJC/51/2024, cotizacion 2024: https://www.boe.es/buscar/act.php?id=BOE-A-2024-1691
+  - AEAT, gravamen estatal base liquidable general IRPF 2024: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2024/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-estatal.html
+  - AEAT, gravamen autonomico Comunidad de Madrid IRPF 2024: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2024/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-madrid.html
+  - AEAT, cuadro de minimos personales y familiares estatales/autonomicos 2024: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2024/c14-adecuacion-impuesto-circunstancias-personales/minimo-autonomico-personal-familiar/cuadro-minimos-personales-familiares-estatal-autonomicos.html
+  - AEAT, gastos deducibles de rendimientos del trabajo 2024: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2024/c03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-2-determinacion-rendimiento-neto/particular-analisis-gastos-articulo-19_2_f-lirpf.html
+  - AEAT, reduccion general por rendimientos del trabajo 2024: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2024/c03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-3-determinacion-rendimiento-neto-reducido.html
+  - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- fecha de consulta/descarga: 2026-06-02
+- periodo: 2024
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid.
+- formato descargado: HTML.
+- archivos brutos:
+  - `data/raw/boe/cotizaciones-2024/2026-06-02_boe_orden-pjc-51-2024-cotizacion-regimen-general.html`
+  - `data/raw/aeat/irpf-2024/2026-06-02_aeat_irpf-2024-gravamen-estatal.html`
+  - `data/raw/aeat/irpf-2024/2026-06-02_aeat_irpf-2024-gravamen-autonomico-madrid.html`
+  - `data/raw/aeat/irpf-2024/2026-06-02_aeat_irpf-2024-minimos-estatal-autonomicos.html`
+  - `data/raw/aeat/irpf-2024/2026-06-02_aeat_irpf-2024-gastos-articulo-19-2-f.html`
+  - `data/raw/aeat/irpf-2024/2026-06-02_aeat_irpf-2024-reduccion-rendimientos-trabajo.html`
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-parametros-2024.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2024.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2024, escala autonomica de Madrid, minimos personales/familiares estatales y de Madrid, gastos/reducciones de trabajo y tipos de IVA.
+- nota metodologica: paquete 2024 calculable para caso base Comunidad de Madrid. No activa selector completo de CCAA, no parametriza deducciones autonomicas y no replica retenciones de nomina sin algoritmo oficial AEAT 2024. En 2024 se incluye MEI, pero no cotizacion adicional de solidaridad.
+
 ## Calculadora fiscal del trabajador - cobertura anual 2014-2026
 
 - nombre de la fuente: cobertura anual para extender parametros normativos de la calculadora fiscal del trabajador.

@@ -812,6 +812,31 @@
   - `data/methodology/calculadora-fiscal-trabajador-2015.md`.
 - Nota de uso: primer paquete 2015 para caso base Comunidad de Madrid. Antes de activar comparacion completa por CCAA se deben parametrizar las comunidades de regimen comun. Antes de mostrar nomina mensual o retencion exacta se debe localizar e incorporar el algoritmo oficial de retenciones AEAT 2015.
 
+## Calculadora fiscal del trabajador - parametros normativos 2024
+
+- Fecha de preparacion: 2026-06-02.
+- Script reproducible: no aplica; transcripcion estructurada y documentada de normas/paginas oficiales.
+- Fuente:
+  - BOE, Orden PJC/51/2024, de 29 de enero, para bases y tipos de cotizacion 2024, con modificacion de bases minimas por Orden PJC/281/2024.
+  - Agencia Tributaria, Manual practico de Renta 2024, para escalas IRPF, minimos, gastos y reducciones.
+  - Agencia Tributaria, tipos impositivos de IVA.
+- Transformacion aplicada:
+  - descarga y conservacion de brutos oficiales HTML;
+  - transcripcion de bases maximas/minimas del Regimen General;
+  - conversion de grupos 8 a 11, publicados en euros/dia, a equivalente mensual multiplicando por 30, conservando tambien los valores diarios publicados;
+  - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional, MEI y horas extra;
+  - registro explicito de ausencia de cotizacion adicional de solidaridad en 2024;
+  - transcripcion de la escala estatal general del IRPF 2024;
+  - transcripcion de la escala autonomica de la Comunidad de Madrid;
+  - transcripcion de minimos personales/familiares estatales y minimos propios de Madrid;
+  - transcripcion de gastos deducibles y reduccion general de rendimientos del trabajo;
+  - registro de tipos legales de IVA y huecos pendientes para IVA medio y otros impuestos.
+- Archivo generado:
+  - `data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-parametros-2024.json`.
+- Metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2024.md`.
+- Nota de uso: paquete 2024 calculable para caso base Comunidad de Madrid. Antes de activar selector completo de CCAA se deben parametrizar las comunidades de regimen comun. Antes de mostrar nomina mensual o retencion exacta se debe incorporar el algoritmo oficial de retenciones AEAT 2024.
+
 ## Calculadora fiscal del trabajador - cobertura por ano 2014-2026
 
 - Fecha de revision: 2026-06-02.

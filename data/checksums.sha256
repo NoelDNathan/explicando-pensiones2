@@ -1,4 +1,4 @@
-﻿d5ede0cc0e159fad8cd941a3db0e7674de486b00b377040ead78df0ac4f87dd2  data\processed\airef\2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv
+d5ede0cc0e159fad8cd941a3db0e7674de486b00b377040ead78df0ac4f87dd2  data\processed\airef\2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv
 d4bc0e6d4fc3b8cedfffab6e2c33d710e5d609ef42a7c1f8b2a534d6ab1354fd  data\processed\airef\2026-05-18_airef_prevision-gasto-pensiones-pct-pib_2022-2070.csv
 27639a2811b58398c9c7b60997ae6eeef2f8a18f8d2b3ce48082bfde6b434d3d  data\processed\airef\2026-05-18_airef_prevision-pensionistas-millones_2022-2070.csv
 dd671133fc52e597fa1a9ae280ca9fda0fbd59fb9d994b9060991eb37106607d  data\processed\airef\2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv
@@ -18,6 +18,7 @@ af421789db483c615f163f8176791243a729b9ba5b22f75721f6463c96cc62a9  data\processed
 95c701ca5b1dfeadff82298b56f942902634865a4f4b588defd766cccbef44c3  data\processed\fiscal\2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json
 a56a4ba463ab418fa495c18ca95cc961ce598760b1a27321d634ae50dfcf183f  data\processed\fiscal\2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json
 c1cdd22d08af2838b07728b44be3f41d6e03697c3353322652f69f74edbff16d  data\processed\fiscal\2026-06-02_calculadora-fiscal-trabajador-cobertura-por-ano-2014-2026.json
+82e0f5a736d908c3c600759c1a21594e9123a920cc80a4e487da353c1957ce21  data\processed\fiscal\2026-06-02_calculadora-fiscal-trabajador-parametros-2024.json
 df3fbe854827f3ab1fcdae03c45ff8b5acb5131d31bd823b8bd6978ce3f6928e  data\processed\igae\2026-05-18_igae_cofog-aproximacion-pensiones-vejez-supervivientes-aapp_1995-2024.csv
 a0074c0a6e91f13922c5832ae6d38890981bc3796662d75569f01c1f97f973ba  data\processed\igae\2026-05-18_igae_cofog-proteccion-social-detalle-aapp_1995-2024.csv
 dbb6cb169ffead7105e48d626aca02086c54c2f10cf0cf98c43438c0abfbc02f  data\processed\igae\2026-05-18_igae-bdmacro_prestaciones-sociales-seguridad-social_1975-2025.csv
@@ -85,6 +86,11 @@ bb5ea31e06d4f5d0e851e560e3c0c4170bb1e1cbe68fdacc2947c543b6f49963  data\processed
 e40fdfaab15672d42a063cba85e7b89158c96b1c5fb4021eed389708548ad884  data\processed\seguridad-social\2026-06-01_seguridad-social_fipros_recursos-sistema-candidato_1990-2007.csv
 c89b86da55559bc353be45a8344348880d2ccaaffc98266b7ce13e3189a2bd43  data\processed\seguridad-social\2026-06-01_seguridad-social_fipros_validacion-solape-serie-moderna_1995-2007.csv
 29a8febe5bcbe944fab2af99363895987aeea87ef4b810f5245021dc55d5af1a  data\raw\aeat\irpf-2015\2026-06-01_aeat_manual-renta-2015.pdf
+edc4db4bd7519e9becb8f7794d22fa303fd38f90f33a101fb38950590a77d3b1  data\raw\aeat\irpf-2024\2026-06-02_aeat_irpf-2024-gastos-articulo-19-2-f.html
+d547cb637f7d8efc8ce6c35f52f596599cdac36a098b00efa8a6c74339701f08  data\raw\aeat\irpf-2024\2026-06-02_aeat_irpf-2024-gravamen-autonomico-madrid.html
+fd33849fc8fa1da29132d051c26478f4209bdf4ea65fed7d1b032d1654ad302c  data\raw\aeat\irpf-2024\2026-06-02_aeat_irpf-2024-gravamen-estatal.html
+f3d2f64a745610eba36ae582ec9e416b7d197e191116f0e28302de8e96d2f43c  data\raw\aeat\irpf-2024\2026-06-02_aeat_irpf-2024-minimos-estatal-autonomicos.html
+91601241b829e4564f59d6a3e8e72600e8f0df1be367f963c3aee03bf8856097  data\raw\aeat\irpf-2024\2026-06-02_aeat_irpf-2024-reduccion-rendimientos-trabajo.html
 0f646f4d6d9a15f54de5be8e2c46bb68747d8c2193308ecc19284f232e9d6bbb  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_historico-previsiones-deuda.xlsx
 64aa5cd10873b8d490104070a1a5e6871f4f9645d9fc9639f6b89dbaa0e97c16  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_informe-presupuestos-iniciales-aapp-2026.pdf
 610017bc051835329829d942340cfc2275a9b338eca74bcd9513f5a862eeec40  data\raw\airef\deuda-publica-previsiones\2026-05-18_airef_observatorio-deuda-junio-2025.pdf
@@ -98,6 +104,7 @@ c96cebb2e39277e20be39375ba92672c83dd60283d5101b7267d7cd88e896336  data\raw\airef
 f901c5923b33ec8456ddf5c8d2a9234f639eb3a52af5e8374e5694a0a4aee70e  data\raw\airef\sanidad-educacion-cuidados\2026-05-25_airef_dt-sanidad-educacion-cuidados-2025.pdf
 24d5285e1f4e1f560dd46bc698d5b43da29747f5804059c14ac886a900d3b3ac  data\raw\airef\sanidad-educacion-cuidados\2026-05-25_airef_graficos-cuadros-dt-sanidad-educacion-cuidados.xlsx
 1b2dc83a27fb357e0c71fc825b680432fa846de44829c7edd92a74980a445332  data\raw\boe\cotizaciones-2015\2026-06-01_boe_orden-ess-86-2015.html
+0d8dc9837a7a509f90eb4634e02a3d12ccb8eb67422eb3ffcf2e1596cf11f67f  data\raw\boe\cotizaciones-2024\2026-06-02_boe_orden-pjc-51-2024-cotizacion-regimen-general.html
 39175c87c4571043d5df9882a36db9845f85b80c1f49b4d7600c3abe76503bc5  data\raw\boe\irpf-2015\2026-06-01_boe_ley-4-2014-madrid-irpf-2015.html
 1b30415991bdd6b219694e8c0edf165c02b34ec9910fd705384179dd8806c69d  data\raw\boe\irpf-2015\2026-06-01_boe_ley-4-2014-madrid-irpf-2015.pdf
 788a3e6083020f1d7121f6cd3791b6fd5d76e5b9a832bf9777f99a3712933de2  data\raw\boe\irpf-2015\2026-06-01_boe_ley-irpf-consolidada-2015.html
