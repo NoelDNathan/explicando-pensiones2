@@ -8,6 +8,10 @@ Objetivo: dejar localizados y parametrizados los datos oficiales necesarios para
 
 El paquete de parametros creado cubre el caso base que aparece hoy en la interfaz: trabajador por cuenta ajena del Regimen General, contrato indefinido, residente en la Comunidad de Madrid, salario bruto anual y consumo anual estimado por el usuario.
 
+La calculadora 2025 no debe comparar con 2030 ni con ningun futuro en esta fase. La comparacion posterior se hara con anos pasados, siempre que cada ano tenga su propio paquete normativo.
+
+Los factores de usuario que si se tendran en cuenta en este proyecto son: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica.
+
 Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario, trabajadores del mar, artistas, taurinos, regimenes forales, deducciones autonomicas completas y contingencias profesionales por CNAE.
 
 ## Fuentes oficiales usadas
@@ -35,13 +39,16 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 5. Para IRPF anual, partir del rendimiento integro del trabajo, restar cotizaciones del trabajador y gastos deducibles, aplicar reducciones si proceden, calcular cuota estatal y autonomica con las escalas y restar la cuota correspondiente al minimo personal/familiar.
 6. Para retencion de nomina, no aproximar con la escala anual: usar el algoritmo oficial AEAT de retenciones 2025.
 7. Para IVA, pedir gasto anual y porcentaje de gasto por tipo; si el gasto esta expresado con IVA incluido, extraer la cuota con `gasto * tipo / (100 + tipo)`.
+8. Para IVA aproximado, permitir una opcion simple por gasto declarado y reparto 21/10/4/0; si se usa una cesta media, debe proceder de INE EPF y vivir como dataset separado.
+9. Para `otros impuestos`, crear un modulo separado y estimado: carburantes, electricidad, alcohol/tabaco si se declaran, IBI si hay vivienda en propiedad e IVTM si hay vehiculo. No mezclarlo con salario neto laboral.
 
 ## Limitaciones
 
 - La escala autonomica solo esta parametrizada para Madrid. Para que el selector de comunidad sea real, hay que incorporar todas las escalas autonomicas y minimos autonomicos aplicables.
 - Las deducciones estatales/autonomicas pueden cambiar mucho el resultado individual; no se incluyen salvo los minimos y reducciones basicas.
 - La cotizacion por contingencias profesionales depende de actividad/CNAE y es cuota empresarial; no debe inventarse.
-- `Otros impuestos` no es una magnitud directamente deducible del salario bruto. Debe eliminarse, pedirse como entrada o transformarse en un modulo de consumo/patrimonio con fuentes propias.
+- `Otros impuestos` no es una magnitud directamente deducible del salario bruto. En este proyecto se tratara como aproximacion separada, basada en datos declarados por el usuario o en una cesta media documentada.
+- La guia para replicar este paquete en otros ejercicios esta en `data/methodology/calculadora-fiscal-datos-por-ano.md`.
 
 ## Archivo generado
 

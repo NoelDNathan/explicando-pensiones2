@@ -775,4 +775,5 @@
   - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`.
 - Metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2025.md`.
-- Nota de uso: este JSON permite completar una primera version trazable para 2025 del caso base de Madrid. No debe presentarse como calculadora completa para todas las situaciones fiscales hasta incorporar todas las escalas/minimos autonomicos, deducciones, CNAE para contingencias profesionales y supuestos de consumo/patrimonio.
+  - `data/methodology/calculadora-fiscal-datos-por-ano.md`.
+- Nota de uso: este JSON permite completar una primera version trazable para 2025 del caso base de Madrid y documenta los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA y otros impuestos se trataran como aproximaciones separadas; para usar cesta media de consumo debe crearse un dataset propio, preferentemente desde INE EPF, con metadata y checksums.

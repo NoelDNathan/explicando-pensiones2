@@ -7,6 +7,18 @@
     "worker_profile": "trabajador por cuenta ajena del Regimen General",
     "default_region": "Comunidad de Madrid",
     "default_contract": "indefinido",
+    "comparison_policy": "no comparar con futuro; cualquier comparacion posterior sera contra anos pasados y con parametros normativos de cada ano",
+    "included_user_factors": [
+      "salario_bruto_anual",
+      "comunidad_autonoma",
+      "edad",
+      "estado_civil",
+      "hijos_a_cargo",
+      "personas_a_cargo",
+      "discapacidad",
+      "categoria_profesional",
+      "movilidad_geografica"
+    ],
     "excluded": [
       "autonomos",
       "empleados de hogar",
@@ -133,6 +145,7 @@
   "vat": {
     "source": "Agencia Tributaria, tipos impositivos de IVA 2025",
     "source_url": "https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html",
+    "approximation_policy": "aproximacion por consumo declarado o cesta simplificada; no se resta del salario bruto para calcular neto laboral",
     "rates_percent": {
       "general": 21,
       "reduced": 10,
@@ -142,6 +155,21 @@
     "implementation_notes": [
       "El IVA anual no se deduce del salario bruto: requiere gasto anual del usuario y reparto por tipos de IVA.",
       "Si el usuario introduce gasto con IVA incluido, la cuota se calcula como gasto_incluido * tipo / (100 + tipo)."
+    ]
+  },
+  "other_taxes": {
+    "approximation_policy": "aproximacion separada de la nomina, basada en consumo/patrimonio declarado por el usuario o cesta simplificada documentada",
+    "candidate_components": [
+      "impuestos_especiales_carburantes",
+      "impuestos_especiales_alcohol_tabaco_si_el_usuario_los_declara",
+      "impuesto_especial_electricidad_si_hay_gasto_electrico",
+      "IBI_si_el_usuario_declara_vivienda_en_propiedad",
+      "IVTM_si_el_usuario_declara_vehiculo"
+    ],
+    "implementation_notes": [
+      "No presentar 'otros impuestos' como dato exacto si se usa una cesta media.",
+      "Mantenerlo como modulo opcional y separado de salario neto, IRPF y cotizaciones.",
+      "Documentar para cada ano si se usan tipos legales, recaudacion agregada o gasto medio de hogares."
     ]
   },
   "data_gaps_before_ui_use": [

@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Definido el alcance de la calculadora fiscal 2025 para proximas iteraciones: no se comparara con futuro por ahora; la comparacion se hara mas adelante contra anos pasados, con parametros normativos propios por ano. Los factores de usuario incluidos seran salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. IVA y otros impuestos se trataran como aproximaciones separadas del neto laboral. Se creo `data/methodology/calculadora-fiscal-datos-por-ano.md` para guiar futuras interacciones sobre como obtener estos datos en otros ejercicios.
+
 - Creada la pagina `/resumen` como dashboard oscuro inspirado en el mockup aportado para explicar el sistema de pensiones. La vista compone componentes ya creados: `Sidebar`, `YearSelector`, `PopulationPyramid`, `InfoButton`, `KeyIndicatorsPanel`, `ReformSimulator`, `TimeSeriesChart` y `DashboardPanel`. Incluye cabecera, selector de ano, piramide poblacional, panel de indicadores clave, simulador de reformas, grafico historico, comparador y modulo de impacto por grupos. Los valores de indicadores y series son de prototipo para validar diseno y no se incorporan como datos editoriales nuevos. Verificado con `tsc --noEmit`, `vite build` y capturas headless en escritorio y movil.
 
 - Localizados y documentados los parametros oficiales necesarios para una primera calculadora fiscal 2025 trazable del trabajador por cuenta ajena en Regimen General, con caso base Comunidad de Madrid. Se creo `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json` con bases y tipos de cotizacion 2025, MEI, cotizacion adicional de solidaridad, escala estatal IRPF, escala autonomica Madrid, minimos personales/familiares basicos, gastos/reducciones de rendimientos del trabajo y tipos de IVA. Se creo tambien `data/methodology/calculadora-fiscal-trabajador-2025.md` y se actualizaron fuentes, inventario, metadata, transformaciones y checksums.
@@ -330,6 +332,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Actualizadas fuentes, inventario, metadata y transformaciones para el nuevo dataset de poblacion por nacimiento.
 
 ## Pendiente inmediato
+
+- Para completar la calculadora fiscal 2025 en UI, adaptar `src/components/fiscal-worker-dashboard` al alcance decidido: quitar comparacion 2030/futuro, usar el paquete 2025 como base, pedir los factores incluidos y mostrar IVA/otros impuestos como modulos aproximados separados.
 
 - Integrar el JSON de parametros 2025 en `src/components/fiscal-worker-dashboard` sustituyendo valores de maqueta, empezando por el caso Madrid/contrato indefinido/salario bruto anual. Antes de hacer interactivo el selector de CCAA, incorporar escalas autonomicas y minimos autonomicos 2025 de todas las comunidades desde AEAT.
 
