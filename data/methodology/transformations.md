@@ -754,3 +754,25 @@
 - Metodologia:
   - `data/methodology/mcvl-carreras-cotizacion-1996-2012.md`.
 - Nota de comparabilidad: 1996-2003 no tiene edicion MCVL del mismo ano, porque las ediciones disponibles empiezan en 2004. Una edicion posterior puede observar pensiones antiguas supervivientes, pero no representa automaticamente todas las altas originales. Para una serie completa 1996-2012 hace falta Base de Datos de Prestaciones/sala segura; MCVL serviria como reconstruccion muestral, especialmente desde 2004.
+
+## Calculadora fiscal del trabajador - parametros normativos 2025
+
+- Fecha de preparacion: 2026-06-01.
+- Script reproducible: no aplica; transcripcion estructurada y documentada de normas/paginas oficiales.
+- Fuente:
+  - BOE, Orden PJC/178/2025, de 25 de febrero, para bases y tipos de cotizacion 2025.
+  - Agencia Tributaria, Manual practico de Renta 2025, para escalas IRPF, minimos, gastos y reducciones.
+  - Agencia Tributaria, tipos impositivos de IVA 2025.
+- Transformacion aplicada:
+  - localizacion de las paginas oficiales vigentes para 2025;
+  - transcripcion de bases maximas/minimas del Regimen General;
+  - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional, MEI, horas extra y solidaridad;
+  - transcripcion de la escala estatal general del IRPF y de la escala autonomica de Madrid;
+  - transcripcion de minimos personales/familiares estatales basicos, gastos deducibles y reduccion general de rendimientos del trabajo;
+  - registro de tipos de IVA general, reducido, superreducido y cero;
+  - separacion explicita de parametros cubiertos y huecos que requieren nuevas fuentes o datos del usuario.
+- Archivo generado:
+  - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`.
+- Metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2025.md`.
+- Nota de uso: este JSON permite completar una primera version trazable para 2025 del caso base de Madrid. No debe presentarse como calculadora completa para todas las situaciones fiscales hasta incorporar todas las escalas/minimos autonomicos, deducciones, CNAE para contingencias profesionales y supuestos de consumo/patrimonio.

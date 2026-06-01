@@ -1043,3 +1043,27 @@
 - licencia o condiciones de uso: condiciones de acceso y reutilizacion de MCVL; microdatos sujetos a solicitud/autorizacion.
 - descripcion breve: tabla de cobertura candidata que indica para cada ano 1996-2012 si hay edicion MCVL del mismo ano y si existen microdatos locales detectados.
 - nota metodologica: no contiene valores de anos cotizados. Para 1996-2003, MCVL solo podria observar supervivientes en ediciones posteriores, no todas las altas originales. Para 2004-2012 hay ediciones MCVL candidatas, pero sin microdatos locales no se calcula ningun agregado.
+
+## Calculadora fiscal del trabajador - parametros normativos 2025
+
+- nombre de la fuente: Parametros normativos 2025 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de la Presidencia, Justicia y Relaciones con las Cortes; Agencia Estatal de Administracion Tributaria.
+- URLs:
+  - BOE, Orden PJC/178/2025, cotizacion 2025: https://boe.es/buscar/act.php?id=BOE-A-2025-3780&p=20250226&tn=0
+  - AEAT, gravamen estatal base liquidable general IRPF 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-estatal.html
+  - AEAT, gravamen autonomico Comunidad de Madrid IRPF 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-madrid.html
+  - AEAT, minimo personal y familiar 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/manual-especifico-irpf-2025-personas-anos/minimos/minimo-personal-familiar.html
+  - AEAT, gastos deducibles de rendimientos del trabajo: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-2-determinacion-rendimiento-neto/particular-analisis-gastos-articulo-19_2_f-lirpf.html
+  - AEAT, reduccion general por rendimientos del trabajo: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-3-determinacion-rendimiento-neto-reducido.html
+  - AEAT, retenciones ejercicio 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/descarga-programas-ayuda/retenciones/ejercicio-2025.html
+  - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- fecha de consulta: 2026-06-01
+- periodo: 2025
+- ambito: Espana; caso base de trabajador por cuenta ajena del Regimen General y Comunidad de Madrid.
+- formato procesado: JSON.
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2025.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, MEI, cotizacion de solidaridad, escala estatal IRPF 2025, escala autonomica de Madrid, minimos personales/familiares basicos, gastos y reducciones de trabajo, y tipos de IVA.
+- nota metodologica: no es una calculadora cerrada ni una estimacion de recaudacion. Para otras comunidades, deducciones autonomicas, autonomos, contingencias profesionales por CNAE, impuestos especiales o tributos locales hacen falta parametros adicionales.

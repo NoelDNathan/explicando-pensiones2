@@ -59,6 +59,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Localizados y documentados los parametros oficiales necesarios para una primera calculadora fiscal 2025 trazable del trabajador por cuenta ajena en Regimen General, con caso base Comunidad de Madrid. Se creo `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json` con bases y tipos de cotizacion 2025, MEI, cotizacion adicional de solidaridad, escala estatal IRPF, escala autonomica Madrid, minimos personales/familiares basicos, gastos/reducciones de rendimientos del trabajo y tipos de IVA. Se creo tambien `data/methodology/calculadora-fiscal-trabajador-2025.md` y se actualizaron fuentes, inventario, metadata, transformaciones y checksums.
+
+- Alcance aclarado para la calculadora fiscal 2025: el paquete sirve para sustituir la maqueta actual en el caso Madrid/Regimen General. Para activar un selector real de comunidad autonoma faltan las escalas y minimos autonomicos de todas las CCAA; para coste empresarial completo falta parametrizar contingencias profesionales por CNAE; `otros impuestos` no debe calcularse sin datos de consumo/patrimonio o fuentes especificas.
+
 - Creada una interfaz web de alta fidelidad para `Calculadora Fiscal del Trabajador` en la ruta `/calculadora-fiscal`, con dashboard oscuro tipo SaaS para comparar salario neto, IRPF, cotizaciones, aportacion a pensiones, IVA y otros impuestos entre 2025 y 2030. La pantalla se ha estructurado como feature propia en `src/components/fiscal-worker-dashboard/`, separando componente principal, datos del mockup, tipos, grafico de lineas, donuts, iconos de menu y estilos. Tambien se ha incorporado al laboratorio `/componentes` como `Componente 09`. Reutiliza `DashboardPanel` e `InfoButton`. Las cifras son datos de maqueta proporcionados en la interaccion y no quedan incorporadas como dataset editorial trazable. Verificado con `tsc --noEmit`, `vite build` y respuesta HTTP 200 en `http://127.0.0.1:5174/calculadora-fiscal`.
 
 - Aclarado por que el proyecto no contiene ya la cotizacion media anual propuesta. Si contiene ingresos por cotizaciones sociales 1995-2025P y un indicador de ingresos por afiliacion media 2001-2025P, pero ese calculo divide ingresos presupuestarios/liquidados entre afiliacion media total del sistema. La nueva serie seria distinta: base media mensual por cotizante/persona fisica multiplicada por 12 y por el tipo de cotizacion, con cobertura de Regimen General y sin incorporar automaticamente bonificaciones, reducciones ni otros conceptos.
@@ -324,6 +328,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Actualizadas fuentes, inventario, metadata y transformaciones para el nuevo dataset de poblacion por nacimiento.
 
 ## Pendiente inmediato
+
+- Integrar el JSON de parametros 2025 en `src/components/fiscal-worker-dashboard` sustituyendo valores de maqueta, empezando por el caso Madrid/contrato indefinido/salario bruto anual. Antes de hacer interactivo el selector de CCAA, incorporar escalas autonomicas y minimos autonomicos 2025 de todas las comunidades desde AEAT.
 
 - Para ingresos de Seguridad Social 1990-1994, localizar la fuente primaria indicada por el PDF FIPROS: Anuario de Estadisticas Laborales y Observatorio Social de Espana, Informe 2007. Antes de uso editorial, resolver la discrepancia del total 2002 y decidir si se incorpora solo `cotizaciones_sociales`/`transferencias_corrientes` como serie candidata separada o si se encuentra una liquidacion primaria mas limpia.
 
