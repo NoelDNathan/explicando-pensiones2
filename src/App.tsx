@@ -11,6 +11,7 @@ import { ReformSimulator } from './components/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/HealthExpenditureDashboard'
 import { SalaryNationalityDashboard } from './components/SalaryNationalityDashboard'
 import { FiscalWorkerDashboard } from './components/fiscal-worker-dashboard'
+import { PensionOverviewPage } from './components/PensionOverviewPage'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -492,7 +493,7 @@ function Home() {
       <h1>Una web didactica sobre las pensiones en Espana</h1>
       <p>
         Este proyecto esta preparando sus componentes visuales. Puedes abrir el
-        laboratorio interno en <a href="/componentes">/componentes</a>, ver la
+        resumen en <a href="/resumen">/resumen</a>, el laboratorio interno en <a href="/componentes">/componentes</a>, ver la
         pagina de poblacion en <a href="/poblacion">/poblacion</a> o el panel
         de gasto sanitario en <a href="/gasto-sanitario">/gasto-sanitario</a>.
         Tambien puedes abrir la infografia salarial en{' '}
@@ -668,7 +669,9 @@ function App() {
   const isHealthPage = path === '/gasto-sanitario'
   const isSalaryNationalityPage = path === '/salario-nacionalidad'
   const isFiscalWorkerPage = path === '/calculadora-fiscal'
+  const isPensionOverviewPage = path === '/resumen'
 
+  if (isPensionOverviewPage) return <PensionOverviewPage />
   if (isComponentLab) return <ComponentLab />
   if (isPopulationPage) return <PopulationPage />
   if (isHealthPage) return <HealthExpenditurePage />
