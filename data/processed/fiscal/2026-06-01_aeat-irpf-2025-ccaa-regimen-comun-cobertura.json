@@ -1,0 +1,261 @@
+{
+  "dataset_id": "aeat-irpf-2025-ccaa-regimen-comun-cobertura",
+  "created_at": "2026-06-01",
+  "scope": {
+    "year": 2025,
+    "country": "Espana",
+    "included_territories": [
+      "andalucia",
+      "aragon",
+      "asturias",
+      "illes_balears",
+      "canarias",
+      "cantabria",
+      "castilla_la_mancha",
+      "castilla_y_leon",
+      "cataluna",
+      "extremadura",
+      "galicia",
+      "madrid",
+      "murcia",
+      "la_rioja",
+      "comunitat_valenciana"
+    ],
+    "excluded_territories": [
+      "pais_vasco",
+      "navarra",
+      "ceuta",
+      "melilla"
+    ],
+    "notes": [
+      "Pais Vasco y Navarra quedan fuera por decision de alcance.",
+      "Ceuta y Melilla no son comunidades autonomas y se excluyen de esta cobertura inicial.",
+      "Las deducciones autonomicas se documentan como catalogo fuente; no se aplican automaticamente si no estan parametrizados todos sus requisitos."
+    ]
+  },
+  "sources": {
+    "autonomic_scales": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico.html",
+    "personal_family_minimums": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c14-adecuacion-impuesto-circunstancias-personales/minimo-autonomico-personal-familiar/cuadro-minimos-personales-familiares-estatal-autonomicos.html",
+    "autonomic_deductions_guide": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025-deducciones-autonomicas/guia-deducciones-autonomicas.html"
+  },
+  "autonomic_general_scales": {
+    "andalucia": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-andalucia.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 13000, "base_quota_eur": 0, "marginal_percent": 9.5 },
+        { "base_from_eur": 13000, "base_to_eur": 21100, "base_quota_eur": 1235, "marginal_percent": 12 },
+        { "base_from_eur": 21100, "base_to_eur": 35200, "base_quota_eur": 2207, "marginal_percent": 15 },
+        { "base_from_eur": 35200, "base_to_eur": 60000, "base_quota_eur": 4322, "marginal_percent": 18.5 },
+        { "base_from_eur": 60000, "base_to_eur": null, "base_quota_eur": 8910, "marginal_percent": 22.5 }
+      ]
+    },
+    "aragon": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-aragon.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 13072.5, "base_quota_eur": 0, "marginal_percent": 9.5 },
+        { "base_from_eur": 13072.5, "base_to_eur": 21210, "base_quota_eur": 1241.89, "marginal_percent": 12 },
+        { "base_from_eur": 21210, "base_to_eur": 36960, "base_quota_eur": 2218.39, "marginal_percent": 15 },
+        { "base_from_eur": 36960, "base_to_eur": 52500, "base_quota_eur": 4580.89, "marginal_percent": 18.5 },
+        { "base_from_eur": 52500, "base_to_eur": 60000, "base_quota_eur": 7455.79, "marginal_percent": 20.5 },
+        { "base_from_eur": 60000, "base_to_eur": 80000, "base_quota_eur": 8993.29, "marginal_percent": 23 },
+        { "base_from_eur": 80000, "base_to_eur": 90000, "base_quota_eur": 13593.29, "marginal_percent": 24 },
+        { "base_from_eur": 90000, "base_to_eur": 130000, "base_quota_eur": 15993.29, "marginal_percent": 25 },
+        { "base_from_eur": 130000, "base_to_eur": null, "base_quota_eur": 25993.29, "marginal_percent": 25.5 }
+      ]
+    },
+    "asturias": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-principado-asturias.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12450, "base_quota_eur": 0, "marginal_percent": 9 },
+        { "base_from_eur": 12450, "base_to_eur": 17707.2, "base_quota_eur": 1120.5, "marginal_percent": 12 },
+        { "base_from_eur": 17707.2, "base_to_eur": 33007.2, "base_quota_eur": 1751.36, "marginal_percent": 14 },
+        { "base_from_eur": 33007.2, "base_to_eur": 53407.2, "base_quota_eur": 3893.36, "marginal_percent": 19.2 },
+        { "base_from_eur": 53407.2, "base_to_eur": 70000, "base_quota_eur": 7810.16, "marginal_percent": 21.5 },
+        { "base_from_eur": 70000, "base_to_eur": 90000, "base_quota_eur": 11377.62, "marginal_percent": 22.5 },
+        { "base_from_eur": 90000, "base_to_eur": 175000, "base_quota_eur": 15877.62, "marginal_percent": 25 },
+        { "base_from_eur": 175000, "base_to_eur": null, "base_quota_eur": 37127.62, "marginal_percent": 26 }
+      ]
+    },
+    "illes_balears": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-illes-balears.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 10000, "base_quota_eur": 0, "marginal_percent": 9 },
+        { "base_from_eur": 10000, "base_to_eur": 18000, "base_quota_eur": 900, "marginal_percent": 11.25 },
+        { "base_from_eur": 18000, "base_to_eur": 30000, "base_quota_eur": 1800, "marginal_percent": 14.25 },
+        { "base_from_eur": 30000, "base_to_eur": 48000, "base_quota_eur": 3510, "marginal_percent": 17.5 },
+        { "base_from_eur": 48000, "base_to_eur": 70000, "base_quota_eur": 6660, "marginal_percent": 19 },
+        { "base_from_eur": 70000, "base_to_eur": 90000, "base_quota_eur": 10840, "marginal_percent": 21.75 },
+        { "base_from_eur": 90000, "base_to_eur": 120000, "base_quota_eur": 15190, "marginal_percent": 22.75 },
+        { "base_from_eur": 120000, "base_to_eur": 175000, "base_quota_eur": 22015, "marginal_percent": 23.75 },
+        { "base_from_eur": 175000, "base_to_eur": null, "base_quota_eur": 35077.5, "marginal_percent": 24.75 }
+      ]
+    },
+    "canarias": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-canarias.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 13748, "base_quota_eur": 0, "marginal_percent": 9 },
+        { "base_from_eur": 13748, "base_to_eur": 19422, "base_quota_eur": 1237.32, "marginal_percent": 11.5 },
+        { "base_from_eur": 19422, "base_to_eur": 35924, "base_quota_eur": 1889.83, "marginal_percent": 14 },
+        { "base_from_eur": 35924, "base_to_eur": 57566, "base_quota_eur": 4200.11, "marginal_percent": 18.5 },
+        { "base_from_eur": 57566, "base_to_eur": 93268, "base_quota_eur": 8203.88, "marginal_percent": 23.5 },
+        { "base_from_eur": 93268, "base_to_eur": 123745, "base_quota_eur": 16593.85, "marginal_percent": 25 },
+        { "base_from_eur": 123745, "base_to_eur": null, "base_quota_eur": 24213.1, "marginal_percent": 26 }
+      ]
+    },
+    "cantabria": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-cantabria.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 13000, "base_quota_eur": 0, "marginal_percent": 8.5 },
+        { "base_from_eur": 13000, "base_to_eur": 21000, "base_quota_eur": 1105, "marginal_percent": 11 },
+        { "base_from_eur": 21000, "base_to_eur": 35200, "base_quota_eur": 1985, "marginal_percent": 14.5 },
+        { "base_from_eur": 35200, "base_to_eur": 60000, "base_quota_eur": 4044, "marginal_percent": 18 },
+        { "base_from_eur": 60000, "base_to_eur": 90000, "base_quota_eur": 8508, "marginal_percent": 22.5 },
+        { "base_from_eur": 90000, "base_to_eur": null, "base_quota_eur": 15258, "marginal_percent": 24.5 }
+      ]
+    },
+    "castilla_la_mancha": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-castilla-mancha.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12450, "base_quota_eur": 0, "marginal_percent": 9.5 },
+        { "base_from_eur": 12450, "base_to_eur": 20200, "base_quota_eur": 1182.75, "marginal_percent": 12 },
+        { "base_from_eur": 20200, "base_to_eur": 35200, "base_quota_eur": 2112.75, "marginal_percent": 15 },
+        { "base_from_eur": 35200, "base_to_eur": 60000, "base_quota_eur": 4362.75, "marginal_percent": 18.5 },
+        { "base_from_eur": 60000, "base_to_eur": null, "base_quota_eur": 8950.75, "marginal_percent": 22.5 }
+      ]
+    },
+    "castilla_y_leon": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-castilla-leon.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12450, "base_quota_eur": 0, "marginal_percent": 9 },
+        { "base_from_eur": 12450, "base_to_eur": 20200, "base_quota_eur": 1120.5, "marginal_percent": 12 },
+        { "base_from_eur": 20200, "base_to_eur": 35200, "base_quota_eur": 2050.5, "marginal_percent": 14 },
+        { "base_from_eur": 35200, "base_to_eur": 53407.2, "base_quota_eur": 4150.5, "marginal_percent": 18.5 },
+        { "base_from_eur": 53407.2, "base_to_eur": null, "base_quota_eur": 7518.83, "marginal_percent": 21.5 }
+      ]
+    },
+    "cataluna": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-cataluna.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12500, "base_quota_eur": 0, "marginal_percent": 9.5 },
+        { "base_from_eur": 12500, "base_to_eur": 22000, "base_quota_eur": 1187.5, "marginal_percent": 12.5 },
+        { "base_from_eur": 22000, "base_to_eur": 33000, "base_quota_eur": 2375, "marginal_percent": 16 },
+        { "base_from_eur": 33000, "base_to_eur": 53000, "base_quota_eur": 4135, "marginal_percent": 19 },
+        { "base_from_eur": 53000, "base_to_eur": 90000, "base_quota_eur": 7935, "marginal_percent": 21.5 },
+        { "base_from_eur": 90000, "base_to_eur": 120000, "base_quota_eur": 15890, "marginal_percent": 23.5 },
+        { "base_from_eur": 120000, "base_to_eur": 175000, "base_quota_eur": 22940, "marginal_percent": 24.5 },
+        { "base_from_eur": 175000, "base_to_eur": null, "base_quota_eur": 36415, "marginal_percent": 25.5 }
+      ]
+    },
+    "extremadura": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-extremadura.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12450, "base_quota_eur": 0, "marginal_percent": 8 },
+        { "base_from_eur": 12450, "base_to_eur": 20200, "base_quota_eur": 996, "marginal_percent": 10 },
+        { "base_from_eur": 20200, "base_to_eur": 24200, "base_quota_eur": 1771, "marginal_percent": 16 },
+        { "base_from_eur": 24200, "base_to_eur": 35200, "base_quota_eur": 2411, "marginal_percent": 17.5 },
+        { "base_from_eur": 35200, "base_to_eur": 60000, "base_quota_eur": 4336, "marginal_percent": 21 },
+        { "base_from_eur": 60000, "base_to_eur": 80200, "base_quota_eur": 9544, "marginal_percent": 23.5 },
+        { "base_from_eur": 80200, "base_to_eur": 99200, "base_quota_eur": 14291, "marginal_percent": 24 },
+        { "base_from_eur": 99200, "base_to_eur": 120200, "base_quota_eur": 18851, "marginal_percent": 24.5 },
+        { "base_from_eur": 120200, "base_to_eur": null, "base_quota_eur": 23996, "marginal_percent": 25 }
+      ]
+    },
+    "galicia": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-galicia.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12985.35, "base_quota_eur": 0, "marginal_percent": 9 },
+        { "base_from_eur": 12985.35, "base_to_eur": 21068.6, "base_quota_eur": 1168.68, "marginal_percent": 11.65 },
+        { "base_from_eur": 21068.6, "base_to_eur": 35200, "base_quota_eur": 2110.38, "marginal_percent": 14.9 },
+        { "base_from_eur": 35200, "base_to_eur": 60000, "base_quota_eur": 4215.96, "marginal_percent": 18.4 },
+        { "base_from_eur": 60000, "base_to_eur": null, "base_quota_eur": 8779.16, "marginal_percent": 22.5 }
+      ]
+    },
+    "madrid": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-madrid.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 13362.22, "base_quota_eur": 0, "marginal_percent": 8.5 },
+        { "base_from_eur": 13362.22, "base_to_eur": 19004.63, "base_quota_eur": 1135.79, "marginal_percent": 10.7 },
+        { "base_from_eur": 19004.63, "base_to_eur": 35425.68, "base_quota_eur": 1739.53, "marginal_percent": 12.8 },
+        { "base_from_eur": 35425.68, "base_to_eur": 57320.4, "base_quota_eur": 3841.42, "marginal_percent": 17.4 },
+        { "base_from_eur": 57320.4, "base_to_eur": null, "base_quota_eur": 7651.1, "marginal_percent": 20.5 }
+      ]
+    },
+    "murcia": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-region-murcia.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12450, "base_quota_eur": 0, "marginal_percent": 9.5 },
+        { "base_from_eur": 12450, "base_to_eur": 20200, "base_quota_eur": 1182.75, "marginal_percent": 11.2 },
+        { "base_from_eur": 20200, "base_to_eur": 34000, "base_quota_eur": 2050.75, "marginal_percent": 13.3 },
+        { "base_from_eur": 34000, "base_to_eur": 60000, "base_quota_eur": 3886.15, "marginal_percent": 17.9 },
+        { "base_from_eur": 60000, "base_to_eur": null, "base_quota_eur": 8540.15, "marginal_percent": 22.5 }
+      ]
+    },
+    "la_rioja": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-autonoma-rioja.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12450, "base_quota_eur": 0, "marginal_percent": 8 },
+        { "base_from_eur": 12450, "base_to_eur": 20200, "base_quota_eur": 996, "marginal_percent": 10.6 },
+        { "base_from_eur": 20200, "base_to_eur": 35200, "base_quota_eur": 1817.5, "marginal_percent": 13.6 },
+        { "base_from_eur": 35200, "base_to_eur": 40000, "base_quota_eur": 3857.5, "marginal_percent": 17.8 },
+        { "base_from_eur": 40000, "base_to_eur": 50000, "base_quota_eur": 4711.9, "marginal_percent": 18.3 },
+        { "base_from_eur": 50000, "base_to_eur": 60000, "base_quota_eur": 6541.9, "marginal_percent": 19 },
+        { "base_from_eur": 60000, "base_to_eur": 120000, "base_quota_eur": 8441.9, "marginal_percent": 24.5 },
+        { "base_from_eur": 120000, "base_to_eur": null, "base_quota_eur": 23141.9, "marginal_percent": 27 }
+      ]
+    },
+    "comunitat_valenciana": {
+      "source_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunitat-valenciana.html",
+      "brackets": [
+        { "base_from_eur": 0, "base_to_eur": 12000, "base_quota_eur": 0, "marginal_percent": 9 },
+        { "base_from_eur": 12000, "base_to_eur": 22000, "base_quota_eur": 1080, "marginal_percent": 12 },
+        { "base_from_eur": 22000, "base_to_eur": 32000, "base_quota_eur": 2280, "marginal_percent": 15 },
+        { "base_from_eur": 32000, "base_to_eur": 42000, "base_quota_eur": 3780, "marginal_percent": 17.5 },
+        { "base_from_eur": 42000, "base_to_eur": 52000, "base_quota_eur": 5530, "marginal_percent": 20 },
+        { "base_from_eur": 52000, "base_to_eur": 62000, "base_quota_eur": 7530, "marginal_percent": 22.5 },
+        { "base_from_eur": 62000, "base_to_eur": 72000, "base_quota_eur": 9780, "marginal_percent": 25 },
+        { "base_from_eur": 72000, "base_to_eur": 100000, "base_quota_eur": 12280, "marginal_percent": 26.5 },
+        { "base_from_eur": 100000, "base_to_eur": 150000, "base_quota_eur": 19700, "marginal_percent": 27.5 },
+        { "base_from_eur": 150000, "base_to_eur": 200000, "base_quota_eur": 33450, "marginal_percent": 28.5 },
+        { "base_from_eur": 200000, "base_to_eur": null, "base_quota_eur": 47700, "marginal_percent": 29.5 }
+      ]
+    }
+  },
+  "autonomic_personal_family_minimums": {
+    "default_state_minimums_apply_to": [
+      "aragon",
+      "cantabria",
+      "castilla_la_mancha",
+      "castilla_y_leon",
+      "cataluna",
+      "extremadura",
+      "murcia"
+    ],
+    "override_by_territory": {
+      "andalucia": { "taxpayer_general": 5790, "taxpayer_over_65_increment": 1200, "taxpayer_over_75_additional_increment": 1460, "descendants": [2510, 2820, 4170, 4700], "descendant_under_3_increment": 2920, "ascendant_over_65_or_disabled": 1200, "ascendant_over_75_additional_increment": 1460, "disability_33_to_64": 3130, "disability_65_or_more": 9390, "disability_assistance_or_reduced_mobility_increment": 3130 },
+      "asturias": { "taxpayer_general": 6105, "taxpayer_over_65_increment": 1265, "taxpayer_over_75_additional_increment": 1540, "descendants": [2640, 2970, 4400, 4950], "descendant_under_3_increment": 3080, "ascendant_over_65_or_disabled": 1265, "ascendant_over_75_additional_increment": 1540, "disability_33_to_64": 3300, "disability_65_or_more": 9900, "disability_assistance_or_reduced_mobility_increment": 3300 },
+      "illes_balears": { "taxpayer_general": 5550, "taxpayer_over_65_total": 6105, "taxpayer_over_65_increment": 1265, "taxpayer_over_75_additional_increment": 1540, "descendants": [2400, 2970, 4400, 4950], "descendant_under_3_increment": 2800, "ascendant_over_65_or_disabled": 1265, "ascendant_over_75_additional_increment": 1540, "disability_33_to_64": 3300, "disability_65_or_more": 9900, "disability_assistance_or_reduced_mobility_increment": 3300 },
+      "canarias": { "taxpayer_general": 5606, "taxpayer_over_65_increment": 1162, "taxpayer_over_75_additional_increment": 1414, "descendants": [2424, 2727, 4040, 4545], "descendant_under_3_increment": 2828, "ascendant_over_65_or_disabled": 1162, "ascendant_over_75_additional_increment": 1414, "disability_33_to_64": 3030, "disability_65_or_more": 9090, "disability_assistance_or_reduced_mobility_increment": 3030 },
+      "galicia": { "taxpayer_general": 5789, "taxpayer_over_65_increment": 1199, "taxpayer_over_75_additional_increment": 1460, "descendants": [2503, 2816, 4172, 4694], "descendant_under_3_increment": 2920, "ascendant_over_65_or_disabled": 1199, "ascendant_over_75_additional_increment": 1460, "disability_33_to_64": 3129, "disability_65_or_more": 9387, "disability_assistance_or_reduced_mobility_increment": 3129 },
+      "madrid": { "taxpayer_general": 5956.65, "taxpayer_over_65_increment": 1234.26, "taxpayer_over_75_additional_increment": 1502.58, "descendants": [2575.85, 2897.83, 4400, 4950], "descendant_under_3_increment": 3005.16, "ascendant_over_65_or_disabled": 1234.26, "ascendant_over_75_additional_increment": 1502.58, "disability_33_to_64": 3219.81, "disability_65_or_more": 9659.44, "disability_assistance_or_reduced_mobility_increment": 3219.81 },
+      "la_rioja": { "uses_state_minimums_except": "Solo para el minimo por descendientes con discapacidad y asistencia/movilidad segun el cuadro AEAT", "descendant_disability_33_to_64": 3300, "descendant_disability_65_or_more": 9900, "disability_assistance_or_reduced_mobility_increment_general": 3000 },
+      "comunitat_valenciana": { "taxpayer_general": 6105, "taxpayer_over_65_increment": 1265, "taxpayer_over_75_additional_increment": 1540, "descendants": [2640, 2970, 4400, 4950], "descendant_under_3_increment": 3080, "ascendant_over_65_or_disabled": 1265, "ascendant_over_75_additional_increment": 1540, "disability_33_to_64": 3300, "disability_65_or_more": 9900, "disability_assistance_or_reduced_mobility_increment": 3300 }
+    }
+  },
+  "autonomic_deductions": {
+    "policy": "Catalogo fuente completo localizado por comunidad; no aplicar automaticamente en el calculo hasta parametrizar cuantia, limites de renta, compatibilidades y campos de usuario exigidos por cada deduccion.",
+    "guide_url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025-deducciones-autonomicas/guia-deducciones-autonomicas.html",
+    "coverage_status": {
+      "source_index": "complete_common_regime_excluding_pais_vasco_navarra",
+      "calculation_ready": false
+    },
+    "priority_families_for_project": [
+      "hijos_nacimiento_adopcion_acogimiento",
+      "familia_numerosa_monoparental",
+      "discapacidad",
+      "dependencia_personas_a_cargo",
+      "alquiler_vivienda_habitual",
+      "guarderia_cuidado_hijos",
+      "empleados_hogar_cuidado_dependientes"
+    ]
+  }
+}

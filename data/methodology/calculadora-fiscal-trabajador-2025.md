@@ -6,18 +6,18 @@ Objetivo: dejar localizados y parametrizados los datos oficiales necesarios para
 
 ## Alcance implementable
 
-El paquete de parametros creado cubre el caso base que aparece hoy en la interfaz: trabajador por cuenta ajena del Regimen General, contrato indefinido, residente en la Comunidad de Madrid, salario bruto anual y consumo anual estimado por el usuario.
+El paquete de parametros creado cubre trabajador por cuenta ajena del Regimen General, contrato indefinido, salario bruto anual, consumo anual estimado por el usuario y selector de comunidad autonoma para las CCAA de regimen comun. Pais Vasco y Navarra quedan fuera del alcance por decision del proyecto.
 
 La calculadora 2025 no debe comparar con 2030 ni con ningun futuro en esta fase. La comparacion posterior se hara con anos pasados, siempre que cada ano tenga su propio paquete normativo.
 
 Los factores de usuario que si se tendran en cuenta en este proyecto son: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica.
 
-Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario, trabajadores del mar, artistas, taurinos, regimenes forales, deducciones autonomicas completas y contingencias profesionales por CNAE.
+Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario, trabajadores del mar, artistas, taurinos, regimenes forales, aplicacion automatica de deducciones autonomicas completas y contingencias profesionales por CNAE.
 
 ## Fuentes oficiales usadas
 
 - BOE: Orden PJC/178/2025, de 25 de febrero, normas de cotizacion 2025.
-- Agencia Tributaria: Manual practico de Renta 2025, gravamen estatal, gravamen autonomico de Madrid, minimo personal y familiar, gastos/reducciones de rendimientos del trabajo y pagina del algoritmo oficial de retenciones 2025.
+- Agencia Tributaria: Manual practico de Renta 2025, gravamen estatal, gravamen autonomico por CCAA, cuadro de minimos personales/familiares estatales y autonomicos, guia de deducciones autonomicas, gastos/reducciones de rendimientos del trabajo y pagina del algoritmo oficial de retenciones 2025.
 - Agencia Tributaria: tipos impositivos de IVA 2025.
 
 ## Parametros recogidos
@@ -25,10 +25,11 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 - Bases minimas y maximas mensuales del Regimen General por grupo de cotizacion.
 - Tipos de cotizacion 2025: contingencias comunes, desempleo indefinido/temporal, FOGASA, formacion profesional, MEI, horas extra y cotizacion adicional de solidaridad.
 - Escala estatal general del IRPF 2025.
-- Escala autonomica general de la Comunidad de Madrid 2025.
-- Minimos personales y familiares estatales basicos.
+- Escalas autonomicas generales de las CCAA de regimen comun 2025, excluyendo Pais Vasco y Navarra.
+- Minimos personales y familiares estatales basicos y minimos autonomicos propios cuando la CCAA fija importes diferentes.
 - Gastos deducibles generales de rendimientos del trabajo y reduccion por obtencion de rendimientos del trabajo.
 - Tipos de IVA general, reducido, superreducido y cero.
+- Catalogo AEAT de familias de deducciones autonomicas 2025: hijos/nacimiento/adopcion/acogimiento, familia numerosa o monoparental, discapacidad, dependencia/personas a cargo, alquiler de vivienda habitual, guarderia, empleados de hogar/cuidado de dependientes, entre otras.
 
 ## Reglas de calculo recomendadas
 
@@ -44,8 +45,8 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 
 ## Limitaciones
 
-- La escala autonomica solo esta parametrizada para Madrid. Para que el selector de comunidad sea real, hay que incorporar todas las escalas autonomicas y minimos autonomicos aplicables.
-- Las deducciones estatales/autonomicas pueden cambiar mucho el resultado individual; no se incluyen salvo los minimos y reducciones basicas.
+- Las escalas autonomicas y minimos propios quedan parametrizados para CCAA de regimen comun. Pais Vasco y Navarra no se incorporan.
+- Las deducciones estatales/autonomicas pueden cambiar mucho el resultado individual. Para autonomicas hay catalogo oficial localizado, pero no se aplican automaticamente hasta codificar importes, limites, requisitos e incompatibilidades de cada deduccion.
 - La cotizacion por contingencias profesionales depende de actividad/CNAE y es cuota empresarial; no debe inventarse.
 - `Otros impuestos` no es una magnitud directamente deducible del salario bruto. En este proyecto se tratara como aproximacion separada, basada en datos declarados por el usuario o en una cesta media documentada.
 - La guia para replicar este paquete en otros ejercicios esta en `data/methodology/calculadora-fiscal-datos-por-ano.md`.
@@ -54,3 +55,4 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 ## Archivo generado
 
 - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`
+- `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json`

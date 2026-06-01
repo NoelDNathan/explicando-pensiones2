@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Completada la cobertura 2025 de IRPF autonomico para la calculadora fiscal en comunidades de regimen comun, ignorando Pais Vasco y Navarra. Se creo `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json` con escalas autonomicas, minimos autonomicos propios o aplicacion de minimos estatales, y catalogo de familias de deducciones autonomicas AEAT. Estado del bloque: escala autonomica Madrid, si; escalas resto CCAA de regimen comun, si; minimos autonomicos propios, si; deducciones autonomicas por hijos, discapacidad, dependencia, alquiler, familia numerosa, etc., catalogo de fuente localizado pero no calculo automatico hasta parametrizar requisitos e importes.
+
 - Definida la metodologia de IVA y otros impuestos para la calculadora fiscal: el IVA tendra dos modos, `media_por_rango_salarial` pendiente de procesar con INE EPF por tramo de ingresos/renta y `personalizado_por_categoria` con gasto declarado por vivienda, suministros, alimentos, hosteleria, transporte, carburantes, ropa, tecnologia, ocio, salud/educacion/seguros y otros. `Otros impuestos` se tratara inicialmente como media espanola estimada, separada del neto laboral y sin doble contar IVA. Se creo `data/methodology/calculadora-fiscal-iva-otros-impuestos.md` y se amplio el JSON 2025 con estos modos.
 
 - Ajustada la distribucion de `/resumen` para acercarla mucho mas al mockup aportado: el selector de ano queda dentro del area central por encima de piramide e indicadores, la rail derecha empieza arriba con el simulador de reformas, y el bloque superior se reparte entre piramide poblacional e indicadores clave. Se compacto el panel de indicadores para que su altura sea similar a la piramide y deje visible la evolucion historica debajo. Verificado con `tsc --noEmit`, `vite build` y capturas headless de escritorio y movil.
@@ -343,7 +345,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 - Para completar la calculadora fiscal 2025 en UI, adaptar `src/components/fiscal-worker-dashboard` al alcance decidido: quitar comparacion 2030/futuro, usar el paquete 2025 como base, pedir los factores incluidos y mostrar IVA/otros impuestos como modulos aproximados separados.
 
-- Integrar el JSON de parametros 2025 en `src/components/fiscal-worker-dashboard` sustituyendo valores de maqueta, empezando por el caso Madrid/contrato indefinido/salario bruto anual. Antes de hacer interactivo el selector de CCAA, incorporar escalas autonomicas y minimos autonomicos 2025 de todas las comunidades desde AEAT.
+- Integrar los JSON de parametros 2025 en `src/components/fiscal-worker-dashboard` sustituyendo valores de maqueta, empezando por Regimen General/contrato indefinido/salario bruto anual y selector de CCAA de regimen comun. Pais Vasco y Navarra quedan fuera del selector. Las deducciones autonomicas deben mostrarse como no aplicadas automaticamente hasta convertir el catalogo AEAT en reglas por deduccion.
 
 - Para ingresos de Seguridad Social 1990-1994, localizar la fuente primaria indicada por el PDF FIPROS: Anuario de Estadisticas Laborales y Observatorio Social de Espana, Informe 2007. Antes de uso editorial, resolver la discrepancia del total 2002 y decidir si se incorpora solo `cotizaciones_sociales`/`transferencias_corrientes` como serie candidata separada o si se encuentra una liquidacion primaria mas limpia.
 

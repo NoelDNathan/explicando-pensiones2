@@ -767,14 +767,17 @@
   - localizacion de las paginas oficiales vigentes para 2025;
   - transcripcion de bases maximas/minimas del Regimen General;
   - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional, MEI, horas extra y solidaridad;
-  - transcripcion de la escala estatal general del IRPF y de la escala autonomica de Madrid;
-  - transcripcion de minimos personales/familiares estatales basicos, gastos deducibles y reduccion general de rendimientos del trabajo;
+  - transcripcion de la escala estatal general del IRPF y de las escalas autonomicas de las comunidades de regimen comun, excluyendo Pais Vasco y Navarra por alcance;
+  - transcripcion de minimos personales/familiares estatales basicos y minimos autonomicos propios o aplicacion de los minimos estatales cuando la CCAA no fija importes diferentes;
+  - registro de las familias de deducciones autonomicas localizadas en la guia AEAT 2025 como catalogo de fuente, sin convertirlas todavia en reglas de calculo automatico;
+  - transcripcion de gastos deducibles y reduccion general de rendimientos del trabajo;
   - registro de tipos de IVA general, reducido, superreducido y cero;
   - separacion explicita de parametros cubiertos y huecos que requieren nuevas fuentes o datos del usuario.
 - Archivo generado:
   - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`.
+  - `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json`.
 - Metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2025.md`.
   - `data/methodology/calculadora-fiscal-datos-por-ano.md`.
   - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
-- Nota de uso: este JSON permite completar una primera version trazable para 2025 del caso base de Madrid y documenta los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA tendra dos modos: media por rango salarial/renta si se procesa INE EPF y personalizado por categorias de gasto. Otros impuestos se mostraran como media espanola estimada, separada del neto laboral y sin doble contar IVA.
+- Nota de uso: estos JSON permiten completar una primera version trazable para 2025 del trabajador por cuenta ajena en Regimen General y documentan los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA tendra dos modos: media por rango salarial/renta si se procesa INE EPF y personalizado por categorias de gasto. Otros impuestos se mostraran como media espanola estimada, separada del neto laboral y sin doble contar IVA. Las deducciones autonomicas quedan como catalogo oficial localizado; aplicarlas a calculo exige parametrizar condiciones, limites, compatibilidades y campos adicionales por deduccion.

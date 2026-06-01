@@ -1057,16 +1057,20 @@
   - AEAT, reduccion general por rendimientos del trabajo: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-3-determinacion-rendimiento-neto-reducido.html
   - AEAT, retenciones ejercicio 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/descarga-programas-ayuda/retenciones/ejercicio-2025.html
   - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+  - AEAT, gravamen autonomico IRPF 2025 por CCAA: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico.html
+  - AEAT, cuadro de minimos personales y familiares estatales/autonomicos 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c14-adecuacion-impuesto-circunstancias-personales/minimo-autonomico-personal-familiar/cuadro-minimos-personales-familiares-estatal-autonomicos.html
+  - AEAT, guia de deducciones autonomicas 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025-deducciones-autonomicas/guia-deducciones-autonomicas.html
 - fecha de consulta: 2026-06-01
 - periodo: 2025
-- ambito: Espana; caso base de trabajador por cuenta ajena del Regimen General y Comunidad de Madrid.
+- ambito: Espana; trabajador por cuenta ajena del Regimen General. Para CCAA se cubren las comunidades de regimen comun y se excluyen expresamente Pais Vasco y Navarra.
 - formato procesado: JSON.
 - archivo procesado:
   - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`
+  - `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json`
 - metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2025.md`
-- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, MEI, cotizacion de solidaridad, escala estatal IRPF 2025, escala autonomica de Madrid, minimos personales/familiares basicos, gastos y reducciones de trabajo, y tipos de IVA.
-- nota metodologica: no es una calculadora cerrada ni una estimacion de recaudacion. El alcance decidido incorpora salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. IVA tendra dos modos: media por rango salarial/renta, pendiente de procesar INE EPF, y gasto personalizado por categorias. Otros impuestos se trataran como media espanola estimada y separada del neto laboral. Para otras comunidades, deducciones autonomicas, autonomos, contingencias profesionales por CNAE, impuestos especiales o tributos locales hacen falta parametros adicionales.
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, MEI, cotizacion de solidaridad, escala estatal IRPF 2025, escalas autonomicas de regimen comun, minimos personales/familiares estatales y autonomicos, gastos y reducciones de trabajo, tipos de IVA y catalogo de familias de deducciones autonomicas.
+- nota metodologica: no es una calculadora cerrada ni una estimacion de recaudacion. El alcance decidido incorpora salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. IVA tendra dos modos: media por rango salarial/renta, pendiente de procesar INE EPF, y gasto personalizado por categorias. Otros impuestos se trataran como media espanola estimada y separada del neto laboral. Las escalas y minimos de CCAA de regimen comun quedan cubiertos para 2025; Pais Vasco y Navarra se excluyen por decision de alcance. Las deducciones autonomicas quedan localizadas como catalogo AEAT por familias, pero no deben aplicarse automaticamente hasta parametrizar importes, limites, incompatibilidades y requisitos de cada deduccion.
 - fuente candidata para aproximacion de IVA por cesta media: INE, Encuesta de Presupuestos Familiares, tablas de gasto por COICOP; usar solo si se procesa como dataset separado con metadata propia.
 - metodologia especifica:
   - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`

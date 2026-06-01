@@ -103,8 +103,9 @@ No comparar con futuro en esta fase. La comparacion sera contra anos pasados y c
 
 - Cada parametro debe tener fuente oficial o institucional.
 - Cada ano comparado debe tener su propio paquete de parametros; no aplicar reglas 2025 a anos pasados.
-- Si falta una CCAA, el selector no debe permitirla o debe marcarla como pendiente.
+- Si falta una CCAA, el selector no debe permitirla o debe marcarla como pendiente. Para 2025 ya estan cubiertas las CCAA de regimen comun en escalas y minimos; Pais Vasco y Navarra se ignoran por alcance.
 - Si falta una condicion personal, el resultado debe avisar que no la contempla.
+- Las deducciones autonomicas pueden estar localizadas como catalogo de fuente sin estar listas para calculo. Solo se aplicaran cuando cada deduccion tenga importes, limites, requisitos, incompatibilidades y campos de usuario necesarios.
 - IVA y otros impuestos deben aparecer como aproximaciones separadas de `neto laboral`.
 - Cualquier dato medio de consumo debe vivir en `data/processed/` como dataset separado, con metadata y checksums.
 - La metodologia especifica de IVA y otros impuestos esta en `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
