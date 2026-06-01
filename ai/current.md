@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Continuada la cobertura 2015 para la calculadora fiscal del trabajador. Se descargo desde el Ministerio de Hacienda la compilacion de normativa autonomica del IRPF y se conservo el bruto HTML junto con una version textual limpia. Se creo `data/processed/fiscal/2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json` como indice de lineas por comunidad de regimen comun. Estado: fuente oficial localizada, pero no se activan importes nuevos porque el texto esta consolidado y contiene modificaciones posteriores; cada CCAA debe verificarse por vigencia 2015 antes de pasar a parametros calculables. Andalucia queda marcada como escala detectada no usable para 2015 porque la seccion localizada indica efectos desde 2016.
+
 - Reorganizada la carpeta `src/components/` por responsabilidades: componentes base en `ui/`, graficos en `charts/`, piezas de poblacion en `population/` y dashboards/paginas en carpetas de feature (`pension-overview/`, `health-expenditure/`, `salary-nationality/` y `fiscal-worker-dashboard/`). Se actualizaron las importaciones de `App.tsx`, datos y componentes afectados. Verificado con `tsc --noEmit` y `vite build`.
 
 - Iniciado el paquete de parametros 2015 para la calculadora fiscal del trabajador. Se descargaron y conservaron brutos oficiales de BOE/AEAT: Orden ESS/86/2015 de cotizacion, Ley 35/2006 IRPF consolidada a 31-12-2015, Manual practico Renta 2015 y Ley 4/2014 de la Comunidad de Madrid. Se creo `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json` con bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos estatales, minimos por descendientes propios de Madrid, gastos/reducciones de trabajo y tipos de IVA. Estado del bloque: util para caso base Madrid y comparacion normativa anual; pendiente CCAA restantes, deducciones autonomicas, algoritmo AEAT de retenciones 2015, EPF para IVA medio y otros impuestos.
@@ -343,7 +345,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Pendiente inmediato
 
-- Para completar la comparacion 2015 en la calculadora fiscal, parametrizar las escalas y minimos autonomicos de todas las CCAA de regimen comun, localizar el algoritmo oficial AEAT de retenciones 2015 si se muestra nomina mensual, y decidir si las deducciones autonomicas 2015 se incorporan como catalogo o reglas calculables.
+- Para completar la comparacion 2015 en la calculadora fiscal, convertir el indice candidato de Hacienda en parametros calculables comunidad por comunidad, verificando vigencia 2015 antes de transcribir importes. Madrid ya esta parametrizada; Andalucia requiere otra fuente o tramo aplicable a 2015 porque la escala localizada en la compilacion indica efectos desde 2016. Sigue pendiente localizar el algoritmo oficial AEAT de retenciones 2015 si se muestra nomina mensual, y decidir si las deducciones autonomicas 2015 se incorporan como catalogo o reglas calculables.
 
 - Procesar un dataset INE EPF que permita estimar IVA medio por tramo de ingresos/renta y categoria COICOP. Hasta entonces, el modo `media_por_rango_salarial` debe aparecer como pendiente o no mostrarse con cifras.
 

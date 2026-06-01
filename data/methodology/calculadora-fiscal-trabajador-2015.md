@@ -19,6 +19,7 @@ La estimacion anual puede usar escalas IRPF y minimos, pero no debe presentarse 
 - AEAT: Manual practico de Renta 2015, conservado como fuente bruta de contraste.
 - BOE: Ley 4/2014 de la Comunidad de Madrid, con escala autonomica y minimos por descendientes aplicables en 2015.
 - Agencia Tributaria: tipos impositivos de IVA como referencia general.
+- Ministerio de Hacienda: compilacion de normativa autonomica del IRPF, descargada como fuente candidata para localizar escalas y deducciones del resto de comunidades de regimen comun.
 
 ## Parametros recogidos
 
@@ -30,6 +31,7 @@ La estimacion anual puede usar escalas IRPF y minimos, pero no debe presentarse 
 - Minimos personales/familiares estatales basicos y minimos por descendientes propios de Madrid.
 - Gastos deducibles generales de rendimientos del trabajo y reduccion por obtencion de rendimientos del trabajo.
 - Tipos de IVA general, reducido, superreducido y cero como estructura de parametros.
+- Fuente candidata de normativa autonomica comun: se ha creado un indice de cobertura por comunidad, pero no se transcriben importes porque el documento de Hacienda mezcla texto consolidado y notas de modificaciones posteriores. Cada escala debe verificarse contra vigencia 2015 antes de uso calculable.
 
 ## Reglas de calculo recomendadas
 
@@ -45,6 +47,7 @@ La estimacion anual puede usar escalas IRPF y minimos, pero no debe presentarse 
 ## Limitaciones
 
 - Solo queda parametrizada Madrid como comunidad autonoma.
+- Para el resto de comunidades de regimen comun hay una fuente oficial localizada y un indice de lineas candidato, pero no hay parametros numericos activados.
 - Las deducciones autonomicas de Madrid no se han convertido en reglas de calculo automatico.
 - La cotizacion por contingencias profesionales depende de actividad/CNAE y es cuota empresarial; queda fuera del calculo base.
 - `Otros impuestos` queda pendiente porque requiere componentes, fuente y denominador.
@@ -53,3 +56,4 @@ La estimacion anual puede usar escalas IRPF y minimos, pero no debe presentarse 
 ## Archivo generado
 
 - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json`
+- `data/processed/fiscal/2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json`

@@ -791,6 +791,7 @@
   - BOE, Ley 35/2006 del IRPF consolidada a 31 de diciembre de 2015, para escala estatal, minimos, gastos y reducciones.
   - AEAT, Manual practico de Renta 2015, conservado como bruto de contraste.
   - BOE, Ley 4/2014 de la Comunidad de Madrid, para escala autonomica y minimos por descendientes de Madrid.
+  - Ministerio de Hacienda, compilacion de normas autonomicas IRPF, como fuente candidata para comunidades de regimen comun.
   - AEAT, tipos impositivos de IVA.
 - Transformacion aplicada:
   - descarga y conservacion de brutos oficiales HTML/PDF;
@@ -801,9 +802,12 @@
   - transcripcion de la escala estatal general del IRPF 2015;
   - transcripcion de la escala autonomica de la Comunidad de Madrid y minimos por descendientes propios;
   - transcripcion de minimos personales/familiares estatales, gastos deducibles y reduccion general de rendimientos del trabajo;
+  - descarga del HTML de Hacienda sobre normativa autonomica y conversion mecanica a texto limpio para localizar secciones de escala por comunidad;
+  - creacion de un indice candidato de lineas por CCAA de regimen comun, sin transcribir importes todavia por riesgo de mezclar texto consolidado posterior con vigencia 2015;
   - registro de tipos legales de IVA y huecos pendientes para IVA medio y otros impuestos.
 - Archivo generado:
   - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json`.
+  - `data/processed/fiscal/2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json`.
 - Metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2015.md`.
 - Nota de uso: primer paquete 2015 para caso base Comunidad de Madrid. Antes de activar comparacion completa por CCAA se deben parametrizar las comunidades de regimen comun. Antes de mostrar nomina mensual o retencion exacta se debe localizar e incorporar el algoritmo oficial de retenciones AEAT 2015.

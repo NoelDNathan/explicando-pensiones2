@@ -1084,6 +1084,7 @@
   - BOE, Ley 35/2006 del IRPF consolidada a 31-12-2015: https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764&p=20151231&tn=1
   - AEAT, Manual practico Renta 2015: https://sede.agenciatributaria.gob.es/static_files/Sede/Biblioteca/Manual/Practicos/IRPF/IRPF-2015/Manual_Renta_2015_es_es.pdf
   - BOE, Ley 4/2014 de la Comunidad de Madrid: https://www.boe.es/buscar/doc.php?id=BOE-A-2015-1956
+  - Ministerio de Hacienda, normas autonomicas IRPF, fuente candidata para comunidades de regimen comun: https://www.hacienda.gob.es/DocLeyes/onlinelt/c02.06.cd.irpf.autonomias.ejercicioanterior_te_23195.htm
   - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
 - fecha de consulta/descarga: 2026-06-01
 - periodo: 2015
@@ -1095,9 +1096,12 @@
   - `data/raw/aeat/irpf-2015/2026-06-01_aeat_manual-renta-2015.pdf`
   - `data/raw/boe/irpf-2015/2026-06-01_boe_ley-4-2014-madrid-irpf-2015.html`
   - `data/raw/boe/irpf-2015/2026-06-01_boe_ley-4-2014-madrid-irpf-2015.pdf`
+  - `data/raw/hacienda/irpf-autonomico-2015/2026-06-01_hacienda_normas-autonomicas-irpf-ejercicio-anterior.html`
+  - `data/raw/hacienda/irpf-autonomico-2015/2026-06-01_hacienda_normas-autonomicas-irpf-ejercicio-anterior.txt`
 - archivo procesado:
   - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json`
+  - `data/processed/fiscal/2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json`
 - metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2015.md`
-- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos personales/familiares estatales, minimos por descendientes propios de Madrid, gastos y reducciones de trabajo y tipos de IVA.
-- nota metodologica: primer paquete 2015 para caso base Madrid. No activa todas las CCAA, no parametriza deducciones autonomicas y no replica retenciones de nomina sin algoritmo oficial AEAT 2015. En 2015 no existen MEI ni cotizacion adicional de solidaridad.
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos personales/familiares estatales, minimos por descendientes propios de Madrid, gastos y reducciones de trabajo y tipos de IVA. Ademas, conserva una fuente candidata e indice de cobertura para localizar escalas autonomicas de regimen comun.
+- nota metodologica: primer paquete 2015 para caso base Madrid. No activa todas las CCAA, no parametriza deducciones autonomicas y no replica retenciones de nomina sin algoritmo oficial AEAT 2015. El indice de Hacienda es candidato: al ser texto consolidado con modificaciones posteriores, cada escala debe verificarse para vigencia 2015 antes de transcribir importes. En 2015 no existen MEI ni cotizacion adicional de solidaridad.

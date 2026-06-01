@@ -1,0 +1,192 @@
+{
+  "dataset_id": "hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata",
+  "created_at": "2026-06-01",
+  "status": "candidato_en_revision",
+  "scope": {
+    "country": "Espana",
+    "year": 2015,
+    "tax": "IRPF",
+    "component": "gravamen autonomico y normativa autonomica",
+    "included_territories": [
+      "andalucia",
+      "aragon",
+      "asturias",
+      "illes_balears",
+      "canarias",
+      "cantabria",
+      "castilla_la_mancha",
+      "castilla_y_leon",
+      "cataluna",
+      "extremadura",
+      "galicia",
+      "madrid",
+      "murcia",
+      "la_rioja",
+      "comunitat_valenciana"
+    ],
+    "excluded_territories": [
+      "pais_vasco",
+      "navarra",
+      "ceuta",
+      "melilla"
+    ]
+  },
+  "sources": {
+    "hacienda_normas_autonomicas": {
+      "institution": "Ministerio de Hacienda",
+      "url": "https://www.hacienda.gob.es/DocLeyes/onlinelt/c02.06.cd.irpf.autonomias.ejercicioanterior_te_23195.htm",
+      "raw_html": "data/raw/hacienda/irpf-autonomico-2015/2026-06-01_hacienda_normas-autonomicas-irpf-ejercicio-anterior.html",
+      "raw_text": "data/raw/hacienda/irpf-autonomico-2015/2026-06-01_hacienda_normas-autonomicas-irpf-ejercicio-anterior.txt",
+      "download_date": "2026-06-01"
+    },
+    "madrid_canonical_source": {
+      "institution": "BOE / Comunidad de Madrid",
+      "url": "https://www.boe.es/buscar/doc.php?id=BOE-A-2015-1956",
+      "raw_html": "data/raw/boe/irpf-2015/2026-06-01_boe_ley-4-2014-madrid-irpf-2015.html"
+    }
+  },
+  "extraction_policy": [
+    "Este fichero no contiene parametros numericos aplicables a la calculadora.",
+    "La fuente de Hacienda es un texto consolidado/compilado de normativa autonomica con notas de vigencia y modificaciones posteriores.",
+    "Cada escala debe verificarse contra su nota de vigencia o norma autonomica aplicable al periodo impositivo 2015 antes de pasar a un JSON calculable.",
+    "Si la escala localizada indica efectos desde 2016, 2017 o 2018, no debe usarse para 2015."
+  ],
+  "territories": {
+    "andalucia": {
+      "status": "escala_detectada_no_usable_para_2015",
+      "candidate_lines": {
+        "scale_heading": 783,
+        "vigencia_note": 787,
+        "table_header": 797
+      },
+      "notes": [
+        "La escala detectada en el texto limpio indica efectos desde el dia 1 de enero de 2016.",
+        "Pendiente localizar la escala vigente para el periodo impositivo 2015 en fuente normativa compatible."
+      ]
+    },
+    "aragon": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 1131,
+        "text": 1134
+      }
+    },
+    "asturias": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 2257,
+        "article": 2260,
+        "table_header": 2277
+      }
+    },
+    "illes_balears": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 3134,
+        "article": 3137,
+        "table_header": 3154
+      },
+      "notes": [
+        "Las notas finales del documento contienen referencias a presupuestos de Illes Balears 2015, 2016, 2017 y 2018; hay que aislar el texto vigente en 2015."
+      ]
+    },
+    "canarias": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 5659,
+        "text": 5667,
+        "table_header": 5679
+      },
+      "notes": [
+        "Las notas finales incluyen varias modificaciones posteriores con vigencia 2017/2018; requiere comprobacion antes de transcribir importes."
+      ]
+    },
+    "cantabria": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 5372,
+        "text": 5375,
+        "table_header": 5394
+      }
+    },
+    "castilla_la_mancha": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 6802,
+        "text": 6806,
+        "table_header": 6818
+      }
+    },
+    "castilla_y_leon": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 7086,
+        "text": 7089,
+        "table_header": 7101
+      }
+    },
+    "cataluna": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 8678,
+        "text": 8682,
+        "table_header": 8691
+      }
+    },
+    "extremadura": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 9095,
+        "text": 9099,
+        "table_header": 9109
+      }
+    },
+    "galicia": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 10097,
+        "text": 10101,
+        "table_header": 10114
+      }
+    },
+    "madrid": {
+      "status": "parametrizado_en_json_2015",
+      "canonical_source": "BOE, Ley 4/2014 de la Comunidad de Madrid",
+      "processed_file": "data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json",
+      "candidate_lines_in_hacienda_text": {
+        "scale_heading": 11139,
+        "article": 11142,
+        "table_header": 11155
+      }
+    },
+    "murcia": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 12619,
+        "text": 12630,
+        "table_header": 12640
+      }
+    },
+    "la_rioja": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 12939,
+        "text": 12947,
+        "table_header": 12960
+      }
+    },
+    "comunitat_valenciana": {
+      "status": "fuente_localizada_pendiente_verificar_vigencia_2015",
+      "candidate_lines": {
+        "scale_heading": 15691,
+        "text": 15695,
+        "table_header": 15703
+      }
+    }
+  },
+  "next_steps": [
+    "Extraer una comunidad por iteracion y contrastar cada tramo con la nota de vigencia o BOE/diario oficial autonomico aplicable a 2015.",
+    "Convertir solo las comunidades verificadas a un JSON calculable de escalas/minimos 2015.",
+    "Mantener las deducciones autonomicas como catalogo hasta parametrizar importes, limites, requisitos e incompatibilidades."
+  ]
+}
