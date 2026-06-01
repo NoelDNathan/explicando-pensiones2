@@ -1105,3 +1105,28 @@
   - `data/methodology/calculadora-fiscal-trabajador-2015.md`
 - descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos personales/familiares estatales, minimos por descendientes propios de Madrid, gastos y reducciones de trabajo y tipos de IVA. Ademas, conserva una fuente candidata e indice de cobertura para localizar escalas autonomicas de regimen comun.
 - nota metodologica: primer paquete 2015 para caso base Madrid. No activa todas las CCAA, no parametriza deducciones autonomicas y no replica retenciones de nomina sin algoritmo oficial AEAT 2015. El indice de Hacienda es candidato: al ser texto consolidado con modificaciones posteriores, cada escala debe verificarse para vigencia 2015 antes de transcribir importes. En 2015 no existen MEI ni cotizacion adicional de solidaridad.
+
+## Calculadora fiscal del trabajador - cobertura anual 2014-2026
+
+- nombre de la fuente: cobertura anual para extender parametros normativos de la calculadora fiscal del trabajador.
+- instituciones: Agencia Estatal de Administracion Tributaria; Boletin Oficial del Estado.
+- URLs:
+  - AEAT, pagina de manuales practicos IRPF: https://sede.agenciatributaria.gob.es/Sede/manuales/irpf_.html
+  - BOE, Orden ESS/106/2014: https://www.boe.es/eli/es/o/2014/01/31/ess106
+  - BOE, Orden ESS/70/2016: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2016-886
+  - BOE, Orden ESS/106/2017: https://www.boe.es/diario_boe/txt.php?id=BOE-A-2017-1369
+  - BOE, Orden ESS/55/2018: https://www.boe.es/eli/es/o/2018/01/26/ess55
+  - BOE, Orden TMS/83/2019: https://www.boe.es/eli/es/o/2019/01/31/tms83
+  - BOE, Real Decreto-ley 18/2019, prorroga de cotizacion 2020: https://www.boe.es/eli/es/rdl/2019/12/27/18/con
+  - BOE, Orden PCM/1353/2021: https://www.boe.es/eli/es/o/2021/12/02/pcm1353
+  - BOE, Orden PCM/244/2022: https://www.boe.es/buscar/doc.php?id=BOE-A-2022-5063
+  - BOE, Orden PCM/74/2023: https://www.boe.es/eli/es/o/2023/01/30/pcm74
+  - BOE, Orden PJC/51/2024: https://www.boe.es/buscar/act.php?id=BOE-A-2024-1691
+- fecha de revision: 2026-06-02
+- periodo: 2014-2026; cubrible 2014-2025; 2026 no cerrado para IRPF anual.
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-cobertura-por-ano-2014-2026.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-cobertura-por-ano.md`
+- descripcion breve: matriz de disponibilidad de fuentes oficiales por ano para priorizar la extraccion de parametros de IRPF y cotizacion del Regimen General.
+- nota metodologica: no contiene importes ni reglas calculables. 2020 requiere tratamiento especifico por prorroga de la normativa 2019; 2026 no debe presentarse como ejercicio fiscal anual cerrado.

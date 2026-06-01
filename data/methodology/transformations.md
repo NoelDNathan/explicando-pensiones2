@@ -811,3 +811,20 @@
 - Metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2015.md`.
 - Nota de uso: primer paquete 2015 para caso base Comunidad de Madrid. Antes de activar comparacion completa por CCAA se deben parametrizar las comunidades de regimen comun. Antes de mostrar nomina mensual o retencion exacta se debe localizar e incorporar el algoritmo oficial de retenciones AEAT 2015.
+
+## Calculadora fiscal del trabajador - cobertura por ano 2014-2026
+
+- Fecha de revision: 2026-06-02.
+- Script reproducible: no aplica; revision de fuentes oficiales y matriz metodologica.
+- Fuentes revisadas:
+  - AEAT, pagina de manuales practicos IRPF, con manuales de Renta 2014 a Renta 2025.
+  - BOE, ordenes/normas de cotizacion anual del Regimen General para 2014-2025.
+- Transformacion aplicada:
+  - clasificacion manual de cada ejercicio segun disponibilidad de IRPF anual y cotizacion del Regimen General;
+  - marcado de 2015 y 2025 como ya parametrizados parcialmente en ficheros existentes;
+  - marcado de 2020 como cubrible con metodologia especifica por prorroga normativa;
+  - marcado de 2026 como no cubierto para IRPF anual completo a 2026-06-02.
+- Archivos generados:
+  - `data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-cobertura-por-ano-2014-2026.json`.
+  - `data/methodology/calculadora-fiscal-cobertura-por-ano.md`.
+- Nota de uso: este fichero no contiene parametros numericos calculables. Sirve para priorizar la extraccion de anos y evitar mezclar ejercicios cerrados con 2026 o anos anteriores a 2014 sin fuente equivalente localizada.

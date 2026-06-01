@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Revisada la cobertura anual posible para extender la calculadora fiscal del trabajador. Se creo `data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-cobertura-por-ano-2014-2026.json` y `data/methodology/calculadora-fiscal-cobertura-por-ano.md`. Resultado: se pueden abarcar 2014-2025 con fuentes oficiales AEAT/BOE; 2016-2024 son los anos mas directos para completar tras 2015 y 2025. El ano 2020 queda marcado con metodologia especifica por prorroga de cotizacion, 2021 con cautela de efectos temporales, y 2026 queda fuera como IRPF anual cerrado hasta que exista manual de Renta 2026.
+
 - Creado `src/components/ui/DashboardSidebar.tsx` como capa de gestion de la barra lateral sobre el componente presentacional `Sidebar`. Se ha aplicado en `/resumen`, `/gasto-sanitario` y `/calculadora-fiscal`, centralizando el marcado de item activo e indicador activo sin duplicar esa logica en cada pagina. En la calculadora fiscal se sustituyo la sidebar local por la compartida y se ajustaron estilos de compatibilidad para conservar ancho, logo y estado activo. Verificado con `tsc --noEmit`, `vite build` y respuesta HTTP 200 en `/resumen`, `/gasto-sanitario` y `/calculadora-fiscal`. No se pudo hacer captura headless porque Playwright no esta instalado en el workspace.
 
 - Continuada la cobertura 2015 para la calculadora fiscal del trabajador. Se descargo desde el Ministerio de Hacienda la compilacion de normativa autonomica del IRPF y se conservo el bruto HTML junto con una version textual limpia. Se creo `data/processed/fiscal/2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json` como indice de lineas por comunidad de regimen comun. Estado: fuente oficial localizada, pero no se activan importes nuevos porque el texto esta consolidado y contiene modificaciones posteriores; cada CCAA debe verificarse por vigencia 2015 antes de pasar a parametros calculables. Andalucia queda marcada como escala detectada no usable para 2015 porque la seccion localizada indica efectos desde 2016.
@@ -346,6 +348,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Actualizadas fuentes, inventario, metadata y transformaciones para el nuevo dataset de poblacion por nacimiento.
 
 ## Pendiente inmediato
+
+- Extender la calculadora fiscal por anos usando la nueva matriz de cobertura: priorizar 2024, 2023 y 2022; despues 2021 y 2020 con cautelas metodologicas; continuar hacia 2019-2016 y finalmente 2014. No incorporar 2026 como ejercicio IRPF anual cerrado hasta que la AEAT publique el manual de Renta 2026.
 
 - Para completar la comparacion 2015 en la calculadora fiscal, convertir el indice candidato de Hacienda en parametros calculables comunidad por comunidad, verificando vigencia 2015 antes de transcribir importes. Madrid ya esta parametrizada; Andalucia requiere otra fuente o tramo aplicable a 2015 porque la escala localizada en la compilacion indica efectos desde 2016. Sigue pendiente localizar el algoritmo oficial AEAT de retenciones 2015 si se muestra nomina mensual, y decidir si las deducciones autonomicas 2015 se incorporan como catalogo o reglas calculables.
 
