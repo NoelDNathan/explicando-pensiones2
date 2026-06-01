@@ -776,4 +776,5 @@
 - Metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2025.md`.
   - `data/methodology/calculadora-fiscal-datos-por-ano.md`.
-- Nota de uso: este JSON permite completar una primera version trazable para 2025 del caso base de Madrid y documenta los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA y otros impuestos se trataran como aproximaciones separadas; para usar cesta media de consumo debe crearse un dataset propio, preferentemente desde INE EPF, con metadata y checksums.
+  - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
+- Nota de uso: este JSON permite completar una primera version trazable para 2025 del caso base de Madrid y documenta los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA tendra dos modos: media por rango salarial/renta si se procesa INE EPF y personalizado por categorias de gasto. Otros impuestos se mostraran como media espanola estimada, separada del neto laboral y sin doble contar IVA.

@@ -39,8 +39,8 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 5. Para IRPF anual, partir del rendimiento integro del trabajo, restar cotizaciones del trabajador y gastos deducibles, aplicar reducciones si proceden, calcular cuota estatal y autonomica con las escalas y restar la cuota correspondiente al minimo personal/familiar.
 6. Para retencion de nomina, no aproximar con la escala anual: usar el algoritmo oficial AEAT de retenciones 2025.
 7. Para IVA, pedir gasto anual y porcentaje de gasto por tipo; si el gasto esta expresado con IVA incluido, extraer la cuota con `gasto * tipo / (100 + tipo)`.
-8. Para IVA aproximado, permitir una opcion simple por gasto declarado y reparto 21/10/4/0; si se usa una cesta media, debe proceder de INE EPF y vivir como dataset separado.
-9. Para `otros impuestos`, crear un modulo separado y estimado: carburantes, electricidad, alcohol/tabaco si se declaran, IBI si hay vivienda en propiedad e IVTM si hay vehiculo. No mezclarlo con salario neto laboral.
+8. Para IVA aproximado, ofrecer dos opciones: media por rango salarial/renta si se procesa INE EPF, y personalizado por gasto declarado en categorias de consumo.
+9. Para `otros impuestos`, crear un modulo separado con media espanola estimada. No pedir datos detallados en la primera version y no mezclarlo con salario neto laboral.
 
 ## Limitaciones
 
@@ -49,6 +49,7 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 - La cotizacion por contingencias profesionales depende de actividad/CNAE y es cuota empresarial; no debe inventarse.
 - `Otros impuestos` no es una magnitud directamente deducible del salario bruto. En este proyecto se tratara como aproximacion separada, basada en datos declarados por el usuario o en una cesta media documentada.
 - La guia para replicar este paquete en otros ejercicios esta en `data/methodology/calculadora-fiscal-datos-por-ano.md`.
+- La metodologia especifica de IVA y otros impuestos esta en `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
 
 ## Archivo generado
 

@@ -59,12 +59,13 @@ No comparar con futuro en esta fase. La comparacion sera contra anos pasados y c
    - MEI y solidaridad solo en los anos en que existan;
    - notas de cambios normativos.
 7. Para IVA aproximado:
-   - opcion simple: pedir al usuario gasto anual sujeto a 21%, 10%, 4% y 0%;
-   - opcion guiada: usar una cesta simplificada basada en INE EPF y mapear COICOP a tipos de IVA;
+   - opcion media: usar INE EPF para gasto medio por categoria y tramo de ingresos/renta, mapear COICOP a tipos de IVA y mostrarlo como referencia por rango;
+   - opcion personalizada: pedir al usuario gasto anual por categorias de consumo comprensibles y aplicar tipos por defecto ajustables;
    - mostrar siempre como `IVA estimado`, no como impuesto exacto.
 8. Para otros impuestos:
-   - pedir datos del usuario cuando sean individuales: vivienda, municipio, vehiculo, carburante, electricidad, tabaco/alcohol;
-   - si se usa una media, etiquetar como `estimado_promedio` y documentar fuente y limites;
+   - en la primera version usar media espanola estimada, no formulario detallado;
+   - etiquetar como `estimado_promedio` y documentar fuente, componentes incluidos y denominador;
+   - no incluir IVA para evitar doble conteo;
    - mantener separado del salario neto, porque no sale directamente de la nomina.
 
 ## Estructura minima del JSON
@@ -106,6 +107,7 @@ No comparar con futuro en esta fase. La comparacion sera contra anos pasados y c
 - Si falta una condicion personal, el resultado debe avisar que no la contempla.
 - IVA y otros impuestos deben aparecer como aproximaciones separadas de `neto laboral`.
 - Cualquier dato medio de consumo debe vivir en `data/processed/` como dataset separado, con metadata y checksums.
+- La metodologia especifica de IVA y otros impuestos esta en `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
 
 ## Fuentes de referencia iniciales
 

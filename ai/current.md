@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Definida la metodologia de IVA y otros impuestos para la calculadora fiscal: el IVA tendra dos modos, `media_por_rango_salarial` pendiente de procesar con INE EPF por tramo de ingresos/renta y `personalizado_por_categoria` con gasto declarado por vivienda, suministros, alimentos, hosteleria, transporte, carburantes, ropa, tecnologia, ocio, salud/educacion/seguros y otros. `Otros impuestos` se tratara inicialmente como media espanola estimada, separada del neto laboral y sin doble contar IVA. Se creo `data/methodology/calculadora-fiscal-iva-otros-impuestos.md` y se amplio el JSON 2025 con estos modos.
+
 - Ajustada la distribucion de `/resumen` para acercarla mucho mas al mockup aportado: el selector de ano queda dentro del area central por encima de piramide e indicadores, la rail derecha empieza arriba con el simulador de reformas, y el bloque superior se reparte entre piramide poblacional e indicadores clave. Se compacto el panel de indicadores para que su altura sea similar a la piramide y deje visible la evolucion historica debajo. Verificado con `tsc --noEmit`, `vite build` y capturas headless de escritorio y movil.
 
 - Definido el alcance de la calculadora fiscal 2025 para proximas iteraciones: no se comparara con futuro por ahora; la comparacion se hara mas adelante contra anos pasados, con parametros normativos propios por ano. Los factores de usuario incluidos seran salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. IVA y otros impuestos se trataran como aproximaciones separadas del neto laboral. Se creo `data/methodology/calculadora-fiscal-datos-por-ano.md` para guiar futuras interacciones sobre como obtener estos datos en otros ejercicios.
@@ -334,6 +336,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Actualizadas fuentes, inventario, metadata y transformaciones para el nuevo dataset de poblacion por nacimiento.
 
 ## Pendiente inmediato
+
+- Procesar un dataset INE EPF que permita estimar IVA medio por tramo de ingresos/renta y categoria COICOP. Hasta entonces, el modo `media_por_rango_salarial` debe aparecer como pendiente o no mostrarse con cifras.
+
+- Localizar/procesar una fuente institucional para `otros_impuestos_media_espana` y decidir denominador: por hogar, por persona adulta o por trabajador. Evitar mezclar IVA dentro de este modulo.
 
 - Para completar la calculadora fiscal 2025 en UI, adaptar `src/components/fiscal-worker-dashboard` al alcance decidido: quitar comparacion 2030/futuro, usar el paquete 2025 como base, pedir los factores incluidos y mostrar IVA/otros impuestos como modulos aproximados separados.
 

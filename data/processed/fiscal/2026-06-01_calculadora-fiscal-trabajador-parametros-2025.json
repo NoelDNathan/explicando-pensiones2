@@ -146,6 +146,39 @@
     "source": "Agencia Tributaria, tipos impositivos de IVA 2025",
     "source_url": "https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html",
     "approximation_policy": "aproximacion por consumo declarado o cesta simplificada; no se resta del salario bruto para calcular neto laboral",
+    "available_modes": [
+      {
+        "id": "media_por_rango_salarial",
+        "label": "IVA medio estimado por rango de renta/salario",
+        "status": "pendiente_dataset_consumo",
+        "method": "usar gasto medio por categoria de consumo de INE EPF por tramo de ingresos del hogar o variable equivalente; mapear cada categoria COICOP a uno o varios tipos de IVA; calcular cuota de IVA incluida en el gasto",
+        "required_dataset": "gasto medio anual por categoria COICOP y tramo de ingresos/renta del hogar",
+        "preferred_source": "INE, Encuesta de Presupuestos Familiares",
+        "display_warning": "comparacion orientativa: representa una cesta media, no el IVA exacto pagado por el usuario"
+      },
+      {
+        "id": "personalizado_por_categoria",
+        "label": "IVA estimado por gasto declarado en categorias",
+        "status": "implementable_con_parametros_actuales",
+        "method": "pedir gasto anual con IVA incluido por categoria; aplicar tipo o mezcla de tipos asociada a cada categoria; sumar cuotas",
+        "formula": "iva_incluido = gasto_con_iva * tipo / (100 + tipo)",
+        "display_warning": "aproximacion: algunas categorias mezclan bienes exentos, superreducidos, reducidos y generales"
+      }
+    ],
+    "custom_consumption_categories": [
+      { "id": "vivienda_alquiler_hipoteca", "label": "Vivienda: alquiler o hipoteca", "default_vat_rate_percent": 0, "confidence": "baja", "note": "alquiler de vivienda habitual e hipoteca no son consumo sujeto a IVA general para el usuario; obras, reparaciones y vivienda nueva requieren tratamiento aparte" },
+      { "id": "suministros_hogar", "label": "Suministros del hogar", "default_vat_rate_percent": 21, "confidence": "media", "note": "electricidad, gas, agua y telecomunicaciones pueden tener reglas o tipos reducidos segun ano y concepto; usar como aproximacion simple" },
+      { "id": "alimentos_basicos", "label": "Alimentos basicos", "default_vat_rate_percent": 4, "confidence": "media", "note": "categoria simplificada; algunos alimentos pueden estar al 0%, 4% o 10% segun producto y ano" },
+      { "id": "alimentacion_general", "label": "Alimentacion general", "default_vat_rate_percent": 10, "confidence": "media", "note": "mezcla simplificada para supermercado no basico" },
+      { "id": "restaurantes_hosteleria", "label": "Restaurantes y hosteleria", "default_vat_rate_percent": 10, "confidence": "alta", "note": "aproximacion general para servicios de hosteleria" },
+      { "id": "transporte_publico", "label": "Transporte publico", "default_vat_rate_percent": 10, "confidence": "media", "note": "puede variar por ayudas, abonos o servicios concretos" },
+      { "id": "carburantes", "label": "Carburantes", "default_vat_rate_percent": 21, "confidence": "alta", "note": "el gasto incluye tambien impuestos especiales; el IVA se calcula sobre precio final sujeto a IVA" },
+      { "id": "ropa_calzado", "label": "Ropa y calzado", "default_vat_rate_percent": 21, "confidence": "alta", "note": "tipo general" },
+      { "id": "tecnologia_muebles_hogar", "label": "Tecnologia, muebles y equipamiento", "default_vat_rate_percent": 21, "confidence": "alta", "note": "tipo general" },
+      { "id": "ocio_cultura", "label": "Ocio y cultura", "default_vat_rate_percent": 21, "confidence": "baja", "note": "categoria mixta: libros, prensa, cine, espectaculos y plataformas pueden tener tipos distintos" },
+      { "id": "salud_educacion_seguros", "label": "Salud, educacion y seguros", "default_vat_rate_percent": 0, "confidence": "baja", "note": "muchos servicios estan exentos, pero medicamentos/productos sanitarios y servicios privados concretos pueden tener IVA" },
+      { "id": "otros_consumos", "label": "Otros consumos", "default_vat_rate_percent": 21, "confidence": "baja", "note": "categoria residual; permitir ajustar el tipo manualmente si se implementa modo avanzado" }
+    ],
     "rates_percent": {
       "general": 21,
       "reduced": 10,
@@ -158,7 +191,14 @@
     ]
   },
   "other_taxes": {
-    "approximation_policy": "aproximacion separada de la nomina, basada en consumo/patrimonio declarado por el usuario o cesta simplificada documentada",
+    "approximation_policy": "media espanola estimada separada de la nomina; no se calcula como dato individual salvo que el usuario active modulos personalizados en el futuro",
+    "preferred_mode": {
+      "id": "media_espanola",
+      "label": "Otros impuestos medios estimados",
+      "status": "pendiente_dataset",
+      "method": "calcular una media por persona adulta, trabajador u hogar segun disponibilidad, usando recaudacion institucional y/o gasto medio de hogares; documentar denominador elegido",
+      "display_warning": "estimacion de contexto: no representa necesariamente lo que paga el usuario"
+    },
     "candidate_components": [
       "impuestos_especiales_carburantes",
       "impuestos_especiales_alcohol_tabaco_si_el_usuario_los_declara",
@@ -169,7 +209,8 @@
     "implementation_notes": [
       "No presentar 'otros impuestos' como dato exacto si se usa una cesta media.",
       "Mantenerlo como modulo opcional y separado de salario neto, IRPF y cotizaciones.",
-      "Documentar para cada ano si se usan tipos legales, recaudacion agregada o gasto medio de hogares."
+      "Documentar para cada ano si se usan tipos legales, recaudacion agregada o gasto medio de hogares.",
+      "Para una primera version, priorizar media espanola agregada y no pedir datos adicionales al usuario."
     ]
   },
   "data_gaps_before_ui_use": [
