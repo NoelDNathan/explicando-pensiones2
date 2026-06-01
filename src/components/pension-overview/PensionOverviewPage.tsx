@@ -27,7 +27,8 @@ import { KeyIndicatorsPanel } from './KeyIndicatorsPanel'
 import type { IndicatorItem } from './KeyIndicatorsPanel'
 import { PopulationPyramid } from '../population/PopulationPyramid'
 import { ReformSimulator } from './ReformSimulator'
-import { Sidebar } from '../ui/Sidebar'
+import { DashboardSidebar } from '../ui/DashboardSidebar'
+import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
 import { TimeSeriesChart } from '../charts/TimeSeriesChart'
 import type { ChartMilestone, ChartSeries } from '../charts/TimeSeriesChart'
 import { YearSelector } from '../ui/YearSelector'
@@ -113,6 +114,17 @@ function MiniLogo() {
     </svg>
   )
 }
+
+const PENSION_SIDEBAR_ITEMS: DashboardSidebarItem[] = [
+  { id: 'summary', label: 'Resumen', icon: iconNode(Home), href: '/resumen' },
+  { id: 'timeline', label: 'Linea temporal', icon: iconNode(LineChart), href: '#evolucion' },
+  { id: 'simulator', label: 'Simulador', icon: iconNode(Settings2), href: '#simulador' },
+  { id: 'scenarios', label: 'Escenarios', icon: iconNode(Gauge), href: '#escenarios' },
+  { id: 'impact', label: 'Quien gana / pierde', icon: iconNode(Scale), href: '#impacto' },
+  { id: 'compare', label: 'Comparador', icon: iconNode(BarChart3), href: '#comparador' },
+  { id: 'forum', label: 'Foro de propuestas', icon: iconNode(MessageSquare), href: '#foro' },
+  { id: 'method', label: 'Metodologia', icon: iconNode(BookOpen), href: '#metodologia' },
+]
 
 function DashboardIcon({ children, tone = 'blue' }: { children: React.ReactNode; tone?: 'blue' | 'green' | 'red' | 'amber' | 'purple' }) {
   return <span className={`pov-metric-icon pov-metric-icon--${tone}`}>{children}</span>
@@ -269,23 +281,15 @@ export function PensionOverviewPage() {
 
   return (
     <div className="pov-shell">
-      <Sidebar
+      <DashboardSidebar
         className="pov-sidebar"
         brand={{
           title: 'Pensiones',
           subtitle: 'en Espana',
           icon: <MiniLogo />,
         }}
-        menu={[
-          { id: 'summary', label: 'Resumen', icon: iconNode(Home), active: true, href: '/resumen' },
-          { id: 'timeline', label: 'Linea temporal', icon: iconNode(LineChart), href: '#evolucion' },
-          { id: 'simulator', label: 'Simulador', icon: iconNode(Settings2), href: '#simulador' },
-          { id: 'scenarios', label: 'Escenarios', icon: iconNode(Gauge), href: '#escenarios' },
-          { id: 'impact', label: 'Quien gana / pierde', icon: iconNode(Scale), href: '#impacto' },
-          { id: 'compare', label: 'Comparador', icon: iconNode(BarChart3), href: '#comparador' },
-          { id: 'forum', label: 'Foro de propuestas', icon: iconNode(MessageSquare), href: '#foro' },
-          { id: 'method', label: 'Metodologia', icon: iconNode(BookOpen), href: '#metodologia' },
-        ]}
+        items={PENSION_SIDEBAR_ITEMS}
+        activeItemId="summary"
         infoCard={{
           title: 'Prototipo',
           body: 'Vista de resumen para integrar componentes y probar narrativa antes de fijar cifras editoriales.',

@@ -2,14 +2,12 @@ import {
   Bookmark,
   ChevronRight,
   Info,
-  Landmark,
-  LockKeyhole,
   PiggyBank,
-  Receipt,
   Share2,
-  Sparkles,
   Users,
 } from 'lucide-react'
+import { DashboardSidebar } from '../ui/DashboardSidebar'
+import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
 import { DashboardPanel } from '../ui/DashboardPanel'
 import { InfoButton } from '../ui/InfoButton'
 import {
@@ -25,46 +23,39 @@ import { FiscalLineChart } from './FiscalLineChart'
 import { MenuIcon } from './MenuIcon'
 import './FiscalWorkerDashboard.css'
 
+const FISCAL_SIDEBAR_ITEMS: DashboardSidebarItem[] = FISCAL_MENU.map((item) => ({
+  id: item.toLowerCase(),
+  label: item,
+  icon: <MenuIcon id={item.toLowerCase()} />,
+}))
+
+function FiscalLogo() {
+  return (
+    <span className="fwd-managed-logo" aria-hidden="true">
+      <span />
+      <span />
+    </span>
+  )
+}
+
 function FiscalSidebar() {
   return (
-    <aside className="fwd-sidebar">
-      <div className="fwd-brand">
-        <div className="fwd-logo" aria-hidden="true"><span /><span /></div>
-        <div>
-          <h1>Calculadora Fiscal del Trabajador</h1>
-          <p>Tus números, tu futuro.</p>
-        </div>
-      </div>
-
-      <nav className="fwd-nav" aria-label="Secciones">
-        {FISCAL_MENU.map((item, index) => (
-          <button key={item} className={index === 0 ? 'is-active' : ''} type="button">
-            <MenuIcon id={item.toLowerCase()} />
-            {item}
-          </button>
-        ))}
-      </nav>
-
-      <div className="fwd-tools">
-        <p>Herramientas</p>
-        <button type="button"><Receipt size={15} /> Tabla de tramos IRPF</button>
-        <button type="button"><Landmark size={15} /> Bases y tipos 2025-2030</button>
-        <button type="button"><Info size={15} /> Guía rápida</button>
-      </div>
-
-      <div className="fwd-promo">
-        <Sparkles size={18} />
-        <strong>¿Eres más experto?</strong>
-        <p>Guarda escenarios, compáralos y entiende cada euro.</p>
-        <button type="button">Crear cuenta gratis</button>
-      </div>
-
-      <div className="fwd-sidebar-footer">
-        <span>Aviso legal</span><span>Privacidad</span><span>Términos</span>
-        <small>© 2026 Calculadora Fiscal del Trabajador</small>
-        <button type="button"><LockKeyhole size={16} /> Modo oscuro</button>
-      </div>
-    </aside>
+    <DashboardSidebar
+      className="fwd-sidebar"
+      brand={{
+        title: 'Calculadora Fiscal',
+        subtitle: 'del Trabajador',
+        icon: <FiscalLogo />,
+      }}
+      items={FISCAL_SIDEBAR_ITEMS}
+      activeItemId={FISCAL_SIDEBAR_ITEMS[0].id}
+      infoCard={{
+        title: 'Prototipo',
+        body: 'Compara salario neto, IRPF, cotizaciones e impuestos con parametros trazables.',
+      }}
+      ctaLabel="Ver metodologia"
+      footerText="Aviso legal - Privacidad - Terminos"
+    />
   )
 }
 

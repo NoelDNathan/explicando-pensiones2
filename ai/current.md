@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-06-01
+Fecha: 2026-06-02
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Creado `src/components/ui/DashboardSidebar.tsx` como capa de gestion de la barra lateral sobre el componente presentacional `Sidebar`. Se ha aplicado en `/resumen`, `/gasto-sanitario` y `/calculadora-fiscal`, centralizando el marcado de item activo e indicador activo sin duplicar esa logica en cada pagina. En la calculadora fiscal se sustituyo la sidebar local por la compartida y se ajustaron estilos de compatibilidad para conservar ancho, logo y estado activo. Verificado con `tsc --noEmit`, `vite build` y respuesta HTTP 200 en `/resumen`, `/gasto-sanitario` y `/calculadora-fiscal`. No se pudo hacer captura headless porque Playwright no esta instalado en el workspace.
 
 - Continuada la cobertura 2015 para la calculadora fiscal del trabajador. Se descargo desde el Ministerio de Hacienda la compilacion de normativa autonomica del IRPF y se conservo el bruto HTML junto con una version textual limpia. Se creo `data/processed/fiscal/2026-06-01_hacienda-irpf-2015-ccaa-regimen-comun-cobertura-candidata.json` como indice de lineas por comunidad de regimen comun. Estado: fuente oficial localizada, pero no se activan importes nuevos porque el texto esta consolidado y contiene modificaciones posteriores; cada CCAA debe verificarse por vigencia 2015 antes de pasar a parametros calculables. Andalucia queda marcada como escala detectada no usable para 2015 porque la seccion localizada indica efectos desde 2016.
 
@@ -371,6 +373,7 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si la web usa el JSON de edad minima legal para calculos o filtros, decidir si el tramo anterior a 1976 se presenta como referencia general o si se investiga una fuente juridica primaria mas completa por regimen laboral.
 - Si se necesita una edad efectiva historica antes de 1980, localizar una fuente institucional anual comparable de altas iniciales de jubilacion o reconstruirla desde tablas oficiales de altas por edad; no rellenar 1975-1979 con OCDE `effective labour market exit age` porque mide salida del mercado laboral, no altas iniciales de jubilacion.
 - Aplicar las nuevas reglas frontend al reorganizar componentes: separar componentes reutilizables, mantener tokens compartidos y evitar estilos duplicados en paginas finales.
+- Revisar visualmente en navegador `/resumen`, `/gasto-sanitario` y `/calculadora-fiscal` tras la extraccion de `DashboardSidebar`, especialmente en movil; la comprobacion actual cubre TypeScript, build y HTTP 200, pero no captura visual porque Playwright no esta instalado.
 - Conectar `/resumen` a datasets procesados trazables y reemplazar los valores de prototipo de indicadores, grafico historico, comparador e impactos por series documentadas antes de uso editorial publico.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la estructura definitiva de `src/components/`.
 - Revisar visualmente `/poblacion` en escritorio y movil cuando haya navegador/captura disponible; la comprobacion automatizada actual solo valido build y respuesta HTTP.

@@ -22,8 +22,8 @@ import {
   Users,
   Wallet,
 } from 'lucide-react'
-import { Sidebar } from '../ui/Sidebar'
-import type { SidebarMenuItem } from '../ui/Sidebar'
+import { DashboardSidebar } from '../ui/DashboardSidebar'
+import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
 import { DashboardHeader } from '../ui/DashboardHeader'
 import { ToolbarChip } from '../ui/ToolbarChip'
 import { DashboardPanel } from '../ui/DashboardPanel'
@@ -100,10 +100,10 @@ const KPI_ICONS: Record<string, React.ReactNode> = {
   intensity: <Calendar size={18} strokeWidth={1.8} />,
 }
 
-const SIDEBAR_MENU: SidebarMenuItem[] = [
-  { id: 'overview', label: 'Resumen', icon: <LayoutGrid size={17} strokeWidth={1.8} />, active: true },
+const SIDEBAR_MENU: DashboardSidebarItem[] = [
+  { id: 'overview', label: 'Resumen', icon: <LayoutGrid size={17} strokeWidth={1.8} /> },
   { id: 'profile', label: 'Perfil por edad', icon: <BarChart3 size={17} strokeWidth={1.8} /> },
-  { id: 'individual', label: 'Vista individual', icon: <UserRound size={17} strokeWidth={1.8} />, indicator: true },
+  { id: 'individual', label: 'Vista individual', icon: <UserRound size={17} strokeWidth={1.8} />, indicator: 'active' },
   { id: 'aggregate', label: 'Vista agregada', icon: <Users size={17} strokeWidth={1.8} /> },
   { id: 'scenarios', label: 'Escenarios', icon: <Layers size={17} strokeWidth={1.8} /> },
   { id: 'methodology', label: 'Metodologia', icon: <BookOpen size={17} strokeWidth={1.8} /> },
@@ -154,16 +154,13 @@ export function HealthExpenditureDashboard({
     if (item.id === 'individual') {
       return {
         ...item,
-        active: !isCollective,
-        indicator: !isCollective,
         onClick: () => setViewMode('individual'),
       }
     }
     if (item.id === 'aggregate') {
       return {
         ...item,
-        active: isCollective,
-        indicator: isCollective,
+        indicator: 'active' as const,
         onClick: () => setViewMode('collective'),
       }
     }
@@ -172,13 +169,14 @@ export function HealthExpenditureDashboard({
 
   return (
     <div className={rootClass}>
-      <Sidebar
+      <DashboardSidebar
         brand={{
           title: 'Gasto Sanitario',
           subtitle: 'en Espana',
           icon: <HeartPulse size={18} strokeWidth={2} />,
         }}
-        menu={sidebarMenu}
+        items={sidebarMenu}
+        activeItemId={['overview', isCollective ? 'aggregate' : 'individual']}
         infoCard={{
           title: isCollective ? 'Vista colectiva' : 'Vista individual',
           body: isCollective

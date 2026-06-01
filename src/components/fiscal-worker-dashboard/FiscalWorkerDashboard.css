@@ -49,6 +49,52 @@
   box-shadow: 16px 0 45px rgba(0, 0, 0, 0.28);
 }
 
+.fwd-sidebar.sb {
+  width: 260px;
+  min-height: 100svh;
+  padding: 22px 18px;
+}
+
+.fwd-sidebar .sb__brand-title {
+  color: var(--fwd-text);
+  font-size: 15px;
+  line-height: 1.12;
+}
+
+.fwd-sidebar .sb__brand-subtitle,
+.fwd-sidebar .sb-info-card__body,
+.fwd-sidebar .sb__footnote {
+  color: var(--fwd-muted);
+}
+
+.fwd-sidebar .sb-menu__item--active {
+  color: #fff;
+  border-color: rgba(74, 144, 255, 0.65);
+  background: linear-gradient(135deg, rgba(38, 111, 255, 0.88), rgba(8, 57, 150, 0.7));
+  box-shadow:
+    0 0 28px rgba(47, 128, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+.fwd-managed-logo {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  height: 34px;
+}
+
+.fwd-managed-logo span {
+  display: block;
+  width: 10px;
+  border-radius: 3px;
+  background: linear-gradient(145deg, #5ec7ff 0%, #1e6bff 70%);
+  box-shadow: 0 0 18px rgba(47, 128, 255, 0.55);
+  transform: skewY(-28deg);
+}
+
+.fwd-managed-logo span:first-child { height: 23px; }
+.fwd-managed-logo span:last-child { height: 31px; opacity: 0.82; }
+
 .fwd-brand {
   display: grid;
   grid-template-columns: 40px 1fr;
@@ -926,6 +972,11 @@
   .fwd-sidebar {
     position: static;
     height: auto;
+  }
+
+  .fwd-sidebar.sb {
+    width: 100%;
+    min-height: 0;
   }
 
   .fwd-controls,
