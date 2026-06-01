@@ -7,8 +7,8 @@
 
 import { ArrowRight, Trophy } from 'lucide-react'
 import { DashboardPanel } from './DashboardPanel'
-import { CategoryRanking } from './CategoryRanking'
-import type { CategoryRankingItem } from './CategoryRanking'
+import { CategoryRanking } from '../charts/CategoryRanking'
+import type { CategoryRankingItem } from '../charts/CategoryRanking'
 import { IconBadge } from './IconBadge'
 
 export type RankingCardProps = {

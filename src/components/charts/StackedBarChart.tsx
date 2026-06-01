@@ -22,7 +22,7 @@ import {
   toStackedBarRows,
   type HealthCategoryDef,
   type StackedBarRow,
-} from '../data/healthExpenditureData'
+} from '../../data/healthExpenditureData'
 import './StackedBarChart.css'
 
 export type StackedBarChartProps = {

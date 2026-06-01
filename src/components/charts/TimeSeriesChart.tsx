@@ -11,7 +11,7 @@
 
 import React, { useState, useMemo } from 'react'
 import './TimeSeriesChart.css'
-import { InfoButton } from './InfoButton'
+import { InfoButton } from '../ui/InfoButton'
 
 // ─── Public types ─────────────────────────────────────────────────────────────
 

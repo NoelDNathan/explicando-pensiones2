@@ -21,21 +21,21 @@ import {
   Users,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { DashboardPanel } from './DashboardPanel'
-import { InfoButton } from './InfoButton'
+import { DashboardPanel } from '../ui/DashboardPanel'
+import { InfoButton } from '../ui/InfoButton'
 import { KeyIndicatorsPanel } from './KeyIndicatorsPanel'
 import type { IndicatorItem } from './KeyIndicatorsPanel'
-import { PopulationPyramid } from './PopulationPyramid'
+import { PopulationPyramid } from '../population/PopulationPyramid'
 import { ReformSimulator } from './ReformSimulator'
-import { Sidebar } from './Sidebar'
-import { TimeSeriesChart } from './TimeSeriesChart'
-import type { ChartMilestone, ChartSeries } from './TimeSeriesChart'
-import { YearSelector } from './YearSelector'
+import { Sidebar } from '../ui/Sidebar'
+import { TimeSeriesChart } from '../charts/TimeSeriesChart'
+import type { ChartMilestone, ChartSeries } from '../charts/TimeSeriesChart'
+import { YearSelector } from '../ui/YearSelector'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
   POPULATION_YEAR_SUMMARIES,
-} from '../data/populationPyramidData'
+} from '../../data/populationPyramidData'
 import './PensionOverviewPage.css'
 
 const CHART_YEARS = [

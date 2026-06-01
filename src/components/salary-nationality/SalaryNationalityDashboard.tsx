@@ -11,7 +11,7 @@ import {
   SALARY_PANEL_MAX,
   SALARY_PANEL_TOTAL,
   SALARY_SOURCE_ICON,
-} from '../data/salaryNationalityDashboardData'
+} from '../../data/salaryNationalityDashboardData'
 import './SalaryNationalityDashboard.css'
 
 const formatEuro = (value: number): string =>

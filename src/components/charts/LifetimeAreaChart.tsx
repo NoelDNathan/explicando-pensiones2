@@ -20,7 +20,7 @@ import {
   LIFETIME_TOTAL,
   LIFETIME_TOTAL_FORMATTED,
   type LifetimePoint,
-} from '../data/healthExpenditureData'
+} from '../../data/healthExpenditureData'
 import './LifetimeAreaChart.css'
 
 export type LifetimeAreaChartProps = {

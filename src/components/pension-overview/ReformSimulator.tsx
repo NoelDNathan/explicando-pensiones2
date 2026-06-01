@@ -12,7 +12,7 @@
  */
 
 import './ReformSimulator.css'
-import { InfoButton } from './InfoButton'
+import { InfoButton } from '../ui/InfoButton'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

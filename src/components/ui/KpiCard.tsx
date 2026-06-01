@@ -8,7 +8,7 @@
 import type { ReactNode } from 'react'
 import { MetricCard } from './MetricCard'
 import { IconBadge } from './IconBadge'
-import type { KpiDef } from '../data/healthExpenditureData'
+import type { KpiDef } from '../../data/healthExpenditureData'
 
 const TONE_COLORS: Record<KpiDef['tone'], string> = {
   teal: '#22d3ee',

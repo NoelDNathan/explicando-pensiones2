@@ -10,8 +10,8 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react'
-import { DashboardPanel } from '../DashboardPanel'
-import { InfoButton } from '../InfoButton'
+import { DashboardPanel } from '../ui/DashboardPanel'
+import { InfoButton } from '../ui/InfoButton'
 import {
   CHANGE_ITEMS,
   FISCAL_KPIS,

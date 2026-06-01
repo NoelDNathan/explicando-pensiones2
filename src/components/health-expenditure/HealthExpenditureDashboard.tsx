@@ -22,19 +22,19 @@ import {
   Users,
   Wallet,
 } from 'lucide-react'
-import { Sidebar } from './Sidebar'
-import type { SidebarMenuItem } from './Sidebar'
-import { DashboardHeader } from './DashboardHeader'
-import { ToolbarChip } from './ToolbarChip'
-import { DashboardPanel } from './DashboardPanel'
-import { InfoBanner } from './InfoBanner'
-import { StackedBarChart } from './StackedBarChart'
-import { LifetimeAreaChart } from './LifetimeAreaChart'
-import { InterpretationCard } from './InterpretationCard'
-import { RankingCard } from './RankingCard'
-import './RankingCard.css'
-import { KpiCard } from './KpiCard'
-import { FooterNote } from './FooterNote'
+import { Sidebar } from '../ui/Sidebar'
+import type { SidebarMenuItem } from '../ui/Sidebar'
+import { DashboardHeader } from '../ui/DashboardHeader'
+import { ToolbarChip } from '../ui/ToolbarChip'
+import { DashboardPanel } from '../ui/DashboardPanel'
+import { InfoBanner } from '../ui/InfoBanner'
+import { StackedBarChart } from '../charts/StackedBarChart'
+import { LifetimeAreaChart } from '../charts/LifetimeAreaChart'
+import { InterpretationCard } from '../ui/InterpretationCard'
+import { RankingCard } from '../ui/RankingCard'
+import '../ui/RankingCard.css'
+import { KpiCard } from '../ui/KpiCard'
+import { FooterNote } from '../ui/FooterNote'
 import {
   COLLECTIVE_HEALTH_CATEGORIES,
   COLLECTIVE_KPI_ITEMS,
@@ -45,9 +45,9 @@ import {
   YEAR_OPTIONS,
   formatSystemEuro,
   getRankingCategories,
-} from '../data/healthExpenditureData'
-import type { HealthCategoryDef, HealthViewMode } from '../data/healthExpenditureData'
-import type { CategoryRankingItem } from './CategoryRanking'
+} from '../../data/healthExpenditureData'
+import type { HealthCategoryDef, HealthViewMode } from '../../data/healthExpenditureData'
+import type { CategoryRankingItem } from '../charts/CategoryRanking'
 import './HealthExpenditureDashboard.css'
 
 export type HealthExpenditureDashboardProps = {

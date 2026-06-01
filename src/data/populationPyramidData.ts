@@ -1,4 +1,4 @@
-import type { PyramidAgeGroup } from '../components/PopulationPyramid'
+import type { PyramidAgeGroup } from '../components/population/PopulationPyramid'
 
 import observedPopulationCsv from '../../data/processed/ine/2026-05-18_ine_ecp_piramide-poblacion-espana-sexo-edad_1975-2025.csv?raw'
 import projectedPopulationCsv from '../../data/processed/ine/2026-05-18_ine_proyeccion-poblacion-residente-espana-sexo-edad_2024-2074.csv?raw'

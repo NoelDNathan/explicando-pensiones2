@@ -10,8 +10,8 @@
  * MetricCardProps objects; the grid reflows at narrow viewports.
  */
 
-import { MetricCard } from './MetricCard'
-import type { MetricCardProps } from './MetricCard'
+import { MetricCard } from '../ui/MetricCard'
+import type { MetricCardProps } from '../ui/MetricCard'
 import './KeyIndicatorsPanel.css'
 
 // ─── Re-export for consumer convenience ───────────────────────────────────────
