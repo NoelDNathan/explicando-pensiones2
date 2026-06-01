@@ -307,23 +307,23 @@ export function PensionOverviewPage() {
           </div>
         </header>
 
-        <section className="pov-year-band" aria-label="Selector de ano">
-          <YearSelector
-            year={year}
-            onYearChange={setYear}
-            minYear={POPULATION_YEAR_RANGE.min}
-            maxYear={2070}
-            marks={[1950, 1975, 2000, 2025, 2050, 2070]}
-            playIntervalMs={160}
-          />
-          <button type="button" className="pov-year-jump">
-            Ir al ano
-            <CalendarDays size={16} />
-          </button>
-        </section>
-
         <div className="pov-grid">
           <section className="pov-center">
+            <section className="pov-year-band" aria-label="Selector de ano">
+              <YearSelector
+                year={year}
+                onYearChange={setYear}
+                minYear={POPULATION_YEAR_RANGE.min}
+                maxYear={2070}
+                marks={[1950, 1975, 2000, 2025, 2050, 2070]}
+                playIntervalMs={160}
+              />
+              <button type="button" className="pov-year-jump">
+                Ir al ano
+                <CalendarDays size={16} />
+              </button>
+            </section>
+
             <div className="pov-top-grid">
               <DashboardPanel
                 className="pov-pyramid-panel"
