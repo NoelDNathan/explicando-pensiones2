@@ -781,3 +781,29 @@
   - `data/methodology/calculadora-fiscal-datos-por-ano.md`.
   - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
 - Nota de uso: estos JSON permiten completar una primera version trazable para 2025 del trabajador por cuenta ajena en Regimen General y documentan los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA tendra dos modos: media por rango salarial/renta si se procesa INE EPF y personalizado por categorias de gasto. Otros impuestos se mostraran como media espanola estimada, separada del neto laboral y sin doble contar IVA. Las deducciones autonomicas quedan como catalogo oficial localizado; aplicarlas a calculo exige parametrizar condiciones, limites, compatibilidades y campos adicionales por deduccion.
+
+## Calculadora fiscal del trabajador - parametros normativos 2015
+
+- Fecha de preparacion: 2026-06-01.
+- Script reproducible: no aplica; transcripcion estructurada y documentada de normas/paginas oficiales.
+- Fuente:
+  - BOE, Orden ESS/86/2015, de 30 de enero, para bases y tipos de cotizacion 2015.
+  - BOE, Ley 35/2006 del IRPF consolidada a 31 de diciembre de 2015, para escala estatal, minimos, gastos y reducciones.
+  - AEAT, Manual practico de Renta 2015, conservado como bruto de contraste.
+  - BOE, Ley 4/2014 de la Comunidad de Madrid, para escala autonomica y minimos por descendientes de Madrid.
+  - AEAT, tipos impositivos de IVA.
+- Transformacion aplicada:
+  - descarga y conservacion de brutos oficiales HTML/PDF;
+  - transcripcion de bases maximas/minimas del Regimen General;
+  - conversion de grupos 8 a 11, publicados en euros/dia, a equivalente mensual multiplicando por 30, conservando tambien los valores diarios publicados;
+  - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional y horas extra;
+  - registro explicito de ausencia de MEI y cotizacion adicional de solidaridad en 2015;
+  - transcripcion de la escala estatal general del IRPF 2015;
+  - transcripcion de la escala autonomica de la Comunidad de Madrid y minimos por descendientes propios;
+  - transcripcion de minimos personales/familiares estatales, gastos deducibles y reduccion general de rendimientos del trabajo;
+  - registro de tipos legales de IVA y huecos pendientes para IVA medio y otros impuestos.
+- Archivo generado:
+  - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json`.
+- Metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2015.md`.
+- Nota de uso: primer paquete 2015 para caso base Comunidad de Madrid. Antes de activar comparacion completa por CCAA se deben parametrizar las comunidades de regimen comun. Antes de mostrar nomina mensual o retencion exacta se debe localizar e incorporar el algoritmo oficial de retenciones AEAT 2015.

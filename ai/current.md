@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Iniciado el paquete de parametros 2015 para la calculadora fiscal del trabajador. Se descargaron y conservaron brutos oficiales de BOE/AEAT: Orden ESS/86/2015 de cotizacion, Ley 35/2006 IRPF consolidada a 31-12-2015, Manual practico Renta 2015 y Ley 4/2014 de la Comunidad de Madrid. Se creo `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json` con bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos estatales, minimos por descendientes propios de Madrid, gastos/reducciones de trabajo y tipos de IVA. Estado del bloque: util para caso base Madrid y comparacion normativa anual; pendiente CCAA restantes, deducciones autonomicas, algoritmo AEAT de retenciones 2015, EPF para IVA medio y otros impuestos.
+
 - Completada la cobertura 2025 de IRPF autonomico para la calculadora fiscal en comunidades de regimen comun, ignorando Pais Vasco y Navarra. Se creo `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json` con escalas autonomicas, minimos autonomicos propios o aplicacion de minimos estatales, y catalogo de familias de deducciones autonomicas AEAT. Estado del bloque: escala autonomica Madrid, si; escalas resto CCAA de regimen comun, si; minimos autonomicos propios, si; deducciones autonomicas por hijos, discapacidad, dependencia, alquiler, familia numerosa, etc., catalogo de fuente localizado pero no calculo automatico hasta parametrizar requisitos e importes.
 
 - Definida la metodologia de IVA y otros impuestos para la calculadora fiscal: el IVA tendra dos modos, `media_por_rango_salarial` pendiente de procesar con INE EPF por tramo de ingresos/renta y `personalizado_por_categoria` con gasto declarado por vivienda, suministros, alimentos, hosteleria, transporte, carburantes, ropa, tecnologia, ocio, salud/educacion/seguros y otros. `Otros impuestos` se tratara inicialmente como media espanola estimada, separada del neto laboral y sin doble contar IVA. Se creo `data/methodology/calculadora-fiscal-iva-otros-impuestos.md` y se amplio el JSON 2025 con estos modos.
@@ -338,6 +340,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Actualizadas fuentes, inventario, metadata y transformaciones para el nuevo dataset de poblacion por nacimiento.
 
 ## Pendiente inmediato
+
+- Para completar la comparacion 2015 en la calculadora fiscal, parametrizar las escalas y minimos autonomicos de todas las CCAA de regimen comun, localizar el algoritmo oficial AEAT de retenciones 2015 si se muestra nomina mensual, y decidir si las deducciones autonomicas 2015 se incorporan como catalogo o reglas calculables.
 
 - Procesar un dataset INE EPF que permita estimar IVA medio por tramo de ingresos/renta y categoria COICOP. Hasta entonces, el modo `media_por_rango_salarial` debe aparecer como pendiente o no mostrarse con cifras.
 

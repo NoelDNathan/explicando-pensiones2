@@ -1074,3 +1074,30 @@
 - fuente candidata para aproximacion de IVA por cesta media: INE, Encuesta de Presupuestos Familiares, tablas de gasto por COICOP; usar solo si se procesa como dataset separado con metadata propia.
 - metodologia especifica:
   - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`
+
+## Calculadora fiscal del trabajador - parametros normativos 2015
+
+- nombre de la fuente: Parametros normativos 2015 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de Empleo y Seguridad Social; BOE / legislacion estatal IRPF; Agencia Estatal de Administracion Tributaria; Comunidad de Madrid.
+- URLs:
+  - BOE, Orden ESS/86/2015, cotizacion 2015: https://www.boe.es/eli/es/o/2015/01/30/ess86
+  - BOE, Ley 35/2006 del IRPF consolidada a 31-12-2015: https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764&p=20151231&tn=1
+  - AEAT, Manual practico Renta 2015: https://sede.agenciatributaria.gob.es/static_files/Sede/Biblioteca/Manual/Practicos/IRPF/IRPF-2015/Manual_Renta_2015_es_es.pdf
+  - BOE, Ley 4/2014 de la Comunidad de Madrid: https://www.boe.es/buscar/doc.php?id=BOE-A-2015-1956
+  - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- fecha de consulta/descarga: 2026-06-01
+- periodo: 2015
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid.
+- formato descargado: HTML y PDF.
+- archivos brutos:
+  - `data/raw/boe/cotizaciones-2015/2026-06-01_boe_orden-ess-86-2015.html`
+  - `data/raw/boe/irpf-2015/2026-06-01_boe_ley-irpf-consolidada-2015.html`
+  - `data/raw/aeat/irpf-2015/2026-06-01_aeat_manual-renta-2015.pdf`
+  - `data/raw/boe/irpf-2015/2026-06-01_boe_ley-4-2014-madrid-irpf-2015.html`
+  - `data/raw/boe/irpf-2015/2026-06-01_boe_ley-4-2014-madrid-irpf-2015.pdf`
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2015.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2015.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF 2015, escala autonomica de Madrid, minimos personales/familiares estatales, minimos por descendientes propios de Madrid, gastos y reducciones de trabajo y tipos de IVA.
+- nota metodologica: primer paquete 2015 para caso base Madrid. No activa todas las CCAA, no parametriza deducciones autonomicas y no replica retenciones de nomina sin algoritmo oficial AEAT 2015. En 2015 no existen MEI ni cotizacion adicional de solidaridad.
