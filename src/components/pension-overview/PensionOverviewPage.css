@@ -187,6 +187,35 @@
   gap: 8px;
 }
 
+.pov-panel-info-trigger {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(157, 182, 217, 0.7);
+  border-radius: 50%;
+  color: #dbeafe;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    color 140ms ease,
+    transform 140ms ease;
+}
+
+.pov-panel-info-trigger:hover {
+  border-color: #4380ff;
+  color: #ffffff;
+  background: rgba(45, 108, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.pov-panel-info-trigger:focus-visible {
+  outline: 2px solid #36d9e0;
+  outline-offset: 3px;
+}
+
 .pov-panel-source {
   margin: 0;
   color: var(--color-text-inverted-muted);

@@ -22,7 +22,6 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { DashboardPanel } from '../ui/DashboardPanel'
-import { InfoButton } from '../ui/InfoButton'
 import { KeyIndicatorsPanel } from './KeyIndicatorsPanel'
 import type { IndicatorItem } from './KeyIndicatorsPanel'
 import { PopulationPyramid } from '../population/PopulationPyramid'
@@ -32,6 +31,7 @@ import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
 import { TimeSeriesChart } from '../charts/TimeSeriesChart'
 import type { ChartMilestone, ChartSeries } from '../charts/TimeSeriesChart'
 import { YearSelector } from '../ui/YearSelector'
+import { IndicatorInfoModal } from './IndicatorInfoModal'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -269,6 +269,7 @@ function WinnersLosers() {
 
 export function PensionOverviewPage() {
   const [year, setYear] = React.useState(2025)
+  const [indicatorInfoOpen, setIndicatorInfoOpen] = React.useState(true)
 
   const currentSummary = React.useMemo(
     () => POPULATION_YEAR_SUMMARIES.find((summary) => summary.year === year)
@@ -334,12 +335,14 @@ export function PensionOverviewPage() {
                 title={
                   <span className="pov-panel-title">
                     Piramide poblacional de Espana
-                    <InfoButton label="Informacion sobre la piramide" size="sm">
-                      <p>
-                        La piramide usa el componente existente y cambia con el selector de ano.
-                        Las capas por lugar de nacimiento deben tratarse segun su metadata.
-                      </p>
-                    </InfoButton>
+                    <button
+                      type="button"
+                      className="pov-panel-info-trigger"
+                      aria-label="Abrir informacion del indicador"
+                      onClick={() => setIndicatorInfoOpen(true)}
+                    >
+                      <Info size={14} strokeWidth={2} />
+                    </button>
                   </span>
                 }
                 subtitle="Poblacion por edad, sexo y nacimiento"
@@ -417,6 +420,11 @@ export function PensionOverviewPage() {
           </aside>
         </div>
       </main>
+
+      <IndicatorInfoModal
+        open={indicatorInfoOpen}
+        onClose={() => setIndicatorInfoOpen(false)}
+      />
     </div>
   )
 }

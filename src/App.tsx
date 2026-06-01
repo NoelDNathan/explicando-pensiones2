@@ -12,6 +12,7 @@ import { HealthExpenditureDashboard } from './components/health-expenditure/Heal
 import { SalaryNationalityDashboard } from './components/salary-nationality/SalaryNationalityDashboard'
 import { FiscalWorkerDashboard } from './components/fiscal-worker-dashboard'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
+import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -259,6 +260,8 @@ const INDICATORS_2025: IndicatorItem[] = [
 // ─── Component lab ────────────────────────────────────────────────────────────
 
 function ComponentLab() {
+  const [indicatorInfoOpen, setIndicatorInfoOpen] = React.useState(false)
+
   return (
     <main className="component-lab">
       <header className="lab-header">
@@ -482,6 +485,33 @@ function ComponentLab() {
           <FiscalWorkerDashboard />
         </div>
       </section>
+
+      <section className="component-section" aria-labelledby="indicator-info-modal-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 10</p>
+          <h2 id="indicator-info-modal-title">Modal de informacion del indicador</h2>
+          <p>
+            Ventana glassmorphism para fuentes, metodologia, limitaciones y
+            descargas de un indicador. Se abre desde iconos de informacion en
+            dashboards oscuros.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--info-modal">
+          <button
+            type="button"
+            className="component-info-modal-trigger"
+            onClick={() => setIndicatorInfoOpen(true)}
+          >
+            Abrir modal
+          </button>
+        </div>
+      </section>
+
+      <IndicatorInfoModal
+        open={indicatorInfoOpen}
+        onClose={() => setIndicatorInfoOpen(false)}
+      />
     </main>
   )
 }
