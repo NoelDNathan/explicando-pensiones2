@@ -10,6 +10,7 @@ import { YearSelector } from './components/YearSelector'
 import { ReformSimulator } from './components/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/HealthExpenditureDashboard'
 import { SalaryNationalityDashboard } from './components/SalaryNationalityDashboard'
+import { FiscalWorkerDashboard } from './components/fiscal-worker-dashboard'
 import {
   POPULATION_SCALE_MAX,
   POPULATION_YEAR_RANGE,
@@ -462,6 +463,24 @@ function ComponentLab() {
           <HealthExpenditureDashboard />
         </div>
       </section>
+
+      <section
+        className="component-section component-section--wide"
+        aria-labelledby="fiscal-dashboard-title"
+      >
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 09</p>
+          <h2 id="fiscal-dashboard-title">Calculadora fiscal del trabajador</h2>
+          <p>
+            Mockup de dashboard SaaS oscuro para comparar salario neto,
+            impuestos y aportacion a pensiones entre dos anos.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dashboard component-preview--bleed">
+          <FiscalWorkerDashboard />
+        </div>
+      </section>
     </main>
   )
 }
@@ -477,7 +496,8 @@ function Home() {
         pagina de poblacion en <a href="/poblacion">/poblacion</a> o el panel
         de gasto sanitario en <a href="/gasto-sanitario">/gasto-sanitario</a>.
         Tambien puedes abrir la infografia salarial en{' '}
-        <a href="/salario-nacionalidad">/salario-nacionalidad</a>.
+        <a href="/salario-nacionalidad">/salario-nacionalidad</a> y la
+        calculadora fiscal en <a href="/calculadora-fiscal">/calculadora-fiscal</a>.
       </p>
     </main>
   )
@@ -647,11 +667,13 @@ function App() {
   const isPopulationPage = path === '/poblacion'
   const isHealthPage = path === '/gasto-sanitario'
   const isSalaryNationalityPage = path === '/salario-nacionalidad'
+  const isFiscalWorkerPage = path === '/calculadora-fiscal'
 
   if (isComponentLab) return <ComponentLab />
   if (isPopulationPage) return <PopulationPage />
   if (isHealthPage) return <HealthExpenditurePage />
   if (isSalaryNationalityPage) return <SalaryNationalityDashboard />
+  if (isFiscalWorkerPage) return <FiscalWorkerDashboard />
   return <Home />
 }
 
