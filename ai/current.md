@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-06-02
+Fecha: 2026-06-03
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Refactorizado `src/components/population/PopulationPyramid.tsx` para reducir responsabilidades. Se separaron tipos publicos en `PopulationPyramid.types.ts`, constantes visuales/datos demo/leyendas en `PopulationPyramid.config.ts`, geometria y helpers en `PopulationPyramid.geometry.ts`, subpiezas SVG en `PopulationPyramid.parts.tsx` y la ficha `POPULATION_PYRAMID_INFO` en `PopulationPyramid.info.tsx`. `PopulationPyramid.tsx` queda como orquestador y reexporta tipos e informacion para mantener imports existentes. Verificado con `tsc --noEmit` y `vite build`.
 
 - Cerrado un primer bloque funcional de la calculadora fiscal 2025. La ruta `/calculadora-fiscal` deja de comparar con 2030 y pasa a calcular 2025 con el JSON normativo: salario bruto, CCAA de regimen comun, edad, hijos, ascendientes, discapacidad y movilidad geografica. Se anadio proxy de IVA desde INE EPF 2024 (`data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json`) y modulo separado de otros impuestos desde AEAT IART 2025 (`data/processed/fiscal/2026-06-02_aeat-otros-impuestos-2025-modulo-contexto.json`). Estado: IRPF/cotizaciones/CCAA 2025 quedan conectados a UI; IVA es proxy estimado, no observado 2025; otros impuestos quedan como entrada manual documentada. Las deducciones autonomicas no se automatizan todavia porque cada una requiere campos y requisitos especificos; la UI permite introducir importe verificado.
 
