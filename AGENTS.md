@@ -35,6 +35,10 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
    - usar HICP del Ageing Report/Comision Europea solo como supuesto macro de largo plazo para escenarios, no como continuidad directa del IPC INE ni como "inflacion INE";
    - etiquetar cada tramo con indicador, fuente, horizonte, `estado_dato` y ruptura metodologica;
    - para deflactar importes historicos o explicar poder adquisitivo pasado, priorizar IPC observado del INE.
+11. Antes de cerrar una interaccion con cambios de codigo, ejecutar la verificacion aplicable y dejar constancia del resultado:
+   - para cambios frontend o TypeScript, ejecutar como minimo `pnpm run build` o el equivalente local disponible (`tsc` y `vite build`);
+   - si se toca layout, interaccion o legibilidad, revisar tambien la pantalla afectada en escritorio y movil cuando haya navegador disponible;
+   - si la verificacion no puede ejecutarse por limitaciones del entorno, documentar el bloqueo en `ai/current.md`, `ai/history/` y en la respuesta final.
 
 ## Reglas de diseno frontend
 

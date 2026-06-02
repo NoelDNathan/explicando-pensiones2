@@ -269,7 +269,7 @@ function WinnersLosers() {
 
 export function PensionOverviewPage() {
   const [year, setYear] = React.useState(2025)
-  const [indicatorInfoOpen, setIndicatorInfoOpen] = React.useState(true)
+  const [indicatorInfoOpen, setIndicatorInfoOpen] = React.useState(false)
 
   const currentSummary = React.useMemo(
     () => POPULATION_YEAR_SUMMARIES.find((summary) => summary.year === year)
@@ -314,7 +314,7 @@ export function PensionOverviewPage() {
 
         <div className="pov-grid">
           <section className="pov-center">
-            <section className="pov-year-band" aria-label="Selector de ano">
+            <section className="pov-year-band" aria-label="Selector de año">
               <YearSelector
                 year={year}
                 onYearChange={setYear}
@@ -323,10 +323,6 @@ export function PensionOverviewPage() {
                 marks={[1950, 1975, 2000, 2025, 2050, 2070]}
                 playIntervalMs={160}
               />
-              <button type="button" className="pov-year-jump">
-                Ir al ano
-                <CalendarDays size={16} />
-              </button>
             </section>
 
             <div className="pov-top-grid">
@@ -423,8 +419,8 @@ export function PensionOverviewPage() {
 
       <IndicatorInfoModal
         open={indicatorInfoOpen}
-        content={POPULATION_PYRAMID_INFO}
         onClose={() => setIndicatorInfoOpen(false)}
+        content={POPULATION_PYRAMID_INFO}
       />
     </div>
   )

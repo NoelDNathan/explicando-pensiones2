@@ -261,13 +261,12 @@ export function ReformSimulator({
           <p className="rs-title">Simulador de reformas</p>
           <p className="rs-subtitle">Añade medidas y descubre su impacto futuro</p>
         </div>
-        <button
-          type="button"
+        <InfoButton
           className="rs-info-btn"
-          aria-label="Información sobre el simulador"
+          label="Información sobre el simulador"
         >
-          <InfoButton label="Información sobre el simulador" />
-        </button>
+          <p>Añade o quita medidas para comparar su efecto acumulado en el escenario mostrado.</p>
+        </InfoButton>
       </div>
 
       {/* ── Tabs ── */}

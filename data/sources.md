@@ -1168,3 +1168,49 @@
   - `data/methodology/calculadora-fiscal-cobertura-por-ano.md`
 - descripcion breve: matriz de disponibilidad de fuentes oficiales por ano para priorizar la extraccion de parametros de IRPF y cotizacion del Regimen General.
 - nota metodologica: no contiene importes ni reglas calculables. 2020 requiere tratamiento especifico por prorroga de la normativa 2019; 2026 no debe presentarse como ejercicio fiscal anual cerrado.
+
+## Calculadora fiscal del trabajador - parametros normativos 2023 y 2022
+
+- nombre de la fuente: Parametros normativos 2023 y 2022 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de la Presidencia; Agencia Estatal de Administracion Tributaria.
+- URLs:
+  - BOE, Orden PCM/74/2023, cotizacion 2023: https://www.boe.es/buscar/act.php?id=BOE-A-2023-2472
+  - BOE, Orden PCM/244/2022, cotizacion 2022: https://www.boe.es/buscar/doc.php?id=BOE-A-2022-5063
+  - AEAT, Manual practico Renta 2023: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2023.html
+  - AEAT, Manual practico Renta 2022: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2022.html
+  - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- fecha de consulta/descarga: 2026-06-03
+- periodo: 2023 y 2022
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid.
+- formato descargado: HTML.
+- archivos brutos:
+  - `data/raw/boe/cotizaciones-2023/2026-06-03_boe_orden-pcm-74-2023-cotizacion-regimen-general.html`
+  - `data/raw/aeat/irpf-2023/`
+  - `data/raw/boe/cotizaciones-2022/2026-06-03_boe_orden-pcm-244-2022-cotizacion-regimen-general.html`
+  - `data/raw/aeat/irpf-2022/`
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2023.json`
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2022.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2023.md`
+  - `data/methodology/calculadora-fiscal-trabajador-2022.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica de Madrid, minimos personales/familiares estatales y de Madrid, gastos/reducciones de trabajo y tipos de IVA.
+- nota metodologica: paquetes calculables para caso base Comunidad de Madrid. 2023 incluye MEI; 2022 no. Madrid 2022 no se copia de 2023 porque cambian tramos y minimos autonomicos. No activa selector completo de CCAA, deducciones autonomicas automaticas ni nomina mensual exacta sin algoritmo AEAT.
+
+## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
+
+- nombre de la fuente: Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2021.
+- institucion: Seguridad Social / Ministerio de Inclusion, Seguridad Social y Migraciones.
+- URL: https://www.seg-social.es/wps/wcm/connect/wss/7fad23dd-65cf-4ff4-baf3-50c5d2fabf61/202120003.pdf?CVID=&MOD=AJPERES
+- fecha de descarga: 2026-06-03
+- periodo usado: 2000-2005
+- ambito: Espana; Regimen General; cotizaciones y bases medias mensuales.
+- formato descargado: PDF.
+- archivo bruto:
+  - `data/raw/seguridad-social/cotizacion-regimen-general/2026-06-03_seguridad-social_informe-economico-financiero-2021_cotizacion-rg_2000-2019.pdf`
+- archivo procesado:
+  - `data/processed/seguridad-social/2026-06-03_seguridad-social_aportacion-anual-media-regimen-general_2000-2005.csv`
+- metodologia:
+  - `data/methodology/aportacion-anual-media-trabajador-empresa-regimen-general-2000-2005.md`
+- descripcion breve: transcripcion controlada de numero de cotizaciones y bases medias mensuales del Regimen General para calcular una aportacion anual media trabajador+empresa con el tipo total del 28,30%.
+- nota metodologica: indicador estimado a partir de datos agregados observados. No equivale a personas trabajadoras unicas, no mide aportacion vitalicia y no incorpora bonificaciones, reducciones, horas extra, otros conceptos ni regimenes distintos del General.

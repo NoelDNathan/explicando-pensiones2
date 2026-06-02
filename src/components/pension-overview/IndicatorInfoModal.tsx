@@ -12,10 +12,7 @@ import {
 } from 'lucide-react'
 import './IndicatorInfoModal.css'
 
-export type IndicatorInfoModalTab = {
-  label: string
-  active?: boolean
-}
+
 
 export type IndicatorInfoModalSection = {
   title: string
@@ -39,7 +36,6 @@ export type IndicatorInfoModalDownload = {
 export type IndicatorInfoModalContent = {
   title: string
   subtitle: string
-  tabs?: IndicatorInfoModalTab[]
   sections: IndicatorInfoModalSection[]
   stats?: IndicatorInfoModalStat[]
   downloads?: IndicatorInfoModalDownload[]
@@ -138,20 +134,6 @@ export function IndicatorInfoModal({ open, onClose, content }: IndicatorInfoModa
           </button>
         </header>
 
-        {content.tabs && content.tabs.length > 0 && (
-          <nav className="iim-tabs" aria-label={content.title}>
-            {content.tabs.map((tab) => (
-              <button
-                key={tab.label}
-                type="button"
-                className={`iim-tab${tab.active ? ' iim-tab--active' : ''}`}
-                aria-current={tab.active ? 'page' : undefined}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        )}
 
         <div className="iim-content">
           <div className="iim-main-column">

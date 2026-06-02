@@ -111,17 +111,19 @@ function CategoryTick({
   icons,
   rows,
 }: {
-  x?: number
-  y?: number
+  x?: number | string
+  y?: number | string
   payload?: { value: string }
   icons?: Record<string, ReactNode>
   rows: StackedBarRow[]
 }) {
   const row = rows.find((r) => r.label === payload?.value)
   const icon = row ? icons?.[row.id] : null
+  const tickX = typeof x === 'number' ? x : Number(x) || 0
+  const tickY = typeof y === 'number' ? y : Number(y) || 0
 
   return (
-    <g transform={`translate(${x},${y})`}>
+    <g transform={`translate(${tickX},${tickY})`}>
       {icon && (
         <foreignObject x={-168} y={-10} width={18} height={18}>
           <span className="sbc__tick-icon">{icon}</span>

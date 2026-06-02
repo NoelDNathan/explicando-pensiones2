@@ -874,3 +874,50 @@
   - `data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-cobertura-por-ano-2014-2026.json`.
   - `data/methodology/calculadora-fiscal-cobertura-por-ano.md`.
 - Nota de uso: este fichero no contiene parametros numericos calculables. Sirve para priorizar la extraccion de anos y evitar mezclar ejercicios cerrados con 2026 o anos anteriores a 2014 sin fuente equivalente localizada.
+
+## Calculadora fiscal del trabajador - parametros normativos 2023 y 2022
+
+- Fecha de preparacion: 2026-06-03.
+- Script reproducible: no aplica; transcripcion estructurada y documentada de normas/paginas oficiales.
+- Fuente:
+  - BOE, Orden PCM/74/2023, con modificacion Orden PCM/313/2023, para bases y tipos de cotizacion 2023.
+  - BOE, Orden PCM/244/2022 para bases y tipos de cotizacion 2022.
+  - Agencia Tributaria, Manuales practicos de Renta 2023 y 2022, para escalas IRPF, minimos, gastos y reducciones.
+  - Agencia Tributaria, tipos impositivos de IVA.
+- Transformacion aplicada:
+  - descarga y conservacion de brutos oficiales HTML;
+  - transcripcion de bases maximas/minimas del Regimen General;
+  - conversion de grupos 8 a 11, publicados en euros/dia, a equivalente mensual multiplicando por 30, conservando tambien los valores diarios publicados;
+  - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional, horas extra y MEI cuando aplica;
+  - registro explicito de MEI 2023 y de ausencia de MEI y cotizacion adicional de solidaridad en 2022;
+  - transcripcion de la escala estatal general del IRPF 2023 y 2022;
+  - transcripcion de las escalas autonomicas de la Comunidad de Madrid, separando 2022 de 2023 porque cambian tramos y cuotas;
+  - transcripcion de minimos personales/familiares estatales y minimos propios de Madrid;
+  - transcripcion de gastos deducibles y reduccion general de rendimientos del trabajo;
+  - registro de tipos legales de IVA y huecos pendientes para IVA medio y otros impuestos.
+- Archivos generados:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2023.json`.
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2022.json`.
+- Metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2023.md`.
+  - `data/methodology/calculadora-fiscal-trabajador-2022.md`.
+- Nota de uso: paquetes 2023 y 2022 calculables para caso base Comunidad de Madrid. Antes de activar selector completo de CCAA se deben parametrizar comunidades de regimen comun y deducciones autonomicas. Antes de mostrar nomina mensual o retencion exacta se debe incorporar el algoritmo oficial de retenciones AEAT del ejercicio correspondiente.
+
+## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
+
+- Fecha de preparacion: 2026-06-03.
+- Script reproducible: no aplica; transcripcion controlada de PDF oficial y calculo aritmetico.
+- Fuente:
+  - Seguridad Social, `Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2021`, bloque de cotizacion del Regimen General.
+- Transformacion aplicada:
+  - descarga y conservacion del PDF oficial;
+  - transcripcion de `cotizaciones_numero` y `base_media_mensual_eur` para 2000-2005;
+  - aplicacion del tipo total de cotizacion normal del Regimen General, 28,30%;
+  - calculo de `base_media_anual_eur = base_media_mensual_eur * 12`;
+  - calculo de `aportacion_anual_media_trabajador_empresa_eur = base_media_anual_eur * 0,283`;
+  - calculo de control agregado `cotizacion_normal_calculada_millones_eur = aportacion anual media * cotizaciones / 1.000.000`.
+- Archivos generados:
+  - `data/raw/seguridad-social/cotizacion-regimen-general/2026-06-03_seguridad-social_informe-economico-financiero-2021_cotizacion-rg_2000-2019.pdf`.
+  - `data/processed/seguridad-social/2026-06-03_seguridad-social_aportacion-anual-media-regimen-general_2000-2005.csv`.
+  - `data/methodology/aportacion-anual-media-trabajador-empresa-regimen-general-2000-2005.md`.
+- Nota de uso: el indicador se marca como `estimado` porque la aportacion anual media es calculada por el proyecto, aunque cotizaciones y bases procedan de una fuente oficial observada. No usar como aportacion vitalicia ni como dato individual de trabajador.

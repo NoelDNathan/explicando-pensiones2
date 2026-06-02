@@ -67,6 +67,9 @@
 
 .rs-info-btn {
   flex: 0 0 auto;
+}
+
+.rs-info-btn .info-button__trigger {
   display: grid;
   place-items: center;
   width: 30px;
@@ -82,13 +85,13 @@
     border-color 150ms ease;
 }
 
-.rs-info-btn:hover {
+.rs-info-btn .info-button__trigger:hover {
   color: var(--rs-text);
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(66, 110, 200, 0.42);
 }
 
-.rs-info-btn:focus-visible {
+.rs-info-btn .info-button__trigger:focus-visible {
   outline: 2px solid var(--rs-accent);
   outline-offset: 2px;
 }

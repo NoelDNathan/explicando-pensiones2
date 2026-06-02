@@ -20,7 +20,7 @@ export interface YearSelectorProps {
   minYear?: number
   maxYear?: number
   /** Specific years to render tick marks and labels for. */
-  marks?: number[]
+  marks?: readonly number[]
   /** Controlled play state. If omitted, the component manages it internally. */
   playing?: boolean
   onPlayToggle?: () => void
@@ -88,7 +88,7 @@ interface TimelineProps {
   minYear: number
   maxYear: number
   marks: readonly number[]
-  svgRef: React.RefObject<SVGSVGElement>
+  svgRef: React.RefObject<SVGSVGElement | null>
   onPointerDown: (e: React.PointerEvent<SVGSVGElement>) => void
   onPointerMove: (e: React.PointerEvent<SVGSVGElement>) => void
   onPointerUp: (e: React.PointerEvent<SVGSVGElement>) => void

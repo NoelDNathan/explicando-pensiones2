@@ -259,7 +259,9 @@ function InfoIcon({ label }: { label: string }) {
       title={label}
       role="img"
     >
-      <InfoButton label={label} />
+      <InfoButton label={label}>
+        <p>{label}</p>
+      </InfoButton>
     </span>
   )
 }
@@ -313,13 +315,6 @@ export function TimeSeriesChart({
 
     const xStep = Math.max(1, Math.ceil(N / 14))
 
-    const projStart = series.reduce<number | null>((acc, s) => {
-      if (s.kind === 'mixed' && s.projectionFrom != null) {
-        return acc === null ? s.projectionFrom : Math.min(acc, s.projectionFrom)
-      }
-      return acc
-    }, null)
-
     const paths = series.map((s) => {
       const splitAt =
         s.kind === 'mixed'        ? (s.projectionFrom ?? N)
@@ -341,7 +336,7 @@ export function TimeSeriesChart({
       xOf, yOf, leftScale, rightScale,
       leftTicks, rightTicks,
       leftSeries, rightSeries,
-      xStep, projStart, paths,
+      xStep, paths,
     }
   }, [series, N])
 
@@ -349,7 +344,7 @@ export function TimeSeriesChart({
     xOf, yOf, leftScale, rightScale,
     leftTicks, rightTicks,
     leftSeries, rightSeries,
-    xStep, projStart, paths,
+    xStep, paths,
   } = geo
 
   // ── Hover tracking ─────────────────────────────────────────────────────────
@@ -381,6 +376,7 @@ export function TimeSeriesChart({
             {title && <h3 className="tsc__title">{title}</h3>}
             {infoLabel && <InfoIcon label={infoLabel} />}
           </div>
+          {subtitle && <p className="tsc__subtitle">{subtitle}</p>}
         </div>
 
         {/* Row 2: legend */}

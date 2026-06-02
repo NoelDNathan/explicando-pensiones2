@@ -1,6 +1,6 @@
 {
   "dataset_id": "fiscal-worker-calculator-coverage-by-year-2014-2026",
-  "created_at": "2026-06-02",
+  "created_at": "2026-06-03",
   "status": "cobertura_metodologica",
   "scope": {
     "country": "Espana",
@@ -51,7 +51,7 @@
     },
     {
       "year": 2024,
-      "coverage_status": "cubrible",
+      "coverage_status": "parametrizado_parcial_ampliable",
       "irpf_source_status": "localizado",
       "social_security_source_status": "localizado_con_modificacion",
       "irpf_sources": [
@@ -59,27 +59,37 @@
         "AEAT Manual practico de Renta 2024 Parte 2 Deducciones autonomicas"
       ],
       "social_security_sources": ["BOE Orden PJC/51/2024", "BOE Orden PJC/281/2024"],
+      "existing_processed_files": [
+        "data/processed/fiscal/2026-06-02_calculadora-fiscal-trabajador-parametros-2024.json"
+      ],
       "use_in_calculator": true,
-      "notes": ["Buen candidato para siguiente extraccion completa."]
+      "notes": ["Madrid listo; CCAA restantes requieren extraccion y validacion si se activa selector territorial."]
     },
     {
       "year": 2023,
-      "coverage_status": "cubrible_con_cautela_version",
+      "coverage_status": "parametrizado_parcial_ampliable",
       "irpf_source_status": "localizado",
       "social_security_source_status": "localizado_con_modificacion",
       "irpf_sources": ["AEAT Manual practico de Renta 2023"],
       "social_security_sources": ["BOE Orden PCM/74/2023", "BOE Orden PCM/313/2023"],
+      "existing_processed_files": [
+        "data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2023.json"
+      ],
       "use_in_calculator": true,
-      "notes": ["Documentar si se usa texto original o redaccion modificada de bases minimas."]
+      "notes": ["Madrid listo; se usa redaccion BOE consolidada con modificacion de bases minimas 2023."]
     },
     {
       "year": 2022,
-      "coverage_status": "cubrible",
+      "coverage_status": "parametrizado_parcial_ampliable",
       "irpf_source_status": "localizado",
       "social_security_source_status": "localizado",
       "irpf_sources": ["AEAT Manual practico de Renta 2022"],
       "social_security_sources": ["BOE Orden PCM/244/2022"],
-      "use_in_calculator": true
+      "existing_processed_files": [
+        "data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2022.json"
+      ],
+      "use_in_calculator": true,
+      "notes": ["Madrid listo; no copiar de 2023 porque tramos y minimos autonomicos cambian."]
     },
     {
       "year": 2021,
@@ -167,7 +177,7 @@
       "notes": ["Limite inferior de la cobertura AEAT localizada en la pagina de manuales revisada."]
     }
   ],
-  "recommended_order": [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2014],
+  "recommended_order": [2021, 2020, 2019, 2018, 2017, 2016, 2014],
   "global_gaps": [
     "Retenciones de nomina: localizar algoritmo AEAT especifico por ejercicio si la UI muestra retencion mensual exacta.",
     "Deducciones autonomicas: mantener catalogo hasta codificar reglas calculables por deduccion.",
