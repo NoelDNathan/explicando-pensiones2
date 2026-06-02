@@ -993,6 +993,7 @@
 - descripcion breve: la tabla 2.3 publica la evolucion de la estructura de los recursos del Sistema de Seguridad Social: cotizaciones, transferencias corrientes, otros ingresos y total neto consolidado, en millones de euros y porcentaje sobre total.
 - fuente original indicada en el PDF: elaboracion propia a partir del Anuario de Estadisticas Laborales y del Observatorio Social de Espana, Informe 2007.
 - nota metodologica: es la fuente candidata mas prometedora localizada para 1990-1994, pero es secundaria. La validacion contra la serie moderna 1995-2007 muestra coincidencia por redondeo para transferencias corrientes; cotizaciones difieren menos de 0,5% en 1997-2007; total neto/otros ingresos no coinciden plenamente y presentan diferencias relevantes en 2002, 2006 y 2007. No usar editorialmente antes de localizar o documentar la fuente primaria original.
+- decision de uso: para 1990-1994, usar solo como candidato `cotizaciones_sociales` y `transferencias_corrientes`; no usar por ahora `total_neto_consolidado`, `otros_ingresos` ni porcentajes sobre total. Nota completa en `data/methodology/validacion-ingresos-seguridad-social-1990-1994.md`.
 
 ## Seguridad Social - altas de jubilacion por anos cotizados
 

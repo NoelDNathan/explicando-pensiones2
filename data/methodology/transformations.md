@@ -676,6 +676,7 @@
   - `total_neto_consolidado`: muestra diferencias menores en la mayoria del solape, pero diferencias relevantes en 2002, 2006 y 2007.
   - `otros_ingresos`: muestra una diferencia relevante en 2007.
 - Nota metodologica: es el candidato mas util localizado hasta ahora para extender ingresos de Seguridad Social a 1990-1994, especialmente en cotizaciones y transferencias. No debe presentarse como continuidad editorial final de la serie 1995-2025P hasta localizar o documentar mejor la fuente primaria original y resolver las discrepancias de `total_neto_consolidado`/`otros_ingresos`. El ano 2002 queda especialmente marcado: el total publicado en la tabla candidata no cuadra con la suma de componentes ni con la serie moderna.
+- Decision provisional documentada: `data/methodology/validacion-ingresos-seguridad-social-1990-1994.md`. Para 1990-1994, `cotizaciones_sociales` y `transferencias_corrientes` pueden tratarse como candidatos pendientes de fuente primaria; `total_neto_consolidado`, `otros_ingresos` y porcentajes sobre total quedan bloqueados para uso editorial.
 
 ## Seguridad Social / BOE / Congreso - edad legal y efectiva de jubilacion 1975-2026
 
