@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import { InfoButton } from './components/ui/InfoButton'
-import { PopulationPyramid } from './components/population/PopulationPyramid'
+import { POPULATION_PYRAMID_INFO, PopulationPyramid } from './components/population/PopulationPyramid'
 import { TimeSeriesChart } from './components/charts/TimeSeriesChart'
 import type { ChartSeries, ChartMilestone } from './components/charts/TimeSeriesChart'
 import { KeyIndicatorsPanel } from './components/pension-overview/KeyIndicatorsPanel'
@@ -511,6 +511,7 @@ function ComponentLab() {
       <IndicatorInfoModal
         open={indicatorInfoOpen}
         onClose={() => setIndicatorInfoOpen(false)}
+        content={POPULATION_PYRAMID_INFO}
       />
     </main>
   )

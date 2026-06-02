@@ -1,13 +1,9 @@
 import { useEffect, type ReactNode } from 'react'
 import {
   CalendarDays,
-  Clock3,
-  Database,
   Download,
   ExternalLink,
-  FileDown,
   FileText,
-  Globe2,
   HelpCircle,
   Info,
   Mail,
@@ -16,18 +12,52 @@ import {
 } from 'lucide-react'
 import './IndicatorInfoModal.css'
 
-type IndicatorInfoModalProps = {
-  open: boolean
-  onClose: () => void
+export type IndicatorInfoModalTab = {
+  label: string
+  active?: boolean
 }
 
-const tabs = ['Resumen', 'Fuentes', 'Metodologia', 'Notas', 'Descargas']
+export type IndicatorInfoModalSection = {
+  title: string
+  icon?: ReactNode
+  body?: ReactNode
+  items?: ReactNode[]
+  orderedItems?: ReactNode[]
+}
 
-const definitions = [
-  ['Edad de trabajar', 'poblacion entre 16 y la edad legal de jubilacion.'],
-  ['Tasa de reemplazo', 'pension inicial media / ultimo salario medio.'],
-  ['Relacion cotizantes / pensionistas', 'numero de cotizantes por cada pensionista.'],
-]
+export type IndicatorInfoModalStat = {
+  label: string
+  value: string
+  icon?: ReactNode
+}
+
+export type IndicatorInfoModalDownload = {
+  label: string
+  icon?: ReactNode
+}
+
+export type IndicatorInfoModalContent = {
+  title: string
+  subtitle: string
+  tabs?: IndicatorInfoModalTab[]
+  sections: IndicatorInfoModalSection[]
+  stats?: IndicatorInfoModalStat[]
+  downloads?: IndicatorInfoModalDownload[]
+  help?: {
+    title: string
+    body: ReactNode
+    href?: string
+    linkLabel?: string
+    icon?: ReactNode
+  }
+  primaryActionLabel?: string
+}
+
+export type IndicatorInfoModalProps = {
+  open: boolean
+  onClose: () => void
+  content: IndicatorInfoModalContent
+}
 
 function InfoCard({
   icon,
@@ -47,16 +77,25 @@ function InfoCard({
   )
 }
 
-function DownloadButton({ children, icon }: { children: ReactNode; icon: ReactNode }) {
+function sectionIcon(section: IndicatorInfoModalSection) {
+  if (section.icon) return section.icon
+
+  const title = section.title.toLowerCase()
+  if (title.includes('definiciones')) return <HelpCircle size={16} />
+  if (title.includes('limitaciones') || title.includes('supuestos')) return <ShieldCheck size={16} />
+  return <Info size={16} />
+}
+
+function DownloadButton({ children, icon }: { children: ReactNode; icon?: ReactNode }) {
   return (
     <button type="button" className="iim-download-button">
       <span>{children}</span>
-      {icon}
+      {icon ?? <FileText size={17} />}
     </button>
   )
 }
 
-export function IndicatorInfoModal({ open, onClose }: IndicatorInfoModalProps) {
+export function IndicatorInfoModal({ open, onClose, content }: IndicatorInfoModalProps) {
   useEffect(() => {
     if (!open) return
 
@@ -75,7 +114,7 @@ export function IndicatorInfoModal({ open, onClose }: IndicatorInfoModalProps) {
       <button
         type="button"
         className="iim-backdrop"
-        aria-label="Cerrar informacion del indicador"
+        aria-label={`Cerrar ${content.title}`}
         onClick={onClose}
       />
 
@@ -91,115 +130,100 @@ export function IndicatorInfoModal({ open, onClose }: IndicatorInfoModalProps) {
             <Info size={28} strokeWidth={2.1} />
           </span>
           <div className="iim-header__copy">
-            <h2 id="indicator-info-title">Informacion del indicador</h2>
-            <p id="indicator-info-subtitle">Piramide poblacional de Espana</p>
+            <h2 id="indicator-info-title">{content.title}</h2>
+            <p id="indicator-info-subtitle">{content.subtitle}</p>
           </div>
           <button type="button" className="iim-close" aria-label="Cerrar" onClick={onClose}>
             <X size={26} strokeWidth={1.8} />
           </button>
         </header>
 
-        <nav className="iim-tabs" aria-label="Informacion del indicador">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              className={`iim-tab${tab === 'Fuentes' ? ' iim-tab--active' : ''}`}
-              aria-current={tab === 'Fuentes' ? 'page' : undefined}
-            >
-              {tab}
-            </button>
-          ))}
-        </nav>
+        {content.tabs && content.tabs.length > 0 && (
+          <nav className="iim-tabs" aria-label={content.title}>
+            {content.tabs.map((tab) => (
+              <button
+                key={tab.label}
+                type="button"
+                className={`iim-tab${tab.active ? ' iim-tab--active' : ''}`}
+                aria-current={tab.active ? 'page' : undefined}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        )}
 
         <div className="iim-content">
           <div className="iim-main-column">
-            <section className="iim-section">
-              <div className="iim-section__title">
-                <Info size={16} />
-                <h3>Fuente de informacion</h3>
-              </div>
-              <ul className="iim-list">
-                <li><strong>INE</strong> - Cifras de poblacion a 1 de enero de 2025</li>
-                <li>Proyecciones de poblacion 2022-2070</li>
-                <li>Seguridad Social, AIReF, Banco de Espana, IGAE</li>
-              </ul>
-            </section>
+            {content.sections.map((section) => (
+              <section className="iim-section" key={section.title}>
+                <div className="iim-section__title">
+                  {sectionIcon(section)}
+                  <h3>{section.title}</h3>
+                </div>
 
-            <section className="iim-section">
-              <div className="iim-section__title">
-                <Database size={16} />
-                <h3>Metodologia</h3>
-              </div>
-              <p>
-                Este indicador combina datos demograficos oficiales y proyecciones
-                economicas para ofrecer una vision integrada de la estructura
-                poblacional de Espana. Los datos se armonizan para permitir
-                simulaciones y comparaciones en el tiempo.
-              </p>
-              <ol className="iim-steps">
-                <li><strong>Recopilacion:</strong> obtencion de datos oficiales de fuentes publicas.</li>
-                <li><strong>Limpieza:</strong> validacion y depuracion de series temporales y clasificaciones.</li>
-                <li><strong>Normalizacion:</strong> unificacion de criterios y definiciones entre fuentes.</li>
-                <li><strong>Proyeccion:</strong> aplicacion de modelos demograficos y economicos para 2022-2070.</li>
-                <li><strong>Validacion:</strong> contraste con series historicas y revision de coherencia.</li>
-              </ol>
-            </section>
+                {section.body && <div className="iim-section__body">{section.body}</div>}
 
-            <section className="iim-section">
-              <div className="iim-section__title">
-                <HelpCircle size={16} />
-                <h3>Definiciones clave</h3>
-              </div>
-              <ul className="iim-list">
-                {definitions.map(([term, detail]) => (
-                  <li key={term}><strong>{term}:</strong> {detail}</li>
-                ))}
-              </ul>
-            </section>
+                {section.items && section.items.length > 0 && (
+                  <ul className="iim-list">
+                    {section.items.map((item, index) => <li key={index}>{item}</li>)}
+                  </ul>
+                )}
 
-            <section className="iim-section">
-              <div className="iim-section__title">
-                <ShieldCheck size={16} />
-                <h3>Limitaciones y supuestos</h3>
-              </div>
-              <p>
-                Las proyecciones dependen de supuestos sobre fecundidad,
-                mortalidad, migraciones, empleo, productividad y politicas
-                publicas. Los resultados son aproximaciones sujetas a incertidumbre.
-              </p>
-            </section>
+                {section.orderedItems && section.orderedItems.length > 0 && (
+                  <ol className="iim-steps">
+                    {section.orderedItems.map((item, index) => <li key={index}>{item}</li>)}
+                  </ol>
+                )}
+              </section>
+            ))}
           </div>
 
           <aside className="iim-side-column" aria-label="Ficha tecnica y descargas">
-            <div className="iim-side-panel">
-              <InfoCard icon={<CalendarDays size={26} />} label="Ultima actualizacion" value="Enero 2025" />
-              <InfoCard icon={<Globe2 size={26} />} label="Cobertura" value="Espana" />
-              <InfoCard icon={<Clock3 size={26} />} label="Frecuencia" value="Anual" />
-              <InfoCard icon={<ShieldCheck size={26} />} label="Nivel de confianza" value="Datos oficiales" />
-            </div>
+            {content.stats && content.stats.length > 0 && (
+              <div className="iim-side-panel">
+                {content.stats.map((stat) => (
+                  <InfoCard
+                    key={stat.label}
+                    icon={stat.icon ?? <CalendarDays size={26} />}
+                    label={stat.label}
+                    value={stat.value}
+                  />
+                ))}
+              </div>
+            )}
 
-            <div className="iim-side-panel">
-              <h3 className="iim-side-title"><Download size={18} /> Descargas</h3>
-              <DownloadButton icon={<FileText size={17} />}>CSV</DownloadButton>
-              <DownloadButton icon={<FileDown size={17} />}>PDF</DownloadButton>
-              <DownloadButton icon={<ExternalLink size={18} />}>Ver fuente original</DownloadButton>
-            </div>
+            {content.downloads && content.downloads.length > 0 && (
+              <div className="iim-side-panel">
+                <h3 className="iim-side-title"><Download size={18} /> Descargas</h3>
+                {content.downloads.map((download) => (
+                  <DownloadButton key={download.label} icon={download.icon}>
+                    {download.label}
+                  </DownloadButton>
+                ))}
+              </div>
+            )}
 
-            <div className="iim-side-panel iim-help-panel">
-              <h3 className="iim-side-title"><HelpCircle size={18} /> Mas informacion</h3>
-              <p>¿Dudas o sugerencias? Escribenos y te ayudaremos.</p>
-              <a href="mailto:info@pensionesenespana.es">
-                <Mail size={16} />
-                info@pensionesenespana.es
-              </a>
-            </div>
+            {content.help && (
+              <div className="iim-side-panel iim-help-panel">
+                <h3 className="iim-side-title">
+                  {content.help.icon ?? <HelpCircle size={18} />} {content.help.title}
+                </h3>
+                <div className="iim-help-panel__body">{content.help.body}</div>
+                {content.help.href && content.help.linkLabel && (
+                  <a href={content.help.href}>
+                    <Mail size={16} />
+                    {content.help.linkLabel}
+                  </a>
+                )}
+              </div>
+            )}
           </aside>
         </div>
 
         <footer className="iim-footer">
           <button type="button" className="iim-primary-action">
-            Ver fuente original
+            {content.primaryActionLabel ?? 'Ver fuente original'}
             <ExternalLink size={19} />
           </button>
           <button type="button" className="iim-secondary-action" onClick={onClose}>

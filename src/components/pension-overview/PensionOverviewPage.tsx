@@ -24,7 +24,7 @@ import type { LucideIcon } from 'lucide-react'
 import { DashboardPanel } from '../ui/DashboardPanel'
 import { KeyIndicatorsPanel } from './KeyIndicatorsPanel'
 import type { IndicatorItem } from './KeyIndicatorsPanel'
-import { PopulationPyramid } from '../population/PopulationPyramid'
+import { POPULATION_PYRAMID_INFO, PopulationPyramid } from '../population/PopulationPyramid'
 import { ReformSimulator } from './ReformSimulator'
 import { DashboardSidebar } from '../ui/DashboardSidebar'
 import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
@@ -423,6 +423,7 @@ export function PensionOverviewPage() {
 
       <IndicatorInfoModal
         open={indicatorInfoOpen}
+        content={POPULATION_PYRAMID_INFO}
         onClose={() => setIndicatorInfoOpen(false)}
       />
     </div>
