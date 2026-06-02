@@ -1,0 +1,914 @@
+﻿{
+    "dataset_id":  "ine-epf-2024-vat-proxy-2025",
+    "created_at":  "2026-06-02",
+    "source":  {
+                   "institution":  "INE",
+                   "table":  "Encuesta de Presupuestos Familiares 2024, tabla 73809",
+                   "url":  "https://ine.es/jaxiT3/Tabla.htm?L=0\u0026t=73809",
+                   "raw_file":  "data/raw/ine/epf/iva-2025-proxy/2026-06-02_ine_epf-2024_gasto-ingresos-hogar-coicop2_tabla-73809.json"
+               },
+    "status":  "estimado",
+    "period_observed":  2024,
+    "intended_use_year":  2025,
+    "unit":  "euros por hogar y porcentaje aproximado",
+    "method":  "Proxy de IVA incluido a partir del gasto medio por hogar de la EPF 2024 por nivel de ingresos mensuales netos y grupo COICOP a 2 digitos. Se asigna un tipo de IVA aproximado por grupo COICOP; no es microdato ni liquidacion fiscal observada.",
+    "limitations":  [
+                        "La EPF 2025 anual no se usa porque el resultado anual disponible en INE es 2024 a fecha de preparacion.",
+                        "Los grupos COICOP a 2 digitos mezclan bienes exentos, tipo cero, superreducido, reducido y general; los tipos asignados son aproximaciones metodologicas.",
+                        "No incluye impuestos especiales, IBI, IVTM ni otros tributos locales.",
+                        "El nivel de ingresos es del hogar y neto mensual regular; no equivale directamente al salario bruto individual."
+                    ],
+    "income_brackets":  [
+                            {
+                                "income_label":  "Total",
+                                "mean_household_spending_eur":  34120.23,
+                                "estimated_vat_included_eur":  3290.38,
+                                "estimated_effective_vat_percent_on_spending":  9.64,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  5398.6,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  399.9
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  1435.61,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  249.16
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  11044.88,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  818.14
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  1277.94,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  221.79
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  1381.31,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  53.13
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  1232.23,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  213.86
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  446.87,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  77.56
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  1102.98,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  191.43
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  1695.05,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  221.09
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  555.83,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  3384.93,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  307.72
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  1273.66,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "Total",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  3890.34,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  536.6
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "Hasta 499 euros",
+                                "mean_household_spending_eur":  14972.54,
+                                "estimated_vat_included_eur":  1350.86,
+                                "estimated_effective_vat_percent_on_spending":  9.02,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  2605.29,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  192.98
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  356.65,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  61.9
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  7261.25,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  537.87
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  353.08,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  61.28
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  544.07,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  20.93
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  495.93,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  86.07
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  264.03,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  45.82
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  485.38,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  84.24
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  383.46,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  50.02
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  0,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  670.62,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  60.97
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  474.13,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "Hasta 499 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  1078.65,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  148.78
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "De 500 a 999 euros",
+                                "mean_household_spending_eur":  16614.61,
+                                "estimated_vat_included_eur":  1511.44,
+                                "estimated_effective_vat_percent_on_spending":  9.1,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  3260.32,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  241.51
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  484.29,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  84.05
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  7378.7,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  546.57
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  656.9,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  114.01
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  647.04,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  24.89
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  623.54,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  108.22
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  217.65,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  37.77
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  512.9,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  89.02
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  426.76,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  55.66
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  75.87,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  736.29,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  66.94
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  559.03,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 500 a 999 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  1035.32,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  142.8
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "De 1.000 a 1.499 euros",
+                                "mean_household_spending_eur":  21956.03,
+                                "estimated_vat_included_eur":  2060.6,
+                                "estimated_effective_vat_percent_on_spending":  9.39,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  4051.7,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  300.13
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  827.51,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  143.62
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  8391.33,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  621.58
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  743.18,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  128.98
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  929.76,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  35.76
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  758.67,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  131.67
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  306.24,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  53.15
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  727.59,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  126.28
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  720.91,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  94.03
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  132.42,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  1473.93,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  133.99
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  780.09,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.000 a 1.499 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  2112.7,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  291.41
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "De 1.500 a 1.999 euros",
+                                "mean_household_spending_eur":  26458.56,
+                                "estimated_vat_included_eur":  2512.51,
+                                "estimated_effective_vat_percent_on_spending":  9.5,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  4600.48,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  340.78
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  1018.94,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  176.84
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  9489.44,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  702.92
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  922.45,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  160.09
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  1131.24,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  43.51
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  958.36,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  166.33
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  384.97,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  66.81
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  892.59,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  154.91
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  1076.74,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  140.44
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  237.56,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  2175.64,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  197.79
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  944.97,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 1.500 a 1.999 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  2625.18,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  362.09
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "De 2.000 a 2.499 euros",
+                                "mean_household_spending_eur":  33209.75,
+                                "estimated_vat_included_eur":  3198.83,
+                                "estimated_effective_vat_percent_on_spending":  9.63,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  5347.68,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  396.12
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  1470.61,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  255.23
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  11000.45,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  814.85
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  1221.67,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  212.03
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  1321.49,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  50.83
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  1149.95,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  199.58
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  438.58,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  76.12
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  1100.97,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  191.08
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  1561.88,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  203.72
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  453.79,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  3271.21,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  297.38
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  1232.8,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.000 a 2.499 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  3638.67,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  501.89
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "De 2.500 a 2.999 euros",
+                                "mean_household_spending_eur":  37715.68,
+                                "estimated_vat_included_eur":  3676.6,
+                                "estimated_effective_vat_percent_on_spending":  9.75,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  6106.26,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  452.32
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  1661.22,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  288.31
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  11355.13,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  841.12
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  1269.61,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  220.35
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  1582.74,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  60.87
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  1378.39,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  239.22
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  514.91,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  89.36
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  1261.33,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  218.91
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  1927,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  251.35
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  570.43,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  3759.86,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  341.81
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  1449.69,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 2.500 a 2.999 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  4879.11,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  672.98
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "De 3.000 a 4.999 euros",
+                                "mean_household_spending_eur":  44517.94,
+                                "estimated_vat_included_eur":  4363.63,
+                                "estimated_effective_vat_percent_on_spending":  9.8,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  6696.14,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  496.01
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  1963.87,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  340.84
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  12954.78,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  959.61
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  1651.61,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  286.64
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  1817.94,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  69.92
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  1672.92,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  290.34
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  587.31,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  101.93
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  1454.24,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  252.39
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  2565.64,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  334.65
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  808.21,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  5048.03,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  458.91
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  1697.43,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "De 3.000 a 4.999 euros",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  5599.82,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  772.39
+                                                      }
+                                                  ]
+                            },
+                            {
+                                "income_label":  "5.000 euros o mÃ¡s",
+                                "mean_household_spending_eur":  64823.11,
+                                "estimated_vat_included_eur":  6305.54,
+                                "estimated_effective_vat_percent_on_spending":  9.73,
+                                "coicop2_items":  [
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Alimentos y bebidas no alcohÃ³licas",
+                                                          "mean_household_spending_eur":  7951.41,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  588.99
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Vestido y calzado",
+                                                          "mean_household_spending_eur":  2849.11,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  494.47
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Vivienda, agua, electricidad, gas y otros combustibles",
+                                                          "mean_household_spending_eur":  18780.4,
+                                                          "proxy_vat_rate_percent":  8,
+                                                          "estimated_vat_included_eur":  1391.14
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Muebles, artÃ­culos del hogar y artÃ­culos para el mantenimiento corriente del hogar",
+                                                          "mean_household_spending_eur":  3105.06,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  538.89
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Sanidad",
+                                                          "mean_household_spending_eur":  2361.11,
+                                                          "proxy_vat_rate_percent":  4,
+                                                          "estimated_vat_included_eur":  90.81
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Cuidado personal, protecciÃ³n social, y bienes y servicios diversos",
+                                                          "mean_household_spending_eur":  2287.41,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  396.99
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Bebidas alcohÃ³licas, tabaco y estupefacientes",
+                                                          "mean_household_spending_eur":  652.74,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  113.29
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "InformaciÃ³n y comunicaciones",
+                                                          "mean_household_spending_eur":  1815.92,
+                                                          "proxy_vat_rate_percent":  21,
+                                                          "estimated_vat_included_eur":  315.16
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Actividades recreativas, deporte y cultura",
+                                                          "mean_household_spending_eur":  4097.48,
+                                                          "proxy_vat_rate_percent":  15,
+                                                          "estimated_vat_included_eur":  534.45
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Servicios de educaciÃ³n",
+                                                          "mean_household_spending_eur":  2254.18,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Restaurantes y servicios de alojamiento",
+                                                          "mean_household_spending_eur":  8208.22,
+                                                          "proxy_vat_rate_percent":  10,
+                                                          "estimated_vat_included_eur":  746.2
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Seguros y servicios financieros",
+                                                          "mean_household_spending_eur":  2520.26,
+                                                          "proxy_vat_rate_percent":  0,
+                                                          "estimated_vat_included_eur":  0
+                                                      },
+                                                      {
+                                                          "income_label":  "5.000 euros o mÃ¡s",
+                                                          "coicop2_label":  "Transporte",
+                                                          "mean_household_spending_eur":  7939.81,
+                                                          "proxy_vat_rate_percent":  16,
+                                                          "estimated_vat_included_eur":  1095.15
+                                                      }
+                                                  ]
+                            }
+                        ]
+}

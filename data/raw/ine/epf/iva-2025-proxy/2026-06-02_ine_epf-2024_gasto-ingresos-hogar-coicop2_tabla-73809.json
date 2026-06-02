@@ -1,0 +1,1135 @@
+[{"COD":"EPF575905", "Nombre":"Total. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":34120.22, "Secreto":false}
+]
+}
+,{"COD":"EPF575906", "Nombre":"Total. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5398.6, "Secreto":false}
+]
+}
+,{"COD":"EPF575907", "Nombre":"Total. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1435.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575908", "Nombre":"Total. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11044.88, "Secreto":false}
+]
+}
+,{"COD":"EPF575909", "Nombre":"Total. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1277.94, "Secreto":false}
+]
+}
+,{"COD":"EPF575910", "Nombre":"Total. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1381.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575918", "Nombre":"Total. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1232.23, "Secreto":false}
+]
+}
+,{"COD":"EPF575912", "Nombre":"Total. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":446.87, "Secreto":false}
+]
+}
+,{"COD":"EPF575913", "Nombre":"Total. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1102.98, "Secreto":false}
+]
+}
+,{"COD":"EPF575914", "Nombre":"Total. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1695.05, "Secreto":false}
+]
+}
+,{"COD":"EPF575915", "Nombre":"Total. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":555.83, "Secreto":false}
+]
+}
+,{"COD":"EPF575916", "Nombre":"Total. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3384.93, "Secreto":false}
+]
+}
+,{"COD":"EPF575917", "Nombre":"Total. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1273.66, "Secreto":false}
+]
+}
+,{"COD":"EPF575911", "Nombre":"Total. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3890.34, "Secreto":false}
+]
+}
+,{"COD":"EPF575919", "Nombre":"Total. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":13638.24, "Secreto":false}
+]
+}
+,{"COD":"EPF575920", "Nombre":"Total. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2157.88, "Secreto":false}
+]
+}
+,{"COD":"EPF575921", "Nombre":"Total. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":573.83, "Secreto":false}
+]
+}
+,{"COD":"EPF575922", "Nombre":"Total. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4414.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575923", "Nombre":"Total. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":510.81, "Secreto":false}
+]
+}
+,{"COD":"EPF575924", "Nombre":"Total. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":552.12, "Secreto":false}
+]
+}
+,{"COD":"EPF575932", "Nombre":"Total. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":492.54, "Secreto":false}
+]
+}
+,{"COD":"EPF575926", "Nombre":"Total. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":178.62, "Secreto":false}
+]
+}
+,{"COD":"EPF575927", "Nombre":"Total. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":440.88, "Secreto":false}
+]
+}
+,{"COD":"EPF575928", "Nombre":"Total. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":677.53, "Secreto":false}
+]
+}
+,{"COD":"EPF575929", "Nombre":"Total. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":222.17, "Secreto":false}
+]
+}
+,{"COD":"EPF575930", "Nombre":"Total. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1352.99, "Secreto":false}
+]
+}
+,{"COD":"EPF575931", "Nombre":"Total. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":509.09, "Secreto":false}
+]
+}
+,{"COD":"EPF575925", "Nombre":"Total. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1555.01, "Secreto":false}
+]
+}
+,{"COD":"EPF575891", "Nombre":"Total. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575892", "Nombre":"Total. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":15.82, "Secreto":false}
+]
+}
+,{"COD":"EPF575893", "Nombre":"Total. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.21, "Secreto":false}
+]
+}
+,{"COD":"EPF575894", "Nombre":"Total. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":32.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575895", "Nombre":"Total. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.75, "Secreto":false}
+]
+}
+,{"COD":"EPF575896", "Nombre":"Total. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.05, "Secreto":false}
+]
+}
+,{"COD":"EPF575904", "Nombre":"Total. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575898", "Nombre":"Total. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575899", "Nombre":"Total. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.23, "Secreto":false}
+]
+}
+,{"COD":"EPF575900", "Nombre":"Total. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575901", "Nombre":"Total. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.63, "Secreto":false}
+]
+}
+,{"COD":"EPF575902", "Nombre":"Total. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9.92, "Secreto":false}
+]
+}
+,{"COD":"EPF575903", "Nombre":"Total. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.73, "Secreto":false}
+]
+}
+,{"COD":"EPF575897", "Nombre":"Total. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11.4, "Secreto":false}
+]
+}
+,{"COD":"EPF575569", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":15055.91, "Secreto":false}
+]
+}
+,{"COD":"EPF575570", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2605.29, "Secreto":false}
+]
+}
+,{"COD":"EPF575571", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":356.65, "Secreto":false}
+]
+}
+,{"COD":"EPF575572", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":7261.25, "Secreto":false}
+]
+}
+,{"COD":"EPF575573", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":353.08, "Secreto":false}
+]
+}
+,{"COD":"EPF575574", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":544.07, "Secreto":false}
+]
+}
+,{"COD":"EPF575582", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":495.93, "Secreto":false}
+]
+}
+,{"COD":"EPF575576", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":264.03, "Secreto":false}
+]
+}
+,{"COD":"EPF575577", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":485.38, "Secreto":false}
+]
+}
+,{"COD":"EPF575578", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":383.46, "Secreto":false}
+]
+}
+,{"COD":"EPF575579", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":null, "Secreto":true}
+]
+}
+,{"COD":"EPF575580", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":670.62, "Secreto":false}
+]
+}
+,{"COD":"EPF575581", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":474.13, "Secreto":false}
+]
+}
+,{"COD":"EPF575575", "Nombre":"Hasta 499 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1078.65, "Secreto":false}
+]
+}
+,{"COD":"EPF575583", "Nombre":"Hasta 499 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9520.74, "Secreto":false}
+]
+}
+,{"COD":"EPF575584", "Nombre":"Hasta 499 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1647.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575585", "Nombre":"Hasta 499 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":225.53, "Secreto":false}
+]
+}
+,{"COD":"EPF575586", "Nombre":"Hasta 499 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4591.71, "Secreto":false}
+]
+}
+,{"COD":"EPF575587", "Nombre":"Hasta 499 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":223.27, "Secreto":false}
+]
+}
+,{"COD":"EPF575588", "Nombre":"Hasta 499 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":344.05, "Secreto":false}
+]
+}
+,{"COD":"EPF575596", "Nombre":"Hasta 499 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":313.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575590", "Nombre":"Hasta 499 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":166.96, "Secreto":false}
+]
+}
+,{"COD":"EPF575591", "Nombre":"Hasta 499 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":306.93, "Secreto":false}
+]
+}
+,{"COD":"EPF575592", "Nombre":"Hasta 499 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":242.49, "Secreto":false}
+]
+}
+,{"COD":"EPF575593", "Nombre":"Hasta 499 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":null, "Secreto":true}
+]
+}
+,{"COD":"EPF575594", "Nombre":"Hasta 499 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":424.07, "Secreto":false}
+]
+}
+,{"COD":"EPF575595", "Nombre":"Hasta 499 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":299.82, "Secreto":false}
+]
+}
+,{"COD":"EPF575589", "Nombre":"Hasta 499 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":682.09, "Secreto":false}
+]
+}
+,{"COD":"EPF575555", "Nombre":"Hasta 499 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575556", "Nombre":"Hasta 499 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":17.3, "Secreto":false}
+]
+}
+,{"COD":"EPF575557", "Nombre":"Hasta 499 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575558", "Nombre":"Hasta 499 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":48.23, "Secreto":false}
+]
+}
+,{"COD":"EPF575559", "Nombre":"Hasta 499 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2.35, "Secreto":false}
+]
+}
+,{"COD":"EPF575560", "Nombre":"Hasta 499 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575568", "Nombre":"Hasta 499 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.29, "Secreto":false}
+]
+}
+,{"COD":"EPF575562", "Nombre":"Hasta 499 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.75, "Secreto":false}
+]
+}
+,{"COD":"EPF575563", "Nombre":"Hasta 499 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.22, "Secreto":false}
+]
+}
+,{"COD":"EPF575564", "Nombre":"Hasta 499 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2.55, "Secreto":false}
+]
+}
+,{"COD":"EPF575565", "Nombre":"Hasta 499 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":null, "Secreto":true}
+]
+}
+,{"COD":"EPF575566", "Nombre":"Hasta 499 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.45, "Secreto":false}
+]
+}
+,{"COD":"EPF575567", "Nombre":"Hasta 499 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.15, "Secreto":false}
+]
+}
+,{"COD":"EPF575561", "Nombre":"Hasta 499 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":7.16, "Secreto":false}
+]
+}
+,{"COD":"EPF575611", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":16614.6, "Secreto":false}
+]
+}
+,{"COD":"EPF575612", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3260.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575613", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":484.29, "Secreto":false}
+]
+}
+,{"COD":"EPF575614", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":7378.7, "Secreto":false}
+]
+}
+,{"COD":"EPF575615", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":656.9, "Secreto":false}
+]
+}
+,{"COD":"EPF575616", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":647.04, "Secreto":false}
+]
+}
+,{"COD":"EPF575624", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":623.54, "Secreto":false}
+]
+}
+,{"COD":"EPF575618", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":217.65, "Secreto":false}
+]
+}
+,{"COD":"EPF575619", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":512.9, "Secreto":false}
+]
+}
+,{"COD":"EPF575620", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":426.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575621", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":75.87, "Secreto":false}
+]
+}
+,{"COD":"EPF575622", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":736.29, "Secreto":false}
+]
+}
+,{"COD":"EPF575623", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":559.03, "Secreto":false}
+]
+}
+,{"COD":"EPF575617", "Nombre":"De 500 a 999 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1035.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575625", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11291.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575626", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2215.72, "Secreto":false}
+]
+}
+,{"COD":"EPF575627", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":329.12, "Secreto":false}
+]
+}
+,{"COD":"EPF575628", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5014.58, "Secreto":false}
+]
+}
+,{"COD":"EPF575629", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":446.43, "Secreto":false}
+]
+}
+,{"COD":"EPF575630", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":439.73, "Secreto":false}
+]
+}
+,{"COD":"EPF575638", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":423.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575632", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":147.91, "Secreto":false}
+]
+}
+,{"COD":"EPF575633", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":348.57, "Secreto":false}
+]
+}
+,{"COD":"EPF575634", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":290.02, "Secreto":false}
+]
+}
+,{"COD":"EPF575635", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":51.56, "Secreto":false}
+]
+}
+,{"COD":"EPF575636", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":500.38, "Secreto":false}
+]
+}
+,{"COD":"EPF575637", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":379.92, "Secreto":false}
+]
+}
+,{"COD":"EPF575631", "Nombre":"De 500 a 999 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":703.6, "Secreto":false}
+]
+}
+,{"COD":"EPF575597", "Nombre":"De 500 a 999 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575598", "Nombre":"De 500 a 999 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":19.62, "Secreto":false}
+]
+}
+,{"COD":"EPF575599", "Nombre":"De 500 a 999 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2.91, "Secreto":false}
+]
+}
+,{"COD":"EPF575600", "Nombre":"De 500 a 999 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":44.41, "Secreto":false}
+]
+}
+,{"COD":"EPF575601", "Nombre":"De 500 a 999 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.95, "Secreto":false}
+]
+}
+,{"COD":"EPF575602", "Nombre":"De 500 a 999 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.89, "Secreto":false}
+]
+}
+,{"COD":"EPF575610", "Nombre":"De 500 a 999 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.75, "Secreto":false}
+]
+}
+,{"COD":"EPF575604", "Nombre":"De 500 a 999 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575605", "Nombre":"De 500 a 999 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.09, "Secreto":false}
+]
+}
+,{"COD":"EPF575606", "Nombre":"De 500 a 999 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2.57, "Secreto":false}
+]
+}
+,{"COD":"EPF575607", "Nombre":"De 500 a 999 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":0.46, "Secreto":false}
+]
+}
+,{"COD":"EPF575608", "Nombre":"De 500 a 999 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.43, "Secreto":false}
+]
+}
+,{"COD":"EPF575609", "Nombre":"De 500 a 999 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.36, "Secreto":false}
+]
+}
+,{"COD":"EPF575603", "Nombre":"De 500 a 999 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":6.23, "Secreto":false}
+]
+}
+,{"COD":"EPF575653", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":21956.05, "Secreto":false}
+]
+}
+,{"COD":"EPF575654", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4051.7, "Secreto":false}
+]
+}
+,{"COD":"EPF575655", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":827.51, "Secreto":false}
+]
+}
+,{"COD":"EPF575656", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":8391.33, "Secreto":false}
+]
+}
+,{"COD":"EPF575657", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":743.18, "Secreto":false}
+]
+}
+,{"COD":"EPF575658", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":929.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575666", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":758.67, "Secreto":false}
+]
+}
+,{"COD":"EPF575660", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":306.24, "Secreto":false}
+]
+}
+,{"COD":"EPF575661", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":727.59, "Secreto":false}
+]
+}
+,{"COD":"EPF575662", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":720.91, "Secreto":false}
+]
+}
+,{"COD":"EPF575663", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":132.42, "Secreto":false}
+]
+}
+,{"COD":"EPF575664", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1473.93, "Secreto":false}
+]
+}
+,{"COD":"EPF575665", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":780.09, "Secreto":false}
+]
+}
+,{"COD":"EPF575659", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2112.7, "Secreto":false}
+]
+}
+,{"COD":"EPF575667", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11715.6, "Secreto":false}
+]
+}
+,{"COD":"EPF575668", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2161.96, "Secreto":false}
+]
+}
+,{"COD":"EPF575669", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":441.56, "Secreto":false}
+]
+}
+,{"COD":"EPF575670", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4477.56, "Secreto":false}
+]
+}
+,{"COD":"EPF575671", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":396.56, "Secreto":false}
+]
+}
+,{"COD":"EPF575672", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":496.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575680", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":404.82, "Secreto":false}
+]
+}
+,{"COD":"EPF575674", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":163.41, "Secreto":false}
+]
+}
+,{"COD":"EPF575675", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":388.24, "Secreto":false}
+]
+}
+,{"COD":"EPF575676", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":384.67, "Secreto":false}
+]
+}
+,{"COD":"EPF575677", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":70.66, "Secreto":false}
+]
+}
+,{"COD":"EPF575678", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":786.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575679", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":416.25, "Secreto":false}
+]
+}
+,{"COD":"EPF575673", "Nombre":"De 1.000 a 1.499 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1127.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575639", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575640", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":18.45, "Secreto":false}
+]
+}
+,{"COD":"EPF575641", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.77, "Secreto":false}
+]
+}
+,{"COD":"EPF575642", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":38.22, "Secreto":false}
+]
+}
+,{"COD":"EPF575643", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.38, "Secreto":false}
+]
+}
+,{"COD":"EPF575644", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.23, "Secreto":false}
+]
+}
+,{"COD":"EPF575652", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.46, "Secreto":false}
+]
+}
+,{"COD":"EPF575646", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.39, "Secreto":false}
+]
+}
+,{"COD":"EPF575647", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575648", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.28, "Secreto":false}
+]
+}
+,{"COD":"EPF575649", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":0.6, "Secreto":false}
+]
+}
+,{"COD":"EPF575650", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":6.71, "Secreto":false}
+]
+}
+,{"COD":"EPF575651", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.55, "Secreto":false}
+]
+}
+,{"COD":"EPF575645", "Nombre":"De 1.000 a 1.499 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9.62, "Secreto":false}
+]
+}
+,{"COD":"EPF575695", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":26458.55, "Secreto":false}
+]
+}
+,{"COD":"EPF575696", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4600.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575697", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1018.94, "Secreto":false}
+]
+}
+,{"COD":"EPF575698", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9489.44, "Secreto":false}
+]
+}
+,{"COD":"EPF575699", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":922.45, "Secreto":false}
+]
+}
+,{"COD":"EPF575700", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1131.24, "Secreto":false}
+]
+}
+,{"COD":"EPF575708", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":958.36, "Secreto":false}
+]
+}
+,{"COD":"EPF575702", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":384.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575703", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":892.59, "Secreto":false}
+]
+}
+,{"COD":"EPF575704", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1076.74, "Secreto":false}
+]
+}
+,{"COD":"EPF575705", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":237.56, "Secreto":false}
+]
+}
+,{"COD":"EPF575706", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2175.64, "Secreto":false}
+]
+}
+,{"COD":"EPF575707", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":944.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575701", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2625.18, "Secreto":false}
+]
+}
+,{"COD":"EPF575709", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12475.39, "Secreto":false}
+]
+}
+,{"COD":"EPF575710", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2169.16, "Secreto":false}
+]
+}
+,{"COD":"EPF575711", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":480.44, "Secreto":false}
+]
+}
+,{"COD":"EPF575712", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4474.34, "Secreto":false}
+]
+}
+,{"COD":"EPF575713", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":434.94, "Secreto":false}
+]
+}
+,{"COD":"EPF575714", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":533.39, "Secreto":false}
+]
+}
+,{"COD":"EPF575722", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":451.87, "Secreto":false}
+]
+}
+,{"COD":"EPF575716", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":181.52, "Secreto":false}
+]
+}
+,{"COD":"EPF575717", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":420.86, "Secreto":false}
+]
+}
+,{"COD":"EPF575718", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":507.69, "Secreto":false}
+]
+}
+,{"COD":"EPF575719", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":112.01, "Secreto":false}
+]
+}
+,{"COD":"EPF575720", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1025.83, "Secreto":false}
+]
+}
+,{"COD":"EPF575721", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":445.56, "Secreto":false}
+]
+}
+,{"COD":"EPF575715", "Nombre":"De 1.500 a 1.999 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1237.79, "Secreto":false}
+]
+}
+,{"COD":"EPF575681", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575682", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":17.39, "Secreto":false}
+]
+}
+,{"COD":"EPF575683", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.85, "Secreto":false}
+]
+}
+,{"COD":"EPF575684", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":35.87, "Secreto":false}
+]
+}
+,{"COD":"EPF575685", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.49, "Secreto":false}
+]
+}
+,{"COD":"EPF575686", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.28, "Secreto":false}
+]
+}
+,{"COD":"EPF575694", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.62, "Secreto":false}
+]
+}
+,{"COD":"EPF575688", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.45, "Secreto":false}
+]
+}
+,{"COD":"EPF575689", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575690", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.07, "Secreto":false}
+]
+}
+,{"COD":"EPF575691", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":0.9, "Secreto":false}
+]
+}
+,{"COD":"EPF575692", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":8.22, "Secreto":false}
+]
+}
+,{"COD":"EPF575693", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.57, "Secreto":false}
+]
+}
+,{"COD":"EPF575687", "Nombre":"De 1.500 a 1.999 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9.92, "Secreto":false}
+]
+}
+,{"COD":"EPF575737", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":33209.75, "Secreto":false}
+]
+}
+,{"COD":"EPF575738", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5347.68, "Secreto":false}
+]
+}
+,{"COD":"EPF575739", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1470.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575740", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11000.45, "Secreto":false}
+]
+}
+,{"COD":"EPF575741", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1221.67, "Secreto":false}
+]
+}
+,{"COD":"EPF575742", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1321.49, "Secreto":false}
+]
+}
+,{"COD":"EPF575750", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1149.95, "Secreto":false}
+]
+}
+,{"COD":"EPF575744", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":438.58, "Secreto":false}
+]
+}
+,{"COD":"EPF575745", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1100.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575746", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1561.88, "Secreto":false}
+]
+}
+,{"COD":"EPF575747", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":453.79, "Secreto":false}
+]
+}
+,{"COD":"EPF575748", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3271.21, "Secreto":false}
+]
+}
+,{"COD":"EPF575749", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1232.8, "Secreto":false}
+]
+}
+,{"COD":"EPF575743", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3638.67, "Secreto":false}
+]
+}
+,{"COD":"EPF575751", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":13047.6, "Secreto":false}
+]
+}
+,{"COD":"EPF575752", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2101.02, "Secreto":false}
+]
+}
+,{"COD":"EPF575753", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":577.78, "Secreto":false}
+]
+}
+,{"COD":"EPF575754", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4321.91, "Secreto":false}
+]
+}
+,{"COD":"EPF575755", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":479.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575756", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":519.19, "Secreto":false}
+]
+}
+,{"COD":"EPF575764", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":451.8, "Secreto":false}
+]
+}
+,{"COD":"EPF575758", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":172.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575759", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":432.55, "Secreto":false}
+]
+}
+,{"COD":"EPF575760", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":613.64, "Secreto":false}
+]
+}
+,{"COD":"EPF575761", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":178.29, "Secreto":false}
+]
+}
+,{"COD":"EPF575762", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1285.21, "Secreto":false}
+]
+}
+,{"COD":"EPF575763", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":484.35, "Secreto":false}
+]
+}
+,{"COD":"EPF575757", "Nombre":"De 2.000 a 2.499 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1429.58, "Secreto":false}
+]
+}
+,{"COD":"EPF575723", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575724", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":16.1, "Secreto":false}
+]
+}
+,{"COD":"EPF575725", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.43, "Secreto":false}
+]
+}
+,{"COD":"EPF575726", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":33.12, "Secreto":false}
+]
+}
+,{"COD":"EPF575727", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.68, "Secreto":false}
+]
+}
+,{"COD":"EPF575728", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.98, "Secreto":false}
+]
+}
+,{"COD":"EPF575736", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.46, "Secreto":false}
+]
+}
+,{"COD":"EPF575730", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575731", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575732", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.7, "Secreto":false}
+]
+}
+,{"COD":"EPF575733", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575734", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9.85, "Secreto":false}
+]
+}
+,{"COD":"EPF575735", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.71, "Secreto":false}
+]
+}
+,{"COD":"EPF575729", "Nombre":"De 2.000 a 2.499 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":10.96, "Secreto":false}
+]
+}
+,{"COD":"EPF575779", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":37715.68, "Secreto":false}
+]
+}
+,{"COD":"EPF575780", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":6106.26, "Secreto":false}
+]
+}
+,{"COD":"EPF575781", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1661.22, "Secreto":false}
+]
+}
+,{"COD":"EPF575782", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11355.13, "Secreto":false}
+]
+}
+,{"COD":"EPF575783", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1269.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575784", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1582.74, "Secreto":false}
+]
+}
+,{"COD":"EPF575792", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1378.39, "Secreto":false}
+]
+}
+,{"COD":"EPF575786", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":514.91, "Secreto":false}
+]
+}
+,{"COD":"EPF575787", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1261.33, "Secreto":false}
+]
+}
+,{"COD":"EPF575788", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1927.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575789", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":570.43, "Secreto":false}
+]
+}
+,{"COD":"EPF575790", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3759.86, "Secreto":false}
+]
+}
+,{"COD":"EPF575791", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1449.69, "Secreto":false}
+]
+}
+,{"COD":"EPF575785", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4879.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575793", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":13452.45, "Secreto":false}
+]
+}
+,{"COD":"EPF575794", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2177.98, "Secreto":false}
+]
+}
+,{"COD":"EPF575795", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":592.52, "Secreto":false}
+]
+}
+,{"COD":"EPF575796", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4050.16, "Secreto":false}
+]
+}
+,{"COD":"EPF575797", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":452.84, "Secreto":false}
+]
+}
+,{"COD":"EPF575798", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":564.53, "Secreto":false}
+]
+}
+,{"COD":"EPF575806", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":491.65, "Secreto":false}
+]
+}
+,{"COD":"EPF575800", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":183.66, "Secreto":false}
+]
+}
+,{"COD":"EPF575801", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":449.89, "Secreto":false}
+]
+}
+,{"COD":"EPF575802", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":687.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575803", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":203.46, "Secreto":false}
+]
+}
+,{"COD":"EPF575804", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1341.07, "Secreto":false}
+]
+}
+,{"COD":"EPF575805", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":517.08, "Secreto":false}
+]
+}
+,{"COD":"EPF575799", "Nombre":"De 2.500 a 2.999 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1740.28, "Secreto":false}
+]
+}
+,{"COD":"EPF575765", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575766", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":16.19, "Secreto":false}
+]
+}
+,{"COD":"EPF575767", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.4, "Secreto":false}
+]
+}
+,{"COD":"EPF575768", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":30.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575769", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575770", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.2, "Secreto":false}
+]
+}
+,{"COD":"EPF575778", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.65, "Secreto":false}
+]
+}
+,{"COD":"EPF575772", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575773", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.34, "Secreto":false}
+]
+}
+,{"COD":"EPF575774", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575775", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.51, "Secreto":false}
+]
+}
+,{"COD":"EPF575776", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":9.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575777", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.84, "Secreto":false}
+]
+}
+,{"COD":"EPF575771", "Nombre":"De 2.500 a 2.999 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12.94, "Secreto":false}
+]
+}
+,{"COD":"EPF575821", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":44517.93, "Secreto":false}
+]
+}
+,{"COD":"EPF575822", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":6696.14, "Secreto":false}
+]
+}
+,{"COD":"EPF575823", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1963.87, "Secreto":false}
+]
+}
+,{"COD":"EPF575824", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12954.78, "Secreto":false}
+]
+}
+,{"COD":"EPF575825", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1651.61, "Secreto":false}
+]
+}
+,{"COD":"EPF575826", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1817.94, "Secreto":false}
+]
+}
+,{"COD":"EPF575834", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1672.92, "Secreto":false}
+]
+}
+,{"COD":"EPF575828", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":587.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575829", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1454.24, "Secreto":false}
+]
+}
+,{"COD":"EPF575830", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2565.64, "Secreto":false}
+]
+}
+,{"COD":"EPF575831", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":808.21, "Secreto":false}
+]
+}
+,{"COD":"EPF575832", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5048.03, "Secreto":false}
+]
+}
+,{"COD":"EPF575833", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1697.43, "Secreto":false}
+]
+}
+,{"COD":"EPF575827", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5599.82, "Secreto":false}
+]
+}
+,{"COD":"EPF575835", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":14286.79, "Secreto":false}
+]
+}
+,{"COD":"EPF575836", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2148.94, "Secreto":false}
+]
+}
+,{"COD":"EPF575837", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":630.25, "Secreto":false}
+]
+}
+,{"COD":"EPF575838", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4157.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575839", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":530.04, "Secreto":false}
+]
+}
+,{"COD":"EPF575840", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":583.42, "Secreto":false}
+]
+}
+,{"COD":"EPF575848", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":536.88, "Secreto":false}
+]
+}
+,{"COD":"EPF575842", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":188.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575843", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":466.7, "Secreto":false}
+]
+}
+,{"COD":"EPF575844", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":823.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575845", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":259.37, "Secreto":false}
+]
+}
+,{"COD":"EPF575846", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1620.03, "Secreto":false}
+]
+}
+,{"COD":"EPF575847", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":544.74, "Secreto":false}
+]
+}
+,{"COD":"EPF575841", "Nombre":"De 3.000 a 4.999 euros. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1797.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575807", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575808", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":15.04, "Secreto":false}
+]
+}
+,{"COD":"EPF575809", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.41, "Secreto":false}
+]
+}
+,{"COD":"EPF575810", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":29.1, "Secreto":false}
+]
+}
+,{"COD":"EPF575811", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.71, "Secreto":false}
+]
+}
+,{"COD":"EPF575812", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.08, "Secreto":false}
+]
+}
+,{"COD":"EPF575820", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575814", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575815", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.27, "Secreto":false}
+]
+}
+,{"COD":"EPF575816", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575817", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.82, "Secreto":false}
+]
+}
+,{"COD":"EPF575818", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":11.34, "Secreto":false}
+]
+}
+,{"COD":"EPF575819", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.81, "Secreto":false}
+]
+}
+,{"COD":"EPF575813", "Nombre":"De 3.000 a 4.999 euros. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12.58, "Secreto":false}
+]
+}
+,{"COD":"EPF575863", "Nombre":"5.000 euros o más. Gasto medio por hogar. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":64823.1, "Secreto":false}
+]
+}
+,{"COD":"EPF575864", "Nombre":"5.000 euros o más. Gasto medio por hogar. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":7951.41, "Secreto":false}
+]
+}
+,{"COD":"EPF575865", "Nombre":"5.000 euros o más. Gasto medio por hogar. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2849.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575866", "Nombre":"5.000 euros o más. Gasto medio por hogar. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":18780.4, "Secreto":false}
+]
+}
+,{"COD":"EPF575867", "Nombre":"5.000 euros o más. Gasto medio por hogar. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3105.06, "Secreto":false}
+]
+}
+,{"COD":"EPF575868", "Nombre":"5.000 euros o más. Gasto medio por hogar. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2361.11, "Secreto":false}
+]
+}
+,{"COD":"EPF575876", "Nombre":"5.000 euros o más. Gasto medio por hogar. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2287.41, "Secreto":false}
+]
+}
+,{"COD":"EPF575870", "Nombre":"5.000 euros o más. Gasto medio por hogar. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":652.74, "Secreto":false}
+]
+}
+,{"COD":"EPF575871", "Nombre":"5.000 euros o más. Gasto medio por hogar. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1815.92, "Secreto":false}
+]
+}
+,{"COD":"EPF575872", "Nombre":"5.000 euros o más. Gasto medio por hogar. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4097.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575873", "Nombre":"5.000 euros o más. Gasto medio por hogar. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2254.18, "Secreto":false}
+]
+}
+,{"COD":"EPF575874", "Nombre":"5.000 euros o más. Gasto medio por hogar. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":8208.22, "Secreto":false}
+]
+}
+,{"COD":"EPF575875", "Nombre":"5.000 euros o más. Gasto medio por hogar. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2520.26, "Secreto":false}
+]
+}
+,{"COD":"EPF575869", "Nombre":"5.000 euros o más. Gasto medio por hogar. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":7939.81, "Secreto":false}
+]
+}
+,{"COD":"EPF575877", "Nombre":"5.000 euros o más. Gasto medio por persona. Índice general. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":18429.07, "Secreto":false}
+]
+}
+,{"COD":"EPF575878", "Nombre":"5.000 euros o más. Gasto medio por persona. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2260.57, "Secreto":false}
+]
+}
+,{"COD":"EPF575879", "Nombre":"5.000 euros o más. Gasto medio por persona. Vestido y calzado. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":810.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575880", "Nombre":"5.000 euros o más. Gasto medio por persona. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":5339.23, "Secreto":false}
+]
+}
+,{"COD":"EPF575881", "Nombre":"5.000 euros o más. Gasto medio por persona. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":882.76, "Secreto":false}
+]
+}
+,{"COD":"EPF575882", "Nombre":"5.000 euros o más. Gasto medio por persona. Sanidad. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":671.26, "Secreto":false}
+]
+}
+,{"COD":"EPF575890", "Nombre":"5.000 euros o más. Gasto medio por persona. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":650.31, "Secreto":false}
+]
+}
+,{"COD":"EPF575884", "Nombre":"5.000 euros o más. Gasto medio por persona. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":185.57, "Secreto":false}
+]
+}
+,{"COD":"EPF575885", "Nombre":"5.000 euros o más. Gasto medio por persona. Información y comunicaciones. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":516.26, "Secreto":false}
+]
+}
+,{"COD":"EPF575886", "Nombre":"5.000 euros o más. Gasto medio por persona. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1164.9, "Secreto":false}
+]
+}
+,{"COD":"EPF575887", "Nombre":"5.000 euros o más. Gasto medio por persona. Servicios de educación. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":640.86, "Secreto":false}
+]
+}
+,{"COD":"EPF575888", "Nombre":"5.000 euros o más. Gasto medio por persona. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2333.58, "Secreto":false}
+]
+}
+,{"COD":"EPF575889", "Nombre":"5.000 euros o más. Gasto medio por persona. Seguros y servicios financieros. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":716.5, "Secreto":false}
+]
+}
+,{"COD":"EPF575883", "Nombre":"5.000 euros o más. Gasto medio por persona. Transporte. Dato base. ", "FK_Unidad":7, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2257.27, "Secreto":false}
+]
+}
+,{"COD":"EPF575849", "Nombre":"5.000 euros o más. Distribución porcentual. Índice general. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":100.0, "Secreto":false}
+]
+}
+,{"COD":"EPF575850", "Nombre":"5.000 euros o más. Distribución porcentual. Alimentos y bebidas no alcohólicas. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12.27, "Secreto":false}
+]
+}
+,{"COD":"EPF575851", "Nombre":"5.000 euros o más. Distribución porcentual. Vestido y calzado. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.4, "Secreto":false}
+]
+}
+,{"COD":"EPF575852", "Nombre":"5.000 euros o más. Distribución porcentual. Vivienda, agua, electricidad, gas y otros combustibles. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":28.97, "Secreto":false}
+]
+}
+,{"COD":"EPF575853", "Nombre":"5.000 euros o más. Distribución porcentual. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":4.79, "Secreto":false}
+]
+}
+,{"COD":"EPF575854", "Nombre":"5.000 euros o más. Distribución porcentual. Sanidad. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.64, "Secreto":false}
+]
+}
+,{"COD":"EPF575862", "Nombre":"5.000 euros o más. Distribución porcentual. Cuidado personal, protección social, y bienes y servicios diversos. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.53, "Secreto":false}
+]
+}
+,{"COD":"EPF575856", "Nombre":"5.000 euros o más. Distribución porcentual. Bebidas alcohólicas, tabaco y estupefacientes. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":1.01, "Secreto":false}
+]
+}
+,{"COD":"EPF575857", "Nombre":"5.000 euros o más. Distribución porcentual. Información y comunicaciones. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":2.8, "Secreto":false}
+]
+}
+,{"COD":"EPF575858", "Nombre":"5.000 euros o más. Distribución porcentual. Actividades recreativas, deporte y cultura. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":6.32, "Secreto":false}
+]
+}
+,{"COD":"EPF575859", "Nombre":"5.000 euros o más. Distribución porcentual. Servicios de educación. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.48, "Secreto":false}
+]
+}
+,{"COD":"EPF575860", "Nombre":"5.000 euros o más. Distribución porcentual. Restaurantes y servicios de alojamiento. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12.66, "Secreto":false}
+]
+}
+,{"COD":"EPF575861", "Nombre":"5.000 euros o más. Distribución porcentual. Seguros y servicios financieros. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":3.89, "Secreto":false}
+]
+}
+,{"COD":"EPF575855", "Nombre":"5.000 euros o más. Distribución porcentual. Transporte. Dato base. ", "FK_Unidad":101, "FK_Escala":1, "Data":[{"Fecha":1704063600000, "FK_TipoDato":1, "FK_Periodo":28, "Anyo":2024, "Valor":12.25, "Secreto":false}
+]
+}
+]

@@ -783,6 +783,26 @@
   - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
 - Nota de uso: estos JSON permiten completar una primera version trazable para 2025 del trabajador por cuenta ajena en Regimen General y documentan los factores decididos para el proyecto: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. No debe comparar con futuro. IVA tendra dos modos: media por rango salarial/renta si se procesa INE EPF y personalizado por categorias de gasto. Otros impuestos se mostraran como media espanola estimada, separada del neto laboral y sin doble contar IVA. Las deducciones autonomicas quedan como catalogo oficial localizado; aplicarlas a calculo exige parametrizar condiciones, limites, compatibilidades y campos adicionales por deduccion.
 
+## Calculadora fiscal 2025 - IVA proxy y otros impuestos
+
+- Fecha de preparacion: 2026-06-02.
+- Fuentes:
+  - INE, Encuesta de Presupuestos Familiares 2024, tabla 73809.
+  - AEAT, Informe Anual de Recaudacion Tributaria 2025.
+- Transformacion aplicada:
+  - descarga de la tabla INE 73809 via API, ultimo periodo disponible;
+  - filtrado a `Gasto medio por hogar` y periodo 2024;
+  - asignacion metodologica de tipos aproximados de IVA por grupos COICOP a 2 digitos;
+  - calculo de IVA incluido estimado como `gasto * tipo / (100 + tipo)`;
+  - descarga de paginas/PDF AEAT 2025 de impuestos especiales y otros impuestos;
+  - registro de magnitudes agregadas AEAT y decision de no dividirlas por hogares, adultos ni trabajadores para la UI.
+- Archivos generados:
+  - `data/raw/ine/epf/iva-2025-proxy/2026-06-02_ine_epf-2024_gasto-ingresos-hogar-coicop2_tabla-73809.json`.
+  - `data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json`.
+  - `data/raw/aeat/recaudacion-tributaria-2025/`.
+  - `data/processed/fiscal/2026-06-02_aeat-otros-impuestos-2025-modulo-contexto.json`.
+- Nota de uso: el IVA proxy es estimado y utiliza EPF 2024 como aproximacion de contexto para 2025. `Otros impuestos` queda como entrada manual separada, con 0 euros por defecto, porque la recaudacion agregada AEAT no es atribuible directamente a un trabajador individual.
+
 ## Calculadora fiscal del trabajador - parametros normativos 2015
 
 - Fecha de preparacion: 2026-06-01.

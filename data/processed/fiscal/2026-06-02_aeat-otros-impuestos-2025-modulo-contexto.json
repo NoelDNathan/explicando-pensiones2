@@ -1,0 +1,44 @@
+{
+  "dataset_id": "aeat-other-taxes-2025-context-module",
+  "created_at": "2026-06-02",
+  "status": "observado_agregado_no_individual",
+  "year": 2025,
+  "source": {
+    "institution": "Agencia Estatal de Administracion Tributaria",
+    "report": "Informe Anual de Recaudacion Tributaria 2025",
+    "urls": [
+      "https://sede.agenciatributaria.gob.es/Sede/estadisticas/recaudacion-tributaria/informe-anual/ejercicio-2025/5-impuestos-especiales.html",
+      "https://sede.agenciatributaria.gob.es/Sede/estadisticas/recaudacion-tributaria/informe-anual/ejercicio-2025/6-otros-impuestos.html",
+      "https://sede.agenciatributaria.gob.es/static_files/AEAT/Estudios/Estadisticas/Informes_Estadisticos/Informes_Anuales_de_Recaudacion_Tributaria/Ejercicio_2025/IART25_es_es.pdf"
+    ],
+    "raw_files": [
+      "data/raw/aeat/recaudacion-tributaria-2025/2026-06-02_aeat_informe-anual-recaudacion-tributaria-2025.pdf",
+      "data/raw/aeat/recaudacion-tributaria-2025/2026-06-02_aeat_iart-2025-impuestos-especiales.html",
+      "data/raw/aeat/recaudacion-tributaria-2025/2026-06-02_aeat_iart-2025-otros-impuestos.html"
+    ]
+  },
+  "observed_aggregate_values": {
+    "special_taxes_revenue_million_eur": 23083,
+    "special_taxes_growth_vs_2024_percent": 4.3,
+    "other_tax_figures_revenue_million_eur": 18009,
+    "other_tax_figures_growth_vs_2024_percent": 32.8,
+    "hydrocarbons_revenue_million_eur": 12366,
+    "tobacco_revenue_million_eur": 7340,
+    "electricity_tax_revenue_million_eur": 1587,
+    "non_reusable_plastic_packaging_tax_revenue_million_eur": 599,
+    "electronic_cigarette_liquids_tax_revenue_million_eur": 30
+  },
+  "calculator_policy": {
+    "mode": "separate_context_input",
+    "denominator": "none_for_default_calculation",
+    "default_amount_eur": 0,
+    "reason": "La recaudacion AEAT es agregada y mezcla consumo de hogares, empresas, operaciones exteriores, intermediarios y figuras no atribuibles de forma directa a un trabajador individual. Dividir por hogares, adultos o trabajadores produciria una media de contexto con sesgos fuertes.",
+    "ui_rule": "Mostrar como modulo separado. Permitir que el usuario introduzca un importe anual verificado o mantener 0 por defecto. No restarlo del salario neto laboral ni mezclarlo con el IVA calculado desde consumo."
+  },
+  "limitations": [
+    "No incluye tributos locales como IBI o IVTM salvo que el usuario los introduzca manualmente.",
+    "No asigna impuestos especiales por consumo individual sin datos de litros, tabaco, alcohol, electricidad u otros consumos concretos.",
+    "No debe presentarse como cantidad media pagada por un trabajador.",
+    "Las cifras son recaudacion de caja gestionada por AEAT, no carga fiscal individual."
+  ]
+}

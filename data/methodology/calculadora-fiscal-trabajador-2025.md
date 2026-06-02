@@ -56,3 +56,15 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 
 - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`
 - `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json`
+- `data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json`
+- `data/processed/fiscal/2026-06-02_aeat-otros-impuestos-2025-modulo-contexto.json`
+
+## Integracion en la UI
+
+La ruta `/calculadora-fiscal` queda conectada al paquete normativo 2025. La pantalla calcula salario neto laboral anual a partir de salario bruto, CCAA de regimen comun, edad, hijos, ascendientes, discapacidad y movilidad geografica.
+
+Las deducciones autonomicas no se aplican automaticamente porque el catalogo AEAT exige requisitos heterogeneos por deduccion: nacimiento/adopcion en ano concreto, convivencia, familia numerosa, alquiler, edad, municipios, limites de base individual y familiar, incompatibilidades y justificantes. La UI permite introducir una deduccion autonomica ya verificada por el usuario o por una futura regla especifica.
+
+El IVA medio por renta/salario se implementa como proxy de contexto usando INE EPF 2024 por nivel de ingresos mensuales netos del hogar y grupo COICOP a 2 digitos. No es dato observado 2025 ni IVA individual exacto. La EPF 2025 anual no se usa como fuente observada en esta revision.
+
+`Otros impuestos` se convierte en modulo separado: por defecto 0 euros y entrada manual. La fuente AEAT 2025 se conserva como contexto agregado de impuestos especiales y otras figuras, pero no se divide por hogares, trabajadores o adultos porque la recaudacion mezcla consumo de hogares, empresas, operaciones exteriores y figuras no atribuibles directamente a un trabajador.

@@ -1061,6 +1061,11 @@
   - AEAT, gravamen autonomico IRPF 2025 por CCAA: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico.html
   - AEAT, cuadro de minimos personales y familiares estatales/autonomicos 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c14-adecuacion-impuesto-circunstancias-personales/minimo-autonomico-personal-familiar/cuadro-minimos-personales-familiares-estatal-autonomicos.html
   - AEAT, guia de deducciones autonomicas 2025: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025-deducciones-autonomicas/guia-deducciones-autonomicas.html
+  - INE, EPF 2024 tabla 73809, gasto por ingresos mensuales netos del hogar: https://ine.es/jaxiT3/Tabla.htm?L=0&t=73809
+  - INE, metodologia EPF: https://www.ine.es/dynt3/metadatos/RespuestaDatos.htm?oper=314
+  - AEAT, Informe Anual de Recaudacion Tributaria 2025: https://sede.agenciatributaria.gob.es/Sede/estadisticas/recaudacion-tributaria/informe-anual/ejercicio-2025.html
+  - AEAT, IART 2025, impuestos especiales: https://sede.agenciatributaria.gob.es/Sede/estadisticas/recaudacion-tributaria/informe-anual/ejercicio-2025/5-impuestos-especiales.html
+  - AEAT, IART 2025, otros impuestos: https://sede.agenciatributaria.gob.es/Sede/estadisticas/recaudacion-tributaria/informe-anual/ejercicio-2025/6-otros-impuestos.html
 - fecha de consulta: 2026-06-01
 - periodo: 2025
 - ambito: Espana; trabajador por cuenta ajena del Regimen General. Para CCAA se cubren las comunidades de regimen comun y se excluyen expresamente Pais Vasco y Navarra.
@@ -1068,10 +1073,12 @@
 - archivo procesado:
   - `data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json`
   - `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json`
+  - `data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json`
+  - `data/processed/fiscal/2026-06-02_aeat-otros-impuestos-2025-modulo-contexto.json`
 - metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2025.md`
 - descripcion breve: recoge bases y tipos de cotizacion del Regimen General, MEI, cotizacion de solidaridad, escala estatal IRPF 2025, escalas autonomicas de regimen comun, minimos personales/familiares estatales y autonomicos, gastos y reducciones de trabajo, tipos de IVA y catalogo de familias de deducciones autonomicas.
-- nota metodologica: no es una calculadora cerrada ni una estimacion de recaudacion. El alcance decidido incorpora salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. IVA tendra dos modos: media por rango salarial/renta, pendiente de procesar INE EPF, y gasto personalizado por categorias. Otros impuestos se trataran como media espanola estimada y separada del neto laboral. Las escalas y minimos de CCAA de regimen comun quedan cubiertos para 2025; Pais Vasco y Navarra se excluyen por decision de alcance. Las deducciones autonomicas quedan localizadas como catalogo AEAT por familias, pero no deben aplicarse automaticamente hasta parametrizar importes, limites, incompatibilidades y requisitos de cada deduccion.
+- nota metodologica: la calculadora 2025 queda conectada a la UI para calculo anual orientativo de salario neto laboral. El alcance decidido incorpora salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica. IVA medio se implementa como proxy desde INE EPF 2024, no como dato observado 2025. Otros impuestos se muestran como modulo separado con entrada manual y fuente AEAT agregada, no como media por trabajador. Las escalas y minimos de CCAA de regimen comun quedan cubiertos para 2025; Pais Vasco y Navarra se excluyen por decision de alcance. Las deducciones autonomicas quedan localizadas como catalogo AEAT por familias, pero no deben aplicarse automaticamente hasta parametrizar importes, limites, incompatibilidades y requisitos de cada deduccion.
 - fuente candidata para aproximacion de IVA por cesta media: INE, Encuesta de Presupuestos Familiares, tablas de gasto por COICOP; usar solo si se procesa como dataset separado con metadata propia.
 - metodologia especifica:
   - `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`
