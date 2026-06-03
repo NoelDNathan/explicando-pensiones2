@@ -976,14 +976,16 @@
   - conversion de grupos 8 a 11, publicados en euros/dia, a equivalente mensual multiplicando por 30, conservando tambien los valores diarios publicados;
   - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional y horas extra;
   - registro explicito de ausencia de MEI y cotizacion adicional de solidaridad en 2005;
-  - transcripcion de escala estatal y escala autonomica/complementaria del IRPF;
+  - transcripcion de escala estatal y escala complementaria del IRPF;
+  - revision de la Ley 5/2004 de Madrid con terminos `Renta`, `IRPF`, `Impuesto sobre la Renta`, `deducci`, `escala`, `tarifa` y `auton`, sin localizar escala autonomica propia ni deducciones IRPF especificas para el caso base;
   - transcripcion de minimos y reducciones en base: minimo personal, descendientes, cuidado de hijos, edad, asistencia, discapacidad y rendimientos del trabajo;
-  - marcado de ruptura metodologica respecto a 2015-2025 porque los minimos/reducciones operan sobre base.
+  - marcado de ruptura metodologica respecto a 2015-2025 porque los minimos/reducciones operan sobre base;
+  - incorporacion de un caso de prueba reproducible para salario bruto anual de 30.000 euros.
 - Archivos generados:
   - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json`.
 - Metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2005.md`.
-- Nota de uso: paquete 2005 iniciado como `legacy`. No conectar a la UI moderna hasta implementar una rama de calculo pre-2007. Madrid se mantiene con escala complementaria como fallback, pendiente de verificacion autonomica completa.
+- Nota de uso: paquete 2005 cerrado como `legacy` para caso base Comunidad de Madrid. No conectar a la UI moderna hasta implementar una rama de calculo pre-2007.
 
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 

@@ -1266,7 +1266,7 @@
   - BOE, Ley 5/2004 Comunidad de Madrid: https://www.boe.es/eli/es-m/l/2004/12/27/5
 - fecha de consulta/descarga: 2026-06-03
 - periodo: 2005
-- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid iniciado como `legacy`.
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid cerrado como `legacy`.
 - formato descargado: HTML.
 - archivos brutos:
   - `data/raw/boe/cotizaciones-2005/2026-06-03_boe_orden-tas-77-2005-cotizacion-regimen-general.html`
@@ -1276,8 +1276,8 @@
   - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json`
 - metodologia:
   - `data/methodology/calculadora-fiscal-trabajador-2005.md`
-- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica o complementaria, minimos y reducciones en base, reduccion de rendimientos del trabajo y tipos legales de IVA.
-- nota metodologica: paquete parcial `legacy`. El IRPF 2005 aplica minimos y reducciones sobre base, no como el modelo moderno de cuota del minimo. No conectar a UI exacta hasta adaptar el algoritmo. Madrid se inicia con escala complementaria como fallback y queda pendiente de verificacion autonomica completa.
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala complementaria para Madrid, minimos y reducciones en base, reduccion de rendimientos del trabajo, tipos legales de IVA y un caso de prueba reproducible.
+- nota metodologica: paquete cerrado `legacy` para caso base Madrid 2005. El IRPF 2005 aplica minimos y reducciones sobre base, no como el modelo moderno de cuota del minimo. No conectar a UI exacta hasta adaptar el algoritmo. La Ley 5/2004 de Madrid descargada se reviso sin localizar escala propia ni deducciones IRPF especificas para el caso base.
 
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 
