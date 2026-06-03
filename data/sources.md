@@ -1256,6 +1256,29 @@
 - descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica de Madrid, minimos personales/familiares estatales y minimos por descendientes propios de Madrid, gastos/reducciones de trabajo y tipos de IVA.
 - nota metodologica: paquetes calculables para caso base Comunidad de Madrid. 2018 incluye una cautela especifica porque la reduccion por rendimientos del trabajo tiene regla transitoria desde el 5 de julio. No activa selector completo de CCAA, deducciones autonomicas automaticas ni nomina mensual exacta sin algoritmo AEAT.
 
+## Calculadora fiscal del trabajador - parametros normativos 2005
+
+- nombre de la fuente: Parametros normativos 2005 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de Trabajo y Asuntos Sociales; BOE / Ministerio de Hacienda; BOE / Comunidad de Madrid.
+- URLs:
+  - BOE, Orden TAS/77/2005, cotizacion 2005: https://www.boe.es/eli/es/o/2005/01/18/tas77
+  - BOE, Real Decreto Legislativo 3/2004 IRPF consolidado a 31-12-2005: https://www.boe.es/buscar/act.php?id=BOE-A-2004-4347&p=20051231&tn=1
+  - BOE, Ley 5/2004 Comunidad de Madrid: https://www.boe.es/eli/es-m/l/2004/12/27/5
+- fecha de consulta/descarga: 2026-06-03
+- periodo: 2005
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid iniciado como `legacy`.
+- formato descargado: HTML.
+- archivos brutos:
+  - `data/raw/boe/cotizaciones-2005/2026-06-03_boe_orden-tas-77-2005-cotizacion-regimen-general.html`
+  - `data/raw/boe/irpf-2005/2026-06-03_boe_real-decreto-legislativo-3-2004-irpf-consolidado-2005.html`
+  - `data/raw/boe/irpf-2005/2026-06-03_boe_ley-5-2004-madrid-medidas-fiscales-2005.html`
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2005.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica o complementaria, minimos y reducciones en base, reduccion de rendimientos del trabajo y tipos legales de IVA.
+- nota metodologica: paquete parcial `legacy`. El IRPF 2005 aplica minimos y reducciones sobre base, no como el modelo moderno de cuota del minimo. No conectar a UI exacta hasta adaptar el algoritmo. Madrid se inicia con escala complementaria como fallback y queda pendiente de verificacion autonomica completa.
+
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 
 - nombre de la fuente: Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2021.

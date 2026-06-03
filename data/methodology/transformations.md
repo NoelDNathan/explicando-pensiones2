@@ -962,6 +962,29 @@
   - `data/methodology/calculadora-fiscal-trabajador-2018.md`.
 - Nota de uso: paquetes 2019 y 2018 calculables para caso base Comunidad de Madrid. 2018 queda marcado con cautela para calculo exacto completo hasta implementar la regla transitoria de reduccion del trabajo. Antes de activar selector completo de CCAA se deben parametrizar comunidades de regimen comun y deducciones autonomicas. Antes de mostrar nomina mensual o retencion exacta se debe incorporar el algoritmo oficial de retenciones AEAT del ejercicio correspondiente.
 
+## Calculadora fiscal del trabajador - parametros normativos 2005
+
+- Fecha de preparacion: 2026-06-03.
+- Script reproducible: no aplica; transcripcion estructurada y documentada de normas oficiales.
+- Fuente:
+  - BOE, Orden TAS/77/2005 para bases y tipos de cotizacion 2005.
+  - BOE, Real Decreto Legislativo 3/2004 IRPF consolidado a 31-12-2005.
+  - BOE, Ley 5/2004 Comunidad de Madrid para contraste de normativa autonomica 2005.
+- Transformacion aplicada:
+  - descarga y conservacion de brutos oficiales HTML;
+  - transcripcion de bases maximas/minimas del Regimen General;
+  - conversion de grupos 8 a 11, publicados en euros/dia, a equivalente mensual multiplicando por 30, conservando tambien los valores diarios publicados;
+  - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional y horas extra;
+  - registro explicito de ausencia de MEI y cotizacion adicional de solidaridad en 2005;
+  - transcripcion de escala estatal y escala autonomica/complementaria del IRPF;
+  - transcripcion de minimos y reducciones en base: minimo personal, descendientes, cuidado de hijos, edad, asistencia, discapacidad y rendimientos del trabajo;
+  - marcado de ruptura metodologica respecto a 2015-2025 porque los minimos/reducciones operan sobre base.
+- Archivos generados:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json`.
+- Metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2005.md`.
+- Nota de uso: paquete 2005 iniciado como `legacy`. No conectar a la UI moderna hasta implementar una rama de calculo pre-2007. Madrid se mantiene con escala complementaria como fallback, pendiente de verificacion autonomica completa.
+
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 
 - Fecha de preparacion: 2026-06-03.

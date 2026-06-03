@@ -1,0 +1,161 @@
+{
+  "dataset_id": "fiscal-worker-calculator-params-2005",
+  "created_at": "2026-06-03",
+  "scope": {
+    "country": "Espana",
+    "year": 2005,
+    "worker_profile": "trabajador por cuenta ajena del Regimen General",
+    "default_region": "Comunidad de Madrid",
+    "default_contract": "indefinido",
+    "coverage_status": "parametrizado parcial legacy: cotizacion Regimen General e IRPF estatal/complementario 2005",
+    "comparison_policy": "no conectar a la UI moderna hasta adaptar el algoritmo a la estructura IRPF anterior a 2007",
+    "included_user_factors": [
+      "salario_bruto_anual",
+      "edad",
+      "hijos_a_cargo",
+      "ascendientes_a_cargo",
+      "discapacidad",
+      "categoria_profesional",
+      "movilidad_geografica"
+    ],
+    "excluded": [
+      "autonomos",
+      "empleados de hogar",
+      "sistema especial agrario",
+      "trabajadores del mar",
+      "regimenes forales",
+      "deducciones autonomicas de Madrid no parametrizadas como reglas",
+      "retenciones de nomina AEAT 2005",
+      "cotizacion por accidentes de trabajo y enfermedades profesionales por CNAE",
+      "impuestos especiales y tributos locales sin datos de consumo o patrimonio del usuario"
+    ]
+  },
+  "social_security": {
+    "source": "BOE, Orden TAS/77/2005, de 18 de enero",
+    "source_url": "https://www.boe.es/eli/es/o/2005/01/18/tas77",
+    "raw_files": [
+      "data/raw/boe/cotizaciones-2005/2026-06-03_boe_orden-tas-77-2005-cotizacion-regimen-general.html"
+    ],
+    "base_limits_monthly_eur": {
+      "max_common_contingencies": 2813.4,
+      "min_by_group": [
+        { "group": 1, "label": "Ingenieros y Licenciados. Personal de alta direccion no incluido", "min": 836.1, "max": 2813.4 },
+        { "group": 2, "label": "Ingenieros Tecnicos, Peritos y Ayudantes Titulados", "min": 693.6, "max": 2813.4 },
+        { "group": 3, "label": "Jefes Administrativos y de Taller", "min": 603.0, "max": 2813.4 },
+        { "group": 4, "label": "Ayudantes no Titulados", "min": 598.5, "max": 2813.4 },
+        { "group": 5, "label": "Oficiales Administrativos", "min": 598.5, "max": 2813.4 },
+        { "group": 6, "label": "Subalternos", "min": 598.5, "max": 2813.4 },
+        { "group": 7, "label": "Auxiliares Administrativos", "min": 598.5, "max": 2813.4 },
+        { "group": 8, "label": "Oficiales de primera y segunda", "min": 598.5, "max": 2813.4, "published_min_daily": 19.95, "published_max_daily": 93.78 },
+        { "group": 9, "label": "Oficiales de tercera y Especialistas", "min": 598.5, "max": 2813.4, "published_min_daily": 19.95, "published_max_daily": 93.78 },
+        { "group": 10, "label": "Peones", "min": 598.5, "max": 2813.4, "published_min_daily": 19.95, "published_max_daily": 93.78 },
+        { "group": 11, "label": "Trabajadores menores de dieciocho anos", "min": 598.5, "max": 2813.4, "published_min_daily": 19.95, "published_max_daily": 93.78 }
+      ]
+    },
+    "rates_percent": {
+      "common_contingencies": { "total": 28.3, "employer": 23.6, "employee": 4.7 },
+      "mei": { "total": 0.0, "employer": 0.0, "employee": 0.0 },
+      "unemployment_indefinite": { "total": 7.55, "employer": 6.0, "employee": 1.55 },
+      "unemployment_fixed_term_full_time": { "total": 8.3, "employer": 6.7, "employee": 1.6 },
+      "unemployment_fixed_term_part_time": { "total": 9.3, "employer": 7.7, "employee": 1.6 },
+      "fogasa": { "total": 0.4, "employer": 0.4, "employee": 0.0 },
+      "vocational_training": { "total": 0.7, "employer": 0.6, "employee": 0.1 },
+      "overtime_force_majeure": { "total": 14.0, "employer": 12.0, "employee": 2.0 },
+      "overtime_other": { "total": 28.3, "employer": 23.6, "employee": 4.7 }
+    },
+    "solidarity_contribution_monthly": [],
+    "implementation_notes": [
+      "Para salario anual, prorratear pagas extra en 12 bases mensuales de cotizacion antes de aplicar topes.",
+      "Los grupos 8 a 11 se publican en euros por dia; se conserva el valor diario y se usa equivalente mensual de 30 dias para calculos mensuales simples.",
+      "En 2005 no se aplica MEI ni cotizacion adicional de solidaridad.",
+      "La cotizacion por contingencias profesionales depende de tarifa de primas y queda fuera del caso base."
+    ]
+  },
+  "irpf": {
+    "calculation_model": "legacy_base_reductions_before_2007",
+    "sources": [
+      {
+        "label": "BOE, Real Decreto Legislativo 3/2004, texto refundido de la Ley del IRPF consolidado a 31-12-2005",
+        "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2004-4347&p=20051231&tn=1",
+        "raw_file": "data/raw/boe/irpf-2005/2026-06-03_boe_real-decreto-legislativo-3-2004-irpf-consolidado-2005.html"
+      },
+      {
+        "label": "BOE, Ley 5/2004 de la Comunidad de Madrid, medidas fiscales y administrativas 2005",
+        "url": "https://www.boe.es/eli/es-m/l/2004/12/27/5",
+        "raw_file": "data/raw/boe/irpf-2005/2026-06-03_boe_ley-5-2004-madrid-medidas-fiscales-2005.html"
+      }
+    ],
+    "state_general_scale": [
+      { "base_from_eur": 0.0, "base_to_eur": 4000.0, "base_quota_eur": 0.0, "marginal_percent": 9.06 },
+      { "base_from_eur": 4000.0, "base_to_eur": 13800.0, "base_quota_eur": 362.4, "marginal_percent": 15.84 },
+      { "base_from_eur": 13800.0, "base_to_eur": 25800.0, "base_quota_eur": 1914.72, "marginal_percent": 18.68 },
+      { "base_from_eur": 25800.0, "base_to_eur": 45000.0, "base_quota_eur": 4156.32, "marginal_percent": 24.71 },
+      { "base_from_eur": 45000.0, "base_to_eur": null, "base_quota_eur": 8900.64, "marginal_percent": 29.16 }
+    ],
+    "madrid_or_complementary_general_scale": {
+      "status": "escala complementaria estatal usada como fallback",
+      "legal_basis": "RDL 3/2004 art. 3 y art. 75: si la comunidad autonoma no hubiese aprobado escala, se aplica la escala complementaria",
+      "pending_verification": "confirmar en normativa autonomica completa de Madrid 2005 que no se aprobo escala propia aplicable a este ejercicio",
+      "scale": [
+        { "base_from_eur": 0.0, "base_to_eur": 4000.0, "base_quota_eur": 0.0, "marginal_percent": 5.94 },
+        { "base_from_eur": 4000.0, "base_to_eur": 13800.0, "base_quota_eur": 237.6, "marginal_percent": 8.16 },
+        { "base_from_eur": 13800.0, "base_to_eur": 25800.0, "base_quota_eur": 1037.28, "marginal_percent": 9.32 },
+        { "base_from_eur": 25800.0, "base_to_eur": 45000.0, "base_quota_eur": 2155.68, "marginal_percent": 12.29 },
+        { "base_from_eur": 45000.0, "base_to_eur": null, "base_quota_eur": 4515.36, "marginal_percent": 15.84 }
+      ]
+    },
+    "personal_and_family_base_reductions_eur": {
+      "taxpayer_general": 3400,
+      "descendants": [1400, 1500, 2200, 2300],
+      "descendant_under_3_care_reduction": 1200,
+      "taxpayer_over_65_reduction": 800,
+      "taxpayer_over_75_assistance_reduction": 1000,
+      "ascendant_over_65_or_disabled_reduction": 800,
+      "ascendant_over_75_assistance_reduction": 1000,
+      "disability_33_to_64": 2000,
+      "disability_65_or_more": 5000,
+      "active_worker_disability_33_to_64": 2800,
+      "active_worker_disability_65_or_more_or_assistance": 6200,
+      "disability_assistance_or_reduced_mobility": 2000
+    },
+    "work_income_reduction_2005": {
+      "applies_to": "base imponible, not post-2015 style deductible expenses block",
+      "brackets": [
+        { "net_work_income_from_eur": 0.0, "net_work_income_to_eur": 8200.0, "formula": "3500" },
+        { "net_work_income_from_eur": 8200.01, "net_work_income_to_eur": 13000.0, "formula": "3500 - 0.2291 * (RNT - 8200)" },
+        { "net_work_income_from_eur": 13000.0, "net_work_income_to_eur": null, "formula": "2400" }
+      ],
+      "requires_other_non_exempt_income_not_above_eur_for_higher_reduction": 6500,
+      "geographic_mobility_increment": "100% of art. 51 work-income reduction in year of move and following year",
+      "active_workers_over_65_increment": "100% of art. 51 work-income reduction"
+    },
+    "implementation_notes": [
+      "El esquema IRPF 2005 aplica minimo personal/familiar y otras reducciones como minoraciones de base, antes de gravar. No debe reutilizarse sin cambios el algoritmo 2015-2025 de minimos gravados por escala.",
+      "La Comunidad de Madrid queda iniciada con escala complementaria estatal como fallback porque no se ha localizado una escala propia en la Ley 5/2004 descargada; requiere verificacion autonómica completa antes de cerrar el selector territorial.",
+      "Para nomina mensual o retenciones, usar el algoritmo oficial de retenciones AEAT 2005 si se incorpora en una fase posterior.",
+      "Las deducciones autonomicas de Madrid 2005 quedan fuera de calculo automatico hasta parametrizar requisitos e importes."
+    ]
+  },
+  "vat": {
+    "source": "Agencia Tributaria, tipos impositivos de IVA",
+    "source_url": "https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html",
+    "approximation_policy": "aproximacion por consumo declarado o cesta simplificada; no se resta del salario bruto para calcular neto laboral",
+    "rates_percent": {
+      "general": 16,
+      "reduced": 7,
+      "super_reduced": 4
+    },
+    "implementation_notes": [
+      "Tipos legales vigentes antes de las subidas posteriores: general 16%, reducido 7% y superreducido 4%.",
+      "El IVA anual requiere gasto anual del usuario y reparto por tipos; no se calcula como media individual sin EPF compatible."
+    ]
+  },
+  "data_gaps_before_ui_use": [
+    "Adaptar el algoritmo de la calculadora a IRPF pre-2007: minimos y reducciones se aplican sobre base, no como cuota del minimo gravado por escala.",
+    "Verificar normativa autonómica completa de Madrid 2005 para confirmar si procede escala propia o escala complementaria estatal.",
+    "Parametrizar deducciones autonomicas de Madrid 2005 por requisito antes de aplicarlas automaticamente.",
+    "Anadir algoritmo oficial de retenciones AEAT 2005 si se muestra nomina mensual.",
+    "Anadir tarifa de primas de accidentes de trabajo y enfermedades profesionales segun actividad si se muestra coste empresarial completo.",
+    "Procesar INE EPF 2005 o fuente compatible antes de mostrar IVA medio por renta/salario."
+  ]
+}
