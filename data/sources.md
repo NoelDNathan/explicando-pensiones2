@@ -1197,6 +1197,36 @@
 - descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica de Madrid, minimos personales/familiares estatales y de Madrid, gastos/reducciones de trabajo y tipos de IVA.
 - nota metodologica: paquetes calculables para caso base Comunidad de Madrid. 2023 incluye MEI; 2022 no. Madrid 2022 no se copia de 2023 porque cambian tramos y minimos autonomicos. No activa selector completo de CCAA, deducciones autonomicas automaticas ni nomina mensual exacta sin algoritmo AEAT.
 
+## Calculadora fiscal del trabajador - parametros normativos 2021 y 2020
+
+- nombre de la fuente: Parametros normativos 2021 y 2020 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de la Presidencia; BOE / Jefatura del Estado; BOE / Ministerio de Trabajo, Migraciones y Seguridad Social; Agencia Estatal de Administracion Tributaria.
+- URLs:
+  - BOE, Orden PCM/1353/2021, cotizacion 2021: https://www.boe.es/eli/es/o/2021/12/02/pcm1353
+  - BOE, Real Decreto-ley 18/2019, prorroga de cotizacion 2020: https://www.boe.es/eli/es/rdl/2019/12/27/18/con
+  - BOE, Orden TMS/83/2019, prorrogada en materia de cotizacion 2020: https://www.boe.es/buscar/doc.php?id=BOE-A-2019-1366
+  - AEAT, Manual practico Renta 2021: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2021.html
+  - AEAT, Manual practico Renta 2020: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020.html
+  - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- fecha de consulta/descarga: 2026-06-03
+- periodo: 2021 y 2020
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid.
+- formato descargado: HTML.
+- archivos brutos:
+  - `data/raw/boe/cotizaciones-2021/2026-06-03_boe_orden-pcm-1353-2021-cotizacion-regimen-general.html`
+  - `data/raw/aeat/irpf-2021/`
+  - `data/raw/boe/cotizaciones-2020/2026-06-03_boe_real-decreto-ley-18-2019-prorroga-cotizacion-2020.html`
+  - `data/raw/boe/cotizaciones-2020/2026-06-03_boe_orden-tms-83-2019-cotizacion-prorrogada-2020.html`
+  - `data/raw/aeat/irpf-2020/`
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2021.json`
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2020.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2021.md`
+  - `data/methodology/calculadora-fiscal-trabajador-2020.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica de Madrid, minimos personales/familiares estatales y minimos por descendientes propios de Madrid, gastos/reducciones de trabajo y tipos de IVA.
+- nota metodologica: paquetes calculables para caso base Comunidad de Madrid. 2021 incluye el nuevo tramo estatal desde 300.000 euros y exige cautela temporal para cotizacion anual exacta porque la orden fija bases desde el 1 de septiembre. 2020 se documenta como prorroga normativa de cotizacion de la Orden TMS/83/2019 por el Real Decreto-ley 18/2019. No activa selector completo de CCAA, deducciones autonomicas automaticas ni nomina mensual exacta sin algoritmo AEAT.
+
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 
 - nombre de la fuente: Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2021.

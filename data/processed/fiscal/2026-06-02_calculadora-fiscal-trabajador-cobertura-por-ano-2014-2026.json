@@ -93,23 +93,29 @@
     },
     {
       "year": 2021,
-      "coverage_status": "cubrible_con_cautela_fechas",
+      "coverage_status": "parametrizado_parcial_ampliable",
       "irpf_source_status": "localizado",
       "social_security_source_status": "localizado",
       "irpf_sources": ["AEAT Manual practico de Renta 2021"],
       "social_security_sources": ["BOE Orden PCM/1353/2021"],
+      "existing_processed_files": [
+        "data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2021.json"
+      ],
       "use_in_calculator": true,
-      "notes": ["Revisar efectos temporales porque la orden de desarrollo se publico a final de 2021."]
+      "notes": ["Madrid listo; cotizacion documentada con cautela temporal porque los topes y bases de la Orden PCM/1353/2021 aplican desde el 1 de septiembre de 2021."]
     },
     {
       "year": 2020,
-      "coverage_status": "cubrible_con_metodologia_especifica",
+      "coverage_status": "parametrizado_parcial_ampliable",
       "irpf_source_status": "localizado",
       "social_security_source_status": "localizado_por_prorroga",
       "irpf_sources": ["AEAT Manual practico de Renta 2020"],
       "social_security_sources": ["BOE Real Decreto-ley 18/2019", "BOE Orden TMS/83/2019 prorrogada"],
+      "existing_processed_files": [
+        "data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2020.json"
+      ],
       "use_in_calculator": true,
-      "notes": ["No tratar como simple copia de 2019 sin documentar la prorroga y posibles disposiciones posteriores."]
+      "notes": ["Madrid listo; cotizacion documentada como prorroga normativa de la Orden TMS/83/2019 por el Real Decreto-ley 18/2019."]
     },
     {
       "year": 2019,
@@ -177,7 +183,7 @@
       "notes": ["Limite inferior de la cobertura AEAT localizada en la pagina de manuales revisada."]
     }
   ],
-  "recommended_order": [2021, 2020, 2019, 2018, 2017, 2016, 2014],
+  "recommended_order": [2019, 2018, 2017, 2016, 2014],
   "global_gaps": [
     "Retenciones de nomina: localizar algoritmo AEAT especifico por ejercicio si la UI muestra retencion mensual exacta.",
     "Deducciones autonomicas: mantener catalogo hasta codificar reglas calculables por deduccion.",

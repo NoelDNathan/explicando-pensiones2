@@ -903,6 +903,36 @@
   - `data/methodology/calculadora-fiscal-trabajador-2022.md`.
 - Nota de uso: paquetes 2023 y 2022 calculables para caso base Comunidad de Madrid. Antes de activar selector completo de CCAA se deben parametrizar comunidades de regimen comun y deducciones autonomicas. Antes de mostrar nomina mensual o retencion exacta se debe incorporar el algoritmo oficial de retenciones AEAT del ejercicio correspondiente.
 
+## Calculadora fiscal del trabajador - parametros normativos 2021 y 2020
+
+- Fecha de preparacion: 2026-06-03.
+- Script reproducible: no aplica; transcripcion estructurada y documentada de normas/paginas oficiales.
+- Fuente:
+  - BOE, Orden PCM/1353/2021 para bases y tipos de cotizacion 2021.
+  - BOE, Real Decreto-ley 18/2019 y Orden TMS/83/2019 para cotizacion 2020 prorrogada.
+  - Agencia Tributaria, Manuales practicos de Renta 2021 y 2020, para escalas IRPF, minimos, gastos y reducciones.
+  - Agencia Tributaria, tipos impositivos de IVA.
+- Transformacion aplicada:
+  - descarga y conservacion de brutos oficiales HTML;
+  - transcripcion de bases maximas/minimas del Regimen General;
+  - conversion de grupos 8 a 11, publicados en euros/dia, a equivalente mensual multiplicando por 30, conservando tambien los valores diarios publicados;
+  - transcripcion de tipos de cotizacion por contingencias comunes, desempleo, FOGASA, formacion profesional y horas extra;
+  - registro explicito de ausencia de MEI y cotizacion adicional de solidaridad en 2021 y 2020;
+  - documentacion de la cautela temporal 2021, porque las bases de la Orden PCM/1353/2021 aplican desde el 1 de septiembre;
+  - documentacion de la prorroga normativa 2020, sin copiar importes de 2019 sin fuente;
+  - transcripcion de la escala estatal general del IRPF 2021 y 2020;
+  - transcripcion de las escalas autonomicas de la Comunidad de Madrid;
+  - transcripcion de minimos personales/familiares estatales y minimos por descendientes propios de Madrid;
+  - transcripcion de gastos deducibles y reduccion general de rendimientos del trabajo;
+  - registro de tipos legales de IVA y huecos pendientes para IVA medio y otros impuestos.
+- Archivos generados:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2021.json`.
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2020.json`.
+- Metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2021.md`.
+  - `data/methodology/calculadora-fiscal-trabajador-2020.md`.
+- Nota de uso: paquetes 2021 y 2020 calculables para caso base Comunidad de Madrid. Antes de activar selector completo de CCAA se deben parametrizar comunidades de regimen comun y deducciones autonomicas. Antes de mostrar nomina mensual o retencion exacta se debe incorporar el algoritmo oficial de retenciones AEAT del ejercicio correspondiente.
+
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 
 - Fecha de preparacion: 2026-06-03.

@@ -1,0 +1,192 @@
+{
+  "dataset_id": "fiscal-worker-calculator-params-2020",
+  "created_at": "2026-06-03",
+  "scope": {
+    "country": "Espana",
+    "year": 2020,
+    "worker_profile": "trabajador por cuenta ajena del Regimen General",
+    "default_region": "Comunidad de Madrid",
+    "default_contract": "indefinido",
+    "coverage_status": "parametrizado parcial: caso base Comunidad de Madrid",
+    "comparison_policy": "comparar solo con anos con paquete normativo propio; no mezclar con 2026 ni con datos de maqueta",
+    "included_user_factors": [
+      "salario_bruto_anual",
+      "edad",
+      "estado_civil",
+      "hijos_a_cargo",
+      "personas_a_cargo",
+      "discapacidad",
+      "categoria_profesional",
+      "movilidad_geografica"
+    ],
+    "excluded": [
+      "autonomos",
+      "empleados de hogar",
+      "sistema especial agrario",
+      "trabajadores del mar",
+      "artistas y taurinos",
+      "regimenes forales",
+      "selector completo de CCAA hasta parametrizar escalas y minimos 2020",
+      "deducciones autonomicas no parametrizadas",
+      "cotizacion por accidentes de trabajo y enfermedades profesionales por CNAE",
+      "impuestos especiales y tributos locales sin datos de consumo o patrimonio del usuario"
+    ]
+  },
+  "social_security": {
+    "source": "BOE, Real Decreto-ley 18/2019, de 27 de diciembre, y Orden TMS/83/2019, de 31 de enero, prorrogada para cotizacion 2020",
+    "source_url": "https://www.boe.es/eli/es/rdl/2019/12/27/18/con",
+    "supporting_source_url": "https://www.boe.es/buscar/doc.php?id=BOE-A-2019-1366",
+    "raw_files": [
+      "data/raw/boe/cotizaciones-2020/2026-06-03_boe_real-decreto-ley-18-2019-prorroga-cotizacion-2020.html",
+      "data/raw/boe/cotizaciones-2020/2026-06-03_boe_orden-tms-83-2019-cotizacion-prorrogada-2020.html"
+    ],
+    "base_limits_monthly_eur": {
+      "max_common_contingencies": 4070.1,
+      "min_by_group": [
+        { "group": 1, "label": "Ingenieros y Licenciados. Alta direccion no excluida", "min": 1466.4, "max": 4070.1 },
+        { "group": 2, "label": "Ingenieros Tecnicos, Peritos y Ayudantes Titulados", "min": 1215.9, "max": 4070.1 },
+        { "group": 3, "label": "Jefes Administrativos y de Taller", "min": 1057.8, "max": 4070.1 },
+        { "group": 4, "label": "Ayudantes no Titulados", "min": 1050.0, "max": 4070.1 },
+        { "group": 5, "label": "Oficiales Administrativos", "min": 1050.0, "max": 4070.1 },
+        { "group": 6, "label": "Subalternos", "min": 1050.0, "max": 4070.1 },
+        { "group": 7, "label": "Auxiliares Administrativos", "min": 1050.0, "max": 4070.1 },
+        { "group": 8, "label": "Oficiales de primera y segunda", "min": 1050.0, "max": 4070.1, "published_min_daily": 35.0, "published_max_daily": 135.67 },
+        { "group": 9, "label": "Oficiales de tercera y Especialistas", "min": 1050.0, "max": 4070.1, "published_min_daily": 35.0, "published_max_daily": 135.67 },
+        { "group": 10, "label": "Peones", "min": 1050.0, "max": 4070.1, "published_min_daily": 35.0, "published_max_daily": 135.67 },
+        { "group": 11, "label": "Personas trabajadoras menores de 18 anos", "min": 1050.0, "max": 4070.1, "published_min_daily": 35.0, "published_max_daily": 135.67 }
+      ]
+    },
+    "rates_percent": {
+      "common_contingencies": { "total": 28.3, "employer": 23.6, "employee": 4.7 },
+      "mei": { "total": 0.0, "employer": 0.0, "employee": 0.0 },
+      "unemployment_indefinite": { "total": 7.05, "employer": 5.5, "employee": 1.55 },
+      "unemployment_fixed_term": { "total": 8.3, "employer": 6.7, "employee": 1.6 },
+      "fogasa": { "total": 0.2, "employer": 0.2, "employee": 0.0 },
+      "vocational_training": { "total": 0.7, "employer": 0.6, "employee": 0.1 },
+      "overtime_force_majeure": { "total": 14.0, "employer": 12.0, "employee": 2.0 },
+      "overtime_other": { "total": 28.3, "employer": 23.6, "employee": 4.7 }
+    },
+    "solidarity_contribution_monthly": [],
+    "implementation_notes": [
+      "Para salario anual, prorratear pagas extra en 12 bases mensuales de cotizacion antes de aplicar topes.",
+      "Los grupos 8 a 11 se publican en euros por dia; se conserva el valor diario y se usa equivalente mensual de 30 dias para calculos mensuales simples.",
+      "El Real Decreto-ley 18/2019 prorroga para 2020 la aplicacion de la Orden TMS/83/2019 en materia de cotizacion, en tanto no se oponga a dicho real decreto-ley.",
+      "En 2020 no se aplica MEI ni cotizacion adicional de solidaridad.",
+      "La cotizacion por contingencias profesionales depende de la tarifa de primas por actividad/CNAE y debe pedirse al usuario o parametrizarse aparte."
+    ]
+  },
+  "irpf": {
+    "sources": [
+      {
+        "label": "Agencia Tributaria, Manual practico Renta 2020, gravamen estatal de la base liquidable general",
+        "url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020/capitulo-15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-estatal.html",
+        "raw_file": "data/raw/aeat/irpf-2020/2026-06-03_aeat_irpf-2020-gravamen-estatal.html"
+      },
+      {
+        "label": "Agencia Tributaria, Manual practico Renta 2020, gravamen autonomico Comunidad de Madrid",
+        "url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020/capitulo-15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-autonomico/comunidad-madrid.html",
+        "raw_file": "data/raw/aeat/irpf-2020/2026-06-03_aeat_irpf-2020-gravamen-autonomico-madrid.html"
+      },
+      {
+        "label": "Agencia Tributaria, Manual practico Renta 2020, minimos personales y familiares estatales",
+        "url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020/capitulo-14-adecuacion-impuesto-circunstancias-personales/importes-minimo-personal-familiar/minimo-contribuyente.html",
+        "raw_file": "data/raw/aeat/irpf-2020/2026-06-03_aeat_irpf-2020-minimos-estatales.html"
+      },
+      {
+        "label": "Agencia Tributaria, Manual practico Renta 2020, minimo por descendientes Comunidad de Madrid",
+        "url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020/capitulo-14-adecuacion-impuesto-circunstancias-personales/importes-minimo-personal-familiar/comunidad-madrid-importes-minimo-descendientes.html",
+        "raw_file": "data/raw/aeat/irpf-2020/2026-06-03_aeat_irpf-2020-minimos-autonomicos-madrid-descendientes.html"
+      },
+      {
+        "label": "Agencia Tributaria, gastos deducibles art. 19.2.f LIRPF 2020",
+        "url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020/capitulo-03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-2-determinacion-rendimiento-neto/particular-analisis-gastos-articulo-19_2_f-lirpf.html",
+        "raw_file": "data/raw/aeat/irpf-2020/2026-06-03_aeat_irpf-2020-gastos-articulo-19-2-f.html"
+      },
+      {
+        "label": "Agencia Tributaria, reduccion general por obtencion de rendimientos del trabajo 2020",
+        "url": "https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2020/capitulo-03-rendimientos-trabajo/rendimiento-neto-trabajo-integrar-base-imponible/fase-3-determinacion-rendimiento-neto-reducido.html",
+        "raw_file": "data/raw/aeat/irpf-2020/2026-06-03_aeat_irpf-2020-reduccion-rendimientos-trabajo.html"
+      }
+    ],
+    "state_general_scale": [
+      { "base_from_eur": 0.0, "base_to_eur": 12450.0, "base_quota_eur": 0.0, "marginal_percent": 9.5 },
+      { "base_from_eur": 12450.0, "base_to_eur": 20200.0, "base_quota_eur": 1182.75, "marginal_percent": 12.0 },
+      { "base_from_eur": 20200.0, "base_to_eur": 35200.0, "base_quota_eur": 2112.75, "marginal_percent": 15.0 },
+      { "base_from_eur": 35200.0, "base_to_eur": 60000.0, "base_quota_eur": 4362.75, "marginal_percent": 18.5 },
+      { "base_from_eur": 60000.0, "base_to_eur": null, "base_quota_eur": 8950.75, "marginal_percent": 22.5 }
+    ],
+    "madrid_general_scale": [
+      { "base_from_eur": 0.0, "base_to_eur": 12450.0, "base_quota_eur": 0.0, "marginal_percent": 9.0 },
+      { "base_from_eur": 12450.0, "base_to_eur": 17707.2, "base_quota_eur": 1120.5, "marginal_percent": 11.2 },
+      { "base_from_eur": 17707.2, "base_to_eur": 33007.2, "base_quota_eur": 1709.31, "marginal_percent": 13.3 },
+      { "base_from_eur": 33007.2, "base_to_eur": 53407.29, "base_quota_eur": 3744.21, "marginal_percent": 17.9 },
+      { "base_from_eur": 53407.29, "base_to_eur": null, "base_quota_eur": 7395.81, "marginal_percent": 21.0 }
+    ],
+    "personal_and_family_minimum_state_eur": {
+      "taxpayer_general": 5550,
+      "taxpayer_over_65_increment": 1150,
+      "taxpayer_over_75_additional_increment": 1400,
+      "descendants": [2400, 2700, 4000, 4500],
+      "descendant_under_3_increment": 2800,
+      "ascendant_over_65_or_disabled": 1150,
+      "ascendant_over_75_additional_increment": 1400,
+      "disability_33_to_64": 3000,
+      "disability_65_or_more": 9000,
+      "disability_assistance_or_reduced_mobility_increment": 3000
+    },
+    "personal_and_family_minimum_madrid_eur": {
+      "taxpayer_general": 5550,
+      "taxpayer_over_65_increment": 1150,
+      "taxpayer_over_75_additional_increment": 1400,
+      "descendants": [2400, 2700, 4400, 4950],
+      "descendant_under_3_increment": 2800,
+      "ascendant_over_65_or_disabled": 1150,
+      "ascendant_over_75_additional_increment": 1400,
+      "disability_33_to_64": 3000,
+      "disability_65_or_more": 9000,
+      "disability_assistance_or_reduced_mobility_increment": 3000
+    },
+    "work_income_deductible_expenses_eur": {
+      "general_other_expenses": 2000,
+      "geographic_mobility_increment": 2000,
+      "active_worker_disability_33_to_64_increment": 3500,
+      "active_worker_disability_65_or_more_or_assistance_increment": 7750
+    },
+    "work_income_reduction_2020": {
+      "applies_if_work_net_income_below_eur": 16825,
+      "requires_other_non_exempt_income_not_above_eur": 6500,
+      "brackets": [
+        { "rnt_from_eur": 0.0, "rnt_to_eur": 13115.0, "formula": "5565" },
+        { "rnt_from_eur": 13115.0, "rnt_to_eur": 16825.0, "formula": "5565 - 1.5 * (RNT - 13115)" }
+      ]
+    },
+    "implementation_notes": [
+      "Para estimar cuota anual, calcular base liquidable general tras gastos deducibles, reducciones y minimos; aplicar escala estatal y autonomica y restar la cuota asociada al minimo personal/familiar.",
+      "El paquete 2020 solo deja calculable la Comunidad de Madrid como caso base; para activar selector de CCAA hay que transcribir y validar todas las escalas y minimos autonomicos 2020.",
+      "Para nomina mensual o retenciones, usar el algoritmo oficial de retenciones AEAT 2020 si se incorpora en una fase posterior.",
+      "Las deducciones autonomicas y familiares especificas deben tratarse como parametros adicionales porque dependen de circunstancias del usuario."
+    ]
+  },
+  "vat": {
+    "source": "Agencia Tributaria, tipos impositivos de IVA",
+    "source_url": "https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html",
+    "approximation_policy": "aproximacion por consumo declarado o cesta simplificada; no se resta del salario bruto para calcular neto laboral",
+    "rates_percent": {
+      "general": 21,
+      "reduced": 10,
+      "super_reduced": 4,
+      "zero": 0
+    },
+    "implementation_notes": [
+      "El IVA anual no se deduce del salario bruto: requiere gasto anual del usuario y reparto por tipos de IVA.",
+      "Si el usuario introduce gasto con IVA incluido, la cuota se calcula como gasto_incluido * tipo / (100 + tipo)."
+    ]
+  },
+  "data_gaps_before_ui_use": [
+    "Parametrizar escalas y minimos autonomicos 2020 de todas las CCAA de regimen comun si se activa selector territorial.",
+    "Parametrizar deducciones autonomicas por comunidad y requisito antes de aplicarlas automaticamente.",
+    "Anadir algoritmo oficial de retenciones AEAT 2020 si se muestra nomina mensual.",
+    "Anadir tarifa de primas de accidentes de trabajo y enfermedades profesionales segun CNAE/ocupacion si se muestra coste empresarial completo.",
+    "Procesar INE EPF antes de mostrar IVA medio por rango salarial o renta."
+  ]
+}
