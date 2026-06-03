@@ -1227,6 +1227,35 @@
 - descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica de Madrid, minimos personales/familiares estatales y minimos por descendientes propios de Madrid, gastos/reducciones de trabajo y tipos de IVA.
 - nota metodologica: paquetes calculables para caso base Comunidad de Madrid. 2021 incluye el nuevo tramo estatal desde 300.000 euros y exige cautela temporal para cotizacion anual exacta porque la orden fija bases desde el 1 de septiembre. 2020 se documenta como prorroga normativa de cotizacion de la Orden TMS/83/2019 por el Real Decreto-ley 18/2019. No activa selector completo de CCAA, deducciones autonomicas automaticas ni nomina mensual exacta sin algoritmo AEAT.
 
+## Calculadora fiscal del trabajador - parametros normativos 2019 y 2018
+
+- nombre de la fuente: Parametros normativos 2019 y 2018 para calculadora fiscal del trabajador.
+- instituciones: BOE / Ministerio de Trabajo, Migraciones y Seguridad Social; BOE / Ministerio de Empleo y Seguridad Social; Agencia Estatal de Administracion Tributaria.
+- URLs:
+  - BOE, Orden TMS/83/2019, cotizacion 2019: https://www.boe.es/buscar/doc.php?id=BOE-A-2019-1366
+  - BOE, correccion de erratas Orden TMS/83/2019: https://www.boe.es/buscar/doc.php?id=BOE-A-2019-1932
+  - BOE, Orden ESS/55/2018, cotizacion 2018: https://www.boe.es/eli/es/o/2018/01/26/ess55
+  - AEAT, Manual de ayuda Renta 2019: https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-ayuda-presentacion/irpf-2019.html
+  - AEAT, Manual Renta 2018: https://sede.agenciatributaria.gob.es/Sede/manuales/ejercicio-2018/modelo-100.html
+  - AEAT, tipos impositivos de IVA: https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html
+- fecha de consulta/descarga: 2026-06-03
+- periodo: 2019 y 2018
+- ambito: Espana; trabajador por cuenta ajena del Regimen General; caso base Comunidad de Madrid.
+- formato descargado: HTML y PDF.
+- archivos brutos:
+  - `data/raw/boe/cotizaciones-2019/`
+  - `data/raw/aeat/irpf-2019/`
+  - `data/raw/boe/cotizaciones-2018/`
+  - `data/raw/aeat/irpf-2018/`
+- archivo procesado:
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2019.json`
+  - `data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2018.json`
+- metodologia:
+  - `data/methodology/calculadora-fiscal-trabajador-2019.md`
+  - `data/methodology/calculadora-fiscal-trabajador-2018.md`
+- descripcion breve: recoge bases y tipos de cotizacion del Regimen General, escala estatal IRPF, escala autonomica de Madrid, minimos personales/familiares estatales y minimos por descendientes propios de Madrid, gastos/reducciones de trabajo y tipos de IVA.
+- nota metodologica: paquetes calculables para caso base Comunidad de Madrid. 2018 incluye una cautela especifica porque la reduccion por rendimientos del trabajo tiene regla transitoria desde el 5 de julio. No activa selector completo de CCAA, deducciones autonomicas automaticas ni nomina mensual exacta sin algoritmo AEAT.
+
 ## Aportacion anual media trabajador+empresa - Regimen General 2000-2005
 
 - nombre de la fuente: Informe Economico-Financiero a los Presupuestos de la Seguridad Social de 2021.
