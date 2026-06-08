@@ -1,2 +1,6 @@
 export { FiscalWorkerDashboard } from './FiscalWorkerDashboard'
 export { FiscalWorkerDashboard as default } from './FiscalWorkerDashboard'
+export { FiscalKpiRow, FISCAL_KPI_ROW_DEMO_ITEMS } from './FiscalKpiRow'
+export type { FiscalKpiItem, FiscalKpiMetric, FiscalKpiRowProps, FiscalKpiTone } from './FiscalKpiRow'
+export { SocialSecurityBasesExplainer } from './SocialSecurityBasesExplainer'
+export { ProgressiveIrpfExplainer } from './ProgressiveIrpfExplainer'

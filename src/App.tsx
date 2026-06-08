@@ -10,7 +10,10 @@ import { YearSelector } from './components/ui/YearSelector'
 import { ReformSimulator } from './components/pension-overview/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/health-expenditure/HealthExpenditureDashboard'
 import { SalaryNationalityDashboard } from './components/salary-nationality/SalaryNationalityDashboard'
-import { FiscalWorkerDashboard } from './components/fiscal-worker-dashboard'
+import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer } from './components/fiscal-worker-dashboard'
+import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
+import { WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
+import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
 import {
@@ -261,6 +264,11 @@ const INDICATORS_2025: IndicatorItem[] = [
 
 function ComponentLab() {
   const [indicatorInfoOpen, setIndicatorInfoOpen] = React.useState(false)
+  const [demoChildren, setDemoChildren] = React.useState(0)
+  const [demoChildrenUnder3, setDemoChildrenUnder3] = React.useState(0)
+  const [demoAscendants, setDemoAscendants] = React.useState(0)
+  const [demoDisability, setDemoDisability] = React.useState<DisabilityMode>('none')
+  const [demoAutonomicDeduction, setDemoAutonomicDeduction] = React.useState(0)
 
   return (
     <main className="component-lab">
@@ -508,6 +516,189 @@ function ComponentLab() {
         </div>
       </section>
 
+      <section className="component-section component-section--wide" aria-labelledby="fiscal-personal-data-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 11</p>
+          <h2 id="fiscal-personal-data-title">Tarjeta editable de datos fiscales</h2>
+          <p>
+            Formulario oscuro de alta fidelidad para introducir minimos
+            familiares, discapacidad e importe verificado de deduccion
+            autonomica.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--fiscal-card">
+          <FiscalPersonalDataCard
+            childrenCount={demoChildren}
+            childrenUnder3={demoChildrenUnder3}
+            ascendants={demoAscendants}
+            disability={demoDisability}
+            autonomicDeduction={demoAutonomicDeduction}
+            onChildrenCountChange={setDemoChildren}
+            onChildrenUnder3Change={setDemoChildrenUnder3}
+            onAscendantsChange={setDemoAscendants}
+            onDisabilityChange={setDemoDisability}
+            onAutonomicDeductionChange={setDemoAutonomicDeduction}
+          />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="fiscal-kpi-row-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 12</p>
+          <h2 id="fiscal-kpi-row-title">Fila KPI fiscal</h2>
+          <p>
+            Seis tarjetas compactas para el resumen anual de salario, IRPF,
+            cotizaciones, Seguridad Social, IVA proxy y otros impuestos.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--fiscal-kpi-row">
+          <FiscalKpiRow />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="ssbe-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 13</p>
+          <h2 id="ssbe-title">Bases minimas y maximas de cotizacion</h2>
+          <p>
+            Dashboard educativo oscuro para explicar como una base real se
+            compara con los limites de cotizacion y como afecta a Seguridad
+            Social, neto e IRPF.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dashboard component-preview--bleed">
+          <SocialSecurityBasesExplainer />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="irpf-progressive-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 14</p>
+          <h2 id="irpf-progressive-title">Como funciona el IRPF progresivo</h2>
+          <p>
+            Dashboard educativo oscuro para explicar base liquidable, tramos,
+            cuota acumulada y tipo efectivo con un ejemplo editable.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dashboard component-preview--bleed">
+          <ProgressiveIrpfExplainer />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-salary-base-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 15</p>
+          <h2 id="worker-salary-base-title">Base real salarial</h2>
+          <p>
+            Tarjeta editable para calcular la base real desde salario,
+            periodicidad, pagas, complementos y salario en especie.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-salary-card">
+          <WorkerSalaryBaseCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-contribution-limits-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 16</p>
+          <h2 id="worker-contribution-limits-title">Limites de cotizacion del trabajador</h2>
+          <p>
+            Paso visual para comparar la base real del trabajador con la base
+            minima y maxima del grupo de cotizacion, y devolver la base que
+            se usara en el calculo de cotizaciones.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-limits">
+          <WorkerContributionLimitsCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-social-contributions-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 17</p>
+          <h2 id="worker-social-contributions-title">Cotizaciones sociales</h2>
+          <p>
+            Paso visual para separar cotizaciones del trabajador, aportacion
+            adicional de la empresa, base usada para cotizar y coste total de
+            contratar.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-social">
+          <WorkerSocialContributionsCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-personal-reductions-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 18</p>
+          <h2 id="worker-personal-reductions-title">Reducciones y situacion personal</h2>
+          <p>
+            Paso visual para recoger hijos, discapacidad, estado civil,
+            ascendientes a cargo, reducciones de base y deducciones de cuota
+            antes de cerrar el calculo del IRPF.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-personal">
+          <WorkerPersonalReductionsCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-irpf-tranches-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 19</p>
+          <h2 id="worker-irpf-tranches-title">IRPF por tramos</h2>
+          <p>
+            Paso visual para explicar el calculo progresivo del IRPF, con base
+            liquidable, tramos activos, cuota estimada y tipo efectivo.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-irpf">
+          <WorkerIrpfTranchesCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-consumption-taxes-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 20</p>
+          <h2 id="worker-consumption-taxes-title">IVA y otros impuestos</h2>
+          <p>
+            Paso editable para estimar impuestos indirectos por categoria:
+            cada fila sincroniza porcentaje e importe anual en euros y anade
+            vivienda en propiedad como modulo simplificado de IBI.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-consumption">
+          <WorkerConsumptionTaxesCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-fiscal-steps-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 21</p>
+          <h2 id="worker-fiscal-steps-title">Navegacion fiscal del trabajador</h2>
+          <p>
+            Cabecera guiada de siete pasos para recorrer base real, limites,
+            cotizaciones, reducciones, IRPF, salario neto e impuestos sobre el
+            consumo.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--dashboard">
+          <WorkerFiscalStepsCard />
+        </div>
+      </section>
+
       <IndicatorInfoModal
         open={indicatorInfoOpen}
         onClose={() => setIndicatorInfoOpen(false)}
@@ -530,6 +721,9 @@ function Home() {
         Tambien puedes abrir la infografia salarial en{' '}
         <a href="/salario-nacionalidad">/salario-nacionalidad</a> y la
         calculadora fiscal en <a href="/calculadora-fiscal">/calculadora-fiscal</a>.
+        El componente educativo de bases de cotizacion esta en{' '}
+        <a href="/bases-cotizacion">/bases-cotizacion</a> y la explicacion del
+        IRPF progresivo en <a href="/irpf">/irpf</a>.
       </p>
     </main>
   )
@@ -700,6 +894,8 @@ function App() {
   const isHealthPage = path === '/gasto-sanitario'
   const isSalaryNationalityPage = path === '/salario-nacionalidad'
   const isFiscalWorkerPage = path === '/calculadora-fiscal'
+  const isSocialSecurityBasesPage = path === '/bases-cotizacion'
+  const isProgressiveIrpfPage = path === '/irpf'
   const isPensionOverviewPage = path === '/resumen'
 
   if (isPensionOverviewPage) return <PensionOverviewPage />
@@ -708,6 +904,8 @@ function App() {
   if (isHealthPage) return <HealthExpenditurePage />
   if (isSalaryNationalityPage) return <SalaryNationalityDashboard />
   if (isFiscalWorkerPage) return <FiscalWorkerDashboard />
+  if (isSocialSecurityBasesPage) return <SocialSecurityBasesExplainer />
+  if (isProgressiveIrpfPage) return <ProgressiveIrpfExplainer />
   return <Home />
 }
 

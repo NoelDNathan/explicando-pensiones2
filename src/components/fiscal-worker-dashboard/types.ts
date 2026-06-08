@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type FiscalTone = 'green' | 'purple' | 'cyan' | 'orange' | 'yellow' | 'violet'
+export type DisabilityMode = 'none' | '33_64' | '65_or_more'
 
 export type FiscalKpi = {
   title: string

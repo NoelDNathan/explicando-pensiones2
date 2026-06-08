@@ -1,16 +1,8 @@
 import { useMemo, useState } from 'react'
 import {
   Bookmark,
-  Calculator,
-  FileText,
-  HandCoins,
   Info,
-  PiggyBank,
-  Receipt,
   Share2,
-  ShieldCheck,
-  Users,
-  Wallet,
 } from 'lucide-react'
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
 import fiscalParams2005Json from '../../../data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json'
@@ -18,11 +10,21 @@ import autonomicCoverageJson from '../../../data/processed/fiscal/2026-06-01_aea
 import vatProxyJson from '../../../data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json'
 import { DashboardSidebar } from '../ui/DashboardSidebar'
 import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
-import { DashboardPanel } from '../ui/DashboardPanel'
 import { InfoButton } from '../ui/InfoButton'
 import { FISCAL_MENU } from './data'
-import { Donut } from './Donut'
+import { FiscalKpiRow } from './FiscalKpiRow'
+import type { FiscalKpiItem } from './FiscalKpiRow'
 import { MenuIcon } from './MenuIcon'
+import {
+  WorkerConsumptionTaxesCard,
+  WorkerContributionLimitsCard,
+  WorkerFiscalStepsCard,
+  WorkerIrpfTranchesCard,
+  WorkerPersonalReductionsCard,
+  WorkerSalaryBaseCard,
+  WorkerSocialContributionsCard,
+} from '../worker-salary-dashboard'
+import type { DisabilityMode } from './types'
 import './FiscalWorkerDashboard.css'
 
 type ScaleBracket = {
@@ -140,7 +142,6 @@ type VatProxy = {
   }>
 }
 
-type DisabilityMode = 'none' | '33_64' | '65_or_more'
 type TaxYear = '2025' | '2005'
 
 const fiscalParams2025 = fiscalParams2025Json as FiscalParams
@@ -305,6 +306,7 @@ export function FiscalWorkerDashboard() {
   const [monthlyConsumption, setMonthlyConsumption] = useState(1700)
   const [manualAutonomicDeduction, setManualAutonomicDeduction] = useState(0)
   const [otherTaxes, setOtherTaxes] = useState(0)
+  const [activeWorkerStepId, setActiveWorkerStepId] = useState(1)
 
   const result = useMemo(() => {
     const effectiveRegion = taxYear === '2005' ? 'madrid' : region
@@ -428,6 +430,114 @@ export function FiscalWorkerDashboard() {
     }
   }, [age, ascendants, children, childrenUnder3, disability, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, region, salary, taxYear])
 
+  const fiscalKpiItems: FiscalKpiItem[] = [
+    {
+      tone: 'green',
+      icon: 'wallet',
+      title: 'Salario neto',
+      left: { label: 'Anual', value: formatEuro(result.netSalary) },
+      right: { label: 'Mensual', value: formatEuro(result.netSalary / 12) },
+      badge: `${formatPercent(100 - result.effectiveLaborRate)} del bruto`,
+    },
+    {
+      tone: 'purple',
+      icon: 'users',
+      title: 'IRPF anual',
+      left: { label: 'Estatal', value: formatEuro(result.stateTax) },
+      right: { label: result.regionalTaxLabel, value: formatEuro(result.regionalTax) },
+      badge: formatEuro(result.irpf),
+    },
+    {
+      tone: 'cyan',
+      icon: 'shield',
+      title: 'Cotizacion trabajador',
+      left: { label: 'Base mensual', value: formatEuro(result.contributionBase) },
+      right: { label: 'Cuota anual', value: formatEuro(result.employeeSocialSecurity) },
+      badge: result.socialSecurityNote,
+    },
+    {
+      tone: 'gold',
+      icon: 'bank',
+      title: 'Aportacion SS total',
+      left: { label: 'Empresa', value: formatEuro(result.employerSocialSecurity) },
+      right: { label: 'Pensiones', value: formatEuro(result.pensionsContribution) },
+      badge: 'Trabajador + empresa',
+    },
+    {
+      tone: 'orange',
+      icon: 'receipt',
+      title: taxYear === '2005' ? 'IVA legal' : 'IVA proxy',
+      left: { label: 'Gasto anual', value: formatEuro(result.annualConsumption) },
+      right: { label: 'IVA', value: formatEuro(result.vat) },
+      badge: `${result.vatSourceLabel}: ${formatPercent(result.vatRate)}`,
+    },
+    {
+      tone: 'violet',
+      icon: 'document',
+      title: 'Otros impuestos',
+      left: { label: 'Declarado', value: formatEuro(otherTaxes) },
+      right: { label: 'Modulo', value: 'separado' },
+      badge: 'No altera el neto laboral',
+    },
+  ]
+
+  const activeWorkerStepCard = (() => {
+    switch (activeWorkerStepId) {
+      case 1:
+        return <WorkerSalaryBaseCard initialSalary={salary} initialPayPeriod="annual" initialPayCount="12" />
+      case 2:
+        return (
+          <WorkerContributionLimitsCard
+            calculationYear={Number(taxYear)}
+            userBaseAnnual={salary}
+            initialGroupId={7}
+            sourceLabel={result.taxSourceLabel}
+          />
+        )
+      case 3:
+        return (
+          <WorkerSocialContributionsCard
+            year={Number(taxYear)}
+            grossSalaryAnnual={salary}
+            baseUsedMonthly={result.contributionBase}
+            selectedContributionGroup="Grupo 7"
+          />
+        )
+      case 4:
+        return (
+          <WorkerPersonalReductionsCard
+            initialChildren={children}
+            initialAscendants={ascendants}
+            initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
+          />
+        )
+      case 5:
+        return (
+          <WorkerIrpfTranchesCard
+            initialRegion={result.effectiveRegion}
+            initialTaxableBase={result.taxableBase}
+          />
+        )
+      case 6:
+        return (
+          <section className="fwd-net-step" aria-labelledby="fwd-net-step-title">
+            <header className="fwd-net-step__header">
+              <div>
+                <span>6.</span>
+                <h2 id="fwd-net-step-title">Salario neto</h2>
+              </div>
+              <p>Resume lo que queda del salario bruto despues de cotizaciones del trabajador e IRPF. El IVA y otros impuestos se mantienen separados en el paso 7.</p>
+            </header>
+            <FiscalKpiRow className="fwd-kpis fwd-kpis--net-step" items={fiscalKpiItems} />
+          </section>
+        )
+      case 7:
+        return <WorkerConsumptionTaxesCard initialBudgetAnnual={result.annualConsumption} />
+      default:
+        return <WorkerSalaryBaseCard initialSalary={salary} initialPayPeriod="annual" initialPayCount="12" />
+    }
+  })()
+
   return (
     <div className="fwd">
       <FiscalSidebar />
@@ -475,108 +585,14 @@ export function FiscalWorkerDashboard() {
           </label>
         </section>
 
-        <section className="fwd-kpis" aria-label={`Indicadores ${taxYear}`}>
-          <article className="fwd-kpi fwd-tone-green"><div><Wallet size={20} /><strong>Salario neto</strong></div><dl><div><dt>{taxYear}</dt><dd>{formatEuro(result.netSalary)}</dd></div><div><dt>Mensual</dt><dd>{formatEuro(result.netSalary / 12)}</dd></div></dl><p>{formatPercent(100 - result.effectiveLaborRate)} del bruto</p></article>
-          <article className="fwd-kpi fwd-tone-purple"><div><Users size={20} /><strong>IRPF anual</strong></div><dl><div><dt>Estatal</dt><dd>{formatEuro(result.stateTax)}</dd></div><div><dt>{result.regionalTaxLabel}</dt><dd>{formatEuro(result.regionalTax)}</dd></div></dl><p>{formatEuro(result.irpf)}</p></article>
-          <article className="fwd-kpi fwd-tone-cyan"><div><ShieldCheck size={20} /><strong>Cotizacion trabajador</strong></div><dl><div><dt>Base mensual</dt><dd>{formatEuro(result.contributionBase)}</dd></div><div><dt>Cuota anual</dt><dd>{formatEuro(result.employeeSocialSecurity)}</dd></div></dl><p>{result.socialSecurityNote}</p></article>
-          <article className="fwd-kpi fwd-tone-orange"><div><HandCoins size={20} /><strong>Aportacion SS total</strong></div><dl><div><dt>Empresa</dt><dd>{formatEuro(result.employerSocialSecurity)}</dd></div><div><dt>Pensiones</dt><dd>{formatEuro(result.pensionsContribution)}</dd></div></dl><p>Trabajador + empresa</p></article>
-          <article className="fwd-kpi fwd-tone-yellow"><div><Receipt size={20} /><strong>{taxYear === '2005' ? 'IVA legal' : 'IVA proxy'}</strong></div><dl><div><dt>Gasto anual</dt><dd>{formatEuro(result.annualConsumption)}</dd></div><div><dt>IVA</dt><dd>{formatEuro(result.vat)}</dd></div></dl><p>{result.vatSourceLabel}: {formatPercent(result.vatRate)}</p></article>
-          <article className="fwd-kpi fwd-tone-violet"><div><FileText size={20} /><strong>Otros impuestos</strong></div><dl><div><dt>Declarado</dt><dd>{formatEuro(otherTaxes)}</dd></div><div><dt>Modulo</dt><dd>separado</dd></div></dl><p>No altera el neto laboral</p></article>
-        </section>
+        <WorkerFiscalStepsCard activeStepId={activeWorkerStepId} onStepChange={setActiveWorkerStepId} />
 
-        <section className="fwd-content">
-          <div className="fwd-column">
-            <DashboardPanel className="fwd-panel" title="Tus datos" density="compact">
-              <ul className="fwd-data-list">
-                <li><span>Hijos con derecho a minimo</span><input type="number" min={0} max={8} value={children} onChange={(event) => setChildren(Number(event.target.value))} /></li>
-                <li><span>Hijos menores de 3 anos</span><input type="number" min={0} max={children} value={childrenUnder3} onChange={(event) => setChildrenUnder3(Number(event.target.value))} /></li>
-                <li><span>Ascendientes a cargo</span><input type="number" min={0} max={4} value={ascendants} onChange={(event) => setAscendants(Number(event.target.value))} /></li>
-                <li><span>Discapacidad trabajador</span><select value={disability} onChange={(event) => setDisability(event.target.value as DisabilityMode)}><option value="none">No</option><option value="33_64">33% a 64%</option><option value="65_or_more">65% o mas</option></select></li>
-                <li><span>Deduccion autonomica verificada</span><input type="number" min={0} step={50} value={manualAutonomicDeduction} onChange={(event) => setManualAutonomicDeduction(Number(event.target.value))} /></li>
-              </ul>
-            </DashboardPanel>
-            <DashboardPanel className="fwd-panel" title="Consumo e impuestos indirectos" density="compact">
-              <ul className="fwd-data-list">
-                <li><span>Gasto mensual con IVA</span><input type="number" min={0} step={50} value={monthlyConsumption} onChange={(event) => setMonthlyConsumption(Number(event.target.value))} /></li>
-                <li><span>Otros impuestos declarados</span><input type="number" min={0} step={25} value={otherTaxes} onChange={(event) => setOtherTaxes(Number(event.target.value))} /></li>
-                <li><span>Fuente IVA medio</span><b>{result.vatSourceLabel}</b></li>
-              </ul>
-            </DashboardPanel>
-          </div>
-
-          <div className="fwd-column fwd-column--center">
-            <DashboardPanel className="fwd-panel fwd-panel--hero" title={`Distribucion del salario bruto ${taxYear}`} subtitle={`Comunidad: ${REGION_LABELS[result.effectiveRegion] ?? result.effectiveRegion}`} density="compact">
-              <div className="fwd-stack-bars">
-                <div><strong>Neto</strong><span><i style={{ width: `${Math.min(100, result.netSalary / salary * 100)}%` }}>{formatEuro(result.netSalary)}</i></span><b>{formatEuro(salary)}</b></div>
-                <div><strong>IRPF</strong><span><em style={{ width: `${Math.min(100, result.irpf / salary * 100)}%` }}>{formatEuro(result.irpf)}</em></span><b>{formatPercent(result.irpf / salary * 100)}</b></div>
-                <div><strong>SS</strong><span><em style={{ width: `${Math.min(100, result.employeeSocialSecurity / salary * 100)}%` }}>{formatEuro(result.employeeSocialSecurity)}</em></span><b>{formatPercent(result.employeeSocialSecurity / salary * 100)}</b></div>
-              </div>
-            </DashboardPanel>
-            <DashboardPanel className="fwd-panel fwd-pension" title="Aportacion a Seguridad Social" subtitle={result.pensionSubtitle} density="compact">
-              <div className="fwd-pension-flow">
-                <span className="fwd-round-icon"><Users size={31} /></span>
-                <div><small>Trabajador</small><strong>{formatEuro(result.employeeSocialSecurity)}</strong></div>
-                <span />
-                <div className="is-delta"><small>Empresa</small><strong>{formatEuro(result.employerSocialSecurity)}</strong></div>
-                <span />
-                <div><small>Total</small><strong>{formatEuro(result.employeeSocialSecurity + result.employerSocialSecurity)}</strong></div>
-                <span className="fwd-round-icon is-blue"><PiggyBank size={31} /></span>
-              </div>
-            </DashboardPanel>
-          </div>
-
-          <div className="fwd-column">
-            <DashboardPanel className="fwd-panel" title="Deducciones autonomicas" density="compact">
-              <div className="fwd-method-note">
-                <Calculator size={18} />
-                <p>{result.deductionNote}</p>
-              </div>
-              <ul className="fwd-data-list">
-                <li><span>Estado reglas automaticas</span><b>{autonomicCoverage.autonomic_deductions.coverage_status.calculation_ready ? 'Activas' : 'Pendientes'}</b></li>
-                <li><span>Importe aplicado</span><b>{formatEuro(manualAutonomicDeduction)}</b></li>
-              </ul>
-            </DashboardPanel>
-            <DashboardPanel className="fwd-panel" title="Resultado de contexto" density="compact">
-              <ul className="fwd-summary">
-                <li className="fwd-tone-cyan"><span><Calculator size={20} /></span><div><strong>Carga laboral</strong><small>IRPF + cotizacion trabajador</small></div><b>{formatEuro(result.irpf + result.employeeSocialSecurity)}</b></li>
-                <li className="fwd-tone-yellow"><span><Receipt size={20} /></span><div><strong>{taxYear === '2005' ? 'IVA legal' : 'IVA proxy'}</strong><small>No se resta del neto laboral</small></div><b>{formatEuro(result.vat)}</b></li>
-                <li className="fwd-tone-violet"><span><FileText size={20} /></span><div><strong>Total contexto</strong><small>Laboral + consumo + otros</small></div><b>{formatEuro(result.totalContextTax)}</b></li>
-              </ul>
-            </DashboardPanel>
+        <section className="fwd-worker-dashboard" aria-label="Pasos detallados del worker salary dashboard">
+          <div className="fwd-worker-card">
+            {activeWorkerStepCard}
           </div>
         </section>
 
-        <section className="fwd-bottom">
-          <DashboardPanel className="fwd-panel" title="Composicion aproximada" subtitle={`El donut separa neto laboral, IRPF, cotizacion del trabajador, ${taxYear === '2005' ? 'IVA legal' : 'IVA proxy'} y otros impuestos declarados.`} density="compact">
-            <div className="fwd-donuts">
-              <Donut
-                year={taxYear}
-                net={`${formatEuro(result.netSalary)} (${formatPercent(result.netSalary / salary * 100)})`}
-                irpf={`${formatEuro(result.irpf)} (${formatPercent(result.irpf / salary * 100)})`}
-                ss={`${formatEuro(result.employeeSocialSecurity)} (${formatPercent(result.employeeSocialSecurity / salary * 100)})`}
-                iva={`${formatEuro(result.vat)} (${formatPercent(result.vat / salary * 100)})`}
-                other={`${formatEuro(otherTaxes)} (${formatPercent(otherTaxes / salary * 100)})`}
-              />
-            </div>
-            <p className="fwd-note">El IVA y otros impuestos son modulos de contexto: dependen del consumo o de datos declarados por el usuario.</p>
-          </DashboardPanel>
-          <DashboardPanel className="fwd-panel" title="Detalle anual" density="compact">
-            <div className="fwd-table-wrap">
-              <table className="fwd-table">
-                <thead><tr><th>Concepto</th><th>Importe</th><th>Nota</th></tr></thead>
-                <tbody>
-                  <tr><th>Salario bruto</th><td>{formatEuro(salary)}</td><td>Entrada usuario</td></tr>
-                  <tr><th>Cotizacion trabajador</th><td>{formatEuro(result.employeeSocialSecurity)}</td><td>{result.taxSourceLabel}</td></tr>
-                  <tr><th>IRPF antes de deducciones</th><td>{formatEuro(result.irpfBeforeDeductions)}</td><td>{result.taxSourceLabel}</td></tr>
-                  <tr><th>Deduccion autonomica aplicada</th><td>{formatEuro(manualAutonomicDeduction)}</td><td>Manual verificada</td></tr>
-                  <tr><th>Salario neto laboral</th><td>{formatEuro(result.netSalary)}</td><td>No incluye IVA</td></tr>
-                  <tr><th>{taxYear === '2005' ? 'IVA legal' : 'IVA proxy'}</th><td>{formatEuro(result.vat)}</td><td>{result.vatSourceLabel}</td></tr>
-                  <tr><th>Otros impuestos</th><td>{formatEuro(otherTaxes)}</td><td>{result.otherTaxSourceLabel}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </DashboardPanel>
-        </section>
       </main>
     </div>
   )

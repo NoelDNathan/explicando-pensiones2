@@ -413,6 +413,88 @@
   border: none;
 }
 
+.component-preview--fiscal-card {
+  justify-content: center;
+  padding: clamp(18px, 4vw, 42px) !important;
+  border: 1px solid #1d2b44 !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(47, 128, 255, 0.22), transparent 35%),
+    linear-gradient(135deg, #030814, #07142a 52%, #020612) !important;
+}
+
+.component-preview--fiscal-card .fpdc {
+  max-width: 980px;
+}
+
+.component-preview--fiscal-kpi-row {
+  padding: clamp(16px, 2vw, 24px) !important;
+  border: 1px solid #1d2b44 !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 14% -12%, rgba(47, 128, 255, 0.22), transparent 32%),
+    linear-gradient(135deg, #020817 0%, #07172d 54%, #020817 100%) !important;
+  overflow-x: auto;
+}
+
+.component-preview--worker-salary-card {
+  justify-content: center;
+  padding: clamp(18px, 4vw, 42px) !important;
+  border: 1px solid #18332d !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 14% -8%, rgba(56, 210, 89, 0.2), transparent 34%),
+    radial-gradient(circle at 88% 4%, rgba(28, 160, 255, 0.2), transparent 32%),
+    linear-gradient(135deg, #021115 0%, #031927 55%, #020711 100%) !important;
+}
+
+.component-preview--worker-limits {
+  justify-content: center;
+  padding: clamp(18px, 4vw, 42px) !important;
+  border: 1px solid #19304e !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 12% -8%, rgba(44, 159, 255, 0.24), transparent 35%),
+    radial-gradient(circle at 90% 6%, rgba(255, 148, 25, 0.18), transparent 32%),
+    linear-gradient(135deg, #020817 0%, #061831 58%, #020711 100%) !important;
+}
+
+.component-preview--worker-social {
+  justify-content: center;
+  padding: clamp(14px, 3vw, 34px) !important;
+  border: 1px solid #2f2547 !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 13% -8%, rgba(168, 92, 255, 0.22), transparent 34%),
+    radial-gradient(circle at 89% 5%, rgba(255, 148, 25, 0.18), transparent 32%),
+    radial-gradient(circle at 48% 105%, rgba(32, 178, 255, 0.16), transparent 28%),
+    linear-gradient(135deg, #020817 0%, #07152c 55%, #020711 100%) !important;
+}
+
+.component-preview--worker-irpf {
+  justify-content: center;
+  padding: clamp(14px, 3vw, 34px) !important;
+  border: 1px solid #293259 !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 12% -8%, rgba(174, 92, 255, 0.2), transparent 34%),
+    radial-gradient(circle at 86% 0%, rgba(40, 144, 255, 0.2), transparent 32%),
+    radial-gradient(circle at 45% 105%, rgba(255, 145, 18, 0.14), transparent 29%),
+    linear-gradient(135deg, #040617 0%, #07162e 55%, #020711 100%) !important;
+}
+
+.component-preview--worker-consumption {
+  justify-content: center;
+  padding: clamp(14px, 3vw, 34px) !important;
+  border: 1px solid #24425a !important;
+  border-radius: 18px !important;
+  background:
+    radial-gradient(circle at 12% -8%, rgba(47, 174, 255, 0.22), transparent 34%),
+    radial-gradient(circle at 88% 2%, rgba(255, 158, 37, 0.18), transparent 32%),
+    radial-gradient(circle at 45% 105%, rgba(48, 211, 129, 0.12), transparent 29%),
+    linear-gradient(135deg, #020817 0%, #07172d 55%, #020711 100%) !important;
+}
+
 /* Full-bleed preview: breaks out of the lab's max-width container
    so wide dashboards can show their intended proportions. */
 .component-preview--bleed {
