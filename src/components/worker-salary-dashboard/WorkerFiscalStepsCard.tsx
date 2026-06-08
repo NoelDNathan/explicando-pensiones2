@@ -4,6 +4,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  CircleHelp,
   Info,
   Lightbulb,
   Scale,
@@ -145,6 +146,22 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     ],
     important: 'Dos personas con el mismo neto pueden pagar impuestos indirectos muy distintos si consumen de forma diferente.',
     Icon: ShoppingCart,
+  },
+  {
+    id: 8,
+    title: 'Preguntas frecuentes',
+    subtitle: 'Resuelve dudas antes de leer el resultado',
+    description: 'Cierra el recorrido con respuestas rapidas a las dudas mas habituales: que se descuenta de la nomina, que paga la empresa y que queda fuera del salario neto.',
+    checklist: ['Bruto frente a neto', 'Bases y limites', 'IRPF y retenciones', 'Impuestos de consumo'],
+    helpTitle: 'Para que sirve esta seccion?',
+    helpBody: 'Sirve como comprobacion final. Si algun resultado parece raro, estas preguntas ayudan a identificar si la diferencia viene de bases, cotizaciones, IRPF o consumo.',
+    details: [
+      'Usala para separar tres ideas: lo que cobras, lo que cuesta tu empleo y lo que pagas despues al consumir.',
+      'Las respuestas son orientativas y explican el modelo de la calculadora; no sustituyen una nomina real ni asesoramiento fiscal.',
+      'Si cambias salario, pagas, comunidad o consumo, conviene volver a revisar las preguntas clave porque el resultado puede cambiar.',
+    ],
+    important: 'La FAQ no anade nuevos impuestos al calculo: solo explica como leer los pasos anteriores.',
+    Icon: CircleHelp,
   },
 ]
 
