@@ -255,10 +255,11 @@ export function WorkerContributionLimitsCard({
 
       {infoOpen && (
         <div className="wclc-popover" role="status">
-          El grupo de cotizacion es una categoria laboral de la Seguridad
-          Social. Cada grupo tiene una base minima y una base maxima. La base
-          usada para cotizar sera tu base real si cae dentro del rango, la
-          minima si queda por debajo o la maxima si supera el tope.
+          El grupo de cotizacion marca un minimo y un maximo. Ejemplo sencillo:
+          si en el Grupo 7 la base minima es 1.424,40 EUR y tu base es 1.324,40
+          EUR, estas 100 EUR por debajo y se usa 1.424,40 EUR. Si la base maxima
+          es 5.101,20 EUR y tu base es 5.201,20 EUR, estas 100 EUR por encima y
+          se usa 5.101,20 EUR.
         </div>
       )}
 

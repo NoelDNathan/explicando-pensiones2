@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
-  Info,
   Lightbulb,
   Scale,
   Shield,
@@ -210,7 +209,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
         })}
       </nav>
 
-      <p className="wfsc-hint">Haz clic en cualquier paso para ir directamente</p>
 
       <div className="wfsc-stage">
         <button
@@ -248,7 +246,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
           <aside className="wfsc-help" aria-label="Ayuda del paso activo">
             <div className="wfsc-help__head">
               <h3>{activeStep.helpTitle}</h3>
-              <Info size={20} aria-hidden="true" />
             </div>
             <p>{activeStep.helpBody}</p>
             <ul className="wfsc-detail-list" aria-label="Detalles del paso activo">

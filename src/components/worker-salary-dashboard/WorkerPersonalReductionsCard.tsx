@@ -5,7 +5,6 @@ import {
   FileText,
   HandHeart,
   Heart,
-  Info,
   Landmark,
   Percent,
   TrendingDown,
@@ -184,7 +183,6 @@ export function WorkerPersonalReductionsCard({
   const [largeFamily, setLargeFamily] = useState('no')
   const [dependentDisability, setDependentDisability] = useState('no')
   const [regionalDeductions, setRegionalDeductions] = useState('configure')
-  const [infoOpen, setInfoOpen] = useState(false)
 
   useEffect(() => {
     setChildren(String(initialChildren))
@@ -259,25 +257,7 @@ export function WorkerPersonalReductionsCard({
           <span aria-hidden="true">4.</span>
           <h2 id="wprc-title">Reducciones y situacion personal</h2>
         </div>
-        <button
-          className="wprc-info"
-          type="button"
-          aria-label="Mas informacion sobre reducciones y deducciones"
-          aria-expanded={infoOpen}
-          onClick={() => setInfoOpen((open) => !open)}
-        >
-          <Info size={21} strokeWidth={2.35} aria-hidden="true" />
-        </button>
       </header>
-
-      {infoOpen && (
-        <div className="wprc-popover" role="status">
-          Las reducciones bajan la base sobre la que se calcula el IRPF. Las
-          deducciones actuan despues y reducen la cuota final. Este componente
-          es una pieza de interfaz: los importes deben conectarse a reglas y
-          fuentes documentadas antes de uso editorial publico.
-        </div>
-      )}
 
       <div className="wprc-top-grid" aria-label="Situacion personal">
         <TopField
