@@ -77,26 +77,6 @@ export function WorkerSalaryBaseCard({
   }, [inKindSalary, payCount, payPeriod, salary, salaryComplements])
 
   useEffect(() => {
-    setSalary(initialSalary)
-  }, [initialSalary])
-
-  useEffect(() => {
-    setPayPeriod(initialPayPeriod)
-  }, [initialPayPeriod])
-
-  useEffect(() => {
-    setPayCount(initialPayCount)
-  }, [initialPayCount])
-
-  useEffect(() => {
-    setSalaryComplements(initialSalaryComplements)
-  }, [initialSalaryComplements])
-
-  useEffect(() => {
-    setInKindSalary(initialInKindSalary)
-  }, [initialInKindSalary])
-
-  useEffect(() => {
     onValuesChange?.({
       salary,
       payPeriod,
