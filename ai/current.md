@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-06-08
+Fecha: 2026-06-09
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Eliminada la banda superior de controles de `/calculadora-fiscal` que incluia ejercicio, comunidad, edad, movilidad geografica y slider de salario bruto anual, porque duplicaba entradas del worker salary dashboard y podia dejar estados desincronizados. Tambien se retiraron sus estilos `fwd-controls`, `fwd-slider`, `fwd-switch` y referencias responsive asociadas. El flujo queda centrado en `WorkerFiscalStepsCard` y las tarjetas activas del worker salary dashboard. No se incorporaron datos nuevos ni se cambiaron fuentes. Verificacion: `.\node_modules\.bin\tsc.cmd --noEmit` correcto; `node node_modules\vite\bin\vite.js build` correcto, con avisos conocidos de chunk grande y tiempos de plugins; `/calculadora-fiscal` devuelve HTTP 200 en `http://127.0.0.1:5191/calculadora-fiscal`.
 
 - Conectados valores del `worker-salary-dashboard` con el calculo central de `/calculadora-fiscal`: la tarjeta de base real comunica salario base, complementos y salario en especie; el grupo elegido en limites de cotizacion actualiza la base usada y las cotizaciones; la situacion personal y ajustes configurados alimentan hijos, ascendientes, discapacidad, reducciones y deducciones explicitas; el selector de region de IRPF sincroniza la comunidad; y el detalle de consumo puede sustituir el IVA proxy general por el IVA, impuestos especiales e IBI estimados en la tarjeta. Se anadio sincronizacion de props en las tarjetas activas para que los controles superiores no queden desfasados. No se incorporaron datos nuevos ni fuentes nuevas; FOGASA 2025 se mantiene en 0 dentro de la tarjeta cuando no esta parametrizado en el JSON actual. Verificacion: `.\node_modules\.bin\tsc.cmd --noEmit` correcto; `node node_modules\vite\bin\vite.js build` correcto, con avisos conocidos de chunk grande y tiempos de plugins; `/calculadora-fiscal` devuelve HTTP 200 en `http://127.0.0.1:5190/calculadora-fiscal`. Revision visual escritorio/movil pendiente porque no hay herramienta Browser callable en este turno y Playwright no esta instalado.
 

@@ -310,7 +310,6 @@
   min-width: 76px;
 }
 
-.fwd-controls,
 .fwd-kpi,
 .fwd-panel.dp {
   border: 1px solid var(--fwd-border);
@@ -323,38 +322,6 @@
   backdrop-filter: blur(14px);
 }
 
-.fwd-controls {
-  display: grid;
-  grid-template-columns: 120px 120px minmax(300px, 1fr) 230px;
-  gap: 16px;
-  align-items: center;
-  min-height: 88px;
-  padding: 15px 20px;
-  border-radius: 9px;
-}
-
-.fwd-controls label,
-.fwd-slider span {
-  color: #c9d8ea;
-  font-size: 13px;
-}
-
-.fwd-controls label {
-  display: grid;
-  gap: 8px;
-}
-
-.fwd-controls select {
-  width: 100%;
-  height: 38px;
-  padding: 0 12px;
-  border: 1px solid rgba(96, 140, 184, 0.35);
-  border-radius: 8px;
-  color: #fff;
-  background: rgba(2, 13, 29, 0.64);
-}
-
-.fwd-controls input,
 .fwd-data-list input,
 .fwd-data-list select {
   width: min(132px, 100%);
@@ -369,70 +336,6 @@
 .fwd-data-list input,
 .fwd-data-list select {
   justify-self: end;
-}
-
-.fwd-slider {
-  display: grid;
-  gap: 8px;
-}
-
-.fwd-slider div:first-child {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.fwd-slider em {
-  color: var(--fwd-muted);
-  font-style: normal;
-}
-
-.fwd-slider b {
-  padding: 8px 17px;
-  border: 1px solid rgba(82, 130, 180, 0.32);
-  border-radius: 8px;
-  background: rgba(3, 16, 34, 0.62);
-  font-size: 14px;
-}
-
-.fwd-slider input {
-  accent-color: var(--fwd-blue);
-}
-
-.fwd-scale {
-  display: flex;
-  justify-content: space-between;
-  color: var(--fwd-faint);
-  font-size: 11px;
-}
-
-.fwd-switch {
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-}
-
-.fwd-switch input {
-  position: absolute;
-  opacity: 0;
-}
-
-.fwd-switch > span {
-  width: 44px;
-  height: 22px;
-  border-radius: 999px;
-  background: #314058;
-  position: relative;
-}
-
-.fwd-switch > span::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #d5dce6;
 }
 
 .fwd-kpis {
@@ -1465,7 +1368,6 @@
 
   .fwd-main,
   .fwd-header,
-  .fwd-controls,
   .wfsc,
   .fwd-worker-dashboard {
     width: 100%;
@@ -1473,7 +1375,6 @@
     min-width: 0;
   }
 
-  .fwd-controls,
   .fwd-composition-body {
     grid-template-columns: 1fr;
   }

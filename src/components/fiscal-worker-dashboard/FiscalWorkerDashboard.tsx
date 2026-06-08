@@ -10,7 +10,6 @@ import autonomicCoverageJson from '../../../data/processed/fiscal/2026-06-01_aea
 import vatProxyJson from '../../../data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json'
 import { DashboardSidebar } from '../ui/DashboardSidebar'
 import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
-import { InfoButton } from '../ui/InfoButton'
 import { FISCAL_MENU } from './data'
 import { FiscalKpiRow } from './FiscalKpiRow'
 import type { FiscalKpiItem } from './FiscalKpiRow'
@@ -154,11 +153,6 @@ const fiscalParams2025 = fiscalParams2025Json as FiscalParams
 const fiscalParams2005 = fiscalParams2005Json as LegacyFiscalParams2005
 const autonomicCoverage = autonomicCoverageJson as AutonomicCoverage
 const vatProxy = vatProxyJson as VatProxy
-
-const TAX_YEAR_OPTIONS: Array<{ value: TaxYear; label: string }> = [
-  { value: '2025', label: '2025' },
-  { value: '2005', label: '2005 legacy' },
-]
 
 const FISCAL_SIDEBAR_ITEMS: DashboardSidebarItem[] = FISCAL_MENU.map((item) => ({
   id: item.toLowerCase(),
@@ -399,20 +393,20 @@ function FiscalSidebar() {
 }
 
 export function FiscalWorkerDashboard() {
-  const [taxYear, setTaxYear] = useState<TaxYear>('2025')
+  const [taxYear] = useState<TaxYear>('2025')
   const [salary, setSalary] = useState(35000)
   const [salaryComplements, setSalaryComplements] = useState(0)
   const [inKindSalary, setInKindSalary] = useState(0)
   const [region, setRegion] = useState('madrid')
-  const [age, setAge] = useState(40)
+  const [age] = useState(40)
   const [children, setChildren] = useState(0)
-  const [childrenUnder3, setChildrenUnder3] = useState(0)
+  const [childrenUnder3] = useState(0)
   const [ascendants, setAscendants] = useState(0)
   const [disability, setDisability] = useState<DisabilityMode>('none')
-  const [mobility, setMobility] = useState(false)
-  const [monthlyConsumption, setMonthlyConsumption] = useState(1700)
-  const [manualAutonomicDeduction, setManualAutonomicDeduction] = useState(0)
-  const [otherTaxes, setOtherTaxes] = useState(0)
+  const [mobility] = useState(false)
+  const [monthlyConsumption] = useState(1700)
+  const [manualAutonomicDeduction] = useState(0)
+  const [otherTaxes] = useState(0)
   const [contributionGroupId, setContributionGroupId] = useState(7)
   const [contractType, setContractType] = useState<WorkerContractType>('indefinite')
   const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
@@ -752,37 +746,6 @@ export function FiscalWorkerDashboard() {
             <button type="button" aria-label="Informacion"><Info size={18} /></button>
           </div>
         </header>
-
-        <section className="fwd-controls" aria-label="Controles de calculo">
-          <label>Ejercicio
-            <select value={taxYear} onChange={(event) => setTaxYear(event.target.value as TaxYear)}>
-              {TAX_YEAR_OPTIONS.map((item) => (
-                <option value={item.value} key={item.value}>{item.label}</option>
-              ))}
-            </select>
-          </label>
-          <label>Comunidad
-            <select value={result.effectiveRegion} disabled={taxYear === '2005'} onChange={(event) => setRegion(event.target.value)}>
-              {(taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map((item) => (
-                <option value={item} key={item}>{REGION_LABELS[item] ?? item}</option>
-              ))}
-            </select>
-          </label>
-          <label>Edad
-            <input value={age} min={16} max={90} type="number" onChange={(event) => setAge(Number(event.target.value))} />
-          </label>
-          <div className="fwd-slider">
-            <div><span>Salario bruto anual</span><b>{formatEuro(salary)}</b></div>
-            <input type="range" min="14000" max="120000" step="500" value={salary} aria-label="Salario bruto anual" onChange={(event) => setSalary(Number(event.target.value))} />
-            <div className="fwd-scale"><span>14.000</span><span>35.000</span><span>60.000</span><span>90.000</span><span>120.000</span></div>
-          </div>
-          <label className="fwd-switch">
-            Movilidad geografica
-            <InfoButton label="Movilidad geografica" size="sm"><p>Aplica el incremento de gasto deducible si cumple los requisitos legales.</p></InfoButton>
-            <input type="checkbox" checked={mobility} onChange={(event) => setMobility(event.target.checked)} />
-            <span />
-          </label>
-        </section>
 
         <WorkerFiscalStepsCard activeStepId={activeWorkerStepId} onStepChange={setActiveWorkerStepId} />
 
