@@ -23,6 +23,7 @@ type WorkerFiscalStep = {
   checklist: string[]
   helpTitle: string
   helpBody: string
+  details: string[]
   important: string
   Icon: typeof Calculator
 }
@@ -41,6 +42,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Salario bruto', 'Pagas del ano', 'Complementos anuales', 'Salario en especie anual'],
     helpTitle: 'Que significa base real?',
     helpBody: 'Es una base de trabajo para la calculadora. Intenta acercarse a todo lo que recibes de la empresa antes de restar cotizaciones o impuestos.',
+    details: [
+      'Incluye dinero y retribuciones en especie, como coche, seguro o vales si forman parte de tu remuneracion.',
+      'Sirve para ordenar el calculo: primero se mide el bruto completo y despues se aplican limites, cuotas e impuestos.',
+      'Si introduces importes mensuales, la calculadora los lleva a una cifra anual para comparar todo con la misma unidad.',
+    ],
     important: 'No es todavia la base de cotizacion ni la base del IRPF. Es el bruto completo desde el que empezamos.',
     Icon: Calculator,
   },
@@ -52,6 +58,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Grupo o categoria profesional', 'Base minima', 'Base maxima', 'Base usada'],
     helpTitle: 'Que es el grupo de cotizacion?',
     helpBody: 'Es una categoria laboral de la Seguridad Social. Agrupa puestos parecidos y fija limites de cotizacion. No siempre coincide con tu puesto comercial o tu convenio.',
+    details: [
+      'La base minima actua como suelo: si tu base queda por debajo, se usa ese minimo para cotizar.',
+      'La base maxima actua como techo: si tu salario supera el limite, las cuotas ordinarias no crecen por encima de ese tope.',
+      'La base usada es la cifra final sobre la que se calculan las cotizaciones sociales del paso siguiente.',
+    ],
     important: 'Si tu bruto supera la base maxima, no cotizas mas por la parte que queda por encima en las cuotas ordinarias.',
     Icon: Scale,
   },
@@ -63,6 +74,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Contingencias comunes', 'Desempleo', 'Formacion', 'MEI y empresa'],
     helpTitle: 'Que son las categorias de cotizacion?',
     helpBody: 'Son destinos de la cuota: jubilacion y bajas comunes, desempleo, formacion, refuerzo de pensiones o coberturas empresariales. Cada una puede tener un porcentaje distinto.',
+    details: [
+      'La cuota del trabajador aparece como descuento en la nomina y reduce el salario neto.',
+      'La aportacion de la empresa no se descuenta de tu nomina, pero forma parte del coste total de contratar.',
+      'Algunas categorias financian prestaciones comunes; otras cubren desempleo, formacion, accidentes o mecanismos especificos.',
+    ],
     important: 'Tu neto baja por la parte del trabajador. La parte de empresa aumenta el coste laboral, pero no se resta de tu nomina.',
     Icon: Shield,
   },
@@ -74,6 +90,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Minimos personales', 'Reducciones de base', 'Deducciones de cuota', 'Requisitos'],
     helpTitle: 'Reduccion o deduccion?',
     helpBody: 'Una reduccion baja la base sobre la que se calcula el impuesto. Una deduccion baja directamente el impuesto final si cumples sus condiciones.',
+    details: [
+      'Los minimos personales y familiares intentan dejar una parte de renta fuera de tributacion por necesidades basicas.',
+      'Las reducciones se aplican antes de calcular la cuota; por eso cambian la base que entra en los tramos.',
+      'Las deducciones se revisan al final y dependen mucho de requisitos, ejercicio fiscal y comunidad autonoma.',
+    ],
     important: 'Dos personas con el mismo salario pueden pagar IRPF distinto por su situacion personal y comunidad.',
     Icon: UserRound,
   },
@@ -85,6 +106,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Base liquidable', 'Tramos', 'Tipo marginal', 'Tipo efectivo'],
     helpTitle: 'Tipo marginal y tipo efectivo',
     helpBody: 'El tipo marginal afecta solo al siguiente euro que entra en ese tramo. El tipo efectivo es la media real que pagas sobre toda la base.',
+    details: [
+      'La base liquidable se reparte por escalones: cada tramo calcula impuesto solo sobre la parte que cae dentro de el.',
+      'El tramo estatal y el autonomico se suman para aproximar la cuota total de IRPF.',
+      'El tipo efectivo ayuda a leer el resultado real: cuota total dividida entre la base considerada.',
+    ],
     important: 'Subir de tramo no hace que todo tu salario tribute al porcentaje mas alto.',
     Icon: BarChart3,
   },
@@ -96,6 +122,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Salario bruto', 'Cotizaciones trabajador', 'IRPF', 'Neto anual y mensual'],
     helpTitle: 'Que entra en el neto?',
     helpBody: 'Entra lo que se descuenta en la nomina: Seguridad Social del trabajador e IRPF. No incluye lo que luego pagas al consumir.',
+    details: [
+      'El bruto es lo pactado antes de descuentos; el neto es lo que recibes despues de las retenciones de nomina.',
+      'La retencion de IRPF es un pago a cuenta: puede ajustarse en la declaracion anual segun tu situacion final.',
+      'El neto mensual depende tambien del numero de pagas: 12 y 14 pagas pueden tener el mismo neto anual repartido distinto.',
+    ],
     important: 'Por eso la empresa puede tener un coste mayor que tu bruto y tu bolsillo recibir menos que el bruto.',
     Icon: WalletCards,
   },
@@ -107,6 +138,11 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     checklist: ['Categorias de gasto', 'Tipo de IVA', 'Impuestos especiales', 'IBI u otros'],
     helpTitle: 'Que son categorias de gasto?',
     helpBody: 'Son grupos de consumo: vivienda, comida, transporte, ocio, energia, etc. Cada grupo puede tener un tipo de IVA o un impuesto distinto.',
+    details: [
+      'El IVA se paga al comprar bienes o servicios y no sale directamente de la nomina.',
+      'Los impuestos especiales afectan a consumos concretos, como carburantes, alcohol, tabaco o energia, segun el caso.',
+      'El IBI y otros tributos dependen de patrimonio, municipio o uso de servicios, por eso se muestran como contexto separado.',
+    ],
     important: 'Dos personas con el mismo neto pueden pagar impuestos indirectos muy distintos si consumen de forma diferente.',
     Icon: ShoppingCart,
   },
@@ -198,6 +234,11 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
               <Info size={20} aria-hidden="true" />
             </div>
             <p>{activeStep.helpBody}</p>
+            <ul className="wfsc-detail-list" aria-label="Detalles del paso activo">
+              {activeStep.details.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
             <div className="wfsc-important">
               <strong><Lightbulb size={18} aria-hidden="true" /> Importante</strong>
               <span>{activeStep.important}</span>
