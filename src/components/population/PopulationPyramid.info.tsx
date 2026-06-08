@@ -15,13 +15,6 @@ import type { IndicatorInfoModalContent } from '../pension-overview/IndicatorInf
 export const POPULATION_PYRAMID_INFO = {
   title: 'Informacion del indicador',
   subtitle: 'Piramide poblacional de Espana',
-  tabs: [
-    { label: 'Resumen' },
-    { label: 'Fuentes', active: true },
-    { label: 'Metodologia' },
-    { label: 'Notas' },
-    { label: 'Descargas' },
-  ],
   sections: [
     {
       title: 'Fuente de informacion',

@@ -25,9 +25,7 @@ import {
   WorkingAgeBoundaryLines,
 } from './PopulationPyramid.parts'
 import type {
-  AgeLabelMode,
   PopulationPyramidProps,
-  PyramidAgeGroup,
 } from './PopulationPyramid.types'
 
 export type {

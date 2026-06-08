@@ -4,7 +4,6 @@ import {
   PYRAMID_LAYOUT,
   PYRAMID_VIEWBOX,
   SEX_LEGEND_ITEMS,
-  type LegendItem,
 } from './PopulationPyramid.config'
 import {
   formatPyramidMillions,
