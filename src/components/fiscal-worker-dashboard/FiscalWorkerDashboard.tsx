@@ -526,7 +526,7 @@ export function FiscalWorkerDashboard() {
                 <span>6.</span>
                 <h2 id="fwd-net-step-title">Salario neto</h2>
               </div>
-              <p>Resume lo que queda del salario bruto despues de cotizaciones del trabajador e IRPF. El IVA y otros impuestos se mantienen separados en el paso 7.</p>
+              <p>Aqui ves el dinero que llega a tu bolsillo por tu trabajo: bruto menos cotizaciones del trabajador e IRPF. IVA y otros impuestos van aparte porque dependen de como gastas.</p>
             </header>
             <FiscalKpiRow className="fwd-kpis fwd-kpis--net-step" items={fiscalKpiItems} />
           </section>

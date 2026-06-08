@@ -423,10 +423,9 @@ export function WorkerSocialContributionsCard({
 
       {infoOpen && (
         <div className="wscc-popover" role="status">
-          Una parte de las cotizaciones se descuenta del salario bruto del
-          trabajador. Otra parte la paga la empresa ademas del salario bruto.
-          Por eso el coste total de contratar suele ser mayor que el bruto de
-          la nomina.
+          Las cotizaciones se calculan sobre la base usada del paso anterior.
+          La parte del trabajador se descuenta de la nomina. La parte de
+          empresa se suma al coste laboral, pero no reduce tu salario neto.
         </div>
       )}
 

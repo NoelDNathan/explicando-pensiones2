@@ -249,10 +249,10 @@ export function WorkerContributionLimitsCard({
 
       {infoOpen && (
         <div className="wclc-popover" role="status">
-          La base de cotizacion es la cantidad sobre la que se calculan las
-          cotizaciones a la Seguridad Social. Si tu base real esta por debajo
-          del minimo se usa la minima; si supera el maximo, se usa la maxima
-          para las cotizaciones ordinarias.
+          El grupo de cotizacion es una categoria laboral de la Seguridad
+          Social. Cada grupo tiene una base minima y una base maxima. La base
+          usada para cotizar sera tu base real si cae dentro del rango, la
+          minima si queda por debajo o la maxima si supera el tope.
         </div>
       )}
 
