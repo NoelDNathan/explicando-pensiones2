@@ -124,7 +124,7 @@ export function WorkerConsumptionTaxesCard({
   initialHasOwnedHome = true,
   onResultChange,
 }: WorkerConsumptionTaxesCardProps) {
-  const [budgetAnnual] = useState(initialBudgetAnnual)
+  const [budgetAnnual, setBudgetAnnual] = useState(initialBudgetAnnual)
   const [shares, setShares] = useState(() =>
     categories.map((category) => ({
       ...category,
@@ -133,6 +133,10 @@ export function WorkerConsumptionTaxesCard({
   )
   const [hasOwnedHome, setHasOwnedHome] = useState(initialHasOwnedHome)
   const [cadastralValue, setCadastralValue] = useState(initialCadastralValue)
+
+  useEffect(() => {
+    setBudgetAnnual(initialBudgetAnnual)
+  }, [initialBudgetAnnual])
 
   const propertyTaxAnnual = hasOwnedHome ? cadastralValue * 0.006 : 0
 

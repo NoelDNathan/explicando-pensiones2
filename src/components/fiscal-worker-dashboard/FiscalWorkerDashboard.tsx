@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   Bookmark,
   Info,
@@ -23,6 +23,12 @@ import {
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
   WorkerSocialContributionsCard,
+} from '../worker-salary-dashboard'
+import type {
+  ConsumptionTaxesResult,
+  PersonalReductionResult,
+  SocialContributionRates,
+  WorkerContractType,
 } from '../worker-salary-dashboard'
 import type { DisabilityMode } from './types'
 import './FiscalWorkerDashboard.css'
@@ -205,6 +211,16 @@ const REGION_LABELS: Record<string, string> = {
   comunitat_valenciana: 'Comunitat Valenciana',
 }
 
+const CONTRIBUTION_GROUP_LABELS: Record<number, string> = {
+  1: 'Ingenieros y Licenciados',
+  2: 'Ingenieros Tecnicos, Peritos y Ayudantes Titulados',
+  3: 'Jefes Administrativos y de Taller',
+  4: 'Ayudantes no Titulados',
+  5: 'Oficiales Administrativos',
+  6: 'Subalternos',
+  7: 'Auxiliares Administrativos',
+}
+
 function formatEuro(value: number) {
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
@@ -294,6 +310,68 @@ function solidarityContribution(monthlySalary: number) {
   )
 }
 
+function getContributionRatesForYear(taxYear: TaxYear): SocialContributionRates {
+  if (taxYear === '2005') {
+    const rates = fiscalParams2005.social_security.rates_percent
+
+    return {
+      worker: {
+        commonContingencies: rates.common_contingencies.employee / 100,
+        unemployment: {
+          indefinite: rates.unemployment_indefinite.employee / 100,
+          temporary: rates.unemployment_indefinite.employee / 100,
+          internship: rates.unemployment_indefinite.employee / 100,
+          training: 0,
+        },
+        professionalTraining: rates.vocational_training.employee / 100,
+        mei: 0,
+      },
+      company: {
+        commonContingencies: rates.common_contingencies.employer / 100,
+        unemployment: {
+          indefinite: rates.unemployment_indefinite.employer / 100,
+          temporary: rates.unemployment_indefinite.employer / 100,
+          internship: rates.unemployment_indefinite.employer / 100,
+          training: 0,
+        },
+        fogasa: rates.fogasa.employer / 100,
+        professionalTraining: rates.vocational_training.employer / 100,
+        mei: 0,
+        occupationalAccidents: 0,
+      },
+    }
+  }
+
+  const rates = fiscalParams2025.social_security.rates_percent
+
+  return {
+    worker: {
+      commonContingencies: rates.common_contingencies.employee / 100,
+      unemployment: {
+        indefinite: rates.unemployment_indefinite.employee / 100,
+        temporary: rates.unemployment_indefinite.employee / 100,
+        internship: rates.unemployment_indefinite.employee / 100,
+        training: 0,
+      },
+      professionalTraining: rates.vocational_training.employee / 100,
+      mei: rates.mei.employee / 100,
+    },
+    company: {
+      commonContingencies: rates.common_contingencies.employer / 100,
+      unemployment: {
+        indefinite: rates.unemployment_indefinite.employer / 100,
+        temporary: rates.unemployment_indefinite.employer / 100,
+        internship: rates.unemployment_indefinite.employer / 100,
+        training: 0,
+      },
+      fogasa: 0,
+      professionalTraining: rates.vocational_training.employer / 100,
+      mei: rates.mei.employer / 100,
+      occupationalAccidents: 0,
+    },
+  }
+}
+
 function FiscalLogo() {
   return (
     <span className="fwd-managed-logo" aria-hidden="true">
@@ -323,6 +401,8 @@ function FiscalSidebar() {
 export function FiscalWorkerDashboard() {
   const [taxYear, setTaxYear] = useState<TaxYear>('2025')
   const [salary, setSalary] = useState(35000)
+  const [salaryComplements, setSalaryComplements] = useState(0)
+  const [inKindSalary, setInKindSalary] = useState(0)
   const [region, setRegion] = useState('madrid')
   const [age, setAge] = useState(40)
   const [children, setChildren] = useState(0)
@@ -333,18 +413,51 @@ export function FiscalWorkerDashboard() {
   const [monthlyConsumption, setMonthlyConsumption] = useState(1700)
   const [manualAutonomicDeduction, setManualAutonomicDeduction] = useState(0)
   const [otherTaxes, setOtherTaxes] = useState(0)
+  const [contributionGroupId, setContributionGroupId] = useState(7)
+  const [contractType, setContractType] = useState<WorkerContractType>('indefinite')
+  const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
+  const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
   const [activeWorkerStepId, setActiveWorkerStepId] = useState(1)
+
+  const handleSalaryBaseValuesChange = useCallback((values: {
+    salary: number
+    payPeriod: 'annual' | 'monthly'
+    payCount: '12' | '14'
+    salaryComplements: number
+    inKindSalary: number
+  }) => {
+    const baseSalaryAnnual = values.payPeriod === 'annual'
+      ? values.salary
+      : values.salary * Number(values.payCount)
+    setSalary(baseSalaryAnnual)
+    setSalaryComplements(values.salaryComplements)
+    setInKindSalary(values.inKindSalary)
+  }, [])
+
+  const handlePersonalResultChange = useCallback((personalResult: PersonalReductionResult) => {
+    setPersonalAdjustments(personalResult)
+    setChildren(personalResult.children)
+    setAscendants(personalResult.ascendants)
+    setDisability(personalResult.disabilityPercent === 0 ? 'none' : personalResult.disabilityPercent === 33 ? '33_64' : '65_or_more')
+  }, [])
+
+  const handleIrpfResultChange = useCallback((irpfResult: { region: string }) => {
+    if (taxYear !== '2005') setRegion(irpfResult.region)
+  }, [taxYear])
 
   const result = useMemo(() => {
     const effectiveRegion = taxYear === '2005' ? 'madrid' : region
-    const monthlySalary = salary / 12
+    const grossSalaryAnnual = salary + salaryComplements + inKindSalary
+    const monthlySalary = grossSalaryAnnual / 12
     const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
-    const group = params.social_security.base_limits_monthly_eur.min_by_group.find((item) => item.group === 7)
+    const group = params.social_security.base_limits_monthly_eur.min_by_group.find((item) => item.group === contributionGroupId)
     const minBase = group?.min ?? 0
     const maxBase = params.social_security.base_limits_monthly_eur.max_common_contingencies
     const contributionBase = Math.min(Math.max(monthlySalary, minBase), maxBase)
     const annualContributionBase = contributionBase * 12
     const annualConsumption = monthlyConsumption * 12
+    const extraBaseReductions = personalAdjustments?.reductionsTotal ?? 0
+    const explicitDeductions = manualAutonomicDeduction + (personalAdjustments?.deductionsTotal ?? 0)
 
     if (taxYear === '2005') {
       const rates = fiscalParams2005.social_security.rates_percent
@@ -353,22 +466,26 @@ export function FiscalWorkerDashboard() {
       const employeeSocialSecurity = annualContributionBase * employeeRate / 100
       const employerSocialSecurity = annualContributionBase * employerRate / 100
       const pensionsContribution = annualContributionBase * (rates.common_contingencies.employee + rates.common_contingencies.employer) / 100
-      const netWorkIncomeBeforeReduction = Math.max(0, salary - employeeSocialSecurity)
+      const netWorkIncomeBeforeReduction = Math.max(0, grossSalaryAnnual - employeeSocialSecurity)
       const reduction = workReduction2005(netWorkIncomeBeforeReduction, age, mobility)
       const personalFamilyReduction = familyBaseReduction2005(age, children, childrenUnder3, ascendants, disability)
-      const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction - personalFamilyReduction)
+      const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction - personalFamilyReduction - extraBaseReductions)
       const stateTax = applyScale(taxableBase, fiscalParams2005.irpf.state_general_scale)
       const regionalTax = applyScale(taxableBase, fiscalParams2005.irpf.madrid_or_complementary_general_scale.scale)
       const irpfBeforeDeductions = stateTax + regionalTax
-      const irpf = Math.max(0, irpfBeforeDeductions - manualAutonomicDeduction)
-      const netSalary = salary - employeeSocialSecurity - irpf
+      const irpf = Math.max(0, irpfBeforeDeductions - explicitDeductions)
+      const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
       const vatRate = fiscalParams2005.vat.rates_percent.general
-      const vat = annualConsumption * vatRate / (100 + vatRate)
-      const totalContextTax = employeeSocialSecurity + irpf + vat + otherTaxes
+      const vat = consumptionTaxes?.vatAnnual ?? annualConsumption * vatRate / (100 + vatRate)
+      const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
+      const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
       return {
         taxYear,
         effectiveRegion,
+        grossSalaryAnnual,
+        contributionGroupId: group?.group ?? contributionGroupId,
+        contributionGroupLabel: group?.label ?? CONTRIBUTION_GROUP_LABELS[contributionGroupId] ?? `Grupo ${contributionGroupId}`,
         contributionBase,
         employeeSocialSecurity,
         employerSocialSecurity,
@@ -383,8 +500,8 @@ export function FiscalWorkerDashboard() {
         vatRate,
         annualConsumption,
         totalContextTax,
-        effectiveLaborRate: (employeeSocialSecurity + irpf) / salary * 100,
-        effectiveContextRate: totalContextTax / salary * 100,
+        effectiveLaborRate: grossSalaryAnnual > 0 ? (employeeSocialSecurity + irpf) / grossSalaryAnnual * 100 : 0,
+        effectiveContextRate: grossSalaryAnnual > 0 ? totalContextTax / grossSalaryAnnual * 100 : 0,
         socialSecurityNote: 'Sin MEI ni solidaridad',
         vatSourceLabel: 'IVA general legal 2005',
         taxSourceLabel: 'BOE 2005',
@@ -412,25 +529,29 @@ export function FiscalWorkerDashboard() {
       fiscalParams2025.irpf.work_income_deductible_expenses_eur.general_other_expenses +
       (mobility ? fiscalParams2025.irpf.work_income_deductible_expenses_eur.geographic_mobility_increment : 0) +
       disabilityExpense
-    const netWorkIncomeBeforeReduction = Math.max(0, salary - employeeSocialSecurity - deductibleExpenses)
+    const netWorkIncomeBeforeReduction = Math.max(0, grossSalaryAnnual - employeeSocialSecurity - deductibleExpenses)
     const reduction = workReduction2025(netWorkIncomeBeforeReduction)
-    const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction)
+    const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction - extraBaseReductions)
     const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, disability)
     const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, disability)
     const regionalScale = autonomicCoverage.autonomic_general_scales[effectiveRegion]?.brackets ?? autonomicCoverage.autonomic_general_scales.madrid.brackets
     const stateTax = Math.max(0, applyScale(taxableBase, fiscalParams2025.irpf.state_general_scale) - applyScale(Math.min(stateMinimum, taxableBase), fiscalParams2025.irpf.state_general_scale))
     const regionalTax = Math.max(0, applyScale(taxableBase, regionalScale) - applyScale(Math.min(regionalMinimum, taxableBase), regionalScale))
     const irpfBeforeDeductions = stateTax + regionalTax
-    const irpf = Math.max(0, irpfBeforeDeductions - manualAutonomicDeduction)
-    const netSalary = salary - employeeSocialSecurity - irpf
+    const irpf = Math.max(0, irpfBeforeDeductions - explicitDeductions)
+    const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
     const vatBracket = vatProxy.income_brackets.find((item) => item.income_label === 'Total') ?? vatProxy.income_brackets[0]
     const vatRate = vatBracket?.estimated_effective_vat_percent_on_spending ?? 9
-    const vat = annualConsumption * vatRate / 100
-    const totalContextTax = employeeSocialSecurity + irpf + vat + otherTaxes
+    const vat = consumptionTaxes?.vatAnnual ?? annualConsumption * vatRate / 100
+    const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
+    const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
     return {
       taxYear,
       effectiveRegion,
+      grossSalaryAnnual,
+      contributionGroupId: group?.group ?? contributionGroupId,
+      contributionGroupLabel: group?.label ?? CONTRIBUTION_GROUP_LABELS[contributionGroupId] ?? `Grupo ${contributionGroupId}`,
       contributionBase,
       employeeSocialSecurity,
       employerSocialSecurity,
@@ -445,8 +566,8 @@ export function FiscalWorkerDashboard() {
       vatRate,
       annualConsumption,
       totalContextTax,
-      effectiveLaborRate: (employeeSocialSecurity + irpf) / salary * 100,
-      effectiveContextRate: totalContextTax / salary * 100,
+      effectiveLaborRate: grossSalaryAnnual > 0 ? (employeeSocialSecurity + irpf) / grossSalaryAnnual * 100 : 0,
+      effectiveContextRate: grossSalaryAnnual > 0 ? totalContextTax / grossSalaryAnnual * 100 : 0,
       socialSecurityNote: 'Incluye MEI',
       vatSourceLabel: 'INE EPF 2024',
       taxSourceLabel: 'AEAT/BOE 2025',
@@ -455,7 +576,7 @@ export function FiscalWorkerDashboard() {
       deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
-  }, [age, ascendants, children, childrenUnder3, disability, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, region, salary, taxYear])
+  }, [age, ascendants, children, childrenUnder3, consumptionTaxes, contributionGroupId, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxYear])
 
   const fiscalKpiItems: FiscalKpiItem[] = [
     {
@@ -480,7 +601,7 @@ export function FiscalWorkerDashboard() {
       title: 'Cotizacion trabajador',
       left: { label: 'Base mensual', value: formatEuro(result.contributionBase) },
       right: { label: 'Cuota anual', value: formatEuro(result.employeeSocialSecurity) },
-      badge: result.socialSecurityNote,
+      badge: `Grupo ${result.contributionGroupId}: ${result.socialSecurityNote}`,
     },
     {
       tone: 'gold',
@@ -502,7 +623,10 @@ export function FiscalWorkerDashboard() {
       tone: 'violet',
       icon: 'document',
       title: 'Otros impuestos',
-      left: { label: 'Declarado', value: formatEuro(otherTaxes) },
+      left: {
+        label: consumptionTaxes ? 'Especiales + IBI' : 'Declarado',
+        value: formatEuro(consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + otherTaxes : otherTaxes),
+      },
       right: { label: 'Modulo', value: 'separado' },
       badge: 'No altera el neto laboral',
     },
@@ -511,23 +635,39 @@ export function FiscalWorkerDashboard() {
   const activeWorkerStepCard = (() => {
     switch (activeWorkerStepId) {
       case 1:
-        return <WorkerSalaryBaseCard initialSalary={salary} initialPayPeriod="annual" initialPayCount="12" />
+        return (
+          <WorkerSalaryBaseCard
+            initialSalary={salary}
+            initialPayPeriod="annual"
+            initialPayCount="12"
+            initialSalaryComplements={salaryComplements}
+            initialInKindSalary={inKindSalary}
+            onValuesChange={handleSalaryBaseValuesChange}
+          />
+        )
       case 2:
         return (
           <WorkerContributionLimitsCard
             calculationYear={Number(taxYear)}
-            userBaseAnnual={salary}
-            initialGroupId={7}
+            userBaseAnnual={result.grossSalaryAnnual}
+            initialGroupId={contributionGroupId}
             sourceLabel={result.taxSourceLabel}
+            onGroupChange={setContributionGroupId}
           />
         )
       case 3:
         return (
           <WorkerSocialContributionsCard
             year={Number(taxYear)}
-            grossSalaryAnnual={salary}
+            grossSalaryAnnual={result.grossSalaryAnnual}
             baseUsedMonthly={result.contributionBase}
-            selectedContributionGroup="Grupo 7"
+            selectedContributionGroup={`Grupo ${result.contributionGroupId} - ${result.contributionGroupLabel}`}
+            isAboveMaximumBase={result.grossSalaryAnnual / 12 > result.contributionBase}
+            excessOverMaximumMonthly={Math.max(0, result.grossSalaryAnnual / 12 - result.contributionBase)}
+            isBelowMinimumBase={result.grossSalaryAnnual / 12 < result.contributionBase}
+            contractType={contractType}
+            contributionRates={getContributionRatesForYear(taxYear)}
+            onContractTypeChange={setContractType}
           />
         )
       case 4:
@@ -536,6 +676,7 @@ export function FiscalWorkerDashboard() {
             initialChildren={children}
             initialAscendants={ascendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
+            onResultChange={handlePersonalResultChange}
           />
         )
       case 5:
@@ -543,6 +684,11 @@ export function FiscalWorkerDashboard() {
           <WorkerIrpfTranchesCard
             initialRegion={result.effectiveRegion}
             initialTaxableBase={result.taxableBase}
+            regions={(taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map((item) => ({
+              value: item,
+              label: REGION_LABELS[item] ?? item,
+            }))}
+            onResultChange={handleIrpfResultChange}
           />
         )
       case 6:
@@ -559,7 +705,12 @@ export function FiscalWorkerDashboard() {
           </section>
         )
       case 7:
-        return <WorkerConsumptionTaxesCard initialBudgetAnnual={result.annualConsumption} />
+        return (
+          <WorkerConsumptionTaxesCard
+            initialBudgetAnnual={result.annualConsumption}
+            onResultChange={setConsumptionTaxes}
+          />
+        )
       case 8:
         return (
           <section className="fwd-faq-step" aria-labelledby="fwd-faq-step-title">

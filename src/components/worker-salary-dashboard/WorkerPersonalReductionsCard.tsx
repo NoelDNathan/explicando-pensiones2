@@ -186,6 +186,22 @@ export function WorkerPersonalReductionsCard({
   const [regionalDeductions, setRegionalDeductions] = useState('configure')
   const [infoOpen, setInfoOpen] = useState(false)
 
+  useEffect(() => {
+    setChildren(String(initialChildren))
+  }, [initialChildren])
+
+  useEffect(() => {
+    setDisabilityPercent(String(initialDisabilityPercent))
+  }, [initialDisabilityPercent])
+
+  useEffect(() => {
+    setMaritalStatus(initialMaritalStatus)
+  }, [initialMaritalStatus])
+
+  useEffect(() => {
+    setAscendants(String(initialAscendants))
+  }, [initialAscendants])
+
   const result = useMemo<PersonalReductionResult>(() => {
     const pensionPlanAmount = Number(pensionPlans)
     const compensatoryAmount = Number(compensatoryPension)

@@ -1,6 +1,6 @@
 import { ChevronDown, Euro, Info } from 'lucide-react'
 import type { CSSProperties } from 'react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './WorkerSalaryBaseCard.css'
 
 type PayPeriod = 'annual' | 'monthly'
@@ -12,6 +12,14 @@ type WorkerSalaryBaseCardProps = {
   initialPayCount?: PayCount
   initialSalaryComplements?: number
   initialInKindSalary?: number
+  onValuesChange?: (values: {
+    salary: number
+    payPeriod: PayPeriod
+    payCount: PayCount
+    salaryComplements: number
+    inKindSalary: number
+    realBaseAnnual: number
+  }) => void
 }
 
 const euroFormatter = new Intl.NumberFormat('es-ES', {
@@ -53,6 +61,7 @@ export function WorkerSalaryBaseCard({
   initialPayCount = '14',
   initialSalaryComplements = 2000,
   initialInKindSalary = 500,
+  onValuesChange,
 }: WorkerSalaryBaseCardProps) {
   const [salary, setSalary] = useState(initialSalary)
   const [payPeriod, setPayPeriod] = useState<PayPeriod>(initialPayPeriod)
@@ -66,6 +75,37 @@ export function WorkerSalaryBaseCard({
     const annualSalary = payPeriod === 'annual' ? salary : salary * Number(payCount)
     return annualSalary + salaryComplements + inKindSalary
   }, [inKindSalary, payCount, payPeriod, salary, salaryComplements])
+
+  useEffect(() => {
+    setSalary(initialSalary)
+  }, [initialSalary])
+
+  useEffect(() => {
+    setPayPeriod(initialPayPeriod)
+  }, [initialPayPeriod])
+
+  useEffect(() => {
+    setPayCount(initialPayCount)
+  }, [initialPayCount])
+
+  useEffect(() => {
+    setSalaryComplements(initialSalaryComplements)
+  }, [initialSalaryComplements])
+
+  useEffect(() => {
+    setInKindSalary(initialInKindSalary)
+  }, [initialInKindSalary])
+
+  useEffect(() => {
+    onValuesChange?.({
+      salary,
+      payPeriod,
+      payCount,
+      salaryComplements,
+      inKindSalary,
+      realBaseAnnual: realBase,
+    })
+  }, [inKindSalary, onValuesChange, payCount, payPeriod, realBase, salary, salaryComplements])
 
   const handlePayPeriodChange = (nextPayPeriod: PayPeriod) => {
     if (nextPayPeriod === payPeriod) return

@@ -44,6 +44,7 @@ type WorkerContributionLimitsCardProps = {
   initialViewMode?: ContributionViewMode
   dataAvailable?: boolean
   sourceLabel?: string
+  onGroupChange?: (groupId: number) => void
   onResultChange?: (result: ContributionLimitResult | null) => void
 }
 
@@ -191,12 +192,17 @@ export function WorkerContributionLimitsCard({
   initialViewMode = 'monthly',
   dataAvailable = true,
   sourceLabel = 'Fuente: BOE, Orden PJC/297/2026, articulo 3. Grupos 1-7 con bases mensuales.',
+  onGroupChange,
   onResultChange,
 }: WorkerContributionLimitsCardProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<number | undefined>(initialGroupId)
   const [viewMode, setViewMode] = useState<ContributionViewMode>(initialViewMode)
   const [simulationMode, setSimulationMode] = useState<SimulationMode>('case')
   const [infoOpen, setInfoOpen] = useState(false)
+
+  useEffect(() => {
+    setSelectedGroupId(initialGroupId)
+  }, [initialGroupId])
 
   const selectedGroup = useMemo(
     () => groups.find((group) => group.id === selectedGroupId),
@@ -263,7 +269,9 @@ export function WorkerContributionLimitsCard({
             <select
               value={selectedGroupId ?? ''}
               onChange={(event) => {
-                setSelectedGroupId(Number(event.target.value))
+                const nextGroupId = Number(event.target.value)
+                setSelectedGroupId(nextGroupId)
+                onGroupChange?.(nextGroupId)
                 setSimulationMode('case')
               }}
             >

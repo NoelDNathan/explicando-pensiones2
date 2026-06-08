@@ -87,6 +87,10 @@ export function WorkerIrpfTranchesCard({
 }: WorkerIrpfTranchesCardProps) {
   const [region, setRegion] = useState(initialRegion)
 
+  useEffect(() => {
+    setRegion(initialRegion)
+  }, [initialRegion])
+
   const result = useMemo<WorkerIrpfTranchesResult>(() => {
     const lines = brackets.map((bracket) => {
       const upper = bracket.to ?? Number.POSITIVE_INFINITY

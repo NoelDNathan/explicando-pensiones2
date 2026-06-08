@@ -85,6 +85,7 @@ type WorkerSocialContributionsCardProps = {
   isBelowMinimumBase?: boolean
   dataAvailable?: boolean
   contributionRates?: SocialContributionRates
+  onContractTypeChange?: (contractType: WorkerContractType) => void
   onResultChange?: (result: SocialContributionResult | null) => void
 }
 
@@ -271,12 +272,17 @@ export function WorkerSocialContributionsCard({
   isBelowMinimumBase = false,
   dataAvailable = true,
   contributionRates = DEMO_SOCIAL_CONTRIBUTION_RATES,
+  onContractTypeChange,
   onResultChange,
 }: WorkerSocialContributionsCardProps) {
   const [viewMode, setViewMode] = useState<SocialContributionViewMode>('annual')
   const [displayMode, setDisplayMode] = useState<SocialContributionDisplayMode>('both')
   const [selectedContractType, setSelectedContractType] = useState<WorkerContractType>(contractType)
   const [infoOpen, setInfoOpen] = useState(false)
+
+  useEffect(() => {
+    setSelectedContractType(contractType)
+  }, [contractType])
 
   const result = useMemo(() => {
     if (!dataAvailable || baseUsedAnnual <= 0 || grossSalaryAnnual <= 0) return null
@@ -441,7 +447,11 @@ export function WorkerSocialContributionsCard({
           <span className="wscc-select-shell">
             <select
               value={selectedContractType}
-              onChange={(event) => setSelectedContractType(event.target.value as WorkerContractType)}
+              onChange={(event) => {
+                const nextContractType = event.target.value as WorkerContractType
+                setSelectedContractType(nextContractType)
+                onContractTypeChange?.(nextContractType)
+              }}
             >
               {Object.entries(contractLabels).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
