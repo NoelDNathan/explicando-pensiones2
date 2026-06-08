@@ -23,7 +23,7 @@
 - licencia o condiciones de uso: reutilizacion segun condiciones del portal de la Seguridad Social y del INE
 - descripcion breve: serie de personas pensionistas, no numero de pensiones, observada desde el libro mensual; extension 2027-2070 como proxy demografica calibrada al ultimo dato oficial disponible.
 - uso previsto en la web: explicar la diferencia entre pensionistas-personas y pensiones, y permitir una vista demografica de largo plazo con `estado_dato` visible.
-- nota metodologica: no se rellenan 1975-2005 con numero de pensiones porque una persona puede cobrar varias pensiones; eSTADISS requiere consulta/exportacion parametrizada y captcha, por lo que queda pendiente incorporar una descarga manual si publica personas para ese tramo.
+- nota metodologica: falta fuente oficial procesada para personas pensionistas 1975-2005. No se rellenan esos anos con numero de pensiones porque una persona puede cobrar varias pensiones; eSTADISS requiere consulta/exportacion parametrizada y captcha, por lo que queda pendiente incorporar una descarga manual si publica personas para ese tramo.
 
 ## Seguridad Social - Muestra Continua de Vidas Laborales (MCVL)
 
@@ -647,7 +647,7 @@
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`
   - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`
-- nota metodologica: la serie anual observada local de numero de pensiones procede de INEbase/MITES para cortes de diciembre 1980-1985, de INEbase/Anuarios INE y MITES para medias anuales 1986-2005 y de la hoja `Pnes y ptas` para 2006-2026. El tramo 2027-2070 se modeliza con pensionistas AIReF y ratio pensiones/pensionista de abril de 2026; 1975-1979 queda pendiente de extraccion historica compatible.
+- nota metodologica: la serie anual observada local de numero de pensiones procede de INEbase/MITES para cortes de diciembre 1980-1985, de INEbase/Anuarios INE y MITES para medias anuales 1986-2005 y de la hoja `Pnes y ptas` para 2006-2026. El tramo 2027-2070 se modeliza con pensionistas AIReF y ratio pensiones/pensionista de abril de 2026; 1975-1979 queda pendiente de extraccion historica compatible. Hay PDFs candidatos, especialmente 1976-1979 en INEbase Historia, pero falta extraccion, transcripcion controlada y validacion.
 
 ## Imserso - Evolucion de nominas de PNC y PSPD
 
@@ -730,7 +730,7 @@
 - archivos brutos: `data/raw/inebase-historia/pensiones-contributivas/`
 - archivo procesado derivado: `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-observado-modelizado_1975-2070.csv`
 - descripcion breve: tablas del Anuario Estadistico de Espana que reproducen series de pensiones contributivas por regimen/clase y pension media. El tramo 1986-2000 usa medias anuales en miles; 1980 usa una tabla antigua de pensiones en vigor a 31 de diciembre.
-- nota metodologica: 1980 se incorpora como suma controlada de los regimenes con total impreso en el PDF oficial. 1986-2000 se incorpora porque las tablas usadas publican medias anuales en miles, compatibles con MITES 2001-2005. Los PDFs localizados para 1976-1979 son cortes a 31 de diciembre con estructura antigua por regimen/ramas y quedan como candidatos pendientes antes de mezclarlos con la serie editorial.
+- nota metodologica: 1980 se incorpora como suma controlada de los regimenes con total impreso en el PDF oficial. 1986-2000 se incorpora porque las tablas usadas publican medias anuales en miles, compatibles con MITES 2001-2005. Los PDFs localizados para 1976-1979 son cortes a 31 de diciembre con estructura antigua por regimen/ramas y quedan como candidatos pendientes antes de mezclarlos con la serie editorial. La primera inspeccion del PDF 1976-1979 queda documentada en `data/methodology/pensiones-contributivas-inebase-1976-1979.md`: 1979 ofrece una suma candidata de 3.947.153 pensiones, pero 1976-1978 mantienen celdas de total agrario no cerradas y requieren doble transcripcion.
 
 ## MITES - BEL, prestaciones no contributivas
 
@@ -829,7 +829,7 @@
 - licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Administracion Presupuestaria
 - descripcion breve: serie anual de prestaciones sociales del subsector Seguridad Social, con PIB corriente para calcular porcentaje del PIB.
 - uso previsto en la web: ofrecer una serie larga desde 1975 como contexto de gasto social de la Seguridad Social.
-- nota metodologica: no debe presentarse como serie pura de gasto en pensiones; BDMACRO indica que las prestaciones sociales incluyen pensiones, desempleo y otras prestaciones sociales.
+- nota metodologica: no debe presentarse como serie pura de gasto en pensiones; BDMACRO indica que las prestaciones sociales incluyen pensiones, desempleo y otras prestaciones sociales. Antes de 1995 falta una fuente tabular estricta que separe pensiones de otras prestaciones, asi que esta serie solo puede usarse como contexto macro separado.
 
 ## Ministerio de Sanidad - EGSP e IGTGS para desglose sanitario por categoria y edad
 
@@ -992,8 +992,29 @@
   - `data/processed/seguridad-social/2026-06-01_seguridad-social_fipros_validacion-solape-serie-moderna_1995-2007.csv`
 - descripcion breve: la tabla 2.3 publica la evolucion de la estructura de los recursos del Sistema de Seguridad Social: cotizaciones, transferencias corrientes, otros ingresos y total neto consolidado, en millones de euros y porcentaje sobre total.
 - fuente original indicada en el PDF: elaboracion propia a partir del Anuario de Estadisticas Laborales y del Observatorio Social de Espana, Informe 2007.
-- nota metodologica: es la fuente candidata mas prometedora localizada para 1990-1994, pero es secundaria. La validacion contra la serie moderna 1995-2007 muestra coincidencia por redondeo para transferencias corrientes; cotizaciones difieren menos de 0,5% en 1997-2007; total neto/otros ingresos no coinciden plenamente y presentan diferencias relevantes en 2002, 2006 y 2007. No usar editorialmente antes de localizar o documentar la fuente primaria original.
-- decision de uso: para 1990-1994, usar solo como candidato `cotizaciones_sociales` y `transferencias_corrientes`; no usar por ahora `total_neto_consolidado`, `otros_ingresos` ni porcentajes sobre total. Nota completa en `data/methodology/validacion-ingresos-seguridad-social-1990-1994.md`.
+- nota metodologica: FIPROS sigue siendo la fuente candidata mas amplia localizada para 1991-1994, pero es secundaria. La validacion contra la serie moderna 1995-2007 muestra coincidencia por redondeo para transferencias corrientes; cotizaciones difieren menos de 0,5% en 1997-2007; total neto/otros ingresos no coinciden plenamente y presentan diferencias relevantes en 2002, 2006 y 2007.
+- decision de uso revisada el 2026-06-07: el Observatorio Social de Espana 2007 confirma 1990, pero 1991-1994 siguen solo como candidatos FIPROS pendientes de fuente primaria para `cotizaciones_sociales` y `transferencias_corrientes`. La discrepancia de 2002 se resuelve bloqueando los totales FIPROS: el total publicado repite 2001, no cuadra con componentes y no debe usarse para serie historica ni porcentajes. No crear total corregido propio sin fuente primaria limpia. Nota completa en `data/methodology/validacion-ingresos-seguridad-social-1990-1994.md`.
+
+## Seguridad Social / Observatorio Social de Espana - Recursos de Seguridad Social 1980-2007
+
+- nombre de la fuente: `Informe 2007. Observatorio Social de Espana`
+- institucion: Seguridad Social / Observatorio Social de Espana
+- URL: https://www.seg-social.es/descarga/51945
+- fecha de descarga: 2026-06-07
+- periodo revisado: 1980, 1990, 1995 y 2000-2007
+- ambito geografico: Espana, sistema de Seguridad Social
+- formato descargado: PDF
+- archivo bruto:
+  - `data/raw/seguridad-social/ingresos-historicos-candidatos/2026-06-07_seguridad-social_observatorio-social-espana-informe-2007_recursos-ss.pdf`
+- archivos procesados:
+  - `data/processed/seguridad-social/2026-06-07_seguridad-social_observatorio-social-informe-2007_recursos-ss_1980-2007.csv`
+  - `data/processed/seguridad-social/2026-06-07_seguridad-social_observatorio-social-informe-2007_validacion-serie-moderna_1995-2007.csv`
+- script:
+  - `scripts/process-seguridad-social-observatorio-social-informe-2007-recursos.ps1`
+- descripcion breve: la tabla 4.6 publica cotizaciones sociales, transferencias corrientes, otros ingresos y total de recursos de Seguridad Social en millones de euros; la tabla 4.7 publica la estructura porcentual.
+- fuente indicada en la tabla: Seguridad Social.
+- nota metodologica: confirma los importes de 1990 y resuelve el descuadre de 2002 frente a FIPROS, porque publica `total = 80.371,10`, igual a la suma de componentes, y porcentajes coherentes con ese total. No cubre 1991-1994, por lo que no limpia todo el tramo historico pendiente. Desde 2002 la fuente advierte ruptura por salida del presupuesto de asistencia sanitaria y servicios sociales transferidos a las CCAA; 2006 y 2007 son presupuesto inicial.
+- decision de uso: usar como contraste institucional para 1990 y 2002; no usar como serie continua 1990-2007 ni como sustituto de la serie moderna liquidada desde 1995.
 
 ## Seguridad Social - altas de jubilacion por anos cotizados
 

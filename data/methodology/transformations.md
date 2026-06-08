@@ -66,7 +66,7 @@
   - `data/processed/pensiones/2026-05-25_seguridad-social_pensiones-contributivas-regimen-clase_2026-04.csv`.
   - `data/processed/pensiones/2026-05-25_seguridad-social_altas-bajas-pensiones-contributivas_2026-03.csv`.
 - Limitaciones:
-  - contributivas 1975-1979 queda pendiente de extraccion compatible: las rutas MITES comprobadas con el patron de Anuarios devuelven pagina 404 moderna; INEbase aporta PDFs candidatos para 1976-1979, pero son cortes a 31 de diciembre con estructura antigua y requieren validacion separada;
+  - contributivas 1975-1979 queda pendiente de extraccion compatible: las rutas MITES comprobadas con el patron de Anuarios devuelven pagina 404 moderna; INEbase aporta PDFs candidatos historicos, especialmente para 1976-1979, pero son cortes a 31 de diciembre con estructura antigua y requieren extraccion, transcripcion controlada y validacion separada antes de uso editorial. La primera inspeccion del PDF 1976-1979 queda documentada en `data/methodology/pensiones-contributivas-inebase-1976-1979.md`: 1979 tiene una suma candidata de 3.947.153 pensiones, pero 1976-1978 conservan celdas de total agrario no cerradas y no se incorporan al CSV maestro;
   - 1980-1985 son cortes de diciembre y no medias anuales; la columna `mes_referencia` conserva esa ruptura frente a las medias anuales 1986-2005;
   - PNC 1991-2000 procede de tablas escaneadas transcritas visualmente desde el PDF oficial renderizado; no hay capa de texto embebida en ese PDF;
   - las modelizaciones no son proyecciones oficiales y solo sirven como proxy demografica inicial.
@@ -111,7 +111,7 @@
 - Cobertura principal:
   - PIB, gasto publico total, intereses y saldo publico: observado 1975-2024; estimado 2025-2070 mediante supuestos macro Ageing Report y ratios/anclas AIReF interpoladas.
   - deuda publica total: observado 1975-2025; 2026 y anclas 2030/2040/2050/2060/2070 como escenario AIReF; anos intermedios no estimados.
-  - gasto en pensiones: 1995-2024 como aproximacion COFOG `10.2 Vejez + 10.3 Supervivientes`; 2025-2070 como escenario AIReF; 1975-1994 no estimado.
+  - gasto en pensiones: 1995-2024 como aproximacion COFOG `10.2 Vejez + 10.3 Supervivientes`; 2025-2070 como escenario AIReF; 1975-1994 no estimado porque falta una fuente tabular estricta que separe pensiones de otras prestaciones.
   - gasto en sanidad: 1995-2024 observado COFOG `07 Salud`; 2025-2070 proyectado Ageing Report; 1975-1994 no estimado.
 - Notas de definicion:
   - `intereses_deuda` usa la columna BDMACRO `Intereses + Otras rentas de la propiedad`, no D.41 puro.
@@ -451,7 +451,7 @@
   - exportacion a CSV con punto decimal.
 - Archivo generado: `data/processed/igae/2026-05-18_igae-bdmacro_prestaciones-sociales-seguridad-social_1975-2025.csv`.
 - Periodo resultante: 1975-2025.
-- Nota de definicion: esta serie no es una serie pura de gasto en pensiones. BDMACRO define prestaciones sociales como prestaciones sociales en especie adquiridas en el mercado mas prestaciones sociales distintas de transferencias en especie; incluye pensiones, desempleo y otras prestaciones sociales.
+- Nota de definicion: esta serie no es una serie pura de gasto en pensiones. BDMACRO define prestaciones sociales como prestaciones sociales en especie adquiridas en el mercado mas prestaciones sociales distintas de transferencias en especie; incluye pensiones, desempleo y otras prestaciones sociales. No usarla para cubrir una serie estricta de gasto en pensiones antes de 1995 salvo que se localice y documente una conciliacion tabular que separe esas prestaciones.
 
 ## AIReF - previsiones de pensiones 2020-2070
 
@@ -675,8 +675,30 @@
   - `cotizaciones_sociales`: coincide por redondeo en 1995-1996 y muestra diferencias menores en 1997-2007.
   - `total_neto_consolidado`: muestra diferencias menores en la mayoria del solape, pero diferencias relevantes en 2002, 2006 y 2007.
   - `otros_ingresos`: muestra una diferencia relevante en 2007.
-- Nota metodologica: es el candidato mas util localizado hasta ahora para extender ingresos de Seguridad Social a 1990-1994, especialmente en cotizaciones y transferencias. No debe presentarse como continuidad editorial final de la serie 1995-2025P hasta localizar o documentar mejor la fuente primaria original y resolver las discrepancias de `total_neto_consolidado`/`otros_ingresos`. El ano 2002 queda especialmente marcado: el total publicado en la tabla candidata no cuadra con la suma de componentes ni con la serie moderna.
-- Decision provisional documentada: `data/methodology/validacion-ingresos-seguridad-social-1990-1994.md`. Para 1990-1994, `cotizaciones_sociales` y `transferencias_corrientes` pueden tratarse como candidatos pendientes de fuente primaria; `total_neto_consolidado`, `otros_ingresos` y porcentajes sobre total quedan bloqueados para uso editorial.
+- Nota metodologica: FIPROS sigue siendo el candidato mas util localizado hasta ahora para extender ingresos de Seguridad Social a 1991-1994, especialmente en cotizaciones y transferencias. No debe presentarse como continuidad editorial final de la serie 1995-2025P hasta localizar o documentar mejor la fuente primaria original. El ano 2002 queda resuelto operativamente como bloqueo de los totales FIPROS: el total publicado repite 2001, no cuadra con la suma de componentes ni con la serie moderna, y no se crea un total corregido propio.
+- Decision documentada: `data/methodology/validacion-ingresos-seguridad-social-1990-1994.md`. Para 1991-1994, solo `cotizaciones_sociales` y `transferencias_corrientes` pueden tratarse como candidatos FIPROS pendientes de fuente primaria; `total_neto_consolidado`, `otros_ingresos` y porcentajes sobre total quedan bloqueados para uso editorial. El ano 1990 queda contrastado por Observatorio Social de Espana 2007.
+
+## Seguridad Social / Observatorio Social de Espana - recursos del sistema 1980-2007
+
+- Fecha de transformacion: 2026-06-07.
+- Script reproducible: `scripts/process-seguridad-social-observatorio-social-informe-2007-recursos.ps1`.
+- Fuente bruta:
+  - Seguridad Social / Observatorio Social de Espana, `Informe 2007`, PDF servido por Seguridad Social en `https://www.seg-social.es/descarga/51945`.
+- Transformacion aplicada:
+  - descarga y conservacion del PDF oficial en `data/raw/seguridad-social/ingresos-historicos-candidatos/`;
+  - transcripcion manual de la tabla 4.6, `Evolucion de los recursos Seguridad Social (millones de euros)`;
+  - transcripcion manual de la tabla 4.7, `Evolucion de la estructura de recursos de la Seguridad Social (%)`;
+  - normalizacion a CSV largo con cuatro variables: `cotizaciones_sociales`, `transferencias_corrientes`, `otros_ingresos` y `total_recursos`;
+  - calculo de `suma_componentes_millones_eur` y `diferencia_suma_menos_total_millones_eur`;
+  - validacion contra la serie moderna liquidada 1995-2025P cuando hay anos coincidentes.
+- Archivos generados:
+  - `data/processed/seguridad-social/2026-06-07_seguridad-social_observatorio-social-informe-2007_recursos-ss_1980-2007.csv`.
+  - `data/processed/seguridad-social/2026-06-07_seguridad-social_observatorio-social-informe-2007_validacion-serie-moderna_1995-2007.csv`.
+- Resultado de validacion:
+  - confirma los importes de 1990 publicados por FIPROS para componentes y total, aunque el Observatorio solo publica anos seleccionados;
+  - en 2002 publica `total_recursos = 80.371,10`, igual a la suma de componentes, y porcentajes coherentes con ese total;
+  - en 2006 y 2007 la comparacion contra la serie moderna liquidada muestra diferencias relevantes porque el Observatorio publica presupuesto inicial.
+- Nota metodologica: desde 2002 la fuente indica ruptura porque el presupuesto ya no contiene la asistencia sanitaria ni los servicios sociales transferidos a las CCAA. El Observatorio no cubre 1991-1994, por lo que no resuelve el hueco historico completo; sirve como contraste institucional de 1990 y como evidencia para bloquear el total FIPROS erroneo de 2002.
 
 ## Seguridad Social / BOE / Congreso - edad legal y efectiva de jubilacion 1975-2026
 

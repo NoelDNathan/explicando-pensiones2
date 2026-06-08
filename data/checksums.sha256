@@ -1,4 +1,4 @@
-﻿d5ede0cc0e159fad8cd941a3db0e7674de486b00b377040ead78df0ac4f87dd2  data\processed\airef\2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv
+d5ede0cc0e159fad8cd941a3db0e7674de486b00b377040ead78df0ac4f87dd2  data\processed\airef\2026-05-18_airef_prevision-financiacion-sistema-pensiones-pct-pib_2020-2070.csv
 d4bc0e6d4fc3b8cedfffab6e2c33d710e5d609ef42a7c1f8b2a534d6ab1354fd  data\processed\airef\2026-05-18_airef_prevision-gasto-pensiones-pct-pib_2022-2070.csv
 27639a2811b58398c9c7b60997ae6eeef2f8a18f8d2b3ce48082bfde6b434d3d  data\processed\airef\2026-05-18_airef_prevision-pensionistas-millones_2022-2070.csv
 dd671133fc52e597fa1a9ae280ca9fda0fbd59fb9d994b9060991eb37106607d  data\processed\airef\2026-05-25_airef_ine_gasto-sanitario-vital-esperado-bandas-dashboard_2022.csv
@@ -297,3 +297,6 @@ f9fab0fe84b13e80ff3c1074c49069d8ac1568300566f8f805a07a5be022fa0c  data\raw\segur
 768c38803a4e1df1b5a5d968f3bacc34d2900f909555084bcd39c78592f5a8c1  data\raw\seguridad-social\serie-verde\2026-05-18_seguridad-social_serie-verde-2012_tomo-i-agregado-sistema.pdf
 976dd31d207ca2842f71ccea39d1e6f7b84a9337bb38419d526aef1cb8e7cc9d  data\raw\seguridad-social\serie-verde\2026-05-28_seguridad-social_serie-verde-tomo-i-agregado-sistema_2012.pdf
 7fbbf8f3357bd012f422909466840c89e7f2f6abbd2896fdd8b44843e04e0eb7  data\raw\seguridad-social\serie-verde\2026-05-28_seguridad-social_serie-verde-tomo-i-agregado-sistema_2022.pdf
+27974f143a229a6f2f448ca33f734ff46a00e8b9e6f176c8914056ee69d9f880  data\raw\seguridad-social\ingresos-historicos-candidatos\2026-06-07_seguridad-social_observatorio-social-espana-informe-2007_recursos-ss.pdf
+3217bffdf1bd26f97ed54c1ccc2a46a8fd1acd85c0fe9f9f70a3ae483b763889  data\processed\seguridad-social\2026-06-07_seguridad-social_observatorio-social-informe-2007_recursos-ss_1980-2007.csv
+0a3905d8fa3975fdc4ce386b8ba26e20ecaa69c1eeb9b7a6536eb71d81bca1fc  data\processed\seguridad-social\2026-06-07_seguridad-social_observatorio-social-informe-2007_validacion-serie-moderna_1995-2007.csv
