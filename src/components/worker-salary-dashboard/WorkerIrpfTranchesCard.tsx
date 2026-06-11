@@ -148,18 +148,20 @@ export function WorkerIrpfTranchesCard({
       <p className="witc-intro">Solo se tributa por la parte de renta que cae en cada tramo.</p>
 
       <div className="witc-brackets" aria-label="Tramos de IRPF">
-        {result.lines.map((line) => (
-          <article
-            key={`${line.from}-${line.to ?? 'more'}`}
-            className={`witc-bracket witc-bracket--${line.tone}${line.taxableAmount > 0 ? ' is-active' : ''}`}
-          >
-            {line.taxableAmount > 0 && line.to && result.taxableBase < line.to ? (
-              <span className="witc-bracket__marker" aria-hidden="true" />
-            ) : null}
-            <strong>{Math.round(line.rate * 100)}%</strong>
-            <span>{formatRange(line)}</span>
-          </article>
-        ))}
+        {result.lines.map((line) => {
+          const isActive = line.taxableAmount > 0
+
+          return (
+            <article
+              key={`${line.from}-${line.to ?? 'more'}`}
+              className={`witc-bracket witc-bracket--${line.tone}${isActive ? ' is-active' : ' is-inactive'}`}
+              aria-label={`${formatRange(line)}, ${Math.round(line.rate * 100)}%, ${isActive ? 'alcanzado' : 'no alcanzado'}`}
+            >
+              <strong>{Math.round(line.rate * 100)}%</strong>
+              <span>{formatRange(line)}</span>
+            </article>
+          )
+        })}
       </div>
 
       <div className="witc-lower">

@@ -145,6 +145,23 @@
   box-shadow: 0 0 18px color-mix(in srgb, var(--tone) 34%, transparent);
 }
 
+.witc-bracket.is-inactive {
+  border-color: rgba(105, 117, 141, 0.32);
+  background:
+    radial-gradient(circle at 28% -18%, rgba(133, 146, 168, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(32, 43, 63, 0.78), rgba(13, 21, 36, 0.82));
+  opacity: 0.54;
+  filter: grayscale(0.72) saturate(0.46);
+}
+
+.witc-bracket.is-inactive strong {
+  color: #8f9bb3;
+}
+
+.witc-bracket.is-inactive span {
+  color: #7f8ca4;
+}
+
 .witc-bracket--green { --tone: var(--witc-green); }
 .witc-bracket--purple { --tone: var(--witc-purple); }
 .witc-bracket--blue { --tone: var(--witc-blue); }
@@ -166,17 +183,6 @@
   font-weight: 860;
   text-align: center;
   overflow-wrap: anywhere;
-}
-
-.witc-bracket__marker {
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  width: 0;
-  height: 0;
-  transform: translateX(-50%);
-  border-inline: 7px solid transparent;
-  border-top: 9px solid #ff970f;
 }
 
 .witc-lower {
