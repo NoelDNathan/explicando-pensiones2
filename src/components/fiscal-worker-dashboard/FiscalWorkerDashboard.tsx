@@ -242,7 +242,16 @@ function getMinimums(region: string): Minimums {
   return { ...fiscalParams2025.irpf.personal_and_family_minimum_state_eur, ...override }
 }
 
-function familyMinimum(minimums: Minimums, age: number, children: number, childrenUnder3: number, ascendants: number, disability: DisabilityMode) {
+function familyMinimum(
+  minimums: Minimums,
+  age: number,
+  children: number,
+  childrenUnder3: number,
+  ascendants: number,
+  ascendantsOver75: number,
+  disability: DisabilityMode,
+  dependentDisabilityMinimum: number,
+) {
   let total = minimums.taxpayer_general
   if (age >= 65) total += minimums.taxpayer_over_65_increment ?? 0
   if (age >= 75) total += minimums.taxpayer_over_75_additional_increment ?? 0
@@ -252,8 +261,10 @@ function familyMinimum(minimums: Minimums, age: number, children: number, childr
   }
   total += Math.min(childrenUnder3, children) * (minimums.descendant_under_3_increment ?? 0)
   total += ascendants * (minimums.ascendant_over_65_or_disabled ?? 0)
+  total += ascendantsOver75 * (minimums.ascendant_over_75_additional_increment ?? 0)
   if (disability === '33_64') total += minimums.disability_33_to_64 ?? 0
   if (disability === '65_or_more') total += minimums.disability_65_or_more ?? 0
+  total += dependentDisabilityMinimum
   return total
 }
 
@@ -358,7 +369,7 @@ function getContributionRatesForYear(taxYear: TaxYear): SocialContributionRates 
         internship: rates.unemployment_indefinite.employer / 100,
         training: 0,
       },
-      fogasa: 0,
+      fogasa: rates.fogasa.employer / 100,
       professionalTraining: rates.vocational_training.employer / 100,
       mei: rates.mei.employer / 100,
       occupationalAccidents: 0,
@@ -400,9 +411,11 @@ export function FiscalWorkerDashboard() {
   const [region, setRegion] = useState('madrid')
   const [age] = useState(40)
   const [children, setChildren] = useState(0)
-  const [childrenUnder3] = useState(0)
+  const [childrenUnder3, setChildrenUnder3] = useState(0)
   const [ascendants, setAscendants] = useState(0)
+  const [ascendantsOver75, setAscendantsOver75] = useState(0)
   const [disability, setDisability] = useState<DisabilityMode>('none')
+  const [dependentDisabilityMinimum, setDependentDisabilityMinimum] = useState(0)
   const [mobility] = useState(false)
   const [monthlyConsumption] = useState(1700)
   const [manualAutonomicDeduction] = useState(0)
@@ -431,7 +444,10 @@ export function FiscalWorkerDashboard() {
   const handlePersonalResultChange = useCallback((personalResult: PersonalReductionResult) => {
     setPersonalAdjustments(personalResult)
     setChildren(personalResult.children)
+    setChildrenUnder3(personalResult.childrenUnder3)
     setAscendants(personalResult.ascendants)
+    setAscendantsOver75(personalResult.ascendantsOver75)
+    setDependentDisabilityMinimum(personalResult.dependentDisabilityMinimum)
     setDisability(personalResult.disabilityPercent === 0 ? 'none' : personalResult.disabilityPercent === 33 ? '33_64' : '65_or_more')
   }, [])
 
@@ -526,8 +542,8 @@ export function FiscalWorkerDashboard() {
     const netWorkIncomeBeforeReduction = Math.max(0, grossSalaryAnnual - employeeSocialSecurity - deductibleExpenses)
     const reduction = workReduction2025(netWorkIncomeBeforeReduction)
     const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction - extraBaseReductions)
-    const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, disability)
-    const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, disability)
+    const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, ascendantsOver75, disability, dependentDisabilityMinimum)
+    const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, ascendantsOver75, disability, dependentDisabilityMinimum)
     const regionalScale = autonomicCoverage.autonomic_general_scales[effectiveRegion]?.brackets ?? autonomicCoverage.autonomic_general_scales.madrid.brackets
     const stateTax = Math.max(0, applyScale(taxableBase, fiscalParams2025.irpf.state_general_scale) - applyScale(Math.min(stateMinimum, taxableBase), fiscalParams2025.irpf.state_general_scale))
     const regionalTax = Math.max(0, applyScale(taxableBase, regionalScale) - applyScale(Math.min(regionalMinimum, taxableBase), regionalScale))
@@ -570,7 +586,7 @@ export function FiscalWorkerDashboard() {
       deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
-  }, [age, ascendants, children, childrenUnder3, consumptionTaxes, contributionGroupId, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxYear])
+  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxYear])
 
   const fiscalKpiItems: FiscalKpiItem[] = [
     {

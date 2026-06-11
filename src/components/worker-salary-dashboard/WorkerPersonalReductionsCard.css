@@ -40,8 +40,15 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 35%);
 }
 
+.wprc-hero,
 .wprc-header,
-.wprc-popover,
+.wprc-hero-panel,
+.wprc-flow,
+.wprc-minimum-panel,
+.wprc-dependent-grid,
+.wprc-dependent-card,
+.wprc-benefits,
+.wprc-explained,
 .wprc-top-grid,
 .wprc-panels,
 .wprc-summary {
@@ -54,85 +61,231 @@
   margin: 0;
 }
 
-.wprc-header {
-  display: flex;
+.wprc-hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.25fr);
+  gap: clamp(18px, 3vw, 42px);
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
+}
+
+.wprc-header {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
 }
 
 .wprc-title {
-  display: flex;
-  align-items: center;
+  display: grid;
+  gap: 13px;
   min-width: 0;
-  gap: 24px;
+}
+
+.wprc-step-orb {
+  display: grid;
+  place-items: center;
+  width: clamp(82px, 8vw, 112px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #59f26b 0%, #12b7ee 100%);
+  box-shadow:
+    0 0 34px rgba(76, 238, 114, 0.45),
+    0 0 70px rgba(18, 183, 238, 0.22);
+  font-size: clamp(42px, 5vw, 62px);
+  line-height: 1;
+  font-weight: 900;
 }
 
 .wprc-title > span {
-  color: var(--wprc-cyan);
-  font-size: clamp(32px, 3.6vw, 46px);
+  color: #58f171;
+  font-size: clamp(16px, 1.45vw, 20px);
   line-height: 1;
-  font-weight: 900;
-  text-shadow: 0 0 18px rgba(39, 229, 240, 0.56);
+  font-weight: 820;
 }
 
 .wprc h2 {
-  font-size: clamp(28px, 3.1vw, 44px);
+  font-size: clamp(35px, 4.8vw, 68px);
   line-height: 1.05;
-  font-weight: 880;
+  font-weight: 900;
   letter-spacing: 0;
+  text-shadow: 0 5px 18px rgba(0, 0, 0, 0.35);
 }
 
-.wprc-info {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 45px;
-  height: 45px;
-  border: 2px solid rgba(37, 133, 255, 0.96);
-  border-radius: 999px;
-  color: #55bbff;
-  background: rgba(0, 42, 91, 0.38);
-  box-shadow:
-    0 0 20px rgba(32, 141, 255, 0.46),
-    inset 0 0 14px rgba(32, 141, 255, 0.24);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    color 160ms ease,
-    transform 160ms ease,
-    box-shadow 160ms ease;
+.wprc-title p {
+  max-width: 560px;
+  color: #d7e1f6;
+  font-size: clamp(17px, 1.65vw, 23px);
+  line-height: 1.45;
+  font-weight: 620;
 }
 
-.wprc-info:hover,
-.wprc-info:focus-visible {
-  color: #dff5ff;
-  border-color: #72d5ff;
-  transform: translateY(-1px);
-  box-shadow:
-    0 0 28px rgba(32, 141, 255, 0.66),
-    inset 0 0 18px rgba(32, 141, 255, 0.28);
-}
-
-.wprc button:focus-visible,
 .wprc select:focus-visible {
   outline: 3px solid rgba(74, 183, 255, 0.42);
   outline-offset: 3px;
 }
 
-.wprc-popover {
-  margin: -10px 0 18px auto;
-  max-width: 780px;
-  padding: 12px 14px;
-  border: 1px solid rgba(92, 170, 255, 0.38);
-  border-radius: 11px;
-  color: #dbe8ff;
-  background: rgba(2, 15, 35, 0.96);
-  box-shadow: 0 18px 34px rgba(0, 6, 20, 0.3);
+.wprc-hero-panel {
+  padding: clamp(22px, 3vw, 36px);
+  border: 1px solid rgba(77, 157, 245, 0.55);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(71, 242, 113, 0.13), transparent 28%),
+    linear-gradient(180deg, rgba(5, 26, 58, 0.74), rgba(2, 15, 37, 0.82));
+  box-shadow:
+    0 22px 50px rgba(0, 6, 20, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.wprc-hero-panel h3 {
+  color: #58f171;
+  font-size: clamp(21px, 2.1vw, 30px);
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.wprc-hero-panel ul {
+  display: grid;
+  gap: 15px;
+  margin: 22px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wprc-hero-panel li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 13px;
+  align-items: center;
+  color: #ecf3ff;
+  font-size: clamp(16px, 1.45vw, 21px);
+  line-height: 1.25;
+  font-weight: 650;
+}
+
+.wprc-hero-panel li svg {
+  color: #58f171;
+  filter: drop-shadow(0 0 10px rgba(88, 241, 113, 0.35));
+}
+
+.wprc-hero-panel strong {
+  display: block;
+  color: #58f171;
+  font-size: clamp(34px, 3.6vw, 52px);
+  line-height: 1;
+  font-weight: 920;
+}
+
+.wprc-hero-panel > span {
+  display: block;
+  margin-top: 8px;
+  color: #aab8d3;
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 680;
+}
+
+.wprc-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.wprc-flow article {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(72, 148, 232, 0.42);
+  border-radius: 12px;
+  background: rgba(4, 24, 54, 0.66);
+}
+
+.wprc-flow span {
+  display: block;
+  color: #58f171;
+  font-size: clamp(28px, 2.7vw, 40px);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.wprc-flow p {
+  margin-top: 7px;
+  color: #b8c7e4;
   font-size: 14px;
-  line-height: 1.45;
-  font-weight: 690;
+  line-height: 1.25;
+  font-weight: 730;
+}
+
+.wprc-minimum-panel {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.62fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 16px;
+  border: 1px solid rgba(88, 241, 113, 0.42);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(6, 30, 58, 0.78), rgba(3, 18, 42, 0.8));
+}
+
+.wprc-minimum-panel h3 {
+  color: #58f171;
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 880;
+}
+
+.wprc-minimum-panel p {
+  margin-top: 6px;
+  color: #c7d4eb;
+  font-size: 14px;
+  line-height: 1.32;
+  font-weight: 650;
+}
+
+.wprc-minimum-panel ol {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wprc-minimum-panel li {
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  min-height: 78px;
+  padding: 11px 8px;
+  border: 1px solid rgba(113, 135, 170, 0.32);
+  border-radius: 10px;
+  color: #8290aa;
+  background: rgba(10, 21, 40, 0.68);
+}
+
+.wprc-minimum-panel li.is-active {
+  color: #effff2;
+  border-color: rgba(88, 241, 113, 0.7);
+  background: linear-gradient(180deg, rgba(43, 174, 84, 0.3), rgba(8, 44, 42, 0.72));
+  box-shadow: 0 0 18px rgba(88, 241, 113, 0.18);
+}
+
+.wprc-minimum-panel li span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.wprc-minimum-panel li strong {
+  font-size: clamp(16px, 1.45vw, 21px);
+  line-height: 1;
+  font-weight: 900;
 }
 
 .wprc-top-grid {
@@ -230,6 +383,231 @@
 .wprc-top-field:hover > .wprc-select,
 .wprc-top-field:focus-within > .wprc-select {
   opacity: 1;
+}
+
+.wprc-dependent-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.wprc-dependent-card {
+  padding: 18px;
+  border: 1px solid rgba(77, 157, 245, 0.52);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(47, 140, 255, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(4, 26, 57, 0.78), rgba(2, 14, 34, 0.82));
+  box-shadow:
+    0 18px 38px rgba(0, 6, 20, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.wprc-dependent-card--ascendant {
+  border-color: rgba(88, 241, 113, 0.42);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(88, 241, 113, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(4, 28, 45, 0.78), rgba(2, 16, 32, 0.84));
+}
+
+.wprc-dependent-card header {
+  margin-bottom: 14px;
+}
+
+.wprc-dependent-card h3 {
+  color: #eef6ff;
+  font-size: clamp(22px, 2vw, 29px);
+  line-height: 1.08;
+  font-weight: 880;
+}
+
+.wprc-dependent-card p {
+  margin-top: 6px;
+  color: #9fb3d6;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+.wprc-dependent-list {
+  display: grid;
+  gap: 10px;
+}
+
+.wprc-dependent {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid rgba(83, 143, 210, 0.4);
+  border-radius: 12px;
+  background: rgba(2, 15, 35, 0.64);
+}
+
+.wprc-dependent.is-eligible {
+  border-color: rgba(88, 241, 113, 0.54);
+  box-shadow: inset 3px 0 0 rgba(88, 241, 113, 0.76);
+}
+
+.wprc-dependent.is-excluded {
+  opacity: 0.7;
+  filter: saturate(0.72);
+}
+
+.wprc-dependent__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-column: 1 / -1;
+  gap: 10px;
+}
+
+.wprc-dependent__head strong {
+  color: #f4f8ff;
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 820;
+}
+
+.wprc-dependent__head span {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid rgba(88, 241, 113, 0.5);
+  border-radius: 999px;
+  color: #58f171;
+  background: rgba(88, 241, 113, 0.1);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 830;
+}
+
+.wprc-dependent.is-excluded .wprc-dependent__head span {
+  color: #a5b1c7;
+  border-color: rgba(165, 177, 199, 0.38);
+  background: rgba(165, 177, 199, 0.08);
+}
+
+.wprc-dependent label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wprc-dependent label > span {
+  color: #aebfe0;
+  font-size: 12px;
+  line-height: 1.1;
+  font-weight: 760;
+}
+
+.wprc-dependent .wprc-select {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid rgba(75, 121, 179, 0.5);
+  border-radius: 8px;
+  background: rgba(4, 20, 43, 0.86);
+}
+
+.wprc-dependent .wprc-select select {
+  min-height: 36px;
+  padding-left: 11px;
+  color: #edf4ff;
+  font-size: 14px;
+}
+
+.wprc-empty {
+  padding: 18px;
+  border: 1px dashed rgba(126, 160, 205, 0.42);
+  border-radius: 12px;
+  color: #aebedd;
+  background: rgba(3, 18, 40, 0.52);
+  font-weight: 700;
+}
+
+.wprc-benefits {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.38fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid rgba(83, 143, 210, 0.48);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 5% 0%, rgba(39, 229, 240, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(4, 24, 53, 0.78), rgba(2, 14, 32, 0.84));
+}
+
+.wprc-benefits__heading h3,
+.wprc-explained h3 {
+  color: #eef6ff;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.08;
+  font-weight: 880;
+}
+
+.wprc-benefits__heading p,
+.wprc-explained p {
+  margin-top: 7px;
+  color: #a8b9d9;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+.wprc-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.wprc-benefit {
+  display: grid;
+  gap: 8px;
+  min-height: 84px;
+  padding: 12px;
+  border: 1px solid rgba(103, 135, 180, 0.32);
+  border-radius: 11px;
+  background: rgba(4, 18, 39, 0.72);
+}
+
+.wprc-benefit span {
+  color: #eef4ff;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 760;
+}
+
+.wprc-benefit strong {
+  align-self: end;
+  width: fit-content;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #dce8ff;
+  background: rgba(126, 148, 184, 0.18);
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 850;
+}
+
+.wprc-benefit--exempt strong {
+  color: #58f171;
+  background: rgba(88, 241, 113, 0.12);
+}
+
+.wprc-benefit--partial strong {
+  color: #27e5f0;
+  background: rgba(39, 229, 240, 0.12);
+}
+
+.wprc-benefit--taxable strong {
+  color: #ffb86b;
+  background: rgba(255, 184, 107, 0.13);
+}
+
+.wprc-benefit--review strong {
+  color: #d6bcff;
+  background: rgba(155, 99, 255, 0.14);
 }
 
 .wprc-panels {
@@ -379,6 +757,65 @@
   font-size: clamp(16px, 1.7vw, 21px);
 }
 
+.wprc-explained {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.42fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid rgba(88, 241, 113, 0.42);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(88, 241, 113, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(5, 27, 47, 0.78), rgba(2, 15, 33, 0.84));
+}
+
+.wprc-explained dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.wprc-explained dl div {
+  display: grid;
+  gap: 7px;
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid rgba(99, 147, 205, 0.36);
+  border-radius: 11px;
+  background: rgba(3, 18, 40, 0.64);
+}
+
+.wprc-explained dt {
+  color: #aebfe0;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 760;
+}
+
+.wprc-explained dd {
+  margin: 0;
+  color: #eff6ff;
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.wprc-explained .is-minus dd {
+  color: #ffb86b;
+}
+
+.wprc-explained .is-result {
+  border-color: rgba(88, 241, 113, 0.58);
+  background: rgba(16, 61, 49, 0.62);
+}
+
+.wprc-explained .is-result dd {
+  color: #58f171;
+}
+
 .wprc-summary {
   display: grid;
   grid-template-columns: 72px minmax(0, 1fr) minmax(210px, 292px) minmax(210px, 292px);
@@ -492,10 +929,24 @@
 }
 
 @media (max-width: 1060px) {
+  .wprc-hero,
+  .wprc-dependent-grid,
+  .wprc-minimum-panel,
+  .wprc-benefits,
+  .wprc-explained,
   .wprc-top-grid,
   .wprc-panels,
   .wprc-summary {
     grid-template-columns: 1fr;
+  }
+
+  .wprc-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wprc-benefit-grid,
+  .wprc-explained dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .wprc-top-field + .wprc-top-field {
@@ -509,13 +960,53 @@
 }
 
 @media (max-width: 640px) {
-  .wprc-title {
-    gap: 12px;
+  .wprc {
+    padding: 14px;
+    border-radius: 18px;
   }
 
-  .wprc-info {
-    width: 40px;
-    height: 40px;
+  .wprc-header {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .wprc-step-orb {
+    width: 72px;
+    font-size: 38px;
+  }
+
+  .wprc-title {
+    gap: 8px;
+  }
+
+  .wprc h2 {
+    font-size: clamp(29px, 10vw, 42px);
+  }
+
+  .wprc-title p {
+    font-size: 15px;
+  }
+
+  .wprc-hero-panel {
+    padding: 18px;
+  }
+
+  .wprc-flow,
+  .wprc-minimum-panel ol {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wprc-benefit-grid,
+  .wprc-explained dl {
+    grid-template-columns: 1fr;
+  }
+
+  .wprc-minimum-panel {
+    padding: 14px;
+  }
+
+  .wprc-dependent {
+    grid-template-columns: 1fr;
   }
 
   .wprc-top-field,
@@ -563,10 +1054,24 @@
 }
 
 @container (max-width: 820px) {
+  .wprc-hero,
+  .wprc-dependent-grid,
+  .wprc-minimum-panel,
+  .wprc-benefits,
+  .wprc-explained,
   .wprc-top-grid,
   .wprc-panels,
   .wprc-summary {
     grid-template-columns: 1fr;
+  }
+
+  .wprc-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wprc-benefit-grid,
+  .wprc-explained dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .wprc-top-field + .wprc-top-field {
