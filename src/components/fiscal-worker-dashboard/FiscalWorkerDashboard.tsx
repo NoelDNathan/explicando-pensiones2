@@ -250,11 +250,12 @@ function familyMinimum(
   ascendants: number,
   ascendantsOver75: number,
   disability: DisabilityMode,
+  taxpayerDisabilityAssistanceMinimum: number,
   dependentDisabilityMinimum: number,
 ) {
   let total = minimums.taxpayer_general
-  if (age >= 65) total += minimums.taxpayer_over_65_increment ?? 0
-  if (age >= 75) total += minimums.taxpayer_over_75_additional_increment ?? 0
+  if (age > 65) total += minimums.taxpayer_over_65_increment ?? 0
+  if (age > 75) total += minimums.taxpayer_over_75_additional_increment ?? 0
   const descendantAmounts = minimums.descendants ?? []
   for (let index = 0; index < children; index += 1) {
     total += descendantAmounts[Math.min(index, descendantAmounts.length - 1)] ?? 0
@@ -264,6 +265,7 @@ function familyMinimum(
   total += ascendantsOver75 * (minimums.ascendant_over_75_additional_increment ?? 0)
   if (disability === '33_64') total += minimums.disability_33_to_64 ?? 0
   if (disability === '65_or_more') total += minimums.disability_65_or_more ?? 0
+  total += taxpayerDisabilityAssistanceMinimum
   total += dependentDisabilityMinimum
   return total
 }
@@ -418,6 +420,7 @@ export function FiscalWorkerDashboard() {
   const [ascendantsOver75, setAscendantsOver75] = useState(0)
   const [disability, setDisability] = useState<DisabilityMode>('none')
   const [dependentDisabilityMinimum, setDependentDisabilityMinimum] = useState(0)
+  const [taxpayerDisabilityAssistanceMinimum, setTaxpayerDisabilityAssistanceMinimum] = useState(0)
   const [mobility] = useState(false)
   const [monthlyConsumption] = useState(1700)
   const [manualAutonomicDeduction] = useState(0)
@@ -452,6 +455,7 @@ export function FiscalWorkerDashboard() {
     setAscendants(personalResult.eligibleAscendants)
     setAscendantsOver75(personalResult.ascendantsOver75)
     setDependentDisabilityMinimum(personalResult.dependentDisabilityMinimum)
+    setTaxpayerDisabilityAssistanceMinimum(personalResult.taxpayerDisabilityAssistanceMinimum)
     setDisability(personalResult.disabilityPercent === 0 ? 'none' : personalResult.disabilityPercent === 33 ? '33_64' : '65_or_more')
   }, [])
 
@@ -546,8 +550,8 @@ export function FiscalWorkerDashboard() {
     const netWorkIncomeBeforeReduction = Math.max(0, grossSalaryAnnual - employeeSocialSecurity - deductibleExpenses)
     const reduction = workReduction2025(netWorkIncomeBeforeReduction)
     const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction - extraBaseReductions)
-    const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, ascendantsOver75, disability, dependentDisabilityMinimum)
-    const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, ascendantsOver75, disability, dependentDisabilityMinimum)
+    const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
+    const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
     const regionalScale = autonomicCoverage.autonomic_general_scales[effectiveRegion]?.brackets ?? autonomicCoverage.autonomic_general_scales.madrid.brackets
     const stateTax = Math.max(0, applyScale(taxableBase, fiscalParams2025.irpf.state_general_scale) - applyScale(Math.min(stateMinimum, taxableBase), fiscalParams2025.irpf.state_general_scale))
     const regionalTax = Math.max(0, applyScale(taxableBase, regionalScale) - applyScale(Math.min(regionalMinimum, taxableBase), regionalScale))
@@ -590,7 +594,7 @@ export function FiscalWorkerDashboard() {
       deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
-  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxYear])
+  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
 
   const fiscalKpiItems: FiscalKpiItem[] = [
     {

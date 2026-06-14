@@ -34,6 +34,7 @@ export type PersonalReductionResult = {
   eligibleChildren: number
   childrenUnder3: number
   disabilityPercent: DisabilityPercent
+  taxpayerDisabilityAssistanceMinimum: number
   maritalStatus: MaritalStatus
   ascendants: number
   eligibleAscendants: number
@@ -187,10 +188,12 @@ const yesNoPositiveOptions: FieldOption[] = [
 
 const descendantAgeOptions: FieldOption[] = [
   { value: 'under3', label: 'Menor de 3' },
-  { value: '3_or_more', label: '3 o mas' },
+  { value: '3_to_24', label: '3 a 24' },
+  { value: '25_plus_disabled', label: '25+ con discapacidad' },
 ]
 
 const ascendantAgeOptions: FieldOption[] = [
+  { value: 'under65_disabled', label: 'Menor de 65 con discapacidad' },
   { value: '65_74', label: '65 a 74' },
   { value: '75_plus', label: '75 o mas' },
 ]
@@ -264,8 +267,18 @@ function SelectControl({ value, options, label, onChange }: {
   )
 }
 
-function qualifies(profile: DependentProfile) {
+function qualifiesBase(profile: DependentProfile) {
   return profile.livesWith === 'yes' && profile.ownIncome === 'no' && profile.filesReturn === 'no'
+}
+
+function qualifiesDescendant(profile: DependentProfile) {
+  return qualifiesBase(profile)
+    && (profile.ageBand !== '25_plus_disabled' || profile.disabilityPercent !== '0')
+}
+
+function qualifiesAscendant(profile: DependentProfile) {
+  return qualifiesBase(profile)
+    && (profile.ageBand !== 'under65_disabled' || profile.disabilityPercent !== '0')
 }
 
 function dependentMinimum(profile: DependentProfile) {
@@ -274,7 +287,18 @@ function dependentMinimum(profile: DependentProfile) {
     : profile.disabilityPercent === '33'
       ? 3000
       : 0
-  return disabilityMinimum + (profile.assistance === 'yes' && disabilityMinimum > 0 ? 3000 : 0)
+  const assistanceMinimum = disabilityMinimum > 0 && (profile.assistance === 'yes' || profile.disabilityPercent === '65')
+    ? 3000
+    : 0
+  return disabilityMinimum + assistanceMinimum
+}
+
+function taxpayerDisabilityAssistance(disabilityPercent: string, assistance: string) {
+  return disabilityPercent !== '0' && (assistance === 'yes' || disabilityPercent === '65') ? 3000 : 0
+}
+
+function taxpayerDisabilityMinimum(disabilityPercent: string) {
+  return disabilityPercent === '65' ? 9000 : disabilityPercent === '33' ? 3000 : 0
 }
 
 function descendantMinimumAt(index: number) {
@@ -318,7 +342,9 @@ function DependentEditor({ type, title, profiles, count, onChange }: DependentEd
         <div className="wprc-dependent-list">
           {activeProfiles.map((profile, index) => {
             const label = type === 'descendant' ? `Descendiente ${index + 1}` : `Ascendiente ${index + 1}`
-            const isEligible = qualifies(profile)
+            const isEligible = type === 'descendant'
+              ? qualifiesDescendant(profile)
+              : qualifiesAscendant(profile)
 
             return (
               <section className={`wprc-dependent ${isEligible ? 'is-eligible' : 'is-excluded'}`} key={`${type}-${index}`}>
@@ -479,7 +505,7 @@ function createDependentProfiles(count: number, type: 'descendant' | 'ascendant'
     filesReturn: 'no',
     disabilityPercent: '0',
     assistance: 'no',
-    ageBand: type === 'descendant' ? '3_or_more' : '65_74',
+    ageBand: type === 'descendant' ? '3_to_24' : '65_74',
   }))
 }
 
@@ -492,6 +518,7 @@ export function WorkerPersonalReductionsCard({
 }: WorkerPersonalReductionsCardProps) {
   const [children, setChildren] = useState(String(initialChildren))
   const [disabilityPercent, setDisabilityPercent] = useState(String(initialDisabilityPercent))
+  const [taxpayerAssistance, setTaxpayerAssistance] = useState('no')
   const [maritalStatus, setMaritalStatus] = useState<MaritalStatus>(initialMaritalStatus)
   const [ascendants, setAscendants] = useState(String(initialAscendants))
   const [pensionPlans, setPensionPlans] = useState('0')
@@ -546,10 +573,11 @@ export function WorkerPersonalReductionsCard({
   const result = useMemo<PersonalReductionResult>(() => {
     const selectedChildrenCount = Number(children)
     const selectedAscendantsCount = Number(ascendants)
-    const eligibleDescendants = descendantProfiles.slice(0, selectedChildrenCount).filter(qualifies)
-    const eligibleAscendants = ascendantProfiles.slice(0, selectedAscendantsCount).filter(qualifies)
+    const eligibleDescendants = descendantProfiles.slice(0, selectedChildrenCount).filter(qualifiesDescendant)
+    const eligibleAscendants = ascendantProfiles.slice(0, selectedAscendantsCount).filter(qualifiesAscendant)
     const dependentDisabilityMinimum = [...eligibleDescendants, ...eligibleAscendants]
       .reduce((total, profile) => total + dependentMinimum(profile), 0)
+    const taxpayerDisabilityAssistanceMinimum = taxpayerDisabilityAssistance(disabilityPercent, taxpayerAssistance)
     const pensionPlanAmount = Number(pensionPlans)
     const companyPensionPlanAmount = Number(companyPensionPlan)
     const mutualitiesAmount = Number(mutualities)
@@ -584,6 +612,7 @@ export function WorkerPersonalReductionsCard({
       eligibleChildren: eligibleDescendants.length,
       childrenUnder3: eligibleDescendants.filter((profile) => profile.ageBand === 'under3').length,
       disabilityPercent: Number(disabilityPercent) as DisabilityPercent,
+      taxpayerDisabilityAssistanceMinimum,
       maritalStatus,
       ascendants: selectedAscendantsCount,
       eligibleAscendants: eligibleAscendants.length,
@@ -638,6 +667,7 @@ export function WorkerPersonalReductionsCard({
     regionalReductions,
     regionalDeductions,
     rent,
+    taxpayerAssistance,
     unionAndProfessionalFees,
   ])
 
@@ -646,13 +676,19 @@ export function WorkerPersonalReductionsCard({
   }, [onResultChange, result])
 
   const selectedDescendants = descendantProfiles.slice(0, Number(children))
-  const eligibleDescendants = selectedDescendants.filter(qualifies)
+  const eligibleDescendants = selectedDescendants.filter(qualifiesDescendant)
   const selectedAscendants = ascendantProfiles.slice(0, Number(ascendants))
-  const eligibleAscendants = selectedAscendants.filter(qualifies)
+  const eligibleAscendants = selectedAscendants.filter(qualifiesAscendant)
   const descendantMinimumTotal = eligibleDescendants.reduce((total, _profile, index) => total + descendantMinimumAt(index), 0)
   const under3Minimum = result.childrenUnder3 * 2800
-  const ascendantMinimumTotal = result.ascendants * 1150 + result.ascendantsOver75 * 1400
-  const familyMinimumPreview = descendantMinimumTotal + under3Minimum + ascendantMinimumTotal + result.dependentDisabilityMinimum
+  const ascendantMinimumTotal = result.eligibleAscendants * 1150 + result.ascendantsOver75 * 1400
+  const taxpayerDisabilityMinimumTotal = taxpayerDisabilityMinimum(disabilityPercent)
+  const familyMinimumPreview = descendantMinimumTotal
+    + under3Minimum
+    + ascendantMinimumTotal
+    + taxpayerDisabilityMinimumTotal
+    + result.dependentDisabilityMinimum
+    + result.taxpayerDisabilityAssistanceMinimum
   const explainedBaseInitial = 32000
   const explainedBaseLiquidable = Math.max(0, explainedBaseInitial - result.reductionsTotal)
   const explainedQuotaBeforeDeductions = 5200
@@ -737,6 +773,13 @@ export function WorkerPersonalReductionsCard({
           value={disabilityPercent}
           options={disabilityOptions}
           onChange={setDisabilityPercent}
+        />
+        <TopField
+          icon={HandHeart}
+          label="Ayuda o movilidad"
+          value={taxpayerAssistance}
+          options={yesNoOptions}
+          onChange={setTaxpayerAssistance}
         />
         <TopField
           icon={Heart}
