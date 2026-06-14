@@ -130,8 +130,9 @@
 
 .wsbc-control-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 0.72fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
+  align-items: start;
 }
 
 .wsbc-control-row--single {
@@ -318,6 +319,16 @@
 
 .wsbc-input-shell--selectlike svg {
   color: #8fb1c7;
+}
+
+.wsbc-select-shell--period {
+  width: 132px;
+  min-height: 42px;
+}
+
+.wsbc-select-shell--period select {
+  min-height: 40px;
+  font-size: 16px;
 }
 
 .wsbc-period-tag {

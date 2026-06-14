@@ -38,8 +38,14 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 1,
     title: 'Base real',
     subtitle: 'Empieza por lo que cobras antes de descuentos',
-    description: 'La base real es tu sueldo bruto completo: salario fijo, pagas, complementos y salario en especie. Es el punto de partida antes de Seguridad Social e IRPF.',
-    checklist: ['Salario bruto', 'Pagas del ano', 'Complementos anuales', 'Salario en especie anual'],
+    description: `Antes de calcular la Seguridad Social o el IRPF, primero hay que determinar tu salario bruto anual: todo lo que ganas durante el año antes de aplicar descuentos.
+
+Para convertirlo en una base mensual de referencia, se suman el salario fijo, las pagas extra, los complementos y, si existe, el salario en especie. Después, ese total anual se divide entre 12 meses.
+
+Por ejemplo, si cobras 28.000 € al año en 14 pagas, tu salario anual sigue siendo 28.000 €. Al dividirlo entre 12, la base mensual equivalente sería de unos 2.333,33 €. Así, las pagas extra también quedan incluidas aunque se cobren solo en momentos concretos del año.
+
+Esta base mensual sirve como punto de partida para calcular las cotizaciones a la Seguridad Social y la retención de IRPF de la nómina.`,
+    checklist: [],
     helpTitle: 'Que significa base real?',
     helpBody: 'Es una base de trabajo para la calculadora. Intenta acercarse a todo lo que recibes de la empresa antes de restar cotizaciones o impuestos.',
     details: [
@@ -54,8 +60,17 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 2,
     title: 'Limites de cotizacion',
     subtitle: 'Del bruto a la base de cotizacion',
-    description: 'Tu grupo de cotizacion marca una base minima y una base maxima. La Seguridad Social usa una base dentro de esos limites para calcular las cuotas.',
-    checklist: ['Grupo o categoria profesional', 'Base minima', 'Base maxima', 'Base usada'],
+    description: `El grupo de cotización es una categoría que usa la Seguridad Social para clasificar tu puesto de trabajo según tus funciones, tu nivel profesional y el convenio que se aplica.
+
+Cada grupo tiene una base mínima y una base máxima. Esto significa que, antes de calcular las cotizaciones, se comprueba si tu base real está dentro de esos límites. Si queda por debajo del mínimo, se usa la base mínima. Si supera el máximo, se usa la base máxima. Y si está dentro del rango, se usa la base real que hemos calculado en el paso anterior.
+
+La base de cotización es la cantidad que se toma como referencia para calcular cuánto se paga a la Seguridad Social cada mes. Sobre esa base se aplican los porcentajes correspondientes, como desempleo, contingencias comunes o formación profesional.
+
+Por eso es importante: una parte de esas cotizaciones se descuenta de tu nómina y otra parte, normalmente mayor, la paga la empresa. Cuanto más alta sea la base de cotización, mayor será el coste de Seguridad Social para ambos.
+
+Además, esta base también influye en futuras prestaciones. Por ejemplo, puede afectar a cuánto cobrarías de paro, durante una baja médica, en una incapacidad o en la pensión de jubilación. En general, una base más alta significa pagar más ahora, pero también puede dar derecho a prestaciones más altas en el futuro.
+`,
+    checklist: [],
     helpTitle: 'Que es el grupo de cotizacion?',
     helpBody: 'Es una categoria laboral de la Seguridad Social. Agrupa puestos parecidos y fija limites de cotizacion. No siempre coincide con tu puesto comercial o tu convenio.',
     details: [
@@ -70,8 +85,12 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 3,
     title: 'Cotizaciones sociales',
     subtitle: 'Cuotas del trabajador y de la empresa',
-    description: 'Sobre la base usada se aplican varios porcentajes. Unos se descuentan de tu nomina y otros los paga la empresa ademas de tu salario.',
-    checklist: ['Contingencias comunes', 'Desempleo', 'Formacion', 'MEI y empresa'],
+    description: `Las cotizaciones sociales son las cantidades que se pagan cada mes a la Seguridad Social. Se calculan aplicando distintos porcentajes sobre tu base de cotización.
+     Una parte se descuenta directamente de tu salario bruto y aparece en tu nómina como cotización del trabajador. Por eso reduce tu salario neto, es decir, lo que finalmente cobras. 
+     La otra parte la paga la empresa además de tu salario bruto. No se resta de tu nómina, pero sí forma parte del coste total que tiene la empresa por contratarte. 
+     Estas cotizaciones sirven para financiar prestaciones como la jubilación, las bajas por enfermedad, el desempleo, la formación profesional, los accidentes laborales o el refuerzo del sistema de pensiones. 
+    Por ejemplo, si tu base de cotización es de 1.929 € al mes, los porcentajes se aplican sobre esa cantidad. Si la parte del trabajador suma un 6,48 %, se descontarían unos 125 € de tu salario bruto. Además, la empresa tendría que pagar sus propias cotizaciones. En este caso, supondrían unos 612,22 € adicionales, que no se descuentan de tu nómina, pero sí aumentan el coste total de contratarte.`,
+    checklist: [],
     helpTitle: 'Que son las categorias de cotizacion?',
     helpBody: 'Son destinos de la cuota: jubilacion y bajas comunes, desempleo, formacion, refuerzo de pensiones o coberturas empresariales. Cada una puede tener un porcentaje distinto.',
     details: [
@@ -86,8 +105,28 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 4,
     title: 'Reducciones',
     subtitle: 'Datos personales que ajustan el IRPF',
-    description: 'Hijos, discapacidad, ascendientes y algunas deducciones pueden cambiar la base del impuesto o la cuota final.',
-    checklist: ['Minimos personales', 'Reducciones de base', 'Deducciones de cuota', 'Requisitos'],
+    description: `En el IRPF hay varias formas de pagar menos impuestos, pero no todas funcionan igual. Las más importantes son las reducciones, las deducciones y algunos beneficios en especie que pueden estar exentos total o parcialmente.
+
+Una reducción baja la cantidad de dinero sobre la que Hacienda calcula el impuesto. Es decir, antes de aplicar los porcentajes del IRPF, se resta una parte de tu renta. Por eso se dice que una reducción afecta a la base imponible o a la base liquidable.
+
+Por ejemplo, imagina que tienes una base de 30.000 €. Si puedes aplicar una reducción de 2.000 €, Hacienda ya no calcula el impuesto sobre 30.000 €, sino sobre 28.000 €. La reducción no te devuelve directamente 2.000 €, sino que hace que el impuesto se calcule sobre una cantidad menor.
+
+Una deducción, en cambio, actúa más tarde. Primero se calcula cuánto impuesto te tocaría pagar y, después, la deducción resta directamente una parte de ese impuesto.
+
+Por ejemplo, si después de hacer todos los cálculos te sale que tienes que pagar 4.000 € de IRPF, y tienes una deducción de 300 €, entonces pagarías 3.700 €. Aquí la deducción sí baja directamente la cuota final.
+
+La diferencia clave es esta: la reducción baja la base antes de calcular el impuesto; la deducción baja el impuesto una vez ya calculado.
+
+Además de esto, existe el salario en especie, que son beneficios que te da la empresa en lugar de pagártelos directamente como dinero. Por ejemplo, una tarjeta comida, una tarjeta transporte, un seguro médico o una ayuda de guardería.
+
+A nivel práctico, algunos de estos beneficios funcionan de forma parecida a una reducción, porque hacen que una parte de lo que recibes no tribute en IRPF. No es exactamente una reducción técnica, porque no se aplica como una reducción general de la base, sino beneficio por beneficio. Pero el efecto para ti puede ser parecido: baja la parte de tu salario que acaba pagando impuestos.
+
+Por ejemplo, no es lo mismo que la empresa te pague 150 € más en nómina que recibir 150 € en tarjeta comida. Si esos 150 € cumplen los requisitos fiscales, una parte puede quedar exenta y no sumarse como salario normal para calcular el IRPF.
+
+El fundamento es bastante sencillo: Hacienda permite ciertos beneficios porque entiende que cubren gastos relacionados con el trabajo o con necesidades habituales del trabajador. Por ejemplo, comer durante la jornada laboral, desplazarte al trabajo, tener cobertura médica o facilitar la conciliación familiar. Por eso existen límites: la ventaja fiscal no está pensada para convertir todo el salario en beneficios exentos, sino para cubrir importes razonables.
+
+Algunos límites habituales son estos: la tarjeta comida puede estar exenta hasta 11 € diarios si cumple los requisitos; el transporte público colectivo puede estar exento con un límite de 1.500 € al año y, en tarjetas o medios electrónicos, con un máximo mensual de 136,36 €; el seguro médico pagado por la empresa puede estar exento hasta 500 € al año por persona cubierta, o 1.500 € si la persona tiene discapacidad; y ciertos servicios educativos o de guardería también pueden tener tratamiento favorable si cumplen las condiciones legales`,
+    checklist: [],
     helpTitle: 'Reduccion o deduccion?',
     helpBody: 'Una reduccion baja la base sobre la que se calcula el impuesto. Una deduccion baja directamente el impuesto final si cumples sus condiciones.',
     details: [
@@ -102,8 +141,14 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 5,
     title: 'IRPF por tramos',
     subtitle: 'El IRPF no aplica un unico porcentaje',
-    description: 'La base liquidable se divide en tramos. Cada tramo paga su propio porcentaje estatal y autonomico.',
-    checklist: ['Base liquidable', 'Tramos', 'Tipo marginal', 'Tipo efectivo'],
+    description: `La base liquidable es la cantidad final sobre la que se aplican los tramos del IRPF. No suele coincidir con tu salario bruto, porque antes se restan las reducciones permitidas por la ley. A partir de esta base se calcula qué parte de tu renta entra en cada tramo y qué porcentaje paga cada una.
+
+El IRPF no se calcula aplicando un único porcentaje a todo el importe. La base liquidable se reparte entre varios tramos, y cada tramo tributa solo por la parte de renta que le corresponde.
+
+En este paso verás cómo se divide tu base liquidable, qué parte entra en cada tramo y cómo se obtiene la cuota acumulada. También entenderás la diferencia entre el tipo marginal, que se aplica al siguiente euro que ganes, y el tipo efectivo, que representa el porcentaje medio real que pagas sobre toda la base.
+
+Estar en un tramo alto no significa que toda tu renta tribute a ese porcentaje. Solo la parte que supera el límite del tramo anterior paga el tipo más alto.`,
+    checklist: [],
     helpTitle: 'Tipo marginal y tipo efectivo',
     helpBody: 'El tipo marginal afecta solo al siguiente euro que entra en ese tramo. El tipo efectivo es la media real que pagas sobre toda la base.',
     details: [
@@ -134,8 +179,18 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 7,
     title: 'IVA y otros impuestos',
     subtitle: 'Impuestos que dependen de tu gasto',
-    description: 'IVA, impuestos especiales, IBI u otros tributos se estiman aparte porque no salen directamente de tu nomina.',
-    checklist: ['Categorias de gasto', 'Tipo de IVA', 'Impuestos especiales', 'IBI u otros'],
+    description: `El IRPF y la Seguridad Social están ligados a tu salario, pero no son los únicos impuestos que pagas.
+
+También pagas impuestos cuando gastas dinero: al comprar comida, pagar transporte, llenar el depósito, consumir electricidad o pagar una vivienda.
+
+El ejemplo más claro es el IVA, que normalmente ya va incluido en el precio de los productos y servicios. No todos los gastos tienen el mismo IVA: algunos pagan el tipo general y otros tienen tipos reducidos.
+
+También existen impuestos especiales, que afectan a consumos concretos como carburantes, alcohol, tabaco o energía.
+
+Por eso estos impuestos no salen directamente de la nómina. Dependen más de cómo consumes que de cuánto cobras.
+
+Idea clave: dos personas con el mismo sueldo pueden pagar impuestos totales distintos si gastan su dinero de forma diferente.`,
+    checklist: [],
     helpTitle: 'Que son categorias de gasto?',
     helpBody: 'Son grupos de consumo: vivienda, comida, transporte, ocio, energia, etc. Cada grupo puede tener un tipo de IVA o un impuesto distinto.',
     details: [

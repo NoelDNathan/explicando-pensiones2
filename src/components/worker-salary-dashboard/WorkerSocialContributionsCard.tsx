@@ -110,7 +110,7 @@ export const DEMO_SOCIAL_CONTRIBUTION_RATES: SocialContributionRates = {
       training: 0,
     },
     professionalTraining: 0.001,
-    mei: 0.0012,
+    mei: 0.0015,
   },
   company: {
     commonContingencies: 0.236,
@@ -121,7 +121,7 @@ export const DEMO_SOCIAL_CONTRIBUTION_RATES: SocialContributionRates = {
       training: 0,
     },
     fogasa: 0.002,
-    professionalTraining: 0.006,
+    professionalTraining: 0.0075,
     mei: 0.006,
     occupationalAccidents: 0,
   },
@@ -278,7 +278,6 @@ export function WorkerSocialContributionsCard({
   const [viewMode, setViewMode] = useState<SocialContributionViewMode>('annual')
   const [displayMode, setDisplayMode] = useState<SocialContributionDisplayMode>('both')
   const [selectedContractType, setSelectedContractType] = useState<WorkerContractType>(contractType)
-  const [infoOpen, setInfoOpen] = useState(false)
 
   useEffect(() => {
     setSelectedContractType(contractType)
@@ -330,28 +329,28 @@ export function WorkerSocialContributionsCard({
       label: 'Contingencias comunes',
       rate: contributionRates.worker.commonContingencies,
       amount: result.breakdown.worker.commonContingencies,
-      help: 'Financian prestaciones como jubilacion, incapacidad temporal y otras prestaciones comunes.',
+      help: 'Cubren situaciones habituales como una baja por enfermedad común, un accidente no laboral, la maternidad, la paternidad o la jubilación. Esta cotización ayuda a financiar prestaciones que puedes necesitar a lo largo de tu vida laboral.',
     },
     {
       key: 'unemployment',
       label: 'Desempleo',
       rate: contributionRates.worker.unemployment[selectedContractType],
       amount: result.breakdown.worker.unemployment,
-      help: 'Financia la proteccion por desempleo.',
+      help: 'Sirve para financiar la prestación por paro. Gracias a esta cotización, si pierdes el trabajo y cumples los requisitos, puedes tener derecho a cobrar una ayuda mientras buscas otro empleo.',
     },
     {
       key: 'professionalTraining',
       label: 'Formacion profesional',
       rate: contributionRates.worker.professionalTraining,
       amount: result.breakdown.worker.professionalTraining,
-      help: 'Financia acciones de formacion profesional para personas trabajadoras.',
+      help: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
     },
     {
       key: 'mei',
       label: 'MEI',
       rate: contributionRates.worker.mei,
       amount: result.breakdown.worker.mei,
-      help: 'Cotizacion adicional destinada a reforzar el sistema de pensiones.',
+      help: 'Es una cotización adicional destinada a reforzar el sistema público de pensiones. No te da una prestación concreta e inmediata, pero contribuye a sostener las pensiones futuras.',
     },
   ]
 
@@ -361,47 +360,47 @@ export function WorkerSocialContributionsCard({
       label: 'Contingencias comunes',
       rate: contributionRates.company.commonContingencies,
       amount: result.breakdown.company.commonContingencies,
-      help: 'Parte empresarial para prestaciones comunes de la Seguridad Social.',
+      help: 'Cubren situaciones habituales como una baja por enfermedad común, un accidente no laboral, la maternidad, la paternidad o la jubilación. Esta cotización ayuda a financiar prestaciones que puedes necesitar a lo largo de tu vida laboral.',
     },
     {
       key: 'unemployment',
       label: 'Desempleo',
       rate: contributionRates.company.unemployment[selectedContractType],
       amount: result.breakdown.company.unemployment,
-      help: 'Aportacion empresarial para financiar la proteccion por desempleo.',
+      help: 'Sirve para financiar la prestación por paro. Gracias a esta cotización, si pierdes el trabajo y cumples los requisitos, puedes tener derecho a cobrar una ayuda mientras buscas otro empleo.',
     },
     {
       key: 'fogasa',
       label: 'FOGASA',
       rate: contributionRates.company.fogasa,
       amount: result.breakdown.company.fogasa,
-      help: 'Fondo que cubre determinados salarios e indemnizaciones cuando la empresa no puede pagarlos.',
+      help: 'Protege al trabajador si la empresa no puede pagar salarios o indemnizaciones, por ejemplo por insolvencia o concurso. En esos casos, este fondo puede asumir parte de las cantidades pendientes.',
     },
     {
       key: 'professionalTraining',
       label: 'Formacion profesional',
       rate: contributionRates.company.professionalTraining,
       amount: result.breakdown.company.professionalTraining,
-      help: 'Aportacion empresarial a la formacion profesional.',
+      help: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
     },
     {
       key: 'mei',
       label: 'MEI',
       rate: contributionRates.company.mei,
       amount: result.breakdown.company.mei,
-      help: 'Cotizacion adicional destinada a reforzar el sistema de pensiones.',
+      help: 'Es una cotización adicional destinada a reforzar el sistema público de pensiones. No te da una prestación concreta e inmediata, pero contribuye a sostener las pensiones futuras.',
     },
     {
       key: 'occupationalAccidents',
       label: 'AT/EP',
       rate: contributionRates.company.occupationalAccidents,
       amount: result.breakdown.company.occupationalAccidents,
-      help: 'Accidentes de trabajo y enfermedades profesionales. En este MVP queda como no incluido.',
+      help: 'Cubre los accidentes de trabajo y las enfermedades profesionales. Si tienes un accidente trabajando o una enfermedad causada por tu actividad laboral, esta cotización ayuda a financiar la asistencia y las prestaciones correspondientes.',
       muted: contributionRates.company.occupationalAccidents === 0,
     },
   ]
 
-  const modeSuffix = viewMode === 'monthly' ? '/ mes' : '/ ano'
+  const modeSuffix = viewMode === 'monthly' ? '/ mes' : '/ año'
   const grossDisplay = getAmount(result, viewMode, 'grossSalaryAnnual')
   const baseDisplay = getAmount(result, viewMode, 'contributionBaseAnnual')
   const workerTotalDisplay = getAmount(result, viewMode, 'workerContributionsAnnual')
@@ -416,24 +415,7 @@ export function WorkerSocialContributionsCard({
           <span className="wscc-step" aria-hidden="true">3.</span>
           <h2 id="wscc-title">Cotizaciones sociales</h2>
         </div>
-        <button
-          className="wscc-info"
-          type="button"
-          aria-label="Mas informacion sobre cotizaciones sociales"
-          aria-expanded={infoOpen}
-          onClick={() => setInfoOpen((open) => !open)}
-        >
-          <Info size={20} strokeWidth={2.3} aria-hidden="true" />
-        </button>
       </header>
-
-      {infoOpen && (
-        <div className="wscc-popover" role="status">
-          Las cotizaciones se calculan sobre la base usada del paso anterior.
-          La parte del trabajador se descuenta de la nomina. La parte de
-          empresa se suma al coste laboral, pero no reduce tu salario neto.
-        </div>
-      )}
 
       <div className="wscc-toolbar">
         <div className="wscc-base-note">
@@ -470,17 +452,6 @@ export function WorkerSocialContributionsCard({
           </button>
         </div>
 
-        <div className="wscc-segments" role="group" aria-label="Formato de lineas">
-          <button type="button" className={displayMode === 'both' ? 'is-active' : ''} onClick={() => setDisplayMode('both')}>
-            % + €
-          </button>
-          <button type="button" className={displayMode === 'percent' ? 'is-active' : ''} onClick={() => setDisplayMode('percent')}>
-            %
-          </button>
-          <button type="button" className={displayMode === 'amount' ? 'is-active' : ''} onClick={() => setDisplayMode('amount')}>
-            €
-          </button>
-        </div>
       </div>
 
       {(isAboveMaximumBase || isBelowMinimumBase) && (
@@ -488,7 +459,7 @@ export function WorkerSocialContributionsCard({
           {isAboveMaximumBase ? (
             <>
               <strong>Salario por encima de la base maxima.</strong>
-              <span>Las cotizaciones ordinarias se calculan solo hasta {formatEuro(baseUsedAnnual)} al ano.</span>
+              <span>Las cotizaciones ordinarias se calculan solo hasta {formatEuro(baseUsedAnnual)} al año.</span>
               <em>Exceso mensual: {formatEuro(excessOverMaximumMonthly)}</em>
             </>
           ) : (
@@ -552,16 +523,6 @@ export function WorkerSocialContributionsCard({
         </aside>
       </div>
 
-      <footer className="wscc-formulas">
-        <p>
-          Trabajador: base usada x {formatPercent(result.workerContributionRate)} =
-          {' '}{formatEuro(result.workerContributionsAnnual)}; despues se resta del bruto.
-        </p>
-        <p>
-          Empresa: base usada x {formatPercent(result.companyContributionRate)} =
-          {' '}{formatEuro(result.companyContributionsAnnual)}; despues se suma al coste de contratar.
-        </p>
-      </footer>
     </section>
   )
 }

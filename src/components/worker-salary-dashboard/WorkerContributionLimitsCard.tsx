@@ -172,7 +172,7 @@ function getStatusCopy(status: ContributionStatus) {
 }
 
 function getDisplayValue(result: ContributionLimitResult, mode: ContributionViewMode, key: 'min' | 'user' | 'max' | 'used') {
-  const suffix = mode === 'monthly' ? '/ mes' : '/ ano'
+  const suffix = mode === 'monthly' ? '/ mes' : '/ año'
   const value = key === 'min'
     ? mode === 'monthly' ? result.minBaseMonthly : result.minBaseAnnual
     : key === 'max'
@@ -231,6 +231,13 @@ export function WorkerContributionLimitsCard({
   const minPosition = selectedGroup ? getMarkerPosition(selectedGroup.minBaseMonthly, visualMin, visualMax) : 20
   const maxPosition = selectedGroup ? getMarkerPosition(selectedGroup.maxBaseMonthly, visualMin, visualMax) : 78
   const userPosition = result ? getMarkerPosition(result.userBaseMonthly, visualMin, visualMax) : 50
+  const isUserCloseToMinimum = Math.abs(userPosition - minPosition) < 18
+  const isUserCloseToMaximum = Math.abs(userPosition - maxPosition) < 18
+  const scaleTopClassName = [
+    'wclc-scale-top',
+    isUserCloseToMinimum ? 'wclc-scale-top--crowded-min' : '',
+    isUserCloseToMaximum ? 'wclc-scale-top--crowded-max' : '',
+  ].filter(Boolean).join(' ')
 
   const hasBase = userBaseAnnual != null && Number.isFinite(userBaseAnnual)
   const isEmpty = !hasBase || !selectedGroup || !dataAvailable
@@ -242,15 +249,7 @@ export function WorkerContributionLimitsCard({
           <span className="wclc-step" aria-hidden="true">2.</span>
           <h2 id="wclc-title">Limites de cotizacion</h2>
         </div>
-        <button
-          className="wclc-info"
-          type="button"
-          aria-label="Mas informacion sobre limites de cotizacion"
-          aria-expanded={infoOpen}
-          onClick={() => setInfoOpen((open) => !open)}
-        >
-          <Info size={20} strokeWidth={2.3} aria-hidden="true" />
-        </button>
+    
       </header>
 
       {infoOpen && (
@@ -304,8 +303,6 @@ export function WorkerContributionLimitsCard({
         </div>
       </div>
 
-      <p className="wclc-year">Ano de calculo: {calculationYear}</p>
-
       {isEmpty ? (
         <div className="wclc-empty">
           {!hasBase
@@ -317,7 +314,7 @@ export function WorkerContributionLimitsCard({
       ) : result && statusCopy ? (
         <>
           <div className="wclc-scale" aria-label="Comparacion de base minima, base real y base maxima">
-            <div className="wclc-scale-top">
+            <div className={scaleTopClassName}>
               <div className="wclc-marker-label wclc-marker-label--min" style={{ left: `${minPosition}%` }}>
                 <span>Base minima</span>
                 <strong>{getDisplayValue(result, viewMode, 'min')}</strong>
@@ -379,52 +376,28 @@ export function WorkerContributionLimitsCard({
             </article>
           </div>
 
-          <output className="wclc-result" aria-live="polite">
-            <span>Base usada para cotizar</span>
-            <strong>{formatEuro(result.baseUsedMonthly)} / mes</strong>
-            <em>{formatEuro(result.baseUsedAnnual)} / ano</em>
-          </output>
-
           <div className="wclc-real-base">
             <span>Tu base real</span>
             <strong>{formatEuro(result.userBaseMonthly)} / mes</strong>
-            <em>{formatEuro(result.userBaseAnnual)} / ano</em>
+            <em>{formatEuro(result.userBaseAnnual)} / año</em>
           </div>
+          <output className="wclc-result" aria-live="polite">
+            <span>Base usada para cotizar</span>
+            <strong>{formatEuro(result.baseUsedMonthly)} / mes</strong>
+            <em>{formatEuro(result.baseUsedAnnual)} / año</em>
+          </output>
+
+ 
 
           {result.status === 'above_maximum' && (
             <p className="wclc-note">
               La parte que supera la base maxima no aumenta las cotizaciones
               ordinarias, aunque puede estar sujeta a mecanismos adicionales si
-              aplica en el ano seleccionado.
+              aplica en el año seleccionado.
             </p>
           )}
 
-          <div className="wclc-simulations" role="group" aria-label="Simulaciones de base">
-            <button
-              type="button"
-              className={simulationMode === 'case' ? 'is-active' : ''}
-              onClick={() => setSimulationMode('case')}
-            >
-              Tu caso
-            </button>
-            <button
-              type="button"
-              className={simulationMode === 'minimum' ? 'is-active' : ''}
-              onClick={() => setSimulationMode('minimum')}
-            >
-              En el minimo
-            </button>
-            <button
-              type="button"
-              className={simulationMode === 'maximum' ? 'is-active' : ''}
-              onClick={() => setSimulationMode('maximum')}
-            >
-              En el maximo
-            </button>
-          </div>
-
-          <p className="wclc-source">{sourceLabel}</p>
-        </>
+          </>
       ) : null}
     </section>
   )

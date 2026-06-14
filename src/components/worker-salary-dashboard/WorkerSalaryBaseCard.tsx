@@ -1,4 +1,4 @@
-import { ChevronDown, Euro, Info } from 'lucide-react'
+import { ChevronDown, Euro } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import './WorkerSalaryBaseCard.css'
@@ -106,9 +106,6 @@ export function WorkerSalaryBaseCard({
           <span className="wsbc-step" aria-hidden="true">1.</span>
           <h2 id="wsbc-title">Base real</h2>
         </div>
-        <button className="wsbc-info" type="button" aria-label="Mas informacion sobre la base real">
-          <Info size={20} strokeWidth={2.3} aria-hidden="true" />
-        </button>
       </header>
 
       <div className="wsbc-fields">
@@ -136,7 +133,7 @@ export function WorkerSalaryBaseCard({
             </div>
           </div>
 
-          <div className="wsbc-select-shell">
+          <div className="wsbc-select-shell wsbc-select-shell--period">
             <select
               value={payPeriod}
               onChange={(event) => handlePayPeriodChange(event.target.value as PayPeriod)}

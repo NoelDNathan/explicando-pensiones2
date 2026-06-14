@@ -1,13 +1,19 @@
 import {
   Accessibility,
   Baby,
+  BriefcaseBusiness,
+  Bus,
   ChevronDown,
   CheckCircle2,
   FileText,
+  Gift,
+  GraduationCap,
   HandHeart,
   Heart,
   Landmark,
   Percent,
+  ShieldCheck,
+  Smartphone,
   TrendingDown,
   UsersRound,
   Utensils,
@@ -25,10 +31,12 @@ export type SelectOption = {
 
 export type PersonalReductionResult = {
   children: number
+  eligibleChildren: number
   childrenUnder3: number
   disabilityPercent: DisabilityPercent
   maritalStatus: MaritalStatus
   ascendants: number
+  eligibleAscendants: number
   ascendantsOver75: number
   dependentDisabilityMinimum: number
   reductionsTotal: number
@@ -114,6 +122,10 @@ type BenefitItem = {
   id: string
   label: string
   status: BenefitStatus
+  icon: IconComponent
+  defaultAmount: number
+  maxMonthly?: number
+  limitLabel: string
 }
 
 const maritalOptions: FieldOption[] = [
@@ -196,24 +208,43 @@ const configureOptions: FieldOption[] = [
 const descendantMinimums = [2400, 2700, 4000, 4500]
 
 const benefitItems: BenefitItem[] = [
-  { id: 'meal-card', label: 'Tickets restaurante', status: 'partial' },
-  { id: 'transport-card', label: 'Transporte colectivo', status: 'partial' },
-  { id: 'health-insurance', label: 'Seguro medico', status: 'partial' },
-  { id: 'company-daycare', label: 'Guarderia empresa', status: 'review' },
-  { id: 'training', label: 'Formacion', status: 'exempt' },
-  { id: 'company-car', label: 'Coche de empresa', status: 'taxable' },
-  { id: 'company-home', label: 'Vivienda de empresa', status: 'taxable' },
-  { id: 'devices', label: 'Movil / portatil', status: 'review' },
-  { id: 'stock-options', label: 'Acciones / stock options', status: 'review' },
-  { id: 'company-loan', label: 'Prestamos empresa', status: 'review' },
+  {
+    id: 'meal-card',
+    label: 'Tarjeta comida',
+    status: 'partial',
+    icon: Utensils,
+    defaultAmount: 0,
+    maxMonthly: 220,
+    limitLabel: 'Max. exento: 11 EUR/dia; 220 EUR si 20 dias',
+  },
+  {
+    id: 'transport-card',
+    label: 'Tarjeta transporte',
+    status: 'partial',
+    icon: Bus,
+    defaultAmount: 0,
+    maxMonthly: 136.36,
+    limitLabel: 'Max. exento: 136,36 EUR/mes; 1.500 EUR/ano',
+  },
+  {
+    id: 'health-insurance',
+    label: 'Seguro medico',
+    status: 'partial',
+    icon: ShieldCheck,
+    defaultAmount: 0,
+    maxMonthly: 41.67,
+    limitLabel: 'Max. exento: 41,67 EUR/mes por persona',
+  },
+  {
+    id: 'company-daycare',
+    label: 'Guarderia empresa',
+    status: 'partial',
+    icon: Baby,
+    defaultAmount: 0,
+    limitLabel: 'Sin tope mensual general si cumple requisitos',
+  },
 ]
 
-const benefitStatusLabels: Record<BenefitStatus, string> = {
-  exempt: 'Exento',
-  partial: 'Parcial',
-  taxable: 'Tributa',
-  review: 'Revisar requisitos',
-}
 
 function SelectControl({ value, options, label, onChange }: {
   value: string
@@ -248,6 +279,11 @@ function dependentMinimum(profile: DependentProfile) {
 
 function descendantMinimumAt(index: number) {
   return descendantMinimums[Math.min(index, descendantMinimums.length - 1)]
+}
+
+function clampBenefitAmount(value: number, maxMonthly?: number) {
+  const positiveValue = Number.isFinite(value) ? Math.max(0, value) : 0
+  return typeof maxMonthly === 'number' ? Math.min(positiveValue, maxMonthly) : positiveValue
 }
 
 function TopField({ icon: Icon, label, value, options, onChange }: TopFieldProps) {
@@ -356,18 +392,66 @@ function DependentEditor({ type, title, profiles, count, onChange }: DependentEd
 }
 
 function BenefitGrid() {
+  const [amounts, setAmounts] = useState<Record<string, number>>(() => (
+    Object.fromEntries(benefitItems.map((item) => [item.id, item.defaultAmount]))
+  ))
+  const totalBenefits = benefitItems.reduce((total, item) => total + (amounts[item.id] ?? 0), 0)
+  const reviewedBenefits = benefitItems.filter((item) => item.status === 'review').length
+  const partialBenefits = benefitItems.filter((item) => item.status === 'partial').length
+  const exemptBenefits = benefitItems.filter((item) => item.status === 'exempt').length
+
   return (
     <section className="wprc-benefits" aria-labelledby="wprc-benefits-title">
-      <div className="wprc-benefits__heading">
-        <h3 id="wprc-benefits-title">Beneficios de empresa</h3>
-        <p>El salario en especie puede estar exento, parcialmente exento o tributar segun limites y requisitos.</p>
+      <div className="wprc-benefits__intro">
+        <div className="wprc-benefits__heading">
+          <span className="wprc-benefits__icon" aria-hidden="true">
+            <BriefcaseBusiness />
+          </span>
+          <div>
+            <span>2.</span>
+            <h3 id="wprc-benefits-title">Salario en especie y beneficios</h3>
+            <p>Importes mensuales con tratamiento fiscal orientativo por beneficio.</p>
+          </div>
+        </div>
+
+        <div className="wprc-benefits__total" aria-label="Importe mensual informado">
+          <span>Importe mensual</span>
+          <strong>{totalBenefits.toLocaleString('es-ES', { maximumFractionDigits: 2 })} EUR</strong>
+        </div>
+
+
       </div>
-      <div className="wprc-benefit-grid">
+
+      <div className="wprc-benefit-list">
         {benefitItems.map((item) => (
-          <article className={`wprc-benefit wprc-benefit--${item.status}`} key={item.id}>
-            <span>{item.label}</span>
-            <strong>{benefitStatusLabels[item.status]}</strong>
-          </article>
+          <label className={`wprc-benefit wprc-benefit--${item.status}`} key={item.id}>
+            <span className="wprc-benefit__main">
+              <span className="wprc-benefit__icon" aria-hidden="true">
+                <item.icon />
+              </span>
+              <span>{item.label}</span>
+            </span>
+            <span className="wprc-benefit__amount">
+              <input
+                aria-label={`${item.label}: importe mensual`}
+                inputMode="numeric"
+                max={item.maxMonthly}
+                min="0"
+                step="0.01"
+                type="number"
+                value={amounts[item.id] ?? 0}
+                onChange={(event) => {
+                  const nextValue = Number(event.target.value)
+                  setAmounts((currentAmounts) => ({
+                    ...currentAmounts,
+                    [item.id]: clampBenefitAmount(nextValue, item.maxMonthly),
+                  }))
+                }}
+              />
+              <span>EUR</span>
+            </span>
+            <span className="wprc-benefit__limit">{item.limitLabel}</span>
+          </label>
         ))}
       </div>
     </section>
@@ -460,8 +544,10 @@ export function WorkerPersonalReductionsCard({
   }
 
   const result = useMemo<PersonalReductionResult>(() => {
-    const eligibleDescendants = descendantProfiles.slice(0, Number(children)).filter(qualifies)
-    const eligibleAscendants = ascendantProfiles.slice(0, Number(ascendants)).filter(qualifies)
+    const selectedChildrenCount = Number(children)
+    const selectedAscendantsCount = Number(ascendants)
+    const eligibleDescendants = descendantProfiles.slice(0, selectedChildrenCount).filter(qualifies)
+    const eligibleAscendants = ascendantProfiles.slice(0, selectedAscendantsCount).filter(qualifies)
     const dependentDisabilityMinimum = [...eligibleDescendants, ...eligibleAscendants]
       .reduce((total, profile) => total + dependentMinimum(profile), 0)
     const pensionPlanAmount = Number(pensionPlans)
@@ -494,11 +580,13 @@ export function WorkerPersonalReductionsCard({
       + Number(newCompanyInvestment)
 
     return {
-      children: eligibleDescendants.length,
+      children: selectedChildrenCount,
+      eligibleChildren: eligibleDescendants.length,
       childrenUnder3: eligibleDescendants.filter((profile) => profile.ageBand === 'under3').length,
       disabilityPercent: Number(disabilityPercent) as DisabilityPercent,
       maritalStatus,
-      ascendants: eligibleAscendants.length,
+      ascendants: selectedAscendantsCount,
+      eligibleAscendants: eligibleAscendants.length,
       ascendantsOver75: eligibleAscendants.filter((profile) => profile.ageBand === '75_plus').length,
       dependentDisabilityMinimum,
       reductionsTotal,

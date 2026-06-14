@@ -410,8 +410,10 @@ export function FiscalWorkerDashboard() {
   const [inKindSalary, setInKindSalary] = useState(0)
   const [region, setRegion] = useState('madrid')
   const [age] = useState(40)
+  const [selectedChildren, setSelectedChildren] = useState(0)
   const [children, setChildren] = useState(0)
   const [childrenUnder3, setChildrenUnder3] = useState(0)
+  const [selectedAscendants, setSelectedAscendants] = useState(0)
   const [ascendants, setAscendants] = useState(0)
   const [ascendantsOver75, setAscendantsOver75] = useState(0)
   const [disability, setDisability] = useState<DisabilityMode>('none')
@@ -443,9 +445,11 @@ export function FiscalWorkerDashboard() {
 
   const handlePersonalResultChange = useCallback((personalResult: PersonalReductionResult) => {
     setPersonalAdjustments(personalResult)
-    setChildren(personalResult.children)
+    setSelectedChildren(personalResult.children)
+    setChildren(personalResult.eligibleChildren)
     setChildrenUnder3(personalResult.childrenUnder3)
-    setAscendants(personalResult.ascendants)
+    setSelectedAscendants(personalResult.ascendants)
+    setAscendants(personalResult.eligibleAscendants)
     setAscendantsOver75(personalResult.ascendantsOver75)
     setDependentDisabilityMinimum(personalResult.dependentDisabilityMinimum)
     setDisability(personalResult.disabilityPercent === 0 ? 'none' : personalResult.disabilityPercent === 33 ? '33_64' : '65_or_more')
@@ -683,8 +687,8 @@ export function FiscalWorkerDashboard() {
       case 4:
         return (
           <WorkerPersonalReductionsCard
-            initialChildren={children}
-            initialAscendants={ascendants}
+            initialChildren={selectedChildren}
+            initialAscendants={selectedAscendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
             onResultChange={handlePersonalResultChange}
           />
