@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
+  FileText,
   Lightbulb,
   Scale,
   Shield,
@@ -26,6 +27,14 @@ type WorkerFiscalStep = {
   details: string[]
   important: string
   Icon: typeof Calculator
+}
+
+type PayrollExample = {
+  intro: string
+  bullets: string[]
+  resultLabel: string
+  resultValue: string
+  highlightRows: string[]
 }
 
 type WorkerFiscalStepsCardProps = {
@@ -219,6 +228,133 @@ Idea clave: dos personas con el mismo sueldo pueden pagar impuestos totales dist
   },
 ]
 
+const PAYROLL_ROWS = [
+  { id: 'salary-base', label: 'Salario base', value: '2.100,00 EUR', section: 'DEVENGOS' },
+  { id: 'salary-complements', label: 'Complementos salariales', value: '350,00 EUR', section: 'DEVENGOS' },
+  { id: 'extra-pay', label: 'Prorrata pagas extra', value: '408,33 EUR', section: 'DEVENGOS' },
+  { id: 'in-kind', label: 'Retribucion en especie', value: '0,00 EUR', section: 'DEVENGOS' },
+  { id: 'gross-total', label: 'Total devengado', value: '2.858,33 EUR', section: 'DEVENGOS' },
+  { id: 'group', label: 'Grupo de cotizacion', value: '7', section: 'COTIZACIONES' },
+  { id: 'common-base', label: 'Base contingencias comunes', value: '2.858,33 EUR', section: 'COTIZACIONES' },
+  { id: 'unemployment-base', label: 'Base desempleo y formacion', value: '2.858,33 EUR', section: 'COTIZACIONES' },
+  { id: 'worker-ss', label: 'Seguridad Social trabajador', value: '-185,16 EUR', section: 'DEDUCCIONES' },
+  { id: 'irpf', label: 'Retencion IRPF', value: '-411,60 EUR', section: 'DEDUCCIONES' },
+  { id: 'net-pay', label: 'Liquido a percibir', value: '2.261,57 EUR', section: 'RESULTADO' },
+]
+
+const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
+  1: {
+    intro: 'Aqui localizamos todo lo que suma antes de aplicar descuentos. Es el punto de partida de la calculadora.',
+    bullets: ['Salario base', 'Complementos', 'Pagas extra', 'Salario en especie'],
+    resultLabel: 'Bruto mensual ejemplo',
+    resultValue: '2.858,33 EUR',
+    highlightRows: ['salary-base', 'salary-complements', 'extra-pay', 'in-kind', 'gross-total'],
+  },
+  2: {
+    intro: 'Aqui miramos las bases de cotizacion: la cifra sobre la que se calculan varias cuotas de Seguridad Social.',
+    bullets: ['Grupo de cotizacion: 7', 'Base contingencias comunes: 2.858,33 EUR', 'Base desempleo y formacion: 2.858,33 EUR'],
+    resultLabel: 'Base usada ejemplo',
+    resultValue: '2.858,33 EUR',
+    highlightRows: ['group', 'common-base', 'unemployment-base'],
+  },
+  3: {
+    intro: 'Aqui se ve que una parte de la Seguridad Social se descuenta de la nomina y otra la paga la empresa fuera del neto.',
+    bullets: ['Base de cotizacion', 'Cuotas del trabajador', 'Aportacion empresarial', 'Descuento en nomina'],
+    resultLabel: 'Descuento trabajador ejemplo',
+    resultValue: '185,16 EUR',
+    highlightRows: ['common-base', 'unemployment-base', 'worker-ss'],
+  },
+  4: {
+    intro: 'Aqui conectamos tu situacion personal, beneficios y ajustes con la parte de IRPF que puede cambiar el impuesto final.',
+    bullets: ['Minimos personales y familiares', 'Reducciones antes de tramos', 'Deducciones al final', 'Beneficios en especie'],
+    resultLabel: 'Fila relacionada en nomina',
+    resultValue: 'IRPF y especie',
+    highlightRows: ['in-kind', 'irpf'],
+  },
+  5: {
+    intro: 'Aqui miramos la retencion de IRPF como resultado visible en la nomina, aunque el calculo interno se haga por tramos.',
+    bullets: ['Base liquidable', 'Tramos estatal y autonomico', 'Tipo marginal', 'Retencion aplicada'],
+    resultLabel: 'Retencion ejemplo',
+    resultValue: '411,60 EUR',
+    highlightRows: ['irpf'],
+  },
+  6: {
+    intro: 'Aqui juntamos los descuentos que salen de la nomina para llegar al importe que finalmente recibes.',
+    bullets: ['Total devengado', 'Seguridad Social', 'IRPF', 'Liquido a percibir'],
+    resultLabel: 'Neto mensual ejemplo',
+    resultValue: '2.261,57 EUR',
+    highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
+  },
+  7: {
+    intro: 'Aqui recordamos que IVA e impuestos de consumo no aparecen como descuento de nomina: dependen de como gastas tu neto.',
+    bullets: ['No aparece en la nomina', 'Depende del consumo', 'IVA incluido en precios', 'Otros tributos separados'],
+    resultLabel: 'En nomina ejemplo',
+    resultValue: 'No aparece',
+    highlightRows: ['net-pay'],
+  },
+  8: {
+    intro: 'Aqui usamos la nomina como resumen para separar bruto, coste, descuentos y neto antes de cerrar la lectura.',
+    bullets: ['Bruto', 'Cotizaciones', 'IRPF', 'Neto'],
+    resultLabel: 'Lectura final',
+    resultValue: 'Bruto -> Neto',
+    highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
+  },
+}
+
+function PayrollExamplePanel({ stepId }: { stepId: number }) {
+  const example = PAYROLL_EXAMPLES[stepId] ?? PAYROLL_EXAMPLES[1]
+  let currentSection = ''
+
+  return (
+    <div className="wfsc-payroll" aria-label="Ejemplo de nomina">
+      <div className="wfsc-payroll__copy">
+        <h3>En la nomina: que estoy viendo?</h3>
+        <p>{example.intro}</p>
+        <ul>
+          {example.bullets.map((bullet) => (
+            <li key={bullet}>{bullet}</li>
+          ))}
+        </ul>
+        <strong>
+          <span>{example.resultLabel}</span>
+          {example.resultValue}
+        </strong>
+      </div>
+
+      <figure className="wfsc-payroll__sheet">
+        <figcaption>Ejemplo de nomina</figcaption>
+        <div className="wfsc-payroll-paper">
+          <header>
+            <div>
+              <strong>EMPRESA EJEMPLO, S.L.</strong>
+              <span>CIF: B12345678</span>
+            </div>
+            <div>
+              <strong>Trabajador/a: Juan Perez Lopez</strong>
+              <span>Periodo: Mayo 2026</span>
+            </div>
+          </header>
+          <div className="wfsc-payroll-table">
+            {PAYROLL_ROWS.map((row) => {
+              const showSection = row.section !== currentSection
+              currentSection = row.section
+              const isHighlighted = example.highlightRows.includes(row.id)
+
+              return (
+                <div className={isHighlighted ? 'is-highlighted' : undefined} key={row.id}>
+                  {showSection && <span className="wfsc-payroll-section">{row.section}</span>}
+                  <span>{row.label}</span>
+                  <strong>{row.value}</strong>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </figure>
+    </div>
+  )
+}
+
 export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFiscalStepsCardProps) {
   const [internalActiveStepId, setInternalActiveStepId] = useState(1)
   const currentStepId = activeStepId ?? internalActiveStepId
@@ -243,28 +379,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
 
   return (
     <section className="wfsc" aria-labelledby="wfsc-title">
-      <nav className="wfsc-steps" aria-label="Pasos de la calculadora fiscal">
-        {WORKER_FISCAL_STEPS.map((step) => {
-          const StepIcon = step.Icon
-          const isActive = step.id === activeStep.id
-          return (
-            <button
-              key={step.id}
-              type="button"
-              className={isActive ? 'is-active' : undefined}
-              onClick={() => setActiveStep(step.id)}
-              aria-current={isActive ? 'step' : undefined}
-            >
-              <span className="wfsc-step-number">{step.id}</span>
-              <StepIcon size={31} strokeWidth={2.15} aria-hidden="true" />
-              <strong>{step.title}</strong>
-              <small>{step.subtitle}</small>
-            </button>
-          )
-        })}
-      </nav>
-
-
       <div className="wfsc-stage">
         <button
           className="wfsc-nav wfsc-nav--previous"
@@ -288,7 +402,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
               <h2 id="wfsc-title">{activeStep.title}</h2>
               <span>{activeStep.description}</span>
               <ul aria-label="Conceptos incluidos en este paso">
-                {activeStep.checklist.map((item) => (
+                {(activeStep.checklist.length > 0 ? activeStep.checklist : activeStep.details).map((item) => (
                   <li key={item}>
                     <CheckCircle2 size={17} aria-hidden="true" />
                     {item}
@@ -299,16 +413,12 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
           </div>
 
           <aside className="wfsc-help" aria-label="Ayuda del paso activo">
-            <div className="wfsc-help__head">
-              <h3>{activeStep.helpTitle}</h3>
-            </div>
-            <p>{activeStep.helpBody}</p>
-            <ul className="wfsc-detail-list" aria-label="Detalles del paso activo">
-              {activeStep.details.map((detail) => (
-                <li key={detail}>{detail}</li>
-              ))}
-            </ul>
+            <PayrollExamplePanel stepId={activeStep.id} />
             <div className="wfsc-important">
+              <strong><FileText size={18} aria-hidden="true" /> {activeStep.helpTitle}</strong>
+              <span>{activeStep.helpBody}</span>
+            </div>
+            <div className="wfsc-important wfsc-important--strong">
               <strong><Lightbulb size={18} aria-hidden="true" /> Importante</strong>
               <span>{activeStep.important}</span>
             </div>
@@ -330,6 +440,21 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
           <span style={{ width: `${progress}%` }} />
           <b style={{ left: `clamp(54px, ${progress}%, calc(100% - 54px))` }}>{Math.round(progress)}% completado</b>
         </div>
+
+        <nav className="wfsc-step-dots" aria-label="Cambiar paso">
+          {WORKER_FISCAL_STEPS.map((step) => (
+            <button
+              key={step.id}
+              type="button"
+              className={step.id === activeStep.id ? 'is-active' : undefined}
+              onClick={() => setActiveStep(step.id)}
+              aria-current={step.id === activeStep.id ? 'step' : undefined}
+              aria-label={`Ir al paso ${step.id}: ${step.title}`}
+            >
+              <span>{step.id}</span>
+            </button>
+          ))}
+        </nav>
       </div>
     </section>
   )
