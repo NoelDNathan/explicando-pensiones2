@@ -4,8 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
-  FileText,
-  Lightbulb,
   Scale,
   Shield,
   ShoppingCart,
@@ -251,6 +249,7 @@ const PAYROLL_ROWS: PayrollRow[] = [
   { id: 'worker-ss', code: '/350', concept: 'TRAB.CONT.COMUNES', price: '4,85', deductions: '84,88' },
   { id: 'unemployment-worker', code: '/370', concept: 'TRAB.DESEMPLEO', price: '1,55', deductions: '27,13' },
   { id: 'training-worker', code: '/380', concept: 'TRAB.FORMAC.PROFESIONAL', price: '0,10', deductions: '1,75' },
+  { id: 'irpf-withholding', code: '/475', concept: 'RETENCION IRPF', price: '12,00', deductions: '210,00' },
 ]
 
 const PAYROLL_TOTALS = [
@@ -260,7 +259,7 @@ const PAYROLL_TOTALS = [
   { id: 'common-base', label: 'BASE CC.CC.', value: '1.750,00' },
   { id: 'professional-base', label: 'BASE CC.PP.', value: '1.750,00' },
   { id: 'gross-total-copy', label: 'TOTAL DEVENGADO', value: '1.750,00' },
-  { id: 'deductions-total', label: 'TOT.DEDUCCIONES', value: '113,76' },
+  { id: 'deductions-total', label: 'TOT.DEDUCCIONES', value: '323,76' },
 ]
 
 const PAYROLL_BASE_ROWS: PayrollBaseRow[] = [
@@ -284,33 +283,33 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   },
   3: {
     resultLabel: 'TOT.DEDUCCIONES',
-    resultValue: '113,76',
-    highlightRows: ['worker-ss', 'unemployment-worker', 'training-worker', 'deductions-total'],
+    resultValue: '323,76',
+    highlightRows: ['worker-ss', 'unemployment-worker', 'training-worker', 'irpf-withholding', 'deductions-total'],
   },
   4: {
     resultLabel: 'BASE IRPF',
     resultValue: '1.750,00',
-    highlightRows: ['in-kind', 'irpf'],
+    highlightRows: ['in-kind', 'irpf', 'irpf-withholding'],
   },
   5: {
-    resultLabel: 'BASE SUJETA A RETENCION DEL IRPF',
-    resultValue: '1.750,00',
-    highlightRows: ['irpf'],
+    resultLabel: 'RETENCION IRPF',
+    resultValue: '210,00',
+    highlightRows: ['irpf', 'irpf-withholding'],
   },
   6: {
     resultLabel: 'LIQUIDO TOTAL',
-    resultValue: '1.636,24',
-    highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
+    resultValue: '1.426,24',
+    highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'deductions-total', 'net-pay'],
   },
   7: {
     resultLabel: 'IMPORTE',
-    resultValue: '1.636,24#',
+    resultValue: '1.426,24#',
     highlightRows: ['net-pay'],
   },
   8: {
     resultLabel: 'IMPORTE',
-    resultValue: '1.636,24#',
-    highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
+    resultValue: '1.426,24#',
+    highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'net-pay'],
   },
 }
 
@@ -408,7 +407,7 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
 
           <div className="wfsc-payroll-liquid">
             <span>LIQUIDO TOTAL</span>
-            <strong className={isHighlighted('net-pay') ? 'is-highlighted' : undefined}>1.636,24</strong>
+            <strong className={isHighlighted('net-pay') ? 'is-highlighted' : undefined}>1.426,24</strong>
           </div>
 
           <section className="wfsc-payroll-bases" aria-label="Bases de cotizacion e IRPF">
@@ -495,14 +494,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
 
           <aside className="wfsc-help" aria-label="Ayuda del paso activo">
             <PayrollExamplePanel stepId={activeStep.id} />
-            <div className="wfsc-important">
-              <strong><FileText size={18} aria-hidden="true" /> {activeStep.helpTitle}</strong>
-              <span>{activeStep.helpBody}</span>
-            </div>
-            <div className="wfsc-important wfsc-important--strong">
-              <strong><Lightbulb size={18} aria-hidden="true" /> Importante</strong>
-              <span>{activeStep.important}</span>
-            </div>
           </aside>
         </div>
 

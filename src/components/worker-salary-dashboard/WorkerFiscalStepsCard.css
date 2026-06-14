@@ -122,8 +122,8 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(340px, 0.82fr) minmax(540px, 1.18fr);
-  gap: clamp(28px, 3.5vw, 54px);
+  grid-template-columns: minmax(390px, 0.94fr) minmax(500px, 1.06fr);
+  gap: clamp(20px, 2vw, 32px);
   align-items: center;
   min-width: 0;
 }
@@ -204,9 +204,10 @@
 .wfsc-help {
   position: relative;
   display: grid;
-  gap: 16px;
+  align-content: start;
+  gap: 0;
   min-width: 0;
-  padding: clamp(18px, 1.8vw, 28px);
+  padding: clamp(14px, 1.4vw, 22px);
   border: 1px solid var(--wfsc-border-strong);
   border-radius: 16px;
   background:
@@ -239,7 +240,7 @@
 }
 
 .wfsc-payroll-paper {
-  width: min(100%, 640px);
+  width: min(100%, 600px);
   overflow: hidden;
   padding: 10px 12px 12px;
   border: 1px solid #111;
@@ -534,35 +535,6 @@
   white-space: nowrap;
 }
 
-.wfsc-important {
-  display: grid;
-  gap: 9px;
-  padding: 15px 17px;
-  border: 1px solid rgba(88, 145, 201, 0.38);
-  border-radius: 11px;
-  background: rgba(9, 31, 54, 0.72);
-}
-
-.wfsc-important--strong {
-  border-color: rgba(95, 232, 117, 0.72);
-  background: rgba(7, 39, 43, 0.52);
-}
-
-.wfsc-important strong {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--wfsc-green);
-  font-size: 14px;
-}
-
-.wfsc-important span {
-  margin: 0;
-  color: #d8e3f0;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
 .wfsc-progress {
   position: absolute;
   left: 26px;
@@ -734,10 +706,6 @@
 
   .wfsc-description p {
     font-size: 14px;
-  }
-
-  .wfsc-important span {
-    font-size: 13px;
   }
 
   .wfsc-payroll figcaption {
