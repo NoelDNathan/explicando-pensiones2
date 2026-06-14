@@ -265,12 +265,9 @@ const PAYROLL_TOTALS = [
 
 const PAYROLL_BASE_ROWS: PayrollBaseRow[] = [
   { id: 'salary-monthly', concept: 'Importe remuneracion mensual', base: '1.750,00' },
-  { id: 'extra-pay-base', concept: 'Importe prorrata pagas extra' },
   { id: 'common-base-detail', concept: 'TOTAL', base: '1.750,00', rate: '24,35', company: '426,12' },
-  { id: 'professional-base-detail', concept: 'AT y EP', rate: '1,50', company: '26,25' },
   { id: 'unemployment-base', concept: 'Desempleo', rate: '5,50', company: '96,25' },
   { id: 'training-base', concept: 'Form. Profesional', base: '1.750,00', rate: '0,60', company: '10,50' },
-  { id: 'fogasa-base', concept: 'Fondo Garantia Salarial', rate: '0,20', company: '3,50' },
   { id: 'irpf', concept: 'Base sujeta a retencion del IRPF', base: '1.750,00' },
 ]
 
