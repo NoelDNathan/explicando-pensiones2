@@ -186,27 +186,19 @@
   letter-spacing: 0;
 }
 
-.wfsc-copy > span {
-  display: block;
+.wfsc-description {
+  display: grid;
+  gap: 14px;
   max-width: 560px;
-  max-height: clamp(220px, 42vh, 430px);
   margin-top: 24px;
-  padding-right: 13px;
-  overflow-y: auto;
+}
+
+.wfsc-description p {
+  margin: 0;
   color: #d2dbea;
   font-size: clamp(15px, 1.22vw, 18px);
   line-height: 1.52;
-  scrollbar-color: rgba(95, 232, 117, 0.6) rgba(80, 113, 150, 0.18);
-  scrollbar-width: thin;
-}
-
-.wfsc-copy > span::-webkit-scrollbar {
-  width: 7px;
-}
-
-.wfsc-copy > span::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(95, 232, 117, 0.58);
+  font-weight: 500;
 }
 
 .wfsc-help {
@@ -663,9 +655,8 @@
     align-items: stretch;
   }
 
-  .wfsc-copy > span {
+  .wfsc-description {
     max-width: none;
-    max-height: 260px;
   }
 }
 
@@ -711,10 +702,6 @@
     font-size: clamp(34px, 11vw, 52px);
   }
 
-  .wfsc-copy > span {
-    max-height: 300px;
-  }
-
   .wfsc-help {
     padding: 18px;
   }
@@ -740,8 +727,12 @@
     gap: 18px;
   }
 
-  .wfsc-copy > span {
-    max-height: 260px;
+  .wfsc-description {
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .wfsc-description p {
     font-size: 14px;
   }
 

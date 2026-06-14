@@ -444,6 +444,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
   const currentStepId = activeStepId ?? internalActiveStepId
   const activeIndex = WORKER_FISCAL_STEPS.findIndex((step) => step.id === currentStepId)
   const activeStep = WORKER_FISCAL_STEPS[activeIndex] ?? WORKER_FISCAL_STEPS[0]
+  const descriptionParagraphs = activeStep.description.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   const progress = useMemo(() => activeStep.id / WORKER_FISCAL_STEPS.length * 100, [activeStep.id])
   const ActiveIcon = activeStep.Icon
 
@@ -484,7 +485,11 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
             <div className="wfsc-copy">
               <p>Paso {activeStep.id} de {WORKER_FISCAL_STEPS.length}</p>
               <h2 id="wfsc-title">{activeStep.title}</h2>
-              <span>{activeStep.description}</span>
+              <div className="wfsc-description">
+                {descriptionParagraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
             </div>
           </div>
 
