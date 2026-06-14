@@ -34,6 +34,24 @@ type PayrollExample = {
   highlightRows: string[]
 }
 
+type PayrollRow = {
+  id: string
+  code: string
+  concept: string
+  units?: string
+  price?: string
+  earnings?: string
+  deductions?: string
+}
+
+type PayrollBaseRow = {
+  id: string
+  concept: string
+  base?: string
+  rate?: string
+  company?: string
+}
+
 type WorkerFiscalStepsCardProps = {
   activeStepId?: number
   onStepChange?: (stepId: number) => void
@@ -225,101 +243,195 @@ Idea clave: dos personas con el mismo sueldo pueden pagar impuestos totales dist
   },
 ]
 
-const PAYROLL_ROWS = [
-  { id: 'salary-base', label: 'Salario base', value: '2.100,00 EUR', section: 'DEVENGOS' },
-  { id: 'salary-complements', label: 'Complementos salariales', value: '350,00 EUR', section: 'DEVENGOS' },
-  { id: 'extra-pay', label: 'Prorrata pagas extra', value: '408,33 EUR', section: 'DEVENGOS' },
-  { id: 'in-kind', label: 'Retribucion en especie', value: '0,00 EUR', section: 'DEVENGOS' },
-  { id: 'gross-total', label: 'Total devengado', value: '2.858,33 EUR', section: 'DEVENGOS' },
-  { id: 'group', label: 'Grupo de cotizacion', value: '7', section: 'COTIZACIONES' },
-  { id: 'common-base', label: 'Base contingencias comunes', value: '2.858,33 EUR', section: 'COTIZACIONES' },
-  { id: 'unemployment-base', label: 'Base desempleo y formacion', value: '2.858,33 EUR', section: 'COTIZACIONES' },
-  { id: 'worker-ss', label: 'Seguridad Social trabajador', value: '-185,16 EUR', section: 'DEDUCCIONES' },
-  { id: 'irpf', label: 'Retencion IRPF', value: '-411,60 EUR', section: 'DEDUCCIONES' },
-  { id: 'net-pay', label: 'Liquido a percibir', value: '2.261,57 EUR', section: 'RESULTADO' },
+const PAYROLL_ROWS: PayrollRow[] = [
+  { id: 'salary-base', code: '0001', concept: 'SALARIO BASE', earnings: '1.200,40' },
+  { id: 'salary-complements', code: '0003', concept: 'PLUS CONVENIO', earnings: '106,40' },
+  { id: 'salary-extra-complement', code: '0005', concept: 'COMPLEMENTO A DEVENGOS', earnings: '225,36' },
+  { id: 'extra-pay', code: '0006', concept: 'PAGA EXTRA PRORRATEADA', earnings: '217,84' },
+  { id: 'worker-ss', code: '/350', concept: 'TRAB.CONT.COMUNES', price: '4,85', deductions: '84,88' },
+  { id: 'unemployment-worker', code: '/370', concept: 'TRAB.DESEMPLEO', price: '1,55', deductions: '27,13' },
+  { id: 'training-worker', code: '/380', concept: 'TRAB.FORMAC.PROFESIONAL', price: '0,10', deductions: '1,75' },
+]
+
+const PAYROLL_TOTALS = [
+  { id: 'gross-total', label: 'REM.TOTALES', value: '1.750,00' },
+  { id: 'in-kind', label: 'BASE IRPF ESPECIE', value: '' },
+  { id: 'irpf-base', label: 'BASE IRPF', value: '1.750,00' },
+  { id: 'common-base', label: 'BASE CC.CC.', value: '1.750,00' },
+  { id: 'professional-base', label: 'BASE CC.PP.', value: '1.750,00' },
+  { id: 'gross-total-copy', label: 'TOTAL DEVENGADO', value: '1.750,00' },
+  { id: 'deductions-total', label: 'TOT.DEDUCCIONES', value: '113,76' },
+]
+
+const PAYROLL_BASE_ROWS: PayrollBaseRow[] = [
+  { id: 'salary-monthly', concept: 'Importe remuneracion mensual', base: '1.750,00' },
+  { id: 'extra-pay-base', concept: 'Importe prorrata pagas extra' },
+  { id: 'common-base-detail', concept: 'TOTAL', base: '1.750,00', rate: '24,35', company: '426,12' },
+  { id: 'professional-base-detail', concept: 'AT y EP', rate: '1,50', company: '26,25' },
+  { id: 'unemployment-base', concept: 'Desempleo', rate: '5,50', company: '96,25' },
+  { id: 'training-base', concept: 'Form. Profesional', base: '1.750,00', rate: '0,60', company: '10,50' },
+  { id: 'fogasa-base', concept: 'Fondo Garantia Salarial', rate: '0,20', company: '3,50' },
+  { id: 'irpf', concept: 'Base sujeta a retencion del IRPF', base: '1.750,00' },
 ]
 
 const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   1: {
-    resultLabel: 'Bruto mensual ejemplo',
-    resultValue: '2.858,33 EUR',
-    highlightRows: ['salary-base', 'salary-complements', 'extra-pay', 'in-kind', 'gross-total'],
+    resultLabel: 'TOTAL DEVENGADO',
+    resultValue: '1.750,00',
+    highlightRows: ['salary-base', 'salary-complements', 'salary-extra-complement', 'extra-pay', 'gross-total', 'gross-total-copy'],
   },
   2: {
-    resultLabel: 'Base usada ejemplo',
-    resultValue: '2.858,33 EUR',
-    highlightRows: ['group', 'common-base', 'unemployment-base'],
+    resultLabel: 'BASE CC.CC.',
+    resultValue: '1.750,00',
+    highlightRows: ['common-base', 'professional-base', 'common-base-detail', 'unemployment-base'],
   },
   3: {
-    resultLabel: 'Descuento trabajador ejemplo',
-    resultValue: '185,16 EUR',
-    highlightRows: ['common-base', 'unemployment-base', 'worker-ss'],
+    resultLabel: 'TOT.DEDUCCIONES',
+    resultValue: '113,76',
+    highlightRows: ['worker-ss', 'unemployment-worker', 'training-worker', 'deductions-total'],
   },
   4: {
-    resultLabel: 'Fila relacionada en nomina',
-    resultValue: 'IRPF y especie',
+    resultLabel: 'BASE IRPF',
+    resultValue: '1.750,00',
     highlightRows: ['in-kind', 'irpf'],
   },
   5: {
-    resultLabel: 'Retencion ejemplo',
-    resultValue: '411,60 EUR',
+    resultLabel: 'BASE SUJETA A RETENCION DEL IRPF',
+    resultValue: '1.750,00',
     highlightRows: ['irpf'],
   },
   6: {
-    resultLabel: 'Neto mensual ejemplo',
-    resultValue: '2.261,57 EUR',
+    resultLabel: 'LIQUIDO TOTAL',
+    resultValue: '1.636,24',
     highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
   },
   7: {
-    resultLabel: 'En nomina ejemplo',
-    resultValue: 'No aparece',
+    resultLabel: 'IMPORTE',
+    resultValue: '1.636,24#',
     highlightRows: ['net-pay'],
   },
   8: {
-    resultLabel: 'Lectura final',
-    resultValue: 'Bruto -> Neto',
+    resultLabel: 'IMPORTE',
+    resultValue: '1.636,24#',
     highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
   },
 }
 
 function PayrollExamplePanel({ stepId }: { stepId: number }) {
   const example = PAYROLL_EXAMPLES[stepId] ?? PAYROLL_EXAMPLES[1]
-  let currentSection = ''
+  const isHighlighted = (id: string) => example.highlightRows.includes(id)
 
   return (
     <figure className="wfsc-payroll" aria-label="Ejemplo de nomina">
-      <figcaption>Ejemplo de nomina</figcaption>
+      <figcaption>Copia anonimizada - datos personales ocultos</figcaption>
       <div className="wfsc-payroll__sheet">
         <div className="wfsc-payroll-paper">
           <div className="wfsc-payroll-title">
-            <span>RECIBO INDIVIDUAL DE SALARIOS</span>
-            <strong>Nomina mensual</strong>
+            <span>RECIBO INDIVIDUAL JUSTIFICATIVO DEL PAGO DE SALARIOS</span>
+            <strong>[DATOS PERSONALES OCULTOS]</strong>
           </div>
-          <header>
+          <div className="wfsc-payroll-meta" aria-label="Datos de la nomina">
             <div>
-              <strong>EMPRESA EJEMPLO, S.L.</strong>
-              <span>CIF: B12345678</span>
+              <strong>TRABAJADOR/A</strong>
+              <span>[OCULTO]</span>
             </div>
             <div>
-              <strong>Trabajador/a: Juan Perez Lopez</strong>
-              <span>Periodo: Mayo 2026</span>
+              <strong>CENTRO DE TRABAJO</strong>
+              <span>BARCELONA</span>
             </div>
-          </header>
-          <div className="wfsc-payroll-table">
-            {PAYROLL_ROWS.map((row) => {
-              const showSection = row.section !== currentSection
-              currentSection = row.section
-              const isHighlighted = example.highlightRows.includes(row.id)
+            <div>
+              <strong>PERIODO LIQUIDACION</strong>
+              <span>01.05.2026 - 31.05.2026</span>
+            </div>
+            <div>
+              <strong>DIAS</strong>
+              <span>31</span>
+            </div>
+            <div>
+              <strong>N. AFILIA. S.S.</strong>
+              <span>[OCULTO]</span>
+            </div>
+            <div>
+              <strong>NIF</strong>
+              <span>[OCULTO]</span>
+            </div>
+            <div>
+              <strong>ANTIGUEDAD</strong>
+              <span>[OCULTO]</span>
+            </div>
+            <div>
+              <strong>CATEGORIA PROFESIONAL</strong>
+              <span>Technical Analyst</span>
+            </div>
+            <div>
+              <strong>CENTRO COMPETENCIA</strong>
+              <span>[OCULTO]</span>
+            </div>
+            <div>
+              <strong>G.C.</strong>
+              <span>03</span>
+            </div>
+            <div>
+              <strong>G. OCUP.</strong>
+              <span>100,00</span>
+            </div>
+          </div>
 
+          <div className="wfsc-payroll-table" aria-label="Conceptos de nomina">
+            <div className="wfsc-payroll-table__head">
+              <span>COD.</span>
+              <span>CONCEPTO</span>
+              <span>UNIDADES</span>
+              <span>PRECIO</span>
+              <span>DEVENGOS</span>
+              <span>DEDUCC.</span>
+            </div>
+            {PAYROLL_ROWS.map((row) => {
               return (
-                <div className={isHighlighted ? 'is-highlighted' : undefined} key={row.id}>
-                  {showSection && <span className="wfsc-payroll-section">{row.section}</span>}
-                  <span>{row.label}</span>
-                  <strong>{row.value}</strong>
+                <div className={isHighlighted(row.id) ? 'is-highlighted' : undefined} key={row.id}>
+                  <span>{row.code}</span>
+                  <span>{row.concept}</span>
+                  <span>{row.units ?? ''}</span>
+                  <span>{row.price ?? ''}</span>
+                  <strong>{row.earnings ?? ''}</strong>
+                  <strong>{row.deductions ?? ''}</strong>
                 </div>
               )
             })}
           </div>
+
+          <div className="wfsc-payroll-totals" aria-label="Totales de nomina">
+            {PAYROLL_TOTALS.map((total) => (
+              <div className={isHighlighted(total.id) ? 'is-highlighted' : undefined} key={total.id}>
+                <span>{total.label}</span>
+                <strong>{total.value}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="wfsc-payroll-liquid">
+            <span>LIQUIDO TOTAL</span>
+            <strong className={isHighlighted('net-pay') ? 'is-highlighted' : undefined}>1.636,24</strong>
+          </div>
+
+          <section className="wfsc-payroll-bases" aria-label="Bases de cotizacion e IRPF">
+            <h3>DETERMINACION DE LAS BASES DE COTIZACION A LA SEGURIDAD SOCIAL Y CONCEPTOS DE RECAUDACION CONJUNTA Y DE LA BASE SUJETA A RETENCION DEL IRPF Y APORTACION DE LA EMPRESA</h3>
+            <div className="wfsc-payroll-bases__head">
+              <span>CONCEPTO</span>
+              <span>BASE</span>
+              <span>TIPO</span>
+              <span>APORTACION EMPRESA</span>
+            </div>
+            {PAYROLL_BASE_ROWS.map((row) => (
+              <div className={isHighlighted(row.id) ? 'is-highlighted' : undefined} key={row.id}>
+                <span>{row.concept}</span>
+                <strong>{row.base ?? ''}</strong>
+                <strong>{row.rate ?? ''}</strong>
+                <strong>{row.company ?? ''}</strong>
+              </div>
+            ))}
+          </section>
+
           <footer className="wfsc-payroll-result">
             <span>{example.resultLabel}</span>
             <strong>{example.resultValue}</strong>

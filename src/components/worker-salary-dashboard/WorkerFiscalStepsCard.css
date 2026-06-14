@@ -240,11 +240,12 @@
 .wfsc-payroll-paper {
   width: min(100%, 620px);
   overflow: hidden;
-  border: 1px solid rgba(9, 20, 38, 0.2);
-  border-radius: 8px;
-  color: #122033;
-  background: #fbfcff;
-  font-family: Arial, "Segoe UI", sans-serif;
+  padding: 14px 16px 16px;
+  border: 1px solid #111;
+  border-radius: 3px;
+  color: #050505;
+  background: #fff;
+  font-family: "Courier New", Courier, monospace;
   box-shadow:
     0 18px 42px rgba(0, 0, 0, 0.36),
     0 0 0 1px rgba(255, 255, 255, 0.5);
@@ -252,91 +253,260 @@
 
 .wfsc-payroll-title {
   display: grid;
-  gap: 3px;
-  padding: 14px 16px 12px;
-  border-bottom: 1px solid #d4dce7;
-  text-align: center;
+  grid-template-columns: minmax(0, 1fr) 38%;
+  gap: 12px;
+  align-items: start;
+  min-height: 54px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #b0b0b0;
+  text-align: left;
 }
 
 .wfsc-payroll-title span {
-  color: #172136;
-  font-size: 11px;
-  font-weight: 900;
+  color: #050505;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 1.25;
   letter-spacing: 0;
 }
 
 .wfsc-payroll-title strong {
-  color: #25334a;
-  font-size: 12px;
-  line-height: 1.1;
-}
-
-.wfsc-payroll-paper header {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid #d4dce7;
-}
-
-.wfsc-payroll-paper header div {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-  padding: 16px;
-}
-
-.wfsc-payroll-paper header div + div {
-  border-left: 1px solid #d4dce7;
-}
-
-.wfsc-payroll-paper header strong,
-.wfsc-payroll-paper header span {
-  overflow: hidden;
-  font-size: 11px;
+  justify-self: end;
+  min-width: 160px;
+  padding: 8px 10px;
+  border: 1px solid #111;
+  color: #050505;
+  background: #fff;
+  font-family: Arial, "Segoe UI", sans-serif;
+  font-size: 8px;
+  font-weight: 500;
   line-height: 1.15;
+  text-align: center;
+}
+
+.wfsc-payroll-meta {
+  display: grid;
+  grid-template-columns: 1.35fr 1.08fr 0.72fr 0.28fr;
+  border: 1px solid #111;
+  border-bottom: 0;
+}
+
+.wfsc-payroll-meta div {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 28px;
+  border-right: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+.wfsc-payroll-meta div:nth-child(4),
+.wfsc-payroll-meta div:last-child {
+  border-right: 0;
+}
+
+.wfsc-payroll-meta div:nth-child(n + 5) {
+  min-height: 30px;
+}
+
+.wfsc-payroll-meta div:nth-child(5),
+.wfsc-payroll-meta div:nth-child(6),
+.wfsc-payroll-meta div:nth-child(7),
+.wfsc-payroll-meta div:nth-child(8),
+.wfsc-payroll-meta div:nth-child(9),
+.wfsc-payroll-meta div:nth-child(10),
+.wfsc-payroll-meta div:nth-child(11) {
+  grid-column: auto;
+}
+
+.wfsc-payroll-meta div:nth-child(5) {
+  grid-column: span 1;
+}
+
+.wfsc-payroll-meta div:nth-child(8) {
+  grid-column: span 1;
+}
+
+.wfsc-payroll-meta strong,
+.wfsc-payroll-meta span {
+  overflow: hidden;
+  padding: 2px 4px;
+  font-size: 8.5px;
+  line-height: 1.12;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.wfsc-payroll-meta strong {
+  font-weight: 700;
+}
+
 .wfsc-payroll-table {
   display: grid;
-  padding: 12px;
+  border: 1px solid #111;
+  border-top: 0;
 }
 
-.wfsc-payroll-table > div {
+.wfsc-payroll-table > div,
+.wfsc-payroll-table__head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
+  grid-template-columns: 34px minmax(0, 1fr) 70px 70px 74px 68px;
   align-items: center;
-  min-height: 31px;
-  padding: 5px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  line-height: 1.1;
+  min-height: 14px;
+  font-size: 8.5px;
+  line-height: 1.12;
 }
 
-.wfsc-payroll-table > div + div {
-  border-top: 1px solid #edf1f6;
-}
-
-.wfsc-payroll-table > div.is-highlighted {
-  border: 1px solid rgba(61, 226, 94, 0.92);
-  background: linear-gradient(90deg, rgba(83, 235, 113, 0.18), rgba(83, 235, 113, 0.06));
-  box-shadow: 0 0 0 1px rgba(83, 235, 113, 0.1);
-}
-
-.wfsc-payroll-table strong {
-  color: #0c1728;
-  font-size: 12px;
+.wfsc-payroll-table > div > span,
+.wfsc-payroll-table > div > strong,
+.wfsc-payroll-table__head > span {
+  min-width: 0;
+  padding: 2px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.wfsc-payroll-section {
-  grid-column: 1 / -1;
-  margin: 5px 0 2px;
-  color: #172136;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0;
+.wfsc-payroll-table__head {
+  min-height: 15px;
+  border-bottom: 1px solid #111;
+  font-weight: 700;
+  text-align: center;
+}
+
+.wfsc-payroll-table > div:not(.wfsc-payroll-table__head) {
+  min-height: 14px;
+}
+
+.wfsc-payroll-table > div.is-highlighted,
+.wfsc-payroll-totals > div.is-highlighted,
+.wfsc-payroll-bases > div.is-highlighted,
+.wfsc-payroll-liquid strong.is-highlighted {
+  outline: 1px solid rgba(58, 211, 87, 0.95);
+  outline-offset: -1px;
+  background: rgba(95, 232, 117, 0.12);
+}
+
+.wfsc-payroll-table strong {
+  color: #050505;
+  font-size: 8.5px;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.wfsc-payroll-totals {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-top: 10px;
+  border: 1px solid #111;
+}
+
+.wfsc-payroll-totals > div {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 34px;
+  border-right: 1px solid #111;
+}
+
+.wfsc-payroll-totals > div:last-child {
+  border-right: 0;
+}
+
+.wfsc-payroll-totals span,
+.wfsc-payroll-totals strong {
+  min-width: 0;
+  padding: 2px 3px;
+  overflow: hidden;
+  color: #050505;
+  font-size: 8px;
+  line-height: 1.08;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wfsc-payroll-totals strong {
+  align-self: end;
+  font-size: 8.5px;
+  font-weight: 400;
+  text-align: right;
+}
+
+.wfsc-payroll-liquid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 130px;
+  justify-content: end;
+  margin-left: auto;
+  width: 42%;
+  min-width: 210px;
+  border-right: 1px solid #111;
+  border-bottom: 1px solid #111;
+  border-left: 1px solid #111;
+}
+
+.wfsc-payroll-liquid span,
+.wfsc-payroll-liquid strong {
+  padding: 3px 5px;
+  color: #050505;
+  font-size: 9px;
+  line-height: 1.1;
+}
+
+.wfsc-payroll-liquid span {
+  font-weight: 700;
+}
+
+.wfsc-payroll-liquid strong {
+  border-left: 1px solid #111;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.wfsc-payroll-bases {
+  display: grid;
+  margin-top: 12px;
+  border: 1px solid #111;
+}
+
+.wfsc-payroll-bases h3 {
+  margin: 0;
+  padding: 5px 6px;
+  border-bottom: 1px solid #111;
+  color: #050505;
+  font-size: 8.5px;
+  line-height: 1.18;
+  font-weight: 700;
+}
+
+.wfsc-payroll-bases__head,
+.wfsc-payroll-bases > div:not(.wfsc-payroll-bases__head) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 84px 64px 94px;
+  min-height: 14px;
+  align-items: center;
+}
+
+.wfsc-payroll-bases__head {
+  border-bottom: 1px solid #111;
+  font-weight: 700;
+}
+
+.wfsc-payroll-bases span,
+.wfsc-payroll-bases strong {
+  min-width: 0;
+  padding: 2px 4px;
+  overflow: hidden;
+  color: #050505;
+  font-size: 8.5px;
+  line-height: 1.12;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wfsc-payroll-bases strong {
+  font-weight: 400;
+  text-align: right;
 }
 
 .wfsc-payroll-result {
@@ -344,13 +514,13 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
-  margin: 0 12px 12px;
-  padding: 12px 14px;
-  border: 1px solid rgba(23, 33, 54, 0.18);
-  border-radius: 6px;
-  background: #f4f7fb;
-  color: #172136;
-  font-size: 12px;
+  margin-top: 10px;
+  padding: 5px 7px;
+  border: 1px solid #111;
+  color: #050505;
+  background: #fff;
+  font-size: 8.5px;
+  line-height: 1.1;
 }
 
 .wfsc-payroll-result span {
@@ -358,8 +528,8 @@
 }
 
 .wfsc-payroll-result strong {
-  color: #0c1728;
-  font-size: 13px;
+  color: #050505;
+  font-size: 10px;
   white-space: nowrap;
 }
 
@@ -582,49 +752,120 @@
   }
 
   .wfsc-payroll-paper {
-    border-radius: 8px;
+    padding: 7px;
+    border-radius: 3px;
   }
 
   .wfsc-payroll-title {
-    padding: 11px 12px 9px;
-  }
-
-  .wfsc-payroll-paper header div {
-    padding: 10px;
-  }
-
-  .wfsc-payroll-paper header strong,
-  .wfsc-payroll-paper header span {
-    font-size: 9px;
-  }
-
-  .wfsc-payroll-table {
-    padding: 8px;
-  }
-
-  .wfsc-payroll-table > div {
     grid-template-columns: 1fr;
-    gap: 3px;
+    gap: 4px;
     min-height: 0;
-    padding: 8px;
-    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .wfsc-payroll-title span {
+    font-size: 6.4px;
+  }
+
+  .wfsc-payroll-title strong {
+    justify-self: stretch;
+    min-width: 0;
+    padding: 4px;
+    font-size: 6px;
+  }
+
+  .wfsc-payroll-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wfsc-payroll-meta div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .wfsc-payroll-meta div:nth-child(4) {
+    border-right: 0;
+  }
+
+  .wfsc-payroll-meta strong,
+  .wfsc-payroll-meta span {
+    padding: 2px 3px;
+    font-size: 6px;
+  }
+
+  .wfsc-payroll-table > div,
+  .wfsc-payroll-table__head {
+    grid-template-columns: 22px minmax(0, 1fr) 34px 32px 42px 38px;
+    min-height: 13px;
+    font-size: 6px;
+  }
+
+  .wfsc-payroll-table > div > span,
+  .wfsc-payroll-table > div > strong,
+  .wfsc-payroll-table__head > span {
+    padding: 2px;
   }
 
   .wfsc-payroll-table strong {
-    font-size: 11px;
-    white-space: normal;
+    font-size: 6px;
+  }
+
+  .wfsc-payroll-totals {
+    margin-top: 6px;
+  }
+
+  .wfsc-payroll-totals span,
+  .wfsc-payroll-totals strong {
+    padding: 2px;
+    font-size: 5.5px;
+  }
+
+  .wfsc-payroll-liquid {
+    grid-template-columns: minmax(0, 1fr) 68px;
+    width: 58%;
+    min-width: 150px;
+  }
+
+  .wfsc-payroll-liquid span,
+  .wfsc-payroll-liquid strong {
+    padding: 3px;
+    font-size: 6.5px;
+  }
+
+  .wfsc-payroll-liquid strong {
+    font-size: 8px;
+  }
+
+  .wfsc-payroll-bases {
+    margin-top: 7px;
+  }
+
+  .wfsc-payroll-bases h3 {
+    padding: 4px;
+    font-size: 6px;
+  }
+
+  .wfsc-payroll-bases__head,
+  .wfsc-payroll-bases > div:not(.wfsc-payroll-bases__head) {
+    grid-template-columns: minmax(0, 1fr) 42px 30px 52px;
+    min-height: 13px;
+  }
+
+  .wfsc-payroll-bases span,
+  .wfsc-payroll-bases strong {
+    padding: 2px;
+    font-size: 6px;
   }
 
   .wfsc-payroll-result {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 4px;
-    margin: 0 8px 8px;
-    padding: 10px;
-    font-size: 11px;
+    margin-top: 7px;
+    padding: 4px;
+    font-size: 6px;
   }
 
   .wfsc-payroll-result strong {
-    font-size: 11px;
+    font-size: 7px;
     white-space: normal;
   }
 }
