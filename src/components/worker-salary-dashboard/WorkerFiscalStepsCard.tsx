@@ -1,7 +1,6 @@
 import {
   BarChart3,
   Calculator,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
@@ -30,8 +29,6 @@ type WorkerFiscalStep = {
 }
 
 type PayrollExample = {
-  intro: string
-  bullets: string[]
   resultLabel: string
   resultValue: string
   highlightRows: string[]
@@ -244,57 +241,41 @@ const PAYROLL_ROWS = [
 
 const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   1: {
-    intro: 'Aqui localizamos todo lo que suma antes de aplicar descuentos. Es el punto de partida de la calculadora.',
-    bullets: ['Salario base', 'Complementos', 'Pagas extra', 'Salario en especie'],
     resultLabel: 'Bruto mensual ejemplo',
     resultValue: '2.858,33 EUR',
     highlightRows: ['salary-base', 'salary-complements', 'extra-pay', 'in-kind', 'gross-total'],
   },
   2: {
-    intro: 'Aqui miramos las bases de cotizacion: la cifra sobre la que se calculan varias cuotas de Seguridad Social.',
-    bullets: ['Grupo de cotizacion: 7', 'Base contingencias comunes: 2.858,33 EUR', 'Base desempleo y formacion: 2.858,33 EUR'],
     resultLabel: 'Base usada ejemplo',
     resultValue: '2.858,33 EUR',
     highlightRows: ['group', 'common-base', 'unemployment-base'],
   },
   3: {
-    intro: 'Aqui se ve que una parte de la Seguridad Social se descuenta de la nomina y otra la paga la empresa fuera del neto.',
-    bullets: ['Base de cotizacion', 'Cuotas del trabajador', 'Aportacion empresarial', 'Descuento en nomina'],
     resultLabel: 'Descuento trabajador ejemplo',
     resultValue: '185,16 EUR',
     highlightRows: ['common-base', 'unemployment-base', 'worker-ss'],
   },
   4: {
-    intro: 'Aqui conectamos tu situacion personal, beneficios y ajustes con la parte de IRPF que puede cambiar el impuesto final.',
-    bullets: ['Minimos personales y familiares', 'Reducciones antes de tramos', 'Deducciones al final', 'Beneficios en especie'],
     resultLabel: 'Fila relacionada en nomina',
     resultValue: 'IRPF y especie',
     highlightRows: ['in-kind', 'irpf'],
   },
   5: {
-    intro: 'Aqui miramos la retencion de IRPF como resultado visible en la nomina, aunque el calculo interno se haga por tramos.',
-    bullets: ['Base liquidable', 'Tramos estatal y autonomico', 'Tipo marginal', 'Retencion aplicada'],
     resultLabel: 'Retencion ejemplo',
     resultValue: '411,60 EUR',
     highlightRows: ['irpf'],
   },
   6: {
-    intro: 'Aqui juntamos los descuentos que salen de la nomina para llegar al importe que finalmente recibes.',
-    bullets: ['Total devengado', 'Seguridad Social', 'IRPF', 'Liquido a percibir'],
     resultLabel: 'Neto mensual ejemplo',
     resultValue: '2.261,57 EUR',
     highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
   },
   7: {
-    intro: 'Aqui recordamos que IVA e impuestos de consumo no aparecen como descuento de nomina: dependen de como gastas tu neto.',
-    bullets: ['No aparece en la nomina', 'Depende del consumo', 'IVA incluido en precios', 'Otros tributos separados'],
     resultLabel: 'En nomina ejemplo',
     resultValue: 'No aparece',
     highlightRows: ['net-pay'],
   },
   8: {
-    intro: 'Aqui usamos la nomina como resumen para separar bruto, coste, descuentos y neto antes de cerrar la lectura.',
-    bullets: ['Bruto', 'Cotizaciones', 'IRPF', 'Neto'],
     resultLabel: 'Lectura final',
     resultValue: 'Bruto -> Neto',
     highlightRows: ['gross-total', 'worker-ss', 'irpf', 'net-pay'],
@@ -306,24 +287,14 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
   let currentSection = ''
 
   return (
-    <div className="wfsc-payroll" aria-label="Ejemplo de nomina">
-      <div className="wfsc-payroll__copy">
-        <h3>En la nomina: que estoy viendo?</h3>
-        <p>{example.intro}</p>
-        <ul>
-          {example.bullets.map((bullet) => (
-            <li key={bullet}>{bullet}</li>
-          ))}
-        </ul>
-        <strong>
-          <span>{example.resultLabel}</span>
-          {example.resultValue}
-        </strong>
-      </div>
-
-      <figure className="wfsc-payroll__sheet">
-        <figcaption>Ejemplo de nomina</figcaption>
+    <figure className="wfsc-payroll" aria-label="Ejemplo de nomina">
+      <figcaption>Ejemplo de nomina</figcaption>
+      <div className="wfsc-payroll__sheet">
         <div className="wfsc-payroll-paper">
+          <div className="wfsc-payroll-title">
+            <span>RECIBO INDIVIDUAL DE SALARIOS</span>
+            <strong>Nomina mensual</strong>
+          </div>
           <header>
             <div>
               <strong>EMPRESA EJEMPLO, S.L.</strong>
@@ -349,9 +320,13 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
               )
             })}
           </div>
+          <footer className="wfsc-payroll-result">
+            <span>{example.resultLabel}</span>
+            <strong>{example.resultValue}</strong>
+          </footer>
         </div>
-      </figure>
-    </div>
+      </div>
+    </figure>
   )
 }
 
@@ -401,14 +376,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
               <p>Paso {activeStep.id} de {WORKER_FISCAL_STEPS.length}</p>
               <h2 id="wfsc-title">{activeStep.title}</h2>
               <span>{activeStep.description}</span>
-              <ul aria-label="Conceptos incluidos en este paso">
-                {(activeStep.checklist.length > 0 ? activeStep.checklist : activeStep.details).map((item) => (
-                  <li key={item}>
-                    <CheckCircle2 size={17} aria-hidden="true" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
 
