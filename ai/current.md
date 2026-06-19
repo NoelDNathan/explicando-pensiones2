@@ -554,7 +554,15 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, IRPF marginal max en cabecera)
+## Ultima sesion (2026-06-19, Base real hasta 500k)
+
+Ajustado `WorkerSalaryBaseCard` para que el rango de salario sea coherente con `IRPF por tramos`:
+- El slider en modo anual pasa de maximo `120.000` a `500.000` EUR.
+- Se actualizan paso y marcas visuales anuales a [14k, 50k, 120k, 250k, 500k].
+- En modo mensual se amplia el maximo a `42.000` EUR para no dejar un limite desproporcionadamente bajo al cambiar de periodicidad.
+- Verificacion: sin errores de linter en `WorkerSalaryBaseCard.tsx`; HMR de Vite aplico el cambio correctamente.
+
+## Sesion previa (2026-06-19, IRPF marginal max en cabecera)
 
 En `WorkerIrpfTranchesCard` se muestra ahora arriba a la derecha el IRPF marginal maximo que esta pagando el usuario, sumando estatal + comunidad autonoma:
 - Nuevo bloque visual `IRPF marginal max actual` en la cabecera derecha, junto al selector de comunidad.

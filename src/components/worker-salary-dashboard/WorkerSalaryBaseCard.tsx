@@ -39,15 +39,15 @@ function parseNumber(value: string) {
 const salaryRanges: Record<PayPeriod, { min: number; max: number; step: number; markers: number[] }> = {
   annual: {
     min: 14000,
-    max: 120000,
-    step: 500,
-    markers: [14000, 35000, 60000, 90000, 120000],
+    max: 500000,
+    step: 1000,
+    markers: [14000, 50000, 120000, 250000, 500000],
   },
   monthly: {
     min: 1000,
-    max: 10000,
+    max: 42000,
     step: 100,
-    markers: [1000, 2500, 5000, 7500, 10000],
+    markers: [1000, 5000, 12000, 25000, 42000],
   },
 }
 
