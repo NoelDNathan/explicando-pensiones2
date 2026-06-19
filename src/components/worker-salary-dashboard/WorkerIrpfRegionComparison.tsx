@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { computeRegionalIrpf2025 } from "../fiscal-worker-dashboard/irpfRegionCalc";
 import "./WorkerIrpfRegionComparison.css";
@@ -94,6 +94,7 @@ export function WorkerIrpfRegionComparison({
 }: WorkerIrpfRegionComparisonProps) {
   const [mode, setMode] = useState<Mode>("percent");
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [pinnedIndex, setPinnedIndex] = useState<number | null>(null);
   const [hoverRegion, setHoverRegion] = useState<string | null>(null);
 
   const series = useMemo<RegionSeries[]>(() => {
@@ -122,7 +123,13 @@ export function WorkerIrpfRegionComparison({
     Math.max(0, Math.min(STEPS, Math.round(salaryToLogPos(salary, minSalary, maxSalary) * STEPS)));
 
   const currentIndex = salaryToIndex(currentSalary);
-  const activeIndex = hoverIndex ?? currentIndex;
+
+  useEffect(() => {
+    setPinnedIndex(null);
+  }, [currentSalary]);
+
+  const activeIndex = hoverIndex ?? pinnedIndex ?? currentIndex;
+  const isPinned = hoverIndex === null && pinnedIndex !== null;
   const activeSalary = series[0]?.points[activeIndex]?.salary ?? currentSalary;
 
   const ranking = useMemo(() => {
@@ -139,16 +146,22 @@ export function WorkerIrpfRegionComparison({
   const yTicks = niceTicks(yDomain[0], yDomain[1], 5);
   const xTicks = LOG_SALARY_MARKERS.filter((t) => t >= minSalary && t <= maxSalary);
 
-  const handleMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const indexFromEvent = (event: React.MouseEvent<SVGSVGElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const svgX = ((event.clientX - rect.left) / rect.width) * VW;
     const plotX = svgX - ML;
-    if (plotX < 0 || plotX > PW) {
-      setHoverIndex(null);
-      return;
-    }
-    const pos = plotX / PW;
-    setHoverIndex(Math.max(0, Math.min(STEPS, Math.round(pos * STEPS))));
+    if (plotX < 0 || plotX > PW) return null;
+    return Math.max(0, Math.min(STEPS, Math.round((plotX / PW) * STEPS)));
+  };
+
+  const handleMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const index = indexFromEvent(event);
+    setHoverIndex(index);
+  };
+
+  const handleClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    const index = indexFromEvent(event);
+    if (index !== null) setPinnedIndex(index);
   };
 
   const linePath = (s: RegionSeries) =>
@@ -195,6 +208,7 @@ export function WorkerIrpfRegionComparison({
             role="img"
             aria-label="Grafico de IRPF por comunidad segun salario"
             onMouseMove={handleMove}
+            onClick={handleClick}
             onMouseLeave={() => {
               setHoverIndex(null);
               setHoverRegion(null);
@@ -233,9 +247,14 @@ export function WorkerIrpfRegionComparison({
               y1={MT}
               x2={xOf(activeSalary)}
               y2={MT + PH}
-              className="wirc-cursor"
+              className={`wirc-cursor${isPinned ? " is-pinned" : ""}`}
             />
-            <text x={xOf(activeSalary)} y={MT - 9} textAnchor="middle" className="wirc-cursor-label">
+            <text
+              x={xOf(activeSalary)}
+              y={MT - 9}
+              textAnchor="middle"
+              className={`wirc-cursor-label${isPinned ? " is-pinned" : ""}`}
+            >
               {formatEuro(activeSalary)}
             </text>
 
