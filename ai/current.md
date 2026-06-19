@@ -554,7 +554,11 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, Comparador IRPF clic fija punto)
+## Ultima sesion (2026-06-19, Comparador IRPF franja resumen)
+
+Franja de tres columnas en `WorkerIrpfRegionComparison`: comunidad con menos IRPF, media de CCAA y comunidad con mas IRPF. Muestra `% · €` y, si aplica, diferencia vs Madrid en pp y euros (verde). Se actualiza con el salario activo del grafico. Menos y mas son clicables para cambiar de comunidad.
+
+## Sesion previa (2026-06-19, Comparador IRPF clic fija punto)
 
 En `WorkerIrpfRegionComparison`, un clic en el grafico fija la linea vertical y el ranking en ese salario; al quitar el raton el punto permanece. Al mover el slider de salario arriba, el marcador vuelve a seguir el salario del usuario. Cursor fijado con linea solida cyan; vista previa al pasar el raton con linea discontinua.
 

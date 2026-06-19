@@ -79,6 +79,78 @@ function formatPercent(value: number, decimals = 1) {
   })} %`;
 }
 
+function formatPercentPoints(value: number, decimals = 1) {
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${value.toLocaleString("es-ES", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })} pp`;
+}
+
+type RegionSnapshot = {
+  value: string;
+  label: string;
+  color: string;
+  irpf: number;
+  rate: number;
+};
+
+type SummaryStatProps = {
+  title: string;
+  tag?: string;
+  color: string;
+  rate: number;
+  irpf: number;
+  madridRate: number;
+  madridIrpf: number;
+  onClick?: () => void;
+};
+
+function SummaryStat({ title, tag, color, rate, irpf, madridRate, madridIrpf, onClick }: SummaryStatProps) {
+  const diffRate = rate - madridRate;
+  const diffIrpf = irpf - madridIrpf;
+  const showDelta = diffRate > 0.005 || diffIrpf > 0;
+
+  const content = (
+    <>
+      <div className="wirc-stat__head">
+        <span className="wirc-stat__dot" style={{ background: color }} aria-hidden="true" />
+        <span className="wirc-stat__label">{title}</span>
+        {tag && <span className="wirc-stat__tag">{tag}</span>}
+      </div>
+      <p className="wirc-stat__values">
+        <strong>{formatPercent(rate)}</strong>
+        <span className="wirc-stat__sep" aria-hidden="true">
+          ·
+        </span>
+        <strong>{formatEuro(irpf)}</strong>
+        {showDelta && (
+          <>
+            <span className="wirc-stat__sep" aria-hidden="true">
+              ·
+            </span>
+            <span className="wirc-stat__delta">{formatPercentPoints(diffRate)}</span>
+            <span className="wirc-stat__sep" aria-hidden="true">
+              ·
+            </span>
+            <span className="wirc-stat__delta">+{formatEuro(diffIrpf)}</span>
+          </>
+        )}
+      </p>
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button type="button" className="wirc-stat wirc-stat--clickable" onClick={onClick}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className="wirc-stat">{content}</div>;
+}
+
 function formatSalaryShort(value: number) {
   if (value >= 1000) return `${Math.round(value / 1000)}k`;
   return `${Math.round(value)}`;
@@ -143,6 +215,30 @@ export function WorkerIrpfRegionComparison({
     return madrid ? valueOf(madrid.points[activeIndex]) : 0;
   }, [series, activeIndex, mode]);
 
+  const snapshot = useMemo<RegionSnapshot[]>(() => {
+    return series.map((s) => {
+      const point = s.points[activeIndex];
+      return { value: s.value, label: s.label, color: s.color, irpf: point.irpf, rate: point.effectiveRate };
+    });
+  }, [series, activeIndex]);
+
+  const summary = useMemo(() => {
+    if (snapshot.length === 0) return null;
+
+    const madrid = snapshot.find((row) => row.value === "madrid");
+    const madridRate = madrid?.rate ?? 0;
+    const madridIrpf = madrid?.irpf ?? 0;
+
+    const lowest = snapshot.reduce((best, row) => (row.irpf < best.irpf ? row : best), snapshot[0]);
+    const highest = snapshot.reduce((best, row) => (row.irpf > best.irpf ? row : best), snapshot[0]);
+    const average = {
+      rate: snapshot.reduce((sum, row) => sum + row.rate, 0) / snapshot.length,
+      irpf: snapshot.reduce((sum, row) => sum + row.irpf, 0) / snapshot.length,
+    };
+
+    return { madridRate, madridIrpf, lowest, highest, average, count: snapshot.length };
+  }, [snapshot]);
+
   const yTicks = niceTicks(yDomain[0], yDomain[1], 5);
   const xTicks = LOG_SALARY_MARKERS.filter((t) => t >= minSalary && t <= maxSalary);
 
@@ -199,6 +295,39 @@ export function WorkerIrpfRegionComparison({
           </button>
         </div>
       </header>
+
+      {summary && (
+        <div className="wirc-stats" aria-label={`Resumen de IRPF en ${formatEuro(activeSalary)}`}>
+          <SummaryStat
+            title={summary.lowest.label}
+            tag={summary.lowest.value === "madrid" ? "referencia" : "menos IRPF"}
+            color={summary.lowest.color}
+            rate={summary.lowest.rate}
+            irpf={summary.lowest.irpf}
+            madridRate={summary.madridRate}
+            madridIrpf={summary.madridIrpf}
+            onClick={() => onRegionChange?.(summary.lowest.value)}
+          />
+          <SummaryStat
+            title={`Media (${summary.count} CCAA)`}
+            color="#8f9bff"
+            rate={summary.average.rate}
+            irpf={summary.average.irpf}
+            madridRate={summary.madridRate}
+            madridIrpf={summary.madridIrpf}
+          />
+          <SummaryStat
+            title={summary.highest.label}
+            tag="mas IRPF"
+            color={summary.highest.color}
+            rate={summary.highest.rate}
+            irpf={summary.highest.irpf}
+            madridRate={summary.madridRate}
+            madridIrpf={summary.madridIrpf}
+            onClick={() => onRegionChange?.(summary.highest.value)}
+          />
+        </div>
+      )}
 
       <div className="wirc-body">
         <div className="wirc-chart-wrap">
