@@ -390,6 +390,11 @@
   background-color: #041529;
 }
 
+.fwd-irpf-step {
+  display: grid;
+  gap: clamp(16px, 2vw, 24px);
+}
+
 .fwd-net-step {
   display: grid;
   gap: 18px;

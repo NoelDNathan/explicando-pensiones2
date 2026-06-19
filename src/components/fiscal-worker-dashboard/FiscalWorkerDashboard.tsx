@@ -18,6 +18,7 @@ import {
   WorkerConsumptionTaxesCard,
   WorkerContributionLimitsCard,
   WorkerFiscalStepsCard,
+  WorkerIrpfRegionComparison,
   WorkerIrpfTranchesCard,
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
@@ -705,27 +706,38 @@ export function FiscalWorkerDashboard() {
             onResultChange={handlePersonalResultChange}
           />
         )
-      case 5:
-        return (
-          <WorkerIrpfTranchesCard
-            initialRegion={result.effectiveRegion}
-            initialTaxableBase={result.taxableBase}
-            stateTax={result.stateTax}
-            regionalTax={result.regionalTax}
-            stateScale={result.stateScale}
-            regionalScale={result.regionalScale}
-            stateMinimum={result.stateMinimum}
-            regionalMinimum={result.regionalMinimum}
-            regionalTaxLabel={result.regionalTaxLabel}
-            grossSalary={salary}
-            onSalaryChange={setSalary}
-            regions={(taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map((item) => ({
-              value: item,
-              label: REGION_LABELS[item] ?? item,
-            }))}
-            onResultChange={handleIrpfResultChange}
-          />
+      case 5: {
+        const regionOptions = (taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map(
+          (item) => ({ value: item, label: REGION_LABELS[item] ?? item }),
         )
+        return (
+          <div className="fwd-irpf-step">
+            <WorkerIrpfTranchesCard
+              initialRegion={result.effectiveRegion}
+              initialTaxableBase={result.taxableBase}
+              stateTax={result.stateTax}
+              regionalTax={result.regionalTax}
+              stateScale={result.stateScale}
+              regionalScale={result.regionalScale}
+              stateMinimum={result.stateMinimum}
+              regionalMinimum={result.regionalMinimum}
+              regionalTaxLabel={result.regionalTaxLabel}
+              grossSalary={salary}
+              onSalaryChange={setSalary}
+              regions={regionOptions}
+              onResultChange={handleIrpfResultChange}
+            />
+            {taxYear !== '2005' && (
+              <WorkerIrpfRegionComparison
+                regions={regionOptions}
+                selectedRegion={result.effectiveRegion}
+                currentSalary={result.grossSalaryAnnual}
+                onRegionChange={setRegion}
+              />
+            )}
+          </div>
+        )
+      }
       case 6:
         return (
           <section className="fwd-net-step" aria-labelledby="fwd-net-step-title">

@@ -554,7 +554,16 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, Base real hasta 500k)
+## Ultima sesion (2026-06-19, Comparador de IRPF por comunidad)
+
+Nuevo componente `WorkerIrpfRegionComparison` bajo el paso 5 (IRPF), solo en 2025:
+- Grafico SVG (sin dependencias) con una linea por comunidad; eje X = salario bruto anual (14k-120k), eje Y conmutable entre "% del salario" y "€ al año".
+- Comunidad seleccionada resaltada, marcador vertical en el salario actual y ranking lateral ordenado de menos a mas IRPF en el salario activo (clicable para cambiar de comunidad; muestra la diferencia respecto a la mas barata). Al pasar el raton por el grafico, cursor y ranking se actualizan al salario bajo el puntero.
+- Nuevo modulo `irpfRegionCalc.ts` que reutiliza los parametros 2025 (BOE/AEAT) con un perfil tipo explicito (soltero, 40 anos, sin hijos ni discapacidad, grupo 7) para calcular el IRPF anual por comunidad. No incluye deducciones autonomicas.
+- Verificacion: `ReadLints` y `tsc --noEmit` sin errores; HMR de Vite OK. `pnpm run build` sigue bloqueado solo por errores PREEXISTENTES (`fogasa` en ruta 2005 y varios imports sin usar en otras tarjetas), no por este cambio.
+- Bloqueo: la verificacion visual en navegador (escritorio/movil) no pudo ejecutarse por falta del subagente de navegador (limite de API). Pendiente revision visual manual.
+
+## Sesion previa (2026-06-19, Base real hasta 500k)
 
 Ajustado `WorkerSalaryBaseCard` para que el rango de salario sea coherente con `IRPF por tramos`:
 - El slider en modo anual pasa de maximo `120.000` a `500.000` EUR.

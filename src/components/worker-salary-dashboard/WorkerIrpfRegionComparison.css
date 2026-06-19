@@ -1,0 +1,248 @@
+.wirc {
+  --wirc-text: #f5f7ff;
+  --wirc-muted: #a9b6d2;
+  --wirc-line: rgba(77, 123, 188, 0.28);
+
+  container-type: inline-size;
+  width: min(100%, 1280px);
+  padding: clamp(14px, 1.65vw, 24px);
+  border: 1px solid rgba(74, 98, 168, 0.82);
+  border-radius: 16px;
+  color: var(--wirc-text);
+  background:
+    radial-gradient(circle at 6% -20%, rgba(40, 123, 255, 0.16), transparent 26%),
+    radial-gradient(circle at 92% -10%, rgba(153, 86, 255, 0.14), transparent 24%),
+    linear-gradient(135deg, #070b23 0%, #051225 48%, #061b31 100%);
+  box-shadow: 0 24px 74px rgba(0, 4, 17, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.wirc *,
+.wirc *::before,
+.wirc *::after {
+  box-sizing: border-box;
+}
+
+.wirc h3,
+.wirc p {
+  margin: 0;
+}
+
+.wirc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.wirc-title-group h3 {
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 800;
+}
+
+.wirc-title-group p {
+  margin-top: 6px;
+  max-width: 62ch;
+  color: var(--wirc-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.wirc-toggle {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid rgba(120, 150, 210, 0.4);
+  border-radius: 999px;
+  background: rgba(8, 17, 33, 0.6);
+}
+
+.wirc-toggle button {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wirc-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.wirc-toggle button.is-active {
+  color: #07101f;
+  background: linear-gradient(135deg, #5ad1ff, #8f9bff);
+}
+
+.wirc-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(240px, 0.9fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.wirc-chart-wrap {
+  min-width: 0;
+}
+
+.wirc-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: none;
+}
+
+.wirc-grid {
+  stroke: var(--wirc-line);
+  stroke-width: 0.6;
+}
+
+.wirc-axis-label {
+  fill: var(--wirc-muted);
+  font-size: 11px;
+  font-family: inherit;
+}
+
+.wirc-axis-unit {
+  fill: var(--wirc-muted);
+  font-size: 11px;
+  font-family: inherit;
+}
+
+.wirc-line {
+  cursor: pointer;
+  transition: stroke-opacity 0.12s ease, stroke-width 0.12s ease;
+}
+
+.wirc-cursor {
+  stroke: rgba(180, 200, 240, 0.55);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.wirc-cursor-label {
+  fill: #cfe0ff;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+/* Ranking */
+.wirc-ranking {
+  border: 1px solid rgba(120, 150, 210, 0.28);
+  border-radius: 12px;
+  background: rgba(7, 14, 30, 0.55);
+  padding: 10px;
+  max-height: 420px;
+  overflow: auto;
+}
+
+.wirc-ranking__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 6px 10px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.wirc-ranking__hint {
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--wirc-muted);
+}
+
+.wirc-ranking__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wirc-rank-row {
+  display: grid;
+  grid-template-columns: 18px 10px 1fr auto;
+  grid-template-areas: "pos dot label amount" "pos dot diff diff";
+  align-items: center;
+  column-gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--wirc-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.wirc-rank-row:hover {
+  background: rgba(90, 130, 200, 0.14);
+}
+
+.wirc-rank-row.is-selected {
+  background: rgba(90, 209, 255, 0.14);
+  border-color: rgba(90, 209, 255, 0.5);
+}
+
+.wirc-rank-pos {
+  grid-area: pos;
+  color: var(--wirc-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.wirc-rank-dot {
+  grid-area: dot;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--rank-color, #5ad1ff);
+}
+
+.wirc-rank-label {
+  grid-area: label;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wirc-rank-amount {
+  grid-area: amount;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.wirc-rank-diff {
+  grid-area: diff;
+  color: var(--wirc-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.wirc-note {
+  margin-top: 14px;
+  color: var(--wirc-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@container (max-width: 760px) {
+  .wirc-body {
+    grid-template-columns: 1fr;
+  }
+  .wirc-ranking {
+    max-height: none;
+  }
+}
