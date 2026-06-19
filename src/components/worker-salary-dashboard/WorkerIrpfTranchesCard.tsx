@@ -1,135 +1,192 @@
-import { ChevronDown } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import './WorkerIrpfTranchesCard.css'
+import { ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import "./WorkerIrpfTranchesCard.css";
 
-export type WorkerIrpfBracketTone = 'green' | 'purple' | 'blue' | 'orange' | 'yellow' | 'red'
+export type WorkerIrpfBracketTone = "green" | "purple" | "blue" | "orange" | "yellow" | "red";
 
 export type WorkerIrpfBracket = {
-  from: number
-  to: number | null
-  rate: number
-  tone: WorkerIrpfBracketTone
-}
+  from: number;
+  to: number | null;
+  rate: number;
+  tone: WorkerIrpfBracketTone;
+};
 
 export type WorkerIrpfTrancheLine = WorkerIrpfBracket & {
-  taxableAmount: number
-  quota: number
-}
+  taxableAmount: number;
+  quota: number;
+};
+
+/** Tramo de una escala oficial (estatal o autonomica) tal como llega del motor. */
+export type WorkerIrpfScaleBracket = {
+  base_from_eur: number;
+  base_to_eur: number | null;
+  base_quota_eur: number;
+  marginal_percent: number;
+};
+
+type ScaleLine = {
+  from: number;
+  to: number | null;
+  rate: number;
+  tone: WorkerIrpfBracketTone;
+  taxableAmount: number;
+  quota: number;
+};
 
 export type WorkerIrpfTranchesResult = {
-  region: string
-  taxableBase: number
-  quota: number
-  effectiveRate: number
-  lines: WorkerIrpfTrancheLine[]
-}
+  region: string;
+  taxableBase: number;
+  quota: number;
+  effectiveRate: number;
+  lines: WorkerIrpfTrancheLine[];
+};
 
 type RegionOption = {
-  value: string
-  label: string
-}
+  value: string;
+  label: string;
+};
 
 type WorkerIrpfTranchesCardProps = {
-  initialRegion?: string
-  initialTaxableBase?: number
-  brackets?: WorkerIrpfBracket[]
-  regions?: RegionOption[]
+  initialRegion?: string;
+  initialTaxableBase?: number;
+  brackets?: WorkerIrpfBracket[];
+  regions?: RegionOption[];
   /**
    * Cuota estatal autoritativa calculada por el motor (escala estatal con el
    * minimo personal y familiar ya descontado). Si se proporciona junto a
    * `regionalTax`, la tarjeta muestra estas cifras en lugar de recalcular el
    * IRPF con los tramos genericos, evitando incoherencias con el KPI.
    */
-  stateTax?: number
+  stateTax?: number;
   /** Cuota autonomica/complementaria autoritativa calculada por el motor. */
-  regionalTax?: number
+  regionalTax?: number;
+  /** Escala estatal completa (tramos oficiales). Habilita la vista de doble escala. */
+  stateScale?: WorkerIrpfScaleBracket[];
+  /** Escala autonomica/complementaria completa (tramos oficiales de la comunidad). */
+  regionalScale?: WorkerIrpfScaleBracket[];
+  /** Minimo personal y familiar estatal aplicado a la escala. */
+  stateMinimum?: number;
+  /** Minimo personal y familiar autonomico aplicado a la escala. */
+  regionalMinimum?: number;
   /** Etiqueta del tramo territorial ("Autonomico" o "Complementario"). */
-  regionalTaxLabel?: string
-  onResultChange?: (result: WorkerIrpfTranchesResult) => void
-}
+  regionalTaxLabel?: string;
+  onResultChange?: (result: WorkerIrpfTranchesResult) => void;
+};
 
 const DEFAULT_REGIONS: RegionOption[] = [
-  { value: 'madrid', label: 'Madrid' },
-  { value: 'andalucia', label: 'Andalucia' },
-  { value: 'cataluna', label: 'Cataluna' },
-  { value: 'valencia', label: 'C. Valenciana' },
-]
+  { value: "madrid", label: "Madrid" },
+  { value: "andalucia", label: "Andalucia" },
+  { value: "cataluna", label: "Cataluna" },
+  { value: "valencia", label: "C. Valenciana" },
+];
 
 const DEFAULT_BRACKETS: WorkerIrpfBracket[] = [
-  { from: 0, to: 12450, rate: 0.19, tone: 'green' },
-  { from: 12450, to: 20200, rate: 0.24, tone: 'purple' },
-  { from: 20200, to: 35200, rate: 0.3, tone: 'blue' },
-  { from: 35200, to: 60000, rate: 0.37, tone: 'orange' },
-  { from: 60000, to: 300000, rate: 0.45, tone: 'yellow' },
-  { from: 300000, to: null, rate: 0.47, tone: 'red' },
-]
+  { from: 0, to: 12450, rate: 0.19, tone: "green" },
+  { from: 12450, to: 20200, rate: 0.24, tone: "purple" },
+  { from: 20200, to: 35200, rate: 0.3, tone: "blue" },
+  { from: 35200, to: 60000, rate: 0.37, tone: "orange" },
+  { from: 60000, to: 300000, rate: 0.45, tone: "yellow" },
+  { from: 300000, to: null, rate: 0.47, tone: "red" },
+];
+
+const TONES: WorkerIrpfBracketTone[] = ["green", "purple", "blue", "orange", "yellow", "red"];
 
 function formatEuro(value: number, decimals = 0) {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
+  return new Intl.NumberFormat("es-ES", {
+    style: "currency",
+    currency: "EUR",
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
-  }).format(value)
+  }).format(value);
 }
 
 function formatPercent(value: number, decimals = 0) {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat("es-ES", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
-  }).format(value)
+  }).format(value);
 }
 
-function formatRange(bracket: WorkerIrpfBracket) {
-  const from = bracket.from === 0 ? '0' : bracket.from.toLocaleString('es-ES')
+/** Formatea un tipo marginal (fraccion) como "9,5" o "12" sin ceros sobrantes. */
+function formatRate(fraction: number) {
+  return new Intl.NumberFormat("es-ES", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(fraction * 100);
+}
+
+function formatRange(bracket: { from: number; to: number | null }) {
+  const from = bracket.from === 0 ? "0" : bracket.from.toLocaleString("es-ES");
   if (bracket.to === null) {
-    return `> ${bracket.from.toLocaleString('es-ES')} \u20ac`
+    return `> ${bracket.from.toLocaleString("es-ES")} \u20ac`;
   }
 
-  return `${from} - ${bracket.to.toLocaleString('es-ES')} \u20ac`
+  return `${from} - ${bracket.to.toLocaleString("es-ES")} \u20ac`;
+}
+
+/** Convierte una escala oficial en lineas con el importe gravado por tramo. */
+function computeScaleLines(scale: WorkerIrpfScaleBracket[], base: number): ScaleLine[] {
+  return scale.map((bracket, index) => {
+    const upper = bracket.base_to_eur ?? Number.POSITIVE_INFINITY;
+    const taxableAmount = Math.max(0, Math.min(base, upper) - bracket.base_from_eur);
+    const rate = bracket.marginal_percent / 100;
+
+    return {
+      from: bracket.base_from_eur,
+      to: bracket.base_to_eur,
+      rate,
+      tone: TONES[index % TONES.length],
+      taxableAmount,
+      quota: taxableAmount * rate,
+    };
+  });
 }
 
 export function WorkerIrpfTranchesCard({
-  initialRegion = 'madrid',
+  initialRegion = "madrid",
   initialTaxableBase = 30243,
   brackets = DEFAULT_BRACKETS,
   regions = DEFAULT_REGIONS,
   stateTax,
   regionalTax,
-  regionalTaxLabel = 'Autonomico',
+  stateScale,
+  regionalScale,
+  stateMinimum,
+  regionalMinimum,
+  regionalTaxLabel = "Autonomico",
   onResultChange,
 }: WorkerIrpfTranchesCardProps) {
-  const [region, setRegion] = useState(initialRegion)
+  const [region, setRegion] = useState(initialRegion);
 
   useEffect(() => {
-    setRegion(initialRegion)
-  }, [initialRegion])
+    setRegion(initialRegion);
+  }, [initialRegion]);
 
   const regionLabel = useMemo(
     () => regions.find((r) => r.value === region)?.label ?? regionalTaxLabel,
     [region, regions, regionalTaxLabel],
-  )
+  );
 
   // Cuando el motor pasa las cuotas reales (estatal + autonomica con el minimo
   // personal y familiar ya aplicado), la tarjeta muestra esas cifras. En caso
   // contrario (uso autonomo del componente) recalcula con los tramos genericos.
-  const isAuthoritative = stateTax !== undefined && regionalTax !== undefined
+  const isAuthoritative = stateTax !== undefined && regionalTax !== undefined;
 
   const result = useMemo<WorkerIrpfTranchesResult>(() => {
     const lines = brackets.map((bracket) => {
-      const upper = bracket.to ?? Number.POSITIVE_INFINITY
-      const taxableAmount = Math.max(0, Math.min(initialTaxableBase, upper) - bracket.from)
+      const upper = bracket.to ?? Number.POSITIVE_INFINITY;
+      const taxableAmount = Math.max(0, Math.min(initialTaxableBase, upper) - bracket.from);
 
       return {
         ...bracket,
         taxableAmount,
         quota: taxableAmount * bracket.rate,
-      }
-    })
-    const computedQuota = lines.reduce((total, line) => total + line.quota, 0)
+      };
+    });
+    const computedQuota = lines.reduce((total, line) => total + line.quota, 0);
     const quota = isAuthoritative
       ? Math.max(0, (stateTax ?? 0) + (regionalTax ?? 0))
-      : computedQuota
+      : computedQuota;
 
     return {
       region,
@@ -137,15 +194,107 @@ export function WorkerIrpfTranchesCard({
       quota,
       effectiveRate: initialTaxableBase > 0 ? (quota / initialTaxableBase) * 100 : 0,
       lines,
-    }
-  }, [brackets, initialTaxableBase, isAuthoritative, region, regionalTax, stateTax])
+    };
+  }, [brackets, initialTaxableBase, isAuthoritative, region, regionalTax, stateTax]);
 
   useEffect(() => {
-    onResultChange?.(result)
-  }, [onResultChange, result])
+    onResultChange?.(result);
+  }, [onResultChange, result]);
 
-  const activeLines = result.lines.filter((line) => line.taxableAmount > 0)
-  const visibleLines = activeLines.slice(0, 4)
+  const stateLines = useMemo(
+    () => (stateScale && stateScale.length > 0 ? computeScaleLines(stateScale, result.taxableBase) : []),
+    [stateScale, result.taxableBase],
+  );
+  const regionalLines = useMemo(
+    () =>
+      regionalScale && regionalScale.length > 0
+        ? computeScaleLines(regionalScale, result.taxableBase)
+        : [],
+    [regionalScale, result.taxableBase],
+  );
+
+  // Vista de doble escala: solo cuando hay cuotas autoritativas y escalas reales.
+  const hasScales = isAuthoritative && stateLines.length > 0 && regionalLines.length > 0;
+
+  const stateGross = useMemo(() => stateLines.reduce((t, l) => t + l.quota, 0), [stateLines]);
+  const regionalGross = useMemo(() => regionalLines.reduce((t, l) => t + l.quota, 0), [regionalLines]);
+  const stateReduction = Math.max(0, stateGross - (stateTax ?? 0));
+  const regionalReduction = Math.max(0, regionalGross - (regionalTax ?? 0));
+
+  const activeLines = result.lines.filter((line) => line.taxableAmount > 0);
+  const visibleLines = activeLines.slice(0, 4);
+
+  const renderBracketBox = (line: ScaleLine, keyPrefix: string) => {
+    const isActive = line.taxableAmount > 0;
+    return (
+      <article
+        key={`${keyPrefix}-${line.from}-${line.to ?? "more"}`}
+        className={`witc-bracket witc-bracket--${line.tone}${isActive ? " is-active" : " is-inactive"}`}
+        aria-label={`${formatRange(line)}, ${formatRate(line.rate)}%, ${isActive ? "alcanzado" : "no alcanzado"}`}
+      >
+        <strong>{formatRate(line.rate)}%</strong>
+        <span>{formatRange(line)}</span>
+      </article>
+    );
+  };
+
+  const renderTramoColumn = (
+    title: string,
+    titleTone: "state" | "region",
+    lines: ScaleLine[],
+    gross: number,
+    reduction: number,
+    tax: number,
+    totalLabel: string,
+    minimumBase: number | undefined,
+  ) => {
+    const active = lines.filter((line) => line.taxableAmount > 0);
+    return (
+      <div className="witc-calc-col">
+        <h4 className={`witc-calc-col__title witc-calc-col__title--${titleTone}`}>{title}</h4>
+        <ul className="witc-tramos">
+          {active.map((line) => (
+            <li key={`${title}-${line.from}-${line.to ?? "more"}`} className={`witc-tramo witc-tramo--${line.tone}`}>
+              <span className="witc-tramo__dot" aria-hidden="true" />
+              <div className="witc-tramo__main">
+                <p className="witc-tramo__range">{formatRange(line)}</p>
+                <p className="witc-tramo__calc">
+                  {formatEuro(line.taxableAmount, 0)} x {formatRate(line.rate)}%
+                </p>
+              </div>
+              <strong className="witc-tramo__amount">{formatEuro(line.quota, 2)}</strong>
+            </li>
+          ))}
+          <li className="witc-tramo witc-tramo--summary">
+            <span className="witc-tramo__dot witc-tramo__dot--ghost" aria-hidden="true" />
+            <div className="witc-tramo__main">
+              <p className="witc-tramo__range">Cuota integra (escala)</p>
+            </div>
+            <strong className="witc-tramo__amount">{formatEuro(gross, 2)}</strong>
+          </li>
+          {reduction > 0 && (
+            <li className="witc-tramo witc-tramo--minus">
+              <span className="witc-tramo__dot witc-tramo__dot--ghost" aria-hidden="true" />
+              <div className="witc-tramo__main">
+                <p className="witc-tramo__range">Minimo personal y familiar</p>
+                {minimumBase !== undefined && minimumBase > 0 && (
+                  <p className="witc-tramo__calc">base exenta {formatEuro(minimumBase, 0)}</p>
+                )}
+              </div>
+              <strong className="witc-tramo__amount">{"\u2212"} {formatEuro(reduction, 2)}</strong>
+            </li>
+          )}
+          <li className={`witc-tramo witc-tramo--total witc-tramo--total-${titleTone}`}>
+            <span className="witc-tramo__dot witc-tramo__dot--ghost" aria-hidden="true" />
+            <div className="witc-tramo__main">
+              <p className="witc-tramo__range">{totalLabel}</p>
+            </div>
+            <strong className="witc-tramo__amount">{formatEuro(tax, 2)}</strong>
+          </li>
+        </ul>
+      </div>
+    );
+  };
 
   return (
     <section className="witc" aria-labelledby="witc-title">
@@ -164,7 +313,9 @@ export function WorkerIrpfTranchesCard({
               onChange={(event) => setRegion(event.target.value)}
             >
               {regions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
               ))}
             </select>
             <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
@@ -172,24 +323,46 @@ export function WorkerIrpfTranchesCard({
         </label>
       </header>
 
-      <p className="witc-intro">Solo se tributa por la parte de renta que cae en cada tramo.</p>
+      <p className="witc-intro">
+        Tu IRPF se calcula con dos escalas distintas: la estatal y la de tu comunidad. Solo se tributa
+        por la parte de renta que cae en cada tramo.
+      </p>
 
-      <div className="witc-brackets" aria-label="Tramos de IRPF">
-        {result.lines.map((line) => {
-          const isActive = line.taxableAmount > 0
+      {hasScales ? (
+        <div className="witc-scales">
+          <div className="witc-scale-group">
+            <span className="witc-scale-tag witc-scale-tag--state">Escala estatal</span>
+            <div className="witc-brackets" aria-label="Tramos de la escala estatal">
+              {stateLines.map((line) => renderBracketBox(line, "state"))}
+            </div>
+          </div>
+          <div className="witc-scale-group">
+            <span className="witc-scale-tag witc-scale-tag--region">
+              Escala autonomica {"\u00b7"} {regionLabel}
+            </span>
+            <div className="witc-brackets" aria-label={`Tramos de la escala autonomica de ${regionLabel}`}>
+              {regionalLines.map((line) => renderBracketBox(line, "region"))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="witc-brackets" aria-label="Tramos de IRPF">
+          {result.lines.map((line) => {
+            const isActive = line.taxableAmount > 0;
 
-          return (
-            <article
-              key={`${line.from}-${line.to ?? 'more'}`}
-              className={`witc-bracket witc-bracket--${line.tone}${isActive ? ' is-active' : ' is-inactive'}`}
-              aria-label={`${formatRange(line)}, ${Math.round(line.rate * 100)}%, ${isActive ? 'alcanzado' : 'no alcanzado'}`}
-            >
-              <strong>{Math.round(line.rate * 100)}%</strong>
-              <span>{formatRange(line)}</span>
-            </article>
-          )
-        })}
-      </div>
+            return (
+              <article
+                key={`${line.from}-${line.to ?? "more"}`}
+                className={`witc-bracket witc-bracket--${line.tone}${isActive ? " is-active" : " is-inactive"}`}
+                aria-label={`${formatRange(line)}, ${Math.round(line.rate * 100)}%, ${isActive ? "alcanzado" : "no alcanzado"}`}
+              >
+                <strong>{Math.round(line.rate * 100)}%</strong>
+                <span>{formatRange(line)}</span>
+              </article>
+            );
+          })}
+        </div>
+      )}
 
       <div className="witc-lower">
         <aside className="witc-base-card" aria-label="Base liquidable">
@@ -199,29 +372,31 @@ export function WorkerIrpfTranchesCard({
         </aside>
 
         <section className="witc-calc" aria-labelledby="witc-calc-title">
-          <h3 id="witc-calc-title">Calculo acumulado</h3>
-          {isAuthoritative ? (
+          <h3 id="witc-calc-title">Calculo por tramos</h3>
+          {hasScales ? (
             <>
-              <ul>
-                <li className="witc-calc-row witc-calc-row--blue">
-                  <span aria-hidden="true" />
-                  <p>Cuota estatal</p>
-                  <b>escala estatal - minimo</b>
-                  <strong>= {formatEuro(stateTax ?? 0, 2)}</strong>
-                </li>
-                <li className="witc-calc-row witc-calc-row--orange">
-                  <span aria-hidden="true" />
-                  <p>Cuota {regionLabel}</p>
-                  <b>escala {regionalTaxLabel.toLowerCase()} - minimo</b>
-                  <strong>= {formatEuro(regionalTax ?? 0, 2)}</strong>
-                </li>
-                <li className="witc-calc-row witc-calc-row--green">
-                  <span aria-hidden="true" />
-                  <p>Cuota integra</p>
-                  <b>estatal + {regionLabel}</b>
-                  <strong>= {formatEuro(result.quota, 2)}</strong>
-                </li>
-              </ul>
+              <div className="witc-calc-cols">
+                {renderTramoColumn(
+                  "Estatal",
+                  "state",
+                  stateLines,
+                  stateGross,
+                  stateReduction,
+                  stateTax ?? 0,
+                  "Cuota estatal",
+                  stateMinimum,
+                )}
+                {renderTramoColumn(
+                  `${regionLabel}`,
+                  "region",
+                  regionalLines,
+                  regionalGross,
+                  regionalReduction,
+                  regionalTax ?? 0,
+                  `Cuota ${regionLabel}`,
+                  regionalMinimum,
+                )}
+              </div>
               {result.quota > 0 && (
                 <div className="witc-split-bar" aria-hidden="true">
                   <div className="witc-split-bar__label witc-split-bar__label--state">
@@ -231,10 +406,7 @@ export function WorkerIrpfTranchesCard({
                     className="witc-split-bar__track"
                     title={`Estado ${formatEuro(stateTax ?? 0, 0)} · ${regionLabel} ${formatEuro(regionalTax ?? 0, 0)}`}
                   >
-                    <div
-                      className="witc-split-bar__fill witc-split-bar__fill--state"
-                      style={{ flex: stateTax ?? 0 }}
-                    />
+                    <div className="witc-split-bar__fill witc-split-bar__fill--state" style={{ flex: stateTax ?? 0 }} />
                     <div
                       className="witc-split-bar__fill witc-split-bar__fill--region"
                       style={{ flex: regionalTax ?? 0 }}
@@ -246,15 +418,41 @@ export function WorkerIrpfTranchesCard({
                 </div>
               )}
             </>
+          ) : isAuthoritative ? (
+            <ul>
+              <li className="witc-calc-row witc-calc-row--blue">
+                <span aria-hidden="true" />
+                <p>Cuota estatal</p>
+                <b>escala estatal - minimo</b>
+                <strong>= {formatEuro(stateTax ?? 0, 2)}</strong>
+              </li>
+              <li className="witc-calc-row witc-calc-row--orange">
+                <span aria-hidden="true" />
+                <p>Cuota {regionLabel}</p>
+                <b>escala {regionalTaxLabel.toLowerCase()} - minimo</b>
+                <strong>= {formatEuro(regionalTax ?? 0, 2)}</strong>
+              </li>
+              <li className="witc-calc-row witc-calc-row--green">
+                <span aria-hidden="true" />
+                <p>Cuota integra</p>
+                <b>estatal + {regionLabel}</b>
+                <strong>= {formatEuro(result.quota, 2)}</strong>
+              </li>
+            </ul>
           ) : (
             <ul>
               {visibleLines.map((line, index) => (
-                <li key={`${line.from}-${line.to ?? 'more'}-calc`} className={`witc-calc-row witc-calc-row--${line.tone}`}>
+                <li
+                  key={`${line.from}-${line.to ?? "more"}-calc`}
+                  className={`witc-calc-row witc-calc-row--${line.tone}`}
+                >
                   <span aria-hidden="true" />
                   <p>
                     Tramo {index + 1} ({formatRange(line)})
                   </p>
-                  <b>{formatEuro(line.taxableAmount, 2)} x {Math.round(line.rate * 100)}%</b>
+                  <b>
+                    {formatEuro(line.taxableAmount, 2)} x {Math.round(line.rate * 100)}%
+                  </b>
                   <strong>= {formatEuro(line.quota, 2)}</strong>
                 </li>
               ))}
@@ -291,7 +489,7 @@ export function WorkerIrpfTranchesCard({
         </aside>
       </div>
     </section>
-  )
+  );
 }
 
-export default WorkerIrpfTranchesCard
+export default WorkerIrpfTranchesCard;

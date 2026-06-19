@@ -511,6 +511,10 @@ export function FiscalWorkerDashboard() {
         taxableBase,
         stateTax,
         regionalTax,
+        stateScale: fiscalParams2005.irpf.state_general_scale,
+        regionalScale: fiscalParams2005.irpf.madrid_or_complementary_general_scale.scale,
+        stateMinimum: 0,
+        regionalMinimum: 0,
         irpfBeforeDeductions,
         irpf,
         netSalary,
@@ -577,6 +581,10 @@ export function FiscalWorkerDashboard() {
       taxableBase,
       stateTax,
       regionalTax,
+      stateScale: fiscalParams2025.irpf.state_general_scale,
+      regionalScale,
+      stateMinimum,
+      regionalMinimum,
       irpfBeforeDeductions,
       irpf,
       netSalary,
@@ -704,6 +712,10 @@ export function FiscalWorkerDashboard() {
             initialTaxableBase={result.taxableBase}
             stateTax={result.stateTax}
             regionalTax={result.regionalTax}
+            stateScale={result.stateScale}
+            regionalScale={result.regionalScale}
+            stateMinimum={result.stateMinimum}
+            regionalMinimum={result.regionalMinimum}
             regionalTaxLabel={result.regionalTaxLabel}
             regions={(taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map((item) => ({
               value: item,
