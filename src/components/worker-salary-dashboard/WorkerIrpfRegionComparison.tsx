@@ -73,7 +73,8 @@ function formatEuro(value: number) {
 }
 
 function formatPercent(value: number, decimals = 1) {
-  return `${value.toLocaleString("es-ES", {
+  const safe = Number.isFinite(value) ? value : 0;
+  return `${safe.toLocaleString("es-ES", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   })} %`;
@@ -218,8 +219,9 @@ export function WorkerIrpfRegionComparison({
   const snapshot = useMemo<RegionSnapshot[]>(() => {
     return series.map((s) => {
       const point = s.points[activeIndex];
-      return { value: s.value, label: s.label, color: s.color, irpf: point.irpf, rate: point.effectiveRate };
-    });
+      if (!point) return null;
+      return { value: s.value, label: s.label, color: s.color, irpf: point.irpf, rate: point.rate };
+    }).filter((row): row is RegionSnapshot => row !== null);
   }, [series, activeIndex]);
 
   const summary = useMemo(() => {
