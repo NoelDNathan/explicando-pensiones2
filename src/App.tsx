@@ -7,6 +7,7 @@ import type { ChartSeries, ChartMilestone } from './components/charts/TimeSeries
 import { KeyIndicatorsPanel } from './components/pension-overview/KeyIndicatorsPanel'
 import type { IndicatorItem } from './components/pension-overview/KeyIndicatorsPanel'
 import { YearSelector } from './components/ui/YearSelector'
+import { SalarySlider } from './components/ui/SalarySlider'
 import { ReformSimulator } from './components/pension-overview/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/health-expenditure/HealthExpenditureDashboard'
 import { SalaryNationalityDashboard } from './components/salary-nationality/SalaryNationalityDashboard'
@@ -48,6 +49,44 @@ function PlayButton({
       <span className="play-button__icon" aria-hidden="true"></span>
       <span className="play-button__label">{label}</span>
     </button>
+  )
+}
+
+function SalarySliderShowcase() {
+  const [linearValue, setLinearValue] = React.useState(35000)
+  const [logValue, setLogValue] = React.useState(35000)
+
+  return (
+    <div style={{ display: 'grid', gap: 18, maxWidth: 520 }}>
+      <div style={{ display: 'grid', gap: 6 }}>
+        <span style={{ color: '#c1c9df', fontWeight: 820 }}>Escala lineal (14.000 - 120.000 €)</span>
+        <SalarySlider
+          value={linearValue}
+          onChange={setLinearValue}
+          min={14000}
+          max={120000}
+          step={500}
+          markers={[14000, 35000, 60000, 90000, 120000]}
+          unitLabel="brutos al año"
+          ariaLabel="Salario escala lineal"
+        />
+      </div>
+      <div style={{ display: 'grid', gap: 6 }}>
+        <span style={{ color: '#c1c9df', fontWeight: 820 }}>
+          Escala logaritmica (14.000 - 500.000 €, sube mas rapido arriba)
+        </span>
+        <SalarySlider
+          value={logValue}
+          onChange={setLogValue}
+          min={14000}
+          max={500000}
+          markers={[14000, 50000, 120000, 250000, 500000]}
+          scale="log"
+          unitLabel="brutos al año"
+          ariaLabel="Salario escala logaritmica"
+        />
+      </div>
+    </div>
   )
 }
 
@@ -586,6 +625,22 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dashboard component-preview--bleed">
           <ProgressiveIrpfExplainer />
+        </div>
+      </section>
+
+      <section className="component-section" aria-labelledby="salary-slider-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente reutilizable</p>
+          <h2 id="salary-slider-title">Slider de salario</h2>
+          <p>
+            Control de salario reutilizable usado en "Base real" y en "IRPF por
+            tramos". Admite escala lineal o logaritmica (sube mas rapido cuanto
+            mas alto es el importe).
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark">
+          <SalarySliderShowcase />
         </div>
       </section>
 

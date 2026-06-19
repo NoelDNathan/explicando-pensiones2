@@ -554,7 +554,16 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, salario editable en paso 5)
+## Ultima sesion (2026-06-19, SalarySlider reutilizable)
+
+Se extrae el slider de salario a un componente compartido y se aplica escala logaritmica con tope 500.000 EUR en el paso 5:
+- Nuevo componente `src/components/ui/SalarySlider.tsx` (+ CSS) reutilizable, con props `scale: 'linear' | 'log'`, `min/max/step/markers`, `unitLabel`. En modo `log`, el mismo desplazamiento del slider supone un salto mayor en euros cuanto mas alto es el importe (mapeo exponencial con redondeo "bonito" por tramos).
+- `WorkerSalaryBaseCard` (Base real) ahora usa `SalarySlider` (escala lineal, comportamiento identico al anterior); se elimina el markup y CSS duplicado del slider.
+- `WorkerIrpfTranchesCard` (paso 5) usa el mismo `SalarySlider` con `scale="log"`, `max=500000` y marcas [14k, 50k, 120k, 250k, 500k].
+- Anadido al laboratorio `/componentes` un showcase del `SalarySlider` (variantes lineal y logaritmica), cumpliendo la regla de revisar componentes nuevos antes de integrarlos.
+- Verificacion: sin errores de linter ni de tipos en los archivos modificados; HMR de Vite limpio. Persisten errores de build previos ajenos.
+
+## Sesion previa (2026-06-19, salario editable en paso 5)
 
 Se anade un control de salario en la tarjeta del paso 5 (`WorkerIrpfTranchesCard`) para poder ajustar el salario sin volver al paso 1:
 - Nuevas props `grossSalary` y `onSalaryChange`; el dashboard las conecta a su estado `salary`/`setSalary`, de modo que mover el control recalcula toda la cadena (cotizaciones, minimos, cuotas estatal y autonomica, neto y KPIs).

@@ -117,81 +117,15 @@
 }
 
 .witc-salary {
-  --witc-salary-value: 0%;
+  display: grid;
+  gap: 8px;
   margin-bottom: 16px;
-  padding: 12px 16px 14px;
-  border: 1px solid var(--witc-line);
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(4, 20, 43, 0.7), rgba(2, 13, 29, 0.7));
 }
 
-.witc-salary__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.witc-salary__head label {
+.witc-salary__label {
   color: #c1c9df;
   font-size: clamp(13px, 1.15vw, 17px);
   font-weight: 820;
-}
-
-.witc-salary__head output {
-  color: #46d0ff;
-  font-size: clamp(18px, 1.7vw, 26px);
-  font-weight: 900;
-  white-space: nowrap;
-}
-
-.witc-salary input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 8px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    #2f7bd6 var(--witc-salary-value),
-    rgba(33, 52, 84, 0.85) var(--witc-salary-value)
-  );
-  cursor: pointer;
-}
-
-.witc-salary input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid #061b31;
-  background: #56c2ff;
-  box-shadow: 0 0 0 2px rgba(86, 194, 255, 0.5);
-}
-
-.witc-salary input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid #061b31;
-  background: #56c2ff;
-  box-shadow: 0 0 0 2px rgba(86, 194, 255, 0.5);
-}
-
-.witc-salary input[type="range"]:focus-visible {
-  outline: 3px solid rgba(86, 163, 255, 0.4);
-  outline-offset: 4px;
-}
-
-.witc-salary__scale {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-  color: #7e8cab;
-  font-size: clamp(10px, 0.9vw, 12px);
-  font-weight: 760;
 }
 
 .witc-brackets {

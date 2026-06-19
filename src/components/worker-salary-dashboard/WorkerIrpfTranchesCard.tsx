@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
-import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
+import { SalarySlider } from "../ui/SalarySlider";
 import "./WorkerIrpfTranchesCard.css";
 
 export type WorkerIrpfBracketTone = "green" | "purple" | "blue" | "orange" | "yellow" | "red";
@@ -78,11 +78,7 @@ type WorkerIrpfTranchesCardProps = {
   onResultChange?: (result: WorkerIrpfTranchesResult) => void;
 };
 
-const SALARY_RANGE = { min: 14000, max: 120000, step: 500, markers: [14000, 35000, 60000, 90000, 120000] };
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 250000, 500000] };
 
 const DEFAULT_REGIONS: RegionOption[] = [
   { value: "madrid", label: "Madrid" },
@@ -181,12 +177,10 @@ export function WorkerIrpfTranchesCard({
   }, [grossSalary]);
 
   const showSalaryControl = grossSalary !== undefined && onSalaryChange !== undefined;
-  const salaryPercent = ((salary - SALARY_RANGE.min) / (SALARY_RANGE.max - SALARY_RANGE.min)) * 100;
 
   const handleSalaryChange = (next: number) => {
-    const clamped = clamp(next, SALARY_RANGE.min, SALARY_RANGE.max);
-    setSalary(clamped);
-    onSalaryChange?.(clamped);
+    setSalary(next);
+    onSalaryChange?.(next);
   };
 
   const regionLabel = useMemo(
@@ -356,26 +350,21 @@ export function WorkerIrpfTranchesCard({
       </p>
 
       {showSalaryControl && (
-        <div className="witc-salary" style={{ "--witc-salary-value": `${salaryPercent}%` } as CSSProperties}>
-          <div className="witc-salary__head">
-            <label htmlFor="witc-salary-range">Salario bruto anual</label>
-            <output htmlFor="witc-salary-range">{formatEuro(salary, 0)}</output>
-          </div>
-          <input
+        <div className="witc-salary">
+          <label className="witc-salary__label" htmlFor="witc-salary-range">
+            Salario bruto anual
+          </label>
+          <SalarySlider
             id="witc-salary-range"
-            type="range"
+            value={salary}
+            onChange={handleSalaryChange}
             min={SALARY_RANGE.min}
             max={SALARY_RANGE.max}
-            step={SALARY_RANGE.step}
-            value={salary}
-            onChange={(event) => handleSalaryChange(Number(event.target.value))}
-            aria-label="Salario bruto anual en euros"
+            markers={SALARY_RANGE.markers}
+            scale="log"
+            unitLabel="brutos al año"
+            ariaLabel="Salario bruto anual en euros"
           />
-          <div className="witc-salary__scale" aria-hidden="true">
-            {SALARY_RANGE.markers.map((marker) => (
-              <span key={marker}>{formatEuro(marker, 0)}</span>
-            ))}
-          </div>
         </div>
       )}
 

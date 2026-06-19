@@ -1,6 +1,6 @@
 import { ChevronDown, Euro } from 'lucide-react'
-import type { CSSProperties } from 'react'
 import { useEffect, useMemo, useState } from 'react'
+import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerSalaryBaseCard.css'
 
 type PayPeriod = 'annual' | 'monthly'
@@ -69,7 +69,6 @@ export function WorkerSalaryBaseCard({
   const [salaryComplements, setSalaryComplements] = useState(initialSalaryComplements)
   const [inKindSalary, setInKindSalary] = useState(initialInKindSalary)
   const salaryRange = salaryRanges[payPeriod]
-  const salaryPercent = ((salary - salaryRange.min) / (salaryRange.max - salaryRange.min)) * 100
 
   const realBase = useMemo(() => {
     const annualSalary = payPeriod === 'annual' ? salary : salary * Number(payCount)
@@ -111,27 +110,17 @@ export function WorkerSalaryBaseCard({
       <div className="wsbc-fields">
         <label className="wsbc-label" htmlFor="wsbc-salary">Salario anual o mensual</label>
         <div className="wsbc-control-row">
-          <div className="wsbc-slider" style={{ '--wsbc-slider-value': `${salaryPercent}%` } as CSSProperties}>
-            <div className="wsbc-slider-top">
-              <output htmlFor="wsbc-salary">{formatNumber(salary)} €</output>
-              <span>{payPeriod === 'annual' ? 'brutos al año' : 'brutos al mes'}</span>
-            </div>
-            <input
-              id="wsbc-salary"
-              type="range"
-              min={salaryRange.min}
-              max={salaryRange.max}
-              step={salaryRange.step}
-              value={salary}
-              onChange={(event) => setSalary(Number(event.target.value))}
-              aria-label="Salario anual o mensual en euros"
-            />
-            <div className="wsbc-slider-scale" aria-hidden="true">
-              {salaryRange.markers.map((marker) => (
-                <span key={marker}>{formatNumber(marker)}</span>
-              ))}
-            </div>
-          </div>
+          <SalarySlider
+            id="wsbc-salary"
+            value={salary}
+            onChange={setSalary}
+            min={salaryRange.min}
+            max={salaryRange.max}
+            step={salaryRange.step}
+            markers={salaryRange.markers}
+            unitLabel={payPeriod === 'annual' ? 'brutos al año' : 'brutos al mes'}
+            ariaLabel="Salario anual o mensual en euros"
+          />
 
           <div className="wsbc-select-shell wsbc-select-shell--period">
             <select
