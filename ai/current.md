@@ -554,7 +554,18 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19)
+## Ultima sesion (2026-06-19, doble escala IRPF)
+
+`WorkerIrpfTranchesCard` ahora muestra de forma explicita las dos escalas del IRPF cuando recibe datos autoritativos del motor:
+- Se consumen las props `stateScale`, `regionalScale`, `stateMinimum` y `regionalMinimum` que el dashboard ya pasaba pero que el componente ignoraba.
+- En la parte superior se renderizan dos filas de tramos: "Escala estatal" (9,5/12/15/18,5/22,5/24,5 %) y "Escala autonomica · <comunidad>" con los limites reales de cada comunidad, marcando activos/inactivos segun la base liquidable.
+- El bloque "Calculo por tramos" se divide en dos columnas (Estatal y la comunidad): cada una lista importe gravado x tipo marginal = cuota por tramo, subtotal de cuota integra de la escala, resta del minimo personal/familiar y cuota final, cuadrando con las cuotas autoritativas `stateTax`/`regionalTax`.
+- Se mantiene la barra de reparto Estado vs comunidad y los tres KPIs de la columna derecha.
+- Helper nuevo `computeScaleLines` y `formatRate` (tipos con decimales tipo "9,5").
+- La grid de tramos pasa a `auto-fit` para adaptarse a escalas con distinto numero de tramos.
+- Verificacion: `tsc -b` no genera errores nuevos en este componente; siguen los errores previos en `WorkerContributionLimitsCard`, `WorkerPersonalReductionsCard`, `WorkerSocialContributionsCard` y `FiscalWorkerDashboard` (fogasa) que bloquean el build completo y no se han tocado por estar fuera del alcance pedido.
+
+## Sesion previa (2026-06-19)
 
 Mejorada la claridad visual del desglose de IRPF por comunidad autonoma en `WorkerIrpfTranchesCard`:
 - El nombre de la comunidad autonoma seleccionada sustituye a la etiqueta generica "autonomico" en el calculo acumulado y en las filas de resultado.
