@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import "./WorkerIrpfTranchesCard.css";
 
@@ -70,8 +71,18 @@ type WorkerIrpfTranchesCardProps = {
   regionalMinimum?: number;
   /** Etiqueta del tramo territorial ("Autonomico" o "Complementario"). */
   regionalTaxLabel?: string;
+  /** Salario bruto anual actual. Si se pasa junto a `onSalaryChange`, se muestra un control para ajustarlo. */
+  grossSalary?: number;
+  /** Callback al cambiar el salario bruto anual desde esta tarjeta. */
+  onSalaryChange?: (annualGross: number) => void;
   onResultChange?: (result: WorkerIrpfTranchesResult) => void;
 };
+
+const SALARY_RANGE = { min: 14000, max: 120000, step: 500, markers: [14000, 35000, 60000, 90000, 120000] };
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
 
 const DEFAULT_REGIONS: RegionOption[] = [
   { value: "madrid", label: "Madrid" },
@@ -154,13 +165,29 @@ export function WorkerIrpfTranchesCard({
   stateMinimum,
   regionalMinimum,
   regionalTaxLabel = "Autonomico",
+  grossSalary,
+  onSalaryChange,
   onResultChange,
 }: WorkerIrpfTranchesCardProps) {
   const [region, setRegion] = useState(initialRegion);
+  const [salary, setSalary] = useState(grossSalary ?? 0);
 
   useEffect(() => {
     setRegion(initialRegion);
   }, [initialRegion]);
+
+  useEffect(() => {
+    if (grossSalary !== undefined) setSalary(grossSalary);
+  }, [grossSalary]);
+
+  const showSalaryControl = grossSalary !== undefined && onSalaryChange !== undefined;
+  const salaryPercent = ((salary - SALARY_RANGE.min) / (SALARY_RANGE.max - SALARY_RANGE.min)) * 100;
+
+  const handleSalaryChange = (next: number) => {
+    const clamped = clamp(next, SALARY_RANGE.min, SALARY_RANGE.max);
+    setSalary(clamped);
+    onSalaryChange?.(clamped);
+  };
 
   const regionLabel = useMemo(
     () => regions.find((r) => r.value === region)?.label ?? regionalTaxLabel,
@@ -327,6 +354,30 @@ export function WorkerIrpfTranchesCard({
         Tu IRPF se calcula con dos escalas distintas: la estatal y la de tu comunidad. Solo se tributa
         por la parte de renta que cae en cada tramo.
       </p>
+
+      {showSalaryControl && (
+        <div className="witc-salary" style={{ "--witc-salary-value": `${salaryPercent}%` } as CSSProperties}>
+          <div className="witc-salary__head">
+            <label htmlFor="witc-salary-range">Salario bruto anual</label>
+            <output htmlFor="witc-salary-range">{formatEuro(salary, 0)}</output>
+          </div>
+          <input
+            id="witc-salary-range"
+            type="range"
+            min={SALARY_RANGE.min}
+            max={SALARY_RANGE.max}
+            step={SALARY_RANGE.step}
+            value={salary}
+            onChange={(event) => handleSalaryChange(Number(event.target.value))}
+            aria-label="Salario bruto anual en euros"
+          />
+          <div className="witc-salary__scale" aria-hidden="true">
+            {SALARY_RANGE.markers.map((marker) => (
+              <span key={marker}>{formatEuro(marker, 0)}</span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {hasScales ? (
         <div className="witc-scales">

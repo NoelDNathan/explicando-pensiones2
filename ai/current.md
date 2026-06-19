@@ -554,7 +554,16 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, doble escala IRPF)
+## Ultima sesion (2026-06-19, salario editable en paso 5)
+
+Se anade un control de salario en la tarjeta del paso 5 (`WorkerIrpfTranchesCard`) para poder ajustar el salario sin volver al paso 1:
+- Nuevas props `grossSalary` y `onSalaryChange`; el dashboard las conecta a su estado `salary`/`setSalary`, de modo que mover el control recalcula toda la cadena (cotizaciones, minimos, cuotas estatal y autonomica, neto y KPIs).
+- El control es un slider anual (14.000-120.000 EUR, paso 500) con valor visible y escala de marcas, coherente con el del paso 1.
+- Solo se muestra cuando llegan ambas props (uso integrado); el uso autonomo del componente no lo muestra.
+- Estilos nuevos `.witc-salary` y derivados; sin tocar el sistema de tokens.
+- Verificacion: sin errores de linter en los archivos modificados; HMR de Vite aplica los cambios sin errores. Persisten los errores de build previos ajenos a esta tarea.
+
+## Sesion previa (2026-06-19, doble escala IRPF)
 
 `WorkerIrpfTranchesCard` ahora muestra de forma explicita las dos escalas del IRPF cuando recibe datos autoritativos del motor:
 - Se consumen las props `stateScale`, `regionalScale`, `stateMinimum` y `regionalMinimum` que el dashboard ya pasaba pero que el componente ignoraba.

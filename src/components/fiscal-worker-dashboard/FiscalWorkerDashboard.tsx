@@ -717,6 +717,8 @@ export function FiscalWorkerDashboard() {
             stateMinimum={result.stateMinimum}
             regionalMinimum={result.regionalMinimum}
             regionalTaxLabel={result.regionalTaxLabel}
+            grossSalary={salary}
+            onSalaryChange={setSalary}
             regions={(taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map((item) => ({
               value: item,
               label: REGION_LABELS[item] ?? item,
