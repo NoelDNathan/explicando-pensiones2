@@ -105,6 +105,11 @@ export function WorkerIrpfTranchesCard({
     setRegion(initialRegion)
   }, [initialRegion])
 
+  const regionLabel = useMemo(
+    () => regions.find((r) => r.value === region)?.label ?? regionalTaxLabel,
+    [region, regions, regionalTaxLabel],
+  )
+
   // Cuando el motor pasa las cuotas reales (estatal + autonomica con el minimo
   // personal y familiar ya aplicado), la tarjeta muestra esas cifras. En caso
   // contrario (uso autonomo del componente) recalcula con los tramos genericos.
@@ -196,26 +201,51 @@ export function WorkerIrpfTranchesCard({
         <section className="witc-calc" aria-labelledby="witc-calc-title">
           <h3 id="witc-calc-title">Calculo acumulado</h3>
           {isAuthoritative ? (
-            <ul>
-              <li className="witc-calc-row witc-calc-row--blue">
-                <span aria-hidden="true" />
-                <p>Cuota estatal</p>
-                <b>escala estatal - minimo</b>
-                <strong>= {formatEuro(stateTax ?? 0, 2)}</strong>
-              </li>
-              <li className="witc-calc-row witc-calc-row--orange">
-                <span aria-hidden="true" />
-                <p>Cuota {regionalTaxLabel.toLowerCase()}</p>
-                <b>escala {regionalTaxLabel.toLowerCase()} - minimo</b>
-                <strong>= {formatEuro(regionalTax ?? 0, 2)}</strong>
-              </li>
-              <li className="witc-calc-row witc-calc-row--green">
-                <span aria-hidden="true" />
-                <p>Cuota integra</p>
-                <b>estatal + {regionalTaxLabel.toLowerCase()}</b>
-                <strong>= {formatEuro(result.quota, 2)}</strong>
-              </li>
-            </ul>
+            <>
+              <ul>
+                <li className="witc-calc-row witc-calc-row--blue">
+                  <span aria-hidden="true" />
+                  <p>Cuota estatal</p>
+                  <b>escala estatal - minimo</b>
+                  <strong>= {formatEuro(stateTax ?? 0, 2)}</strong>
+                </li>
+                <li className="witc-calc-row witc-calc-row--orange">
+                  <span aria-hidden="true" />
+                  <p>Cuota {regionLabel}</p>
+                  <b>escala {regionalTaxLabel.toLowerCase()} - minimo</b>
+                  <strong>= {formatEuro(regionalTax ?? 0, 2)}</strong>
+                </li>
+                <li className="witc-calc-row witc-calc-row--green">
+                  <span aria-hidden="true" />
+                  <p>Cuota integra</p>
+                  <b>estatal + {regionLabel}</b>
+                  <strong>= {formatEuro(result.quota, 2)}</strong>
+                </li>
+              </ul>
+              {result.quota > 0 && (
+                <div className="witc-split-bar" aria-hidden="true">
+                  <div className="witc-split-bar__label witc-split-bar__label--state">
+                    Estado&nbsp;{formatPercent(((stateTax ?? 0) / result.quota) * 100, 0)}%
+                  </div>
+                  <div
+                    className="witc-split-bar__track"
+                    title={`Estado ${formatEuro(stateTax ?? 0, 0)} · ${regionLabel} ${formatEuro(regionalTax ?? 0, 0)}`}
+                  >
+                    <div
+                      className="witc-split-bar__fill witc-split-bar__fill--state"
+                      style={{ flex: stateTax ?? 0 }}
+                    />
+                    <div
+                      className="witc-split-bar__fill witc-split-bar__fill--region"
+                      style={{ flex: regionalTax ?? 0 }}
+                    />
+                  </div>
+                  <div className="witc-split-bar__label witc-split-bar__label--region">
+                    {regionLabel}&nbsp;{formatPercent(((regionalTax ?? 0) / result.quota) * 100, 0)}%
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <ul>
               {visibleLines.map((line, index) => (
@@ -233,10 +263,27 @@ export function WorkerIrpfTranchesCard({
         </section>
 
         <aside className="witc-results" aria-label="Resultado estimado">
-          <output className="witc-result witc-result--quota">
-            <span>Cuota integra estimada</span>
-            <strong>{formatEuro(result.quota, 2)}</strong>
-          </output>
+          {isAuthoritative ? (
+            <>
+              <output className="witc-result witc-result--state">
+                <span>Cuota estatal</span>
+                <strong>{formatEuro(stateTax ?? 0, 2)}</strong>
+              </output>
+              <output className="witc-result witc-result--region">
+                <span>Cuota {regionLabel}</span>
+                <strong>{formatEuro(regionalTax ?? 0, 2)}</strong>
+              </output>
+              <output className="witc-result witc-result--quota">
+                <span>Total IRPF</span>
+                <strong>{formatEuro(result.quota, 2)}</strong>
+              </output>
+            </>
+          ) : (
+            <output className="witc-result witc-result--quota">
+              <span>Cuota integra estimada</span>
+              <strong>{formatEuro(result.quota, 2)}</strong>
+            </output>
+          )}
           <output className="witc-result witc-result--rate">
             <span>Tipo efectivo aprox.</span>
             <strong>{formatPercent(result.effectiveRate, 1)}%</strong>

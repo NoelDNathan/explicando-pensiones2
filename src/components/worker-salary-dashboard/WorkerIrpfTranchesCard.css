@@ -305,9 +305,51 @@
   white-space: nowrap;
 }
 
+.witc-split-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.witc-split-bar__track {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  gap: 2px;
+}
+
+.witc-split-bar__fill {
+  border-radius: 999px;
+  transition: flex 0.35s ease;
+}
+
+.witc-split-bar__fill--state {
+  background: #4c91ff;
+}
+
+.witc-split-bar__fill--region {
+  background: #f1850d;
+}
+
+.witc-split-bar__label {
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 820;
+  white-space: nowrap;
+}
+
+.witc-split-bar__label--state {
+  color: #4c91ff;
+}
+
+.witc-split-bar__label--region {
+  color: #f1850d;
+}
+
 .witc-results {
   display: grid;
-  grid-template-rows: 1.1fr 0.8fr;
   gap: 6px;
 }
 
@@ -324,6 +366,14 @@
 .witc-result strong {
   color: #bd73ff;
   font-weight: 920;
+}
+
+.witc-result--state strong {
+  color: #4c91ff;
+}
+
+.witc-result--region strong {
+  color: #f1850d;
 }
 
 .witc-result--rate strong {
@@ -360,6 +410,19 @@
   .witc-results {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: none;
+  }
+
+  .witc-split-bar {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .witc-split-bar__track {
+    order: -1;
+  }
+
+  .witc-split-bar__label {
+    display: inline;
   }
 }
 

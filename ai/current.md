@@ -554,6 +554,15 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
+## Ultima sesion (2026-06-19)
+
+Mejorada la claridad visual del desglose de IRPF por comunidad autonoma en `WorkerIrpfTranchesCard`:
+- El nombre de la comunidad autonoma seleccionada sustituye a la etiqueta generica "autonomico" en el calculo acumulado y en las filas de resultado.
+- La columna derecha de KPIs ahora muestra, en modo autoritativo, tres tarjetas separadas: cuota estatal (azul), cuota de la comunidad (naranja, con su nombre real) y total IRPF (morado); antes solo mostraba el total.
+- Se ha anadido una barra de reparto proporcional (Estado vs Comunidad) debajo de las filas del calculo acumulado, con etiquetas de porcentaje codificadas por color.
+- Los estilos se extienden con las nuevas clases `.witc-split-bar`, `.witc-result--state` y `.witc-result--region` sin romper el sistema de tokens existente.
+- No hay errores de linter en los archivos modificados; los errores de build previos estan en otros componentes no tocados en esta sesion.
+
 ## Nota operativa
 
 Git esta configurado con remoto `origin`. Cuando el entorno marque el repositorio como propiedad dudosa, se usa `git -c safe.directory="C:/Users/Noel Nathan/Programacion/Projectos/explicando-pensiones2"` para inspeccionar, commitear y publicar.
