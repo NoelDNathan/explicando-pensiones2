@@ -702,6 +702,9 @@ export function FiscalWorkerDashboard() {
           <WorkerIrpfTranchesCard
             initialRegion={result.effectiveRegion}
             initialTaxableBase={result.taxableBase}
+            stateTax={result.stateTax}
+            regionalTax={result.regionalTax}
+            regionalTaxLabel={result.regionalTaxLabel}
             regions={(taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map((item) => ({
               value: item,
               label: REGION_LABELS[item] ?? item,
