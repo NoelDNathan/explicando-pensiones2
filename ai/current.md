@@ -554,7 +554,13 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, Comparador de IRPF por comunidad)
+## Ultima sesion (2026-06-19, Comparador IRPF 500k y ranking vs Madrid)
+
+Ajustes en `WorkerIrpfRegionComparison`:
+- Eje X ampliado hasta 500.000 EUR con escala logaritmica y marcas en 14k, 50k, 120k, 250k y 500k.
+- Ranking ordenado de mas a menos IRPF; la diferencia se mide siempre respecto a Madrid (+X si paga mas; Madrid muestra "—").
+
+## Sesion previa (2026-06-19, Comparador de IRPF por comunidad)
 
 Nuevo componente `WorkerIrpfRegionComparison` bajo el paso 5 (IRPF), solo en 2025:
 - Grafico SVG (sin dependencias) con una linea por comunidad; eje X = salario bruto anual (14k-120k), eje Y conmutable entre "% del salario" y "€ al año".

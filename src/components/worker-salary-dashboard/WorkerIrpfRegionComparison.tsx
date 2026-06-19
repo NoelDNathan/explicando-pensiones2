@@ -32,7 +32,17 @@ const MT = 24;
 const MB = 44;
 const PW = VW - ML - MR;
 const PH = VH - MT - MB;
-const STEPS = 60;
+const STEPS = 80;
+const LOG_SALARY_MARKERS = [14000, 50000, 120000, 250000, 500000];
+
+function salaryToLogPos(salary: number, minSalary: number, maxSalary: number) {
+  const clamped = Math.min(maxSalary, Math.max(minSalary, salary));
+  return Math.log(clamped / minSalary) / Math.log(maxSalary / minSalary);
+}
+
+function logPosToSalary(pos: number, minSalary: number, maxSalary: number) {
+  return minSalary * Math.pow(maxSalary / minSalary, pos);
+}
 
 function colorFor(index: number, total: number) {
   const hue = Math.round((index / Math.max(1, total)) * 330);
@@ -80,7 +90,7 @@ export function WorkerIrpfRegionComparison({
   currentSalary,
   onRegionChange,
   minSalary = 14000,
-  maxSalary = 120000,
+  maxSalary = 500000,
 }: WorkerIrpfRegionComparisonProps) {
   const [mode, setMode] = useState<Mode>("percent");
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
@@ -89,7 +99,7 @@ export function WorkerIrpfRegionComparison({
   const series = useMemo<RegionSeries[]>(() => {
     return regions.map((region, index) => {
       const points = Array.from({ length: STEPS + 1 }, (_, i) => {
-        const salary = minSalary + ((maxSalary - minSalary) * i) / STEPS;
+        const salary = logPosToSalary(i / STEPS, minSalary, maxSalary);
         const result = computeRegionalIrpf2025(salary, region.value);
         return { salary, irpf: result.irpf, rate: result.effectiveRate };
       });
@@ -105,26 +115,29 @@ export function WorkerIrpfRegionComparison({
     return [0, max <= 0 ? 1 : max * 1.08];
   }, [series, mode]);
 
-  const xOf = (salary: number) => ML + ((salary - minSalary) / (maxSalary - minSalary)) * PW;
+  const xOf = (salary: number) => ML + salaryToLogPos(salary, minSalary, maxSalary) * PW;
   const yOf = (value: number) => MT + PH - ((value - yDomain[0]) / (yDomain[1] - yDomain[0])) * PH;
 
-  const currentIndex = Math.max(
-    0,
-    Math.min(STEPS, Math.round(((currentSalary - minSalary) / (maxSalary - minSalary)) * STEPS)),
-  );
+  const salaryToIndex = (salary: number) =>
+    Math.max(0, Math.min(STEPS, Math.round(salaryToLogPos(salary, minSalary, maxSalary) * STEPS)));
+
+  const currentIndex = salaryToIndex(currentSalary);
   const activeIndex = hoverIndex ?? currentIndex;
-  const activeSalary = minSalary + ((maxSalary - minSalary) * activeIndex) / STEPS;
+  const activeSalary = series[0]?.points[activeIndex]?.salary ?? currentSalary;
 
   const ranking = useMemo(() => {
     return series
       .map((s) => ({ value: s.value, label: s.label, color: s.color, amount: valueOf(s.points[activeIndex]) }))
-      .sort((a, b) => a.amount - b.amount);
+      .sort((a, b) => b.amount - a.amount);
   }, [series, activeIndex, mode]);
 
-  const cheapest = ranking[0]?.amount ?? 0;
+  const madridAmount = useMemo(() => {
+    const madrid = series.find((s) => s.value === "madrid");
+    return madrid ? valueOf(madrid.points[activeIndex]) : 0;
+  }, [series, activeIndex, mode]);
 
   const yTicks = niceTicks(yDomain[0], yDomain[1], 5);
-  const xTicks = niceTicks(minSalary, maxSalary, 6).filter((t) => t >= minSalary && t <= maxSalary);
+  const xTicks = LOG_SALARY_MARKERS.filter((t) => t >= minSalary && t <= maxSalary);
 
   const handleMove = (event: React.MouseEvent<SVGSVGElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -134,7 +147,8 @@ export function WorkerIrpfRegionComparison({
       setHoverIndex(null);
       return;
     }
-    setHoverIndex(Math.max(0, Math.min(STEPS, Math.round((plotX / PW) * STEPS))));
+    const pos = plotX / PW;
+    setHoverIndex(Math.max(0, Math.min(STEPS, Math.round(pos * STEPS))));
   };
 
   const linePath = (s: RegionSeries) =>
@@ -265,12 +279,13 @@ export function WorkerIrpfRegionComparison({
         <aside className="wirc-ranking" aria-label={`Ranking de IRPF para ${formatEuro(activeSalary)}`}>
           <div className="wirc-ranking__head">
             <span>En {formatEuro(activeSalary)}</span>
-            <span className="wirc-ranking__hint">de menos a mas IRPF</span>
+            <span className="wirc-ranking__hint">de mas a menos IRPF · vs Madrid</span>
           </div>
           <ol className="wirc-ranking__list">
             {ranking.map((row, position) => {
               const isSelected = row.value === selectedRegion;
-              const diff = row.amount - cheapest;
+              const diff = row.amount - madridAmount;
+              const isMadrid = row.value === "madrid";
               return (
                 <li key={row.value}>
                   <button
@@ -286,7 +301,9 @@ export function WorkerIrpfRegionComparison({
                     <span className="wirc-rank-label">{row.label}</span>
                     <span className="wirc-rank-amount">{formatValue(row.amount)}</span>
                     <span className="wirc-rank-diff">
-                      {position === 0 ? "—" : `+${mode === "percent" ? formatPercent(diff) : formatEuro(diff)}`}
+                      {isMadrid || diff <= 0
+                        ? "—"
+                        : `+${mode === "percent" ? formatPercent(diff) : formatEuro(diff)}`}
                     </span>
                   </button>
                 </li>
