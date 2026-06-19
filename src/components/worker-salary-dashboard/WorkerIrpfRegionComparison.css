@@ -217,6 +217,12 @@
   stroke-dasharray: none;
 }
 
+.wirc-cursor--preview {
+  stroke: rgba(180, 200, 240, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
 .wirc-cursor-label {
   fill: #cfe0ff;
   font-size: 11px;
@@ -226,6 +232,19 @@
 
 .wirc-cursor-label.is-pinned {
   fill: #5ad1ff;
+}
+
+.wirc-cursor-label--preview {
+  fill: rgba(180, 200, 240, 0.75);
+  font-weight: 600;
+}
+
+.wirc-line-hit {
+  cursor: pointer;
+}
+
+.wirc-line-group {
+  pointer-events: auto;
 }
 
 /* Ranking */

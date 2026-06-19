@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { computeRegionalIrpf2025 } from "../fiscal-worker-dashboard/irpfRegionCalc";
 import "./WorkerIrpfRegionComparison.css";
@@ -81,8 +81,9 @@ function formatPercent(value: number, decimals = 1) {
 }
 
 function formatPercentPoints(value: number, decimals = 1) {
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${value.toLocaleString("es-ES", {
+  const safe = Number.isFinite(value) ? value : 0;
+  const sign = safe > 0 ? "+" : "";
+  return `${sign}${safe.toLocaleString("es-ES", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   })} pp`;
@@ -169,6 +170,7 @@ export function WorkerIrpfRegionComparison({
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [pinnedIndex, setPinnedIndex] = useState<number | null>(null);
   const [hoverRegion, setHoverRegion] = useState<string | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const series = useMemo<RegionSeries[]>(() => {
     return regions.map((region, index) => {
@@ -199,21 +201,33 @@ export function WorkerIrpfRegionComparison({
 
   useEffect(() => {
     setPinnedIndex(null);
+    setHoverIndex(null);
   }, [currentSalary]);
 
-  const activeIndex = hoverIndex ?? pinnedIndex ?? currentIndex;
-  const isPinned = hoverIndex === null && pinnedIndex !== null;
+  /** El punto fijado tiene prioridad; el hover solo previsualiza si no hay fijacion. */
+  const activeIndex = pinnedIndex ?? hoverIndex ?? currentIndex;
+  const previewIndex =
+    pinnedIndex !== null && hoverIndex !== null && hoverIndex !== pinnedIndex ? hoverIndex : null;
+  const isPinned = pinnedIndex !== null;
   const activeSalary = series[0]?.points[activeIndex]?.salary ?? currentSalary;
+  const previewSalary =
+    previewIndex !== null ? (series[0]?.points[previewIndex]?.salary ?? null) : null;
 
   const ranking = useMemo(() => {
     return series
-      .map((s) => ({ value: s.value, label: s.label, color: s.color, amount: valueOf(s.points[activeIndex]) }))
+      .map((s) => {
+        const point = s.points[activeIndex];
+        if (!point) return null;
+        return { value: s.value, label: s.label, color: s.color, amount: valueOf(point) };
+      })
+      .filter((row): row is NonNullable<typeof row> => row !== null)
       .sort((a, b) => b.amount - a.amount);
   }, [series, activeIndex, mode]);
 
   const madridAmount = useMemo(() => {
     const madrid = series.find((s) => s.value === "madrid");
-    return madrid ? valueOf(madrid.points[activeIndex]) : 0;
+    const point = madrid?.points[activeIndex];
+    return point ? valueOf(point) : 0;
   }, [series, activeIndex, mode]);
 
   const snapshot = useMemo<RegionSnapshot[]>(() => {
@@ -244,21 +258,26 @@ export function WorkerIrpfRegionComparison({
   const yTicks = niceTicks(yDomain[0], yDomain[1], 5);
   const xTicks = LOG_SALARY_MARKERS.filter((t) => t >= minSalary && t <= maxSalary);
 
-  const indexFromEvent = (event: React.MouseEvent<SVGSVGElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const svgX = ((event.clientX - rect.left) / rect.width) * VW;
+  const indexFromClientX = (clientX: number) => {
+    const svg = svgRef.current;
+    if (!svg) return null;
+    const rect = svg.getBoundingClientRect();
+    const svgX = ((clientX - rect.left) / rect.width) * VW;
     const plotX = svgX - ML;
     if (plotX < 0 || plotX > PW) return null;
     return Math.max(0, Math.min(STEPS, Math.round((plotX / PW) * STEPS)));
   };
 
-  const handleMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    const index = indexFromEvent(event);
-    setHoverIndex(index);
+  const handlePlotMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    setHoverIndex(indexFromClientX(event.clientX));
   };
 
-  const handleClick = (event: React.MouseEvent<SVGSVGElement>) => {
-    const index = indexFromEvent(event);
+  const handlePlotLeave = () => {
+    setHoverIndex(null);
+  };
+
+  const handlePlotClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const index = indexFromClientX(event.clientX);
     if (index !== null) setPinnedIndex(index);
   };
 
@@ -331,19 +350,22 @@ export function WorkerIrpfRegionComparison({
         </div>
       )}
 
-      <div className="wirc-body">
-        <div className="wirc-chart-wrap">
+      <div
+        className="wirc-body"
+        onMouseLeave={() => setHoverRegion(null)}
+      >
+        <div
+          className="wirc-chart-wrap"
+          onMouseMove={handlePlotMove}
+          onMouseLeave={handlePlotLeave}
+          onClick={handlePlotClick}
+        >
           <svg
+            ref={svgRef}
             viewBox={`0 0 ${VW} ${VH}`}
             className="wirc-chart"
             role="img"
             aria-label="Grafico de IRPF por comunidad segun salario"
-            onMouseMove={handleMove}
-            onClick={handleClick}
-            onMouseLeave={() => {
-              setHoverIndex(null);
-              setHoverRegion(null);
-            }}
           >
             <text x={ML} y={MT - 9} className="wirc-axis-unit">
               {mode === "percent" ? "% del salario" : "€ al año"}
@@ -373,6 +395,26 @@ export function WorkerIrpfRegionComparison({
               );
             })}
 
+            {previewSalary !== null && (
+              <>
+                <line
+                  x1={xOf(previewSalary)}
+                  y1={MT}
+                  x2={xOf(previewSalary)}
+                  y2={MT + PH}
+                  className="wirc-cursor wirc-cursor--preview"
+                />
+                <text
+                  x={xOf(previewSalary)}
+                  y={MT - 9}
+                  textAnchor="middle"
+                  className="wirc-cursor-label wirc-cursor-label--preview"
+                >
+                  {formatEuro(previewSalary)}
+                </text>
+              </>
+            )}
+
             <line
               x1={xOf(activeSalary)}
               y1={MT}
@@ -392,25 +434,41 @@ export function WorkerIrpfRegionComparison({
             {series.map((s) => {
               const isSelected = s.value === selectedRegion;
               const isHover = s.value === hoverRegion;
-              const dim = (hoverRegion && !isHover && !isSelected) || (!hoverRegion && false);
+              const dim = Boolean(hoverRegion && !isHover && !isSelected);
+              const path = linePath(s);
               return (
-                <path
-                  key={s.value}
-                  d={linePath(s)}
-                  fill="none"
-                  stroke={s.color}
-                  strokeWidth={isSelected || isHover ? 3.4 : 1.4}
-                  strokeOpacity={dim ? 0.18 : isSelected || isHover ? 1 : 0.55}
-                  className="wirc-line"
-                  onMouseEnter={() => setHoverRegion(s.value)}
-                  onClick={() => onRegionChange?.(s.value)}
-                />
+                <g key={s.value} className="wirc-line-group">
+                  <path
+                    d={path}
+                    fill="none"
+                    stroke="transparent"
+                    strokeWidth={16}
+                    className="wirc-line-hit"
+                    onMouseEnter={() => setHoverRegion(s.value)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      const index = indexFromClientX(event.clientX);
+                      if (index !== null) setPinnedIndex(index);
+                      onRegionChange?.(s.value);
+                    }}
+                  />
+                  <path
+                    d={path}
+                    fill="none"
+                    stroke={s.color}
+                    strokeWidth={isSelected || isHover ? 3.4 : 1.4}
+                    strokeOpacity={dim ? 0.18 : isSelected || isHover ? 1 : 0.55}
+                    className="wirc-line"
+                    pointerEvents="none"
+                  />
+                </g>
               );
             })}
 
             {series.map((s) => {
               if (s.value !== selectedRegion && s.value !== hoverRegion) return null;
               const p = s.points[activeIndex];
+              if (!p) return null;
               return (
                 <circle
                   key={`dot-${s.value}`}
@@ -443,7 +501,6 @@ export function WorkerIrpfRegionComparison({
                     className={`wirc-rank-row${isSelected ? " is-selected" : ""}`}
                     onClick={() => onRegionChange?.(row.value)}
                     onMouseEnter={() => setHoverRegion(row.value)}
-                    onMouseLeave={() => setHoverRegion(null)}
                     style={{ "--rank-color": row.color } as CSSProperties}
                   >
                     <span className="wirc-rank-pos">{position + 1}</span>
