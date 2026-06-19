@@ -244,6 +244,11 @@ export function WorkerIrpfTranchesCard({
 
   const activeLines = result.lines.filter((line) => line.taxableAmount > 0);
   const visibleLines = activeLines.slice(0, 4);
+  const currentStateRate = stateLines.filter((line) => line.taxableAmount > 0).at(-1)?.rate ?? 0;
+  const currentRegionalRate = regionalLines.filter((line) => line.taxableAmount > 0).at(-1)?.rate ?? 0;
+  const currentCombinedMarginalRate = hasScales
+    ? currentStateRate + currentRegionalRate
+    : activeLines.at(-1)?.rate ?? 0;
 
   const renderBracketBox = (line: ScaleLine, keyPrefix: string) => {
     const isActive = line.taxableAmount > 0;
@@ -325,23 +330,36 @@ export function WorkerIrpfTranchesCard({
           <h2 id="witc-title">IRPF por tramos</h2>
         </div>
 
-        <label className="witc-region">
-          <span>Comunidad autonoma</span>
-          <span className="witc-select">
-            <select
-              aria-label="Comunidad autonoma"
-              value={region}
-              onChange={(event) => setRegion(event.target.value)}
-            >
-              {regions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
-          </span>
-        </label>
+        <div className="witc-header-side">
+          <label className="witc-region">
+            <span>Comunidad autonoma</span>
+            <span className="witc-select">
+              <select
+                aria-label="Comunidad autonoma"
+                value={region}
+                onChange={(event) => setRegion(event.target.value)}
+              >
+                {regions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
+            </span>
+          </label>
+          {currentCombinedMarginalRate > 0 && (
+            <output className="witc-max-rate" aria-live="polite">
+              <span>IRPF marginal max actual</span>
+              <strong>{formatRate(currentCombinedMarginalRate)}%</strong>
+              {hasScales && (
+                <b>
+                  {formatRate(currentStateRate)}% estatal + {formatRate(currentRegionalRate)}% {regionLabel}
+                </b>
+              )}
+            </output>
+          )}
+        </div>
       </header>
 
       <p className="witc-intro">

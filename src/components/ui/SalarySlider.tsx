@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import "./SalarySlider.css";
 
 export type SalarySliderScale = "linear" | "log";
@@ -33,6 +34,12 @@ function formatNumber(value: number) {
   return euroFormatter.format(Number.isFinite(value) ? value : 0);
 }
 
+function parseNumber(value: string) {
+  const normalized = value.replace(/\./g, "").replace(",", ".").replace(/[^\d.-]/g, "");
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
@@ -61,6 +68,7 @@ export function SalarySlider({
   const isLog = scale === "log";
   const ratio = max / min;
   const safeValue = clamp(value, min, max);
+  const [textValue, setTextValue] = useState(formatNumber(safeValue));
 
   const valueToPos = (v: number) =>
     Math.round((Math.log(clamp(v, min, max) / min) / Math.log(ratio)) * LOG_STEPS);
@@ -74,10 +82,42 @@ export function SalarySlider({
     onChange(isLog ? posToValue(raw) : clamp(raw, min, max));
   };
 
+  const commitTextValue = () => {
+    const parsed = clamp(parseNumber(textValue), min, max);
+    const normalized = isLog ? roundNice(parsed) : Math.round(parsed / step) * step;
+    const nextValue = clamp(normalized, min, max);
+    onChange(nextValue);
+    setTextValue(formatNumber(nextValue));
+  };
+
+  useEffect(() => {
+    setTextValue(formatNumber(safeValue));
+  }, [safeValue]);
+
   return (
     <div className="salary-slider" style={{ "--salary-slider-value": `${fillPercent}%` } as CSSProperties}>
       <div className="salary-slider__top">
-        <output htmlFor={id}>{formatNumber(safeValue)} €</output>
+        <div className="salary-slider__value-shell">
+          <input
+            id={`${id}-text`}
+            className="salary-slider__value-input"
+            inputMode="decimal"
+            value={textValue}
+            onChange={(event) => setTextValue(event.target.value)}
+            onBlur={commitTextValue}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.currentTarget.blur();
+              }
+              if (event.key === "Escape") {
+                setTextValue(formatNumber(safeValue));
+                event.currentTarget.blur();
+              }
+            }}
+            aria-label={`${ariaLabel} (editable)`}
+          />
+          <span aria-hidden="true">€</span>
+        </div>
         {unitLabel && <span>{unitLabel}</span>}
       </div>
       <input

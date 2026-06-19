@@ -33,12 +33,37 @@
   gap: 14px;
 }
 
-.salary-slider output {
+.salary-slider__value-shell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.salary-slider__value-input {
   color: #f4f8ff;
+  width: min(220px, 42vw);
+  min-width: 90px;
+  border: 1px solid rgba(114, 150, 188, 0.45);
+  border-radius: 6px;
+  background: rgba(7, 30, 51, 0.72);
+  padding: 4px 10px;
+  text-align: right;
   font-size: clamp(19px, 2.4vw, 24px);
   line-height: 1;
   font-weight: 820;
   white-space: nowrap;
+}
+
+.salary-slider__value-input:focus-visible {
+  outline: 3px solid rgba(66, 184, 255, 0.38);
+  outline-offset: 2px;
+}
+
+.salary-slider__value-shell > span {
+  color: #f4f8ff;
+  font-size: clamp(16px, 2vw, 21px);
+  font-weight: 820;
 }
 
 .salary-slider__top span {

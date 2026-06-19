@@ -77,6 +77,12 @@
   font-weight: 820;
 }
 
+.witc-header-side {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
 .witc-select {
   position: relative;
   display: inline-grid;
@@ -106,6 +112,37 @@
 .witc select:focus-visible {
   outline: 3px solid rgba(86, 163, 255, 0.38);
   outline-offset: 3px;
+}
+
+.witc-max-rate {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  padding: 7px 10px;
+  border: 1px solid rgba(86, 163, 255, 0.35);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(7, 28, 52, 0.74), rgba(5, 20, 39, 0.72));
+}
+
+.witc-max-rate span {
+  color: #9ab3de;
+  font-size: clamp(11px, 0.95vw, 13px);
+  font-weight: 760;
+}
+
+.witc-max-rate strong {
+  color: #63bbff;
+  font-size: clamp(20px, 1.8vw, 28px);
+  line-height: 1;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.witc-max-rate b {
+  color: #9bc4f5;
+  font-size: clamp(10px, 0.9vw, 12px);
+  font-weight: 760;
+  white-space: nowrap;
 }
 
 .witc-intro {
@@ -562,6 +599,15 @@
   .witc-select {
     min-width: 0;
     width: 100%;
+  }
+
+  .witc-header-side {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .witc-max-rate {
+    justify-items: start;
   }
 
   .witc-lower {

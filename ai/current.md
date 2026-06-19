@@ -554,7 +554,26 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, SalarySlider reutilizable)
+## Ultima sesion (2026-06-19, IRPF marginal max en cabecera)
+
+En `WorkerIrpfTranchesCard` se muestra ahora arriba a la derecha el IRPF marginal maximo que esta pagando el usuario, sumando estatal + comunidad autonoma:
+- Nuevo bloque visual `IRPF marginal max actual` en la cabecera derecha, junto al selector de comunidad.
+- Si hay doble escala (estatal + autonomica), el valor se calcula como `ultimo tramo activo estatal + ultimo tramo activo autonomico` y se muestra tambien el desglose (por ejemplo `15% estatal + 14% comunidad`).
+- Si no hay doble escala disponible, usa el ultimo tramo activo de la escala generica como aproximacion.
+- Ajustes responsive para que en tamanos pequenos el bloque se apile correctamente bajo el selector.
+- Verificacion: sin errores de linter en `WorkerIrpfTranchesCard.tsx` y `WorkerIrpfTranchesCard.css`.
+
+## Sesion previa (2026-06-19, salario editable por texto)
+
+Se habilita la edicion manual del salario directamente en el componente compartido `SalarySlider`:
+- El valor superior del slider ahora es un `input` editable en vez de solo lectura; permite escribir el salario con separador espanol (`.` miles, `,` decimal) y confirmar con `Enter` o al perder foco.
+- Se mantiene el control deslizante en paralelo; texto y slider quedan sincronizados por estado.
+- En `Escape`, el campo vuelve al valor actual sin aplicar cambios.
+- En escala lineal, el valor escrito se ajusta al `step`; en escala logaritmica se normaliza con el redondeo progresivo existente.
+- El cambio impacta automaticamente en `Base real` y en `IRPF por tramos` porque ambos usan el mismo `SalarySlider`.
+- Verificacion: sin errores de linter en `src/components/ui/SalarySlider.tsx` y `src/components/ui/SalarySlider.css`.
+
+## Sesion previa (2026-06-19, SalarySlider reutilizable)
 
 Se extrae el slider de salario a un componente compartido y se aplica escala logaritmica con tope 500.000 EUR en el paso 5:
 - Nuevo componente `src/components/ui/SalarySlider.tsx` (+ CSS) reutilizable, con props `scale: 'linear' | 'log'`, `min/max/step/markers`, `unitLabel`. En modo `log`, el mismo desplazamiento del slider supone un salto mayor en euros cuanto mas alto es el importe (mapeo exponencial con redondeo "bonito" por tramos).
