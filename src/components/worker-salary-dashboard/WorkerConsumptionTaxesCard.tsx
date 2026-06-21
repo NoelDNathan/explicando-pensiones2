@@ -1,6 +1,4 @@
 import {
-  ArrowLeft,
-  ArrowRight,
   Calculator,
   Home,
   Info,
@@ -9,6 +7,7 @@ import {
   WalletCards,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { InfoButton } from '../ui/InfoButton'
 import './WorkerConsumptionTaxesCard.css'
 
 type ConsumptionTaxTone = 'green' | 'blue' | 'cyan' | 'orange' | 'purple' | 'red' | 'neutral'
@@ -22,6 +21,7 @@ export type ConsumptionTaxCategory = {
   statutoryLabel: string
   tone: ConsumptionTaxTone
   note?: string
+  help?: string
 }
 
 export type ConsumptionTaxLine = ConsumptionTaxCategory & {
@@ -54,46 +54,134 @@ type WorkerConsumptionTaxesCardProps = {
 
 const DEFAULT_BUDGET_ANNUAL = 28145.92
 
+const IBI_HELP =
+  'El IBI (Impuesto sobre Bienes Inmuebles) lo cobra tu ayuntamiento por la vivienda en propiedad. Este bloque es opcional y no forma parte del reparto del 100 % de gasto. La calculadora estima una cuota anual aproximada como valor catastral x 0,6 %; el tipo real lo fija cada municipio y puede variar bastante. Activa el interruptor para incluirlo en el impacto fiscal total; no es IVA ni impuesto especial de consumo.'
+
 const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
   {
     id: 'saving',
     label: 'Ahorro / inversion',
-    initialSharePercent: 10,
+    initialSharePercent: 0,
     vatRate: 0,
     statutoryLabel: '0% ahora',
     tone: 'green',
-    note: 'El ahorro o la inversion no paga IVA en el momento actual, pero los bienes y servicios adquiridos con ese dinero podrian tributar cuando se consuman mas adelante.',
+    help: 'No es consumo corriente ni deuda: aqui va el dinero que reservas en lugar de gastarlo ya. Depositos, fondos, acciones, aportaciones a pensiones privadas... No paga IVA al guardarlo, pero lo que luego compres con ese dinero si tributara en su categoria.',
   },
-  { id: 'utilities', label: 'Suministros', initialSharePercent: 9, vatRate: 21, statutoryLabel: '21%', tone: 'blue' },
-  { id: 'basic-food', label: 'Alimentacion basica', initialSharePercent: 12, vatRate: 4, statutoryLabel: '4%', tone: 'green' },
-  { id: 'general-food', label: 'Alimentacion general', initialSharePercent: 11, vatRate: 10, statutoryLabel: '10%', tone: 'orange' },
-  { id: 'non-essential-market', label: 'Supermercado no esencial', initialSharePercent: 6, vatRate: 21, statutoryLabel: '21%', tone: 'purple' },
-  { id: 'restaurants', label: 'Restaurantes / delivery', initialSharePercent: 9, vatRate: 10, statutoryLabel: '10%', tone: 'orange' },
+  {
+    id: 'mortgage-debt',
+    label: 'Hipoteca / deudas',
+    initialSharePercent: 0,
+    vatRate: 0,
+    statutoryLabel: 'Sin IVA',
+    tone: 'neutral',
+    help: 'Cuota de hipoteca, prestamos personales, tarjetas u otras deudas que amortizas cada mes. Tambien puedes incluir aqui el alquiler de vivienda habitual. No llevan IVA en este reparto: son pagos financieros o de vivienda, no compra de bienes o servicios con IVA.',
+  },
+  {
+    id: 'basic-food',
+    label: 'Alimentacion basica',
+    initialSharePercent: 0,
+    vatRate: 4,
+    statutoryLabel: '4%',
+    tone: 'green',
+    help: 'La frontera legal del IVA (4 % vs 10 %) no es obvia. Basica: pan, leche, huevos, fruta/verdura fresca, etc. General: resto de comida del supermercado no incluida en la basica.',
+  },
+  {
+    id: 'general-food',
+    label: 'Alimentacion general',
+    initialSharePercent: 0,
+    vatRate: 10,
+    statutoryLabel: '10%',
+    tone: 'orange',
+    help: 'La frontera legal del IVA (4 % vs 10 %) no es obvia. Basica: pan, leche, huevos, fruta/verdura fresca, etc. General: resto de comida del supermercado no incluida en la basica.',
+  },
+  {
+    id: 'restaurants',
+    label: 'Restaurantes / delivery',
+    initialSharePercent: 0,
+    vatRate: 10,
+    statutoryLabel: '10%',
+    tone: 'orange',
+    help: 'Comidas fuera de casa y delivery. Puede solaparse con alimentacion general si compras comida preparada para llevar; aqui va lo que consumes en restaurante o te lo traen a domicilio.',
+  },
+  {
+    id: 'shopping',
+    label: 'Compras generales',
+    initialSharePercent: 0,
+    vatRate: 21,
+    statutoryLabel: '21%',
+    tone: 'blue',
+    help: 'Es el cajon de sastre del 21 %. Ropa, electronica, muebles, higiene no farmaceutica, etc. Lo que no encaje en otra fila.',
+  },
   {
     id: 'leisure',
     label: 'Ocio / suscripciones *',
-    initialSharePercent: 7,
+    initialSharePercent: 0,
     vatRate: 21,
     statutoryLabel: '21%',
     tone: 'purple',
     note: 'Algunos servicios de ocio o cultura pueden tributar al 10%.',
+    help: 'Streaming, gimnasio, cine, videojuegos... Por defecto 21 %; algunos servicios culturales/de ocio pueden ir al 10 %.',
   },
-  { id: 'shopping', label: 'Compras generales', initialSharePercent: 8, vatRate: 21, statutoryLabel: '21%', tone: 'blue' },
-  { id: 'public-transport', label: 'Transporte publico', initialSharePercent: 5, vatRate: 10, statutoryLabel: '10%', tone: 'green' },
-  { id: 'fuel', label: 'Gasolina', initialSharePercent: 7.5, vatRate: 21, specialRate: 20, statutoryLabel: '21% + 20%', tone: 'orange' },
-  { id: 'electricity', label: 'Electricidad', initialSharePercent: 4.5, vatRate: 21, specialRate: 5.11, statutoryLabel: '21% + 5,11%', tone: 'cyan' },
+  { id: 'public-transport', label: 'Transporte publico', initialSharePercent: 0, vatRate: 10, statutoryLabel: '10%', tone: 'green' },
+  {
+    id: 'fuel',
+    label: 'Gasolina',
+    initialSharePercent: 0,
+    vatRate: 21,
+    specialRate: 20,
+    statutoryLabel: '21% + 20%',
+    tone: 'orange',
+    help: 'El tipo 21 % + 20 % mezcla IVA e impuesto especial sobre hidrocarburos. El segundo no es IVA: es un tributo distinto que se suma al precio en surtidor.',
+  },
+  {
+    id: 'electricity',
+    label: 'Electricidad',
+    initialSharePercent: 0,
+    vatRate: 21,
+    specialRate: 5.11,
+    statutoryLabel: '21% + 5,11%',
+    tone: 'cyan',
+    help: 'El 21 % + 5,11 % combina IVA e impuesto especial sobre la electricidad. Esta fila no incluye gas, agua u otros suministros si no los has repartido en otra categoria.',
+  },
   {
     id: 'health',
     label: 'Salud / farmacia *',
-    initialSharePercent: 3,
+    initialSharePercent: 0,
     vatRate: 0,
     statutoryLabel: '0%',
     tone: 'cyan',
     note: 'Segun el caso, algunos productos o servicios pueden tributar a tipos superiores, incluso al 21%.',
+    help: 'Medicamentos con receta y productos sanitarios basicos suelen ir al 0 % o tipos reducidos; otros productos de farmacia/parafarmacia (cosmetica, optica...) pueden ir al 21 %.',
   },
-  { id: 'education-insurance-banking', label: 'Educacion / seguros / banca', initialSharePercent: 3, vatRate: 0, statutoryLabel: 'Exento / 0%', tone: 'purple' },
-  { id: 'tobacco', label: 'Tabaco', initialSharePercent: 1, vatRate: 21, specialRate: 55, statutoryLabel: '21% + 55%', tone: 'red' },
-  { id: 'alcohol', label: 'Alcohol', initialSharePercent: 4, vatRate: 21, specialRate: 5, statutoryLabel: '21% + 5%', tone: 'orange' },
+  {
+    id: 'education-insurance-banking',
+    label: 'Educacion / seguros / banca',
+    initialSharePercent: 0,
+    vatRate: 0,
+    statutoryLabel: 'Exento / 0%',
+    tone: 'purple',
+    help: 'Mezcla tres ambitos distintos. Enseñanza reglada, primas de seguro y comisiones bancarias suelen ir exentas o al 0 %; no confundir con otros servicios financieros o material escolar con IVA.',
+  },
+  {
+    id: 'tobacco',
+    label: 'Tabaco',
+    initialSharePercent: 0,
+    vatRate: 21,
+    specialRate: 55,
+    statutoryLabel: '21% + 55%',
+    tone: 'red',
+    help: 'Cigarrillos, tabaco de liar y productos derivados del tabaco. El 21 % + 55 % combina IVA e impuesto especial: el segundo no es IVA y pesa mucho en el precio final.',
+  },
+  {
+    id: 'alcohol',
+    label: 'Alcohol',
+    initialSharePercent: 0,
+    vatRate: 21,
+    specialRate: 5,
+    statutoryLabel: '21% + 5%',
+    tone: 'orange',
+    help: 'Bebidas alcoholicas: cerveza, vino, licores, etc. El 21 % + 5 % mezcla IVA e impuesto especial sobre el alcohol; el tipo especial varia segun producto, aqui usamos una cifra orientativa.',
+  },
 ]
 
 function formatEuro(value: number, decimals = 2) {
@@ -120,7 +208,7 @@ function clampNumber(value: number, min = 0, max = Number.POSITIVE_INFINITY) {
 export function WorkerConsumptionTaxesCard({
   categories = DEFAULT_CATEGORIES,
   initialBudgetAnnual = DEFAULT_BUDGET_ANNUAL,
-  initialCadastralValue = 46941.67,
+  initialCadastralValue = 0,
   initialHasOwnedHome = true,
   onResultChange,
 }: WorkerConsumptionTaxesCardProps) {
@@ -201,20 +289,6 @@ export function WorkerConsumptionTaxesCard({
           <h2 id="wctc-title">7. IVA y otros impuestos</h2>
           <p>Distribuye tu gasto y calcula cuanto pagas en IVA e impuestos especiales.</p>
         </div>
-
-        <div className="wctc-header-note">
-          <Info size={18} aria-hidden="true" />
-          <p>Edita el porcentaje o los euros. El otro valor se actualiza automaticamente.<br />La suma total debe ser 100% del gasto asignado.</p>
-        </div>
-
-        <nav className="wctc-nav" aria-label="Navegacion del simulador">
-          <button type="button" aria-label="Paso anterior">
-            <ArrowLeft size={31} strokeWidth={2.2} aria-hidden="true" />
-          </button>
-          <button type="button" aria-label="Paso siguiente">
-            <ArrowRight size={31} strokeWidth={2.2} aria-hidden="true" />
-          </button>
-        </nav>
       </header>
 
       <div className="wctc-layout">
@@ -222,9 +296,8 @@ export function WorkerConsumptionTaxesCard({
           <div className="wctc-grid-head" aria-hidden="true">
             <span>Categoria de gasto</span>
             <span>Tipo impositivo / regla</span>
-            <span>% del gasto</span>
-            <span />
             <span>Importe anual (€)</span>
+            <span>% del gasto</span>
             <span />
           </div>
 
@@ -234,10 +307,34 @@ export function WorkerConsumptionTaxesCard({
                 <div className="wctc-category">
                   <span className="wctc-index">{index + 1}</span>
                   <span className="wctc-category-dot" aria-hidden="true" />
-                  <strong>{line.label}</strong>
+                  <span className="wctc-category-label">
+                    <strong>{line.label}</strong>
+                    {line.help && (
+                      <InfoButton
+                        label={`Que incluye ${line.label.replace(/\s*\*$/, '')}`}
+                        size="sm"
+                        placement="end"
+                        className="wctc-help"
+                      >
+                        <p>{line.help}</p>
+                      </InfoButton>
+                    )}
+                  </span>
                 </div>
 
                 <p className="wctc-rule">{line.statutoryLabel}</p>
+
+                <label className="wctc-input wctc-input--euro">
+                  <span className="sr-only">Importe anual en {line.label}</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={Number(line.spendAnnual.toFixed(2))}
+                    onChange={(event) => updateAmount(line.id, Number(event.target.value))}
+                  />
+                  <b>€</b>
+                </label>
 
                 <label className="wctc-input wctc-input--percent">
                   <span className="sr-only">Porcentaje del gasto en {line.label}</span>
@@ -252,20 +349,6 @@ export function WorkerConsumptionTaxesCard({
                   <b>%</b>
                 </label>
 
-                <div className="wctc-sync" aria-hidden="true">↔</div>
-
-                <label className="wctc-input wctc-input--euro">
-                  <span className="sr-only">Importe anual en {line.label}</span>
-                  <input
-                    type="number"
-                    min={0}
-                    step={1}
-                    value={Number(line.spendAnnual.toFixed(2))}
-                    onChange={(event) => updateAmount(line.id, Number(event.target.value))}
-                  />
-                  <b>€</b>
-                </label>
-
                 <div className="wctc-mini">
                   <span style={{ width: `${Math.max(5, (line.spendAnnual / maxLineAmount) * 100)}%` }} />
                 </div>
@@ -278,9 +361,8 @@ export function WorkerConsumptionTaxesCard({
                 <strong>TOTAL</strong>
               </div>
               <p className="wctc-rule">—</p>
-              <output className="wctc-total-cell">{formatNumber(result.totalSharePercent)}%</output>
-              <span />
               <output className="wctc-total-cell">{formatEuro(result.assignedSpendAnnual)}</output>
+              <output className="wctc-total-cell">{formatNumber(result.totalSharePercent)}%</output>
               <small>≈ 100%</small>
             </article>
           </div>
@@ -292,8 +374,11 @@ export function WorkerConsumptionTaxesCard({
             </div>
 
             <div className="wctc-ibi-row">
-              <div>
+              <div className="wctc-ibi-head">
                 <strong>IBI</strong>
+                <InfoButton label="Que es el IBI estimado" size="sm" placement="end" className="wctc-help">
+                  <p>{IBI_HELP}</p>
+                </InfoButton>
                 <small>* Simplificacion orientativa</small>
               </div>
               <label>
@@ -316,7 +401,16 @@ export function WorkerConsumptionTaxesCard({
                 />
                 <span aria-hidden="true" />
               </label>
-              <output>{formatEuro(result.propertyTaxAnnual)}</output>
+              <output className="wctc-ibi-amounts" aria-label="Cuota IBI estimada">
+                <span className="wctc-ibi-amount">
+                  <small>Anual</small>
+                  <strong>{formatEuro(result.propertyTaxAnnual)}</strong>
+                </span>
+                <span className="wctc-ibi-amount">
+                  <small>Mensual</small>
+                  <strong>{formatEuro(result.propertyTaxAnnual / 12)}</strong>
+                </span>
+              </output>
             </div>
           </section>
         </section>
@@ -356,20 +450,8 @@ export function WorkerConsumptionTaxesCard({
             <span><b>Impacto total aprox.</b><small>Suma de todos los conceptos</small></span>
             <strong>{formatEuro(result.totalTaxAnnual)}<small>{formatNumber(result.effectiveRate)}% del gasto</small></strong>
           </output>
-
-          <div className="wctc-warning">
-            <Info size={20} aria-hidden="true" />
-            <p>{categories[0]?.note}</p>
-          </div>
         </aside>
       </div>
-
-      <footer className="wctc-footnotes">
-        <Info size={24} aria-hidden="true" />
-        <p>* Ocio / suscripciones: algunos servicios pueden tributar al 10%.</p>
-        <p>* Salud / farmacia: segun el caso, algunos productos o servicios pueden tributar a tipos superiores, incluso al 21%.</p>
-        <p>* IBI: calculo muy simplificado con fines orientativos.</p>
-      </footer>
     </section>
   )
 }

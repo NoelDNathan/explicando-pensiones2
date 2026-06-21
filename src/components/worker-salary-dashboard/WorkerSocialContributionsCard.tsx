@@ -40,6 +40,8 @@ export type SocialContributionResult = {
   salaryAfterWorkerContributionsMonthly: number
   totalCompanyCostAnnual: number
   totalCompanyCostMonthly: number
+  totalContributionsAnnual: number
+  totalContributionsMonthly: number
   workerContributionRate: number
   companyContributionRate: number
   breakdown: {
@@ -181,6 +183,7 @@ function calculateSocialContributions(params: {
 
   const workerContributionsAnnual = sumValues(workerBreakdown)
   const companyContributionsAnnual = sumValues(companyBreakdown)
+  const totalContributionsAnnual = workerContributionsAnnual + companyContributionsAnnual
   const salaryAfterWorkerContributionsAnnual = grossSalaryAnnual - workerContributionsAnnual
   const totalCompanyCostAnnual = grossSalaryAnnual + companyContributionsAnnual
 
@@ -197,6 +200,8 @@ function calculateSocialContributions(params: {
     salaryAfterWorkerContributionsMonthly: salaryAfterWorkerContributionsAnnual / 12,
     totalCompanyCostAnnual,
     totalCompanyCostMonthly: totalCompanyCostAnnual / 12,
+    totalContributionsAnnual,
+    totalContributionsMonthly: totalContributionsAnnual / 12,
     workerContributionRate: workerContributionsAnnual / contributionBaseAnnual,
     companyContributionRate: companyContributionsAnnual / contributionBaseAnnual,
     breakdown: {
@@ -407,6 +412,7 @@ export function WorkerSocialContributionsCard({
   const salaryAfterDisplay = getAmount(result, viewMode, 'salaryAfterWorkerContributionsAnnual')
   const companyTotalDisplay = getAmount(result, viewMode, 'companyContributionsAnnual')
   const companyCostDisplay = getAmount(result, viewMode, 'totalCompanyCostAnnual')
+  const totalContributionsDisplay = getAmount(result, viewMode, 'totalContributionsAnnual')
 
   return (
     <section className="wscc" aria-labelledby="wscc-title">
@@ -519,6 +525,12 @@ export function WorkerSocialContributionsCard({
           <div className="wscc-summary__item wscc-summary__item--hero">
             <span>Coste total empresa</span>
             <strong>{formatEuro(companyCostDisplay)}</strong>
+          </div>
+          <div className="wscc-summary__divider" aria-hidden="true"></div>
+          <div className="wscc-summary__item wscc-summary__item--total">
+            <span>Coste total cotizaciones</span>
+            <strong>{formatEuro(totalContributionsDisplay)}</strong>
+            <em>Trabajador + empresa</em>
           </div>
         </aside>
       </div>

@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-06-14
+Fecha: 2026-06-21
 
 ## Situacion
 
@@ -58,6 +58,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Añadido **Coste total cotizaciones** al resumen de `WorkerSocialContributionsCard`: suma cotizaciones del trabajador y coste adicional de la empresa (`totalContributionsAnnual` / mensual segun vista). Sin datos nuevos ni fuentes nuevas. Verificacion: `pnpm run build` falla por errores TS preexistentes en otros modulos; el cambio en WSCC compila sin errores nuevos.
 
 - Ajustado `WorkerFiscalStepsCard` en `/calculadora-fiscal` tras la revision visual: se eliminaron para todos los pasos los dos avisos bajo la nomina (`Reduccion o deduccion?`/`Importante` y equivalentes), se redujo la separacion entre texto y documento ajustando el grid y el ancho de la nomina, y el recibo de ejemplo incorpora ahora una retencion IRPF inventada y didactica (`RETENCION IRPF`, 12,00%, 210,00 EUR), con `TOT.DEDUCCIONES` actualizado a 323,76 EUR y `LIQUIDO TOTAL` a 1.426,24 EUR. No se incorporaron datos editoriales nuevos ni fuentes nuevas; el recibo sigue siendo un ejemplo visual. Verificacion: `.\node_modules\.bin\tsc.cmd --noEmit` correcto; `node node_modules\vite\bin\vite.js build` correcto con avisos conocidos de chunk grande y tiempos de plugins; Browser integrado en `http://127.0.0.1:5212/calculadora-fiscal`: escritorio sin `.wfsc-important`, fila IRPF e importes nuevos presentes, importes antiguos ausentes, separacion texto-documento de 26 px, sin overflow horizontal; paso 5 resalta `/475 RETENCION IRPF 12,00 210,00`; movil 390x844 sin overflow de pagina y con scroll interno solo en la nomina; consola sin errores.
 
@@ -554,7 +556,51 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-19, Comparador IRPF fix interacciones)
+## Ultima sesion (2026-06-21, WIRC fix bucle clics region)
+
+Corregido bucle Madrid/CCAA al seleccionar en el comparador: `WorkerIrpfTranchesCard` ya no emite `onResultChange` con region obsoleta en modo autoritativo; usa `initialRegion` y `onRegionChange`. El comparador solo resetea la CCAA de comparacion si coincide con la seleccionada.
+
+## Sesion previa (2026-06-21, WIRC modo 2 CCAA + media)
+
+`WorkerIrpfRegionComparison`: grafico con solo 2 CCAA activas (seleccionada + comparacion) y linea de media; trazos mas gruesos; ranking dividido en bloque activo y selector; correccion de clics (seleccion solo desde ranking, sin hover en 19 lineas).
+
+## Sesion previa (2026-06-21, WCTC fila hipoteca/deudas)
+
+Nueva categoria `Hipoteca / deudas` en `WorkerConsumptionTaxesCard` (sin IVA, con ayuda contextual), colocada tras Ahorro/inversion para separar amortizaciones y alquiler del consumo corriente.
+
+## Sesion previa (2026-06-21, WCTC quitar avisos duplicados)
+
+Eliminados el bloque `.wctc-warning` del resumen y el footer `.wctc-footnotes`; las matizaciones siguen en los iconos de ayuda por categoria e IBI.
+
+## Sesion previa (2026-06-21, WCTC IBI anual y mensual)
+
+La cuota IBI estimada muestra importe anual y mensual (anual / 12) en el bloque de vivienda.
+
+## Sesion previa (2026-06-21, WCTC ayuda IBI)
+
+Icono `InfoButton` junto a la etiqueta IBI en el bloque de vivienda: explica que es opcional, la formula valor catastral x 0,6 % es orientativa y que no es IVA ni impuesto especial.
+
+## Sesion previa (2026-06-21, WCTC ayuda tabaco y alcohol)
+
+Anadidos textos e iconos `InfoButton` en las filas Tabaco y Alcohol de `WorkerConsumptionTaxesCard`, explicando que incluir y la diferencia entre IVA e impuesto especial (21 %+55 % y 21 %+5 %).
+
+## Sesion previa (2026-06-21, WCTC iconos de ayuda por categoria)
+
+En `WorkerConsumptionTaxesCard`:
+- Nuevo campo opcional `help` en `ConsumptionTaxCategory`.
+- Iconos `InfoButton` (sm) junto al nombre en 9 filas: ahorro, alimentacion basica/general, restaurantes, compras generales, ocio, salud, educacion/seguros/banca, gasolina y electricidad.
+- Textos didacticos sobre que incluir en cada categoria y matices de IVA/impuestos especiales.
+- Verificacion: sin errores de linter en los archivos tocados.
+
+## Sesion previa (2026-06-21, WCTC orden importe/porcentaje)
+
+En `WorkerConsumptionTaxesCard` (paso 7):
+- Eliminado el indicador visual `.wctc-sync` entre importe y porcentaje.
+- Reordenadas las columnas: primero importe anual en euros, despues porcentaje del gasto (cabecera, filas y total).
+- La cuadricula pasa de 6 a 5 columnas conservando el ancho del campo de importe (`minmax(150px, 0.62fr)`).
+- Verificacion: sin errores nuevos de linter en los archivos tocados; el build completo sigue bloqueado por errores previos ajenos.
+
+## Sesion previa (2026-06-19, Comparador IRPF fix interacciones)
 
 Corregidos saltos erraticos al interactuar con el comparador: el punto fijado por clic tiene prioridad sobre el hover (ranking y franja estables); previsualizacion con linea discontinua al pasar por otro salario; eventos de raton en el contenedor del grafico; lineas con area de clic mas ancha; menos parpadeo en el ranking.
 

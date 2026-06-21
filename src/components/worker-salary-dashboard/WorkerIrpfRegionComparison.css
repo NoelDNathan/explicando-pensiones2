@@ -173,14 +173,23 @@
 
 .wirc-chart-wrap {
   min-width: 0;
+  min-height: 280px;
 }
 
 .wirc-chart {
   width: 100%;
+  min-height: 260px;
   height: auto;
   display: block;
   touch-action: none;
   cursor: crosshair;
+}
+
+.wirc-plot-bg {
+  fill: rgba(8, 17, 33, 0.55);
+  stroke: rgba(77, 123, 188, 0.22);
+  stroke-width: 1;
+  rx: 8;
 }
 
 .wirc-grid {
@@ -201,8 +210,12 @@
 }
 
 .wirc-line {
-  cursor: pointer;
+  filter: drop-shadow(0 0 5px rgba(90, 209, 255, 0.16));
   transition: stroke-opacity 0.12s ease, stroke-width 0.12s ease;
+}
+
+.wirc-line-group--selected .wirc-line {
+  filter: drop-shadow(0 0 8px rgba(90, 209, 255, 0.34));
 }
 
 .wirc-cursor {
@@ -244,7 +257,21 @@
 }
 
 .wirc-line-group {
-  pointer-events: auto;
+  pointer-events: none;
+}
+
+.wirc-ranking__section {
+  margin: 10px 6px 6px;
+  color: var(--wirc-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wirc-ranking__list--picker {
+  max-height: 220px;
+  overflow: auto;
 }
 
 /* Ranking */
@@ -307,6 +334,28 @@
 .wirc-rank-row.is-selected {
   background: rgba(90, 209, 255, 0.14);
   border-color: rgba(90, 209, 255, 0.5);
+}
+
+.wirc-rank-row.is-compare {
+  background: rgba(143, 155, 255, 0.12);
+  border-color: rgba(143, 155, 255, 0.42);
+}
+
+.wirc-rank-row.is-average {
+  cursor: default;
+  opacity: 0.92;
+}
+
+.wirc-rank-row:disabled {
+  cursor: default;
+}
+
+.wirc-rank-tag {
+  margin-left: 6px;
+  color: var(--wirc-muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: lowercase;
 }
 
 .wirc-rank-pos {

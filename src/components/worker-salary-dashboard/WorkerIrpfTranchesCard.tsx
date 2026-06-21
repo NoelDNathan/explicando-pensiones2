@@ -75,6 +75,8 @@ type WorkerIrpfTranchesCardProps = {
   grossSalary?: number;
   /** Callback al cambiar el salario bruto anual desde esta tarjeta. */
   onSalaryChange?: (annualGross: number) => void;
+  /** Cuando el motor es autoritativo, notifica cambios de comunidad al contenedor. */
+  onRegionChange?: (region: string) => void;
   onResultChange?: (result: WorkerIrpfTranchesResult) => void;
 };
 
@@ -163,6 +165,7 @@ export function WorkerIrpfTranchesCard({
   regionalTaxLabel = "Autonomico",
   grossSalary,
   onSalaryChange,
+  onRegionChange,
   onResultChange,
 }: WorkerIrpfTranchesCardProps) {
   const [region, setRegion] = useState(initialRegion);
@@ -183,15 +186,24 @@ export function WorkerIrpfTranchesCard({
     onSalaryChange?.(next);
   };
 
-  const regionLabel = useMemo(
-    () => regions.find((r) => r.value === region)?.label ?? regionalTaxLabel,
-    [region, regions, regionalTaxLabel],
-  );
-
   // Cuando el motor pasa las cuotas reales (estatal + autonomica con el minimo
   // personal y familiar ya aplicado), la tarjeta muestra esas cifras. En caso
   // contrario (uso autonomo del componente) recalcula con los tramos genericos.
   const isAuthoritative = stateTax !== undefined && regionalTax !== undefined;
+  const activeRegion = isAuthoritative ? initialRegion : region;
+
+  const handleRegionChange = (nextRegion: string) => {
+    if (isAuthoritative) {
+      onRegionChange?.(nextRegion);
+      return;
+    }
+    setRegion(nextRegion);
+  };
+
+  const regionLabel = useMemo(
+    () => regions.find((r) => r.value === activeRegion)?.label ?? regionalTaxLabel,
+    [activeRegion, regions, regionalTaxLabel],
+  );
 
   const result = useMemo<WorkerIrpfTranchesResult>(() => {
     const lines = brackets.map((bracket) => {
@@ -210,17 +222,18 @@ export function WorkerIrpfTranchesCard({
       : computedQuota;
 
     return {
-      region,
+      region: activeRegion,
       taxableBase: initialTaxableBase,
       quota,
       effectiveRate: initialTaxableBase > 0 ? (quota / initialTaxableBase) * 100 : 0,
       lines,
     };
-  }, [brackets, initialTaxableBase, isAuthoritative, region, regionalTax, stateTax]);
+  }, [activeRegion, brackets, initialTaxableBase, isAuthoritative, regionalTax, stateTax]);
 
   useEffect(() => {
+    if (isAuthoritative) return;
     onResultChange?.(result);
-  }, [onResultChange, result]);
+  }, [isAuthoritative, onResultChange, result]);
 
   const stateLines = useMemo(
     () => (stateScale && stateScale.length > 0 ? computeScaleLines(stateScale, result.taxableBase) : []),
@@ -336,8 +349,8 @@ export function WorkerIrpfTranchesCard({
             <span className="witc-select">
               <select
                 aria-label="Comunidad autonoma"
-                value={region}
-                onChange={(event) => setRegion(event.target.value)}
+                value={activeRegion}
+                onChange={(event) => handleRegionChange(event.target.value)}
               >
                 {regions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -348,17 +361,6 @@ export function WorkerIrpfTranchesCard({
               <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
             </span>
           </label>
-          {currentCombinedMarginalRate > 0 && (
-            <output className="witc-max-rate" aria-live="polite">
-              <span>IRPF marginal max actual</span>
-              <strong>{formatRate(currentCombinedMarginalRate)}%</strong>
-              {hasScales && (
-                <b>
-                  {formatRate(currentStateRate)}% estatal + {formatRate(currentRegionalRate)}% {regionLabel}
-                </b>
-              )}
-            </output>
-          )}
         </div>
       </header>
 
@@ -367,22 +369,47 @@ export function WorkerIrpfTranchesCard({
         por la parte de renta que cae en cada tramo.
       </p>
 
+      {currentCombinedMarginalRate > 0 && !showSalaryControl && (
+        <output className="witc-max-rate" aria-live="polite">
+          <span>IRPF marginal max actual</span>
+          <strong>{formatRate(currentCombinedMarginalRate)}%</strong>
+          {hasScales && (
+            <b>
+              {formatRate(currentStateRate)}% estatal + {formatRate(currentRegionalRate)}% {regionLabel}
+            </b>
+          )}
+        </output>
+      )}
+
       {showSalaryControl && (
         <div className="witc-salary">
           <label className="witc-salary__label" htmlFor="witc-salary-range">
             Salario bruto anual
           </label>
-          <SalarySlider
-            id="witc-salary-range"
-            value={salary}
-            onChange={handleSalaryChange}
-            min={SALARY_RANGE.min}
-            max={SALARY_RANGE.max}
-            markers={SALARY_RANGE.markers}
-            scale="log"
-            unitLabel="brutos al año"
-            ariaLabel="Salario bruto anual en euros"
-          />
+          <div className="witc-salary-row">
+            <SalarySlider
+              id="witc-salary-range"
+              value={salary}
+              onChange={handleSalaryChange}
+              min={SALARY_RANGE.min}
+              max={SALARY_RANGE.max}
+              markers={SALARY_RANGE.markers}
+              scale="log"
+              unitLabel="brutos al año"
+              ariaLabel="Salario bruto anual en euros"
+            />
+            {currentCombinedMarginalRate > 0 && (
+              <output className="witc-max-rate witc-max-rate--inline" aria-live="polite">
+                <span>IRPF marginal max actual</span>
+                <strong>{formatRate(currentCombinedMarginalRate)}%</strong>
+                {hasScales && (
+                  <b>
+                    {formatRate(currentStateRate)}% estatal + {formatRate(currentRegionalRate)}% {regionLabel}
+                  </b>
+                )}
+              </output>
+            )}
+          </div>
         </div>
       )}
 

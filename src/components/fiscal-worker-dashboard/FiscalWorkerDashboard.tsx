@@ -725,6 +725,7 @@ export function FiscalWorkerDashboard() {
               grossSalary={salary}
               onSalaryChange={setSalary}
               regions={regionOptions}
+              onRegionChange={setRegion}
               onResultChange={handleIrpfResultChange}
             />
             {taxYear !== '2005' && (

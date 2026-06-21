@@ -65,8 +65,7 @@
 }
 
 .wctc-header,
-.wctc-layout,
-.wctc-footnotes {
+.wctc-layout {
   position: relative;
 }
 
@@ -204,7 +203,7 @@
 .wctc-grid-head,
 .wctc-row {
   display: grid;
-  grid-template-columns: minmax(250px, 1.1fr) minmax(160px, 0.72fr) minmax(126px, 0.5fr) 46px minmax(150px, 0.62fr) minmax(88px, 0.35fr);
+  grid-template-columns: minmax(250px, 1.1fr) minmax(160px, 0.72fr) minmax(150px, 0.62fr) minmax(126px, 0.5fr) minmax(88px, 0.35fr);
   gap: 12px;
   align-items: center;
 }
@@ -286,6 +285,27 @@
   font-weight: 760;
 }
 
+.wctc-category-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wctc-category-label strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wctc-help {
+  flex: 0 0 auto;
+}
+
+.wctc-help .info-button__panel {
+  width: min(20rem, calc(100vw - 2rem));
+}
+
 .wctc-rule {
   color: #e5ecfa;
 }
@@ -329,20 +349,6 @@
 
 .wctc-input--euro input {
   color: #dfeaff;
-}
-
-.wctc-sync {
-  display: grid;
-  place-items: center;
-  justify-self: center;
-  width: 31px;
-  height: 22px;
-  border: 1px solid rgba(77, 139, 202, 0.48);
-  border-radius: 999px;
-  color: #afc7e7;
-  background: rgba(2, 13, 28, 0.6);
-  font-size: 15px;
-  font-weight: 900;
 }
 
 .wctc-mini {
@@ -431,7 +437,7 @@
 
 .wctc-ibi-row {
   display: grid;
-  grid-template-columns: minmax(130px, 0.7fr) minmax(250px, 1.4fr) auto minmax(130px, 0.45fr);
+  grid-template-columns: minmax(130px, 0.7fr) minmax(250px, 1.4fr) auto minmax(170px, 0.62fr);
   gap: 14px;
   align-items: center;
   padding: 8px 14px;
@@ -446,6 +452,29 @@
   font-size: 14px;
   line-height: 1.1;
   font-weight: 850;
+}
+
+.wctc-ibi-head {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  column-gap: 6px;
+  align-items: center;
+}
+
+.wctc-ibi-head strong {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.wctc-ibi-head .wctc-help {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.wctc-ibi-head small {
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 .wctc-ibi-row small,
@@ -519,12 +548,33 @@
   background: #baf4bd;
 }
 
-.wctc-ibi-row output {
+.wctc-ibi-amounts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   justify-self: end;
+}
+
+.wctc-ibi-amount {
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+  text-align: right;
+}
+
+.wctc-ibi-amount small {
+  color: #aebbd1;
+  font-size: 11px;
+  line-height: 1.1;
+  font-weight: 690;
+}
+
+.wctc-ibi-amount strong {
   color: #e8f0ff;
   font-size: 15px;
   line-height: 1;
   font-weight: 850;
+  font-variant-numeric: tabular-nums;
 }
 
 .wctc-summary {
@@ -620,53 +670,6 @@
   min-height: 84px;
 }
 
-.wctc-warning {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
-  margin-top: 14px;
-  padding: 16px;
-  border: 1px solid rgba(255, 176, 51, 0.48);
-  border-radius: 10px;
-  color: #edd59d;
-  background:
-    radial-gradient(circle at 0 0, rgba(255, 176, 51, 0.15), transparent 38%),
-    rgba(30, 24, 13, 0.45);
-}
-
-.wctc-warning svg {
-  color: #ffb033;
-}
-
-.wctc-warning p {
-  font-size: 14px;
-  line-height: 1.45;
-  font-weight: 720;
-}
-
-.wctc-footnotes {
-  display: grid;
-  grid-template-columns: auto repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  align-items: center;
-  margin-top: 12px;
-  padding: 12px 20px;
-  border: 1px solid rgba(50, 116, 184, 0.36);
-  border-radius: 8px;
-  background: rgba(5, 25, 51, 0.56);
-}
-
-.wctc-footnotes svg {
-  color: #47a9ff;
-}
-
-.wctc-footnotes p {
-  color: #aebbd1;
-  font-size: 13px;
-  line-height: 1.35;
-  font-weight: 690;
-}
-
 @container (max-width: 1220px) {
   .wctc-header,
   .wctc-layout {
@@ -686,8 +689,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .wctc-summary-title,
-  .wctc-warning {
+  .wctc-summary-title {
     grid-column: 1 / -1;
   }
 }
@@ -699,7 +701,7 @@
 
   .wctc-grid-head,
   .wctc-row {
-    min-width: 820px;
+    min-width: 774px;
   }
 
   .wctc-ibi-row {
@@ -711,12 +713,13 @@
   }
 
   .wctc-switch,
-  .wctc-ibi-row output {
+  .wctc-ibi-amounts {
     justify-self: start;
   }
 
-  .wctc-footnotes {
-    grid-template-columns: auto minmax(0, 1fr);
+  .wctc-ibi-amounts {
+    width: 100%;
+    max-width: 280px;
   }
 }
 

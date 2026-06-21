@@ -116,12 +116,22 @@
 
 .witc-max-rate {
   display: grid;
-  justify-items: end;
+  justify-items: start;
   gap: 2px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 12px;
   padding: 7px 10px;
   border: 1px solid rgba(86, 163, 255, 0.35);
   border-radius: 8px;
   background: linear-gradient(180deg, rgba(7, 28, 52, 0.74), rgba(5, 20, 39, 0.72));
+}
+
+.witc-max-rate--inline {
+  margin-bottom: 0;
+  align-content: center;
+  justify-items: end;
+  min-width: min(220px, 100%);
 }
 
 .witc-max-rate span {
@@ -157,6 +167,17 @@
   display: grid;
   gap: 8px;
   margin-bottom: 16px;
+}
+
+.witc-salary-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.witc-salary-row .salary-slider {
+  min-width: 0;
 }
 
 .witc-salary__label {
@@ -606,8 +627,13 @@
     justify-items: stretch;
   }
 
-  .witc-max-rate {
+  .witc-salary-row {
+    grid-template-columns: 1fr;
+  }
+
+  .witc-max-rate--inline {
     justify-items: start;
+    width: 100%;
   }
 
   .witc-lower {
