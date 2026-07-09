@@ -59,6 +59,14 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Añadidos botones `Valores medios (España)` y `Restablecer` en `WorkerConsumptionTaxesCard` para rellenar o limpiar el reparto % del gasto con un perfil orientativo (vivienda 34 %, alimentacion 22 %, etc.).
+
+- Ocultado el panel de nomina (`wfsc-help`) en el paso 8 de `WorkerFiscalStepsCard` (Preguntas frecuentes); el hero pasa a una sola columna.
+
+- Eliminada la fila `Educacion / seguros / banca` de `WorkerConsumptionTaxesCard` (categoria `education-insurance-banking`).
+
+- Corregido el inicio del paso 5 en `WorkerFiscalStepsCard`: el hero alinea el texto y la nomina arriba (`align-items: start`) y al cambiar de paso la vista vuelve al bloque explicativo con `scrollIntoView`.
+
 - Añadida leyenda de colores en la nomina de `WorkerFiscalStepsCard` (paso 3): azul para cotizacion del trabajador y verde para aportacion de la empresa. Solo aparece cuando el paso usa resaltado dual.
 
 - Sustituido el pie de la nomina en `WorkerFiscalStepsCard`: se elimina «Copia anonimizada - datos personales ocultos» y se muestra «Nómina simplificada: lo resaltado es la parte que se trata en este paso.» Verificacion: `pnpm run build` falla por errores TS preexistentes en otros modulos; el cambio en WFSC no introduce errores nuevos.

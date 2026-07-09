@@ -4,6 +4,8 @@ import {
   Info,
   Percent,
   Receipt,
+  RotateCcw,
+  Sparkles,
   WalletCards,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
@@ -154,15 +156,6 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     help: 'Medicamentos con receta y productos sanitarios basicos suelen ir al 0 % o tipos reducidos; otros productos de farmacia/parafarmacia (cosmetica, optica...) pueden ir al 21 %.',
   },
   {
-    id: 'education-insurance-banking',
-    label: 'Educacion / seguros / banca',
-    initialSharePercent: 0,
-    vatRate: 0,
-    statutoryLabel: 'Exento / 0%',
-    tone: 'purple',
-    help: 'Mezcla tres ambitos distintos. Enseñanza reglada, primas de seguro y comisiones bancarias suelen ir exentas o al 0 %; no confundir con otros servicios financieros o material escolar con IVA.',
-  },
-  {
     id: 'tobacco',
     label: 'Tabaco',
     initialSharePercent: 0,
@@ -183,6 +176,23 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     help: 'Bebidas alcoholicas: cerveza, vino, licores, etc. El 21 % + 5 % mezcla IVA e impuesto especial sobre el alcohol; el tipo especial varia segun producto, aqui usamos una cifra orientativa.',
   },
 ]
+
+/** Reparto orientativo (% del gasto) inspirado en patron medio espanol: vivienda ~34 %, alimentacion ~22 %, transporte ~9 %, etc. */
+const AVERAGE_SPAIN_SHARE_PRESETS: Record<string, number> = {
+  saving: 8,
+  'mortgage-debt': 34,
+  'basic-food': 7,
+  'general-food': 10,
+  restaurants: 5,
+  shopping: 11,
+  leisure: 7,
+  'public-transport': 4,
+  fuel: 5,
+  electricity: 4,
+  health: 3,
+  tobacco: 0.5,
+  alcohol: 1.5,
+}
 
 function formatEuro(value: number, decimals = 2) {
   return new Intl.NumberFormat('es-ES', {
@@ -278,6 +288,24 @@ export function WorkerConsumptionTaxesCard({
     updateShare(id, sharePercent)
   }
 
+  function applyAverageSharePresets() {
+    setShares((current) =>
+      current.map((row) => ({
+        ...row,
+        sharePercent: AVERAGE_SPAIN_SHARE_PRESETS[row.id] ?? 0,
+      })),
+    )
+  }
+
+  function resetShares() {
+    setShares(
+      categories.map((category) => ({
+        ...category,
+        sharePercent: category.initialSharePercent,
+      })),
+    )
+  }
+
   const maxLineAmount = Math.max(...result.lines.map((line) => line.spendAnnual), 1)
   const totalStatus = Math.abs(result.totalSharePercent - 100) <= 0.05 ? 'ok' : 'warn'
 
@@ -288,6 +316,17 @@ export function WorkerConsumptionTaxesCard({
           <span className="wctc-step"><span aria-hidden="true" />Paso 7 de 8</span>
           <h2 id="wctc-title">7. IVA y otros impuestos</h2>
           <p>Distribuye tu gasto y calcula cuanto pagas en IVA e impuestos especiales.</p>
+        </div>
+
+        <div className="wctc-header-actions">
+          <button type="button" className="wctc-action wctc-action--primary" onClick={applyAverageSharePresets}>
+            <Sparkles size={18} aria-hidden="true" />
+            <span>Valores medios (España)</span>
+          </button>
+          <button type="button" className="wctc-action" onClick={resetShares}>
+            <RotateCcw size={18} aria-hidden="true" />
+            <span>Restablecer</span>
+          </button>
         </div>
       </header>
 

@@ -13,6 +13,7 @@
 
   position: relative;
   width: 100%;
+  scroll-margin-top: 12px;
   color: var(--wfsc-text);
   font-family: "Aptos", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   letter-spacing: 0;
@@ -124,8 +125,12 @@
   display: grid;
   grid-template-columns: minmax(390px, 0.94fr) minmax(500px, 1.06fr);
   gap: clamp(20px, 2vw, 32px);
-  align-items: center;
+  align-items: start;
   min-width: 0;
+}
+
+.wfsc-hero--single {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .wfsc-hero-main {

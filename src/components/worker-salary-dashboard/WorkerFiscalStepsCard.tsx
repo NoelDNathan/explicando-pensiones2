@@ -10,7 +10,7 @@ import {
   UserRound,
   WalletCards,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type {
   SocialContributionRates,
   SocialContributionResult,
@@ -646,12 +646,15 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
 
 export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveData }: WorkerFiscalStepsCardProps) {
   const [internalActiveStepId, setInternalActiveStepId] = useState(1)
+  const sectionRef = useRef<HTMLElement>(null)
+  const skipInitialScrollRef = useRef(true)
   const currentStepId = activeStepId ?? internalActiveStepId
   const activeIndex = WORKER_FISCAL_STEPS.findIndex((step) => step.id === currentStepId)
   const activeStep = WORKER_FISCAL_STEPS[activeIndex] ?? WORKER_FISCAL_STEPS[0]
   const descriptionParagraphs = activeStep.description.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   const progress = useMemo(() => activeStep.id / WORKER_FISCAL_STEPS.length * 100, [activeStep.id])
   const ActiveIcon = activeStep.Icon
+  const showPayrollHelp = activeStep.id !== 8
 
   const setActiveStep = (nextStepId: number) => {
     const clampedStepId = Math.min(WORKER_FISCAL_STEPS.length, Math.max(1, nextStepId))
@@ -667,8 +670,17 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
     setActiveStep(activeStep.id + 1)
   }
 
+  useEffect(() => {
+    if (skipInitialScrollRef.current) {
+      skipInitialScrollRef.current = false
+      return
+    }
+
+    sectionRef.current?.scrollIntoView({ block: 'start' })
+  }, [currentStepId])
+
   return (
-    <section className="wfsc" aria-labelledby="wfsc-title">
+    <section ref={sectionRef} className="wfsc" aria-labelledby="wfsc-title">
       <div className="wfsc-stage">
         <button
           className="wfsc-nav wfsc-nav--previous"
@@ -681,7 +693,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           <span>Anterior</span>
         </button>
 
-        <div className="wfsc-hero">
+        <div className={`wfsc-hero${showPayrollHelp ? '' : ' wfsc-hero--single'}`}>
           <div className="wfsc-hero-main">
             <span className="wfsc-step-orb" aria-hidden="true">
               <ActiveIcon size={34} strokeWidth={2.35} />
@@ -698,9 +710,11 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
             </div>
           </div>
 
-          <aside className="wfsc-help" aria-label="Ayuda del paso activo">
-            <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
-          </aside>
+          {showPayrollHelp ? (
+            <aside className="wfsc-help" aria-label="Ayuda del paso activo">
+              <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
+            </aside>
+          ) : null}
         </div>
 
         <button
