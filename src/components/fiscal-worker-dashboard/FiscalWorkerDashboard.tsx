@@ -733,7 +733,6 @@ export function FiscalWorkerDashboard() {
                 regions={regionOptions}
                 selectedRegion={result.effectiveRegion}
                 currentSalary={result.grossSalaryAnnual}
-                onRegionChange={setRegion}
               />
             )}
           </div>

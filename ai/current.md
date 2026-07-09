@@ -556,7 +556,11 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Si se muestra un tramo anterior a 1995, hacerlo como contexto separado y con ruptura metodologica explicita, no como continuidad COFOG.
 - Revisar el diseno de pruebas en Figma y decidir si se convierte en base de implementacion web.
 
-## Ultima sesion (2026-06-21, WIRC fix bucle clics region)
+## Ultima sesion (2026-06-21, WIRC diff vs media)
+
+En el ranking lateral de `WorkerIrpfRegionComparison`, la columna de diferencia pasa de Madrid a la media de CCAA en el salario activo: valores positivos en verde (+), negativos en rojo (-), y "—" si coincide con la media. Funciona en modo % y en modo €.
+
+## Sesion previa (2026-06-21, WIRC fix bucle clics region)
 
 Corregido bucle Madrid/CCAA al seleccionar en el comparador: `WorkerIrpfTranchesCard` ya no emite `onResultChange` con region obsoleta en modo autoritativo; usa `initialRegion` y `onRegionChange`. El comparador solo resetea la CCAA de comparacion si coincide con la seleccionada.
 

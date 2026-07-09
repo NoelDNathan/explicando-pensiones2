@@ -260,20 +260,6 @@
   pointer-events: none;
 }
 
-.wirc-ranking__section {
-  margin: 10px 6px 6px;
-  color: var(--wirc-muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.wirc-ranking__list--picker {
-  max-height: 220px;
-  overflow: auto;
-}
-
 /* Ranking */
 .wirc-ranking {
   border: 1px solid rgba(120, 150, 210, 0.28);
@@ -341,13 +327,13 @@
   border-color: rgba(143, 155, 255, 0.42);
 }
 
-.wirc-rank-row.is-average {
+.wirc-rank-row.is-average,
+.wirc-rank-row.is-static {
   cursor: default;
-  opacity: 0.92;
 }
 
-.wirc-rank-row:disabled {
-  cursor: default;
+.wirc-rank-row.is-static {
+  opacity: 0.98;
 }
 
 .wirc-rank-tag {
@@ -396,6 +382,16 @@
   color: var(--wirc-muted);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+}
+
+.wirc-rank-diff.is-up {
+  color: #6ce3a8;
+  font-weight: 600;
+}
+
+.wirc-rank-diff.is-down {
+  color: #ff9aa2;
+  font-weight: 600;
 }
 
 .wirc-note {

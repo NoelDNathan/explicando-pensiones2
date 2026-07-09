@@ -7,10 +7,10 @@ type RegionOption = { value: string; label: string };
 
 type WorkerIrpfRegionComparisonProps = {
   regions: RegionOption[];
+  /** Comunidad activa en el IRPF real (selector de la tarjeta de tramos). Solo lectura aqui. */
   selectedRegion: string;
   /** Salario bruto anual marcado (linea vertical) y base del ranking por defecto. */
   currentSalary: number;
-  onRegionChange?: (region: string) => void;
   minSalary?: number;
   maxSalary?: number;
 };
@@ -176,11 +176,25 @@ function formatSalaryShort(value: number) {
   return `${Math.round(value)}`;
 }
 
+function formatDiffFromAverage(diff: number, mode: Mode): { text: string; tone: "neutral" | "up" | "down" } {
+  const epsilon = mode === "percent" ? 0.005 : 1;
+  if (Math.abs(diff) < epsilon) return { text: "—", tone: "neutral" };
+
+  if (mode === "percent") {
+    const sign = diff > 0 ? "+" : "";
+    return { text: `${sign}${formatPercent(diff)}`, tone: diff > 0 ? "up" : "down" };
+  }
+
+  return {
+    text: diff > 0 ? `+${formatEuro(diff)}` : formatEuro(diff),
+    tone: diff > 0 ? "up" : "down",
+  };
+}
+
 export function WorkerIrpfRegionComparison({
   regions,
   selectedRegion,
   currentSalary,
-  onRegionChange,
   minSalary = 14000,
   maxSalary = 500000,
 }: WorkerIrpfRegionComparisonProps) {
@@ -197,15 +211,9 @@ export function WorkerIrpfRegionComparison({
     });
   }, [regions, selectedRegion]);
 
-  const selectRegion = (value: string) => {
-    if (value === "__average__" || value === selectedRegion) return;
-    if (value === compareRegion) {
-      onRegionChange?.(compareRegion);
-      setCompareRegion(selectedRegion);
-      return;
-    }
-    setCompareRegion(selectedRegion);
-    onRegionChange?.(value);
+  const selectCompareRegion = (value: string) => {
+    if (value === compareRegion || value === selectedRegion) return;
+    setCompareRegion(value);
   };
 
   const series = useMemo<RegionSeries[]>(() => {
@@ -320,11 +328,10 @@ export function WorkerIrpfRegionComparison({
       .sort((a, b) => b.amount - a.amount);
   }, [series, activeIndex, mode]);
 
-  const madridAmount = useMemo(() => {
-    const madrid = series.find((s) => s.value === "madrid");
-    const point = madrid?.points[activeIndex];
-    return point ? valueOf(point) : 0;
-  }, [series, activeIndex, mode]);
+  const averageAmount = useMemo(() => {
+    if (ranking.length === 0) return 0;
+    return ranking.reduce((sum, row) => sum + row.amount, 0) / ranking.length;
+  }, [ranking]);
 
   const snapshot = useMemo<RegionSnapshot[]>(() => {
     return series.map((s) => {
@@ -386,72 +393,57 @@ export function WorkerIrpfRegionComparison({
     return 3.2;
   };
 
-  const comparisonRows = useMemo(() => {
-    const selectedEntry = ranking.find((row) => row.value === selectedRegion);
-    const compareEntry = ranking.find((row) => row.value === compareRegion);
-    const averageAmount = mode === "percent" ? (summary?.average.rate ?? 0) : (summary?.average.irpf ?? 0);
-    const rows: Array<{
-      value: string;
-      label: string;
-      color: string;
-      amount: number;
-      role: "selected" | "compare" | "average";
-    }> = [];
-
-    if (selectedEntry) rows.push({ ...selectedEntry, role: "selected" });
-    if (compareEntry && compareEntry.value !== selectedRegion) {
-      rows.push({ ...compareEntry, role: "compare" });
-    }
-    rows.push({
-      value: "__average__",
-      label: `Media (${regions.length} CCAA)`,
-      color: AVERAGE_COLOR,
-      amount: averageAmount,
-      role: "average",
-    });
-
-    return rows;
-  }, [compareRegion, mode, ranking, regions.length, selectedRegion, summary?.average.irpf, summary?.average.rate]);
-
-  const pickerRows = useMemo(
-    () => ranking.filter((row) => row.value !== selectedRegion && row.value !== compareRegion),
-    [compareRegion, ranking, selectedRegion],
-  );
-
   const formatValue = (value: number) => (mode === "percent" ? formatPercent(value) : formatEuro(value));
 
-  const renderRankRow = (
-    row: { value: string; label: string; color: string; amount: number; role?: "selected" | "compare" | "average" },
-    position?: number,
+  const renderRankingRow = (
+    row: { value: string; label: string; color: string; amount: number },
+    position: number,
   ) => {
-    const isSelected = row.role === "selected";
-    const isCompare = row.role === "compare";
-    const isAverage = row.role === "average";
-    const diff = row.amount - madridAmount;
-    const isMadrid = row.value === "madrid";
+    const isPrimary = row.value === selectedRegion;
+    const isCompare = row.value === compareRegion;
+    const diff = row.amount - averageAmount;
+    const diffDisplay = formatDiffFromAverage(diff, mode);
+
+    const content = (
+      <>
+        <span className="wirc-rank-pos">{position}</span>
+        <span className="wirc-rank-dot" aria-hidden="true" />
+        <span className="wirc-rank-label">
+          {row.label}
+          {isPrimary && <span className="wirc-rank-tag">tu IRPF (arriba)</span>}
+          {isCompare && !isPrimary && <span className="wirc-rank-tag">comparando</span>}
+        </span>
+        <span className="wirc-rank-amount">{formatValue(row.amount)}</span>
+        <span
+          className={`wirc-rank-diff${diffDisplay.tone !== "neutral" ? ` is-${diffDisplay.tone}` : ""}`}
+          title="Diferencia respecto a la media de CCAA"
+        >
+          {diffDisplay.text}
+        </span>
+      </>
+    );
+
+    const className = `wirc-rank-row${isPrimary ? " is-selected" : ""}${isCompare && !isPrimary ? " is-compare" : ""}${isPrimary ? " is-static" : ""}`;
+
+    if (isPrimary) {
+      return (
+        <li key={row.value}>
+          <div className={className} style={{ "--rank-color": row.color } as CSSProperties}>
+            {content}
+          </div>
+        </li>
+      );
+    }
 
     return (
       <li key={row.value}>
         <button
           type="button"
-          className={`wirc-rank-row${isSelected ? " is-selected" : ""}${isCompare ? " is-compare" : ""}${isAverage ? " is-average" : ""}`}
-          onClick={() => selectRegion(row.value)}
-          disabled={isAverage}
+          className={className}
+          onClick={() => selectCompareRegion(row.value)}
           style={{ "--rank-color": row.color } as CSSProperties}
         >
-          <span className="wirc-rank-pos">{position ?? (isSelected ? "A" : isCompare ? "B" : "μ")}</span>
-          <span className="wirc-rank-dot" aria-hidden="true" />
-          <span className="wirc-rank-label">
-            {row.label}
-            {isSelected && <span className="wirc-rank-tag">seleccionada</span>}
-            {isCompare && <span className="wirc-rank-tag">comparar</span>}
-          </span>
-          <span className="wirc-rank-amount">{formatValue(row.amount)}</span>
-          <span className="wirc-rank-diff">
-            {isAverage || isMadrid || diff <= 0
-              ? "—"
-              : `+${mode === "percent" ? formatPercent(diff) : formatEuro(diff)}`}
-          </span>
+          {content}
         </button>
       </li>
     );
@@ -463,8 +455,8 @@ export function WorkerIrpfRegionComparison({
         <div className="wirc-title-group">
           <h3 id="wirc-title">Comparador de IRPF por comunidad</h3>
           <p>
-            Compara dos comunidades y la media de CCAA sobre el mismo salario. Perfil tipo: soltero, 40 anos, sin
-            hijos ni discapacidad, escala 2025.
+            Contrasta tu comunidad (la del selector de arriba) con otra CCAA y la media en el grafico. El ranking
+            solo elige con quien comparar; no cambia tu IRPF real.
           </p>
         </div>
 
@@ -498,7 +490,7 @@ export function WorkerIrpfRegionComparison({
             irpf={summary.lowest.irpf}
             madridRate={summary.madridRate}
             madridIrpf={summary.madridIrpf}
-            onClick={() => selectRegion(summary.lowest.value)}
+            onClick={() => selectCompareRegion(summary.lowest.value)}
           />
           <SummaryStat
             title={`Media (${summary.count} CCAA)`}
@@ -516,7 +508,7 @@ export function WorkerIrpfRegionComparison({
             irpf={summary.highest.irpf}
             madridRate={summary.madridRate}
             madridIrpf={summary.madridIrpf}
-            onClick={() => selectRegion(summary.highest.value)}
+            onClick={() => selectCompareRegion(summary.highest.value)}
           />
         </div>
       )}
@@ -637,17 +629,10 @@ export function WorkerIrpfRegionComparison({
         <aside className="wirc-ranking" aria-label={`Ranking de IRPF para ${formatEuro(activeSalary)}`}>
           <div className="wirc-ranking__head">
             <span>En {formatEuro(activeSalary)}</span>
-            <span className="wirc-ranking__hint">2 CCAA + media · clic para seleccionar</span>
+            <span className="wirc-ranking__hint">clic = comparar · tu IRPF se cambia arriba</span>
           </div>
-
-          <p className="wirc-ranking__section">En el grafico</p>
-          <ol className="wirc-ranking__list wirc-ranking__list--active">
-            {comparisonRows.map((row) => renderRankRow(row))}
-          </ol>
-
-          <p className="wirc-ranking__section">Elegir otra comunidad</p>
-          <ol className="wirc-ranking__list wirc-ranking__list--picker">
-            {pickerRows.map((row, position) => renderRankRow(row, position + 1))}
+          <ol className="wirc-ranking__list">
+            {ranking.map((row, position) => renderRankingRow(row, position + 1))}
           </ol>
         </aside>
       </div>
