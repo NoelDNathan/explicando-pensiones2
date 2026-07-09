@@ -59,6 +59,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Añadida leyenda de colores en la nomina de `WorkerFiscalStepsCard` (paso 3): azul para cotizacion del trabajador y verde para aportacion de la empresa. Solo aparece cuando el paso usa resaltado dual.
+
 - Sustituido el pie de la nomina en `WorkerFiscalStepsCard`: se elimina «Copia anonimizada - datos personales ocultos» y se muestra «Nómina simplificada: lo resaltado es la parte que se trata en este paso.» Verificacion: `pnpm run build` falla por errores TS preexistentes en otros modulos; el cambio en WFSC no introduce errores nuevos.
 
 - Ajustado el layout de las etiquetas con icono de ayuda en `WorkerSalaryBaseCard`: el texto ya no estira la fila y el icono queda junto a la etiqueta.

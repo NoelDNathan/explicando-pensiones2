@@ -241,6 +241,44 @@
   text-align: center;
 }
 
+.wfsc-payroll-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 18px;
+  width: min(100%, 600px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wfsc-payroll-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--wfsc-muted);
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.wfsc-payroll-legend__swatch {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.wfsc-payroll-legend__item--worker .wfsc-payroll-legend__swatch {
+  border: 1px solid rgba(41, 118, 214, 0.82);
+  background: rgba(88, 156, 255, 0.24);
+}
+
+.wfsc-payroll-legend__item--company .wfsc-payroll-legend__swatch {
+  border: 1px solid rgba(43, 188, 69, 0.78);
+  background: rgba(95, 232, 117, 0.2);
+}
+
 .wfsc-payroll-paper {
   width: min(100%, 600px);
   overflow: hidden;
@@ -724,6 +762,14 @@
   }
 
   .wfsc-payroll figcaption {
+    font-size: 12px;
+  }
+
+  .wfsc-payroll-legend {
+    gap: 8px 12px;
+  }
+
+  .wfsc-payroll-legend__item {
     font-size: 12px;
   }
 

@@ -509,10 +509,23 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
   const payrollSnapshot = useMemo(() => buildPayrollSnapshot(payrollLiveData), [payrollLiveData])
   const rowHighlightClass = (id: string) => getRowHighlightClass(id, example)
   const resultValue = payrollSnapshot.resultValues[stepId] ?? example.resultValue
+  const showDualHighlightLegend = Boolean(example.highlightWorkerRows?.length || example.highlightCompanyRows?.length)
 
   return (
     <figure className="wfsc-payroll" aria-label="Nómina simplificada con la parte de este paso resaltada">
       <figcaption>Nómina simplificada: lo resaltado es la parte que se trata en este paso.</figcaption>
+      {showDualHighlightLegend ? (
+        <ul className="wfsc-payroll-legend" aria-label="Leyenda de colores en la nómina">
+          <li className="wfsc-payroll-legend__item wfsc-payroll-legend__item--worker">
+            <span className="wfsc-payroll-legend__swatch" aria-hidden="true" />
+            <span>Azul: cotización del trabajador</span>
+          </li>
+          <li className="wfsc-payroll-legend__item wfsc-payroll-legend__item--company">
+            <span className="wfsc-payroll-legend__swatch" aria-hidden="true" />
+            <span>Verde: aportación de la empresa</span>
+          </li>
+        </ul>
+      ) : null}
       <div className="wfsc-payroll__sheet">
         <div className="wfsc-payroll-paper">
           <div className="wfsc-payroll-title">
