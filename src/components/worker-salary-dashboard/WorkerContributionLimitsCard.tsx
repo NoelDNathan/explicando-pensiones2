@@ -1,7 +1,10 @@
-import { ChevronDown, Info } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
+import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerContributionLimitsCard.css'
+
+const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 250000, 500000] }
 
 export type ContributionViewMode = 'monthly' | 'annual'
 
@@ -44,6 +47,7 @@ type WorkerContributionLimitsCardProps = {
   initialViewMode?: ContributionViewMode
   dataAvailable?: boolean
   sourceLabel?: string
+  onUserBaseAnnualChange?: (baseAnnual: number) => void
   onGroupChange?: (groupId: number) => void
   onResultChange?: (result: ContributionLimitResult | null) => void
 }
@@ -185,24 +189,39 @@ function getDisplayValue(result: ContributionLimitResult, mode: ContributionView
 }
 
 export function WorkerContributionLimitsCard({
-  calculationYear = 2026,
+  calculationYear: _calculationYear = 2026,
   groups = DEMO_CONTRIBUTION_GROUPS,
   initialGroupId = groups[0]?.id,
   userBaseAnnual = 37_500,
   initialViewMode = 'monthly',
   dataAvailable = true,
-  sourceLabel = 'Fuente: BOE, Orden PJC/297/2026, articulo 3. Grupos 1-7 con bases mensuales.',
+  sourceLabel: _sourceLabel = 'Fuente: BOE, Orden PJC/297/2026, articulo 3. Grupos 1-7 con bases mensuales.',
+  onUserBaseAnnualChange,
   onGroupChange,
   onResultChange,
 }: WorkerContributionLimitsCardProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<number | undefined>(initialGroupId)
   const [viewMode, setViewMode] = useState<ContributionViewMode>(initialViewMode)
   const [simulationMode, setSimulationMode] = useState<SimulationMode>('case')
-  const [infoOpen, setInfoOpen] = useState(false)
+  const [infoOpen] = useState(false)
+  const [localBaseAnnual, setLocalBaseAnnual] = useState(userBaseAnnual ?? SALARY_RANGE.min)
 
   useEffect(() => {
     setSelectedGroupId(initialGroupId)
   }, [initialGroupId])
+
+  useEffect(() => {
+    if (userBaseAnnual != null) setLocalBaseAnnual(userBaseAnnual)
+  }, [userBaseAnnual])
+
+  const showSalaryControl = userBaseAnnual != null && onUserBaseAnnualChange !== undefined
+
+  const handleSalaryChange = (next: number) => {
+    setLocalBaseAnnual(next)
+    onUserBaseAnnualChange?.(next)
+  }
+
+  const activeUserBaseAnnual = showSalaryControl ? localBaseAnnual : userBaseAnnual
 
   const selectedGroup = useMemo(
     () => groups.find((group) => group.id === selectedGroupId),
@@ -210,11 +229,11 @@ export function WorkerContributionLimitsCard({
   )
 
   const simulatedAnnualBase = useMemo(() => {
-    if (!selectedGroup || userBaseAnnual == null) return null
+    if (!selectedGroup || activeUserBaseAnnual == null) return null
     if (simulationMode === 'minimum') return selectedGroup.minBaseMonthly * 12
     if (simulationMode === 'maximum') return selectedGroup.maxBaseMonthly * 12
-    return userBaseAnnual
-  }, [selectedGroup, simulationMode, userBaseAnnual])
+    return activeUserBaseAnnual
+  }, [activeUserBaseAnnual, selectedGroup, simulationMode])
 
   const result = useMemo(() => {
     if (!dataAvailable || !selectedGroup || simulatedAnnualBase == null) return null
@@ -239,7 +258,7 @@ export function WorkerContributionLimitsCard({
     isUserCloseToMaximum ? 'wclc-scale-top--crowded-max' : '',
   ].filter(Boolean).join(' ')
 
-  const hasBase = userBaseAnnual != null && Number.isFinite(userBaseAnnual)
+  const hasBase = activeUserBaseAnnual != null && Number.isFinite(activeUserBaseAnnual)
   const isEmpty = !hasBase || !selectedGroup || !dataAvailable
 
   return (
@@ -259,6 +278,27 @@ export function WorkerContributionLimitsCard({
           EUR, estas 100 EUR por debajo y se usa 1.424,40 EUR. Si la base maxima
           es 5.101,20 EUR y tu base es 5.201,20 EUR, estas 100 EUR por encima y
           se usa 5.101,20 EUR.
+        </div>
+      )}
+
+      {showSalaryControl && (
+        <div className="wclc-salary">
+          <label className="wclc-salary__label" htmlFor="wclc-salary-range">
+            Salario bruto anual
+          </label>
+          <div className="wclc-salary-row">
+            <SalarySlider
+              id="wclc-salary-range"
+              value={localBaseAnnual}
+              onChange={handleSalaryChange}
+              min={SALARY_RANGE.min}
+              max={SALARY_RANGE.max}
+              markers={SALARY_RANGE.markers}
+              scale="log"
+              unitLabel="brutos al año"
+              ariaLabel="Salario bruto anual en euros"
+            />
+          </div>
         </div>
       )}
 

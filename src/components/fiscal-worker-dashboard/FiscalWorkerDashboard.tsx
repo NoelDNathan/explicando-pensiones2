@@ -447,6 +447,11 @@ export function FiscalWorkerDashboard() {
     setInKindSalary(values.inKindSalary)
   }, [])
 
+  const handleUserBaseAnnualChange = useCallback((baseAnnual: number) => {
+    const fixedExtras = salaryComplements + inKindSalary
+    setSalary(Math.max(0, baseAnnual - fixedExtras))
+  }, [inKindSalary, salaryComplements])
+
   const handlePersonalResultChange = useCallback((personalResult: PersonalReductionResult) => {
     setPersonalAdjustments(personalResult)
     setSelectedChildren(personalResult.children)
@@ -679,6 +684,7 @@ export function FiscalWorkerDashboard() {
             userBaseAnnual={result.grossSalaryAnnual}
             initialGroupId={contributionGroupId}
             sourceLabel={result.taxSourceLabel}
+            onUserBaseAnnualChange={handleUserBaseAnnualChange}
             onGroupChange={setContributionGroupId}
           />
         )

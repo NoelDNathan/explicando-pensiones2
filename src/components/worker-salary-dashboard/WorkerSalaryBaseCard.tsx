@@ -1,7 +1,14 @@
 import { ChevronDown, Euro } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { InfoButton } from '../ui/InfoButton'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerSalaryBaseCard.css'
+
+const SALARY_COMPLEMENTS_HELP =
+  'Pagos que sumas al salario fijo durante el año: plus de convenio, nocturnidad, productividad, comisiones u otros conceptos en dinero. Introduce el importe total anual, no el mensual.'
+
+const IN_KIND_SALARY_HELP =
+  'Beneficios que recibes de la empresa en lugar de dinero en la nomina: seguro medico, coche, vales comida o transporte, guarderia, etc. Si los tienes, indica su valor anual estimado para calcular tu base real completa.'
 
 type PayPeriod = 'annual' | 'monthly'
 type PayCount = '12' | '14'
@@ -108,7 +115,7 @@ export function WorkerSalaryBaseCard({
       </header>
 
       <div className="wsbc-fields">
-        <label className="wsbc-label" htmlFor="wsbc-salary">Salario anual o mensual</label>
+        <label className="wsbc-label" htmlFor="wsbc-salary">Salario anual o mensual bruto</label>
         <div className="wsbc-control-row">
           <SalarySlider
             id="wsbc-salary"
@@ -150,7 +157,17 @@ export function WorkerSalaryBaseCard({
           </div>
         </div>
 
-        <label className="wsbc-label" htmlFor="wsbc-complements">Complementos salariales anuales</label>
+        <div className="wsbc-label-row">
+          <label className="wsbc-label" htmlFor="wsbc-complements">Complementos salariales anuales</label>
+          <InfoButton
+            label="Que son los complementos salariales anuales"
+            size="sm"
+            placement="end"
+            className="wsbc-help"
+          >
+            <p>{SALARY_COMPLEMENTS_HELP}</p>
+          </InfoButton>
+        </div>
         <div className="wsbc-control-row wsbc-control-row--single">
           <div className="wsbc-input-shell">
             <input
@@ -165,7 +182,17 @@ export function WorkerSalaryBaseCard({
           </div>
         </div>
 
-        <label className="wsbc-label" htmlFor="wsbc-kind">Salario en especie anual</label>
+        <div className="wsbc-label-row">
+          <label className="wsbc-label" htmlFor="wsbc-kind">Salario en especie anual</label>
+          <InfoButton
+            label="Que es el salario en especie anual"
+            size="sm"
+            placement="end"
+            className="wsbc-help"
+          >
+            <p>{IN_KIND_SALARY_HELP}</p>
+          </InfoButton>
+        </div>
         <div className="wsbc-control-row wsbc-control-row--single">
           <div className="wsbc-input-shell">
             <input

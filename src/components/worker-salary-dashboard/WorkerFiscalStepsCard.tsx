@@ -107,7 +107,7 @@ Además, esta base también influye en futuras prestaciones. Por ejemplo, puede 
     id: 3,
     title: 'Cotizaciones sociales',
     subtitle: 'Cuotas del trabajador y de la empresa',
-    description: `Las cotizaciones sociales son las cantidades que se pagan cada mes a la Seguridad Social. Se calculan aplicando distintos porcentajes sobre tu base de cotización.
+    description: `Las cotizaciones sociales son las cantidades que se pagan cada mes a la Seguridad Social. Se calculan aplicando distintos porcentajes sobre tu base de cotización (mirar paso 2).
      Una parte se descuenta directamente de tu salario bruto y aparece en tu nómina como cotización del trabajador. Por eso reduce tu salario neto, es decir, lo que finalmente cobras. 
      La otra parte la paga la empresa además de tu salario bruto. No se resta de tu nómina, pero sí forma parte del coste total que tiene la empresa por contratarte. 
      Estas cotizaciones sirven para financiar prestaciones como la jubilación, las bajas por enfermedad, el desempleo, la formación profesional, los accidentes laborales o el refuerzo del sistema de pensiones. 
@@ -279,7 +279,7 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   2: {
     resultLabel: 'BASE CC.CC.',
     resultValue: '1.750,00',
-    highlightRows: ['common-base', 'professional-base', 'common-base-detail', 'unemployment-base'],
+    highlightRows: ['common-base', 'professional-base', 'salary-monthly'],
   },
   3: {
     resultLabel: 'TOT.DEDUCCIONES',

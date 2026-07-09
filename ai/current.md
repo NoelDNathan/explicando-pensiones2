@@ -59,6 +59,14 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadido `SalarySlider` interactivo en `WorkerContributionLimitsCard` (paso 2): el usuario puede ajustar el salario bruto anual desde limites de cotizacion; el dashboard sincroniza el valor con la base real total.
+
+- Ajustado el resaltado de la nomina en `WorkerFiscalStepsCard` paso 2: `Importe remuneracion mensual` queda en verde y `TOTAL` del bloque de bases deja de resaltarse.
+
+- Corregido el resaltado de la nomina en `WorkerFiscalStepsCard` paso 2: la fila `Desempleo` del bloque de aportacion empresa ya no se marca en verde; solo quedan resaltadas las bases de cotizacion (`BASE CC.CC.`, `BASE CC.PP.` y total de bases).
+
+- Anadidos iconos de informacion en `WorkerSalaryBaseCard` junto a `Complementos salariales anuales` y `Salario en especie anual`, reutilizando `InfoButton` con textos didacticos. Verificacion: `pnpm run build` falla por errores TS preexistentes en otros modulos; el cambio en WSBC no introduce errores nuevos.
+
 - Añadido **Coste total cotizaciones** al resumen de `WorkerSocialContributionsCard`: suma cotizaciones del trabajador y coste adicional de la empresa (`totalContributionsAnnual` / mensual segun vista). Sin datos nuevos ni fuentes nuevas. Verificacion: `pnpm run build` falla por errores TS preexistentes en otros modulos; el cambio en WSCC compila sin errores nuevos.
 
 - Ajustado `WorkerFiscalStepsCard` en `/calculadora-fiscal` tras la revision visual: se eliminaron para todos los pasos los dos avisos bajo la nomina (`Reduccion o deduccion?`/`Importante` y equivalentes), se redujo la separacion entre texto y documento ajustando el grid y el ancho de la nomina, y el recibo de ejemplo incorpora ahora una retencion IRPF inventada y didactica (`RETENCION IRPF`, 12,00%, 210,00 EUR), con `TOT.DEDUCCIONES` actualizado a 323,76 EUR y `LIQUIDO TOTAL` a 1.426,24 EUR. No se incorporaron datos editoriales nuevos ni fuentes nuevas; el recibo sigue siendo un ejemplo visual. Verificacion: `.\node_modules\.bin\tsc.cmd --noEmit` correcto; `node node_modules\vite\bin\vite.js build` correcto con avisos conocidos de chunk grande y tiempos de plugins; Browser integrado en `http://127.0.0.1:5212/calculadora-fiscal`: escritorio sin `.wfsc-important`, fila IRPF e importes nuevos presentes, importes antiguos ausentes, separacion texto-documento de 26 px, sin overflow horizontal; paso 5 resalta `/475 RETENCION IRPF 12,00 210,00`; movil 390x844 sin overflow de pagina y con scroll interno solo en la nomina; consola sin errores.

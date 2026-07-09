@@ -52,6 +52,17 @@ function PlayButton({
   )
 }
 
+function WorkerContributionLimitsShowcase() {
+  const [userBaseAnnual, setUserBaseAnnual] = React.useState(37_500)
+
+  return (
+    <WorkerContributionLimitsCard
+      userBaseAnnual={userBaseAnnual}
+      onUserBaseAnnualChange={setUserBaseAnnual}
+    />
+  )
+}
+
 function SalarySliderShowcase() {
   const [linearValue, setLinearValue] = React.useState(35000)
   const [logValue, setLogValue] = React.useState(35000)
@@ -671,7 +682,7 @@ function ComponentLab() {
         </div>
 
         <div className="component-preview component-preview--dark component-preview--worker-limits">
-          <WorkerContributionLimitsCard />
+          <WorkerContributionLimitsShowcase />
         </div>
       </section>
 

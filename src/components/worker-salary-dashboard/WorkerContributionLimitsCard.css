@@ -61,6 +61,29 @@
   margin-bottom: 22px;
 }
 
+.wclc-salary {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.wclc-salary-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.wclc-salary-row .salary-slider {
+  min-width: 0;
+}
+
+.wclc-salary__label {
+  color: var(--wclc-muted);
+  font-size: clamp(13px, 1.15vw, 17px);
+  font-weight: 820;
+}
+
 .wclc-title-group {
   display: flex;
   align-items: center;
