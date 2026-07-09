@@ -16,7 +16,7 @@
   --fwd-danger: #ff5757;
 
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   min-height: 100svh;
   color: var(--fwd-text);
   background:

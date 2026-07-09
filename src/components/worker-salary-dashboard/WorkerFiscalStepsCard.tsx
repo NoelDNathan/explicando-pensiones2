@@ -11,6 +11,11 @@ import {
   WalletCards,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import type {
+  SocialContributionRates,
+  SocialContributionResult,
+  WorkerContractType,
+} from './WorkerSocialContributionsCard'
 import './WorkerFiscalStepsCard.css'
 
 type WorkerFiscalStep = {
@@ -29,7 +34,9 @@ type WorkerFiscalStep = {
 type PayrollExample = {
   resultLabel: string
   resultValue: string
-  highlightRows: string[]
+  highlightRows?: string[]
+  highlightWorkerRows?: string[]
+  highlightCompanyRows?: string[]
 }
 
 type PayrollRow = {
@@ -53,6 +60,182 @@ type PayrollBaseRow = {
 type WorkerFiscalStepsCardProps = {
   activeStepId?: number
   onStepChange?: (stepId: number) => void
+  payrollLiveData?: PayrollLiveData
+}
+
+export type PayrollLiveData = {
+  grossSalaryAnnual: number
+  salaryAnnual: number
+  salaryComplementsAnnual: number
+  contributionBaseMonthly: number
+  socialContributions: SocialContributionResult
+  irpfAnnual: number
+  netSalaryAnnual: number
+  rates: SocialContributionRates
+  contractType: WorkerContractType
+}
+
+type PayrollSnapshot = {
+  rows: PayrollRow[]
+  totals: Array<{ id: string; label: string; value: string }>
+  baseRows: PayrollBaseRow[]
+  netPay: string
+  resultValues: Record<number, string>
+}
+
+const payrollNumberFormatter = new Intl.NumberFormat('es-ES', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+function formatPayrollNumber(value: number) {
+  return payrollNumberFormatter.format(Number.isFinite(value) ? value : 0)
+}
+
+function formatPayrollPercent(rate: number) {
+  return payrollNumberFormatter.format((Number.isFinite(rate) ? rate : 0) * 100)
+}
+
+function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
+  if (!live) {
+    return {
+      rows: PAYROLL_ROWS,
+      totals: PAYROLL_TOTALS,
+      baseRows: PAYROLL_BASE_ROWS,
+      netPay: '1.426,24',
+      resultValues: Object.fromEntries(
+        Object.entries(PAYROLL_EXAMPLES).map(([stepId, example]) => [Number(stepId), example.resultValue]),
+      ),
+    }
+  }
+
+  const grossMonthly = live.grossSalaryAnnual / 12
+  const contributionBaseMonthly = live.contributionBaseMonthly
+  const { breakdown } = live.socialContributions
+  const workerCommonMonthly = (breakdown.worker.commonContingencies + breakdown.worker.mei) / 12
+  const workerUnemploymentMonthly = breakdown.worker.unemployment / 12
+  const workerTrainingMonthly = breakdown.worker.professionalTraining / 12
+  const workerContributionsMonthly = live.socialContributions.workerContributionsMonthly
+  const irpfMonthly = live.irpfAnnual / 12
+  const netMonthly = live.netSalaryAnnual / 12
+  const deductionsMonthly = workerContributionsMonthly + irpfMonthly
+  const workerCommonRate = live.rates.worker.commonContingencies + live.rates.worker.mei
+  const workerUnemploymentRate = live.rates.worker.unemployment[live.contractType]
+  const workerTrainingRate = live.rates.worker.professionalTraining
+  const companyTotalMonthly = live.socialContributions.companyContributionsMonthly
+  const companyUnemploymentMonthly = breakdown.company.unemployment / 12
+  const companyTrainingMonthly = breakdown.company.professionalTraining / 12
+  const companyTotalRate = live.socialContributions.companyContributionRate
+  const companyUnemploymentRate = live.rates.company.unemployment[live.contractType]
+  const companyTrainingRate = live.rates.company.professionalTraining
+  const irpfWithholdingRate = grossMonthly > 0 ? irpfMonthly / grossMonthly : 0
+
+  const rows: PayrollRow[] = [
+    {
+      id: 'salary-base',
+      code: '0001',
+      concept: 'SALARIO BASE',
+      earnings: formatPayrollNumber(live.salaryAnnual / 12),
+    },
+    {
+      id: 'salary-complements',
+      code: '0003',
+      concept: 'PLUS CONVENIO',
+      earnings: live.salaryComplementsAnnual > 0 ? formatPayrollNumber(live.salaryComplementsAnnual / 12) : '',
+    },
+    { id: 'salary-extra-complement', code: '0005', concept: 'COMPLEMENTO A DEVENGOS', earnings: '' },
+    { id: 'extra-pay', code: '0006', concept: 'PAGA EXTRA PRORRATEADA', earnings: '' },
+    {
+      id: 'worker-ss',
+      code: '/350',
+      concept: 'TRAB.CONT.COMUNES',
+      price: formatPayrollPercent(workerCommonRate),
+      deductions: formatPayrollNumber(workerCommonMonthly),
+    },
+    {
+      id: 'unemployment-worker',
+      code: '/370',
+      concept: 'TRAB.DESEMPLEO',
+      price: formatPayrollPercent(workerUnemploymentRate),
+      deductions: formatPayrollNumber(workerUnemploymentMonthly),
+    },
+    {
+      id: 'training-worker',
+      code: '/380',
+      concept: 'TRAB.FORMAC.PROFESIONAL',
+      price: formatPayrollPercent(workerTrainingRate),
+      deductions: formatPayrollNumber(workerTrainingMonthly),
+    },
+    {
+      id: 'irpf-withholding',
+      code: '/475',
+      concept: 'RETENCION IRPF',
+      price: formatPayrollPercent(irpfWithholdingRate),
+      deductions: formatPayrollNumber(irpfMonthly),
+    },
+  ]
+
+  const totals = [
+    { id: 'gross-total', label: 'REM.TOTALES', value: formatPayrollNumber(grossMonthly) },
+    { id: 'in-kind', label: 'BASE IRPF ESPECIE', value: '' },
+    { id: 'irpf-base', label: 'BASE IRPF', value: formatPayrollNumber(grossMonthly) },
+    { id: 'common-base', label: 'BASE CC.CC.', value: formatPayrollNumber(contributionBaseMonthly) },
+    { id: 'professional-base', label: 'BASE CC.PP.', value: formatPayrollNumber(contributionBaseMonthly) },
+    { id: 'gross-total-copy', label: 'TOTAL DEVENGADO', value: formatPayrollNumber(grossMonthly) },
+    { id: 'deductions-total', label: 'TOT.DEDUCCIONES', value: formatPayrollNumber(deductionsMonthly) },
+  ]
+
+  const baseRows: PayrollBaseRow[] = [
+    {
+      id: 'salary-monthly',
+      concept: 'Importe remuneracion mensual',
+      base: formatPayrollNumber(contributionBaseMonthly),
+    },
+    {
+      id: 'common-base-detail',
+      concept: 'TOTAL',
+      base: formatPayrollNumber(contributionBaseMonthly),
+      rate: formatPayrollPercent(companyTotalRate),
+      company: formatPayrollNumber(companyTotalMonthly),
+    },
+    {
+      id: 'unemployment-base',
+      concept: 'Desempleo',
+      rate: formatPayrollPercent(companyUnemploymentRate),
+      company: formatPayrollNumber(companyUnemploymentMonthly),
+    },
+    {
+      id: 'training-base',
+      concept: 'Form. Profesional',
+      base: formatPayrollNumber(contributionBaseMonthly),
+      rate: formatPayrollPercent(companyTrainingRate),
+      company: formatPayrollNumber(companyTrainingMonthly),
+    },
+    {
+      id: 'irpf',
+      concept: 'Base sujeta a retencion del IRPF',
+      base: formatPayrollNumber(grossMonthly),
+    },
+  ]
+
+  const resultValues: Record<number, string> = {
+    1: formatPayrollNumber(grossMonthly),
+    2: formatPayrollNumber(contributionBaseMonthly),
+    3: formatPayrollNumber(workerContributionsMonthly),
+    4: formatPayrollNumber(grossMonthly),
+    5: formatPayrollNumber(irpfMonthly),
+    6: formatPayrollNumber(netMonthly),
+    7: `${formatPayrollNumber(netMonthly)}#`,
+    8: `${formatPayrollNumber(netMonthly)}#`,
+  }
+
+  return {
+    rows,
+    totals,
+    baseRows,
+    netPay: formatPayrollNumber(netMonthly),
+    resultValues,
+  }
 }
 
 const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
@@ -284,7 +467,8 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   3: {
     resultLabel: 'TOT.DEDUCCIONES',
     resultValue: '323,76',
-    highlightRows: ['worker-ss', 'unemployment-worker', 'training-worker', 'irpf-withholding', 'deductions-total'],
+    highlightWorkerRows: ['worker-ss', 'unemployment-worker', 'training-worker'],
+    highlightCompanyRows: ['common-base-detail', 'unemployment-base', 'training-base'],
   },
   4: {
     resultLabel: 'BASE IRPF',
@@ -313,13 +497,22 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   },
 }
 
-function PayrollExamplePanel({ stepId }: { stepId: number }) {
+function getRowHighlightClass(id: string, example: PayrollExample) {
+  if (example.highlightWorkerRows?.includes(id)) return 'is-highlighted is-highlighted--worker'
+  if (example.highlightCompanyRows?.includes(id)) return 'is-highlighted is-highlighted--company'
+  if (example.highlightRows?.includes(id)) return 'is-highlighted'
+  return undefined
+}
+
+function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payrollLiveData?: PayrollLiveData }) {
   const example = PAYROLL_EXAMPLES[stepId] ?? PAYROLL_EXAMPLES[1]
-  const isHighlighted = (id: string) => example.highlightRows.includes(id)
+  const payrollSnapshot = useMemo(() => buildPayrollSnapshot(payrollLiveData), [payrollLiveData])
+  const rowHighlightClass = (id: string) => getRowHighlightClass(id, example)
+  const resultValue = payrollSnapshot.resultValues[stepId] ?? example.resultValue
 
   return (
-    <figure className="wfsc-payroll" aria-label="Ejemplo de nomina">
-      <figcaption>Copia anonimizada - datos personales ocultos</figcaption>
+    <figure className="wfsc-payroll" aria-label="Nómina simplificada con la parte de este paso resaltada">
+      <figcaption>Nómina simplificada: lo resaltado es la parte que se trata en este paso.</figcaption>
       <div className="wfsc-payroll__sheet">
         <div className="wfsc-payroll-paper">
           <div className="wfsc-payroll-title">
@@ -382,9 +575,9 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
               <span>DEVENGOS</span>
               <span>DEDUCC.</span>
             </div>
-            {PAYROLL_ROWS.map((row) => {
+            {payrollSnapshot.rows.map((row) => {
               return (
-                <div className={isHighlighted(row.id) ? 'is-highlighted' : undefined} key={row.id}>
+                <div className={rowHighlightClass(row.id)} key={row.id}>
                   <span>{row.code}</span>
                   <span>{row.concept}</span>
                   <span>{row.units ?? ''}</span>
@@ -397,8 +590,8 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
           </div>
 
           <div className="wfsc-payroll-totals" aria-label="Totales de nomina">
-            {PAYROLL_TOTALS.map((total) => (
-              <div className={isHighlighted(total.id) ? 'is-highlighted' : undefined} key={total.id}>
+            {payrollSnapshot.totals.map((total) => (
+              <div className={rowHighlightClass(total.id)} key={total.id}>
                 <span>{total.label}</span>
                 <strong>{total.value}</strong>
               </div>
@@ -407,7 +600,7 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
 
           <div className="wfsc-payroll-liquid">
             <span>LIQUIDO TOTAL</span>
-            <strong className={isHighlighted('net-pay') ? 'is-highlighted' : undefined}>1.426,24</strong>
+            <strong className={rowHighlightClass('net-pay')}>{payrollSnapshot.netPay}</strong>
           </div>
 
           <section className="wfsc-payroll-bases" aria-label="Bases de cotizacion e IRPF">
@@ -418,8 +611,8 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
               <span>TIPO</span>
               <span>APORTACION EMPRESA</span>
             </div>
-            {PAYROLL_BASE_ROWS.map((row) => (
-              <div className={isHighlighted(row.id) ? 'is-highlighted' : undefined} key={row.id}>
+            {payrollSnapshot.baseRows.map((row) => (
+              <div className={rowHighlightClass(row.id)} key={row.id}>
                 <span>{row.concept}</span>
                 <strong>{row.base ?? ''}</strong>
                 <strong>{row.rate ?? ''}</strong>
@@ -430,7 +623,7 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
 
           <footer className="wfsc-payroll-result">
             <span>{example.resultLabel}</span>
-            <strong>{example.resultValue}</strong>
+            <strong>{resultValue}</strong>
           </footer>
         </div>
       </div>
@@ -438,7 +631,7 @@ function PayrollExamplePanel({ stepId }: { stepId: number }) {
   )
 }
 
-export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFiscalStepsCardProps) {
+export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveData }: WorkerFiscalStepsCardProps) {
   const [internalActiveStepId, setInternalActiveStepId] = useState(1)
   const currentStepId = activeStepId ?? internalActiveStepId
   const activeIndex = WORKER_FISCAL_STEPS.findIndex((step) => step.id === currentStepId)
@@ -493,7 +686,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange }: WorkerFisc
           </div>
 
           <aside className="wfsc-help" aria-label="Ayuda del paso activo">
-            <PayrollExamplePanel stepId={activeStep.id} />
+            <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
           </aside>
         </div>
 

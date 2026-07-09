@@ -59,6 +59,16 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Sustituido el pie de la nomina en `WorkerFiscalStepsCard`: se elimina «Copia anonimizada - datos personales ocultos» y se muestra «Nómina simplificada: lo resaltado es la parte que se trata en este paso.» Verificacion: `pnpm run build` falla por errores TS preexistentes en otros modulos; el cambio en WFSC no introduce errores nuevos.
+
+- Ajustado el layout de las etiquetas con icono de ayuda en `WorkerSalaryBaseCard`: el texto ya no estira la fila y el icono queda junto a la etiqueta.
+
+- La nomina de `WorkerFiscalStepsCard` usa ahora los valores vivos de la calculadora (base de cotizacion, cuotas trabajador/empresa, IRPF y liquido), alineada con `WorkerSocialContributionsCard`. Se elimina la barra lateral de `/calculadora-fiscal`.
+
+- Ajustado el tooltip de ayuda en `WorkerSocialContributionsCard`: el fondo pasa a `rgba(..., 0.9)` y el icono ya no hereda la opacidad de filas atenuadas (`wscc-line--muted`).
+
+- Paso 3 de `WorkerFiscalStepsCard`: resaltado dual en la nomina — azul para cotizaciones del trabajador (`TRAB.CONT.COMUNES`, `TRAB.DESEMPLEO`, `TRAB.FORMAC.PROFESIONAL`) y verde para aportacion empresa (`TOTAL`, `Desempleo`, `Form. Profesional`). IRPF y base IRPF dejan de resaltarse en este paso.
+
 - Anadido `SalarySlider` interactivo en `WorkerContributionLimitsCard` (paso 2): el usuario puede ajustar el salario bruto anual desde limites de cotizacion; el dashboard sincroniza el valor con la base real total.
 
 - Ajustado el resaltado de la nomina en `WorkerFiscalStepsCard` paso 2: `Importe remuneracion mensual` queda en verde y `TOTAL` del bloque de bases deja de resaltarse.

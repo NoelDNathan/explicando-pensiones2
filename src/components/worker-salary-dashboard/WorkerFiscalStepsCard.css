@@ -234,9 +234,11 @@
 }
 
 .wfsc-payroll figcaption {
+  width: min(100%, 600px);
   color: #f3f7ff;
   font-size: 14px;
-  line-height: 1.1;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .wfsc-payroll-paper {
@@ -384,6 +386,19 @@
 .wfsc-payroll-totals > div.is-highlighted,
 .wfsc-payroll-bases > div.is-highlighted,
 .wfsc-payroll-liquid strong.is-highlighted {
+  outline: 1px solid rgba(43, 188, 69, 0.78);
+  outline-offset: -1px;
+  background: rgba(95, 232, 117, 0.08);
+}
+
+.wfsc-payroll-table > div.is-highlighted--worker,
+.wfsc-payroll-totals > div.is-highlighted--worker {
+  outline: 1px solid rgba(41, 118, 214, 0.82);
+  outline-offset: -1px;
+  background: rgba(88, 156, 255, 0.12);
+}
+
+.wfsc-payroll-bases > div.is-highlighted--company {
   outline: 1px solid rgba(43, 188, 69, 0.78);
   outline-offset: -1px;
   background: rgba(95, 232, 117, 0.08);

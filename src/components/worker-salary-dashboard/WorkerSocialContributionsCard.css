@@ -361,8 +361,13 @@
   min-height: 31px;
 }
 
-.wscc-line--muted {
+.wscc-line--muted .wscc-line__text--muted,
+.wscc-line--muted .wscc-line__values {
   opacity: 0.72;
+}
+
+.wscc-line__text {
+  min-width: 0;
 }
 
 .wscc-line__label {
@@ -423,7 +428,7 @@
   border: 1px solid rgba(104, 163, 224, 0.38);
   border-radius: 9px;
   color: #eaf3ff;
-  background: rgba(2, 13, 30, 0.97);
+  background: rgba(2, 13, 30, 0.9);
   box-shadow: 0 16px 30px rgba(0, 5, 18, 0.34);
   font-size: 12px;
   line-height: 1.35;

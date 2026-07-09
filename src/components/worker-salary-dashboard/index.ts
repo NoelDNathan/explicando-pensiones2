@@ -22,6 +22,7 @@ export type {
   WorkerContributionRates,
   WorkerContractType,
 } from './WorkerSocialContributionsCard'
+export { calculateSocialContributions } from './WorkerSocialContributionsCard'
 export type {
   DisabilityPercent,
   MaritalStatus,

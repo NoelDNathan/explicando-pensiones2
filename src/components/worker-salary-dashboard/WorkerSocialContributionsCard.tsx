@@ -148,7 +148,7 @@ function sumValues(values: Record<string, number>) {
   return Object.values(values).reduce((total, value) => total + value, 0)
 }
 
-function calculateSocialContributions(params: {
+export function calculateSocialContributions(params: {
   grossSalaryAnnual: number
   grossSalaryMonthly: number
   contributionBaseAnnual: number
@@ -240,7 +240,9 @@ function ContributionRows<Key extends string>({
         return (
           <div className={row.muted ? 'wscc-line wscc-line--muted' : 'wscc-line'} key={row.key}>
             <span className="wscc-line__label">
-              {row.label}
+              <span className={row.muted ? 'wscc-line__text wscc-line__text--muted' : 'wscc-line__text'}>
+                {row.label}
+              </span>
               <span className="wscc-tooltip" tabIndex={0} aria-label={row.help}>
                 <Info size={13} aria-hidden="true" />
                 <span role="tooltip">{row.help}</span>

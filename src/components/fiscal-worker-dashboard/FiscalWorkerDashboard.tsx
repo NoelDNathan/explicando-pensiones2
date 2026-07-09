@@ -8,12 +8,8 @@ import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calc
 import fiscalParams2005Json from '../../../data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json'
 import autonomicCoverageJson from '../../../data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json'
 import vatProxyJson from '../../../data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json'
-import { DashboardSidebar } from '../ui/DashboardSidebar'
-import type { DashboardSidebarItem } from '../ui/DashboardSidebar'
-import { FISCAL_MENU } from './data'
 import { FiscalKpiRow } from './FiscalKpiRow'
 import type { FiscalKpiItem } from './FiscalKpiRow'
-import { MenuIcon } from './MenuIcon'
 import {
   WorkerConsumptionTaxesCard,
   WorkerContributionLimitsCard,
@@ -23,6 +19,7 @@ import {
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
   WorkerSocialContributionsCard,
+  calculateSocialContributions,
 } from '../worker-salary-dashboard'
 import type {
   ConsumptionTaxesResult,
@@ -154,12 +151,6 @@ const fiscalParams2025 = fiscalParams2025Json as FiscalParams
 const fiscalParams2005 = fiscalParams2005Json as LegacyFiscalParams2005
 const autonomicCoverage = autonomicCoverageJson as AutonomicCoverage
 const vatProxy = vatProxyJson as VatProxy
-
-const FISCAL_SIDEBAR_ITEMS: DashboardSidebarItem[] = FISCAL_MENU.map((item) => ({
-  id: item.toLowerCase(),
-  label: item,
-  icon: <MenuIcon id={item.toLowerCase()} />,
-}))
 
 const WORKER_FAQ_ITEMS = [
   {
@@ -380,32 +371,6 @@ function getContributionRatesForYear(taxYear: TaxYear): SocialContributionRates 
   }
 }
 
-function FiscalLogo() {
-  return (
-    <span className="fwd-managed-logo" aria-hidden="true">
-      <span />
-      <span />
-    </span>
-  )
-}
-
-function FiscalSidebar() {
-  return (
-    <DashboardSidebar
-      className="fwd-sidebar"
-      brand={{ title: 'Calculadora Fiscal', subtitle: 'del Trabajador', icon: <FiscalLogo /> }}
-      items={FISCAL_SIDEBAR_ITEMS}
-      activeItemId={FISCAL_SIDEBAR_ITEMS[0].id}
-      infoCard={{
-        title: 'Datos trazables',
-        body: '2025 usa BOE/AEAT e IVA proxy EPF; 2005 usa paquete legacy BOE para Madrid.',
-      }}
-      ctaLabel="Ver metodologia"
-      footerText="Aviso legal - Privacidad - Terminos"
-    />
-  )
-}
-
 export function FiscalWorkerDashboard() {
   const [taxYear] = useState<TaxYear>('2025')
   const [salary, setSalary] = useState(35000)
@@ -610,6 +575,29 @@ export function FiscalWorkerDashboard() {
     }
   }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
 
+  const contributionRates = useMemo(() => getContributionRatesForYear(taxYear), [taxYear])
+
+  const socialContributions = useMemo(() => calculateSocialContributions({
+    grossSalaryAnnual: result.grossSalaryAnnual,
+    grossSalaryMonthly: result.grossSalaryAnnual / 12,
+    contributionBaseAnnual: result.contributionBase * 12,
+    contributionBaseMonthly: result.contributionBase,
+    contractType,
+    rates: contributionRates,
+  }), [contractType, contributionRates, result.contributionBase, result.grossSalaryAnnual])
+
+  const payrollLiveData = useMemo(() => ({
+    grossSalaryAnnual: result.grossSalaryAnnual,
+    salaryAnnual: salary,
+    salaryComplementsAnnual: salaryComplements,
+    contributionBaseMonthly: result.contributionBase,
+    socialContributions,
+    irpfAnnual: result.irpf,
+    netSalaryAnnual: result.netSalary,
+    rates: contributionRates,
+    contractType,
+  }), [contractType, contributionRates, result.contributionBase, result.grossSalaryAnnual, result.irpf, result.netSalary, salary, salaryComplements, socialContributions])
+
   const fiscalKpiItems: FiscalKpiItem[] = [
     {
       tone: 'green',
@@ -699,7 +687,7 @@ export function FiscalWorkerDashboard() {
             excessOverMaximumMonthly={Math.max(0, result.grossSalaryAnnual / 12 - result.contributionBase)}
             isBelowMinimumBase={result.grossSalaryAnnual / 12 < result.contributionBase}
             contractType={contractType}
-            contributionRates={getContributionRatesForYear(taxYear)}
+            contributionRates={contributionRates}
             onContractTypeChange={setContractType}
           />
         )
@@ -792,7 +780,6 @@ export function FiscalWorkerDashboard() {
 
   return (
     <div className="fwd">
-      <FiscalSidebar />
       <main className="fwd-main">
         <header className="fwd-header">
           <div>
@@ -806,7 +793,11 @@ export function FiscalWorkerDashboard() {
           </div>
         </header>
 
-        <WorkerFiscalStepsCard activeStepId={activeWorkerStepId} onStepChange={setActiveWorkerStepId} />
+        <WorkerFiscalStepsCard
+          activeStepId={activeWorkerStepId}
+          onStepChange={setActiveWorkerStepId}
+          payrollLiveData={payrollLiveData}
+        />
 
         <section className="fwd-worker-dashboard" aria-label="Pasos detallados del worker salary dashboard">
           <div className="fwd-worker-card">
