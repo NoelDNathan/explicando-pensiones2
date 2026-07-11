@@ -266,10 +266,8 @@ function ContributionRows<Key extends string>({
 }
 
 export function WorkerSocialContributionsCard({
-  year = 2026,
   grossSalaryAnnual = 37_500,
   grossSalaryMonthly = grossSalaryAnnual / 12,
-  payPeriods = 12,
   contractType = 'indefinite',
   baseUsedMonthly = grossSalaryAnnual / 12,
   baseUsedAnnual = baseUsedMonthly * 12,
@@ -283,7 +281,7 @@ export function WorkerSocialContributionsCard({
   onResultChange,
 }: WorkerSocialContributionsCardProps) {
   const [viewMode, setViewMode] = useState<SocialContributionViewMode>('annual')
-  const [displayMode, setDisplayMode] = useState<SocialContributionDisplayMode>('both')
+  const displayMode: SocialContributionDisplayMode = 'both'
   const [selectedContractType, setSelectedContractType] = useState<WorkerContractType>(contractType)
 
   useEffect(() => {

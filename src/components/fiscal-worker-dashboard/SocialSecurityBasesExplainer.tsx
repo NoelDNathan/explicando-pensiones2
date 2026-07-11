@@ -128,11 +128,11 @@ function ExplanationBlock({
 
 export function SocialSecurityBasesExplainer() {
   const baseReal = 1700
-  const minBase = 1989.3
-  const maxBase = 5101.2
+  const minBase = 1929
+  const maxBase = 4909.5
   const finalBase = minBase
-  const employeeContribution = 129.3
-  const employerContribution = 609.72
+  const employeeContribution = 125
+  const employerContribution = 589.7
   const totalContribution = employeeContribution + employerContribution
 
   const baseRealPosition = `${baseReal / 6000 * 100}%`
@@ -149,7 +149,7 @@ export function SocialSecurityBasesExplainer() {
               <h1 id="ssbe-title">Bases minimas y maximas de cotizacion</h1>
               <p>Edita tus datos y veras que base se usa para cotizar.</p>
             </div>
-            <span className="ssbe-badge">Regimen General 2026</span>
+            <span className="ssbe-badge">Regimen General 2025</span>
           </div>
           <nav className="ssbe-tabs" aria-label="Secciones">
             <button type="button" className="is-active"><Info size={18} />Explicacion</button>
@@ -166,8 +166,8 @@ export function SocialSecurityBasesExplainer() {
             </div>
 
             <FieldShell label="Ano" icon={<Database size={17} aria-hidden="true" />}>
-              <select value="2026" aria-label="Ano" onChange={() => undefined}>
-                <option>2026</option>
+              <select value="2025" aria-label="Ano" onChange={() => undefined}>
+                <option>2025</option>
               </select>
             </FieldShell>
 
@@ -314,7 +314,7 @@ export function SocialSecurityBasesExplainer() {
               <p className="ssbe-total">Total cotizacion social: {formatEuro(totalContribution)} al mes</p>
               <p className="ssbe-note">
                 <Info size={18} aria-hidden="true" />
-                Aproximacion mensual para contrato indefinido en Regimen General 2026. AT/EP no incluidas; depende de la actividad de la empresa.
+                Aproximacion mensual para contrato indefinido en Regimen General 2025. AT/EP no incluidas; depende de la actividad de la empresa.
               </p>
             </section>
           </aside>
@@ -325,8 +325,8 @@ export function SocialSecurityBasesExplainer() {
               <h2 id="ssbe-examples-title">Ejemplos rapidos</h2>
             </div>
             <div className="ssbe-example-row">
-              <QuickExample tone="orange" label="Base maxima" before="6.000 €" after="5.101,20 €" text="Se aplica el maximo" />
-              <QuickExample tone="purple" label="Base minima grupo 1" before="1.700 €" after="1.989,30 €" text="Se aplica el minimo" />
+              <QuickExample tone="orange" label="Base maxima" before="6.000 €" after="4.909,50 €" text="Se aplica el maximo" />
+              <QuickExample tone="purple" label="Base minima grupo 1" before="1.700 €" after="1.929,00 €" text="Se aplica el minimo" />
               <QuickExample tone="blue" label="Sin cambios" before={<>1.500 €<small>en grupo 4</small></>} after="1.500 €" text="Sin cambios" />
             </div>
             <div className="ssbe-dots" aria-hidden="true"><span className="is-active" /><span /><span /></div>

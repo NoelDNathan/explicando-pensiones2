@@ -6,14 +6,11 @@ import {
   ChevronDown,
   CheckCircle2,
   FileText,
-  Gift,
-  GraduationCap,
   HandHeart,
   Heart,
   Landmark,
   Percent,
   ShieldCheck,
-  Smartphone,
   TrendingDown,
   UsersRound,
   Utensils,
@@ -422,9 +419,6 @@ function BenefitGrid() {
     Object.fromEntries(benefitItems.map((item) => [item.id, item.defaultAmount]))
   ))
   const totalBenefits = benefitItems.reduce((total, item) => total + (amounts[item.id] ?? 0), 0)
-  const reviewedBenefits = benefitItems.filter((item) => item.status === 'review').length
-  const partialBenefits = benefitItems.filter((item) => item.status === 'partial').length
-  const exemptBenefits = benefitItems.filter((item) => item.status === 'exempt').length
 
   return (
     <section className="wprc-benefits" aria-labelledby="wprc-benefits-title">

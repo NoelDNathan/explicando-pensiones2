@@ -22,6 +22,7 @@ import {
   calculateSocialContributions,
 } from '../worker-salary-dashboard'
 import type {
+  ContributionGroup,
   ConsumptionTaxesResult,
   PersonalReductionResult,
   SocialContributionRates,
@@ -60,6 +61,7 @@ type FiscalParams = {
       common_contingencies: { employer: number; employee: number }
       mei: { employer: number; employee: number }
       unemployment_indefinite: { employer: number; employee: number }
+      fogasa: { employer: number; employee: number }
       vocational_training: { employer: number; employee: number }
     }
     solidarity_contribution_monthly: Array<{
@@ -205,6 +207,15 @@ const CONTRIBUTION_GROUP_LABELS: Record<number, string> = {
   5: 'Oficiales Administrativos',
   6: 'Subalternos',
   7: 'Auxiliares Administrativos',
+}
+
+function buildContributionGroups(params: FiscalParams | LegacyFiscalParams2005): ContributionGroup[] {
+  return params.social_security.base_limits_monthly_eur.min_by_group.map((group) => ({
+    id: group.group,
+    name: group.label ?? CONTRIBUTION_GROUP_LABELS[group.group] ?? `Grupo ${group.group}`,
+    minBaseMonthly: group.min,
+    maxBaseMonthly: group.max,
+  }))
 }
 
 function formatEuro(value: number) {
@@ -397,6 +408,11 @@ export function FiscalWorkerDashboard() {
   const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
   const [activeWorkerStepId, setActiveWorkerStepId] = useState(1)
 
+  const contributionGroups = useMemo(() => {
+    const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
+    return buildContributionGroups(params)
+  }, [taxYear])
+
   const handleSalaryBaseValuesChange = useCallback((values: {
     salary: number
     payPeriod: 'annual' | 'monthly'
@@ -441,7 +457,7 @@ export function FiscalWorkerDashboard() {
     const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
     const group = params.social_security.base_limits_monthly_eur.min_by_group.find((item) => item.group === contributionGroupId)
     const minBase = group?.min ?? 0
-    const maxBase = params.social_security.base_limits_monthly_eur.max_common_contingencies
+    const maxBase = group?.max ?? params.social_security.base_limits_monthly_eur.max_common_contingencies
     const contributionBase = Math.min(Math.max(monthlySalary, minBase), maxBase)
     const annualContributionBase = contributionBase * 12
     const annualConsumption = monthlyConsumption * 12
@@ -669,6 +685,7 @@ export function FiscalWorkerDashboard() {
         return (
           <WorkerContributionLimitsCard
             calculationYear={Number(taxYear)}
+            groups={contributionGroups}
             userBaseAnnual={result.grossSalaryAnnual}
             initialGroupId={contributionGroupId}
             sourceLabel={result.taxSourceLabel}

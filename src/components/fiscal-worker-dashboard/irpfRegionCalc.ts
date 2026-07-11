@@ -139,7 +139,7 @@ export function computeRegionalIrpf2025(grossSalaryAnnual: number, region: strin
     (item) => item.group === CONTRIBUTION_GROUP,
   )
   const minBase = group?.min ?? 0
-  const maxBase = params.social_security.base_limits_monthly_eur.max_common_contingencies
+  const maxBase = group?.max ?? params.social_security.base_limits_monthly_eur.max_common_contingencies
   const contributionBase = Math.min(Math.max(monthlySalary, minBase), maxBase)
   const annualContributionBase = contributionBase * 12
 

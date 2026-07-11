@@ -56,44 +56,44 @@ export const DEMO_CONTRIBUTION_GROUPS: ContributionGroup[] = [
   {
     id: 1,
     name: 'Ingenieros y Licenciados',
-    minBaseMonthly: 1989.3,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1929,
+    maxBaseMonthly: 4909.5,
   },
   {
     id: 2,
     name: 'Ingenieros Tecnicos, Peritos y Ayudantes Titulados',
-    minBaseMonthly: 1649.7,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1599.6,
+    maxBaseMonthly: 4909.5,
   },
   {
     id: 3,
     name: 'Jefes Administrativos y de Taller',
-    minBaseMonthly: 1435.2,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1391.7,
+    maxBaseMonthly: 4909.5,
   },
   {
     id: 4,
     name: 'Ayudantes no Titulados',
-    minBaseMonthly: 1424.4,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1381.2,
+    maxBaseMonthly: 4909.5,
   },
   {
     id: 5,
     name: 'Oficiales Administrativos',
-    minBaseMonthly: 1424.4,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1381.2,
+    maxBaseMonthly: 4909.5,
   },
   {
     id: 6,
     name: 'Subalternos',
-    minBaseMonthly: 1424.4,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1381.2,
+    maxBaseMonthly: 4909.5,
   },
   {
     id: 7,
     name: 'Auxiliares Administrativos',
-    minBaseMonthly: 1424.4,
-    maxBaseMonthly: 5101.2,
+    minBaseMonthly: 1381.2,
+    maxBaseMonthly: 4909.5,
   },
 ]
 
@@ -195,7 +195,7 @@ export function WorkerContributionLimitsCard({
   userBaseAnnual = 37_500,
   initialViewMode = 'monthly',
   dataAvailable = true,
-  sourceLabel: _sourceLabel = 'Fuente: BOE, Orden PJC/297/2026, articulo 3. Grupos 1-7 con bases mensuales.',
+  sourceLabel: _sourceLabel = 'Fuente: BOE/AEAT 2025, Regimen General con bases mensuales.',
   onUserBaseAnnualChange,
   onGroupChange,
   onResultChange,
@@ -274,10 +274,9 @@ export function WorkerContributionLimitsCard({
       {infoOpen && (
         <div className="wclc-popover" role="status">
           El grupo de cotizacion marca un minimo y un maximo. Ejemplo sencillo:
-          si en el Grupo 7 la base minima es 1.424,40 EUR y tu base es 1.324,40
-          EUR, estas 100 EUR por debajo y se usa 1.424,40 EUR. Si la base maxima
-          es 5.101,20 EUR y tu base es 5.201,20 EUR, estas 100 EUR por encima y
-          se usa 5.101,20 EUR.
+          si tu base queda por debajo de {selectedGroup ? formatEuro(selectedGroup.minBaseMonthly) : 'la base minima'},
+          se usa ese minimo. Si supera {selectedGroup ? formatEuro(selectedGroup.maxBaseMonthly) : 'la base maxima'},
+          se usa ese maximo para las cotizaciones ordinarias.
         </div>
       )}
 
