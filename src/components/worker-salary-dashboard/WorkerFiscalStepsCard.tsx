@@ -96,6 +96,23 @@ function formatPayrollPercent(rate: number) {
   return payrollNumberFormatter.format((Number.isFinite(rate) ? rate : 0) * 100)
 }
 
+function getStepDescription(step: WorkerFiscalStep, live?: PayrollLiveData) {
+  if (step.id !== 3 || !live) return step.description
+
+  const { socialContributions } = live
+  const contributionBaseMonthly = formatPayrollNumber(live.contributionBaseMonthly)
+  const workerRate = formatPayrollPercent(socialContributions.workerContributionRate)
+  const workerMonthly = formatPayrollNumber(socialContributions.workerContributionsMonthly)
+  const companyRate = formatPayrollPercent(socialContributions.companyContributionRate)
+  const companyMonthly = formatPayrollNumber(socialContributions.companyContributionsMonthly)
+
+  return `Las cotizaciones sociales son las cantidades que se pagan cada mes a la Seguridad Social. Se calculan aplicando distintos porcentajes sobre tu base de cotización (mirar paso 2).
+     Una parte se descuenta directamente de tu salario bruto y aparece en tu nómina como cotización del trabajador. Por eso reduce tu salario neto, es decir, lo que finalmente cobras. 
+     La otra parte la paga la empresa además de tu salario bruto. No se resta de tu nómina, pero sí forma parte del coste total que tiene la empresa por contratarte. 
+     Estas cotizaciones sirven para financiar prestaciones como la jubilación, las bajas por enfermedad, el desempleo, la formación profesional, los accidentes laborales o el refuerzo del sistema de pensiones. 
+    Con el salario que has introducido, tu base de cotización es de ${contributionBaseMonthly} € al mes. Si la parte del trabajador suma un ${workerRate} %, se descontarían unos ${workerMonthly} € de tu salario bruto. Además, la empresa tendría que pagar sus propias cotizaciones: en este caso, un ${companyRate} %, unos ${companyMonthly} € adicionales al mes, que no se descuentan de tu nómina, pero sí aumentan el coste total de contratarte.`
+}
+
 function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
   if (!live) {
     return {
@@ -651,10 +668,12 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const currentStepId = activeStepId ?? internalActiveStepId
   const activeIndex = WORKER_FISCAL_STEPS.findIndex((step) => step.id === currentStepId)
   const activeStep = WORKER_FISCAL_STEPS[activeIndex] ?? WORKER_FISCAL_STEPS[0]
-  const descriptionParagraphs = activeStep.description.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
+  const activeDescription = getStepDescription(activeStep, payrollLiveData)
+  const descriptionParagraphs = activeDescription.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   const progress = useMemo(() => activeStep.id / WORKER_FISCAL_STEPS.length * 100, [activeStep.id])
   const ActiveIcon = activeStep.Icon
   const showPayrollHelp = activeStep.id !== 8
+  const isCompactStep = activeStep.id === 8
 
   const setActiveStep = (nextStepId: number) => {
     const clampedStepId = Math.min(WORKER_FISCAL_STEPS.length, Math.max(1, nextStepId))
@@ -680,8 +699,13 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   }, [currentStepId])
 
   return (
-    <section ref={sectionRef} className="wfsc" aria-labelledby="wfsc-title">
-      <div className="wfsc-stage">
+    <section
+      ref={sectionRef}
+      className="wfsc"
+      aria-labelledby={isCompactStep ? undefined : 'wfsc-title'}
+      aria-label={isCompactStep ? 'Navegacion del recorrido fiscal' : undefined}
+    >
+      <div className={`wfsc-stage${isCompactStep ? ' wfsc-stage--compact' : ''}`}>
         <button
           className="wfsc-nav wfsc-nav--previous"
           type="button"
@@ -693,29 +717,31 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           <span>Anterior</span>
         </button>
 
-        <div className={`wfsc-hero${showPayrollHelp ? '' : ' wfsc-hero--single'}`}>
-          <div className="wfsc-hero-main">
-            <span className="wfsc-step-orb" aria-hidden="true">
-              <ActiveIcon size={34} strokeWidth={2.35} />
-              <b>{activeStep.id}</b>
-            </span>
-            <div className="wfsc-copy">
-              <p>Paso {activeStep.id} de {WORKER_FISCAL_STEPS.length}</p>
-              <h2 id="wfsc-title">{activeStep.title}</h2>
-              <div className="wfsc-description">
-                {descriptionParagraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
+        {!isCompactStep ? (
+          <div className={`wfsc-hero${showPayrollHelp ? '' : ' wfsc-hero--single'}`}>
+            <div className="wfsc-hero-main">
+              <span className="wfsc-step-orb" aria-hidden="true">
+                <ActiveIcon size={34} strokeWidth={2.35} />
+                <b>{activeStep.id}</b>
+              </span>
+              <div className="wfsc-copy">
+                <p>Paso {activeStep.id} de {WORKER_FISCAL_STEPS.length}</p>
+                <h2 id="wfsc-title">{activeStep.title}</h2>
+                <div className="wfsc-description">
+                  {descriptionParagraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          {showPayrollHelp ? (
-            <aside className="wfsc-help" aria-label="Ayuda del paso activo">
-              <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
-            </aside>
-          ) : null}
-        </div>
+            {showPayrollHelp ? (
+              <aside className="wfsc-help" aria-label="Ayuda del paso activo">
+                <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
+              </aside>
+            ) : null}
+          </div>
+        ) : null}
 
         <button
           className="wfsc-nav wfsc-nav--next"

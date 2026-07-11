@@ -756,11 +756,8 @@ export function FiscalWorkerDashboard() {
         return (
           <section className="fwd-faq-step" aria-labelledby="fwd-faq-step-title">
             <header className="fwd-faq-step__header">
-              <div>
-                <span>8.</span>
-                <h2 id="fwd-faq-step-title">Preguntas frecuentes</h2>
-              </div>
-              <p>Respuestas cortas para comprobar que estas leyendo bien el salario bruto, las bases, las cuotas, el IRPF y los impuestos de consumo.</p>
+              <h2 id="fwd-faq-step-title">Preguntas frecuentes</h2>
+              <p>Respuestas rapidas para comprobar que lees bien el salario bruto, las bases, las cuotas, el IRPF y los impuestos de consumo.</p>
             </header>
 
             <div className="fwd-faq-grid">

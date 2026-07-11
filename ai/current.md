@@ -59,6 +59,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Conectado el ejemplo textual del paso 3 de `WorkerFiscalStepsCard` con los valores vivos de la calculadora: base mensual de cotizacion, porcentaje/cuota del trabajador y porcentaje/aportacion mensual de empresa se recalculan con el salario introducido en `WorkerSalaryBaseCard` y las cotizaciones de `WorkerSocialContributionsCard`. No se incorporaron datos nuevos ni fuentes nuevas; se reutilizan los parametros y calculos ya conectados. Verificacion: lints del archivo sin errores, `.\node_modules\.bin\tsc.cmd --noEmit` correcto, `node node_modules\vite\bin\vite.js build` correcto con avisos conocidos de chunk grande/timings; navegador integrado en `http://localhost:5173/calculadora-fiscal` paso 3 muestra para 35.000 EUR/anio `2.916,67 EUR`, `6,48 %`, `189,00 EUR`, `30,57 %` y `891,63 EUR`, sin overflow horizontal en escritorio ni movil 390px.
+
+- Simplificado el paso 8 (FAQ): `WorkerFiscalStepsCard` muestra solo navegacion compacta (sin titulo ni descripcion duplicados); el encabezado unico queda en `fwd-faq-step`.
+
 - Añadidos botones `Valores medios (España)` y `Restablecer` en `WorkerConsumptionTaxesCard` para rellenar o limpiar el reparto % del gasto con un perfil orientativo (vivienda 34 %, alimentacion 22 %, etc.).
 
 - Ocultado el panel de nomina (`wfsc-help`) en el paso 8 de `WorkerFiscalStepsCard` (Preguntas frecuentes); el hero pasa a una sola columna.

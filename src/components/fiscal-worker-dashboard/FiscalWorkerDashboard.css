@@ -468,29 +468,14 @@
 
 .fwd-faq-step__header {
   display: grid;
-  grid-template-columns: minmax(0, 0.7fr) minmax(260px, 0.9fr);
-  gap: 18px;
-  align-items: end;
-}
-
-.fwd-faq-step__header div {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.fwd-faq-step__header span {
-  color: var(--fwd-green);
-  font-size: clamp(25px, 3vw, 34px);
-  font-weight: 860;
-  line-height: 1;
+  gap: 10px;
 }
 
 .fwd-faq-step__header h2 {
   margin: 0;
   color: #f4f8ff;
   font-size: clamp(26px, 3.2vw, 42px);
-  line-height: 1;
+  line-height: 1.05;
 }
 
 .fwd-faq-step__header p {
