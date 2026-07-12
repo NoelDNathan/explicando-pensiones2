@@ -1,5 +1,20 @@
 # Fuentes registradas
 
+## BOE - Tarifa AT/EP 2025
+
+- nombre de la fuente normativa: tarifa de primas para la cotizacion por accidentes de trabajo y enfermedades profesionales aplicable en 2025
+- institucion: Agencia Estatal Boletin Oficial del Estado
+- URL Orden PJC/178/2025: https://www.boe.es/buscar/act.php?id=BOE-A-2025-3780
+- URL Ley 42/2006, disposicion adicional cuarta, redaccion vigente tras Real Decreto-ley 28/2018: https://www.boe.es/buscar/act.php?id=BOE-A-2006-22865&p=20181229&tn=0
+- fecha de revision: 2026-07-12
+- periodo normativo usado: 2025
+- ambito: Espana, trabajador por cuenta ajena del Regimen General
+- formato consultado: HTML BOE consolidado
+- archivo procesado: `data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json`
+- licencia o condiciones de uso: reutilizacion segun condiciones del BOE
+- descripcion breve: seleccion de actividades frecuentes del Cuadro I CNAE-2009 y ocupaciones especiales del Cuadro II para calcular AT/EP como suma de IT e IMS.
+- nota metodologica: la Orden PJC/178/2025 remite a la Ley 42/2006 para la tarifa de 2025. No se usa la tarifa 2026 con CNAE-2025. La seleccion no sustituye la determinacion definitiva de la Tesoreria General de la Seguridad Social ni cubre toda la tarifa CNAE.
+
 ## Seguridad Social - Pensionistas-personas y modelo demografico
 
 - nombre de la fuente observada: Libro "Evolucion mensual de las pensiones", hoja `Pnes y ptas`

@@ -1,6 +1,7 @@
 export { WorkerSalaryBaseCard } from './WorkerSalaryBaseCard'
 export { WorkerContributionLimitsCard } from './WorkerContributionLimitsCard'
 export { WorkerSocialContributionsCard } from './WorkerSocialContributionsCard'
+export { AtEpCategorySelect } from './AtEpCategorySelect'
 export { WorkerPersonalReductionsCard } from './WorkerPersonalReductionsCard'
 export { WorkerIrpfTranchesCard } from './WorkerIrpfTranchesCard'
 export { WorkerIrpfRegionComparison } from './WorkerIrpfRegionComparison'
@@ -15,6 +16,7 @@ export type {
 } from './WorkerContributionLimitsCard'
 export type {
   CompanyContributionRates,
+  OccupationalAccidentsCategory,
   SocialContributionDisplayMode,
   SocialContributionRates,
   SocialContributionResult,
@@ -22,7 +24,13 @@ export type {
   WorkerContributionRates,
   WorkerContractType,
 } from './WorkerSocialContributionsCard'
-export { calculateSocialContributions } from './WorkerSocialContributionsCard'
+export {
+  AT_EP_2025_CATEGORIES,
+  DEFAULT_AT_EP_2025_CATEGORY_ID,
+  calculateSocialContributions,
+  getOccupationalAccidentsCategory,
+  getOccupationalAccidentsRate,
+} from './WorkerSocialContributionsCard'
 export type {
   DisabilityPercent,
   MaritalStatus,

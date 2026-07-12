@@ -140,10 +140,14 @@
 
 .wscc-toolbar {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) minmax(180px, 0.45fr) auto auto;
+  grid-template-columns: minmax(230px, 0.9fr) minmax(170px, 0.4fr) minmax(320px, 1.15fr) auto;
   gap: 12px;
   align-items: end;
   margin-bottom: 16px;
+}
+
+.wscc-atep-select-field {
+  min-width: 0;
 }
 
 .wscc-base-note,
@@ -368,6 +372,45 @@
 .wscc-line--muted .wscc-line__text--muted,
 .wscc-line--muted .wscc-line__values {
   opacity: 0.72;
+}
+
+.wscc-atep-note {
+  display: grid;
+  gap: 6px;
+  margin-top: 1px;
+  padding: 10px 11px;
+  border: 1px solid rgba(255, 155, 24, 0.22);
+  border-radius: 11px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 155, 24, 0.16), transparent 36%),
+    rgba(31, 22, 10, 0.42);
+}
+
+.wscc-atep-note span {
+  color: #ffd89b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.wscc-atep-note p,
+.wscc-atep-note em {
+  margin: 0;
+  color: #c9d4e7;
+  font-size: 12px;
+  line-height: 1.4;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.wscc-atep-note strong {
+  color: #f4f8ff;
+  font-weight: 900;
+}
+
+.wscc-atep-note em {
+  color: #aeb9d2;
 }
 
 .wscc-line__text {

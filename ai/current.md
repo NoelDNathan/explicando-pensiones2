@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-06-21
+Fecha: 2026-07-12
 
 ## Situacion
 
@@ -8,6 +8,11 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Hecho
 
+- Anadido al paso 3 de la calculadora fiscal un selector de actividad/ocupacion AT/EP 2025 basado en una seleccion trazable de la tarifa oficial BOE 2025, usando CNAE-2009 y ocupaciones especiales del Cuadro II; no se usan datos 2026/CNAE-2025.
+- AT/EP deja de quedar a cero por defecto: el total se calcula como `base * (IT + IMS)` y se incorpora a las cotizaciones y al coste empresarial. El selector se comparte con el dashboard fiscal para que los totales posteriores usen la misma categoria.
+- Anadida explicacion visual bajo la linea AT/EP del panel Empresa: IT como incapacidad temporal e IMS como incapacidad permanente, muerte y supervivencia.
+- Documentada la nueva seleccion en `data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json`, `data/sources.md`, `data/metadata.md`, `data/inventory.md` y `data/methodology/calculadora-fiscal-trabajador-2025.md`; recalculado `data/checksums.sha256`.
+- Verificacion: `pnpm run build` correcto. Revision visual en `/componentes` escritorio y movil correcta; en `/calculadora-fiscal` la automatizacion del navegador no consiguio cambiar al paso 3 mediante los controles del wizard, por lo que la revision visual completa del paso integrado queda pendiente de comprobacion manual o nueva sesion de navegador.
 - Creado `AGENTS.md` con reglas de trabajo para agentes.
 - Creado este archivo `ai/current.md` como estado vivo del proyecto.
 - Creado historial inicial en `ai/history/`.
@@ -58,6 +63,12 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Sustituido el `<select>` nativo de AT/EP por `AtEpCategorySelect`: combobox con busqueda integrada y pildoras de color para IT (azul), IMS (violeta) y Total (naranja) dentro del selector y de cada opcion al filtrar.
+
+- El desplegable de actividad AT/EP en `WorkerSocialContributionsCard` muestra ahora IT, IMS y total por opcion, ademas del codigo y la etiqueta de la categoria.
+
+- Ampliada la explicacion de AT/EP en `WorkerSocialContributionsCard`: ahora aclara que AT/EP cubre accidentes de trabajo y enfermedades profesionales, que lo paga la empresa sobre la base de contingencias profesionales, y define IT e IMS en lenguaje mas didactico. No se cambian calculos ni fuentes.
 
 - Destacado tambien «Coste total empresa» en `WorkerSocialContributionsCard`: borde, fondo y texto naranja con mayor peso visual, por debajo del total de cotizaciones en rojo.
 

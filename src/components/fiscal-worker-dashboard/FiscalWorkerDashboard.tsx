@@ -19,7 +19,9 @@ import {
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
   WorkerSocialContributionsCard,
+  DEFAULT_AT_EP_2025_CATEGORY_ID,
   calculateSocialContributions,
+  getOccupationalAccidentsRate,
 } from '../worker-salary-dashboard'
 import type {
   ContributionGroup,
@@ -404,6 +406,7 @@ export function FiscalWorkerDashboard() {
   const [otherTaxes] = useState(0)
   const [contributionGroupId, setContributionGroupId] = useState(7)
   const [contractType, setContractType] = useState<WorkerContractType>('indefinite')
+  const [occupationalAccidentsCategoryId, setOccupationalAccidentsCategoryId] = useState(DEFAULT_AT_EP_2025_CATEGORY_ID)
   const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
   const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
   const [activeWorkerStepId, setActiveWorkerStepId] = useState(1)
@@ -591,7 +594,14 @@ export function FiscalWorkerDashboard() {
     }
   }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
 
-  const contributionRates = useMemo(() => getContributionRatesForYear(taxYear), [taxYear])
+  const baseContributionRates = useMemo(() => getContributionRatesForYear(taxYear), [taxYear])
+  const contributionRates = useMemo<SocialContributionRates>(() => ({
+    ...baseContributionRates,
+    company: {
+      ...baseContributionRates.company,
+      occupationalAccidents: getOccupationalAccidentsRate(occupationalAccidentsCategoryId),
+    },
+  }), [baseContributionRates, occupationalAccidentsCategoryId])
 
   const socialContributions = useMemo(() => calculateSocialContributions({
     grossSalaryAnnual: result.grossSalaryAnnual,
@@ -705,7 +715,9 @@ export function FiscalWorkerDashboard() {
             isBelowMinimumBase={result.grossSalaryAnnual / 12 < result.contributionBase}
             contractType={contractType}
             contributionRates={contributionRates}
+            occupationalAccidentsCategoryId={occupationalAccidentsCategoryId}
             onContractTypeChange={setContractType}
+            onOccupationalAccidentsCategoryChange={setOccupationalAccidentsCategoryId}
           />
         )
       case 4:

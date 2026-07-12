@@ -12,11 +12,12 @@ La calculadora 2025 no debe comparar con 2030 ni con ningun futuro en esta fase.
 
 Los factores de usuario que si se tendran en cuenta en este proyecto son: salario bruto anual, comunidad autonoma, edad, estado civil, hijos a cargo, personas a cargo, discapacidad, categoria profesional y movilidad geografica.
 
-Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario, trabajadores del mar, artistas, taurinos, regimenes forales, aplicacion automatica de deducciones autonomicas completas y contingencias profesionales por CNAE.
+Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario, trabajadores del mar, artistas, taurinos, regimenes forales y aplicacion automatica de deducciones autonomicas completas. La cotizacion por contingencias profesionales AT/EP se incorpora solo como selector didactico con una seleccion trazable de actividades frecuentes y ocupaciones especiales 2025; no sustituye a la determinacion completa de la TGSS.
 
 ## Fuentes oficiales usadas
 
 - BOE: Orden PJC/178/2025, de 25 de febrero, normas de cotizacion 2025.
+- BOE: Ley 42/2006, disposicion adicional cuarta, tarifa de primas AT/EP aplicable en 2025 por remision de la Orden PJC/178/2025. Redaccion vigente tras Real Decreto-ley 28/2018, con CNAE-2009 y Cuadro II de ocupaciones especiales.
 - Agencia Tributaria: Manual practico de Renta 2025, gravamen estatal, gravamen autonomico por CCAA, cuadro de minimos personales/familiares estatales y autonomicos, guia de deducciones autonomicas, gastos/reducciones de rendimientos del trabajo y pagina del algoritmo oficial de retenciones 2025.
 - Agencia Tributaria: tipos impositivos de IVA 2025.
 
@@ -24,6 +25,7 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 
 - Bases minimas y maximas mensuales del Regimen General por grupo de cotizacion.
 - Tipos de cotizacion 2025: contingencias comunes, desempleo indefinido/temporal, FOGASA, formacion profesional, MEI, horas extra y cotizacion adicional de solidaridad.
+- Seleccion de tipos AT/EP 2025: categorias frecuentes del Cuadro I y todas las ocupaciones especiales del Cuadro II usadas por el selector de la UI. Cada categoria conserva IT, IMS y total como suma.
 - Escala estatal general del IRPF 2025.
 - Escalas autonomicas generales de las CCAA de regimen comun 2025, excluyendo Pais Vasco y Navarra.
 - Minimos personales y familiares estatales basicos y minimos autonomicos propios cuando la CCAA fija importes diferentes.
@@ -35,19 +37,20 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 
 1. Prorratear pagas extra en 12 bases mensuales para cotizacion.
 2. Aplicar base minima o maxima mensual segun grupo de cotizacion.
-3. Calcular cuota obrera de Seguridad Social con contingencias comunes, desempleo, formacion profesional y MEI; FOGASA es solo empresa.
+3. Calcular cuota obrera de Seguridad Social con contingencias comunes, desempleo, formacion profesional y MEI; FOGASA y AT/EP son solo empresa.
 4. Para salarios por encima de la base maxima, aplicar la cuota de solidaridad por tramos mensuales.
 5. Para IRPF anual, partir del rendimiento integro del trabajo, restar cotizaciones del trabajador y gastos deducibles, aplicar reducciones si proceden, calcular cuota estatal y autonomica con las escalas y restar la cuota correspondiente al minimo personal/familiar.
-6. Para retencion de nomina, no aproximar con la escala anual: usar el algoritmo oficial AEAT de retenciones 2025.
-7. Para IVA, pedir gasto anual y porcentaje de gasto por tipo; si el gasto esta expresado con IVA incluido, extraer la cuota con `gasto * tipo / (100 + tipo)`.
-8. Para IVA aproximado, ofrecer dos opciones: media por rango salarial/renta si se procesa INE EPF, y personalizado por gasto declarado en categorias de consumo.
-9. Para `otros impuestos`, crear un modulo separado con media espanola estimada. No pedir datos detallados en la primera version y no mezclarlo con salario neto laboral.
+6. Para AT/EP, aplicar `base de contingencias profesionales * (IT + IMS)`. IT cubre incapacidad temporal derivada de contingencias profesionales; IMS cubre incapacidad permanente, muerte y supervivencia.
+7. Para retencion de nomina, no aproximar con la escala anual: usar el algoritmo oficial AEAT de retenciones 2025.
+8. Para IVA, pedir gasto anual y porcentaje de gasto por tipo; si el gasto esta expresado con IVA incluido, extraer la cuota con `gasto * tipo / (100 + tipo)`.
+9. Para IVA aproximado, ofrecer dos opciones: media por rango salarial/renta si se procesa INE EPF, y personalizado por gasto declarado en categorias de consumo.
+10. Para `otros impuestos`, crear un modulo separado con media espanola estimada. No pedir datos detallados en la primera version y no mezclarlo con salario neto laboral.
 
 ## Limitaciones
 
 - Las escalas autonomicas y minimos propios quedan parametrizados para CCAA de regimen comun. Pais Vasco y Navarra no se incorporan.
 - Las deducciones estatales/autonomicas pueden cambiar mucho el resultado individual. Para autonomicas hay catalogo oficial localizado, pero no se aplican automaticamente hasta codificar importes, limites, requisitos e incompatibilidades de cada deduccion.
-- La cotizacion por contingencias profesionales depende de actividad/CNAE y es cuota empresarial; no debe inventarse.
+- La cotizacion por contingencias profesionales depende de actividad/CNAE u ocupacion y es cuota empresarial. El selector actual usa una seleccion 2025, no la tarifa completa; para casos reales la determinacion corresponde a la Tesoreria General de la Seguridad Social.
 - `Otros impuestos` no es una magnitud directamente deducible del salario bruto. En este proyecto se tratara como aproximacion separada, basada en datos declarados por el usuario o en una cesta media documentada.
 - La guia para replicar este paquete en otros ejercicios esta en `data/methodology/calculadora-fiscal-datos-por-ano.md`.
 - La metodologia especifica de IVA y otros impuestos esta en `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
@@ -58,6 +61,7 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 - `data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json`
 - `data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json`
 - `data/processed/fiscal/2026-06-02_aeat-otros-impuestos-2025-modulo-contexto.json`
+- `data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json`
 
 ## Integracion en la UI
 

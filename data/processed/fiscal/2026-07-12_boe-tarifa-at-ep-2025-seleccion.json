@@ -1,0 +1,66 @@
+{
+  "dataset_id": "boe-tarifa-at-ep-2025-seleccion",
+  "created_at": "2026-07-12",
+  "scope": {
+    "country": "Espana",
+    "year": 2025,
+    "worker_profile": "trabajador por cuenta ajena del Regimen General",
+    "classification": "CNAE-2009 y ocupaciones especiales Cuadro II",
+    "coverage": "seleccion didactica de actividades frecuentes y ocupaciones especiales; no sustituye a la tarifa completa"
+  },
+  "sources": [
+    {
+      "label": "BOE, Orden PJC/178/2025, de 25 de febrero, articulo 4 y remision a la disposicion adicional cuarta de la Ley 42/2006",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2025-3780"
+    },
+    {
+      "label": "BOE, Ley 42/2006, disposicion adicional cuarta, redaccion vigente para 2025 tras Real Decreto-ley 28/2018",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2006-22865&p=20181229&tn=0"
+    }
+  ],
+  "methodology": [
+    "La Orden PJC/178/2025 mantiene para 2025 la tarifa de primas de la disposicion adicional cuarta de la Ley 42/2006.",
+    "Se transcriben solo categorias frecuentes del Cuadro I y todas las ocupaciones especiales del Cuadro II citadas en esa redaccion.",
+    "El total AT/EP es IT + IMS y se aplica sobre la base de contingencias profesionales usada por la calculadora.",
+    "La determinacion definitiva del tipo corresponde a la Tesoreria General de la Seguridad Social segun actividad economica principal u ocupacion."
+  ],
+  "categories": [
+    { "id": "cnae-62", "kind": "cnae", "code": "62", "label": "Programacion, consultoria y actividades informaticas", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "occupation-a-office", "kind": "occupation", "code": "a", "label": "Trabajos exclusivos de oficina", "it_percent": 0.8, "ims_percent": 0.7, "note": "Solo si trabaja exclusivamente en oficina y sin exposicion a los riesgos de la actividad principal." },
+    { "id": "cnae-55-56", "kind": "cnae", "code": "55/56", "label": "Hosteleria: alojamiento, comidas y bebidas", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-85", "kind": "cnae", "code": "85", "label": "Educacion", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-86", "kind": "cnae", "code": "86", "label": "Actividades sanitarias", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-869", "kind": "cnae", "code": "869", "label": "Otras actividades sanitarias", "it_percent": 0.95, "ims_percent": 0.8 },
+    { "id": "cnae-61", "kind": "cnae", "code": "61", "label": "Telecomunicaciones", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-63", "kind": "cnae", "code": "63", "label": "Servicios de informacion, hosting y datos", "it_percent": 0.65, "ims_percent": 1.0 },
+    { "id": "cnae-64", "kind": "cnae", "code": "64", "label": "Servicios financieros", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-68", "kind": "cnae", "code": "68", "label": "Actividades inmobiliarias", "it_percent": 0.65, "ims_percent": 1.0 },
+    { "id": "cnae-69", "kind": "cnae", "code": "69", "label": "Actividades juridicas y de contabilidad", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-70", "kind": "cnae", "code": "70", "label": "Consultoria de gestion empresarial", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-71", "kind": "cnae", "code": "71", "label": "Arquitectura, ingenieria y ensayos tecnicos", "it_percent": 0.65, "ims_percent": 1.0 },
+    { "id": "cnae-73", "kind": "cnae", "code": "73", "label": "Publicidad y estudios de mercado", "it_percent": 0.9, "ims_percent": 0.8 },
+    { "id": "cnae-75", "kind": "cnae", "code": "75", "label": "Actividades veterinarias", "it_percent": 1.5, "ims_percent": 1.1 },
+    { "id": "cnae-79", "kind": "cnae", "code": "79", "label": "Agencias de viajes y operadores turisticos", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-82", "kind": "cnae", "code": "82", "label": "Actividades administrativas y auxiliares de empresa", "it_percent": 1.0, "ims_percent": 1.05 },
+    { "id": "cnae-8220", "kind": "cnae", "code": "8220", "label": "Centros de llamadas", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-41-43", "kind": "cnae", "code": "41/43", "label": "Construccion de edificios y construccion especializada", "it_percent": 3.35, "ims_percent": 3.35 },
+    { "id": "cnae-46", "kind": "cnae", "code": "46", "label": "Comercio al por mayor, regla general", "it_percent": 1.4, "ims_percent": 1.2 },
+    { "id": "cnae-47", "kind": "cnae", "code": "47", "label": "Comercio al por menor, regla general", "it_percent": 0.95, "ims_percent": 0.7 },
+    { "id": "cnae-49", "kind": "cnae", "code": "49", "label": "Transporte terrestre, excepto mercancias por carretera", "it_percent": 1.8, "ims_percent": 1.5 },
+    { "id": "cnae-494", "kind": "cnae", "code": "494", "label": "Transporte de mercancias por carretera y mudanzas", "it_percent": 2.0, "ims_percent": 1.7 },
+    { "id": "cnae-52", "kind": "cnae", "code": "52", "label": "Almacenamiento y actividades anexas al transporte", "it_percent": 1.8, "ims_percent": 1.5 },
+    { "id": "cnae-80", "kind": "cnae", "code": "80", "label": "Actividades de seguridad e investigacion", "it_percent": 1.4, "ims_percent": 2.2 },
+    { "id": "cnae-81", "kind": "cnae", "code": "81", "label": "Servicios a edificios y jardineria", "it_percent": 2.1, "ims_percent": 1.5 },
+    { "id": "cnae-87", "kind": "cnae", "code": "87", "label": "Asistencia en establecimientos residenciales", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-90", "kind": "cnae", "code": "90", "label": "Creacion artistica y espectaculos", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "cnae-93", "kind": "cnae", "code": "93", "label": "Actividades deportivas, recreativas y entretenimiento", "it_percent": 1.7, "ims_percent": 1.3 },
+    { "id": "cnae-95", "kind": "cnae", "code": "95", "label": "Reparacion de ordenadores y articulos de uso domestico", "it_percent": 1.5, "ims_percent": 1.1 },
+    { "id": "cnae-452", "kind": "cnae", "code": "452", "label": "Mantenimiento y reparacion de vehiculos de motor", "it_percent": 2.45, "ims_percent": 2.0 },
+    { "id": "cnae-9602", "kind": "cnae", "code": "9602", "label": "Peluqueria y otros tratamientos de belleza", "it_percent": 0.8, "ims_percent": 0.7 },
+    { "id": "occupation-b-commerce", "kind": "occupation", "code": "b", "label": "Representantes de comercio", "it_percent": 1.0, "ims_percent": 1.0 },
+    { "id": "occupation-d-construction-trades", "kind": "occupation", "code": "d", "label": "Oficios en instalaciones, reparaciones, edificios y obras", "it_percent": 3.35, "ims_percent": 3.35 },
+    { "id": "occupation-f-heavy-goods-driver", "kind": "occupation", "code": "f", "label": "Conductores de mercancias con carga util superior a 3,5 Tm", "it_percent": 3.35, "ims_percent": 3.35 },
+    { "id": "occupation-g-cleaning", "kind": "occupation", "code": "g", "label": "Personal de limpieza", "it_percent": 2.1, "ims_percent": 1.5 },
+    { "id": "occupation-h-security", "kind": "occupation", "code": "h", "label": "Vigilantes, guardas y personal de seguridad", "it_percent": 1.4, "ims_percent": 2.2 }
+  ]
+}

@@ -1,10 +1,23 @@
 import { ChevronDown, Info } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
+import atEpParams2025Json from '../../../data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json'
+import { AtEpCategorySelect } from './AtEpCategorySelect'
 import './WorkerSocialContributionsCard.css'
 
 export type WorkerContractType = 'indefinite' | 'temporary' | 'internship' | 'training'
 export type SocialContributionViewMode = 'annual' | 'monthly'
 export type SocialContributionDisplayMode = 'both' | 'percent' | 'amount'
+
+export type OccupationalAccidentsCategory = {
+  id: string
+  kind: 'cnae' | 'occupation'
+  code: string
+  label: string
+  it_percent: number
+  ims_percent: number
+  note?: string
+}
 
 export type WorkerContributionRates = {
   commonContingencies: number
@@ -87,7 +100,9 @@ type WorkerSocialContributionsCardProps = {
   isBelowMinimumBase?: boolean
   dataAvailable?: boolean
   contributionRates?: SocialContributionRates
+  occupationalAccidentsCategoryId?: string
   onContractTypeChange?: (contractType: WorkerContractType) => void
+  onOccupationalAccidentsCategoryChange?: (categoryId: string) => void
   onResultChange?: (result: SocialContributionResult | null) => void
 }
 
@@ -127,6 +142,22 @@ export const DEMO_SOCIAL_CONTRIBUTION_RATES: SocialContributionRates = {
     mei: 0.006,
     occupationalAccidents: 0,
   },
+}
+
+const atEpParams2025 = atEpParams2025Json as {
+  categories: OccupationalAccidentsCategory[]
+}
+
+export const AT_EP_2025_CATEGORIES = atEpParams2025.categories
+export const DEFAULT_AT_EP_2025_CATEGORY_ID = 'cnae-62'
+
+export function getOccupationalAccidentsCategory(categoryId: string) {
+  return AT_EP_2025_CATEGORIES.find((category) => category.id === categoryId) ?? AT_EP_2025_CATEGORIES[0]
+}
+
+export function getOccupationalAccidentsRate(categoryId: string) {
+  const category = getOccupationalAccidentsCategory(categoryId)
+  return (category.it_percent + category.ims_percent) / 100
 }
 
 const contractLabels: Record<WorkerContractType, string> = {
@@ -223,6 +254,7 @@ function ContributionRows<Key extends string>({
   accent,
   displayMode,
   viewMode,
+  afterRows,
 }: {
   rows: ContributionLine<Key>[]
   totalAmount: number
@@ -230,6 +262,7 @@ function ContributionRows<Key extends string>({
   accent: 'worker' | 'company'
   displayMode: SocialContributionDisplayMode
   viewMode: SocialContributionViewMode
+  afterRows?: ReactNode
 }) {
   const displayAmount = viewMode === 'monthly' ? totalAmount / 12 : totalAmount
 
@@ -256,6 +289,8 @@ function ContributionRows<Key extends string>({
         )
       })}
 
+      {afterRows}
+
       <output className={`wscc-total wscc-total--${accent}`}>
         <span>Total {accent === 'worker' ? 'trabajador' : 'empresa'}</span>
         <strong>{formatPercent(totalRate)}</strong>
@@ -277,16 +312,36 @@ export function WorkerSocialContributionsCard({
   isBelowMinimumBase = false,
   dataAvailable = true,
   contributionRates = DEMO_SOCIAL_CONTRIBUTION_RATES,
+  occupationalAccidentsCategoryId = DEFAULT_AT_EP_2025_CATEGORY_ID,
   onContractTypeChange,
+  onOccupationalAccidentsCategoryChange,
   onResultChange,
 }: WorkerSocialContributionsCardProps) {
   const [viewMode, setViewMode] = useState<SocialContributionViewMode>('annual')
   const displayMode: SocialContributionDisplayMode = 'both'
   const [selectedContractType, setSelectedContractType] = useState<WorkerContractType>(contractType)
+  const [selectedAtEpCategoryId, setSelectedAtEpCategoryId] = useState(occupationalAccidentsCategoryId)
 
   useEffect(() => {
     setSelectedContractType(contractType)
   }, [contractType])
+
+  useEffect(() => {
+    setSelectedAtEpCategoryId(occupationalAccidentsCategoryId)
+  }, [occupationalAccidentsCategoryId])
+
+  const selectedAtEpCategory = useMemo(
+    () => getOccupationalAccidentsCategory(selectedAtEpCategoryId),
+    [selectedAtEpCategoryId],
+  )
+  const selectedAtEpRate = (selectedAtEpCategory.it_percent + selectedAtEpCategory.ims_percent) / 100
+  const contributionRatesWithAtEp = useMemo<SocialContributionRates>(() => ({
+    ...contributionRates,
+    company: {
+      ...contributionRates.company,
+      occupationalAccidents: selectedAtEpRate,
+    },
+  }), [contributionRates, selectedAtEpRate])
 
   const result = useMemo(() => {
     if (!dataAvailable || baseUsedAnnual <= 0 || grossSalaryAnnual <= 0) return null
@@ -296,12 +351,12 @@ export function WorkerSocialContributionsCard({
       contributionBaseAnnual: baseUsedAnnual,
       contributionBaseMonthly: baseUsedMonthly,
       contractType: selectedContractType,
-      rates: contributionRates,
+      rates: contributionRatesWithAtEp,
     })
   }, [
     baseUsedAnnual,
     baseUsedMonthly,
-    contributionRates,
+    contributionRatesWithAtEp,
     dataAvailable,
     grossSalaryAnnual,
     grossSalaryMonthly,
@@ -332,28 +387,28 @@ export function WorkerSocialContributionsCard({
     {
       key: 'commonContingencies',
       label: 'Contingencias comunes',
-      rate: contributionRates.worker.commonContingencies,
+      rate: contributionRatesWithAtEp.worker.commonContingencies,
       amount: result.breakdown.worker.commonContingencies,
       help: 'Cubren situaciones habituales como una baja por enfermedad común, un accidente no laboral, la maternidad, la paternidad o la jubilación. Esta cotización ayuda a financiar prestaciones que puedes necesitar a lo largo de tu vida laboral.',
     },
     {
       key: 'unemployment',
       label: 'Desempleo',
-      rate: contributionRates.worker.unemployment[selectedContractType],
+      rate: contributionRatesWithAtEp.worker.unemployment[selectedContractType],
       amount: result.breakdown.worker.unemployment,
       help: 'Sirve para financiar la prestación por paro. Gracias a esta cotización, si pierdes el trabajo y cumples los requisitos, puedes tener derecho a cobrar una ayuda mientras buscas otro empleo.',
     },
     {
       key: 'professionalTraining',
       label: 'Formacion profesional',
-      rate: contributionRates.worker.professionalTraining,
+      rate: contributionRatesWithAtEp.worker.professionalTraining,
       amount: result.breakdown.worker.professionalTraining,
       help: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
     },
     {
       key: 'mei',
       label: 'MEI',
-      rate: contributionRates.worker.mei,
+      rate: contributionRatesWithAtEp.worker.mei,
       amount: result.breakdown.worker.mei,
       help: 'Es una cotización adicional destinada a reforzar el sistema público de pensiones. No te da una prestación concreta e inmediata, pero contribuye a sostener las pensiones futuras.',
     },
@@ -363,45 +418,44 @@ export function WorkerSocialContributionsCard({
     {
       key: 'commonContingencies',
       label: 'Contingencias comunes',
-      rate: contributionRates.company.commonContingencies,
+      rate: contributionRatesWithAtEp.company.commonContingencies,
       amount: result.breakdown.company.commonContingencies,
       help: 'Cubren situaciones habituales como una baja por enfermedad común, un accidente no laboral, la maternidad, la paternidad o la jubilación. Esta cotización ayuda a financiar prestaciones que puedes necesitar a lo largo de tu vida laboral.',
     },
     {
       key: 'unemployment',
       label: 'Desempleo',
-      rate: contributionRates.company.unemployment[selectedContractType],
+      rate: contributionRatesWithAtEp.company.unemployment[selectedContractType],
       amount: result.breakdown.company.unemployment,
       help: 'Sirve para financiar la prestación por paro. Gracias a esta cotización, si pierdes el trabajo y cumples los requisitos, puedes tener derecho a cobrar una ayuda mientras buscas otro empleo.',
     },
     {
       key: 'fogasa',
       label: 'FOGASA',
-      rate: contributionRates.company.fogasa,
+      rate: contributionRatesWithAtEp.company.fogasa,
       amount: result.breakdown.company.fogasa,
       help: 'Protege al trabajador si la empresa no puede pagar salarios o indemnizaciones, por ejemplo por insolvencia o concurso. En esos casos, este fondo puede asumir parte de las cantidades pendientes.',
     },
     {
       key: 'professionalTraining',
       label: 'Formacion profesional',
-      rate: contributionRates.company.professionalTraining,
+      rate: contributionRatesWithAtEp.company.professionalTraining,
       amount: result.breakdown.company.professionalTraining,
       help: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
     },
     {
       key: 'mei',
       label: 'MEI',
-      rate: contributionRates.company.mei,
+      rate: contributionRatesWithAtEp.company.mei,
       amount: result.breakdown.company.mei,
       help: 'Es una cotización adicional destinada a reforzar el sistema público de pensiones. No te da una prestación concreta e inmediata, pero contribuye a sostener las pensiones futuras.',
     },
     {
       key: 'occupationalAccidents',
       label: 'AT/EP',
-      rate: contributionRates.company.occupationalAccidents,
+      rate: contributionRatesWithAtEp.company.occupationalAccidents,
       amount: result.breakdown.company.occupationalAccidents,
-      help: 'Cubre los accidentes de trabajo y las enfermedades profesionales. Si tienes un accidente trabajando o una enfermedad causada por tu actividad laboral, esta cotización ayuda a financiar la asistencia y las prestaciones correspondientes.',
-      muted: contributionRates.company.occupationalAccidents === 0,
+      help: `Cubre accidentes de trabajo y enfermedades profesionales. En esta calculadora se aplica la categoria seleccionada: ${selectedAtEpCategory.code} - ${selectedAtEpCategory.label}.`,
     },
   ]
 
@@ -448,6 +502,17 @@ export function WorkerSocialContributionsCard({
             <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
           </span>
         </label>
+
+        <div className="wscc-atep-select-field">
+          <AtEpCategorySelect
+            categories={AT_EP_2025_CATEGORIES}
+            value={selectedAtEpCategoryId}
+            onChange={(categoryId) => {
+              setSelectedAtEpCategoryId(categoryId)
+              onOccupationalAccidentsCategoryChange?.(categoryId)
+            }}
+          />
+        </div>
 
         <div className="wscc-segments" role="group" aria-label="Vista de importes">
           <button type="button" className={viewMode === 'annual' ? 'is-active' : ''} onClick={() => setViewMode('annual')}>
@@ -501,6 +566,24 @@ export function WorkerSocialContributionsCard({
             accent="company"
             displayMode={displayMode}
             viewMode={viewMode}
+            afterRows={
+              <div className="wscc-atep-note">
+                <span>AT/EP 2025: {formatPercent(selectedAtEpRate)}</span>
+                <p>
+                  AT/EP es la cotizacion que cubre accidentes de trabajo y enfermedades causadas por la actividad
+                  laboral. La paga la empresa y se calcula sobre la base de contingencias profesionales.
+                </p>
+                <p>
+                  El porcentaje sale de sumar dos partes:
+                  <strong> IT {formatPercent(selectedAtEpCategory.it_percent / 100)}</strong> por incapacidad temporal
+                  {' + '}
+                  <strong>IMS {formatPercent(selectedAtEpCategory.ims_percent / 100)}</strong> por incapacidad
+                  permanente, muerte y supervivencia. IT financia bajas temporales por accidente laboral o enfermedad
+                  profesional; IMS cubre situaciones mas graves o definitivas.
+                </p>
+                {selectedAtEpCategory.note && <em>{selectedAtEpCategory.note}</em>}
+              </div>
+            }
           />
         </article>
 
