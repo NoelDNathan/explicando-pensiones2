@@ -64,6 +64,12 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- El importe de «Cotizaciones trabajador» en el resumen de `WorkerSocialContributionsCard` se muestra ahora en rojo.
+
+- El importe de «Bruto despues de cotizaciones» en el resumen de `WorkerSocialContributionsCard` se muestra ahora en verde, alineado con el tono de salario neto del dashboard fiscal.
+
+- Reorganizado el toolbar de `WorkerSocialContributionsCard` con celdas de altura uniforme: etiqueta + control alineados entre base, contrato, AT/EP y vista anual/mensual. El selector AT/EP usa layout compacto en una sola fila dentro del trigger.
+
 - Sustituido el `<select>` nativo de AT/EP por `AtEpCategorySelect`: combobox con busqueda integrada y pildoras de color para IT (azul), IMS (violeta) y Total (naranja) dentro del selector y de cada opcion al filtrar.
 
 - El desplegable de actividad AT/EP en `WorkerSocialContributionsCard` muestra ahora IT, IMS y total por opcion, ademas del codigo y la etiqueta de la categoria.

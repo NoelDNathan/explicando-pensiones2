@@ -478,35 +478,40 @@ export function WorkerSocialContributionsCard({
       </header>
 
       <div className="wscc-toolbar">
-        <div className="wscc-base-note">
-          <span>Base usada para cotizar</span>
-          <strong>{formatEuro(baseDisplay)} {modeSuffix}</strong>
-          <em>{selectedContributionGroup}</em>
+        <div className="wscc-toolbar-cell wscc-toolbar-cell--base">
+          <div className="wscc-base-note">
+            <span>Base usada para cotizar</span>
+            <strong>{formatEuro(baseDisplay)} {modeSuffix}</strong>
+            <em>{selectedContributionGroup}</em>
+          </div>
         </div>
 
-        <label className="wscc-select-field">
-          <span>Contrato</span>
-          <span className="wscc-select-shell">
-            <select
-              value={selectedContractType}
-              onChange={(event) => {
-                const nextContractType = event.target.value as WorkerContractType
-                setSelectedContractType(nextContractType)
-                onContractTypeChange?.(nextContractType)
-              }}
-            >
-              {Object.entries(contractLabels).map(([value, label]) => (
-                <option key={value} value={value}>{label}</option>
-              ))}
-            </select>
-            <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
-          </span>
-        </label>
+        <div className="wscc-toolbar-cell">
+          <label className="wscc-select-field">
+            <span>Contrato</span>
+            <span className="wscc-select-shell">
+              <select
+                value={selectedContractType}
+                onChange={(event) => {
+                  const nextContractType = event.target.value as WorkerContractType
+                  setSelectedContractType(nextContractType)
+                  onContractTypeChange?.(nextContractType)
+                }}
+              >
+                {Object.entries(contractLabels).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+              <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" />
+            </span>
+          </label>
+        </div>
 
-        <div className="wscc-atep-select-field">
+        <div className="wscc-toolbar-cell">
           <AtEpCategorySelect
             categories={AT_EP_2025_CATEGORIES}
             value={selectedAtEpCategoryId}
+            layout="compact"
             onChange={(categoryId) => {
               setSelectedAtEpCategoryId(categoryId)
               onOccupationalAccidentsCategoryChange?.(categoryId)
@@ -514,13 +519,16 @@ export function WorkerSocialContributionsCard({
           />
         </div>
 
-        <div className="wscc-segments" role="group" aria-label="Vista de importes">
-          <button type="button" className={viewMode === 'annual' ? 'is-active' : ''} onClick={() => setViewMode('annual')}>
-            Anual
-          </button>
-          <button type="button" className={viewMode === 'monthly' ? 'is-active' : ''} onClick={() => setViewMode('monthly')}>
-            Mensual
-          </button>
+        <div className="wscc-toolbar-cell wscc-toolbar-cell--segments">
+          <span className="wscc-toolbar-spacer" aria-hidden="true"></span>
+          <div className="wscc-segments" role="group" aria-label="Vista de importes">
+            <button type="button" className={viewMode === 'annual' ? 'is-active' : ''} onClick={() => setViewMode('annual')}>
+              Anual
+            </button>
+            <button type="button" className={viewMode === 'monthly' ? 'is-active' : ''} onClick={() => setViewMode('monthly')}>
+              Mensual
+            </button>
+          </div>
         </div>
 
       </div>
@@ -598,7 +606,7 @@ export function WorkerSocialContributionsCard({
           </div>
           <div className="wscc-summary__item">
             <span>Bruto despues de cotizaciones</span>
-            <strong>{formatEuro(salaryAfterDisplay)}</strong>
+            <strong className="wscc-summary__after-contributions">{formatEuro(salaryAfterDisplay)}</strong>
           </div>
           <div className="wscc-summary__divider" aria-hidden="true"></div>
           <div className="wscc-summary__item">

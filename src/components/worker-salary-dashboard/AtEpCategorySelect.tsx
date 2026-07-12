@@ -19,6 +19,7 @@ type AtEpCategorySelectProps = {
   onChange: (categoryId: string) => void
   label?: string
   disabled?: boolean
+  layout?: 'default' | 'compact'
 }
 
 function normalizeSearchText(value: string) {
@@ -35,11 +36,17 @@ function matchesCategoryQuery(category: OccupationalAccidentsCategory, query: st
   return haystack.includes(query)
 }
 
-function AtEpRatePills({ category }: { category: OccupationalAccidentsCategory }) {
+function AtEpRatePills({
+  category,
+  compact = false,
+}: {
+  category: OccupationalAccidentsCategory
+  compact?: boolean
+}) {
   const totalPercent = category.it_percent + category.ims_percent
 
   return (
-    <span className="atep-select__rates" aria-hidden="true">
+    <span className={`atep-select__rates${compact ? ' atep-select__rates--compact' : ''}`} aria-hidden="true">
       <span className="atep-select__rate atep-select__rate--it">
         <span>IT</span>
         <strong>{formatPercent(category.it_percent / 100)}</strong>
@@ -56,14 +63,20 @@ function AtEpRatePills({ category }: { category: OccupationalAccidentsCategory }
   )
 }
 
-function AtEpCategoryPreview({ category }: { category: OccupationalAccidentsCategory }) {
+function AtEpCategoryPreview({
+  category,
+  compact = false,
+}: {
+  category: OccupationalAccidentsCategory
+  compact?: boolean
+}) {
   return (
-    <span className="atep-select__preview">
+    <span className={`atep-select__preview${compact ? ' atep-select__preview--compact' : ''}`}>
       <span className="atep-select__identity">
         <span className="atep-select__code">{category.code}</span>
-        <span className="atep-select__label">{category.label}</span>
+        <span className="atep-select__name">{category.label}</span>
       </span>
-      <AtEpRatePills category={category} />
+      <AtEpRatePills category={category} compact={compact} />
     </span>
   )
 }
@@ -74,6 +87,7 @@ export function AtEpCategorySelect({
   onChange,
   label = 'Actividad AT/EP',
   disabled = false,
+  layout = 'default',
 }: AtEpCategorySelectProps) {
   const listboxId = useId()
   const rootRef = useRef<HTMLDivElement>(null)
@@ -161,10 +175,10 @@ export function AtEpCategorySelect({
 
   return (
     <div
-      className={`atep-select${isOpen ? ' atep-select--open' : ''}${disabled ? ' atep-select--disabled' : ''}`}
+      className={`atep-select${layout === 'compact' ? ' atep-select--compact' : ''}${isOpen ? ' atep-select--open' : ''}${disabled ? ' atep-select--disabled' : ''}`}
       ref={rootRef}
     >
-      <span className="atep-select__label" id={`${listboxId}-label`}>
+      <span className="atep-select__field-label" id={`${listboxId}-label`}>
         {label}
       </span>
 
@@ -183,7 +197,11 @@ export function AtEpCategorySelect({
         }}
         onKeyDown={handleTriggerKeyDown}
       >
-        {selectedCategory ? <AtEpCategoryPreview category={selectedCategory} /> : <span>Selecciona actividad</span>}
+        {selectedCategory ? (
+          <AtEpCategoryPreview category={selectedCategory} compact={layout === 'compact'} />
+        ) : (
+          <span>Selecciona actividad</span>
+        )}
         <ChevronDown size={18} strokeWidth={2.4} aria-hidden="true" className="atep-select__chevron" />
       </button>
 
