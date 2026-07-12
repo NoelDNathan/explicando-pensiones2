@@ -226,7 +226,8 @@
 .wfsc-help {
   position: relative;
   display: grid;
-  align-content: start;
+  align-content: center;
+  align-self: center;
   gap: 0;
   min-width: 0;
   padding: clamp(14px, 1.4vw, 22px);
@@ -700,6 +701,12 @@
   .wfsc-hero {
     grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  .wfsc-help {
+    align-self: center;
+    width: min(100%, 682px);
+    justify-self: center;
   }
 
   .wfsc-description {

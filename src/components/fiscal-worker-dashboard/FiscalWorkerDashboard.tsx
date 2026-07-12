@@ -709,15 +709,19 @@ export function FiscalWorkerDashboard() {
           />
         )
       case 4:
+      case 5:
         return (
           <WorkerPersonalReductionsCard
+            focus={activeWorkerStepId === 4 ? 'reductions' : 'deductions-benefits'}
+            stepNumber={activeWorkerStepId}
+            totalSteps={9}
             initialChildren={selectedChildren}
             initialAscendants={selectedAscendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
             onResultChange={handlePersonalResultChange}
           />
         )
-      case 5: {
+      case 6: {
         const regionOptions = (taxYear === '2005' ? ['madrid'] : autonomicCoverage.scope.included_territories).map(
           (item) => ({ value: item, label: REGION_LABELS[item] ?? item }),
         )
@@ -749,12 +753,12 @@ export function FiscalWorkerDashboard() {
           </div>
         )
       }
-      case 6:
+      case 7:
         return (
           <section className="fwd-net-step" aria-labelledby="fwd-net-step-title">
             <header className="fwd-net-step__header">
               <div>
-                <span>6.</span>
+                <span>7.</span>
                 <h2 id="fwd-net-step-title">Salario neto</h2>
               </div>
               <p>Aqui ves el dinero que llega a tu bolsillo por tu trabajo: bruto menos cotizaciones del trabajador e IRPF. IVA y otros impuestos van aparte porque dependen de como gastas.</p>
@@ -762,14 +766,14 @@ export function FiscalWorkerDashboard() {
             <FiscalKpiRow className="fwd-kpis fwd-kpis--net-step" items={fiscalKpiItems} />
           </section>
         )
-      case 7:
+      case 8:
         return (
           <WorkerConsumptionTaxesCard
             initialBudgetAnnual={result.annualConsumption}
             onResultChange={setConsumptionTaxes}
           />
         )
-      case 8:
+      case 9:
         return (
           <section className="fwd-faq-step" aria-labelledby="fwd-faq-step-title">
             <header className="fwd-faq-step__header">

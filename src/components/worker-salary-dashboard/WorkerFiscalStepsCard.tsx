@@ -4,6 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
+  Gift,
   Scale,
   Shield,
   ShoppingCart,
@@ -240,10 +241,11 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
     2: formatPayrollNumber(contributionBaseMonthly),
     3: formatPayrollNumber(workerContributionsMonthly),
     4: formatPayrollNumber(grossMonthly),
-    5: formatPayrollNumber(irpfMonthly),
-    6: formatPayrollNumber(netMonthly),
-    7: `${formatPayrollNumber(netMonthly)}#`,
+    5: '',
+    6: formatPayrollNumber(irpfMonthly),
+    7: formatPayrollNumber(netMonthly),
     8: `${formatPayrollNumber(netMonthly)}#`,
+    9: `${formatPayrollNumber(netMonthly)}#`,
   }
 
   return {
@@ -325,42 +327,62 @@ Además, esta base también influye en futuras prestaciones. Por ejemplo, puede 
   },
   {
     id: 4,
-    title: 'Reducciones',
-    subtitle: 'Datos personales que ajustan el IRPF',
-    description: `En el IRPF hay varias formas de pagar menos impuestos, pero no todas funcionan igual. Las más importantes son las reducciones, las deducciones y algunos beneficios en especie que pueden estar exentos total o parcialmente.
+    title: 'Reducciones y minimos',
+    subtitle: 'Datos personales que reducen la base del IRPF',
+    description: `En el IRPF hay varias formas de pagar menos impuestos, pero no todas funcionan igual. Las reducciones actuan antes de calcular la cuota: bajan la cantidad de dinero sobre la que Hacienda aplica los porcentajes del IRPF.
 
-Una reducción baja la cantidad de dinero sobre la que Hacienda calcula el impuesto. Es decir, antes de aplicar los porcentajes del IRPF, se resta una parte de tu renta. Por eso se dice que una reducción afecta a la base imponible o a la base liquidable.
+Por eso se dice que una reduccion afecta a la base imponible o a la base liquidable. No te devuelve directamente ese importe, sino que hace que el impuesto se calcule sobre una cantidad menor.
 
-Por ejemplo, imagina que tienes una base de 30.000 €. Si puedes aplicar una reducción de 2.000 €, Hacienda ya no calcula el impuesto sobre 30.000 €, sino sobre 28.000 €. La reducción no te devuelve directamente 2.000 €, sino que hace que el impuesto se calcule sobre una cantidad menor.
+Por ejemplo, imagina que tienes una base de 30.000 €. Si puedes aplicar una reduccion de 2.000 €, Hacienda ya no calcula el impuesto sobre 30.000 €, sino sobre 28.000 €.
 
-Una deducción, en cambio, actúa más tarde. Primero se calcula cuánto impuesto te tocaría pagar y, después, la deducción resta directamente una parte de ese impuesto.
+Los minimos personales y familiares son un caso especial de reduccion. Intentan dejar fuera de tributacion una parte de tu renta por necesidades basicas: tu propio minimo, el de tu pareja si tributais conjuntamente y el de cada descendiente o ascendiente que cumpla requisitos de convivencia, edad, discapacidad o dependencia economica.
 
-Por ejemplo, si después de hacer todos los cálculos te sale que tienes que pagar 4.000 € de IRPF, y tienes una deducción de 300 €, entonces pagarías 3.700 €. Aquí la deducción sí baja directamente la cuota final.
+Tambien existen otras reducciones de base, como las de planes de pensiones, mutualidades, pension compensatoria o tributacion conjunta. Todas comparten la misma logica: actuan antes de repartir la renta entre tramos.
 
-La diferencia clave es esta: la reducción baja la base antes de calcular el impuesto; la deducción baja el impuesto una vez ya calculado.
-
-Además de esto, existe el salario en especie, que son beneficios que te da la empresa en lugar de pagártelos directamente como dinero. Por ejemplo, una tarjeta comida, una tarjeta transporte, un seguro médico o una ayuda de guardería.
-
-A nivel práctico, algunos de estos beneficios funcionan de forma parecida a una reducción, porque hacen que una parte de lo que recibes no tribute en IRPF. No es exactamente una reducción técnica, porque no se aplica como una reducción general de la base, sino beneficio por beneficio. Pero el efecto para ti puede ser parecido: baja la parte de tu salario que acaba pagando impuestos.
-
-Por ejemplo, no es lo mismo que la empresa te pague 150 € más en nómina que recibir 150 € en tarjeta comida. Si esos 150 € cumplen los requisitos fiscales, una parte puede quedar exenta y no sumarse como salario normal para calcular el IRPF.
-
-El fundamento es bastante sencillo: Hacienda permite ciertos beneficios porque entiende que cubren gastos relacionados con el trabajo o con necesidades habituales del trabajador. Por ejemplo, comer durante la jornada laboral, desplazarte al trabajo, tener cobertura médica o facilitar la conciliación familiar. Por eso existen límites: la ventaja fiscal no está pensada para convertir todo el salario en beneficios exentos, sino para cubrir importes razonables.
-
-Algunos límites habituales son estos: la tarjeta comida puede estar exenta hasta 11 € diarios si cumple los requisitos; el transporte público colectivo puede estar exento con un límite de 1.500 € al año y, en tarjetas o medios electrónicos, con un máximo mensual de 136,36 €; el seguro médico pagado por la empresa puede estar exento hasta 500 € al año por persona cubierta, o 1.500 € si la persona tiene discapacidad; y ciertos servicios educativos o de guardería también pueden tener tratamiento favorable si cumplen las condiciones legales`,
+La diferencia con las deducciones y con el salario en especie la veras en el paso siguiente. Aqui lo importante es que las reducciones cambian la base sobre la que entran los tramos del IRPF.`,
     checklist: [],
-    helpTitle: 'Reduccion o deduccion?',
-    helpBody: 'Una reduccion baja la base sobre la que se calcula el impuesto. Una deduccion baja directamente el impuesto final si cumples sus condiciones.',
+    helpTitle: 'Que es una reduccion?',
+    helpBody: 'Una reduccion baja la base sobre la que se calcula el impuesto, antes de aplicar los tramos del IRPF.',
     details: [
       'Los minimos personales y familiares intentan dejar una parte de renta fuera de tributacion por necesidades basicas.',
       'Las reducciones se aplican antes de calcular la cuota; por eso cambian la base que entra en los tramos.',
-      'Las deducciones se revisan al final y dependen mucho de requisitos, ejercicio fiscal y comunidad autonoma.',
+      'Convivencia, edad, discapacidad y rentas propias pueden hacer que un familiar compute o quede fuera.',
     ],
     important: 'Dos personas con el mismo salario pueden pagar IRPF distinto por su situacion personal y comunidad.',
     Icon: UserRound,
   },
   {
     id: 5,
+    title: 'Deducciones y salario en especie',
+    subtitle: 'Ajustes sobre la cuota y beneficios exentos',
+    description: `Una deduccion actua mas tarde que una reduccion. Primero se calcula cuanto impuesto te tocaria pagar y, despues, la deduccion resta directamente una parte de ese impuesto.
+
+Por ejemplo, si despues de hacer todos los calculos te sale que tienes que pagar 4.000 € de IRPF, y tienes una deduccion de 300 €, entonces pagarias 3.700 €. Aqui la deduccion si baja directamente la cuota final.
+
+La diferencia clave es esta: la reduccion baja la base antes de calcular el impuesto; la deduccion baja el impuesto una vez ya calculado.
+
+Ademas de esto, existe el salario en especie, que son beneficios que te da la empresa en lugar de pagartelos directamente como dinero. Por ejemplo, una tarjeta comida, una tarjeta transporte, un seguro medico o una ayuda de guarderia.
+
+A nivel practico, algunos de estos beneficios funcionan de forma parecida a una reduccion, porque hacen que una parte de lo que recibes no tribute en IRPF. No es exactamente una reduccion tecnica, porque no se aplica como una reduccion general de la base, sino beneficio por beneficio. Pero el efecto para ti puede ser parecido: baja la parte de tu salario que acaba pagando impuestos.
+
+Por ejemplo, no es lo mismo que la empresa te pague 150 € mas en nomina que recibir 150 € en tarjeta comida. Si esos 150 € cumplen los requisitos fiscales, una parte puede quedar exenta y no sumarse como salario normal para calcular el IRPF.
+
+Hacienda permite ciertos beneficios porque entiende que cubren gastos relacionados con el trabajo o con necesidades habituales del trabajador. Por eso existen limites: la ventaja fiscal no esta pensada para convertir todo el salario en beneficios exentos, sino para cubrir importes razonables.
+
+Algunos limites habituales son estos: la tarjeta comida puede estar exenta hasta 11 € diarios si cumple los requisitos; el transporte publico colectivo puede estar exento con un limite de 1.500 € al ano y, en tarjetas o medios electronicos, con un maximo mensual de 136,36 €; el seguro medico pagado por la empresa puede estar exento hasta 500 € al ano por persona cubierta, o 1.500 € si la persona tiene discapacidad; y ciertos servicios educativos o de guarderia tambien pueden tener tratamiento favorable si cumplen las condiciones legales.`,
+    checklist: [],
+    helpTitle: 'Deduccion o beneficio exento?',
+    helpBody: 'Las deducciones bajan la cuota final del impuesto. Los beneficios en especie pueden quedar exentos si cumplen requisitos y limites legales.',
+    details: [
+      'Las deducciones se revisan al final y dependen mucho de requisitos, ejercicio fiscal y comunidad autonoma.',
+      'El salario en especie no siempre reduce la base: cada beneficio se trata por separado segun su regimen.',
+      'Los limites exentos impiden usar retribuciones en especie como sustituto total del salario en efectivo.',
+    ],
+    important: 'Un beneficio en especie puede no tributar aunque no sea tecnicamente una deduccion ni una reduccion.',
+    Icon: Gift,
+  },
+  {
+    id: 6,
     title: 'IRPF por tramos',
     subtitle: 'El IRPF no aplica un unico porcentaje',
     description: `La base liquidable es la cantidad final sobre la que se aplican los tramos del IRPF. No suele coincidir con tu salario bruto, porque antes se restan las reducciones permitidas por la ley. A partir de esta base se calcula qué parte de tu renta entra en cada tramo y qué porcentaje paga cada una.
@@ -382,7 +404,7 @@ Estar en un tramo alto no significa que toda tu renta tribute a ese porcentaje. 
     Icon: BarChart3,
   },
   {
-    id: 6,
+    id: 7,
     title: 'Salario neto',
     subtitle: 'Bruto menos descuentos de nomina',
     description: 'El salario neto es lo que queda de tu trabajo despues de restar cotizaciones del trabajador e IRPF.',
@@ -398,7 +420,7 @@ Estar en un tramo alto no significa que toda tu renta tribute a ese porcentaje. 
     Icon: WalletCards,
   },
   {
-    id: 7,
+    id: 8,
     title: 'IVA y otros impuestos',
     subtitle: 'Impuestos que dependen de tu gasto',
     description: `El IRPF y la Seguridad Social están ligados a tu salario, pero no son los únicos impuestos que pagas.
@@ -424,7 +446,7 @@ Idea clave: dos personas con el mismo sueldo pueden pagar impuestos totales dist
     Icon: ShoppingCart,
   },
   {
-    id: 8,
+    id: 9,
     title: 'Preguntas frecuentes',
     subtitle: 'Resuelve dudas antes de leer el resultado',
     description: 'Cierra el recorrido con respuestas rapidas a las dudas mas habituales: que se descuenta de la nomina, que paga la empresa y que queda fuera del salario neto.',
@@ -490,24 +512,29 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
   4: {
     resultLabel: 'BASE IRPF',
     resultValue: '1.750,00',
-    highlightRows: ['in-kind', 'irpf', 'irpf-withholding'],
+    highlightRows: ['irpf-base', 'irpf'],
   },
   5: {
+    resultLabel: 'BASE IRPF ESPECIE',
+    resultValue: '',
+    highlightRows: ['in-kind'],
+  },
+  6: {
     resultLabel: 'RETENCION IRPF',
     resultValue: '210,00',
     highlightRows: ['irpf', 'irpf-withholding'],
   },
-  6: {
+  7: {
     resultLabel: 'LIQUIDO TOTAL',
     resultValue: '1.426,24',
     highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'deductions-total', 'net-pay'],
   },
-  7: {
+  8: {
     resultLabel: 'IMPORTE',
     resultValue: '1.426,24#',
     highlightRows: ['net-pay'],
   },
-  8: {
+  9: {
     resultLabel: 'IMPORTE',
     resultValue: '1.426,24#',
     highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'net-pay'],
@@ -672,8 +699,8 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const descriptionParagraphs = activeDescription.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   const progress = useMemo(() => activeStep.id / WORKER_FISCAL_STEPS.length * 100, [activeStep.id])
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 8
-  const isCompactStep = activeStep.id === 8
+  const showPayrollHelp = activeStep.id !== 9
+  const isCompactStep = activeStep.id === 9
 
   const setActiveStep = (nextStepId: number) => {
     const clampedStepId = Math.min(WORKER_FISCAL_STEPS.length, Math.max(1, nextStepId))

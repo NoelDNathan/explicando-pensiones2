@@ -66,6 +66,9 @@ type DeductionKey =
   | 'regionalDeductions'
 
 type WorkerPersonalReductionsCardProps = {
+  focus?: 'reductions' | 'deductions-benefits'
+  stepNumber?: number
+  totalSteps?: number
   initialChildren?: number
   initialDisabilityPercent?: DisabilityPercent
   initialMaritalStatus?: MaritalStatus
@@ -504,12 +507,21 @@ function createDependentProfiles(count: number, type: 'descendant' | 'ascendant'
 }
 
 export function WorkerPersonalReductionsCard({
+  focus = 'reductions',
+  stepNumber = 4,
+  totalSteps = 9,
   initialChildren = 1,
   initialDisabilityPercent = 0,
   initialMaritalStatus = 'married',
   initialAscendants = 0,
   onResultChange,
 }: WorkerPersonalReductionsCardProps) {
+  const showReductionsSection = focus === 'reductions'
+  const showDeductionsSection = focus === 'deductions-benefits'
+  const stepTitle = showReductionsSection ? 'Reducciones y minimo familiar' : 'Deducciones y salario en especie'
+  const stepDescription = showReductionsSection
+    ? 'Detalla quien convive contigo y que requisitos cumple antes de llevarlo al IRPF.'
+    : 'Indica deducciones de cuota y beneficios en especie que pueden quedar exentos o tributar de forma distinta.'
   const [children, setChildren] = useState(String(initialChildren))
   const [disabilityPercent, setDisabilityPercent] = useState(String(initialDisabilityPercent))
   const [taxpayerAssistance, setTaxpayerAssistance] = useState('no')
@@ -689,122 +701,140 @@ export function WorkerPersonalReductionsCard({
   const explainedQuotaFinal = Math.max(0, explainedQuotaBeforeDeductions - result.deductionsTotal)
 
   return (
-    <section className="wprc" aria-labelledby="wprc-title">
+    <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
       <div className="wprc-hero">
         <header className="wprc-header">
-          <div className="wprc-step-orb" aria-hidden="true">4</div>
+          <div className="wprc-step-orb" aria-hidden="true">{stepNumber}</div>
           <div className="wprc-title">
-            <span>Paso 4 de 8</span>
-            <h2 id="wprc-title">Reducciones y minimo familiar</h2>
-            <p>Detalla quien convive contigo y que requisitos cumple antes de llevarlo al IRPF.</p>
+            <span>Paso {stepNumber} de {totalSteps}</span>
+            <h2 id="wprc-title">{stepTitle}</h2>
+            <p>{stepDescription}</p>
           </div>
         </header>
 
-        <aside className="wprc-hero-panel" aria-label="Resumen de requisitos">
-          <h3>En el IRPF: que estoy viendo?</h3>
-          <ul>
-            <li><CheckCircle2 aria-hidden="true" /> Convive contigo o depende economicamente.</li>
-            <li><CheckCircle2 aria-hidden="true" /> No tiene rentas propias relevantes.</li>
-            <li><CheckCircle2 aria-hidden="true" /> No presenta declaracion que impida aplicar el minimo.</li>
-          </ul>
-          <strong>{formatEuro(familyMinimumPreview)}</strong>
-          <span>Minimo familiar orientativo segun los campos seleccionados.</span>
-        </aside>
+        {showReductionsSection ? (
+          <aside className="wprc-hero-panel" aria-label="Resumen de requisitos">
+            <h3>En el IRPF: que estoy viendo?</h3>
+            <ul>
+              <li><CheckCircle2 aria-hidden="true" /> Convive contigo o depende economicamente.</li>
+              <li><CheckCircle2 aria-hidden="true" /> No tiene rentas propias relevantes.</li>
+              <li><CheckCircle2 aria-hidden="true" /> No presenta declaracion que impida aplicar el minimo.</li>
+            </ul>
+            <strong>{formatEuro(familyMinimumPreview)}</strong>
+            <span>Minimo familiar orientativo segun los campos seleccionados.</span>
+          </aside>
+        ) : (
+          <aside className="wprc-hero-panel" aria-label="Resumen de deducciones y beneficios">
+            <h3>Que ocurre despues de calcular la cuota?</h3>
+            <ul>
+              <li><CheckCircle2 aria-hidden="true" /> Las deducciones restan directamente del impuesto calculado.</li>
+              <li><CheckCircle2 aria-hidden="true" /> Los beneficios en especie se revisan uno a uno.</li>
+              <li><CheckCircle2 aria-hidden="true" /> Cada beneficio puede quedar exento, tributar parcialmente o revisarse.</li>
+            </ul>
+            <strong>{formatEuro(result.deductionsTotal)}</strong>
+            <span>Deducciones orientativas segun los campos seleccionados.</span>
+          </aside>
+        )}
       </div>
 
-      <div className="wprc-flow" aria-label="Resumen de personas dependientes">
-        <article>
-          <span>{eligibleDescendants.length}</span>
-          <p>Descendientes que computan</p>
-        </article>
-        <article>
-          <span>{result.childrenUnder3}</span>
-          <p>Menores de 3 anos</p>
-        </article>
-        <article>
-          <span>{eligibleAscendants.length}</span>
-          <p>Ascendientes que computan</p>
-        </article>
-        <article>
-          <span>{formatEuro(result.dependentDisabilityMinimum)}</span>
-          <p>Minimo por discapacidad dependiente</p>
-        </article>
-      </div>
+      {showReductionsSection ? (
+        <>
+          <div className="wprc-flow" aria-label="Resumen de personas dependientes">
+            <article>
+              <span>{eligibleDescendants.length}</span>
+              <p>Descendientes que computan</p>
+            </article>
+            <article>
+              <span>{result.childrenUnder3}</span>
+              <p>Menores de 3 anos</p>
+            </article>
+            <article>
+              <span>{eligibleAscendants.length}</span>
+              <p>Ascendientes que computan</p>
+            </article>
+            <article>
+              <span>{formatEuro(result.dependentDisabilityMinimum)}</span>
+              <p>Minimo por discapacidad dependiente</p>
+            </article>
+          </div>
 
-      <section className="wprc-minimum-panel" aria-labelledby="wprc-minimum-title">
-        <div>
-          <h3 id="wprc-minimum-title">Minimo por descendientes</h3>
-          <p>Los importes suben con el numero de hijos que cumplen requisitos.</p>
-        </div>
-        <ol>
-          {descendantMinimums.map((amount, index) => (
-            <li className={index < eligibleDescendants.length ? 'is-active' : ''} key={amount}>
-              <span>{index + 1}</span>
-              <strong>{formatEuro(amount)}</strong>
-            </li>
-          ))}
-        </ol>
-      </section>
+          <section className="wprc-minimum-panel" aria-labelledby="wprc-minimum-title">
+            <div>
+              <h3 id="wprc-minimum-title">Minimo por descendientes</h3>
+              <p>Los importes suben con el numero de hijos que cumplen requisitos.</p>
+            </div>
+            <ol>
+              {descendantMinimums.map((amount, index) => (
+                <li className={index < eligibleDescendants.length ? 'is-active' : ''} key={amount}>
+                  <span>{index + 1}</span>
+                  <strong>{formatEuro(amount)}</strong>
+                </li>
+              ))}
+            </ol>
+          </section>
 
-      <div className="wprc-top-grid" aria-label="Situacion personal">
-        <TopField
-          icon={UsersRound}
-          label="Descendientes"
-          value={children}
-          options={countOptions}
-          onChange={setChildren}
-        />
-        <TopField
-          icon={HandHeart}
-          label="Ascendientes"
-          value={ascendants}
-          options={ascendantCountOptions}
-          onChange={setAscendants}
-        />
-        <TopField
-          icon={Accessibility}
-          label="Tu discapacidad"
-          value={disabilityPercent}
-          options={disabilityOptions}
-          onChange={setDisabilityPercent}
-        />
-        <TopField
-          icon={HandHeart}
-          label="Ayuda o movilidad"
-          value={taxpayerAssistance}
-          options={yesNoOptions}
-          onChange={setTaxpayerAssistance}
-        />
-        <TopField
-          icon={Heart}
-          label="Estado civil"
-          value={maritalStatus}
-          options={maritalOptions}
-          onChange={(value) => setMaritalStatus(value as MaritalStatus)}
-        />
-      </div>
+          <div className="wprc-top-grid" aria-label="Situacion personal">
+            <TopField
+              icon={UsersRound}
+              label="Descendientes"
+              value={children}
+              options={countOptions}
+              onChange={setChildren}
+            />
+            <TopField
+              icon={HandHeart}
+              label="Ascendientes"
+              value={ascendants}
+              options={ascendantCountOptions}
+              onChange={setAscendants}
+            />
+            <TopField
+              icon={Accessibility}
+              label="Tu discapacidad"
+              value={disabilityPercent}
+              options={disabilityOptions}
+              onChange={setDisabilityPercent}
+            />
+            <TopField
+              icon={HandHeart}
+              label="Ayuda o movilidad"
+              value={taxpayerAssistance}
+              options={yesNoOptions}
+              onChange={setTaxpayerAssistance}
+            />
+            <TopField
+              icon={Heart}
+              label="Estado civil"
+              value={maritalStatus}
+              options={maritalOptions}
+              onChange={(value) => setMaritalStatus(value as MaritalStatus)}
+            />
+          </div>
 
-      <div className="wprc-dependent-grid">
-        <DependentEditor
-          type="descendant"
-          title="Detalle de descendientes"
-          profiles={descendantProfiles}
-          count={Number(children)}
-          onChange={updateDescendant}
-        />
-        <DependentEditor
-          type="ascendant"
-          title="Detalle de ascendientes"
-          profiles={ascendantProfiles}
-          count={Number(ascendants)}
-          onChange={updateAscendant}
-        />
-      </div>
+          <div className="wprc-dependent-grid">
+            <DependentEditor
+              type="descendant"
+              title="Detalle de descendientes"
+              profiles={descendantProfiles}
+              count={Number(children)}
+              onChange={updateDescendant}
+            />
+            <DependentEditor
+              type="ascendant"
+              title="Detalle de ascendientes"
+              profiles={ascendantProfiles}
+              count={Number(ascendants)}
+              onChange={updateAscendant}
+            />
+          </div>
+        </>
+      ) : null}
 
-      <BenefitGrid />
+      {showDeductionsSection ? <BenefitGrid /> : null}
 
       <div className="wprc-panels">
-        <article className="wprc-panel wprc-panel--reductions">
+        {showReductionsSection ? (
+          <article className="wprc-panel wprc-panel--reductions">
           <div className="wprc-panel-heading">
             <span className="wprc-panel-icon" aria-hidden="true">
               <TrendingDown />
@@ -890,7 +920,9 @@ export function WorkerPersonalReductionsCard({
             />
           </div>
         </article>
+        ) : null}
 
+        {showDeductionsSection ? (
         <article className="wprc-panel wprc-panel--deductions">
           <div className="wprc-panel-heading">
             <span className="wprc-panel-icon" aria-hidden="true">
@@ -977,40 +1009,55 @@ export function WorkerPersonalReductionsCard({
             />
           </div>
         </article>
+        ) : null}
       </div>
 
+      {showReductionsSection || showDeductionsSection ? (
       <section className="wprc-explained" aria-labelledby="wprc-explained-title">
         <div>
           <h3 id="wprc-explained-title">Resultado explicado</h3>
-          <p>Las reducciones bajan la base; las deducciones se restan despues del impuesto calculado.</p>
+          <p>
+            {showReductionsSection
+              ? 'Las reducciones bajan la base antes de calcular el impuesto.'
+              : 'Las deducciones se restan despues del impuesto calculado.'}
+          </p>
         </div>
         <dl>
-          <div>
-            <dt>Base inicial</dt>
-            <dd>{formatEuro(explainedBaseInitial)}</dd>
-          </div>
-          <div className="is-minus">
-            <dt>Reducciones aplicadas</dt>
-            <dd>- {formatEuro(result.reductionsTotal)}</dd>
-          </div>
-          <div className="is-result">
-            <dt>Base liquidable</dt>
-            <dd>{formatEuro(explainedBaseLiquidable)}</dd>
-          </div>
-          <div>
-            <dt>Cuota antes de deducciones</dt>
-            <dd>{formatEuro(explainedQuotaBeforeDeductions)}</dd>
-          </div>
-          <div className="is-minus">
-            <dt>Deducciones aplicadas</dt>
-            <dd>- {formatEuro(result.deductionsTotal)}</dd>
-          </div>
-          <div className="is-result">
-            <dt>Cuota final estimada</dt>
-            <dd>{formatEuro(explainedQuotaFinal)}</dd>
-          </div>
+          {showReductionsSection ? (
+            <>
+              <div>
+                <dt>Base inicial</dt>
+                <dd>{formatEuro(explainedBaseInitial)}</dd>
+              </div>
+              <div className="is-minus">
+                <dt>Reducciones aplicadas</dt>
+                <dd>- {formatEuro(result.reductionsTotal)}</dd>
+              </div>
+              <div className="is-result">
+                <dt>Base liquidable</dt>
+                <dd>{formatEuro(explainedBaseLiquidable)}</dd>
+              </div>
+            </>
+          ) : null}
+          {showDeductionsSection ? (
+            <>
+              <div>
+                <dt>Cuota antes de deducciones</dt>
+                <dd>{formatEuro(explainedQuotaBeforeDeductions)}</dd>
+              </div>
+              <div className="is-minus">
+                <dt>Deducciones aplicadas</dt>
+                <dd>- {formatEuro(result.deductionsTotal)}</dd>
+              </div>
+              <div className="is-result">
+                <dt>Cuota final estimada</dt>
+                <dd>{formatEuro(explainedQuotaFinal)}</dd>
+              </div>
+            </>
+          ) : null}
         </dl>
       </section>
+      ) : null}
 
       <footer className="wprc-summary">
         <span className="wprc-summary-icon" aria-hidden="true">
@@ -1020,16 +1067,20 @@ export function WorkerPersonalReductionsCard({
           <p>Estos ajustes se aplicaran en el calculo del IRPF.</p>
           <span>Revisa tus datos para obtener un calculo mas preciso.</span>
         </div>
+        {showReductionsSection ? (
         <output className="wprc-total wprc-total--reductions" aria-label="Total reducciones">
           <TrendingDown aria-hidden="true" />
           <span>Total reducciones</span>
           <strong>{formatEuro(result.reductionsTotal)}</strong>
         </output>
+        ) : null}
+        {showDeductionsSection ? (
         <output className="wprc-total wprc-total--deductions" aria-label="Total deducciones">
           <Percent aria-hidden="true" />
           <span>Total deducciones</span>
           <strong>{formatEuro(result.deductionsTotal)}</strong>
         </output>
+        ) : null}
       </footer>
     </section>
   )
