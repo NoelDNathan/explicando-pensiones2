@@ -59,6 +59,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Destacado tambien «Coste total empresa» en `WorkerSocialContributionsCard`: borde, fondo y texto naranja con mayor peso visual, por debajo del total de cotizaciones en rojo.
+
+- Reordenado el resumen de `WorkerSocialContributionsCard`: «Coste total cotizaciones» arriba con texto rojo y mas destaque; «Coste total empresa» debajo.
+
 - Eliminado el aspecto escalonado del paso 3 (`WorkerSocialContributionsCard`): las columnas Trabajador, Empresa y Resumen no alineaban sus cajas "Total" ni sus bordes inferiores al tener distinto numero de filas. Ahora `.wscc-panel` es flex en columna, `.wscc-lines` usa `flex: 1` para ocupar el alto disponible y `.wscc-total` lleva `margin-top: auto`, fijando el total al fondo; con el `align-items: stretch` del grid, los paneles igualan alturas y los totales quedan alineados. Verificacion: `pnpm run build` (`tsc -b && vite build`) correcto con avisos conocidos de chunk grande y timings. Revision visual en navegador pendiente.
 
 - Arreglada la distribucion de `WorkerPersonalReductionsCard` tras dividir el paso 4: se anade clase modificadora `wprc--reductions` / `wprc--deductions-benefits` segun el foco. Con un solo panel visible, `.wprc-panels` pasa a una columna y su lista de ajustes se reparte en dos columnas para llenar el ancho; `.wprc-summary` deja de reservar hueco para el segundo total (3 columnas en vez de 4). En movil, la lista de ajustes vuelve a una columna. Verificacion: lints sin errores; `tsc --noEmit` y `vite build` correctos. Revision visual en navegador BLOQUEADA: el navegador integrado no dispara los manejadores de React (ni los puntos de paso ni un toggle simple responden, sin errores en consola) incluso tras reiniciar el dev server; no se pudo navegar a los pasos 4/5 para captura.

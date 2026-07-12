@@ -522,15 +522,15 @@ export function WorkerSocialContributionsCard({
             <span>Coste adicional empresa</span>
             <strong className="wscc-summary__company">{formatEuro(companyTotalDisplay)}</strong>
           </div>
-          <div className="wscc-summary__item wscc-summary__item--hero">
-            <span>Coste total empresa</span>
-            <strong>{formatEuro(companyCostDisplay)}</strong>
-          </div>
           <div className="wscc-summary__divider" aria-hidden="true"></div>
           <div className="wscc-summary__item wscc-summary__item--total">
             <span>Coste total cotizaciones</span>
             <strong>{formatEuro(totalContributionsDisplay)}</strong>
             <em>Trabajador + empresa</em>
+          </div>
+          <div className="wscc-summary__item wscc-summary__item--hero">
+            <span>Coste total empresa</span>
+            <strong>{formatEuro(companyCostDisplay)}</strong>
           </div>
         </aside>
       </div>
