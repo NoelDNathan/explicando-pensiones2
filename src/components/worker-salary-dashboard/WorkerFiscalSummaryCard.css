@@ -1,6 +1,7 @@
 .wfsc-summary {
   --summary-company: #ffad42;
   --summary-tax: #ff6f7d;
+  --summary-total-tax: #c69cff;
   --summary-net: #62d76b;
   display: grid;
   gap: clamp(18px, 2.5vw, 28px);
@@ -91,7 +92,7 @@
 
 .wfsc-summary__metrics {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -109,6 +110,7 @@
 
 .wfsc-summary__metric--company { --metric-color: var(--summary-company); }
 .wfsc-summary__metric--tax { --metric-color: var(--summary-tax); }
+.wfsc-summary__metric--total-tax { --metric-color: var(--summary-total-tax); }
 .wfsc-summary__metric--net { --metric-color: var(--summary-net); }
 
 .wfsc-summary__icon {
@@ -186,6 +188,12 @@
   transform: translateY(-1px);
 }
 
+@media (max-width: 1100px) {
+  .wfsc-summary__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
   .wfsc-summary__header,
   .wfsc-summary__footer {
@@ -195,10 +203,6 @@
 
   .wfsc-summary__mode {
     width: 100%;
-  }
-
-  .wfsc-summary__metrics {
-    grid-template-columns: 1fr;
   }
 
   .wfsc-summary__metric p {
@@ -218,6 +222,10 @@
 
   .wfsc-summary__mode button span {
     display: none;
+  }
+
+  .wfsc-summary__metrics {
+    grid-template-columns: 1fr;
   }
 
   .wfsc-summary__metric {

@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-07-16
+Fecha: 2026-07-17
 
 ## Situacion
 
@@ -69,6 +69,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Ampliado `WorkerFiscalSummaryCard` con una cuarta metrica: impuestos y cotizaciones pagados en total, calculada como cotizaciones de empresa + cotizaciones del trabajador + IRPF. Se muestra en euros o como porcentaje del salario bruto y desglosa la parte empresarial y la del trabajador. Verificacion visual correcta en escritorio y movil, sin overflow horizontal; selector accesible e interactivo. No se incorporan datos ni fuentes nuevas.
 
 - Anadido un paso inicial `Resumen rapido` a la calculadora fiscal del trabajador. Reutiliza `SalarySlider` y los calculos vivos del dashboard para mostrar coste total para la empresa, impuestos y cotizaciones del trabajador y salario neto, con selector entre euros y porcentaje. El CTA abre el recorrido detallado desde `Base real`. El componente tambien se ha incorporado a `/componentes`. Verificacion: TypeScript y build de Vite correctos; revision visual e interacciones correctas en escritorio y movil, sin overflow horizontal en `/calculadora-fiscal`. No se incorporan datos ni fuentes nuevas.
 

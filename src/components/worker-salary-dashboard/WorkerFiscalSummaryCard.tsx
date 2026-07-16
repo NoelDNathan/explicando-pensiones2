@@ -1,4 +1,4 @@
-import { ArrowRight, Building2, Landmark, Percent, WalletCards } from 'lucide-react'
+import { ArrowRight, Building2, Landmark, Percent, ReceiptText, WalletCards } from 'lucide-react'
 import { useState } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerFiscalSummaryCard.css'
@@ -40,6 +40,7 @@ export function WorkerFiscalSummaryCard({
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>('absolute')
   const companyCostAnnual = grossSalaryAnnual + employerContributionsAnnual
   const workerPaymentsAnnual = workerContributionsAnnual + irpfAnnual
+  const totalTaxesAnnual = employerContributionsAnnual + workerPaymentsAnnual
   const netSalaryAnnual = Math.max(0, grossSalaryAnnual - workerPaymentsAnnual)
 
   const formatMetric = (value: number) => {
@@ -63,6 +64,7 @@ export function WorkerFiscalSummaryCard({
             className={displayMode === 'absolute' ? 'is-active' : undefined}
             onClick={() => setDisplayMode('absolute')}
             aria-pressed={displayMode === 'absolute'}
+            aria-label="Mostrar resultados en euros"
           >
             €
             <span>Euros</span>
@@ -72,6 +74,7 @@ export function WorkerFiscalSummaryCard({
             className={displayMode === 'percentage' ? 'is-active' : undefined}
             onClick={() => setDisplayMode('percentage')}
             aria-pressed={displayMode === 'percentage'}
+            aria-label="Mostrar resultados en porcentaje"
           >
             <Percent size={15} aria-hidden="true" />
             <span>Porcentaje</span>
@@ -112,6 +115,17 @@ export function WorkerFiscalSummaryCard({
             <strong>{formatMetric(workerPaymentsAnnual)}</strong>
             <small>
               {formatEuro(workerContributionsAnnual)} de cotizaciones + {formatEuro(irpfAnnual)} de IRPF
+            </small>
+          </div>
+        </article>
+
+        <article className="wfsc-summary__metric wfsc-summary__metric--total-tax">
+          <span className="wfsc-summary__icon" aria-hidden="true"><ReceiptText size={24} /></span>
+          <div>
+            <p>Impuestos y cotizaciones pagados en total</p>
+            <strong>{formatMetric(totalTaxesAnnual)}</strong>
+            <small>
+              {formatEuro(employerContributionsAnnual)} de empresa + {formatEuro(workerPaymentsAnnual)} del trabajador
             </small>
           </div>
         </article>
