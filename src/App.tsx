@@ -13,7 +13,7 @@ import { HealthExpenditureDashboard } from './components/health-expenditure/Heal
 import { SalaryNationalityDashboard } from './components/salary-nationality/SalaryNationalityDashboard'
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer } from './components/fiscal-worker-dashboard'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
-import { WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
+import { WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
@@ -59,6 +59,21 @@ function WorkerContributionLimitsShowcase() {
     <WorkerContributionLimitsCard
       userBaseAnnual={userBaseAnnual}
       onUserBaseAnnualChange={setUserBaseAnnual}
+    />
+  )
+}
+
+function WorkerFiscalSummaryShowcase() {
+  const [salary, setSalary] = React.useState(35_000)
+  const salaryFactor = salary / 35_000
+
+  return (
+    <WorkerFiscalSummaryCard
+      grossSalaryAnnual={salary}
+      employerContributionsAnnual={10_700 * salaryFactor}
+      workerContributionsAnnual={2_270 * salaryFactor}
+      irpfAnnual={4_350 * salaryFactor}
+      onSalaryChange={setSalary}
     />
   )
 }
@@ -652,6 +667,22 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dark">
           <SalarySliderShowcase />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-fiscal-summary-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente de resumen</p>
+          <h2 id="worker-fiscal-summary-title">Resumen fiscal del trabajador</h2>
+          <p>
+            Vista condensada del coste total para la empresa, los impuestos y
+            cotizaciones del trabajador y el salario neto, con lectura en euros
+            o porcentaje del bruto.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-salary-card">
+          <WorkerFiscalSummaryShowcase />
         </div>
       </section>
 

@@ -14,6 +14,7 @@ import {
   WorkerConsumptionTaxesCard,
   WorkerContributionLimitsCard,
   WorkerFiscalStepsCard,
+  WorkerFiscalSummaryCard,
   WorkerIrpfRegionComparison,
   WorkerIrpfTranchesCard,
   WorkerPersonalReductionsCard,
@@ -409,7 +410,7 @@ export function FiscalWorkerDashboard() {
   const [occupationalAccidentsCategoryId, setOccupationalAccidentsCategoryId] = useState(DEFAULT_AT_EP_2025_CATEGORY_ID)
   const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
   const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
-  const [activeWorkerStepId, setActiveWorkerStepId] = useState(1)
+  const [activeWorkerStepId, setActiveWorkerStepId] = useState(0)
 
   const contributionGroups = useMemo(() => {
     const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
@@ -680,6 +681,17 @@ export function FiscalWorkerDashboard() {
 
   const activeWorkerStepCard = (() => {
     switch (activeWorkerStepId) {
+      case 0:
+        return (
+          <WorkerFiscalSummaryCard
+            grossSalaryAnnual={result.grossSalaryAnnual}
+            employerContributionsAnnual={socialContributions.companyContributionsAnnual}
+            workerContributionsAnnual={socialContributions.workerContributionsAnnual}
+            irpfAnnual={result.irpf}
+            onSalaryChange={setSalary}
+            onExploreDetails={() => setActiveWorkerStepId(1)}
+          />
+        )
       case 1:
         return (
           <WorkerSalaryBaseCard

@@ -7,6 +7,7 @@ export { WorkerIrpfTranchesCard } from './WorkerIrpfTranchesCard'
 export { WorkerIrpfRegionComparison } from './WorkerIrpfRegionComparison'
 export { WorkerConsumptionTaxesCard } from './WorkerConsumptionTaxesCard'
 export { WorkerFiscalStepsCard } from './WorkerFiscalStepsCard'
+export { WorkerFiscalSummaryCard } from './WorkerFiscalSummaryCard'
 export { WorkerSalaryBaseCard as default } from './WorkerSalaryBaseCard'
 export type {
   ContributionGroup,

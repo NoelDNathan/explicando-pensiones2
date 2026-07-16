@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   UserRound,
   WalletCards,
+  Zap,
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type {
@@ -258,6 +259,18 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
 }
 
 const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
+  {
+    id: 0,
+    title: 'Resumen rápido',
+    subtitle: 'Las cifras esenciales antes de entrar en detalle',
+    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los nueve pasos del recorrido.',
+    checklist: [],
+    helpTitle: 'Una primera aproximación',
+    helpBody: 'El resumen reúne los resultados principales. Los pasos siguientes explican las bases, límites, cuotas y ajustes que hay detrás.',
+    details: [],
+    important: 'El resumen orienta; el detalle explica.',
+    Icon: Zap,
+  },
   {
     id: 1,
     title: 'Base real',
@@ -689,7 +702,7 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
 }
 
 export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveData }: WorkerFiscalStepsCardProps) {
-  const [internalActiveStepId, setInternalActiveStepId] = useState(1)
+  const [internalActiveStepId, setInternalActiveStepId] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
   const skipInitialScrollRef = useRef(true)
   const currentStepId = activeStepId ?? internalActiveStepId
@@ -697,13 +710,15 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const activeStep = WORKER_FISCAL_STEPS[activeIndex] ?? WORKER_FISCAL_STEPS[0]
   const activeDescription = getStepDescription(activeStep, payrollLiveData)
   const descriptionParagraphs = activeDescription.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
-  const progress = useMemo(() => activeStep.id / WORKER_FISCAL_STEPS.length * 100, [activeStep.id])
+  const detailStepCount = WORKER_FISCAL_STEPS.length - 1
+  const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 9
+  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 9
+  const isSummaryStep = activeStep.id === 0
   const isCompactStep = activeStep.id === 9
 
   const setActiveStep = (nextStepId: number) => {
-    const clampedStepId = Math.min(WORKER_FISCAL_STEPS.length, Math.max(1, nextStepId))
+    const clampedStepId = Math.min(detailStepCount, Math.max(0, nextStepId))
     setInternalActiveStepId(clampedStepId)
     onStepChange?.(clampedStepId)
   }
@@ -732,12 +747,12 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
       aria-labelledby={isCompactStep ? undefined : 'wfsc-title'}
       aria-label={isCompactStep ? 'Navegacion del recorrido fiscal' : undefined}
     >
-      <div className={`wfsc-stage${isCompactStep ? ' wfsc-stage--compact' : ''}`}>
+      <div className={`wfsc-stage${isCompactStep ? ' wfsc-stage--compact' : ''}${isSummaryStep ? ' wfsc-stage--summary' : ''}`}>
         <button
           className="wfsc-nav wfsc-nav--previous"
           type="button"
           onClick={goToPrevious}
-          disabled={activeStep.id === 1}
+          disabled={activeStep.id === 0}
           aria-label="Ir al paso anterior"
         >
           <ChevronLeft size={26} aria-hidden="true" />
@@ -749,10 +764,10 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
             <div className="wfsc-hero-main">
               <span className="wfsc-step-orb" aria-hidden="true">
                 <ActiveIcon size={34} strokeWidth={2.35} />
-                <b>{activeStep.id}</b>
+                <b>{activeStep.id === 0 ? 'R' : activeStep.id}</b>
               </span>
               <div className="wfsc-copy">
-                <p>Paso {activeStep.id} de {WORKER_FISCAL_STEPS.length}</p>
+                <p>{activeStep.id === 0 ? 'Antes de empezar' : `Paso ${activeStep.id} de ${detailStepCount}`}</p>
                 <h2 id="wfsc-title">{activeStep.title}</h2>
                 <div className="wfsc-description">
                   {descriptionParagraphs.map((paragraph) => (
@@ -774,7 +789,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           className="wfsc-nav wfsc-nav--next"
           type="button"
           onClick={goToNext}
-          disabled={activeStep.id === WORKER_FISCAL_STEPS.length}
+          disabled={activeStep.id === detailStepCount}
           aria-label="Ir al paso siguiente"
         >
           <ChevronRight size={26} aria-hidden="true" />
@@ -794,9 +809,9 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
               className={step.id === activeStep.id ? 'is-active' : undefined}
               onClick={() => setActiveStep(step.id)}
               aria-current={step.id === activeStep.id ? 'step' : undefined}
-              aria-label={`Ir al paso ${step.id}: ${step.title}`}
+              aria-label={step.id === 0 ? 'Ir al resumen rápido' : `Ir al paso ${step.id}: ${step.title}`}
             >
-              <span>{step.id}</span>
+              <span>{step.id === 0 ? 'R' : step.id}</span>
             </button>
           ))}
         </nav>
