@@ -61,6 +61,10 @@ type WorkerIrpfTranchesCardProps = {
   stateTax?: number;
   /** Cuota autonomica/complementaria autoritativa calculada por el motor. */
   regionalTax?: number;
+  /** Cuota final tras deducciones que no se reparten entre Estado y comunidad. */
+  totalTaxAfterDeductions?: number;
+  /** Deducciones aplicadas sobre la cuota total, como la nueva deduccion de trabajo 2025. */
+  totalQuotaDeduction?: number;
   /** Escala estatal completa (tramos oficiales). Habilita la vista de doble escala. */
   stateScale?: WorkerIrpfScaleBracket[];
   /** Escala autonomica/complementaria completa (tramos oficiales de la comunidad). */
@@ -158,6 +162,8 @@ export function WorkerIrpfTranchesCard({
   regions = DEFAULT_REGIONS,
   stateTax,
   regionalTax,
+  totalTaxAfterDeductions,
+  totalQuotaDeduction = 0,
   stateScale,
   regionalScale,
   stateMinimum,
@@ -168,21 +174,14 @@ export function WorkerIrpfTranchesCard({
   onRegionChange,
   onResultChange,
 }: WorkerIrpfTranchesCardProps) {
-  const [region, setRegion] = useState(initialRegion);
-  const [salary, setSalary] = useState(grossSalary ?? 0);
-
-  useEffect(() => {
-    setRegion(initialRegion);
-  }, [initialRegion]);
-
-  useEffect(() => {
-    if (grossSalary !== undefined) setSalary(grossSalary);
-  }, [grossSalary]);
+  const [uncontrolledRegion, setUncontrolledRegion] = useState(initialRegion);
+  const [uncontrolledSalary, setUncontrolledSalary] = useState(grossSalary ?? 0);
+  const salary = grossSalary ?? uncontrolledSalary;
 
   const showSalaryControl = grossSalary !== undefined && onSalaryChange !== undefined;
 
   const handleSalaryChange = (next: number) => {
-    setSalary(next);
+    if (grossSalary === undefined) setUncontrolledSalary(next);
     onSalaryChange?.(next);
   };
 
@@ -190,14 +189,14 @@ export function WorkerIrpfTranchesCard({
   // personal y familiar ya aplicado), la tarjeta muestra esas cifras. En caso
   // contrario (uso autonomo del componente) recalcula con los tramos genericos.
   const isAuthoritative = stateTax !== undefined && regionalTax !== undefined;
-  const activeRegion = isAuthoritative ? initialRegion : region;
+  const activeRegion = isAuthoritative ? initialRegion : uncontrolledRegion;
 
   const handleRegionChange = (nextRegion: string) => {
     if (isAuthoritative) {
       onRegionChange?.(nextRegion);
       return;
     }
-    setRegion(nextRegion);
+    setUncontrolledRegion(nextRegion);
   };
 
   const regionLabel = useMemo(
@@ -218,17 +217,18 @@ export function WorkerIrpfTranchesCard({
     });
     const computedQuota = lines.reduce((total, line) => total + line.quota, 0);
     const quota = isAuthoritative
-      ? Math.max(0, (stateTax ?? 0) + (regionalTax ?? 0))
+      ? Math.max(0, totalTaxAfterDeductions ?? ((stateTax ?? 0) + (regionalTax ?? 0)))
       : computedQuota;
+    const effectiveRateBase = grossSalary ?? initialTaxableBase;
 
     return {
       region: activeRegion,
       taxableBase: initialTaxableBase,
       quota,
-      effectiveRate: initialTaxableBase > 0 ? (quota / initialTaxableBase) * 100 : 0,
+      effectiveRate: effectiveRateBase > 0 ? (quota / effectiveRateBase) * 100 : 0,
       lines,
     };
-  }, [activeRegion, brackets, initialTaxableBase, isAuthoritative, regionalTax, stateTax]);
+  }, [activeRegion, brackets, grossSalary, initialTaxableBase, isAuthoritative, regionalTax, stateTax, totalTaxAfterDeductions]);
 
   useEffect(() => {
     if (isAuthoritative) return;
@@ -254,6 +254,7 @@ export function WorkerIrpfTranchesCard({
   const regionalGross = useMemo(() => regionalLines.reduce((t, l) => t + l.quota, 0), [regionalLines]);
   const stateReduction = Math.max(0, stateGross - (stateTax ?? 0));
   const regionalReduction = Math.max(0, regionalGross - (regionalTax ?? 0));
+  const splitQuota = Math.max(0, (stateTax ?? 0) + (regionalTax ?? 0));
 
   const activeLines = result.lines.filter((line) => line.taxableAmount > 0);
   const visibleLines = activeLines.slice(0, 4);
@@ -482,10 +483,16 @@ export function WorkerIrpfTranchesCard({
                   regionalMinimum,
                 )}
               </div>
-              {result.quota > 0 && (
+              {totalQuotaDeduction > 0 ? (
+                <div className="witc-total-deduction">
+                  <span>Deduccion estatal por rendimientos del trabajo 2025</span>
+                  <strong>- {formatEuro(totalQuotaDeduction, 2)}</strong>
+                </div>
+              ) : null}
+              {splitQuota > 0 && (
                 <div className="witc-split-bar" aria-hidden="true">
                   <div className="witc-split-bar__label witc-split-bar__label--state">
-                    Estado&nbsp;{formatPercent(((stateTax ?? 0) / result.quota) * 100, 0)}%
+                    Estado&nbsp;{formatPercent(((stateTax ?? 0) / splitQuota) * 100, 0)}%
                   </div>
                   <div
                     className="witc-split-bar__track"
@@ -498,7 +505,7 @@ export function WorkerIrpfTranchesCard({
                     />
                   </div>
                   <div className="witc-split-bar__label witc-split-bar__label--region">
-                    {regionLabel}&nbsp;{formatPercent(((regionalTax ?? 0) / result.quota) * 100, 0)}%
+                    {regionLabel}&nbsp;{formatPercent(((regionalTax ?? 0) / splitQuota) * 100, 0)}%
                   </div>
                 </div>
               )}
@@ -556,6 +563,12 @@ export function WorkerIrpfTranchesCard({
                 <span>Cuota {regionLabel}</span>
                 <strong>{formatEuro(regionalTax ?? 0, 2)}</strong>
               </output>
+              {totalQuotaDeduction > 0 ? (
+                <output className="witc-result witc-result--deduction">
+                  <span>Deduccion trabajo 2025</span>
+                  <strong>- {formatEuro(totalQuotaDeduction, 2)}</strong>
+                </output>
+              ) : null}
               <output className="witc-result witc-result--quota">
                 <span>Total IRPF</span>
                 <strong>{formatEuro(result.quota, 2)}</strong>
@@ -568,7 +581,7 @@ export function WorkerIrpfTranchesCard({
             </output>
           )}
           <output className="witc-result witc-result--rate">
-            <span>Tipo efectivo aprox.</span>
+            <span>Tipo efectivo sobre bruto</span>
             <strong>{formatPercent(result.effectiveRate, 1)}%</strong>
           </output>
         </aside>

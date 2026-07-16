@@ -577,6 +577,23 @@
   color: #f1850d;
 }
 
+.witc-total-deduction {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 184, 107, 0.42);
+  border-radius: 9px;
+  color: #d9e6fa;
+  background: rgba(65, 35, 12, 0.42);
+}
+
+.witc-total-deduction strong {
+  color: #ffb86b;
+  white-space: nowrap;
+}
+
 .witc-results {
   display: grid;
   gap: 6px;
@@ -603,6 +620,10 @@
 
 .witc-result--region strong {
   color: #f1850d;
+}
+
+.witc-result--deduction strong {
+  color: #ffb86b;
 }
 
 .witc-result--rate strong {

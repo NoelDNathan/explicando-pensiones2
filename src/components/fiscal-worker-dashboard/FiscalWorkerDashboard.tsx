@@ -32,6 +32,7 @@ import type {
   WorkerContractType,
 } from '../worker-salary-dashboard'
 import type { DisabilityMode } from './types'
+import { calculateIrpf2025Core } from './irpf2025Calc'
 import './FiscalWorkerDashboard.css'
 
 type ScaleBracket = {
@@ -276,14 +277,6 @@ function familyMinimum(
   return total
 }
 
-function workReduction2025(netWorkIncome: number) {
-  const reduction = fiscalParams2025.irpf.work_income_reduction_2025
-  if (netWorkIncome >= reduction.applies_if_work_net_income_below_eur) return 0
-  if (netWorkIncome <= 14852) return 7302
-  if (netWorkIncome <= 17673.52) return 7302 - 1.75 * (netWorkIncome - 14852)
-  return Math.max(0, 2364.34 - 1.14 * (netWorkIncome - 17673.52))
-}
-
 function workReduction2005(netWorkIncome: number, age: number, mobility: boolean) {
   const baseReduction =
     netWorkIncome <= 8200
@@ -508,6 +501,13 @@ export function FiscalWorkerDashboard() {
         regionalMinimum: 0,
         irpfBeforeDeductions,
         irpf,
+        workReductionBasis: netWorkIncomeBeforeReduction,
+        workReductionApplied: reduction,
+        netWorkIncome: netWorkIncomeBeforeReduction,
+        netReducedWorkIncome: Math.max(0, netWorkIncomeBeforeReduction - reduction - personalFamilyReduction),
+        article19OtherExpensesApplied: 0,
+        pensionReductionApplied: extraBaseReductions,
+        lowWorkIncomeDeductionApplied: explicitDeductions,
         netSalary,
         vat,
         vatRate,
@@ -542,16 +542,27 @@ export function FiscalWorkerDashboard() {
       fiscalParams2025.irpf.work_income_deductible_expenses_eur.general_other_expenses +
       (mobility ? fiscalParams2025.irpf.work_income_deductible_expenses_eur.geographic_mobility_increment : 0) +
       disabilityExpense
-    const netWorkIncomeBeforeReduction = Math.max(0, grossSalaryAnnual - employeeSocialSecurity - deductibleExpenses)
-    const reduction = workReduction2025(netWorkIncomeBeforeReduction)
-    const taxableBase = Math.max(0, netWorkIncomeBeforeReduction - reduction - extraBaseReductions)
     const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
     const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
     const regionalScale = autonomicCoverage.autonomic_general_scales[effectiveRegion]?.brackets ?? autonomicCoverage.autonomic_general_scales.madrid.brackets
-    const stateTax = Math.max(0, applyScale(taxableBase, fiscalParams2025.irpf.state_general_scale) - applyScale(Math.min(stateMinimum, taxableBase), fiscalParams2025.irpf.state_general_scale))
-    const regionalTax = Math.max(0, applyScale(taxableBase, regionalScale) - applyScale(Math.min(regionalMinimum, taxableBase), regionalScale))
-    const irpfBeforeDeductions = stateTax + regionalTax
-    const irpf = Math.max(0, irpfBeforeDeductions - explicitDeductions)
+    const basicPensionContributions = personalAdjustments
+      ? Number(personalAdjustments.reductionLines.pensionPlans) +
+        Number(personalAdjustments.reductionLines.companyPensionPlan) +
+        Number(personalAdjustments.reductionLines.mutualities)
+      : 0
+    const coreIrpf = calculateIrpf2025Core({
+      grossWorkIncome: grossSalaryAnnual,
+      article19ExpensesBeforeOtherExpenses: employeeSocialSecurity,
+      article19OtherExpenses: deductibleExpenses,
+      basicPensionContributions,
+      stateMinimum,
+      regionalMinimum,
+      stateScale: fiscalParams2025.irpf.state_general_scale,
+      regionalScale,
+      regionalQuotaDeductions: manualAutonomicDeduction,
+    })
+    const { taxableBase, stateTax, regionalTax, irpf } = coreIrpf
+    const irpfBeforeDeductions = coreIrpf.liquidQuotaBeforeWorkDeduction
     const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
     const vatBracket = vatProxy.income_brackets.find((item) => item.income_label === 'Total') ?? vatProxy.income_brackets[0]
     const vatRate = vatBracket?.estimated_effective_vat_percent_on_spending ?? 9
@@ -578,6 +589,13 @@ export function FiscalWorkerDashboard() {
       regionalMinimum,
       irpfBeforeDeductions,
       irpf,
+      workReductionBasis: coreIrpf.workReductionBasis,
+      workReductionApplied: coreIrpf.workReductionApplied,
+      netWorkIncome: coreIrpf.netWorkIncome,
+      netReducedWorkIncome: coreIrpf.netReducedWorkIncome,
+      article19OtherExpensesApplied: coreIrpf.article19OtherExpensesApplied,
+      pensionReductionApplied: coreIrpf.pensionReductionApplied,
+      lowWorkIncomeDeductionApplied: coreIrpf.lowWorkIncomeDeductionApplied,
       netSalary,
       vat,
       vatRate,
@@ -742,6 +760,11 @@ export function FiscalWorkerDashboard() {
             initialChildren={selectedChildren}
             initialAscendants={selectedAscendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
+            initialResult={personalAdjustments}
+            initialBaseBeforeReductions={result.netReducedWorkIncome}
+            quotaBeforeDeductions={result.irpfBeforeDeductions}
+            appliedBaseReductions={result.pensionReductionApplied}
+            appliedQuotaDeductions={result.lowWorkIncomeDeductionApplied}
             onResultChange={handlePersonalResultChange}
           />
         )
@@ -756,6 +779,8 @@ export function FiscalWorkerDashboard() {
               initialTaxableBase={result.taxableBase}
               stateTax={result.stateTax}
               regionalTax={result.regionalTax}
+              totalTaxAfterDeductions={result.irpf}
+              totalQuotaDeduction={result.lowWorkIncomeDeductionApplied}
               stateScale={result.stateScale}
               regionalScale={result.regionalScale}
               stateMinimum={result.stateMinimum}

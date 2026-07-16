@@ -31,14 +31,21 @@ export type PersonalReductionResult = {
   eligibleChildren: number
   childrenUnder3: number
   disabilityPercent: DisabilityPercent
+  taxpayerAssistance: string
   taxpayerDisabilityAssistanceMinimum: number
   maritalStatus: MaritalStatus
   ascendants: number
   eligibleAscendants: number
   ascendantsOver75: number
   dependentDisabilityMinimum: number
+  descendantProfiles: DependentProfile[]
+  ascendantProfiles: DependentProfile[]
   reductionsTotal: number
   deductionsTotal: number
+  calculationWarnings: Array<{
+    section: 'reductions' | 'deductions'
+    message: string
+  }>
   reductionLines: Record<ReductionKey, number | boolean>
   deductionLines: Record<DeductionKey, string>
 }
@@ -73,6 +80,11 @@ type WorkerPersonalReductionsCardProps = {
   initialDisabilityPercent?: DisabilityPercent
   initialMaritalStatus?: MaritalStatus
   initialAscendants?: number
+  initialResult?: PersonalReductionResult | null
+  initialBaseBeforeReductions?: number
+  quotaBeforeDeductions?: number
+  appliedBaseReductions?: number
+  appliedQuotaDeductions?: number
   onResultChange?: (result: PersonalReductionResult) => void
 }
 
@@ -100,7 +112,7 @@ type AdjustmentRowProps = {
   onChange: (value: string) => void
 }
 
-type DependentProfile = {
+export type DependentProfile = {
   livesWith: string
   ownIncome: string
   filesReturn: string
@@ -514,6 +526,11 @@ export function WorkerPersonalReductionsCard({
   initialDisabilityPercent = 0,
   initialMaritalStatus = 'married',
   initialAscendants = 0,
+  initialResult = null,
+  initialBaseBeforeReductions = 0,
+  quotaBeforeDeductions = 0,
+  appliedBaseReductions = 0,
+  appliedQuotaDeductions = 0,
   onResultChange,
 }: WorkerPersonalReductionsCardProps) {
   const showReductionsSection = focus === 'reductions'
@@ -522,47 +539,31 @@ export function WorkerPersonalReductionsCard({
   const stepDescription = showReductionsSection
     ? 'Detalla quien convive contigo y que requisitos cumple antes de llevarlo al IRPF.'
     : 'Indica deducciones de cuota y beneficios en especie que pueden quedar exentos o tributar de forma distinta.'
-  const [children, setChildren] = useState(String(initialChildren))
-  const [disabilityPercent, setDisabilityPercent] = useState(String(initialDisabilityPercent))
-  const [taxpayerAssistance, setTaxpayerAssistance] = useState('no')
-  const [maritalStatus, setMaritalStatus] = useState<MaritalStatus>(initialMaritalStatus)
-  const [ascendants, setAscendants] = useState(String(initialAscendants))
-  const [pensionPlans, setPensionPlans] = useState('0')
-  const [companyPensionPlan, setCompanyPensionPlan] = useState('0')
-  const [mutualities, setMutualities] = useState('0')
-  const [compensatoryPension, setCompensatoryPension] = useState('0')
-  const [childSupport, setChildSupport] = useState('0')
-  const [jointTaxation, setJointTaxation] = useState('no')
-  const [protectedAssets, setProtectedAssets] = useState('0')
-  const [regionalReductions, setRegionalReductions] = useState('0')
-  const [unionAndProfessionalFees, setUnionAndProfessionalFees] = useState('0')
-  const [maternity, setMaternity] = useState('none')
-  const [daycare, setDaycare] = useState('0')
-  const [largeFamily, setLargeFamily] = useState('none')
-  const [dependentDisability, setDependentDisability] = useState('no')
-  const [donations, setDonations] = useState('0')
-  const [rent, setRent] = useState('0')
-  const [oldHomePurchase, setOldHomePurchase] = useState('0')
-  const [newCompanyInvestment, setNewCompanyInvestment] = useState('0')
-  const [regionalDeductions, setRegionalDeductions] = useState('configure')
-  const [descendantProfiles, setDescendantProfiles] = useState(() => createDependentProfiles(4, 'descendant'))
-  const [ascendantProfiles, setAscendantProfiles] = useState(() => createDependentProfiles(3, 'ascendant'))
-
-  useEffect(() => {
-    setChildren(String(initialChildren))
-  }, [initialChildren])
-
-  useEffect(() => {
-    setDisabilityPercent(String(initialDisabilityPercent))
-  }, [initialDisabilityPercent])
-
-  useEffect(() => {
-    setMaritalStatus(initialMaritalStatus)
-  }, [initialMaritalStatus])
-
-  useEffect(() => {
-    setAscendants(String(initialAscendants))
-  }, [initialAscendants])
+  const [children, setChildren] = useState(() => String(initialResult?.children ?? initialChildren))
+  const [disabilityPercent, setDisabilityPercent] = useState(() => String(initialResult?.disabilityPercent ?? initialDisabilityPercent))
+  const [taxpayerAssistance, setTaxpayerAssistance] = useState(() => initialResult?.taxpayerAssistance ?? 'no')
+  const [maritalStatus, setMaritalStatus] = useState<MaritalStatus>(() => initialResult?.maritalStatus ?? initialMaritalStatus)
+  const [ascendants, setAscendants] = useState(() => String(initialResult?.ascendants ?? initialAscendants))
+  const [pensionPlans, setPensionPlans] = useState(() => String(initialResult?.reductionLines.pensionPlans ?? 0))
+  const [companyPensionPlan, setCompanyPensionPlan] = useState(() => String(initialResult?.reductionLines.companyPensionPlan ?? 0))
+  const [mutualities, setMutualities] = useState(() => String(initialResult?.reductionLines.mutualities ?? 0))
+  const [compensatoryPension, setCompensatoryPension] = useState(() => String(initialResult?.reductionLines.compensatoryPension ?? 0))
+  const [childSupport, setChildSupport] = useState(() => String(initialResult?.reductionLines.childSupport ?? 0))
+  const [jointTaxation, setJointTaxation] = useState(() => initialResult?.reductionLines.jointTaxation === true ? 'yes' : 'no')
+  const [protectedAssets, setProtectedAssets] = useState(() => String(initialResult?.reductionLines.protectedAssets ?? 0))
+  const [regionalReductions, setRegionalReductions] = useState(() => String(initialResult?.reductionLines.regionalReductions ?? 0))
+  const [unionAndProfessionalFees, setUnionAndProfessionalFees] = useState(() => String(initialResult?.reductionLines.unionAndProfessionalFees ?? 0))
+  const [maternity, setMaternity] = useState(() => initialResult?.deductionLines.maternity ?? 'none')
+  const [daycare, setDaycare] = useState(() => initialResult?.deductionLines.daycare ?? '0')
+  const [largeFamily, setLargeFamily] = useState(() => initialResult?.deductionLines.largeFamily ?? 'none')
+  const [dependentDisability, setDependentDisability] = useState(() => initialResult?.deductionLines.dependentDisability ?? 'no')
+  const [donations, setDonations] = useState(() => initialResult?.deductionLines.donations ?? '0')
+  const [rent, setRent] = useState(() => initialResult?.deductionLines.rent ?? '0')
+  const [oldHomePurchase, setOldHomePurchase] = useState(() => initialResult?.deductionLines.oldHomePurchase ?? '0')
+  const [newCompanyInvestment, setNewCompanyInvestment] = useState(() => initialResult?.deductionLines.newCompanyInvestment ?? '0')
+  const [regionalDeductions, setRegionalDeductions] = useState(() => initialResult?.deductionLines.regionalDeductions ?? 'configure')
+  const [descendantProfiles, setDescendantProfiles] = useState(() => initialResult?.descendantProfiles ?? createDependentProfiles(4, 'descendant'))
+  const [ascendantProfiles, setAscendantProfiles] = useState(() => initialResult?.ascendantProfiles ?? createDependentProfiles(3, 'ascendant'))
 
   const updateDescendant = (index: number, field: keyof DependentProfile, value: string) => {
     setDescendantProfiles((profiles) => profiles.map((profile, profileIndex) => (
@@ -612,20 +613,76 @@ export function WorkerPersonalReductionsCard({
       + Number(rent)
       + Number(oldHomePurchase)
       + Number(newCompanyInvestment)
+    const calculationWarnings: PersonalReductionResult['calculationWarnings'] = []
+    if (pensionPlanAmount + companyPensionPlanAmount + mutualitiesAmount > 0) {
+      calculationWarnings.push({
+        section: 'reductions',
+        message: 'Prevision social: se aplica solo el limite general conjunto de 1.500 EUR y el 30 % del rendimiento neto. El incremento de planes de empleo requiere datos adicionales.',
+      })
+    }
+    if (compensatoryAmount > 0) {
+      calculationWarnings.push({ section: 'reductions', message: 'Pension compensatoria no aplicada: falta confirmar resolucion judicial o convenio formalizado.' })
+    }
+    if (childSupportAmount > 0) {
+      calculationWarnings.push({ section: 'reductions', message: 'Anualidades a hijos no aplicadas: requieren el calculo por escalas separadas y comprobar la incompatibilidad con el minimo por descendientes.' })
+    }
+    if (jointTaxation === 'yes') {
+      calculationWarnings.push({ section: 'reductions', message: 'Tributacion conjunta no aplicada: falta identificar la unidad familiar legal y la convivencia con el otro progenitor.' })
+    }
+    if (protectedAssetsAmount > 0) {
+      calculationWarnings.push({ section: 'reductions', message: 'Patrimonio protegido no aplicado: faltan aportante, beneficiario, aportaciones totales y excesos pendientes.' })
+    }
+    if (regionalReductionsAmount > 0) {
+      calculationWarnings.push({ section: 'reductions', message: 'Reduccion autonomica no aplicada: el importe necesita codigo legal, fuente y requisitos verificados.' })
+    }
+    if (unionAndProfessionalFeesAmount > 0) {
+      calculationWarnings.push({ section: 'reductions', message: 'Cuotas sindicales o profesionales no aplicadas: deben separarse y confirmar la colegiacion obligatoria y su limite.' })
+    }
+    if (maternity !== 'none') {
+      calculationWarnings.push({ section: 'deductions', message: 'Maternidad no aplicada: faltan hijo, meses con derecho, situacion habilitante y abonos anticipados.' })
+    }
+    if (Number(daycare) > 0) {
+      calculationWarnings.push({ section: 'deductions', message: 'Guarderia no aplicada: faltan meses completos, centro autorizado, gasto neto, ayudas y pagos exentos de empresa.' })
+    }
+    if (largeFamily !== 'none') {
+      calculationWarnings.push({ section: 'deductions', message: 'Familia numerosa no aplicada: faltan titulo, categoria, meses, reparto y abonos anticipados.' })
+    }
+    if (dependentDisability === 'yes') {
+      calculationWarnings.push({ section: 'deductions', message: 'Discapacidad a cargo no aplicada: debe calcularse por persona y mes, con reparto y anticipos.' })
+    }
+    if (Number(donations) > 0) {
+      calculationWarnings.push({ section: 'deductions', message: 'Donativo no aplicado: faltan entidad beneficiaria, recurrencia y limite sobre la base liquidable.' })
+    }
+    if (Number(rent) > 0) {
+      calculationWarnings.push({ section: 'deductions', message: 'Alquiler no aplicado: hay que distinguir el regimen estatal transitorio de la deduccion autonomica y comprobar el contrato.' })
+    }
+    if (Number(oldHomePurchase) > 0) {
+      calculationWarnings.push({ section: 'deductions', message: 'Vivienda anterior a 2013 no aplicada: falta acreditar el regimen transitorio, titularidad y pagos admisibles.' })
+    }
+    if (Number(newCompanyInvestment) > 0) {
+      calculationWarnings.push({ section: 'deductions', message: 'Empresa nueva no aplicada: faltan certificacion y requisitos societarios.' })
+    }
+    if (regionalDeductions !== 'none') {
+      calculationWarnings.push({ section: 'deductions', message: 'Deducciones autonomicas no aplicadas: cada comunidad exige una regla y documentacion propias.' })
+    }
 
     return {
       children: selectedChildrenCount,
       eligibleChildren: eligibleDescendants.length,
       childrenUnder3: eligibleDescendants.filter((profile) => profile.ageBand === 'under3').length,
       disabilityPercent: Number(disabilityPercent) as DisabilityPercent,
+      taxpayerAssistance,
       taxpayerDisabilityAssistanceMinimum,
       maritalStatus,
       ascendants: selectedAscendantsCount,
       eligibleAscendants: eligibleAscendants.length,
       ascendantsOver75: eligibleAscendants.filter((profile) => profile.ageBand === '75_plus').length,
       dependentDisabilityMinimum,
+      descendantProfiles,
+      ascendantProfiles,
       reductionsTotal,
       deductionsTotal,
+      calculationWarnings,
       reductionLines: {
         pensionPlans: pensionPlanAmount,
         companyPensionPlan: companyPensionPlanAmount,
@@ -695,10 +752,13 @@ export function WorkerPersonalReductionsCard({
     + taxpayerDisabilityMinimumTotal
     + result.dependentDisabilityMinimum
     + result.taxpayerDisabilityAssistanceMinimum
-  const explainedBaseInitial = 32000
-  const explainedBaseLiquidable = Math.max(0, explainedBaseInitial - result.reductionsTotal)
-  const explainedQuotaBeforeDeductions = 5200
-  const explainedQuotaFinal = Math.max(0, explainedQuotaBeforeDeductions - result.deductionsTotal)
+  const explainedBaseInitial = Math.max(0, initialBaseBeforeReductions)
+  const explainedBaseLiquidable = Math.max(0, explainedBaseInitial - appliedBaseReductions)
+  const explainedQuotaBeforeDeductions = Math.max(0, quotaBeforeDeductions)
+  const explainedQuotaFinal = Math.max(0, explainedQuotaBeforeDeductions - appliedQuotaDeductions)
+  const visibleWarnings = result.calculationWarnings.filter((warning) => (
+    warning.section === (showReductionsSection ? 'reductions' : 'deductions')
+  ))
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -731,8 +791,8 @@ export function WorkerPersonalReductionsCard({
               <li><CheckCircle2 aria-hidden="true" /> Los beneficios en especie se revisan uno a uno.</li>
               <li><CheckCircle2 aria-hidden="true" /> Cada beneficio puede quedar exento, tributar parcialmente o revisarse.</li>
             </ul>
-            <strong>{formatEuro(result.deductionsTotal)}</strong>
-            <span>Deducciones orientativas segun los campos seleccionados.</span>
+            <strong>{formatEuro(appliedQuotaDeductions)}</strong>
+            <span>Deducciones calculadas con los datos suficientes.</span>
           </aside>
         )}
       </div>
@@ -1012,6 +1072,15 @@ export function WorkerPersonalReductionsCard({
         ) : null}
       </div>
 
+      {visibleWarnings.length > 0 ? (
+        <aside className="wprc-calculation-warnings" aria-label="Ajustes pendientes de verificar">
+          <strong>Aun no se incorporan al calculo</strong>
+          <ul>
+            {visibleWarnings.map((warning) => <li key={warning.message}>{warning.message}</li>)}
+          </ul>
+        </aside>
+      ) : null}
+
       {showReductionsSection || showDeductionsSection ? (
       <section className="wprc-explained" aria-labelledby="wprc-explained-title">
         <div>
@@ -1031,7 +1100,7 @@ export function WorkerPersonalReductionsCard({
               </div>
               <div className="is-minus">
                 <dt>Reducciones aplicadas</dt>
-                <dd>- {formatEuro(result.reductionsTotal)}</dd>
+                <dd>- {formatEuro(appliedBaseReductions)}</dd>
               </div>
               <div className="is-result">
                 <dt>Base liquidable</dt>
@@ -1047,7 +1116,7 @@ export function WorkerPersonalReductionsCard({
               </div>
               <div className="is-minus">
                 <dt>Deducciones aplicadas</dt>
-                <dd>- {formatEuro(result.deductionsTotal)}</dd>
+                <dd>- {formatEuro(appliedQuotaDeductions)}</dd>
               </div>
               <div className="is-result">
                 <dt>Cuota final estimada</dt>
@@ -1064,21 +1133,21 @@ export function WorkerPersonalReductionsCard({
           <FileText />
         </span>
         <div className="wprc-summary-copy">
-          <p>Estos ajustes se aplicaran en el calculo del IRPF.</p>
-          <span>Revisa tus datos para obtener un calculo mas preciso.</span>
+          <p>Solo se aplican ajustes con datos suficientes.</p>
+          <span>Las selecciones incompletas quedan pendientes y no reducen el IRPF.</span>
         </div>
         {showReductionsSection ? (
-        <output className="wprc-total wprc-total--reductions" aria-label="Total reducciones">
+        <output className="wprc-total wprc-total--reductions" aria-label="Total reducciones aplicadas">
           <TrendingDown aria-hidden="true" />
-          <span>Total reducciones</span>
-          <strong>{formatEuro(result.reductionsTotal)}</strong>
+          <span>Reduccion aplicada</span>
+          <strong>{formatEuro(appliedBaseReductions)}</strong>
         </output>
         ) : null}
         {showDeductionsSection ? (
-        <output className="wprc-total wprc-total--deductions" aria-label="Total deducciones">
+        <output className="wprc-total wprc-total--deductions" aria-label="Total deducciones aplicadas">
           <Percent aria-hidden="true" />
-          <span>Total deducciones</span>
-          <strong>{formatEuro(result.deductionsTotal)}</strong>
+          <span>Deduccion aplicada</span>
+          <strong>{formatEuro(appliedQuotaDeductions)}</strong>
         </output>
         ) : null}
       </footer>

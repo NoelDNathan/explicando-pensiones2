@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:irpf2025": "node --experimental-strip-types scripts/verify-irpf-2025-core.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.16.0",
