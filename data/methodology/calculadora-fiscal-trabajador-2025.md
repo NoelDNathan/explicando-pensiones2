@@ -54,6 +54,7 @@ Quedan fuera del calculo base los autonomos, empleados de hogar, sistema agrario
 - `Otros impuestos` no es una magnitud directamente deducible del salario bruto. En este proyecto se tratara como aproximacion separada, basada en datos declarados por el usuario o en una cesta media documentada.
 - La guia para replicar este paquete en otros ejercicios esta en `data/methodology/calculadora-fiscal-datos-por-ano.md`.
 - La metodologia especifica de IVA y otros impuestos esta en `data/methodology/calculadora-fiscal-iva-otros-impuestos.md`.
+- La especificacion detallada de datos, orden, formulas y validaciones de reducciones, minimos, deducciones y salario en especie esta en `data/methodology/calculadora-fiscal-irpf-2025-reducciones-deducciones.md`.
 
 ## Archivo generado
 
