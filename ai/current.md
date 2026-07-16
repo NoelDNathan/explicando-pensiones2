@@ -1,13 +1,19 @@
 # Estado actual
 
-Fecha: 2026-07-12
+Fecha: 2026-07-16
 
 ## Situacion
 
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.
 
+- Auditoria detallada, sin cambios de codigo, de los pasos 4 y 5 para IRPF 2025: el calculo no es fiscalmente fiable todavia. La reduccion por rendimientos del trabajo se calcula sobre una magnitud incorrecta, falta la nueva deduccion estatal 2025 para rendimientos del trabajo inferiores a 18.276 EUR, anualidades a hijos y cuotas sindicales/colegiales tienen tratamiento incorrecto, varias reducciones y deducciones se restan sin porcentajes, requisitos ni limites, los beneficios en especie no llegan al motor y los ajustes se pierden al desmontar el paso. Los minimos estatales base y la tecnica de aplicar las escalas al minimo son correctos, con carencias de prorrateo y minimos autonomicos de discapacidad. Pendiente de correccion y pruebas de regresion con casos AEAT.
+
 ## Hecho
 
+- Rediseno visual del paso 2 (`WorkerContributionLimitsCard`): la tarjeta de estado, la de distancia/margen y el bloque de resultado comparten ahora un mismo color de acento segun el estado (morado minimo, azul rango, naranja maximo). La tarjeta de distancia pasa de parrafo a panel de metrica centrado. "Tu base real" y "Base usada para cotizar" se unifican en un unico panel conectado por una pastilla-conector que resume la regla aplicada ("Se eleva a la base minima" / "Cotizas por tu base real" / "Se limita a la base maxima"). Verificacion: `pnpm run build` correcto; revision visual en `/componentes` (estado dentro del rango) correcta en escritorio; estados minimo/maximo comparten estructura identica con tokens de color definidos.
+- Anadida nota didactica bajo la linea MEI del panel Trabajador en el paso 3: explica la evolucion programada del Mecanismo de Equidad Intergeneracional (2025-2050) para empresa y trabajador, incluye tabla de tipos y traduccion a euros sobre la base de cotizacion activa. Por defecto muestra titulo, mini descripcion y tabla; el detalle completo se despliega con "Ver mas detalle". En vista compacta, el panel Trabajador muestra arriba a la derecha el MEI extra del trabajador en 2030 vs hoy.
+- Creado `data/processed/fiscal/2026-07-12_mei-evolucion-programada.json` con calendario trazable desde Real Decreto-ley 21/2021 y tipos observados 2023-2025.
+- Verificacion: `pnpm run build` correcto. Revision visual pendiente en escritorio y movil.
 - Anadido al paso 3 de la calculadora fiscal un selector de actividad/ocupacion AT/EP 2025 basado en una seleccion trazable de la tarifa oficial BOE 2025, usando CNAE-2009 y ocupaciones especiales del Cuadro II; no se usan datos 2026/CNAE-2025.
 - AT/EP deja de quedar a cero por defecto: el total se calcula como `base * (IT + IMS)` y se incorpora a las cotizaciones y al coste empresarial. El selector se comparte con el dashboard fiscal para que los totales posteriores usen la misma categoria.
 - Anadida explicacion visual bajo la linea AT/EP del panel Empresa: IT como incapacidad temporal e IMS como incapacidad permanente, muerte y supervivencia.
@@ -63,6 +69,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 - Creado un diseno de pruebas en Figma para explorar una primera estructura visual de la web: https://www.figma.com/design/3QoTZ12u9h5Y48jw8cCTdZ.
 
 ## Cambios recientes
+
+- Anadido un paso inicial `Resumen rapido` a la calculadora fiscal del trabajador. Reutiliza `SalarySlider` y los calculos vivos del dashboard para mostrar coste total para la empresa, impuestos y cotizaciones del trabajador y salario neto, con selector entre euros y porcentaje. El CTA abre el recorrido detallado desde `Base real`. El componente tambien se ha incorporado a `/componentes`. Verificacion: TypeScript y build de Vite correctos; revision visual e interacciones correctas en escritorio y movil, sin overflow horizontal en `/calculadora-fiscal`. No se incorporan datos ni fuentes nuevas.
 
 - El importe de «Cotizaciones trabajador» en el resumen de `WorkerSocialContributionsCard` se muestra ahora en rojo.
 
