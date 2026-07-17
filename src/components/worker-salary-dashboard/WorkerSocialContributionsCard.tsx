@@ -2,6 +2,7 @@ import { ChevronDown, Info } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import atEpParams2025Json from '../../../data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json'
+import meiEvolutionJson from '../../../data/processed/fiscal/2026-07-12_mei-evolucion-programada.json'
 import { AtEpCategorySelect } from './AtEpCategorySelect'
 import './WorkerSocialContributionsCard.css'
 
@@ -171,6 +172,14 @@ function formatEuro(value: number) {
   return `${currencyFormatter.format(Number.isFinite(value) ? value : 0)} €`
 }
 
+function formatSignedEuro(value: number) {
+  const numeric = Number.isFinite(value) ? value : 0
+  const formatted = formatEuro(Math.abs(numeric))
+  if (numeric > 0) return `+${formatted}`
+  if (numeric < 0) return `−${formatted}`
+  return formatted
+}
+
 function formatPercent(value: number) {
   return percentFormatter.format(Number.isFinite(value) ? value : 0)
 }
@@ -247,6 +256,120 @@ function getAmount(result: SocialContributionResult, mode: SocialContributionVie
   return typeof value === 'number' ? (mode === 'monthly' ? value / 12 : value) : 0
 }
 
+type MeiScheduleEntry = {
+  year?: number
+  year_label?: string
+  total_percent: number
+  employer_percent: number
+  employee_percent: number
+  estado_dato: string
+}
+
+const meiEvolutionSchedule = (meiEvolutionJson as { schedule: MeiScheduleEntry[] }).schedule
+const meiCurrentScheduleEntry = meiEvolutionSchedule.find((entry) => entry.year === 2025) ?? meiEvolutionSchedule[2]
+const meiFinalScheduleEntry = meiEvolutionSchedule[meiEvolutionSchedule.length - 1]
+
+function formatSchedulePercent(value: number) {
+  return `${percentFormatter.format(value / 100).replace(/\s/g, '')}`
+}
+
+function MeiEvolutionNote({
+  variant,
+  contributionBaseAnnual,
+  viewMode,
+  currentWorkerRate,
+  currentCompanyRate,
+  expanded,
+  onExpandedChange,
+}: {
+  variant: 'worker' | 'company'
+  contributionBaseAnnual: number
+  viewMode: SocialContributionViewMode
+  currentWorkerRate: number
+  currentCompanyRate: number
+  expanded: boolean
+  onExpandedChange: (expanded: boolean) => void
+}) {
+  const base = viewMode === 'monthly' ? contributionBaseAnnual / 12 : contributionBaseAnnual
+  const modeSuffix = viewMode === 'monthly' ? '/ mes' : '/ año'
+  const currentWorkerAmount = base * currentWorkerRate
+  const currentCompanyAmount = base * currentCompanyRate
+  const finalWorkerAmount = base * (meiFinalScheduleEntry.employee_percent / 100)
+  const finalCompanyAmount = base * (meiFinalScheduleEntry.employer_percent / 100)
+  const noteId = `wscc-mei-note-${variant}`
+
+  return (
+    <div className={`wscc-mei-note wscc-mei-note--${variant}`}>
+      <div className="wscc-mei-note__head">
+        <span>
+          MEI 2025: {formatSchedulePercent(meiCurrentScheduleEntry.total_percent)} total
+        </span>
+      </div>
+      <p className="wscc-mei-note__summary">
+        Cotización adicional para reforzar las pensiones públicas. Sube 0,1 puntos porcentuales al año hasta 2030.
+      </p>
+      <table className="wscc-mei-note__table">
+        <caption className="wscc-mei-note__caption">Evolución programada del MEI</caption>
+        <thead>
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">Total</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Trabajador</th>
+          </tr>
+        </thead>
+        <tbody>
+          {meiEvolutionSchedule.slice(2).map((entry) => (
+            <tr key={entry.year ?? entry.year_label}>
+              <th scope="row">{entry.year ?? entry.year_label}</th>
+              <td>{formatSchedulePercent(entry.total_percent)}</td>
+              <td>{formatSchedulePercent(entry.employer_percent)}</td>
+              <td>{formatSchedulePercent(entry.employee_percent)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="wscc-mei-note__details" id={`${noteId}-details`} hidden={!expanded}>
+        <p>
+          El MEI (Mecanismo de Equidad Intergeneracional) refuerza el sistema público de pensiones. Lo pagan
+          trabajador y empresa sobre la base de cotización.
+        </p>
+        <p>
+          La cuota sube 0,1 puntos porcentuales al año hasta 2030. A partir de entonces el reparto queda al 50%:
+          <strong> {formatSchedulePercent(meiFinalScheduleEntry.employee_percent)} trabajador</strong>
+          {' + '}
+          <strong>{formatSchedulePercent(meiFinalScheduleEntry.employer_percent)} empresa</strong>.
+        </p>
+        <p>
+          Con tu base de {formatEuro(base)} {modeSuffix}, el MEI supone hoy
+          {' '}
+          <strong>{formatEuro(currentWorkerAmount)}</strong> descontados de tu salario y
+          {' '}
+          <strong>{formatEuro(currentCompanyAmount)}</strong> pagados por la empresa. En 2030-2050, con el mismo
+          total del {formatSchedulePercent(meiFinalScheduleEntry.total_percent)}, serían
+          {' '}
+          <strong>{formatEuro(finalWorkerAmount)}</strong> para ti y
+          {' '}
+          <strong>{formatEuro(finalCompanyAmount)}</strong> para la empresa.
+        </p>
+        <em>Fuente: Real Decreto-ley 21/2021 y órdenes anuales de cotización. Años 2026-2050: calendario legal programado.</em>
+      </div>
+
+      <button
+        type="button"
+        className="wscc-mei-note__toggle"
+        aria-expanded={expanded}
+        aria-controls={`${noteId}-details`}
+        onClick={() => onExpandedChange(!expanded)}
+      >
+        {expanded ? 'Ver menos' : 'Ver más detalle'}
+        <ChevronDown size={14} aria-hidden="true" className={expanded ? 'is-open' : undefined} />
+      </button>
+    </div>
+  )
+}
+
 function ContributionRows<Key extends string>({
   rows,
   totalAmount,
@@ -254,6 +377,8 @@ function ContributionRows<Key extends string>({
   accent,
   displayMode,
   viewMode,
+  afterRowKey,
+  afterRowContent,
   afterRows,
 }: {
   rows: ContributionLine<Key>[]
@@ -262,6 +387,8 @@ function ContributionRows<Key extends string>({
   accent: 'worker' | 'company'
   displayMode: SocialContributionDisplayMode
   viewMode: SocialContributionViewMode
+  afterRowKey?: Key
+  afterRowContent?: ReactNode
   afterRows?: ReactNode
 }) {
   const displayAmount = viewMode === 'monthly' ? totalAmount / 12 : totalAmount
@@ -271,20 +398,23 @@ function ContributionRows<Key extends string>({
       {rows.map((row) => {
         const amount = viewMode === 'monthly' ? row.amount / 12 : row.amount
         return (
-          <div className={row.muted ? 'wscc-line wscc-line--muted' : 'wscc-line'} key={row.key}>
-            <span className="wscc-line__label">
-              <span className={row.muted ? 'wscc-line__text wscc-line__text--muted' : 'wscc-line__text'}>
-                {row.label}
+          <div key={row.key}>
+            <div className={row.muted ? 'wscc-line wscc-line--muted' : 'wscc-line'}>
+              <span className="wscc-line__label">
+                <span className={row.muted ? 'wscc-line__text wscc-line__text--muted' : 'wscc-line__text'}>
+                  {row.label}
+                </span>
+                <span className="wscc-tooltip" tabIndex={0} aria-label={row.help}>
+                  <Info size={13} aria-hidden="true" />
+                  <span role="tooltip">{row.help}</span>
+                </span>
               </span>
-              <span className="wscc-tooltip" tabIndex={0} aria-label={row.help}>
-                <Info size={13} aria-hidden="true" />
-                <span role="tooltip">{row.help}</span>
+              <span className="wscc-line__values">
+                {displayMode !== 'amount' && <strong>{formatPercent(row.rate)}</strong>}
+                {displayMode !== 'percent' && <em>{formatEuro(amount)}</em>}
               </span>
-            </span>
-            <span className="wscc-line__values">
-              {displayMode !== 'amount' && <strong>{formatPercent(row.rate)}</strong>}
-              {displayMode !== 'percent' && <em>{formatEuro(amount)}</em>}
-            </span>
+            </div>
+            {afterRowKey === row.key && afterRowContent}
           </div>
         )
       })}
@@ -319,6 +449,7 @@ export function WorkerSocialContributionsCard({
 }: WorkerSocialContributionsCardProps) {
   const [viewMode, setViewMode] = useState<SocialContributionViewMode>('annual')
   const displayMode: SocialContributionDisplayMode = 'both'
+  const [meiNoteExpanded, setMeiNoteExpanded] = useState(false)
   const [selectedContractType, setSelectedContractType] = useState<WorkerContractType>(contractType)
   const [selectedAtEpCategoryId, setSelectedAtEpCategoryId] = useState(occupationalAccidentsCategoryId)
 
@@ -460,6 +591,14 @@ export function WorkerSocialContributionsCard({
   ]
 
   const modeSuffix = viewMode === 'monthly' ? '/ mes' : '/ año'
+  const meiBaseDisplay = viewMode === 'monthly' ? result.contributionBaseAnnual / 12 : result.contributionBaseAnnual
+  const meiWorkerToday = meiBaseDisplay * contributionRatesWithAtEp.worker.mei
+  const meiCompanyToday = meiBaseDisplay * contributionRatesWithAtEp.company.mei
+  const meiWorker2030 = meiBaseDisplay * (meiFinalScheduleEntry.employee_percent / 100)
+  const meiCompany2030 = meiBaseDisplay * (meiFinalScheduleEntry.employer_percent / 100)
+  const meiWorkerExtra2030 = meiWorker2030 - meiWorkerToday
+  const meiCompanyExtra2030 = meiCompany2030 - meiCompanyToday
+  const meiTotalExtra2030 = meiWorkerExtra2030 + meiCompanyExtra2030
   const grossDisplay = getAmount(result, viewMode, 'grossSalaryAnnual')
   const baseDisplay = getAmount(result, viewMode, 'contributionBaseAnnual')
   const workerTotalDisplay = getAmount(result, viewMode, 'workerContributionsAnnual')
@@ -552,8 +691,26 @@ export function WorkerSocialContributionsCard({
 
       <div className="wscc-grid">
         <article className="wscc-panel wscc-panel--worker">
-          <h3>Trabajador</h3>
-          <p>Se descuenta de tu salario bruto.</p>
+          <div className="wscc-panel__head">
+            <div className="wscc-panel__intro">
+              <h3>Trabajador</h3>
+              <p>Se descuenta de tu salario bruto.</p>
+            </div>
+            {!meiNoteExpanded && meiTotalExtra2030 !== 0 && (
+              <div className="wscc-panel__mei-extra" aria-label="MEI adicional total en 2030 frente a hoy">
+                <div className="wscc-panel__mei-extra-row">
+                  <span>MEI en 2030 extra</span>
+                  <strong>{formatSignedEuro(meiTotalExtra2030)}</strong>
+                </div>
+                <div className="wscc-panel__mei-extra-row wscc-panel__mei-extra-row--split">
+                  <em className="wscc-panel__mei-extra-label">trabajador + empresa</em>
+                  <span className="wscc-panel__mei-extra-split">
+                    {formatSignedEuro(meiWorkerExtra2030)} {formatSignedEuro(meiCompanyExtra2030)}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
           <ContributionRows
             rows={workerRows}
             totalAmount={result.workerContributionsAnnual}
@@ -561,6 +718,18 @@ export function WorkerSocialContributionsCard({
             accent="worker"
             displayMode={displayMode}
             viewMode={viewMode}
+            afterRowKey="mei"
+            afterRowContent={
+              <MeiEvolutionNote
+                variant="worker"
+                contributionBaseAnnual={result.contributionBaseAnnual}
+                viewMode={viewMode}
+                currentWorkerRate={contributionRatesWithAtEp.worker.mei}
+                currentCompanyRate={contributionRatesWithAtEp.company.mei}
+                expanded={meiNoteExpanded}
+                onExpandedChange={setMeiNoteExpanded}
+              />
+            }
           />
         </article>
 

@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react'
+import { ArrowDown, ChevronDown } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
@@ -153,7 +153,7 @@ function getStatusCopy(status: ContributionStatus) {
     return {
       title: 'Debajo del minimo',
       description:
-        'Tu base real esta por debajo de la base minima de tu grupo. Para cotizar se usara la base minima.',
+        'Tu base real esta por debajo de la base minima de tu grupo. Para cotizar se usara la base minima. Es decir, pagarás más de lo que debería pagar tu base, pero generarás mayor derecho a pensiones',
       accent: 'minimum',
     }
   }
@@ -162,7 +162,7 @@ function getStatusCopy(status: ContributionStatus) {
     return {
       title: 'Por encima del maximo',
       description:
-        'Tu base real supera la base maxima. Para las cotizaciones ordinarias se usara la base maxima.',
+        'Tu base real supera la base maxima. Para calcular cuanto pagas en las cotizaciones ordinarias, se usara la base maxima, todo lo que exceda no supone un pago mayor de impuestos, no cotiza ni genera más prestaciones.',
       accent: 'maximum',
     }
   }
@@ -173,6 +173,12 @@ function getStatusCopy(status: ContributionStatus) {
       'Tu base real esta entre la base minima y la maxima. Cotizas por tu base real.',
     accent: 'range',
   }
+}
+
+function getSummaryConnectorLabel(status: ContributionStatus) {
+  if (status === 'below_minimum') return 'Se eleva a la base minima'
+  if (status === 'above_maximum') return 'Se limita a la base maxima'
+  return 'Cotizas por tu base real'
 }
 
 function getDisplayValue(result: ContributionLimitResult, mode: ContributionViewMode, key: 'min' | 'user' | 'max' | 'used') {
@@ -389,52 +395,67 @@ export function WorkerContributionLimitsCard({
             </div>
           </div>
 
-          <div className="wclc-insight-grid">
+          <div className={`wclc-insight-grid wclc-insight-grid--${statusCopy.accent}`}>
             <article className={`wclc-status wclc-status--${statusCopy.accent}`}>
               <h3>{statusCopy.title}</h3>
               <p>{statusCopy.description}</p>
             </article>
 
-            <article className="wclc-distance">
+            <article className={`wclc-distance wclc-distance--${statusCopy.accent}`}>
               {result.status === 'below_minimum' && (
-                <p>
-                  Te faltan <strong>{formatEuro(Math.abs(result.distanceToMinimum))}</strong> al mes para llegar a la base minima.
-                </p>
+                <>
+                  <span className="wclc-distance__label">Te faltan para el minimo</span>
+                  <strong className="wclc-distance__value">{formatEuro(Math.abs(result.distanceToMinimum))}</strong>
+                  <span className="wclc-distance__unit">al mes</span>
+                </>
               )}
               {result.status === 'within_range' && (
                 <>
-                  <p>Estas <strong>{formatEuro(result.distanceToMinimum)}</strong> por encima del minimo.</p>
-                  <p>Estas <strong>{formatEuro(result.distanceToMaximum)}</strong> por debajo del maximo.</p>
+                  <span className="wclc-distance__label">Margen dentro del rango</span>
+                  <span className="wclc-distance__pair">
+                    <span>
+                      <strong>{formatEuro(result.distanceToMinimum)}</strong> sobre el minimo
+                    </span>
+                    <span>
+                      <strong>{formatEuro(result.distanceToMaximum)}</strong> bajo el maximo
+                    </span>
+                  </span>
                 </>
               )}
               {result.status === 'above_maximum' && (
-                <p>
-                  Exceso sobre la base maxima: <strong>{formatEuro(result.excessOverMaximum)}</strong> al mes.
-                </p>
+                <>
+                  <span className="wclc-distance__label">Exceso sobre el maximo</span>
+                  <strong className="wclc-distance__value">{formatEuro(result.excessOverMaximum)}</strong>
+                  <span className="wclc-distance__unit">al mes</span>
+                </>
               )}
             </article>
           </div>
 
-          <div className="wclc-real-base">
-            <span>Tu base real</span>
-            <strong>{formatEuro(result.userBaseMonthly)} / mes</strong>
-            <em>{formatEuro(result.userBaseAnnual)} / año</em>
+          <div className={`wclc-summary wclc-summary--${statusCopy.accent}`}>
+            <div className="wclc-real-base">
+              <span className="wclc-row-label">Tu base real</span>
+              <span className="wclc-row-values">
+                <strong>{formatEuro(result.userBaseMonthly)} / mes</strong>
+                <em>{formatEuro(result.userBaseAnnual)} / año</em>
+              </span>
+            </div>
+
+            <div className="wclc-summary-connector" aria-hidden="true">
+              <span>
+                <ArrowDown size={14} strokeWidth={2.6} />
+                {getSummaryConnectorLabel(result.status)}
+              </span>
+            </div>
+
+            <output className="wclc-result" aria-live="polite">
+              <span className="wclc-row-label">Base usada para cotizar</span>
+              <span className="wclc-row-values">
+                <strong>{formatEuro(result.baseUsedMonthly)} / mes</strong>
+                <em>{formatEuro(result.baseUsedAnnual)} / año</em>
+              </span>
+            </output>
           </div>
-          <output className="wclc-result" aria-live="polite">
-            <span>Base usada para cotizar</span>
-            <strong>{formatEuro(result.baseUsedMonthly)} / mes</strong>
-            <em>{formatEuro(result.baseUsedAnnual)} / año</em>
-          </output>
-
- 
-
-          {result.status === 'above_maximum' && (
-            <p className="wclc-note">
-              La parte que supera la base maxima no aumenta las cotizaciones
-              ordinarias, aunque puede estar sujeta a mecanismos adicionales si
-              aplica en el año seleccionado.
-            </p>
-          )}
 
           </>
       ) : null}

@@ -70,6 +70,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- En el paso inicial `Resumen rapido` de `/calculadora-fiscal`, se oculta `WorkerFiscalStepsCard` para que solo se muestre `WorkerFiscalSummaryCard` sin duplicar cabecera ni texto explicativo. La navegacion al recorrido detallado sigue disponible con el CTA «Ver como funciona, paso a paso». Verificacion: `pnpm run build` correcto.
+
 - Ampliado `WorkerFiscalSummaryCard` con una cuarta metrica: impuestos y cotizaciones pagados en total, calculada como cotizaciones de empresa + cotizaciones del trabajador + IRPF. Se muestra en euros o como porcentaje del salario bruto y desglosa la parte empresarial y la del trabajador. Verificacion visual correcta en escritorio y movil, sin overflow horizontal; selector accesible e interactivo. No se incorporan datos ni fuentes nuevas.
 
 - Anadido un paso inicial `Resumen rapido` a la calculadora fiscal del trabajador. Reutiliza `SalarySlider` y los calculos vivos del dashboard para mostrar coste total para la empresa, impuestos y cotizaciones del trabajador y salario neto, con selector entre euros y porcentaje. El CTA abre el recorrido detallado desde `Base real`. El componente tambien se ha incorporado a `/componentes`. Verificacion: TypeScript y build de Vite correctos; revision visual e interacciones correctas en escritorio y movil, sin overflow horizontal en `/calculadora-fiscal`. No se incorporan datos ni fuentes nuevas.

@@ -1,0 +1,35 @@
+{
+  "dataset_id": "mei-evolucion-programada",
+  "created_at": "2026-07-12",
+  "estado_dato": "observado",
+  "scope": {
+    "country": "Espana",
+    "worker_profile": "trabajador por cuenta ajena del Regimen General",
+    "coverage": "tipos MEI publicados hasta 2025 y calendario legal programado 2026-2050"
+  },
+  "sources": [
+    {
+      "label": "BOE, Real Decreto-ley 21/2021, de 26 de octubre, articulo 11 (Mecanismo de Equidad Intergeneracional)",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2021-17076"
+    },
+    {
+      "label": "BOE, Orden PJC/178/2025, de 25 de febrero, tipos de cotizacion 2025",
+      "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2025-3780"
+    }
+  ],
+  "methodology": [
+    "El MEI se crea en 2023 con incrementos anuales de 0,1 puntos porcentuales hasta alcanzar el 1,2% en 2030.",
+    "Hasta 2029 la empresa aporta la mayor parte; a partir de 2030 el reparto queda al 50% entre empresa y trabajador.",
+    "Los tipos de 2023-2025 se verifican contra los paquetes normativos del proyecto; 2026-2050 siguen el calendario del Real Decreto-ley 21/2021."
+  ],
+  "schedule": [
+    { "year": 2023, "total_percent": 0.6, "employer_percent": 0.5, "employee_percent": 0.1, "estado_dato": "observado" },
+    { "year": 2024, "total_percent": 0.7, "employer_percent": 0.58, "employee_percent": 0.12, "estado_dato": "observado" },
+    { "year": 2025, "total_percent": 0.8, "employer_percent": 0.67, "employee_percent": 0.13, "estado_dato": "observado" },
+    { "year": 2026, "total_percent": 0.9, "employer_percent": 0.75, "employee_percent": 0.15, "estado_dato": "proyectado" },
+    { "year": 2027, "total_percent": 1.0, "employer_percent": 0.83, "employee_percent": 0.17, "estado_dato": "proyectado" },
+    { "year": 2028, "total_percent": 1.1, "employer_percent": 0.92, "employee_percent": 0.18, "estado_dato": "proyectado" },
+    { "year": 2029, "total_percent": 1.2, "employer_percent": 1.0, "employee_percent": 0.2, "estado_dato": "proyectado" },
+    { "year_label": "2030-2050", "total_percent": 1.2, "employer_percent": 0.6, "employee_percent": 0.6, "estado_dato": "proyectado" }
+  ]
+}

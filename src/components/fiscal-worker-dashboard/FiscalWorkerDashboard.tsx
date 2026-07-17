@@ -921,11 +921,13 @@ export function FiscalWorkerDashboard() {
           </div>
         </header>
 
-        <WorkerFiscalStepsCard
-          activeStepId={activeWorkerStepId}
-          onStepChange={setActiveWorkerStepId}
-          payrollLiveData={payrollLiveData}
-        />
+        {activeWorkerStepId !== 0 ? (
+          <WorkerFiscalStepsCard
+            activeStepId={activeWorkerStepId}
+            onStepChange={setActiveWorkerStepId}
+            payrollLiveData={payrollLiveData}
+          />
+        ) : null}
 
         <section className="fwd-worker-dashboard" aria-label="Pasos detallados del worker salary dashboard">
           <div className="fwd-worker-card">

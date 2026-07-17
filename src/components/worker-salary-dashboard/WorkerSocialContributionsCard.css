@@ -384,6 +384,99 @@
   font-weight: 740;
 }
 
+.wscc-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wscc-panel__intro {
+  min-width: 0;
+}
+
+.wscc-panel__intro > p {
+  margin-top: 6px;
+  color: #95a4bd;
+  font-size: 13px;
+  font-weight: 740;
+}
+
+.wscc-panel__mei-extra {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 4px;
+  min-width: 178px;
+  max-width: min(100%, 210px);
+  padding: 6px 10px;
+  border: 1px solid rgba(187, 120, 255, 0.34);
+  border-radius: 9px;
+  background:
+    linear-gradient(135deg, rgba(96, 52, 138, 0.4), rgba(55, 29, 95, 0.24)),
+    rgba(24, 14, 38, 0.68);
+  box-shadow:
+    0 0 10px rgba(187, 120, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.wscc-panel__mei-extra-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wscc-panel__mei-extra-row--split {
+  gap: 8px;
+}
+
+.wscc-panel__mei-extra-row > span:first-child {
+  color: #d9b8ff;
+  font-size: 8px;
+  font-weight: 820;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wscc-panel__mei-extra strong {
+  color: #f2ddff;
+  font-size: clamp(13px, 1.55vw, 16px);
+  line-height: 1;
+  font-weight: 920;
+  text-shadow: 0 0 10px rgba(187, 120, 255, 0.28);
+  white-space: nowrap;
+}
+
+.wscc-panel__mei-extra-label {
+  margin: 0;
+  color: #c9b0e8;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 820;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
+.wscc-panel__mei-extra-split {
+  color: #a894c8;
+  font-size: 8px;
+  font-weight: 760;
+  line-height: 1.2;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wscc-mei-note__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .wscc-lines {
   display: flex;
   flex: 1;
@@ -446,6 +539,163 @@
 
 .wscc-atep-note em {
   color: #aeb9d2;
+}
+
+.wscc-mei-note {
+  display: grid;
+  gap: 6px;
+  margin-top: 1px;
+  padding: 10px 11px;
+  border-radius: 11px;
+}
+
+.wscc-mei-note--worker {
+  border: 1px solid rgba(187, 120, 255, 0.24);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(187, 120, 255, 0.16), transparent 36%),
+    rgba(24, 14, 38, 0.42);
+}
+
+.wscc-mei-note--company {
+  border: 1px solid rgba(255, 155, 24, 0.22);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 155, 24, 0.16), transparent 36%),
+    rgba(31, 22, 10, 0.42);
+}
+
+.wscc-mei-note span {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.wscc-mei-note--worker span {
+  color: #e5c8ff;
+}
+
+.wscc-mei-note--company span {
+  color: #ffd89b;
+}
+
+.wscc-mei-note p,
+.wscc-mei-note em {
+  margin: 0;
+  color: #c9d4e7;
+  font-size: 12px;
+  line-height: 1.4;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.wscc-mei-note__summary {
+  color: #b8c6dc !important;
+}
+
+.wscc-mei-note__details {
+  display: grid;
+  gap: 6px;
+}
+
+.wscc-mei-note__details[hidden] {
+  display: none;
+}
+
+.wscc-mei-note__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  margin-top: 2px;
+  padding: 0;
+  border: 0;
+  color: #d9c4ff;
+  background: transparent;
+  cursor: pointer;
+  font: 820 11px/1.2 var(--sans);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.wscc-mei-note--company .wscc-mei-note__toggle {
+  color: #ffd89b;
+}
+
+.wscc-mei-note__toggle:hover,
+.wscc-mei-note__toggle:focus-visible {
+  color: #f4f8ff;
+}
+
+.wscc-mei-note__toggle svg {
+  transition: transform 160ms ease;
+}
+
+.wscc-mei-note__toggle svg.is-open {
+  transform: rotate(180deg);
+}
+
+.wscc-mei-note strong {
+  color: #f4f8ff;
+  font-weight: 900;
+}
+
+.wscc-mei-note em {
+  color: #aeb9d2;
+}
+
+.wscc-mei-note__caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wscc-mei-note__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.wscc-mei-note__table th,
+.wscc-mei-note__table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid rgba(104, 163, 224, 0.18);
+  text-align: right;
+  font-weight: 780;
+}
+
+.wscc-mei-note__table thead th {
+  color: #aeb9d2;
+  font-size: 10px;
+  font-weight: 820;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.wscc-mei-note__table tbody th {
+  color: #eef6ff;
+  text-align: left;
+  font-weight: 900;
+}
+
+.wscc-mei-note__table tbody td {
+  color: #d7dfef;
+}
+
+.wscc-mei-note--worker .wscc-mei-note__table tbody tr:last-child td,
+.wscc-mei-note--worker .wscc-mei-note__table tbody tr:last-child th {
+  color: #efdcff;
+}
+
+.wscc-mei-note--company .wscc-mei-note__table tbody tr:last-child td,
+.wscc-mei-note--company .wscc-mei-note__table tbody tr:last-child th {
+  color: #ffe3b7;
 }
 
 .wscc-line__text {
@@ -755,6 +1005,16 @@
 
   .wscc-total {
     gap: 4px;
+  }
+
+  .wscc-panel__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wscc-panel__mei-extra {
+    max-width: none;
+    text-align: left;
   }
 }
 
