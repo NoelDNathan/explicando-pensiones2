@@ -12,6 +12,7 @@ import { ReformSimulator } from './components/pension-overview/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/health-expenditure/HealthExpenditureDashboard'
 import { SalaryNationalityDashboard } from './components/salary-nationality/SalaryNationalityDashboard'
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer } from './components/fiscal-worker-dashboard'
+import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
 import { WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
@@ -66,13 +67,18 @@ function WorkerContributionLimitsShowcase() {
 function WorkerFiscalSummaryShowcase() {
   const [salary, setSalary] = React.useState(35_000)
   const salaryFactor = salary / 35_000
+  const workerContributionsAnnual = 2_270 * salaryFactor
+  const irpfAnnual = 4_350 * salaryFactor
+  const netBeforeConsumption = salary - workerContributionsAnnual - irpfAnnual
+  const vatAnnual = estimateVatFromNetSalary(netBeforeConsumption).vatAnnual
 
   return (
     <WorkerFiscalSummaryCard
       grossSalaryAnnual={salary}
       employerContributionsAnnual={10_700 * salaryFactor}
-      workerContributionsAnnual={2_270 * salaryFactor}
-      irpfAnnual={4_350 * salaryFactor}
+      workerContributionsAnnual={workerContributionsAnnual}
+      irpfAnnual={irpfAnnual}
+      vatAnnual={vatAnnual}
       onSalaryChange={setSalary}
     />
   )

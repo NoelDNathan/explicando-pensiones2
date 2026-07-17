@@ -7,7 +7,6 @@ import {
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
 import fiscalParams2005Json from '../../../data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json'
 import autonomicCoverageJson from '../../../data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json'
-import vatProxyJson from '../../../data/processed/fiscal/2026-06-02_ine-epf-2024-iva-medio-proxy-2025.json'
 import { FiscalKpiRow } from './FiscalKpiRow'
 import type { FiscalKpiItem } from './FiscalKpiRow'
 import {
@@ -35,6 +34,7 @@ import type { DisabilityMode } from './types'
 import { calculateFamilyMinimum2025 } from './familyMinimum2025'
 import { calculateIrpf2025Core } from './irpf2025Calc'
 import { calculateInKindBenefits2025 } from './irpf2025Adjustments'
+import { estimateVatFromNetSalary } from './vatEpFProxy'
 import './FiscalWorkerDashboard.css'
 
 type ScaleBracket = {
@@ -148,21 +148,11 @@ type AutonomicCoverage = {
   }
 }
 
-type VatProxy = {
-  income_brackets: Array<{
-    income_label: string
-    mean_household_spending_eur: number
-    estimated_vat_included_eur: number
-    estimated_effective_vat_percent_on_spending: number
-  }>
-}
-
 type TaxYear = '2025' | '2005'
 
 const fiscalParams2025 = fiscalParams2025Json as FiscalParams
 const fiscalParams2005 = fiscalParams2005Json as LegacyFiscalParams2005
 const autonomicCoverage = autonomicCoverageJson as AutonomicCoverage
-const vatProxy = vatProxyJson as VatProxy
 
 const WORKER_FAQ_ITEMS = [
   {
@@ -399,7 +389,6 @@ export function FiscalWorkerDashboard() {
   const [dependentDisabilityMinimum, setDependentDisabilityMinimum] = useState(0)
   const [taxpayerDisabilityAssistanceMinimum, setTaxpayerDisabilityAssistanceMinimum] = useState(0)
   const [mobility] = useState(false)
-  const [monthlyConsumption] = useState(1700)
   const [manualAutonomicDeduction] = useState(0)
   const [otherTaxes] = useState(0)
   const [contributionGroupId, setContributionGroupId] = useState(7)
@@ -461,7 +450,6 @@ export function FiscalWorkerDashboard() {
     const maxBase = group?.max ?? params.social_security.base_limits_monthly_eur.max_common_contingencies
     const contributionBase = Math.min(Math.max(monthlySalary, minBase), maxBase)
     const annualContributionBase = contributionBase * 12
-    const annualConsumption = monthlyConsumption * 12
     const extraBaseReductions = personalAdjustments?.reductionsTotal ?? 0
     const explicitDeductions = manualAutonomicDeduction + (personalAdjustments?.deductionsTotal ?? 0)
 
@@ -481,8 +469,10 @@ export function FiscalWorkerDashboard() {
       const irpfBeforeDeductions = stateTax + regionalTax
       const irpf = Math.max(0, irpfBeforeDeductions - explicitDeductions)
       const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
-      const vatRate = fiscalParams2005.vat.rates_percent.general
-      const vat = consumptionTaxes?.vatAnnual ?? annualConsumption * vatRate / (100 + vatRate)
+      const epfVatEstimate = estimateVatFromNetSalary(netSalary)
+      const annualConsumption = consumptionTaxes?.totalBudgetAnnual ?? epfVatEstimate.annualConsumption
+      const vatRate = consumptionTaxes ? consumptionTaxes.effectiveRate : epfVatEstimate.vatRate
+      const vat = consumptionTaxes?.vatAnnual ?? epfVatEstimate.vatAnnual
       const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
       const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
@@ -528,7 +518,7 @@ export function FiscalWorkerDashboard() {
         effectiveLaborRate: grossSalaryAnnual > 0 ? (employeeSocialSecurity + irpf) / grossSalaryAnnual * 100 : 0,
         effectiveContextRate: grossSalaryAnnual > 0 ? totalContextTax / grossSalaryAnnual * 100 : 0,
         socialSecurityNote: 'Sin MEI ni solidaridad',
-        vatSourceLabel: 'IVA general legal 2005',
+        vatSourceLabel: consumptionTaxes ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
         taxSourceLabel: 'BOE 2005',
         otherTaxSourceLabel: 'Entrada usuario',
         regionalTaxLabel: 'Complementario',
@@ -612,9 +602,10 @@ export function FiscalWorkerDashboard() {
     const { taxableBase, stateTax, regionalTax, irpf } = coreIrpf
     const irpfBeforeDeductions = coreIrpf.liquidQuotaBeforeWorkDeduction
     const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
-    const vatBracket = vatProxy.income_brackets.find((item) => item.income_label === 'Total') ?? vatProxy.income_brackets[0]
-    const vatRate = vatBracket?.estimated_effective_vat_percent_on_spending ?? 9
-    const vat = consumptionTaxes?.vatAnnual ?? annualConsumption * vatRate / 100
+    const epfVatEstimate = estimateVatFromNetSalary(netSalary)
+    const annualConsumption = consumptionTaxes?.totalBudgetAnnual ?? epfVatEstimate.annualConsumption
+    const vatRate = consumptionTaxes ? consumptionTaxes.effectiveRate : epfVatEstimate.vatRate
+    const vat = consumptionTaxes?.vatAnnual ?? epfVatEstimate.vatAnnual
     const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
     const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
@@ -660,14 +651,14 @@ export function FiscalWorkerDashboard() {
       effectiveLaborRate: grossSalaryAnnual > 0 ? (employeeSocialSecurity + irpf) / grossSalaryAnnual * 100 : 0,
       effectiveContextRate: grossSalaryAnnual > 0 ? totalContextTax / grossSalaryAnnual * 100 : 0,
       socialSecurityNote: 'Incluye MEI',
-      vatSourceLabel: 'INE EPF 2024',
+      vatSourceLabel: consumptionTaxes ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
       taxSourceLabel: 'AEAT/BOE 2025',
       otherTaxSourceLabel: 'Entrada usuario / AEAT IART',
       regionalTaxLabel: 'Autonomico',
       deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
-  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, monthlyConsumption, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
+  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
 
   const baseContributionRates = useMemo(() => getContributionRatesForYear(taxYear), [taxYear])
   const contributionRates = useMemo<SocialContributionRates>(() => ({
@@ -762,6 +753,7 @@ export function FiscalWorkerDashboard() {
             employerContributionsAnnual={socialContributions.companyContributionsAnnual}
             workerContributionsAnnual={socialContributions.workerContributionsAnnual}
             irpfAnnual={result.irpf}
+            vatAnnual={result.vat}
             onSalaryChange={setSalary}
             onExploreDetails={() => setActiveWorkerStepId(1)}
           />

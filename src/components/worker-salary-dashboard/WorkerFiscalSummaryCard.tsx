@@ -10,6 +10,7 @@ type WorkerFiscalSummaryCardProps = {
   employerContributionsAnnual?: number
   workerContributionsAnnual?: number
   irpfAnnual?: number
+  vatAnnual?: number
   onSalaryChange?: (salary: number) => void
   onExploreDetails?: () => void
 }
@@ -29,19 +30,27 @@ function formatEuro(value: number) {
   return euroFormatter.format(Math.round(value))
 }
 
+function roundEuro(value: number) {
+  return Math.round(value)
+}
+
 export function WorkerFiscalSummaryCard({
   grossSalaryAnnual = 35_000,
   employerContributionsAnnual = 10_700,
   workerContributionsAnnual = 2_270,
   irpfAnnual = 4_350,
+  vatAnnual = 1_836,
   onSalaryChange,
   onExploreDetails,
 }: WorkerFiscalSummaryCardProps) {
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>('absolute')
+  const workerContributionsRounded = roundEuro(workerContributionsAnnual)
+  const irpfRounded = roundEuro(irpfAnnual)
+  const vatRounded = roundEuro(vatAnnual)
   const companyCostAnnual = grossSalaryAnnual + employerContributionsAnnual
-  const workerPaymentsAnnual = workerContributionsAnnual + irpfAnnual
-  const totalTaxesAnnual = employerContributionsAnnual + workerPaymentsAnnual
-  const netSalaryAnnual = Math.max(0, grossSalaryAnnual - workerPaymentsAnnual)
+  const workerPaymentsAnnual = workerContributionsRounded + irpfRounded + vatRounded
+  const totalTaxesAnnual = roundEuro(employerContributionsAnnual) + workerPaymentsAnnual
+  const netSalaryAnnual = Math.max(0, roundEuro(grossSalaryAnnual) - workerPaymentsAnnual)
 
   const formatMetric = (value: number) => {
     if (displayMode === 'absolute') return formatEuro(value)
@@ -53,9 +62,9 @@ export function WorkerFiscalSummaryCard({
     <section className="wfsc-summary" aria-labelledby="wfsc-summary-title">
       <header className="wfsc-summary__header">
         <div>
-          <p className="wfsc-summary__eyebrow">Tu trabajo, en una sola imagen</p>
-          <h2 id="wfsc-summary-title">Lo esencial de tu nómina</h2>
-          <p>Una aproximación anual con los datos que has introducido. Cambia el salario y compara euros con porcentaje del bruto.</p>
+          <p className="wfsc-summary__eyebrow">Cuanto pagas, cuanto paga tu empresa y con cuanto dinero te quedas</p>
+          <h2 id="wfsc-summary-title">Entiende tu nómina</h2>
+          <p>En esta primera parte ves una aproximación de cuanto te tocaría pagar a ti y a tu empresa en impuestos por tu salario. En los siguientes pasos calcularemos con más precisión cuanto pagas y te ayudaremos a entender que estás pagando de impuestos</p>
         </div>
 
         <div className="wfsc-summary__mode" role="group" aria-label="Unidad de los resultados">
@@ -111,10 +120,10 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--tax">
           <span className="wfsc-summary__icon" aria-hidden="true"><Landmark size={24} /></span>
           <div>
-            <p>Tú pagas en impuestos y cotizaciones</p>
+            <p>Tú pagas en IRPF, cotizaciones e IVA</p>
             <strong>{formatMetric(workerPaymentsAnnual)}</strong>
             <small>
-              {formatEuro(workerContributionsAnnual)} de cotizaciones + {formatEuro(irpfAnnual)} de IRPF
+              {formatEuro(workerContributionsRounded)} de cotizaciones + {formatEuro(irpfRounded)} de IRPF + {formatEuro(vatRounded)} de IVA
             </small>
           </div>
         </article>
@@ -135,7 +144,7 @@ export function WorkerFiscalSummaryCard({
           <div>
             <p>Te queda como salario neto</p>
             <strong>{formatMetric(netSalaryAnnual)}</strong>
-            <small>Lo que recibes tras restar cotizaciones del trabajador e IRPF</small>
+            <small>Lo que te queda tras restar cotizaciones del trabajador, IRPF e IVA estimado</small>
           </div>
         </article>
       </div>
@@ -144,7 +153,7 @@ export function WorkerFiscalSummaryCard({
         <p>
           {displayMode === 'percentage'
             ? 'Los porcentajes toman tu salario bruto como referencia; por eso el coste total de empresa puede superar el 100 %.'
-            : 'Son importes aproximados: una nómina real puede variar por contrato, situación personal, comunidad autónoma y otros ajustes.'}
+            : 'Son importes aproximados: una nómina real puede variar por contrato, situación personal, comunidad autónoma y otros ajustes. Mira los siguientes pasos para descubir cuanto pagas con mayor precisión.'}
         </p>
         <button type="button" onClick={onExploreDetails}>
           Ver cómo funciona, paso a paso

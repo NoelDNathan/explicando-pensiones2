@@ -70,6 +70,12 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- El IVA proxy del resumen y del dashboard fiscal se calcula ahora como porcentaje del salario neto anual (neto = bruto - cotizaciones - IRPF). El tipo efectivo proviene del proxy INE EPF 2024 y puede variar ligeramente por tramo de ingreso (~9-10 %). Formula: `IVA = neto × tipo / 100`. Verificacion: `pnpm run build` correcto.
+
+- El IVA del resumen rapido ya no es fijo: se estima con el proxy INE EPF 2024 segun el neto mensual (bruto - cotizaciones - IRPF). Al mover el slider de salario cambian cotizaciones, IRPF e IVA; el tramo EPF usado se refleja en la etiqueta de fuente. Si el usuario completa el paso de consumo, prevalece ese calculo. Tambien se corrige la coherencia del total mostrado sumando importes redondeados. Verificacion: `pnpm run build` correcto.
+
+- El resumen rapido (`WorkerFiscalSummaryCard`) incorpora ahora el IVA estimado en las metricas del trabajador: pagos personales (cotizaciones + IRPF + IVA), total de impuestos y cotizaciones, y salario neto restante. El dashboard fiscal pasa `result.vat` (proxy INE EPF 2024 con consumo mensual base 1.700 € hasta completar el paso de impuestos de consumo). Verificacion: `pnpm run build` correcto.
+
 - En el paso inicial `Resumen rapido` de `/calculadora-fiscal`, se oculta `WorkerFiscalStepsCard` para que solo se muestre `WorkerFiscalSummaryCard` sin duplicar cabecera ni texto explicativo. La navegacion al recorrido detallado sigue disponible con el CTA «Ver como funciona, paso a paso». Verificacion: `pnpm run build` correcto.
 
 - Ampliado `WorkerFiscalSummaryCard` con una cuarta metrica: impuestos y cotizaciones pagados en total, calculada como cotizaciones de empresa + cotizaciones del trabajador + IRPF. Se muestra en euros o como porcentaje del salario bruto y desglosa la parte empresarial y la del trabajador. Verificacion visual correcta en escritorio y movil, sin overflow horizontal; selector accesible e interactivo. No se incorporan datos ni fuentes nuevas.
