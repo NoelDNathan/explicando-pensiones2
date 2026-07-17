@@ -32,7 +32,9 @@ import type {
   WorkerContractType,
 } from '../worker-salary-dashboard'
 import type { DisabilityMode } from './types'
+import { calculateFamilyMinimum2025 } from './familyMinimum2025'
 import { calculateIrpf2025Core } from './irpf2025Calc'
+import { calculateInKindBenefits2025 } from './irpf2025Adjustments'
 import './FiscalWorkerDashboard.css'
 
 type ScaleBracket = {
@@ -43,7 +45,7 @@ type ScaleBracket = {
 }
 
 type Minimums = {
-  taxpayer_general: number
+  taxpayer_general?: number
   taxpayer_over_65_increment?: number
   taxpayer_over_75_additional_increment?: number
   descendants?: number[]
@@ -53,6 +55,10 @@ type Minimums = {
   disability_33_to_64?: number
   disability_65_or_more?: number
   disability_assistance_or_reduced_mobility_increment?: number
+  descendant_disability_33_to_64?: number
+  descendant_disability_65_or_more?: number
+  disability_assistance_or_reduced_mobility_increment_general?: number
+  uses_state_minimums_except?: string
 }
 
 type FiscalParams = {
@@ -134,7 +140,7 @@ type AutonomicCoverage = {
   scope: { included_territories: string[] }
   autonomic_general_scales: Record<string, { source_url: string; brackets: ScaleBracket[] }>
   autonomic_personal_family_minimums: {
-    override_by_territory: Record<string, Minimums | { uses_state_minimums_except: string }>
+    override_by_territory: Record<string, Minimums>
   }
   autonomic_deductions: {
     coverage_status: { calculation_ready: boolean }
@@ -243,9 +249,7 @@ function applyScale(base: number, scale: ScaleBracket[]) {
 
 function getMinimums(region: string): Minimums {
   const override = autonomicCoverage.autonomic_personal_family_minimums.override_by_territory[region]
-  if (!override || 'uses_state_minimums_except' in override) {
-    return fiscalParams2025.irpf.personal_and_family_minimum_state_eur
-  }
+  if (!override) return fiscalParams2025.irpf.personal_and_family_minimum_state_eur
   return { ...fiscalParams2025.irpf.personal_and_family_minimum_state_eur, ...override }
 }
 
@@ -260,7 +264,7 @@ function familyMinimum(
   taxpayerDisabilityAssistanceMinimum: number,
   dependentDisabilityMinimum: number,
 ) {
-  let total = minimums.taxpayer_general
+  let total = minimums.taxpayer_general ?? 0
   if (age > 65) total += minimums.taxpayer_over_65_increment ?? 0
   if (age > 75) total += minimums.taxpayer_over_75_additional_increment ?? 0
   const descendantAmounts = minimums.descendants ?? []
@@ -495,6 +499,8 @@ export function FiscalWorkerDashboard() {
         taxableBase,
         stateTax,
         regionalTax,
+        stateIntegralQuota: stateTax,
+        regionalIntegralQuota: regionalTax,
         stateScale: fiscalParams2005.irpf.state_general_scale,
         regionalScale: fiscalParams2005.irpf.madrid_or_complementary_general_scale.scale,
         stateMinimum: 0,
@@ -508,6 +514,12 @@ export function FiscalWorkerDashboard() {
         article19OtherExpensesApplied: 0,
         pensionReductionApplied: extraBaseReductions,
         lowWorkIncomeDeductionApplied: explicitDeductions,
+        baseReductionsApplied: extraBaseReductions,
+        quotaDeductionsApplied: explicitDeductions,
+        generalQuotaDeductionsApplied: explicitDeductions,
+        refundableDeductionsGenerated: 0,
+        finalDeclarationResult: irpf,
+        calculationWarnings: [] as string[],
         netSalary,
         vat,
         vatRate,
@@ -533,33 +545,69 @@ export function FiscalWorkerDashboard() {
     const employerSocialSecurity = annualContributionBase * employerRate / 100 + solidarity.employer
     const pensionsContribution = annualContributionBase * (rates.common_contingencies.employee + rates.common_contingencies.employer + rates.mei.employee + rates.mei.employer) / 100 + solidarity.employee + solidarity.employer
     const disabilityExpense =
-      disability === '33_64'
-        ? fiscalParams2025.irpf.work_income_deductible_expenses_eur.active_worker_disability_33_to_64_increment
-        : disability === '65_or_more'
+      disability === '65_or_more' || (disability === '33_64' && personalAdjustments?.taxpayerAssistance === 'yes')
           ? fiscalParams2025.irpf.work_income_deductible_expenses_eur.active_worker_disability_65_or_more_or_assistance_increment
+        : disability === '33_64'
+          ? fiscalParams2025.irpf.work_income_deductible_expenses_eur.active_worker_disability_33_to_64_increment
           : 0
+    const structuredMobility = personalAdjustments?.adjustments
+    const mobilityIncrement = structuredMobility
+      && structuredMobility.wasRegisteredJobseeker
+      && structuredMobility.acceptedJobOtherMunicipality
+      && structuredMobility.movedResidence
+      && (structuredMobility.moveTaxYear === 2024 || structuredMobility.moveTaxYear === 2025)
+      ? Math.min(
+        fiscalParams2025.irpf.work_income_deductible_expenses_eur.geographic_mobility_increment,
+        Math.max(0, structuredMobility.newJobIntegralIncome - structuredMobility.newJobSpecificExpenses),
+      )
+      : 0
     const deductibleExpenses =
       fiscalParams2025.irpf.work_income_deductible_expenses_eur.general_other_expenses +
-      (mobility ? fiscalParams2025.irpf.work_income_deductible_expenses_eur.geographic_mobility_increment : 0) +
+      mobilityIncrement +
       disabilityExpense
-    const stateMinimum = familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
-    const regionalMinimum = familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
+    const stateMinimum = personalAdjustments
+      ? calculateFamilyMinimum2025({
+        minimums: fiscalParams2025.irpf.personal_and_family_minimum_state_eur,
+        age,
+        disabilityPercent: personalAdjustments.disabilityPercent,
+        taxpayerAssistance: personalAdjustments.taxpayerAssistance === 'yes',
+        descendants: personalAdjustments.descendantProfiles.slice(0, personalAdjustments.children),
+        ascendants: personalAdjustments.ascendantProfiles.slice(0, personalAdjustments.ascendants),
+      }).total
+      : familyMinimum(fiscalParams2025.irpf.personal_and_family_minimum_state_eur, age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
+    const regionalMinimum = personalAdjustments
+      ? calculateFamilyMinimum2025({
+        minimums: getMinimums(effectiveRegion),
+        age,
+        disabilityPercent: personalAdjustments.disabilityPercent,
+        taxpayerAssistance: personalAdjustments.taxpayerAssistance === 'yes',
+        descendants: personalAdjustments.descendantProfiles.slice(0, personalAdjustments.children),
+        ascendants: personalAdjustments.ascendantProfiles.slice(0, personalAdjustments.ascendants),
+      }).total
+      : familyMinimum(getMinimums(effectiveRegion), age, children, childrenUnder3, ascendants, ascendantsOver75, disability, taxpayerDisabilityAssistanceMinimum, dependentDisabilityMinimum)
     const regionalScale = autonomicCoverage.autonomic_general_scales[effectiveRegion]?.brackets ?? autonomicCoverage.autonomic_general_scales.madrid.brackets
-    const basicPensionContributions = personalAdjustments
-      ? Number(personalAdjustments.reductionLines.pensionPlans) +
-        Number(personalAdjustments.reductionLines.companyPensionPlan) +
-        Number(personalAdjustments.reductionLines.mutualities)
-      : 0
+    const inKindBenefits = personalAdjustments
+      ? calculateInKindBenefits2025(personalAdjustments.adjustments)
+      : null
+    const taxableWorkIncome = Math.max(
+      0,
+      grossSalaryAnnual
+        - Math.min(inKindSalary, inKindBenefits?.exemptAmount ?? 0)
+        + (inKindBenefits?.paymentOnAccountAdded ?? 0),
+    )
+    const inKindWarnings = inKindBenefits && inKindBenefits.declaredBenefitsTotal > inKindSalary
+      ? ['Los beneficios en especie detallados superan el importe declarado en el paso 1; la exencion se limita hasta reconciliar ambos importes.']
+      : []
     const coreIrpf = calculateIrpf2025Core({
-      grossWorkIncome: grossSalaryAnnual,
+      grossWorkIncome: taxableWorkIncome,
       article19ExpensesBeforeOtherExpenses: employeeSocialSecurity,
       article19OtherExpenses: deductibleExpenses,
-      basicPensionContributions,
       stateMinimum,
       regionalMinimum,
       stateScale: fiscalParams2025.irpf.state_general_scale,
       regionalScale,
       regionalQuotaDeductions: manualAutonomicDeduction,
+      adjustments: personalAdjustments?.adjustments,
     })
     const { taxableBase, stateTax, regionalTax, irpf } = coreIrpf
     const irpfBeforeDeductions = coreIrpf.liquidQuotaBeforeWorkDeduction
@@ -583,6 +631,8 @@ export function FiscalWorkerDashboard() {
       taxableBase,
       stateTax,
       regionalTax,
+      stateIntegralQuota: coreIrpf.stateIntegralQuota,
+      regionalIntegralQuota: coreIrpf.regionalIntegralQuota,
       stateScale: fiscalParams2025.irpf.state_general_scale,
       regionalScale,
       stateMinimum,
@@ -596,6 +646,12 @@ export function FiscalWorkerDashboard() {
       article19OtherExpensesApplied: coreIrpf.article19OtherExpensesApplied,
       pensionReductionApplied: coreIrpf.pensionReductionApplied,
       lowWorkIncomeDeductionApplied: coreIrpf.lowWorkIncomeDeductionApplied,
+      baseReductionsApplied: coreIrpf.baseReductions.totalApplied,
+      quotaDeductionsApplied: coreIrpf.quotaDeductionsApplied,
+      generalQuotaDeductionsApplied: coreIrpf.generalDeductions.totalApplied,
+      refundableDeductionsGenerated: coreIrpf.refundableDeductions.generatedTotal,
+      finalDeclarationResult: coreIrpf.refundableDeductions.finalDeclarationResult,
+      calculationWarnings: [...coreIrpf.warnings, ...inKindWarnings],
       netSalary,
       vat,
       vatRate,
@@ -762,9 +818,13 @@ export function FiscalWorkerDashboard() {
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
             initialResult={personalAdjustments}
             initialBaseBeforeReductions={result.netReducedWorkIncome}
-            quotaBeforeDeductions={result.irpfBeforeDeductions}
-            appliedBaseReductions={result.pensionReductionApplied}
-            appliedQuotaDeductions={result.lowWorkIncomeDeductionApplied}
+            quotaBeforeDeductions={result.stateIntegralQuota + result.regionalIntegralQuota}
+            appliedBaseReductions={result.baseReductionsApplied}
+            appliedQuotaDeductions={result.quotaDeductionsApplied}
+            refundableDeductionsGenerated={result.refundableDeductionsGenerated}
+            finalDeclarationResult={result.finalDeclarationResult}
+            declaredInKindSalary={inKindSalary}
+            engineWarnings={result.calculationWarnings}
             onResultChange={handlePersonalResultChange}
           />
         )
@@ -781,6 +841,7 @@ export function FiscalWorkerDashboard() {
               regionalTax={result.regionalTax}
               totalTaxAfterDeductions={result.irpf}
               totalQuotaDeduction={result.lowWorkIncomeDeductionApplied}
+              generalQuotaDeductions={result.generalQuotaDeductionsApplied}
               stateScale={result.stateScale}
               regionalScale={result.regionalScale}
               stateMinimum={result.stateMinimum}

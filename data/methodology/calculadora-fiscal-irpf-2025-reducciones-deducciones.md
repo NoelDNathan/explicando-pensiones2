@@ -6,7 +6,7 @@ Ejercicio fiscal: 2025
 
 Ámbito: declaración anual del IRPF de trabajadores por cuenta ajena residentes en comunidades autónomas de régimen común
 
-Estado: especificación normativa pendiente de implementación y contraste final con Renta WEB 2025
+Estado: especificación implementada en los pasos 4 y 5; pendiente de contraste externo integral con Renta WEB 2025 y de automatizar el catálogo completo de deducciones autonómicas
 
 ## 1. Objetivo y alcance
 
@@ -918,6 +918,22 @@ Casos adicionales obligatorios:
 8. Alquiler con contrato de 2018: deducción estatal transitoria cero, aunque exista una posible deducción autonómica.
 9. Maternidad con 10 meses de derecho y 400 de abono anticipado: 1.000 generados y 600 pendientes en la declaración antes de otros ajustes.
 10. Guardería pagada íntegramente por la empresa como retribución en especie exenta: gasto computable para incremento de guardería igual a cero.
+
+### Cobertura automatizada a 2026-07-17
+
+El motor y el formulario estructurado calculan ya, sin importes de ejemplo ni selectores que resten cantidades por sí solos:
+
+- cuotas sindicales, colegiación obligatoria y defensa jurídica;
+- movilidad geográfica, discapacidad de trabajador activo y reducción por obtención de rendimientos del trabajo;
+- previsión social ordinaria y de empleo, aportaciones al cónyuge, pensión compensatoria, tributación conjunta y patrimonios protegidos;
+- mínimos personales y familiares a nivel de persona, prorrateo y especialidad de anualidades por alimentos;
+- donativos, alquiler y vivienda habitual en régimen transitorio e inversión en empresas nuevas;
+- maternidad, guardería, familia numerosa y discapacidad a cargo, con abonos anticipados y pagos a cuenta;
+- tarjeta comida, transporte colectivo, seguro médico, guardería de empresa e ingreso a cuenta no repercutido.
+
+Las reducciones y deducciones autonómicas no catalogadas se aceptan solo como importe manual verificado, acompañado de código, fuente y cálculo. Sin esos metadatos no se aplican. La ausencia de información sobre otras rentas se marca expresamente y no se sustituye silenciosamente por cero.
+
+La regresión ejecutable `pnpm run verify:irpf2025` cubre 23 comprobaciones, incluidos los cuatro casos base y casos de límites, incompatibilidades, distribución estatal/autonómica y deducciones reembolsables. Esta regresión verifica el comportamiento interno; no sustituye el contraste pendiente con expedientes completos en Renta WEB 2025.
 
 ## 14. Fuentes oficiales
 

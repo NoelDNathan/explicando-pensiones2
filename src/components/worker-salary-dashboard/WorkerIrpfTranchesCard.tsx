@@ -65,6 +65,8 @@ type WorkerIrpfTranchesCardProps = {
   totalTaxAfterDeductions?: number;
   /** Deducciones aplicadas sobre la cuota total, como la nueva deduccion de trabajo 2025. */
   totalQuotaDeduction?: number;
+  /** Deducciones generales aplicadas y repartidas entre cuota estatal y autonomica. */
+  generalQuotaDeductions?: number;
   /** Escala estatal completa (tramos oficiales). Habilita la vista de doble escala. */
   stateScale?: WorkerIrpfScaleBracket[];
   /** Escala autonomica/complementaria completa (tramos oficiales de la comunidad). */
@@ -164,6 +166,7 @@ export function WorkerIrpfTranchesCard({
   regionalTax,
   totalTaxAfterDeductions,
   totalQuotaDeduction = 0,
+  generalQuotaDeductions = 0,
   stateScale,
   regionalScale,
   stateMinimum,
@@ -469,7 +472,7 @@ export function WorkerIrpfTranchesCard({
                   stateGross,
                   stateReduction,
                   stateTax ?? 0,
-                  "Cuota estatal",
+                  generalQuotaDeductions > 0 ? "Cuota estatal tras deducciones" : "Cuota estatal",
                   stateMinimum,
                 )}
                 {renderTramoColumn(
@@ -479,10 +482,16 @@ export function WorkerIrpfTranchesCard({
                   regionalGross,
                   regionalReduction,
                   regionalTax ?? 0,
-                  `Cuota ${regionLabel}`,
+                  generalQuotaDeductions > 0 ? `Cuota ${regionLabel} tras deducciones` : `Cuota ${regionLabel}`,
                   regionalMinimum,
                 )}
               </div>
+              {generalQuotaDeductions > 0 ? (
+                <div className="witc-total-deduction">
+                  <span>Deducciones generales de cuota aplicadas</span>
+                  <strong>- {formatEuro(generalQuotaDeductions, 2)}</strong>
+                </div>
+              ) : null}
               {totalQuotaDeduction > 0 ? (
                 <div className="witc-total-deduction">
                   <span>Deduccion estatal por rendimientos del trabajo 2025</span>
@@ -567,6 +576,12 @@ export function WorkerIrpfTranchesCard({
                 <output className="witc-result witc-result--deduction">
                   <span>Deduccion trabajo 2025</span>
                   <strong>- {formatEuro(totalQuotaDeduction, 2)}</strong>
+                </output>
+              ) : null}
+              {generalQuotaDeductions > 0 ? (
+                <output className="witc-result witc-result--deduction">
+                  <span>Deducciones generales</span>
+                  <strong>- {formatEuro(generalQuotaDeductions, 2)}</strong>
                 </output>
               ) : null}
               <output className="witc-result witc-result--quota">
