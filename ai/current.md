@@ -70,6 +70,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Anadido el paso 10 `Fuentes del calculo` como cierre del recorrido fiscal en una sola pantalla: muestra nombre del parametro, organismo oficial, documento, URL legible y valores vivos aplicados. Para 2025 documenta BOE cotizaciones, tarifa AT/EP, AEAT IRPF estatal y autonomico e INE EPF/AEAT IVA segun el modo; incluye variante coherente para 2005. Nuevo componente reutilizable `WorkerCalculationSourcesCard`, revisado tambien en `/componentes`. Verificacion: TypeScript y Vite build correctos; revision integrada correcta en escritorio 1440 px y movil 390 px, sin overflow horizontal ni enlaces recortados. `pnpm` no estaba disponible y se usaron los ejecutables locales equivalentes.
+
 - El IVA proxy del resumen y del dashboard fiscal se calcula ahora como porcentaje del salario neto anual (neto = bruto - cotizaciones - IRPF). El tipo efectivo proviene del proxy INE EPF 2024 y puede variar ligeramente por tramo de ingreso (~9-10 %). Formula: `IVA = neto × tipo / 100`. Verificacion: `pnpm run build` correcto.
 
 - El IVA del resumen rapido ya no es fijo: se estima con el proxy INE EPF 2024 segun el neto mensual (bruto - cotizaciones - IRPF). Al mover el slider de salario cambian cotizaciones, IRPF e IVA; el tramo EPF usado se refleja en la etiqueta de fuente. Si el usuario completa el paso de consumo, prevalece ese calculo. Tambien se corrige la coherencia del total mostrado sumando importes redondeados. Verificacion: `pnpm run build` correcto.

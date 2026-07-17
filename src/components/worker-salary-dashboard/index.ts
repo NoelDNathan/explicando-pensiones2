@@ -8,6 +8,7 @@ export { WorkerIrpfRegionComparison } from './WorkerIrpfRegionComparison'
 export { WorkerConsumptionTaxesCard } from './WorkerConsumptionTaxesCard'
 export { WorkerFiscalStepsCard } from './WorkerFiscalStepsCard'
 export { WorkerFiscalSummaryCard } from './WorkerFiscalSummaryCard'
+export { WorkerCalculationSourcesCard } from './WorkerCalculationSourcesCard'
 export { WorkerSalaryBaseCard as default } from './WorkerSalaryBaseCard'
 export type {
   ContributionGroup,
@@ -49,3 +50,4 @@ export type {
   ConsumptionTaxLine,
   ConsumptionTaxesResult,
 } from './WorkerConsumptionTaxesCard'
+export type { CalculationSourceItem } from './WorkerCalculationSourcesCard'

@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  BookOpenCheck,
   Calculator,
   ChevronLeft,
   ChevronRight,
@@ -474,6 +475,18 @@ Idea clave: dos personas con el mismo sueldo pueden pagar impuestos totales dist
     important: 'La FAQ no anade nuevos impuestos al calculo: solo explica como leer los pasos anteriores.',
     Icon: CircleHelp,
   },
+  {
+    id: 10,
+    title: 'Fuentes del calculo',
+    subtitle: 'Origen y valor de cada parametro',
+    description: 'Consulta en una sola pantalla las fuentes oficiales utilizadas, el enlace al documento original y el valor concreto aplicado a tu calculo.',
+    checklist: ['Nombre del parametro', 'Organismo oficial', 'Valor utilizado', 'Enlace verificable'],
+    helpTitle: 'Como comprobar el resultado',
+    helpBody: 'Cada bloque conecta el valor aplicado con su norma o dataset institucional.',
+    details: [],
+    important: 'Los valores cambian cuando modificas tus datos; las fuentes permanecen visibles para que el calculo sea auditable.',
+    Icon: BookOpenCheck,
+  },
 ]
 
 const PAYROLL_ROWS: PayrollRow[] = [
@@ -713,9 +726,9 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const detailStepCount = WORKER_FISCAL_STEPS.length - 1
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 9
+  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 9 && activeStep.id !== 10
   const isSummaryStep = activeStep.id === 0
-  const isCompactStep = activeStep.id === 9
+  const isCompactStep = activeStep.id === 9 || activeStep.id === 10
 
   const setActiveStep = (nextStepId: number) => {
     const clampedStepId = Math.min(detailStepCount, Math.max(0, nextStepId))

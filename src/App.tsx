@@ -14,7 +14,7 @@ import { SalaryNationalityDashboard } from './components/salary-nationality/Sala
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
-import { WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
+import { WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
@@ -799,6 +799,21 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dark component-preview--dashboard">
           <WorkerFiscalStepsCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-calculation-sources-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 22</p>
+          <h2 id="worker-calculation-sources-title">Fuentes del calculo</h2>
+          <p>
+            Pantalla final de trazabilidad con el nombre de cada parametro, el organismo oficial,
+            el valor aplicado y un enlace legible al documento original.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--dashboard">
+          <WorkerCalculationSourcesCard />
         </div>
       </section>
 
