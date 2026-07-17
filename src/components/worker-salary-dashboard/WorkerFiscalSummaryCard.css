@@ -5,6 +5,8 @@
   --summary-net: #62d76b;
   display: grid;
   gap: clamp(18px, 2.5vw, 28px);
+  min-width: 0;
+  max-width: 100%;
   padding: clamp(20px, 3vw, 36px);
   border: 1px solid rgba(93, 164, 229, 0.48);
   border-radius: 20px;

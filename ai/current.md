@@ -70,6 +70,8 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- Revision responsive de `/calculadora-fiscal` en escritorio (1440), tablet (768) y movil (390). El resumen rapido, el paso 7 (IVA) y la mayoria del recorrido ya no generan overflow horizontal. Se corrigio un desborde real en el paso 8 (`Resumen del calculo`): `FiscalKpiRow` forzaba columnas con `minmax(178px/180px)` y `.fwd-net-step` no tenia `min-width: 0`, asi que la pagina se expandia ~1194 px en movil. Ajuste en `FiscalWorkerDashboard.css` y `WorkerFiscalSummaryCard.css`. Verificacion: sin overflow en 390/768/escritorio; `pnpm run build` correcto. Nota: la tabla de consumo del paso 7 mantiene scroll horizontal interno a proposito.
+
 - El paso 8 de la calculadora fiscal pasa a ser un resumen completo del calculo: reutiliza `WorkerFiscalSummaryCard` en variante `final` (coste de empresa, pagos del trabajador, total de impuestos/cotizaciones y resto tras consumo) mas el desglose detallado con `FiscalKpiRow`. Titulo del wizard: «Resumen del calculo». Verificacion: `pnpm run build` correcto.
 
 - Reordenados los pasos 7 y 8 de la calculadora fiscal: ahora el IVA va antes (paso 7) y el salario neto despues (paso 8), justo antes de preguntas frecuentes. Verificacion: `pnpm run build` correcto.
