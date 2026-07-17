@@ -70,6 +70,10 @@ Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto
 
 ## Cambios recientes
 
+- El paso 8 de la calculadora fiscal pasa a ser un resumen completo del calculo: reutiliza `WorkerFiscalSummaryCard` en variante `final` (coste de empresa, pagos del trabajador, total de impuestos/cotizaciones y resto tras consumo) mas el desglose detallado con `FiscalKpiRow`. Titulo del wizard: «Resumen del calculo». Verificacion: `pnpm run build` correcto.
+
+- Reordenados los pasos 7 y 8 de la calculadora fiscal: ahora el IVA va antes (paso 7) y el salario neto despues (paso 8), justo antes de preguntas frecuentes. Verificacion: `pnpm run build` correcto.
+
 - Anadido el paso 10 `Fuentes del calculo` como cierre del recorrido fiscal en una sola pantalla: muestra nombre del parametro, organismo oficial, documento, URL legible y valores vivos aplicados. Para 2025 documenta BOE cotizaciones, tarifa AT/EP, AEAT IRPF estatal y autonomico e INE EPF/AEAT IVA segun el modo; incluye variante coherente para 2005. Nuevo componente reutilizable `WorkerCalculationSourcesCard`, revisado tambien en `/componentes`. Verificacion: TypeScript y Vite build correctos; revision integrada correcta en escritorio 1440 px y movil 390 px, sin overflow horizontal ni enlaces recortados. `pnpm` no estaba disponible y se usaron los ejecutables locales equivalentes.
 
 - El IVA proxy del resumen y del dashboard fiscal se calcula ahora como porcentaje del salario neto anual (neto = bruto - cotizaciones - IRPF). El tipo efectivo proviene del proxy INE EPF 2024 y puede variar ligeramente por tramo de ingreso (~9-10 %). Formula: `IVA = neto × tipo / 100`. Verificacion: `pnpm run build` correcto.

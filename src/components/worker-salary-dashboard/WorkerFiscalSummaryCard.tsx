@@ -4,15 +4,19 @@ import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerFiscalSummaryCard.css'
 
 type SummaryDisplayMode = 'absolute' | 'percentage'
+type SummaryVariant = 'intro' | 'final'
 
 type WorkerFiscalSummaryCardProps = {
+  variant?: SummaryVariant
   grossSalaryAnnual?: number
   employerContributionsAnnual?: number
   workerContributionsAnnual?: number
   irpfAnnual?: number
   vatAnnual?: number
+  otherTaxesAnnual?: number
   onSalaryChange?: (salary: number) => void
   onExploreDetails?: () => void
+  onContinue?: () => void
 }
 
 const euroFormatter = new Intl.NumberFormat('es-ES', {
@@ -35,22 +39,28 @@ function roundEuro(value: number) {
 }
 
 export function WorkerFiscalSummaryCard({
+  variant = 'intro',
   grossSalaryAnnual = 35_000,
   employerContributionsAnnual = 10_700,
   workerContributionsAnnual = 2_270,
   irpfAnnual = 4_350,
   vatAnnual = 1_836,
+  otherTaxesAnnual = 0,
   onSalaryChange,
   onExploreDetails,
+  onContinue,
 }: WorkerFiscalSummaryCardProps) {
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>('absolute')
+  const isFinal = variant === 'final'
   const workerContributionsRounded = roundEuro(workerContributionsAnnual)
   const irpfRounded = roundEuro(irpfAnnual)
   const vatRounded = roundEuro(vatAnnual)
+  const otherTaxesRounded = roundEuro(otherTaxesAnnual)
   const companyCostAnnual = grossSalaryAnnual + employerContributionsAnnual
-  const workerPaymentsAnnual = workerContributionsRounded + irpfRounded + vatRounded
+  const workerPaymentsAnnual = workerContributionsRounded + irpfRounded + vatRounded + otherTaxesRounded
   const totalTaxesAnnual = roundEuro(employerContributionsAnnual) + workerPaymentsAnnual
-  const netSalaryAnnual = Math.max(0, roundEuro(grossSalaryAnnual) - workerPaymentsAnnual)
+  const laborNetAnnual = Math.max(0, roundEuro(grossSalaryAnnual) - workerContributionsRounded - irpfRounded)
+  const remainingAfterConsumption = Math.max(0, laborNetAnnual - vatRounded - otherTaxesRounded)
 
   const formatMetric = (value: number) => {
     if (displayMode === 'absolute') return formatEuro(value)
@@ -58,13 +68,25 @@ export function WorkerFiscalSummaryCard({
     return `${percentFormatter.format(percentage)} %`
   }
 
+  const workerBreakdown = otherTaxesRounded > 0
+    ? `${formatEuro(workerContributionsRounded)} de cotizaciones + ${formatEuro(irpfRounded)} de IRPF + ${formatEuro(vatRounded)} de IVA + ${formatEuro(otherTaxesRounded)} de otros`
+    : `${formatEuro(workerContributionsRounded)} de cotizaciones + ${formatEuro(irpfRounded)} de IRPF + ${formatEuro(vatRounded)} de IVA`
+
   return (
-    <section className="wfsc-summary" aria-labelledby="wfsc-summary-title">
+    <section className={`wfsc-summary${isFinal ? ' wfsc-summary--final' : ''}`} aria-labelledby="wfsc-summary-title">
       <header className="wfsc-summary__header">
         <div>
-          <p className="wfsc-summary__eyebrow">Cuanto pagas, cuanto paga tu empresa y con cuanto dinero te quedas</p>
-          <h2 id="wfsc-summary-title">Entiende tu nómina</h2>
-          <p>En esta primera parte ves una aproximación de cuanto te tocaría pagar a ti y a tu empresa en impuestos por tu salario. En los siguientes pasos calcularemos con más precisión cuanto pagas y te ayudaremos a entender que estás pagando de impuestos</p>
+          <p className="wfsc-summary__eyebrow">
+            {isFinal ? 'Paso 8 · Resultado de todo el recorrido' : 'Cuanto pagas, cuanto paga tu empresa y con cuanto dinero te quedas'}
+          </p>
+          <h2 id="wfsc-summary-title">
+            {isFinal ? 'Resumen del cálculo' : 'Entiende tu nómina'}
+          </h2>
+          <p>
+            {isFinal
+              ? 'Aquí se reúnen las cifras que has construido paso a paso: coste de empresa, cotizaciones, IRPF, IVA y lo que te queda. Puedes seguir ajustando el salario bruto para ver cómo cambia el resultado.'
+              : 'En esta primera parte ves una aproximación de cuanto te tocaría pagar a ti y a tu empresa en impuestos por tu salario. En los siguientes pasos calcularemos con más precisión cuanto pagas y te ayudaremos a entender que estás pagando de impuestos'}
+          </p>
         </div>
 
         <div className="wfsc-summary__mode" role="group" aria-label="Unidad de los resultados">
@@ -93,7 +115,7 @@ export function WorkerFiscalSummaryCard({
 
       <div className="wfsc-summary__salary">
         <SalarySlider
-          id="wfsc-summary-salary"
+          id={isFinal ? 'wfsc-summary-salary-final' : 'wfsc-summary-salary'}
           value={grossSalaryAnnual}
           onChange={onSalaryChange ?? (() => undefined)}
           min={14_000}
@@ -120,11 +142,9 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--tax">
           <span className="wfsc-summary__icon" aria-hidden="true"><Landmark size={24} /></span>
           <div>
-            <p>Tú pagas en IRPF, cotizaciones e IVA</p>
+            <p>{isFinal ? 'Tú pagas en total' : 'Tú pagas en IRPF, cotizaciones e IVA'}</p>
             <strong>{formatMetric(workerPaymentsAnnual)}</strong>
-            <small>
-              {formatEuro(workerContributionsRounded)} de cotizaciones + {formatEuro(irpfRounded)} de IRPF + {formatEuro(vatRounded)} de IVA
-            </small>
+            <small>{workerBreakdown}</small>
           </div>
         </article>
 
@@ -142,9 +162,13 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--net">
           <span className="wfsc-summary__icon" aria-hidden="true"><WalletCards size={24} /></span>
           <div>
-            <p>Te queda como salario neto</p>
-            <strong>{formatMetric(netSalaryAnnual)}</strong>
-            <small>Lo que te queda tras restar cotizaciones del trabajador, IRPF e IVA estimado</small>
+            <p>{isFinal ? 'Te queda tras nómina y consumo' : 'Te queda como salario neto'}</p>
+            <strong>{formatMetric(remainingAfterConsumption)}</strong>
+            <small>
+              {isFinal
+                ? `${formatEuro(laborNetAnnual)} de neto laboral − ${formatEuro(vatRounded + otherTaxesRounded)} de IVA y otros`
+                : 'Lo que te queda tras restar cotizaciones del trabajador, IRPF e IVA estimado'}
+            </small>
           </div>
         </article>
       </div>
@@ -153,12 +177,23 @@ export function WorkerFiscalSummaryCard({
         <p>
           {displayMode === 'percentage'
             ? 'Los porcentajes toman tu salario bruto como referencia; por eso el coste total de empresa puede superar el 100 %.'
-            : 'Son importes aproximados: una nómina real puede variar por contrato, situación personal, comunidad autónoma y otros ajustes. Mira los siguientes pasos para descubir cuanto pagas con mayor precisión.'}
+            : isFinal
+              ? 'Este resumen usa los valores vivos de los pasos anteriores. El neto laboral solo resta cotizaciones e IRPF; el IVA y otros impuestos dependen de tu consumo y van aparte.'
+              : 'Son importes aproximados: una nómina real puede variar por contrato, situación personal, comunidad autónoma y otros ajustes. Mira los siguientes pasos para descubir cuanto pagas con mayor precisión.'}
         </p>
-        <button type="button" onClick={onExploreDetails}>
-          Ver cómo funciona, paso a paso
-          <ArrowRight size={18} aria-hidden="true" />
-        </button>
+        {isFinal ? (
+          onContinue ? (
+            <button type="button" onClick={onContinue}>
+              Ver preguntas frecuentes
+              <ArrowRight size={18} aria-hidden="true" />
+            </button>
+          ) : null
+        ) : (
+          <button type="button" onClick={onExploreDetails}>
+            Ver cómo funciona, paso a paso
+            <ArrowRight size={18} aria-hidden="true" />
+          </button>
+        )}
       </footer>
     </section>
   )

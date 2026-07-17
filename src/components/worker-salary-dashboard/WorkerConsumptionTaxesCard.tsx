@@ -313,7 +313,7 @@ export function WorkerConsumptionTaxesCard({
     <section className="wctc" aria-labelledby="wctc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
-          <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 9</span>
+          <span className="wctc-step"><span aria-hidden="true" />Paso 7 de 10</span>
           <h2 id="wctc-title">7. IVA y otros impuestos</h2>
           <p>Distribuye tu gasto y calcula cuanto pagas en IVA e impuestos especiales.</p>
         </div>

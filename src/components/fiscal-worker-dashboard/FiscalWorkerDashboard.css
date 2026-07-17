@@ -397,18 +397,13 @@
 
 .fwd-net-step {
   display: grid;
-  gap: 18px;
-  padding: clamp(20px, 3vw, 34px);
-  border: 2px solid rgba(76, 151, 255, 0.55);
-  border-radius: 18px;
+  gap: clamp(18px, 2.4vw, 28px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   color: var(--fwd-text);
-  background:
-    radial-gradient(circle at 16% 0%, rgba(98, 215, 107, 0.16), transparent 31%),
-    radial-gradient(circle at 86% 8%, rgba(47, 128, 255, 0.18), transparent 32%),
-    linear-gradient(145deg, rgba(4, 26, 50, 0.96), rgba(2, 12, 27, 0.98));
-  box-shadow:
-    0 22px 64px rgba(0, 7, 20, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: transparent;
+  box-shadow: none;
 }
 
 .fwd-net-step__header {
@@ -439,6 +434,32 @@
 }
 
 .fwd-net-step__header p {
+  margin: 0;
+  color: #b8c8dc;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fwd-net-step__detail {
+  display: grid;
+  gap: 12px;
+  padding: clamp(18px, 2.6vw, 28px);
+  border: 1px solid rgba(93, 164, 229, 0.36);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(98, 215, 107, 0.12), transparent 31%),
+    linear-gradient(145deg, rgba(4, 26, 50, 0.96), rgba(2, 12, 27, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.fwd-net-step__detail h3 {
+  margin: 0;
+  color: #f4f8ff;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.15;
+}
+
+.fwd-net-step__detail > p {
   margin: 0;
   color: #b8c8dc;
   font-size: 14px;

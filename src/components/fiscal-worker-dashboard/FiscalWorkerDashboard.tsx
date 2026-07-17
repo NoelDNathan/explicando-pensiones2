@@ -1014,23 +1014,35 @@ export function FiscalWorkerDashboard() {
       }
       case 7:
         return (
-          <section className="fwd-net-step" aria-labelledby="fwd-net-step-title">
-            <header className="fwd-net-step__header">
-              <div>
-                <span>7.</span>
-                <h2 id="fwd-net-step-title">Salario neto</h2>
-              </div>
-              <p>Aqui ves el dinero que llega a tu bolsillo por tu trabajo: bruto menos cotizaciones del trabajador e IRPF. IVA y otros impuestos van aparte porque dependen de como gastas.</p>
-            </header>
-            <FiscalKpiRow className="fwd-kpis fwd-kpis--net-step" items={fiscalKpiItems} />
-          </section>
-        )
-      case 8:
-        return (
           <WorkerConsumptionTaxesCard
             initialBudgetAnnual={result.annualConsumption}
             onResultChange={setConsumptionTaxes}
           />
+        )
+      case 8:
+        return (
+          <section className="fwd-net-step" aria-labelledby="fwd-net-step-title">
+            <WorkerFiscalSummaryCard
+              variant="final"
+              grossSalaryAnnual={result.grossSalaryAnnual}
+              employerContributionsAnnual={socialContributions.companyContributionsAnnual}
+              workerContributionsAnnual={socialContributions.workerContributionsAnnual}
+              irpfAnnual={result.irpf}
+              vatAnnual={result.vat}
+              otherTaxesAnnual={
+                consumptionTaxes
+                  ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + otherTaxes
+                  : otherTaxes
+              }
+              onSalaryChange={setSalary}
+              onContinue={() => setActiveWorkerStepId(9)}
+            />
+            <div className="fwd-net-step__detail">
+              <h3 id="fwd-net-step-title">Desglose de todas las piezas</h3>
+              <p>Detalle anual de salario neto laboral, IRPF, cotizaciones, aportación a la Seguridad Social, IVA y otros impuestos.</p>
+              <FiscalKpiRow className="fwd-kpis fwd-kpis--net-step" items={fiscalKpiItems} />
+            </div>
+          </section>
         )
       case 9:
         return (

@@ -245,8 +245,8 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
     4: formatPayrollNumber(grossMonthly),
     5: '',
     6: formatPayrollNumber(irpfMonthly),
-    7: formatPayrollNumber(netMonthly),
-    8: `${formatPayrollNumber(netMonthly)}#`,
+    7: `${formatPayrollNumber(netMonthly)}#`,
+    8: formatPayrollNumber(netMonthly),
     9: `${formatPayrollNumber(netMonthly)}#`,
   }
 
@@ -419,22 +419,6 @@ Estar en un tramo alto no significa que toda tu renta tribute a ese porcentaje. 
   },
   {
     id: 7,
-    title: 'Salario neto',
-    subtitle: 'Bruto menos descuentos de nomina',
-    description: 'El salario neto es lo que queda de tu trabajo despues de restar cotizaciones del trabajador e IRPF.',
-    checklist: ['Salario bruto', 'Cotizaciones trabajador', 'IRPF', 'Neto anual y mensual'],
-    helpTitle: 'Que entra en el neto?',
-    helpBody: 'Entra lo que se descuenta en la nomina: Seguridad Social del trabajador e IRPF. No incluye lo que luego pagas al consumir.',
-    details: [
-      'El bruto es lo pactado antes de descuentos; el neto es lo que recibes despues de las retenciones de nomina.',
-      'La retencion de IRPF es un pago a cuenta: puede ajustarse en la declaracion anual segun tu situacion final.',
-      'El neto mensual depende tambien del numero de pagas: 12 y 14 pagas pueden tener el mismo neto anual repartido distinto.',
-    ],
-    important: 'Por eso la empresa puede tener un coste mayor que tu bruto y tu bolsillo recibir menos que el bruto.',
-    Icon: WalletCards,
-  },
-  {
-    id: 8,
     title: 'IVA y otros impuestos',
     subtitle: 'Impuestos que dependen de tu gasto',
     description: `El IRPF y la Seguridad Social están ligados a tu salario, pero no son los únicos impuestos que pagas.
@@ -460,9 +444,25 @@ Idea clave: dos personas con el mismo sueldo pueden pagar impuestos totales dist
     Icon: ShoppingCart,
   },
   {
+    id: 8,
+    title: 'Resumen del cálculo',
+    subtitle: 'Todas las cifras del recorrido en un solo vistazo',
+    description: 'Este paso reúne el resultado completo: coste de empresa, cotizaciones, IRPF, IVA y lo que te queda después de la nómina y del consumo estimado. Sirve para comprobar que las piezas de los pasos anteriores encajan.',
+    checklist: ['Coste de empresa', 'Cotizaciones e IRPF', 'IVA y otros', 'Neto laboral y resto tras consumo'],
+    helpTitle: 'Como leer este resumen?',
+    helpBody: 'Primero mira el coste total de contratarte y lo que pagas tú. Después separa el neto laboral (bruto menos cotizaciones e IRPF) de los impuestos de consumo, que dependen de como gastas.',
+    details: [
+      'El bruto y las cotizaciones de empresa explican cuanto cuesta tu trabajo antes de que cobres.',
+      'Las cotizaciones del trabajador y el IRPF bajan tu nomina; el IVA y otros impuestos salen despues, al consumir.',
+      'Si cambias el salario bruto aqui, se recalculan las cifras vivas de todo el recorrido.',
+    ],
+    important: 'El resumen no inventa datos nuevos: consolida lo que ya has calculado en los pasos anteriores.',
+    Icon: WalletCards,
+  },
+  {
     id: 9,
     title: 'Preguntas frecuentes',
-    subtitle: 'Resuelve dudas antes de leer el resultado',
+    subtitle: 'Resuelve dudas despues del resumen',
     description: 'Cierra el recorrido con respuestas rapidas a las dudas mas habituales: que se descuenta de la nomina, que paga la empresa y que queda fuera del salario neto.',
     checklist: ['Bruto frente a neto', 'Bases y limites', 'IRPF y retenciones', 'Impuestos de consumo'],
     helpTitle: 'Para que sirve esta seccion?',
@@ -551,14 +551,14 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
     highlightRows: ['irpf', 'irpf-withholding'],
   },
   7: {
-    resultLabel: 'LIQUIDO TOTAL',
-    resultValue: '1.426,24',
-    highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'deductions-total', 'net-pay'],
-  },
-  8: {
     resultLabel: 'IMPORTE',
     resultValue: '1.426,24#',
     highlightRows: ['net-pay'],
+  },
+  8: {
+    resultLabel: 'LIQUIDO TOTAL',
+    resultValue: '1.426,24',
+    highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'deductions-total', 'net-pay'],
   },
   9: {
     resultLabel: 'IMPORTE',
