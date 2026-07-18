@@ -1,9 +1,10 @@
-import { ArrowRight, Building2, Landmark, Percent, ReceiptText, WalletCards } from 'lucide-react'
+import { ArrowRight, Building2, Landmark, Percent, PiggyBank, ReceiptText, ShoppingCart, WalletCards } from 'lucide-react'
 import { useState } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerFiscalSummaryCard.css'
 
 type SummaryDisplayMode = 'absolute' | 'percentage'
+type SummaryPeriod = 'month' | 'year'
 type SummaryVariant = 'intro' | 'final'
 
 type WorkerFiscalSummaryCardProps = {
@@ -51,6 +52,7 @@ export function WorkerFiscalSummaryCard({
   onContinue,
 }: WorkerFiscalSummaryCardProps) {
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>('absolute')
+  const [period, setPeriod] = useState<SummaryPeriod>('month')
   const isFinal = variant === 'final'
   const workerContributionsRounded = roundEuro(workerContributionsAnnual)
   const irpfRounded = roundEuro(irpfAnnual)
@@ -71,6 +73,145 @@ export function WorkerFiscalSummaryCard({
   const workerBreakdown = otherTaxesRounded > 0
     ? `${formatEuro(workerContributionsRounded)} de cotizaciones + ${formatEuro(irpfRounded)} de IRPF + ${formatEuro(vatRounded)} de IVA + ${formatEuro(otherTaxesRounded)} de otros`
     : `${formatEuro(workerContributionsRounded)} de cotizaciones + ${formatEuro(irpfRounded)} de IRPF + ${formatEuro(vatRounded)} de IVA`
+
+  if (!isFinal) {
+    const divisor = period === 'month' ? 12 : 1
+    const periodSuffix = period === 'month' ? 'al mes' : 'al año'
+    const formatPeriodEuro = (value: number) => formatEuro(value / divisor)
+    const shareOfCost = (value: number) => (companyCostAnnual > 0 ? value / companyCostAnnual * 100 : 0)
+    const takeHomePer100 = Math.round(shareOfCost(remainingAfterConsumption))
+
+    const flowSegments = [
+      {
+        id: 'net',
+        label: 'Te lo quedas tú',
+        value: remainingAfterConsumption,
+        icon: <PiggyBank size={20} aria-hidden="true" />,
+        detail: 'Lo que puedes gastar o ahorrar después de todo',
+      },
+      {
+        id: 'worker',
+        label: 'IRPF y cotizaciones tuyas',
+        value: workerContributionsRounded + irpfRounded,
+        icon: <Landmark size={20} aria-hidden="true" />,
+        detail: 'Lo que se descuenta directamente de tu nómina',
+      },
+      {
+        id: 'company',
+        label: 'Cotizaciones de tu empresa',
+        value: roundEuro(employerContributionsAnnual),
+        icon: <Building2 size={20} aria-hidden="true" />,
+        detail: 'No sale de tu nómina, pero tu empresa lo paga por ti',
+      },
+      {
+        id: 'consumption',
+        label: 'IVA y otros al gastar',
+        value: vatRounded + otherTaxesRounded,
+        icon: <ShoppingCart size={20} aria-hidden="true" />,
+        detail: 'Se te van poco a poco cada vez que compras algo',
+      },
+    ].filter((segment) => segment.value > 0)
+
+    return (
+      <section className="wfsc-summary wfsc-summary--intro" aria-labelledby="wfsc-summary-title">
+        <header className="wfsc-intro__header">
+          <p className="wfsc-summary__eyebrow">Paso 1 · Empecemos por lo esencial</p>
+          <h2 id="wfsc-summary-title">¿A dónde va el dinero que cuesta tu trabajo?</h2>
+          <p className="wfsc-intro__lead">
+            Mueve tu sueldo y verás, en un vistazo, cuánto acaba en tu bolsillo y cuánto se
+            reparte entre impuestos y cotizaciones. Después lo iremos afinando paso a paso.
+          </p>
+        </header>
+
+        <div className="wfsc-intro__controls">
+          <div className="wfsc-intro__salary">
+            <SalarySlider
+              id="wfsc-summary-salary"
+              value={grossSalaryAnnual}
+              onChange={onSalaryChange ?? (() => undefined)}
+              min={14_000}
+              max={500_000}
+              step={1_000}
+              markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+              unitLabel="brutos al año"
+              ariaLabel="Salario bruto anual para el resumen fiscal"
+            />
+          </div>
+
+          <div className="wfsc-intro__period" role="group" aria-label="Ver las cifras al mes o al año">
+            <button
+              type="button"
+              className={period === 'month' ? 'is-active' : undefined}
+              onClick={() => setPeriod('month')}
+              aria-pressed={period === 'month'}
+            >
+              Al mes
+            </button>
+            <button
+              type="button"
+              className={period === 'year' ? 'is-active' : undefined}
+              onClick={() => setPeriod('year')}
+              aria-pressed={period === 'year'}
+            >
+              Al año
+            </button>
+          </div>
+        </div>
+
+        <div className="wfsc-intro__headline" aria-live="polite">
+          <p>
+            De cada <strong>100 €</strong> que le cuestas a tu empresa, a tu bolsillo llegan
+          </p>
+          <p className="wfsc-intro__headline-number">
+            <strong>{takeHomePer100} €</strong>
+          </p>
+          <p className="wfsc-intro__headline-note">
+            Son {formatPeriodEuro(remainingAfterConsumption)} {periodSuffix} de los{' '}
+            {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu puesto.
+          </p>
+        </div>
+
+        <div className="wfsc-intro__flow">
+          <div className="wfsc-intro__bar" role="img" aria-label={`Reparto del coste total de tu puesto: ${flowSegments.map((segment) => `${segment.label}, ${Math.round(shareOfCost(segment.value))} por ciento`).join('; ')}`}>
+            {flowSegments.map((segment) => (
+              <span
+                key={segment.id}
+                className={`wfsc-intro__bar-part wfsc-intro__bar-part--${segment.id}`}
+                style={{ flexGrow: segment.value }}
+              />
+            ))}
+          </div>
+
+          <ul className="wfsc-intro__legend">
+            {flowSegments.map((segment) => (
+              <li key={segment.id} className={`wfsc-intro__legend-item wfsc-intro__legend-item--${segment.id}`}>
+                <span className="wfsc-intro__legend-icon">{segment.icon}</span>
+                <div>
+                  <p className="wfsc-intro__legend-label">{segment.label}</p>
+                  <p className="wfsc-intro__legend-value">
+                    <strong>{formatPeriodEuro(segment.value)}</strong>
+                    <span>{Math.round(shareOfCost(segment.value))} %</span>
+                  </p>
+                  <p className="wfsc-intro__legend-detail">{segment.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <footer className="wfsc-intro__footer">
+          <button type="button" className="wfsc-intro__cta" onClick={onExploreDetails}>
+            Ver cómo se calcula, paso a paso
+            <ArrowRight size={18} aria-hidden="true" />
+          </button>
+          <p>
+            Son cifras aproximadas: tu nómina real cambia según el contrato, tu situación
+            personal y tu comunidad autónoma. En los siguientes pasos lo ajustamos contigo.
+          </p>
+        </footer>
+      </section>
+    )
+  }
 
   return (
     <section className={`wfsc-summary${isFinal ? ' wfsc-summary--final' : ''}`} aria-labelledby="wfsc-summary-title">
