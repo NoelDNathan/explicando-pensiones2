@@ -188,9 +188,22 @@
 }
 
 .fwd--soft .wfsc-progress b {
+  left: 50%;
   color: #ffffff;
   background: var(--fiscal-primary);
   box-shadow: none;
+}
+
+.fwd--soft .wfsc-nav--next:disabled {
+  visibility: hidden;
+}
+
+.fwd--soft .wfsc-stage--step-7 .wfsc-hero {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.fwd--soft .wfsc-stage--step-7 .wfsc-help {
+  display: none;
 }
 
 .fwd--soft .wfsc-nav button,
@@ -278,6 +291,35 @@
   background: var(--fiscal-blue);
 }
 
+.fwd--soft .wclc-status h3,
+.fwd--soft .wclc-row-label,
+.fwd--soft .wclc-real-base .wclc-row-values strong {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+.fwd--soft :is(.wclc-status p, .wclc-distance__label, .wclc-distance__unit, .wclc-distance__pair, .wclc-row-values em) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wclc-result {
+  color: var(--fiscal-ink);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wclc-result .wclc-row-values strong {
+  color: var(--fiscal-primary-strong);
+  text-shadow: none;
+}
+
+.fwd--soft .wclc-summary-connector span {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-surface);
+}
+
 /* Paso 3 */
 .fwd--soft .wscc {
   --wscc-blue: var(--fiscal-blue);
@@ -293,6 +335,7 @@
 }
 
 .fwd--soft .wscc-toolbar {
+  grid-template-columns: minmax(220px, 0.75fr) minmax(150px, 0.4fr) minmax(400px, 1.25fr) auto;
   border: 1px solid var(--fiscal-line);
   border-radius: 14px;
   background: var(--fiscal-surface-soft);
@@ -398,6 +441,13 @@
 
 .fwd--soft .atep-select__name {
   color: var(--fiscal-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fwd--soft .atep-select__preview--compact {
+  grid-template-columns: minmax(170px, 1fr) auto;
 }
 
 .fwd--soft .atep-select__code {
@@ -469,6 +519,13 @@
   background: var(--fiscal-surface);
 }
 
+.fwd--soft .wscc-summary__title {
+  margin: 0;
+  color: var(--fiscal-ink);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
 .fwd--soft .wscc-summary__item span {
   color: var(--fiscal-copy);
 }
@@ -511,6 +568,39 @@
   border-color: #b8ded7;
   background: var(--fiscal-primary-soft);
   box-shadow: none;
+}
+
+.fwd--soft .wprc-header {
+  display: none;
+}
+
+.fwd--soft .wprc-hero {
+  grid-template-columns: minmax(0, 1fr);
+  margin-bottom: 16px;
+}
+
+.fwd--soft .wprc-hero-panel {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 18px 20px;
+}
+
+.fwd--soft .wprc-hero-panel ul {
+  display: none;
+}
+
+.fwd--soft .wprc-hero-panel h3 {
+  grid-column: 1;
+  margin: 0;
+}
+
+.fwd--soft .wprc-hero-panel > span {
+  grid-column: 1;
+}
+
+.fwd--soft .wprc-hero-panel > strong {
+  grid-column: 2;
+  grid-row: 1 / 3;
 }
 
 .fwd--soft .wprc-hero-panel h3,
@@ -616,6 +706,67 @@
   background: var(--fiscal-surface);
 }
 
+.fwd--soft .irpf-rule-group {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .irpf-rule-group summary {
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-rule-group summary > span:first-child {
+  color: var(--fiscal-primary);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .irpf-rule-group summary small,
+.fwd--soft :is(.irpf-rule-field small, .irpf-rule-check small) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-rule-group__body {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft :is(.irpf-rule-field, .irpf-rule-check) {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-rule-field__control {
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .irpf-rule-field__control > span {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .irpf-rule-result span {
+  color: var(--fiscal-copy);
+  border-color: #b8ded7;
+  background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .irpf-rule-result strong {
+  color: var(--fiscal-green);
+}
+
+.fwd--soft .irpf-rule-subtitle {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .irpf-rule-alert {
+  color: #7a4a17;
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
 .fwd--soft .witc {
   --witc-text: var(--fiscal-ink);
   --witc-muted: var(--fiscal-copy);
@@ -659,6 +810,15 @@
 .fwd--soft .witc-base-card p,
 .fwd--soft .witc-result span {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .witc-base-card strong {
+  color: var(--fiscal-primary-strong);
+  text-shadow: none;
+}
+
+.fwd--soft :is(.witc-region > span:first-child, .witc-salary__label, .witc-calc h3) {
+  color: var(--fiscal-ink);
 }
 
 .fwd--soft .witc-bracket {
@@ -864,6 +1024,30 @@
   text-shadow: none;
 }
 
+.fwd--soft .wctc-summary-card span b,
+.fwd--soft .wctc-summary-card > strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-summary-card :is(span small, strong small),
+.fwd--soft .wctc-ibi-row label > span {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-switch {
+  grid-template-columns: auto auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.fwd--soft .wctc-switch em {
+  color: var(--fiscal-copy);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .fwd--soft .wcsc {
   --wcsc-text: var(--fiscal-ink);
   --wcsc-muted: var(--fiscal-copy);
@@ -896,6 +1080,18 @@
 
 .fwd--soft :is(.fwd-faq-item p, .fwd-net-step__detail > p, .fkr-card small, .fkr-card dt) {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .fwd-faq-item h3,
+.fwd--soft .fkr-card h3,
+.fwd--soft .fkr-card dd {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+.fwd--soft .fkr-card__badge {
+  color: var(--fiscal-ink);
+  text-shadow: none;
 }
 
 .fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .salary-slider {
@@ -988,6 +1184,12 @@
   color: var(--fiscal-blue);
 }
 
+@media (max-width: 1100px) {
+  .fwd--soft .wscc-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 720px) {
   .fwd--soft .fwd-main {
     padding: 14px;
@@ -1021,5 +1223,18 @@
     left: 12px;
     right: 12px;
     bottom: 10px;
+  }
+
+  .fwd--soft .wprc-hero-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fwd--soft .wprc-hero-panel > strong {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .fwd--soft .wscc-toolbar {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

@@ -20,19 +20,16 @@ type WorkerFiscalSummaryCardProps = {
   onContinue?: () => void
 }
 
-const euroFormatter = new Intl.NumberFormat('es-ES', {
-  style: 'currency',
-  currency: 'EUR',
-  maximumFractionDigits: 0,
-})
-
 const percentFormatter = new Intl.NumberFormat('es-ES', {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1,
 })
 
 function formatEuro(value: number) {
-  return euroFormatter.format(Math.round(value))
+  const rounded = Math.round(value)
+  const sign = rounded < 0 ? '-' : ''
+  const digits = Math.abs(rounded).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  return `${sign}${digits} €`
 }
 
 function roundEuro(value: number) {
@@ -115,7 +112,7 @@ export function WorkerFiscalSummaryCard({
     return (
       <section className="wfsc-summary wfsc-summary--intro wfsc-theme--soft" aria-labelledby="wfsc-summary-title">
         <header className="wfsc-intro__header">
-          <p className="wfsc-summary__eyebrow">Paso 1 · Empecemos por lo esencial</p>
+          <p className="wfsc-summary__eyebrow">Resumen rápido · Empecemos por lo esencial</p>
           <h2 id="wfsc-summary-title">¿A dónde va el dinero que cuesta tu trabajo?</h2>
           <p className="wfsc-intro__lead">
             Mueve tu sueldo y verás, en un vistazo, cuánto acaba en tu bolsillo y cuánto se
@@ -272,7 +269,7 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--company">
           <span className="wfsc-summary__icon" aria-hidden="true"><Building2 size={24} /></span>
           <div>
-            <p>Tu empresa paga por tu trabajo</p>
+            <p>{isFinal ? 'Coste total para la empresa' : 'Tu empresa paga por tu trabajo'}</p>
             <strong>{formatMetric(companyCostAnnual)}</strong>
             <small>
               {formatEuro(grossSalaryAnnual)} de salario + {formatEuro(employerContributionsAnnual)} de cotizaciones de empresa
@@ -283,7 +280,7 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--tax">
           <span className="wfsc-summary__icon" aria-hidden="true"><Landmark size={24} /></span>
           <div>
-            <p>{isFinal ? 'Tú pagas en total' : 'Tú pagas en IRPF, cotizaciones e IVA'}</p>
+            <p>{isFinal ? 'Descuentos e impuestos del trabajador' : 'Tú pagas en IRPF, cotizaciones e IVA'}</p>
             <strong>{formatMetric(workerPaymentsAnnual)}</strong>
             <small>{workerBreakdown}</small>
           </div>
@@ -292,7 +289,7 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--total-tax">
           <span className="wfsc-summary__icon" aria-hidden="true"><ReceiptText size={24} /></span>
           <div>
-            <p>Impuestos y cotizaciones pagados en total</p>
+            <p>{isFinal ? 'Recaudación total asociada al empleo' : 'Impuestos y cotizaciones pagados en total'}</p>
             <strong>{formatMetric(totalTaxesAnnual)}</strong>
             <small>
               {formatEuro(employerContributionsAnnual)} de empresa + {formatEuro(workerPaymentsAnnual)} del trabajador
@@ -303,7 +300,7 @@ export function WorkerFiscalSummaryCard({
         <article className="wfsc-summary__metric wfsc-summary__metric--net">
           <span className="wfsc-summary__icon" aria-hidden="true"><WalletCards size={24} /></span>
           <div>
-            <p>{isFinal ? 'Te queda tras nómina y consumo' : 'Te queda como salario neto'}</p>
+            <p>{isFinal ? 'Neto disponible tras nómina y consumo' : 'Te queda como salario neto'}</p>
             <strong>{formatMetric(remainingAfterConsumption)}</strong>
             <small>
               {isFinal

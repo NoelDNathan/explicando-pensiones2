@@ -370,7 +370,7 @@ export function WorkerPersonalReductionsCard({
             <li><CheckCircle2 /> Lo no acreditado no reduce el impuesto.</li>
           </ul>
           <strong>{formatEuro(showReductionsSection ? familyMinimumPreview : appliedQuotaDeductions)}</strong>
-          <span>{showReductionsSection ? 'Minimo familiar estatal orientativo.' : 'Deducciones ordinarias aplicadas a la cuota.'}</span>
+          <span>{showReductionsSection ? 'Mínimo familiar adicional estimado.' : 'Deducciones ordinarias aplicadas a la cuota.'}</span>
         </aside>
       </div>
 

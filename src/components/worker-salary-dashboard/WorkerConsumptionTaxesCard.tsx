@@ -308,6 +308,15 @@ export function WorkerConsumptionTaxesCard({
 
   const maxLineAmount = Math.max(...result.lines.map((line) => line.spendAnnual), 1)
   const totalStatus = Math.abs(result.totalSharePercent - 100) <= 0.05 ? 'ok' : 'warn'
+  const shareDifference = 100 - result.totalSharePercent
+  const totalHint = totalStatus === 'ok'
+    ? 'Distribución completa'
+    : shareDifference > 0
+      ? `Falta ${formatNumber(shareDifference)}%`
+      : `Sobran ${formatNumber(Math.abs(shareDifference))}%`
+  const formatShareOfSpend = (value: number) => result.assignedSpendAnnual > 0
+    ? `${formatNumber((value / result.assignedSpendAnnual) * 100)}% del gasto`
+    : 'Sin gasto asignado'
 
   return (
     <section className="wctc" aria-labelledby="wctc-title">
@@ -402,7 +411,7 @@ export function WorkerConsumptionTaxesCard({
               <p className="wctc-rule">—</p>
               <output className="wctc-total-cell">{formatEuro(result.assignedSpendAnnual)}</output>
               <output className="wctc-total-cell">{formatNumber(result.totalSharePercent)}%</output>
-              <small>≈ 100%</small>
+              <small>{totalHint}</small>
             </article>
           </div>
 
@@ -439,6 +448,7 @@ export function WorkerConsumptionTaxesCard({
                   aria-label="Incluir IBI estimado"
                 />
                 <span aria-hidden="true" />
+                <em>{hasOwnedHome ? 'Incluido' : 'No incluido'}</em>
               </label>
               <output className="wctc-ibi-amounts" aria-label="Cuota IBI estimada">
                 <span className="wctc-ibi-amount">
@@ -469,25 +479,25 @@ export function WorkerConsumptionTaxesCard({
           <output className="wctc-summary-card wctc-summary-card--orange">
             <Receipt size={34} aria-hidden="true" />
             <span><b>IVA estimado</b><small>IVA soportado aproximado</small></span>
-            <strong>{formatEuro(result.vatAnnual)}<small>{formatNumber((result.vatAnnual / result.assignedSpendAnnual) * 100)}% del gasto</small></strong>
+            <strong>{formatEuro(result.vatAnnual)}<small>{formatShareOfSpend(result.vatAnnual)}</small></strong>
           </output>
 
           <output className="wctc-summary-card wctc-summary-card--blue">
             <Info size={34} aria-hidden="true" />
             <span><b>Impuestos especiales</b><small>Tabaco, alcohol, gasolina, electricidad...</small></span>
-            <strong>{formatEuro(result.specialTaxesAnnual)}<small>{formatNumber((result.specialTaxesAnnual / result.assignedSpendAnnual) * 100)}% del gasto</small></strong>
+            <strong>{formatEuro(result.specialTaxesAnnual)}<small>{formatShareOfSpend(result.specialTaxesAnnual)}</small></strong>
           </output>
 
           <output className="wctc-summary-card wctc-summary-card--purple">
             <Home size={34} aria-hidden="true" />
             <span><b>IBI estimado</b><small>Calculo simplificado orientativo</small></span>
-            <strong>{formatEuro(result.propertyTaxAnnual)}<small>{formatNumber((result.propertyTaxAnnual / result.assignedSpendAnnual) * 100)}% del gasto</small></strong>
+            <strong>{formatEuro(result.propertyTaxAnnual)}<small>{formatShareOfSpend(result.propertyTaxAnnual)}</small></strong>
           </output>
 
           <output className="wctc-summary-card wctc-summary-card--cyan wctc-summary-card--total">
             <Calculator size={34} aria-hidden="true" />
             <span><b>Impacto total aprox.</b><small>Suma de todos los conceptos</small></span>
-            <strong>{formatEuro(result.totalTaxAnnual)}<small>{formatNumber(result.effectiveRate)}% del gasto</small></strong>
+            <strong>{formatEuro(result.totalTaxAnnual)}<small>{formatShareOfSpend(result.totalTaxAnnual)}</small></strong>
           </output>
         </aside>
       </div>

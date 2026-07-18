@@ -765,6 +765,7 @@ export function WorkerSocialContributionsCard({
         </article>
 
         <aside className="wscc-summary" aria-label="Resumen de cotizaciones sociales">
+          <h3 className="wscc-summary__title">Resumen</h3>
           <div className="wscc-summary__item">
             <span>Salario bruto trabajador</span>
             <strong className="wscc-summary__gross">{formatEuro(grossDisplay)}</strong>

@@ -343,16 +343,16 @@ export function WorkerIrpfTranchesCard({
     <section className="witc" aria-labelledby="witc-title">
       <header className="witc-header">
         <div className="witc-title">
-          <span aria-hidden="true">5.</span>
+          <span aria-hidden="true">6.</span>
           <h2 id="witc-title">IRPF por tramos</h2>
         </div>
 
         <div className="witc-header-side">
           <label className="witc-region">
-            <span>Comunidad autonoma</span>
+            <span>Comunidad autónoma</span>
             <span className="witc-select">
               <select
-                aria-label="Comunidad autonoma"
+                aria-label="Comunidad autónoma"
                 value={activeRegion}
                 onChange={(event) => handleRegionChange(event.target.value)}
               >
@@ -375,7 +375,7 @@ export function WorkerIrpfTranchesCard({
 
       {currentCombinedMarginalRate > 0 && !showSalaryControl && (
         <output className="witc-max-rate" aria-live="polite">
-          <span>IRPF marginal max actual</span>
+          <span>IRPF marginal máximo actual</span>
           <strong>{formatRate(currentCombinedMarginalRate)}%</strong>
           {hasScales && (
             <b>
@@ -404,7 +404,7 @@ export function WorkerIrpfTranchesCard({
             />
             {currentCombinedMarginalRate > 0 && (
               <output className="witc-max-rate witc-max-rate--inline" aria-live="polite">
-                <span>IRPF marginal max actual</span>
+                <span>IRPF marginal máximo actual</span>
                 <strong>{formatRate(currentCombinedMarginalRate)}%</strong>
                 {hasScales && (
                   <b>
@@ -427,9 +427,9 @@ export function WorkerIrpfTranchesCard({
           </div>
           <div className="witc-scale-group">
             <span className="witc-scale-tag witc-scale-tag--region">
-              Escala autonomica {"\u00b7"} {regionLabel}
+              Escala autonómica {"\u00b7"} {regionLabel}
             </span>
-            <div className="witc-brackets" aria-label={`Tramos de la escala autonomica de ${regionLabel}`}>
+            <div className="witc-brackets" aria-label={`Tramos de la escala autonómica de ${regionLabel}`}>
               {regionalLines.map((line) => renderBracketBox(line, "region"))}
             </div>
           </div>
@@ -461,7 +461,7 @@ export function WorkerIrpfTranchesCard({
         </aside>
 
         <section className="witc-calc" aria-labelledby="witc-calc-title">
-          <h3 id="witc-calc-title">Calculo por tramos</h3>
+          <h3 id="witc-calc-title">Cálculo por tramos</h3>
           {hasScales ? (
             <>
               <div className="witc-calc-cols">

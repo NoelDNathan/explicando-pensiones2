@@ -401,6 +401,7 @@ export function FiscalWorkerDashboard() {
   const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
   const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
   const [activeWorkerStepId, setActiveWorkerStepId] = useState(0)
+  const hasAssignedConsumption = (consumptionTaxes?.assignedSpendAnnual ?? 0) > 0
 
   const contributionGroups = useMemo(() => {
     const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
@@ -474,9 +475,9 @@ export function FiscalWorkerDashboard() {
       const irpf = Math.max(0, irpfBeforeDeductions - explicitDeductions)
       const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
       const epfVatEstimate = estimateVatFromNetSalary(netSalary)
-      const annualConsumption = consumptionTaxes?.totalBudgetAnnual ?? epfVatEstimate.annualConsumption
-      const vatRate = consumptionTaxes ? consumptionTaxes.effectiveRate : epfVatEstimate.vatRate
-      const vat = consumptionTaxes?.vatAnnual ?? epfVatEstimate.vatAnnual
+      const annualConsumption = hasAssignedConsumption ? consumptionTaxes!.totalBudgetAnnual : epfVatEstimate.annualConsumption
+      const vatRate = hasAssignedConsumption ? consumptionTaxes!.effectiveRate : epfVatEstimate.vatRate
+      const vat = hasAssignedConsumption ? consumptionTaxes!.vatAnnual : epfVatEstimate.vatAnnual
       const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
       const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
@@ -522,7 +523,7 @@ export function FiscalWorkerDashboard() {
         effectiveLaborRate: grossSalaryAnnual > 0 ? (employeeSocialSecurity + irpf) / grossSalaryAnnual * 100 : 0,
         effectiveContextRate: grossSalaryAnnual > 0 ? totalContextTax / grossSalaryAnnual * 100 : 0,
         socialSecurityNote: 'Sin MEI ni solidaridad',
-        vatSourceLabel: consumptionTaxes ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
+        vatSourceLabel: hasAssignedConsumption ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
         taxSourceLabel: 'BOE 2005',
         otherTaxSourceLabel: 'Entrada usuario',
         regionalTaxLabel: 'Complementario',
@@ -607,9 +608,9 @@ export function FiscalWorkerDashboard() {
     const irpfBeforeDeductions = coreIrpf.liquidQuotaBeforeWorkDeduction
     const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
     const epfVatEstimate = estimateVatFromNetSalary(netSalary)
-    const annualConsumption = consumptionTaxes?.totalBudgetAnnual ?? epfVatEstimate.annualConsumption
-    const vatRate = consumptionTaxes ? consumptionTaxes.effectiveRate : epfVatEstimate.vatRate
-    const vat = consumptionTaxes?.vatAnnual ?? epfVatEstimate.vatAnnual
+    const annualConsumption = hasAssignedConsumption ? consumptionTaxes!.totalBudgetAnnual : epfVatEstimate.annualConsumption
+    const vatRate = hasAssignedConsumption ? consumptionTaxes!.effectiveRate : epfVatEstimate.vatRate
+    const vat = hasAssignedConsumption ? consumptionTaxes!.vatAnnual : epfVatEstimate.vatAnnual
     const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
     const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
@@ -655,14 +656,14 @@ export function FiscalWorkerDashboard() {
       effectiveLaborRate: grossSalaryAnnual > 0 ? (employeeSocialSecurity + irpf) / grossSalaryAnnual * 100 : 0,
       effectiveContextRate: grossSalaryAnnual > 0 ? totalContextTax / grossSalaryAnnual * 100 : 0,
       socialSecurityNote: 'Incluye MEI',
-      vatSourceLabel: consumptionTaxes ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
+      vatSourceLabel: hasAssignedConsumption ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
       taxSourceLabel: 'AEAT/BOE 2025',
       otherTaxSourceLabel: 'Entrada usuario / AEAT IART',
       regionalTaxLabel: 'Autonomico',
       deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
-  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, inKindSalary, manualAutonomicDeduction, mobility, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
+  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, hasAssignedConsumption, inKindSalary, manualAutonomicDeduction, mobility, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
 
   const baseContributionRates = useMemo(() => getContributionRatesForYear(taxYear), [taxYear])
   const contributionRates = useMemo<SocialContributionRates>(() => ({
@@ -741,7 +742,7 @@ export function FiscalWorkerDashboard() {
       ]
     }
 
-    const vatItem: CalculationSourceItem = consumptionTaxes
+    const vatItem: CalculationSourceItem = hasAssignedConsumption
       ? {
           id: 'vat-declared-consumption',
           name: 'Tipos de IVA aplicados al consumo declarado',
@@ -834,7 +835,7 @@ export function FiscalWorkerDashboard() {
       },
       vatItem,
     ]
-  }, [consumptionTaxes, occupationalAccidentsCategoryId, result, socialContributions, taxYear])
+  }, [hasAssignedConsumption, occupationalAccidentsCategoryId, result, socialContributions, taxYear])
 
   const payrollLiveData = useMemo(() => ({
     grossSalaryAnnual: result.grossSalaryAnnual,
@@ -1017,7 +1018,9 @@ export function FiscalWorkerDashboard() {
         return (
           <WorkerConsumptionTaxesCard
             initialBudgetAnnual={result.annualConsumption}
-            onResultChange={setConsumptionTaxes}
+            onResultChange={(nextResult) => setConsumptionTaxes(
+              nextResult.assignedSpendAnnual > 0 || nextResult.propertyTaxAnnual > 0 ? nextResult : null,
+            )}
           />
         )
       case 8:
