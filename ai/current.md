@@ -4,6 +4,8 @@ Fecha: 2026-07-18
 
 ## Situacion
 
+- Corregida la composición del resumen adhesivo de reducciones en `/calculadora-fiscal`: las cuatro métricas quedan en una sola fila en escritorio, eliminando el hueco que dejaba el mínimo familiar; en móvil quedan en dos columnas. Los desplegables superiores abiertos elevan su capa por encima de la barra para que sus opciones no se oculten. Verificación: TypeScript y Vite build correctos; revisión DOM escritorio y móvil 390 px sin overflow horizontal, con menú abierto sobre la barra.
+
 - Clarificado y hecho persistente el resultado del paso de reducciones de `/calculadora-fiscal`: se diferencian las reducciones de base (planes, pensiones, etc.) del mínimo personal y familiar (hijos, ascendientes y discapacidad), que se aplica al calcular la cuota y no resta la base. El resumen se mueve junto a los datos familiares y queda adhesivo durante el scroll; muestra base previa, reducción de base, base liquidable y mínimo estatal/autonómico. Verificación: en el perfil mostrado el mínimo estatal es 5.550 EUR y la reducción de base es 0 EUR porque no hay una partida de base declarada; TypeScript y Vite build correctos; revisión DOM en escritorio y móvil 390 px sin overflow horizontal, con barra `sticky` activa.
 
 - Sustituido el menú nativo estrecho de los selectores superiores de reducciones por un desplegable accesible propio, con menú claro, opciones amplias y opción activa visible. Verificación: TypeScript y Vite build correctos; revisión DOM en escritorio y móvil 390 px sin overflow horizontal.
