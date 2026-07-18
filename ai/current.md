@@ -4,6 +4,8 @@ Fecha: 2026-07-18
 
 ## Situacion
 
+- Corregido el borde aparentemente cortado de los selectores de las tarjetas superiores de reducciones en `/calculadora-fiscal`: el `<select>` nativo ya no recibe el fondo blanco global dentro del selector circular, por lo que no tapa el contorno del contenedor. Verificacion: TypeScript y Vite build correctos; comprobacion DOM en escritorio y movil 390 px confirma controles circulares de 40 px, fondo interno transparente, radio completo y sin overflow horizontal.
+
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.
 
 - Mejorada la tira superior de reducciones en `/calculadora-fiscal`: las tarjetas de descendientes, ascendientes, discapacidad, ayuda/movilidad y estado civil usan contraste alto, valores sin truncado agresivo y selector circular limpio, evitando textos lavados y valores cortados como `Cas...`. Verificacion: TypeScript y Vite build correctos; comprobacion DOM en escritorio y viewport movil del bloque `.wprc-top-grid` sin overflow horizontal y con valores legibles.
