@@ -1581,3 +1581,62 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Capa final del tema suave. Se declara al final para prevalecer sobre los
+   estilos propios de cada paso: no deben quedar superficies oscuras al pasar
+   de base, cotizaciones, IRPF, consumo, resumen o fuentes. */
+.fwd--soft .fwd-main :is(
+  .wfsc-stage,
+  .wfsc-help,
+  .fwd-net-step__detail,
+  .fwd-faq-step,
+  .fwd-faq-item,
+  [class*="panel"],
+  [class*="field"],
+  [class*="form"],
+  [class*="toolbar"],
+  [class*="summary"],
+  [class*="result"],
+  [class*="source"],
+  [class*="values"],
+  [class*="table"],
+  [class*="listbox"],
+  [role="listbox"],
+  article,
+  aside,
+  fieldset
+) {
+  border-color: var(--fiscal-line) !important;
+  background: var(--fiscal-surface-muted) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.fwd--soft .fwd-main :is(input, select, textarea, button) {
+  color: var(--fiscal-text) !important;
+  border-color: var(--fiscal-line) !important;
+  background-color: var(--fiscal-surface) !important;
+}
+
+.fwd--soft .fwd-main :is(input, select, textarea):focus-visible,
+.fwd--soft .fwd-main button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--fiscal-blue) 35%, transparent);
+  outline-offset: 2px;
+}
+
+.fwd--soft .fwd-main :is(p, label, legend, dt, dd, small) {
+  color: var(--fiscal-muted) !important;
+}
+
+.fwd--soft .fwd-main :is(h1, h2, h3, h4, strong, th) {
+  color: var(--fiscal-text);
+}
+
+.fwd--soft .fwd-main :is(.is-active, [aria-selected="true"], [aria-pressed="true"]) {
+  color: #ffffff !important;
+  border-color: var(--fiscal-blue) !important;
+  background: var(--fiscal-blue) !important;
+}
+
+.fwd--soft .fwd-main :is(.wsbc, .wclc, .wscc, .wprc, .witc, .wctc, .wirc, .wcsc, .wfsc, .fpdc, .pie, .ssbe)::before {
+  opacity: 0.12;
+}
