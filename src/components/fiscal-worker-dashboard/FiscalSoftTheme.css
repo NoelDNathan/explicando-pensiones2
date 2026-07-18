@@ -1,0 +1,1025 @@
+/*
+ * Tema claro de la calculadora fiscal.
+ * Para cambiar la paleta solo hay que editar los tokens de este primer bloque.
+ */
+.fwd--soft {
+  --fiscal-canvas: #f5f7fb;
+  --fiscal-surface: #ffffff;
+  --fiscal-surface-soft: #f8fafc;
+  --fiscal-surface-tint: #eef6f5;
+  --fiscal-ink: #172033;
+  --fiscal-copy: #4f5f70;
+  --fiscal-muted: #718096;
+  --fiscal-line: #dbe4ec;
+  --fiscal-line-strong: #c4d2df;
+  --fiscal-primary: #147d75;
+  --fiscal-primary-strong: #0f655f;
+  --fiscal-primary-soft: #ddf3ef;
+  --fiscal-blue: #2f6fce;
+  --fiscal-blue-soft: #e9f1fd;
+  --fiscal-violet: #7557c8;
+  --fiscal-violet-soft: #f0ebfb;
+  --fiscal-orange: #b96b18;
+  --fiscal-orange-soft: #fff1df;
+  --fiscal-yellow: #9a7418;
+  --fiscal-yellow-soft: #fff7d9;
+  --fiscal-red: #c4455b;
+  --fiscal-red-soft: #fcecef;
+  --fiscal-green: #18865b;
+  --fiscal-green-soft: #e3f5ec;
+  --fiscal-shadow: 0 14px 38px rgba(35, 54, 78, 0.08);
+  --fiscal-shadow-control: 0 5px 14px rgba(35, 54, 78, 0.08);
+
+  --fwd-text: var(--fiscal-ink);
+  --fwd-muted: var(--fiscal-copy);
+  --fwd-faint: var(--fiscal-muted);
+  --fwd-bg: var(--fiscal-canvas);
+  --fwd-panel: var(--fiscal-surface);
+  --fwd-panel-2: var(--fiscal-surface-soft);
+  --fwd-border: var(--fiscal-line);
+  --fwd-blue: var(--fiscal-blue);
+  --fwd-green: var(--fiscal-green);
+  --fwd-purple: var(--fiscal-violet);
+  --fwd-violet: var(--fiscal-violet);
+  --fwd-cyan: var(--fiscal-primary);
+  --fwd-orange: var(--fiscal-orange);
+  --fwd-yellow: var(--fiscal-yellow);
+  --fwd-danger: var(--fiscal-red);
+
+  color: var(--fiscal-ink);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(47, 111, 206, 0.08), transparent 30%),
+    radial-gradient(circle at 92% 4%, rgba(20, 125, 117, 0.08), transparent 28%),
+    var(--fiscal-canvas);
+}
+
+.fwd--soft .fwd-main {
+  gap: 18px;
+  width: min(100%, 1480px);
+  margin-inline: auto;
+  padding: clamp(18px, 2.5vw, 34px);
+}
+
+.fwd--soft .fwd-header h2,
+.fwd--soft .fwd-worker-card :is(h2, h3, h4) {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .fwd-header p,
+.fwd--soft .fwd-worker-card p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .fwd-actions button {
+  min-width: auto;
+  color: var(--fiscal-copy);
+  border: 1px solid var(--fiscal-line);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 3px 10px rgba(35, 54, 78, 0.04);
+}
+
+.fwd--soft .fwd-actions button:hover {
+  color: var(--fiscal-primary-strong);
+  border-color: color-mix(in srgb, var(--fiscal-primary) 38%, var(--fiscal-line));
+  background: var(--fiscal-surface);
+}
+
+/* Tarjetas principales */
+.fwd--soft :is(.wsbc, .wclc, .wscc, .wprc, .witc, .wctc, .wirc, .wcsc, .fpdc, .pie, .ssbe) {
+  color: var(--fiscal-ink);
+  border: 1px solid var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+}
+
+.fwd--soft :is(.wsbc, .wclc, .wscc, .wprc, .witc, .wctc, .wirc, .wcsc, .fpdc, .pie, .ssbe)::before {
+  opacity: 0.08;
+}
+
+.fwd--soft :is(.wsbc-step, .wclc-step, .wscc-step, .wprc-step, .witc-step, .wctc-step, .wcsc-step) {
+  color: var(--fiscal-primary);
+  text-shadow: none;
+}
+
+/* Controles compartidos */
+.fwd--soft .fwd-main :is(input, select, textarea) {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background-color: var(--fiscal-surface);
+}
+
+.fwd--soft .fwd-main :is(input, select, textarea):focus-visible,
+.fwd--soft .fwd-main button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--fiscal-primary) 28%, transparent);
+  outline-offset: 2px;
+}
+
+.fwd--soft .salary-slider {
+  color: var(--fiscal-ink);
+  border: 1px solid var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .salary-slider__value-input {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft :is(.salary-slider__top span, .salary-slider__scale, .salary-slider__value-shell > span) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .salary-slider input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), #dbe4ec var(--salary-slider-value), #dbe4ec 100%);
+  box-shadow: inset 0 1px 2px rgba(35, 54, 78, 0.12);
+}
+
+.fwd--soft .salary-slider input[type="range"]::-moz-range-track {
+  background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), #dbe4ec var(--salary-slider-value), #dbe4ec 100%);
+  box-shadow: inset 0 1px 2px rgba(35, 54, 78, 0.12);
+}
+
+.fwd--soft .salary-slider input[type="range"]::-webkit-slider-thumb {
+  border-color: #ffffff;
+  background: var(--fiscal-primary);
+  box-shadow: 0 0 0 4px rgba(20, 125, 117, 0.14), 0 2px 6px rgba(35, 54, 78, 0.18);
+}
+
+.fwd--soft .salary-slider input[type="range"]::-moz-range-thumb {
+  border-color: #ffffff;
+  background: var(--fiscal-primary);
+  box-shadow: 0 0 0 4px rgba(20, 125, 117, 0.14), 0 2px 6px rgba(35, 54, 78, 0.18);
+}
+
+/* Navegación didáctica */
+.fwd--soft .wfsc {
+  --wfsc-bg: var(--fiscal-canvas);
+  --wfsc-panel: var(--fiscal-surface);
+  --wfsc-panel-soft: var(--fiscal-surface-soft);
+  --wfsc-border: var(--fiscal-line);
+  --wfsc-border-strong: var(--fiscal-blue);
+  --wfsc-text: var(--fiscal-ink);
+  --wfsc-muted: var(--fiscal-copy);
+  --wfsc-faint: var(--fiscal-muted);
+  --wfsc-blue: var(--fiscal-blue);
+  --wfsc-green: var(--fiscal-primary);
+  --wfsc-green-deep: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .wfsc-stage {
+  border-color: var(--fiscal-line);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(20, 125, 117, 0.08), transparent 26%),
+    linear-gradient(145deg, #ffffff, #f3f7fb);
+  box-shadow: var(--fiscal-shadow);
+}
+
+.fwd--soft .wfsc-help {
+  border-color: var(--fiscal-line);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 28px rgba(35, 54, 78, 0.07);
+}
+
+.fwd--soft .wfsc-description p,
+.fwd--soft .wfsc-payroll figcaption {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-progress b {
+  color: #ffffff;
+  background: var(--fiscal-primary);
+  box-shadow: none;
+}
+
+.fwd--soft .wfsc-nav button,
+.fwd--soft .wfsc-step-dots button {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: none;
+}
+
+.fwd--soft .wfsc-nav button:not(:disabled):hover,
+.fwd--soft .wfsc-step-dots button:hover {
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wfsc-step-dots button.is-active,
+.fwd--soft .wfsc-nav__next {
+  color: #ffffff;
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary);
+}
+
+/* Paso 1 */
+.fwd--soft .wsbc {
+  --wsbc-lime: var(--fiscal-primary);
+  --wsbc-green: var(--fiscal-green);
+  --wsbc-green-soft: var(--fiscal-green-soft);
+  --wsbc-cyan: var(--fiscal-blue);
+  --wsbc-cyan-soft: var(--fiscal-blue-soft);
+  --wsbc-text: var(--fiscal-ink);
+  --wsbc-muted: var(--fiscal-copy);
+  --wsbc-field: var(--fiscal-surface-soft);
+  --wsbc-line: var(--fiscal-line);
+}
+
+.fwd--soft .wsbc-fields {
+  border-radius: 14px;
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wsbc :is(select, input) {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wsbc-result {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+  box-shadow: none;
+}
+
+/* Paso 2 */
+.fwd--soft .wclc {
+  --wclc-blue: var(--fiscal-blue);
+  --wclc-blue-soft: var(--fiscal-blue-soft);
+  --wclc-purple: var(--fiscal-violet);
+  --wclc-orange: var(--fiscal-orange);
+  --wclc-text: var(--fiscal-ink);
+  --wclc-muted: var(--fiscal-copy);
+  --wclc-panel: var(--fiscal-surface-soft);
+  --wclc-line: var(--fiscal-line);
+}
+
+.fwd--soft .wclc :is(.wclc-field, .wclc-scale, .wclc-status, .wclc-distance, .wclc-summary) {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wclc-mode {
+  border-color: var(--fiscal-line-strong);
+  background: #e9eef4;
+}
+
+.fwd--soft .wclc-mode button {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wclc-mode button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
+}
+
+/* Paso 3 */
+.fwd--soft .wscc {
+  --wscc-blue: var(--fiscal-blue);
+  --wscc-blue-soft: var(--fiscal-blue-soft);
+  --wscc-violet: var(--fiscal-violet);
+  --wscc-violet-soft: var(--fiscal-violet-soft);
+  --wscc-orange: var(--fiscal-orange);
+  --wscc-orange-soft: var(--fiscal-orange-soft);
+  --wscc-text: var(--fiscal-ink);
+  --wscc-muted: var(--fiscal-copy);
+  --wscc-panel: var(--fiscal-surface-soft);
+  --wscc-line: var(--fiscal-line);
+}
+
+.fwd--soft .wscc-toolbar {
+  border: 1px solid var(--fiscal-line);
+  border-radius: 14px;
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wscc-base-note {
+  color: var(--fiscal-ink);
+  border-color: #b9d9d5;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wscc-base-note :is(strong, span, em) {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+.fwd--soft .wscc-base-note :is(span, em) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wscc-select-shell {
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wscc-select-shell select {
+  color: var(--fiscal-ink);
+  background: transparent;
+}
+
+.fwd--soft .wscc-panel,
+.fwd--soft .wscc-summary {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wscc-line__text,
+.fwd--soft .wscc-line__values small,
+.fwd--soft .wscc-panel__intro p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wscc-line__label,
+.fwd--soft .wscc-line__values strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wscc-line__values em {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .wscc-mei-note {
+  color: var(--fiscal-copy);
+  border-color: #d5c9ee;
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .wscc-mei-note :is(span, p, em, strong, th, td),
+.fwd--soft .wscc-mei-note__summary {
+  color: var(--fiscal-copy) !important;
+  text-shadow: none;
+}
+
+.fwd--soft .wscc-mei-note :is(strong, tbody th) {
+  color: var(--fiscal-ink) !important;
+}
+
+.fwd--soft .wscc-mei-note__toggle {
+  color: var(--fiscal-violet) !important;
+}
+
+.fwd--soft .wscc-atep-note {
+  color: var(--fiscal-copy);
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wscc-atep-note :is(span, p, em) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wscc-atep-note :is(span, strong) {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .atep-select__trigger,
+.fwd--soft .atep-select__panel,
+.fwd--soft .atep-select__search input,
+.fwd--soft .atep-select__option {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .atep-select__search {
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .atep-select__name {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .atep-select__code {
+  color: var(--fiscal-orange);
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .atep-select__rate--it { color: #235b94; border-color: #bdd4ef; }
+.fwd--soft .atep-select__rate--ims { color: #5d469c; border-color: #d8cbed; }
+.fwd--soft .atep-select__rate--total { color: #8b5418; border-color: #efd2a9; }
+
+.fwd--soft .atep-select__rate strong {
+  text-shadow: none;
+}
+
+.fwd--soft .atep-select__option:hover,
+.fwd--soft .atep-select__option[aria-selected="true"] {
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .wscc-segments {
+  border-color: var(--fiscal-line-strong);
+  background: #e9eef4;
+}
+
+.fwd--soft .wscc-segments button {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wscc-segments button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
+}
+
+.fwd--soft .wscc-panel__mei-extra {
+  border-color: #d5c9ee;
+  background: var(--fiscal-violet-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wscc-panel__mei-extra :is(span, em, strong) {
+  color: var(--fiscal-violet);
+  text-shadow: none;
+}
+
+.fwd--soft .wscc-total--worker {
+  color: var(--fiscal-violet);
+  border-color: #d5c9ee;
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .wscc-total--company {
+  color: var(--fiscal-orange);
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wscc-total :is(strong, em) {
+  text-shadow: none;
+}
+
+.fwd--soft .wscc-total em {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wscc-summary__item {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wscc-summary__item span {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wscc-summary__item strong {
+  color: var(--fiscal-ink);
+  text-shadow: none !important;
+}
+
+.fwd--soft .wscc-summary__item--total {
+  border-color: #efc5cc;
+  background: var(--fiscal-red-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wscc-summary__item--hero {
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wscc-summary__item--total :is(span, strong, em) { color: var(--fiscal-red); }
+.fwd--soft .wscc-summary__item--hero :is(span, strong) { color: var(--fiscal-orange); }
+
+/* Pasos 4 a 7 y fuentes */
+.fwd--soft .wprc {
+  --wprc-cyan: var(--fiscal-primary);
+  --wprc-blue: var(--fiscal-blue);
+  --wprc-blue-soft: var(--fiscal-blue-soft);
+  --wprc-violet: var(--fiscal-violet);
+  --wprc-violet-soft: var(--fiscal-violet-soft);
+  --wprc-text: var(--fiscal-ink);
+  --wprc-muted: var(--fiscal-copy);
+  --wprc-line: var(--fiscal-line);
+  --wprc-panel: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-hero-panel {
+  color: var(--fiscal-ink);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wprc-hero-panel h3,
+.fwd--soft .wprc-hero-panel strong {
+  color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .wprc-hero-panel li {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-hero-panel > span {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-hero-panel li svg {
+  color: var(--fiscal-primary);
+  filter: none;
+}
+
+.fwd--soft .wprc-flow article,
+.fwd--soft .wprc-minimum-panel,
+.fwd--soft .wprc-top-grid,
+.fwd--soft .wprc-dependent-card,
+.fwd--soft .wprc-dependent,
+.fwd--soft .wprc-benefits,
+.fwd--soft .wprc-explained,
+.fwd--soft .wprc-explained dl div,
+.fwd--soft .wprc-summary {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wprc-flow span,
+.fwd--soft .wprc-minimum-panel h3 {
+  color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft :is(.wprc-flow p, .wprc-minimum-panel p, .wprc-benefits__heading p, .wprc-explained p, .wprc-explained dt, .wprc-summary-copy span) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-minimum-panel li {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wprc-minimum-panel li.is-active {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wprc-top-field,
+.fwd--soft .wprc-dependent-number,
+.fwd--soft .wprc-select {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wprc-dependent-number input {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-empty {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wprc-explained :is(h3, dd),
+.fwd--soft .wprc-summary-copy p {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-explained .is-result {
+  border-color: #b8ded7;
+  background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .wprc-summary-icon {
+  color: var(--fiscal-primary);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+  box-shadow: none;
+}
+
+.fwd--soft :is(.wprc-panel, .wprc-summary, .irpf-rule-group, .irpf-rule-section, .witc-panel, .wirc-panel, .wctc-panel, .wctc-summary, .wcsc-source, .wcsc-values div) {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft :is(.irpf-rule-form input, .irpf-rule-form select, .witc input, .witc select, .wctc input, .wctc select) {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .witc {
+  --witc-text: var(--fiscal-ink);
+  --witc-muted: var(--fiscal-copy);
+  --witc-line: var(--fiscal-line);
+  --witc-green: var(--fiscal-green);
+  --witc-purple: var(--fiscal-violet);
+  --witc-blue: var(--fiscal-blue);
+  --witc-orange: var(--fiscal-orange);
+  --witc-yellow: var(--fiscal-yellow);
+  --witc-red: var(--fiscal-red);
+}
+
+.fwd--soft .witc-max-rate,
+.fwd--soft .witc-base-card,
+.fwd--soft .witc-calc,
+.fwd--soft .witc-result {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .witc-title > span {
+  color: var(--fiscal-primary);
+  text-shadow: none;
+}
+
+.fwd--soft .witc-scale-tag--state {
+  color: #245a8f;
+  border-color: #bdd4ef;
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .witc-scale-tag--region {
+  color: #8b5418;
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .witc-max-rate :is(span, b),
+.fwd--soft .witc-base-card p,
+.fwd--soft .witc-result span {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .witc-bracket {
+  color: var(--fiscal-ink);
+  border-color: color-mix(in srgb, var(--tone) 28%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--tone) 13%, #ffffff);
+  box-shadow: none;
+}
+
+.fwd--soft .witc-bracket :is(strong, span) {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+.fwd--soft .witc-bracket.is-inactive {
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line);
+  background: #edf1f5;
+  opacity: 0.82;
+}
+
+.fwd--soft .witc-bracket.is-inactive :is(strong, span) {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .witc-calc-row,
+.fwd--soft .witc-tramo {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .witc-calc-row :is(p, b),
+.fwd--soft .witc-tramo :is(p, b) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wirc {
+  --wirc-text: var(--fiscal-ink);
+  --wirc-muted: var(--fiscal-copy);
+  --wirc-line: var(--fiscal-line);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+}
+
+.fwd--soft .wirc-toggle {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wirc-toggle button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
+}
+
+.fwd--soft .wirc-stats,
+.fwd--soft .wirc-ranking {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wirc-stat + .wirc-stat {
+  border-color: var(--fiscal-line);
+}
+
+.fwd--soft .wirc-stat__values strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wirc-stat__delta,
+.fwd--soft .wirc-rank-diff.is-up {
+  color: var(--fiscal-green);
+}
+
+.fwd--soft .wirc-rank-diff.is-down {
+  color: var(--fiscal-red);
+}
+
+.fwd--soft .wirc-plot-bg {
+  fill: var(--fiscal-surface-soft);
+  stroke: var(--fiscal-line);
+}
+
+.fwd--soft .wirc-cursor {
+  stroke: var(--fiscal-muted);
+}
+
+.fwd--soft .wirc-cursor-label {
+  fill: var(--fiscal-copy);
+}
+
+.fwd--soft .wirc-rank-row:hover {
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .wirc-rank-row.is-selected {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 42%, var(--fiscal-line));
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wirc-rank-row.is-compare {
+  border-color: color-mix(in srgb, var(--fiscal-violet) 38%, var(--fiscal-line));
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .wctc {
+  --wctc-text: var(--fiscal-ink);
+  --wctc-muted: var(--fiscal-copy);
+  --wctc-line: var(--fiscal-line);
+  --wctc-strong-line: var(--fiscal-blue);
+  --wctc-panel: var(--fiscal-surface-soft);
+  --wctc-green: var(--fiscal-green);
+  --wctc-blue: var(--fiscal-blue);
+  --wctc-cyan: var(--fiscal-primary);
+  --wctc-orange: var(--fiscal-orange);
+  --wctc-purple: var(--fiscal-violet);
+  --wctc-red: var(--fiscal-red);
+  --wctc-neutral: var(--fiscal-muted);
+}
+
+.fwd--soft :is(.wctc-left, .wctc-summary) {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wctc-action {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wctc-action--primary {
+  color: #ffffff;
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary);
+}
+
+.fwd--soft .wctc-grid-head {
+  color: var(--fiscal-copy);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wctc-rows {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wctc-row {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--tone) 8%, #ffffff), #ffffff 26%);
+}
+
+.fwd--soft .wctc-category strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-rule,
+.fwd--soft .wctc-row small {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-input {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: none;
+}
+
+.fwd--soft .wctc-input input {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-input b {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .wctc-row--total,
+.fwd--soft .wctc-home-strip,
+.fwd--soft .wctc-ibi-row {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wctc-total-cell,
+.fwd--soft .wctc-ibi-amount {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wctc-summary-card {
+  border-color: color-mix(in srgb, var(--tone) 26%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--tone) 9%, #ffffff);
+  box-shadow: none;
+}
+
+.fwd--soft .wctc-summary-card :is(span, strong, small) {
+  text-shadow: none;
+}
+
+.fwd--soft .wcsc {
+  --wcsc-text: var(--fiscal-ink);
+  --wcsc-muted: var(--fiscal-copy);
+  --wcsc-blue: var(--fiscal-blue);
+  --wcsc-green: var(--fiscal-green);
+}
+
+.fwd--soft .wcsc-seal {
+  border-color: #b8ded7;
+  background: var(--fiscal-green-soft);
+}
+
+/* Resultado, FAQ y KPI */
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro),
+.fwd--soft .fwd-net-step__detail,
+.fwd--soft .fwd-faq-step {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+}
+
+.fwd--soft .fwd-faq-item,
+.fwd--soft .fkr-card {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft :is(.fwd-faq-item p, .fwd-net-step__detail > p, .fkr-card small, .fkr-card dt) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .salary-slider {
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__eyebrow {
+  color: var(--fiscal-primary);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__header h2 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__header > div:first-child > p:last-child,
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__footer p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__mode {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__mode button {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__mode button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__salary {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__metric {
+  border-color: color-mix(in srgb, var(--metric-color) 28%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--metric-color) 9%, #ffffff);
+  box-shadow: none;
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__icon {
+  background: color-mix(in srgb, var(--metric-color) 12%, #ffffff);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--metric-color) 24%, transparent);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__metric p {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__metric small {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__footer {
+  border-color: var(--fiscal-line);
+}
+
+.fwd--soft .wcsc-source-index {
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-tint);
+}
+
+.fwd--soft .wcsc-source-title h3,
+.fwd--soft .wcsc-source-title p strong,
+.fwd--soft .wcsc-values dd {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft :is(.wcsc-source-title p, .wcsc-values dt, .wcsc-source-footer p, .wcsc-disclaimer) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wcsc-status {
+  color: var(--fiscal-green);
+  background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .wcsc-status--estimated {
+  color: var(--fiscal-orange);
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wcsc-source-footer a {
+  color: var(--fiscal-blue);
+}
+
+@media (max-width: 720px) {
+  .fwd--soft .fwd-main {
+    padding: 14px;
+  }
+
+  .fwd--soft .fwd-header {
+    gap: 12px;
+  }
+
+  .fwd--soft .fwd-actions button {
+    min-height: 40px;
+  }
+
+  .fwd--soft .wfsc-stage,
+  .fwd--soft .wfsc-stage--compact,
+  .fwd--soft .wfsc-stage--summary {
+    padding-bottom: 142px;
+  }
+
+  .fwd--soft .wfsc-step-dots {
+    display: none;
+  }
+
+  .fwd--soft .wfsc-nav,
+  .fwd--soft .wfsc-stage--compact .wfsc-nav {
+    bottom: 58px;
+  }
+
+  .fwd--soft .wfsc-progress,
+  .fwd--soft .wfsc-stage--compact .wfsc-progress {
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+  }
+}

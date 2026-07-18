@@ -6,7 +6,7 @@ Fecha: 2026-07-18
 
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.
 
-- La calculadora fiscal usa ahora de forma permanente el modo visual suave en todo su recorrido. La paleta se concentra en los tokens `--fiscal-*` de `src/components/fiscal-worker-dashboard/FiscalWorkerDashboard.css`; las tarjetas conectan sus variables locales a esos tokens y una capa final alcanza paneles anidados, formularios, controles, fuentes, resumen y navegacion para que no queden superficies oscuras. Verificacion pendiente: `pnpm run build` intento purgar dependencias sin TTY y la ejecucion equivalente de TypeScript/Vite fuera del aislamiento supero 120 s sin resultado.
+- La pagina completa `/calculadora-fiscal` usa una interfaz clara y coherente para publico general. La paleta editable vive en el primer bloque de `src/components/fiscal-worker-dashboard/FiscalSoftTheme.css`; ese tema cubre navegacion, controles, pasos 1-10, comparador autonomico, resumen, FAQ y fuentes sin recurrir a selectores globales agresivos. La navegacion movil oculta los diez indicadores para evitar solapamientos y conserva botones Anterior/Siguiente mas barra de progreso. Verificacion: TypeScript y Vite build correctos; revision visual en escritorio y movil 390 px correcta, sin overflow horizontal de pagina.
 
 - Corregido el 404 de subpaginas en Vercel: la app usa rutas por `window.location.pathname` sobre un unico `index.html`, y faltaba rewrite SPA. Creado `vercel.json` con `/(.*) -> /index.html`. Pendiente redesplegar y comprobar en produccion.
 

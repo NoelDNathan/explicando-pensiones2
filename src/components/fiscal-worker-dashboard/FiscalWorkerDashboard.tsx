@@ -39,6 +39,7 @@ import { calculateIrpf2025Core } from './irpf2025Calc'
 import { calculateInKindBenefits2025 } from './irpf2025Adjustments'
 import { estimateVatFromNetSalary } from './vatEpFProxy'
 import './FiscalWorkerDashboard.css'
+import './FiscalSoftTheme.css'
 
 type ScaleBracket = {
   base_from_eur: number
