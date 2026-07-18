@@ -88,7 +88,8 @@
 
   --intro-text-strong: #1c2531;
   --intro-text: #4a5560;
-  --intro-text-muted: #6f7b87;
+  /* el texto secundario va a 12px: se mantiene por encima de 4.5:1 sobre crema */
+  --intro-text-muted: #5d6873;
   --intro-eyebrow: #b5710f;
 
   --intro-toggle-bg: #f1e9dc;
@@ -102,66 +103,109 @@
   --intro-focus: rgba(18, 133, 91, 0.55);
 }
 
-/* En la variante clara el SalarySlider (componente compartido, tematizado en
+/* Variante C: claro frio y aireado, mas cercano a una app que a un periodico. */
+.wfsc-theme--soft {
+  --intro-net: #0d9f6e;
+  --intro-worker: #e0455f;
+  --intro-company: #d1810c;
+  --intro-consumption: #7357e6;
+
+  --intro-bg:
+    radial-gradient(circle at 8% 0%, rgba(47, 111, 208, 0.07), transparent 38%),
+    linear-gradient(160deg, #f9fbff, #eef3fa);
+  --intro-border: #dde5f0;
+  --intro-shadow: 0 18px 44px rgba(31, 51, 82, 0.09);
+
+  --intro-surface: #ffffff;
+  --intro-surface-border: #e4ebf4;
+  --intro-card-base: #ffffff;
+  --intro-icon-base: #ffffff;
+  --intro-tint: 8%;
+
+  --intro-text-strong: #17212e;
+  --intro-text: #4b5769;
+  /* el texto secundario va a 12px: se mantiene por encima de 4.5:1 sobre blanco */
+  --intro-text-muted: #5c6879;
+  --intro-eyebrow: #2f6fd0;
+
+  --intro-toggle-bg: #eef2f8;
+  --intro-toggle-active-bg: linear-gradient(135deg, #3b7ee0, #2b62b8);
+  --intro-toggle-active-text: #ffffff;
+
+  --intro-cta-bg: linear-gradient(135deg, #0d9f6e, #0a8459);
+  --intro-cta-border: rgba(10, 132, 89, 0.35);
+  --intro-cta-text: #ffffff;
+  --intro-cta-shadow: 0 12px 28px rgba(10, 132, 89, 0.2);
+  --intro-focus: rgba(47, 111, 208, 0.55);
+}
+
+/* En las variantes claras el SalarySlider (componente compartido, tematizado en
    oscuro) desentona dentro del panel blanco: se reviste solo aqui. */
-.wfsc-theme--light .salary-slider {
-  border-color: #e3d9c9;
-  background: #fbf7f0;
+.wfsc-theme--light,
+.wfsc-theme--soft {
+  --intro-slider-bg: var(--intro-surface);
+  --intro-slider-track-empty: var(--intro-surface-border);
+}
+
+.wfsc-theme--light {
+  --intro-slider-bg: #fbf7f0;
+  --intro-slider-track-empty: #e3d9c9;
+}
+
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider {
+  border-color: var(--intro-slider-track-empty);
+  background: var(--intro-slider-bg);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.wfsc-theme--light .salary-slider__value-input,
-.wfsc-theme--light .salary-slider__value-shell > span {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__value-input {
   color: var(--intro-text-strong);
-}
-
-.wfsc-theme--light .salary-slider__value-input {
-  border-color: #ddd2c0;
+  border-color: var(--intro-slider-track-empty);
   background: #ffffff;
 }
 
-.wfsc-theme--light .salary-slider__top span,
-.wfsc-theme--light .salary-slider__scale {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__top span,
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__scale {
   color: var(--intro-text-muted);
 }
 
 /* Los pseudoelementos de rango van en reglas separadas: si un navegador no
    reconoce uno de los selectores, descarta la regla entera. */
-.wfsc-theme--light .salary-slider input[type="range"]::-webkit-slider-runnable-track {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-webkit-slider-runnable-track {
   background: linear-gradient(
     90deg,
-    #12855b 0%,
-    #12855b var(--salary-slider-value),
-    #e3d9c9 var(--salary-slider-value),
-    #e3d9c9 100%
+    var(--intro-net) 0%,
+    var(--intro-net) var(--salary-slider-value),
+    var(--intro-slider-track-empty) var(--salary-slider-value),
+    var(--intro-slider-track-empty) 100%
   );
-  box-shadow: inset 0 1px 2px rgba(72, 55, 32, 0.16);
+  box-shadow: inset 0 1px 2px rgba(40, 50, 65, 0.14);
 }
 
-.wfsc-theme--light .salary-slider input[type="range"]::-moz-range-track {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-moz-range-track {
   background: linear-gradient(
     90deg,
-    #12855b 0%,
-    #12855b var(--salary-slider-value),
-    #e3d9c9 var(--salary-slider-value),
-    #e3d9c9 100%
+    var(--intro-net) 0%,
+    var(--intro-net) var(--salary-slider-value),
+    var(--intro-slider-track-empty) var(--salary-slider-value),
+    var(--intro-slider-track-empty) 100%
   );
-  box-shadow: inset 0 1px 2px rgba(72, 55, 32, 0.16);
+  box-shadow: inset 0 1px 2px rgba(40, 50, 65, 0.14);
 }
 
-.wfsc-theme--light .salary-slider input[type="range"]::-webkit-slider-thumb {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-webkit-slider-thumb {
   border-color: #ffffff;
-  background: #12855b;
-  box-shadow: 0 0 0 4px rgba(18, 133, 91, 0.16), 0 2px 6px rgba(72, 55, 32, 0.24);
+  background: var(--intro-net);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--intro-net) 18%, transparent), 0 2px 6px rgba(40, 50, 65, 0.2);
 }
 
-.wfsc-theme--light .salary-slider input[type="range"]::-moz-range-thumb {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-moz-range-thumb {
   border-color: #ffffff;
-  background: #12855b;
-  box-shadow: 0 0 0 4px rgba(18, 133, 91, 0.16), 0 2px 6px rgba(72, 55, 32, 0.24);
+  background: var(--intro-net);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--intro-net) 18%, transparent), 0 2px 6px rgba(40, 50, 65, 0.2);
 }
 
-.wfsc-theme--light .salary-slider__value-shell > span {
+:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__value-shell > span {
   color: var(--intro-text-strong);
 }
 

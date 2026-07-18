@@ -40,12 +40,19 @@ function roundEuro(value: number) {
 }
 
 /**
- * TEMPORAL: permite comparar las dos paletas candidatas del paso 1 sobre la
- * pantalla real (?tema=claro). Se elimina al elegir una de las dos.
+ * TEMPORAL: permite comparar las paletas candidatas del paso 1 sobre la
+ * pantalla real (?tema=claro | ?tema=suave). Se elimina al elegir una.
  */
-function readIntroTheme(): 'warm-dark' | 'light' {
+function readIntroTheme(): 'warm-dark' | 'light' | 'soft' {
   if (typeof window === 'undefined') return 'warm-dark'
-  return new URLSearchParams(window.location.search).get('tema') === 'claro' ? 'light' : 'warm-dark'
+  switch (new URLSearchParams(window.location.search).get('tema')) {
+    case 'claro':
+      return 'light'
+    case 'suave':
+      return 'soft'
+    default:
+      return 'warm-dark'
+  }
 }
 
 export function WorkerFiscalSummaryCard({
