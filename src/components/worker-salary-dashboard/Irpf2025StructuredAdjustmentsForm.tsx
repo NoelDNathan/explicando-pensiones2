@@ -4,6 +4,7 @@ import {
   calculateInKindBenefits2025,
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import type { Irpf2025AdjustmentInput } from '../fiscal-worker-dashboard/irpf2025Adjustments'
+import { InfoButton } from '../ui/InfoButton'
 import './Irpf2025StructuredAdjustmentsForm.css'
 
 type Props = {
@@ -17,6 +18,7 @@ type NumberFieldProps = {
   label: string
   value: number
   onChange: (value: number) => void
+  help?: string
   hint?: string
   max?: number
   min?: number
@@ -24,10 +26,116 @@ type NumberFieldProps = {
   unit?: string
 }
 
-function NumberField({ label, value, onChange, hint, max, min = 0, step = 0.01, unit = 'EUR' }: NumberFieldProps) {
+const FIELD_HELP: Record<string, string> = {
+  'Conozco todas mis otras rentas no exentas': 'Algunas reducciones solo se pueden aplicar si conoces si tienes otras rentas no exentas. Si no esta confirmado, la calculadora evita aplicar beneficios sujetos a umbral.',
+  'Otras rentas no exentas distintas del trabajo': 'Ingresos que no vienen de tu salario y que no estan exentos: alquileres, actividades, ganancias, intereses u otros rendimientos. Sirven para comprobar limites.',
+  'Cuotas sindicales pagadas': 'Importes pagados a sindicatos. En IRPF pueden reducir el rendimiento neto del trabajo si son cuotas reales y justificables.',
+  'Cuotas de colegio profesional': 'Cuotas a un colegio profesional cuando colegiarse es obligatorio para ejercer. La calculadora aplica el limite maximo permitido.',
+  'La colegiacion es obligatoria para ejercer': 'Marca si tu profesion exige estar colegiado para trabajar. Si no es obligatorio, la cuota no se trata igual.',
+  'Defensa juridica laboral': 'Gastos de abogado o defensa por conflictos laborales con el empleador. Tienen un limite especifico anual.',
+  'Estaba inscrito como demandante de empleo': 'Dato necesario para aplicar el incremento por movilidad geografica cuando aceptas trabajo en otro municipio.',
+  'Acepte un empleo en otro municipio': 'Se refiere a aceptar un puesto que exige desplazarse a otro municipio, dentro de la regla de movilidad geografica.',
+  'Traslade mi residencia': 'La movilidad geografica exige traslado efectivo de residencia. Sin este requisito, el incremento no se aplica.',
+  'Ejercicio del traslado': 'Indica el ano fiscal en que se produjo el traslado. Para 2025 solo importan los ejercicios cubiertos por la regla temporal.',
+  'Rendimiento integro del nuevo empleo': 'Salario bruto asociado al empleo que origina la movilidad geografica.',
+  'Gastos especificos del nuevo empleo': 'Gastos vinculados al nuevo empleo que sirven para limitar o calcular el incremento aplicable.',
+  'Plan personal': 'Aportaciones tuyas a planes de pensiones individuales u otros sistemas de prevision social con reduccion en base.',
+  'Mutualidad admisible': 'Aportaciones a mutualidades que fiscalmente pueden actuar como prevision social, si cumplen requisitos.',
+  'Contribucion empresarial imputada': 'Aportacion que hace la empresa a un plan de empleo y que se atribuye fiscalmente al trabajador.',
+  'Aportacion propia al mismo plan de empleo': 'Aportacion adicional que haces tu al plan de empleo de la empresa. Puede tener limite conjunto con la contribucion empresarial.',
+  'Rendimiento integro del empleador del plan': 'Dato usado para decidir el coeficiente o limite aplicable a aportaciones vinculadas al plan de empleo.',
+  'Aportacion al sistema del conyuge': 'Aportacion a prevision social del conyuge. Solo reduce si sus rendimientos estan por debajo del umbral legal.',
+  'Rendimientos netos del conyuge': 'Importe que decide si la aportacion al sistema de prevision del conyuge tiene derecho a reduccion.',
+  'El sistema del conyuge cumple los requisitos': 'Confirma que el producto y la situacion del conyuge encajan en la regla fiscal. Sin confirmacion, no se aplica.',
+  'Pension compensatoria pagada': 'Importe pagado al exconyuge por resolucion judicial o convenio formalizado. Reduce la base si cumple los requisitos.',
+  'Existe resolucion o convenio formalizado': 'La pension compensatoria necesita respaldo formal para reducir la base.',
+  'Modalidad de declaracion': 'Individual o conjunta. La tributacion conjunta puede generar reduccion, pero depende de la unidad familiar.',
+  'Aportacion a patrimonio protegido': 'Aportaciones a un patrimonio protegido de persona con discapacidad. Tienen limites y requisitos especificos.',
+  'Total aportado por todos al mismo patrimonio': 'Suma de aportaciones de todos los aportantes al mismo patrimonio protegido. Sirve para aplicar limites globales.',
+  'Aportante, beneficiario y patrimonio cumplen requisitos': 'Confirmacion formal para no aplicar una reduccion de patrimonio protegido sin base documental suficiente.',
+  'Reduccion autonomica calculada': 'Importe de una reduccion propia de tu comunidad autonoma ya calculada fuera de esta pantalla.',
+  'Codigo o nombre de la reduccion autonomica': 'Nombre identificable de la regla autonomica usada, para que el calculo sea trazable.',
+  'Fuente oficial de la reduccion': 'Enlace a la norma, manual o fuente oficial que justifica la reduccion autonomica.',
+  'Base, porcentaje y limite utilizados': 'Resumen de la formula aplicada: sobre que base se calcula, porcentaje usado y limite maximo.',
+  'Reduccion autonomica documentada y verificada': 'Solo al marcar esto la calculadora trata la reduccion como utilizable. Evita mezclar importes no comprobados.',
+  'La tarjeta comida cumple los requisitos': 'Vales o tarjeta restaurante con condiciones fiscales. Si cumple, una parte puede estar exenta.',
+  'Importe diario de tarjeta comida': 'Importe por dia de uso de la tarjeta comida. La exencion se limita por dia admisible.',
+  'Dias admisibles de tarjeta comida': 'Dias reales que cumplen requisitos. No todos los dias del ano tienen por que computar.',
+  'La tarjeta transporte cumple los requisitos': 'Ayuda al transporte colectivo del trabajador. Si cumple requisitos, puede estar exenta con limite mensual/anual.',
+  'Importe mensual de transporte': 'Importe mensual de transporte pagado por la empresa o mediante tarjeta.',
+  'Meses admisibles de transporte': 'Meses en los que el beneficio de transporte cumple requisitos.',
+  'El seguro medico cubre personas admisibles': 'Seguro medico para trabajador, conyuge o descendientes. La exencion depende de las personas cubiertas y limites por persona.',
+  'Personas aseguradas sin discapacidad': 'Numero de personas cubiertas por el seguro medico sin discapacidad reconocida.',
+  'Primas de personas sin discapacidad': 'Prima anual asociada a esas personas. La exencion tiene limite por persona.',
+  'Personas aseguradas con discapacidad': 'Numero de personas cubiertas con discapacidad reconocida, con limite de exencion superior.',
+  'Primas de personas con discapacidad': 'Prima anual asociada a personas con discapacidad.',
+  'La guarderia de empresa cumple el articulo 42.3.b': 'Guarderia o educacion infantil pagada por la empresa bajo requisitos de retribucion en especie exenta.',
+  'Guarderia pagada por la empresa': 'Importe anual del beneficio de guarderia de empresa.',
+  'Ingreso a cuenta no repercutido': 'Pago fiscal que asume la empresa y no te cobra. Puede aumentar la valoracion de la retribucion en especie.',
+  'Donativo 2025': 'Importe donado durante el ejercicio. La deduccion depende de entidad, recurrencia y limites.',
+  'Donado a la misma entidad en 2024': 'Sirve para comprobar fidelidad de donativos a la misma entidad.',
+  'Donado a la misma entidad en 2023': 'Sirve junto con 2024 para aplicar, si procede, el tramo incrementado por recurrencia.',
+  'Entidad incluida en la Ley 49/2002': 'Confirma que la entidad receptora permite aplicar la deduccion fiscal de donativos.',
+  'Alquiler pagado en 2025': 'Importe anual de alquiler de vivienda habitual, solo relevante si se conserva regimen transitorio.',
+  'Contrato anterior a 2015': 'La deduccion estatal por alquiler es transitoria. El contrato debe venir de antes de 2015.',
+  'Se pagaron cantidades antes de 2015': 'Requisito historico para mantener el derecho transitorio por alquiler.',
+  'Hubo derecho a deduccion antes de 2015': 'Confirma que ya existia derecho fiscal antes de la supresion general de la deduccion.',
+  'Es la vivienda habitual': 'La deduccion de alquiler o vivienda exige que sea tu vivienda habitual, no segunda residencia.',
+  'Inversion admisible en vivienda': 'Pagos por adquisicion o financiacion de vivienda habitual bajo regimen transitorio anterior a 2013.',
+  'Acredita regimen transitorio anterior a 2013': 'Confirma que conservas derecho a deduccion por vivienda habitual anterior a 2013.',
+  'Porcentaje de titularidad': 'Parte de la vivienda que te corresponde fiscalmente. Limita la base atribuible.',
+  'Porcentaje autonomico de vivienda': 'Tramo autonomico de la deduccion por vivienda habitual cuando aplica el regimen transitorio.',
+  'Requisitos del 9 % catalan verificados': 'Algunas situaciones en Cataluna usan un porcentaje autonomico especial. Marcado solo si esta comprobado.',
+  'Inversion en empresa nueva': 'Inversion en empresas de nueva o reciente creacion con derecho potencial a deduccion.',
+  'Certificacion y requisitos societarios verificados': 'Confirma que la empresa y la inversion cumplen los requisitos fiscales.',
+  'Deduccion autonomica ya calculada': 'Importe de una deduccion propia de tu comunidad autonoma calculada aparte.',
+  'Codigo o nombre de la deduccion autonomica': 'Nombre identificable de la deduccion autonomica para poder auditar el calculo.',
+  'Fuente oficial de la deduccion': 'Enlace oficial que justifica la regla autonomica usada.',
+  'Regla autonomica, fuente y requisitos verificados': 'Solo al marcarlo se considera que la deduccion autonomica es suficientemente trazable.',
+  'Cumple los requisitos de maternidad': 'Deduccion reembolsable vinculada a hijos menores de 3 anos y situacion laboral o prestacion habilitante.',
+  'Hijos que generan deduccion por maternidad': 'Numero de hijos que pueden generar derecho a la deduccion.',
+  'Suma de meses-hijo con derecho': 'Cuenta meses por hijo. Dos hijos durante doce meses equivalen a veinticuatro meses-hijo.',
+  'Hijos con incremento unico de 150 EUR': 'Casos que generan el incremento unico previsto en la regla.',
+  'Abono anticipado de maternidad cobrado': 'Importe que ya te han pagado por adelantado y se resta del resultado de la declaracion.',
+  'Cumple los requisitos del incremento de guarderia': 'Incremento asociado a gastos de guarderia o centros autorizados, sujeto a requisitos y limites.',
+  'Hijos que generan incremento de guarderia': 'Numero de hijos por los que se calcula el incremento de guarderia.',
+  'Suma de meses completos por hijo': 'Meses completos de guarderia por cada hijo con derecho.',
+  'Gasto anual de guarderia': 'Importe pagado por guarderia antes de restar subvenciones o importes exentos.',
+  'Subvenciones de guarderia': 'Ayudas recibidas que reducen el gasto computable para el incremento.',
+  'Guarderia exenta pagada por la empresa': 'Importe de guarderia tratado como retribucion en especie exenta; no debe duplicarse como gasto deducible.',
+  'Titulo de familia numerosa vigente': 'La deduccion exige titulo oficial vigente durante los meses declarados.',
+  'Categoria de familia numerosa': 'General o especial. La categoria cambia el importe mensual base de la deduccion.',
+  'Meses con derecho a familia numerosa': 'Meses del ejercicio en los que el titulo y requisitos estaban vigentes.',
+  'Hijos que exceden el minimo de categoria': 'Hijos por encima del minimo necesario para la categoria, que pueden aumentar la deduccion.',
+  'Parte del derecho que corresponde': 'Porcentaje que te corresponde cuando el derecho se reparte entre contribuyentes.',
+  'Abono anticipado de familia numerosa': 'Importe ya cobrado por adelantado, que se descuenta al calcular el resultado.',
+  'Suma de meses-persona con discapacidad a cargo': 'Cuenta meses por persona con discapacidad a cargo. Dos personas durante doce meses equivalen a veinticuatro.',
+  'Parte del derecho por discapacidad': 'Porcentaje que te corresponde si varios contribuyentes comparten el derecho.',
+  'Abonos anticipados por discapacidad': 'Importes ya cobrados por adelantado por esta deduccion.',
+  'Cotizaciones que limitan estas deducciones': 'Algunas deducciones reembolsables quedan limitadas por cotizaciones cuando el derecho nace por alta laboral.',
+  'El derecho nace por prestacion habilitante sin limite de cotizaciones': 'Marca si el derecho procede de una prestacion que elimina el limite de cotizaciones.',
+  'Retenciones de IRPF practicadas': 'IRPF que ya te ha retenido la empresa en nomina durante el ano.',
+  'Otros ingresos o pagos a cuenta': 'Otros pagos ya realizados a Hacienda, distintos de las retenciones de nomina.',
+}
+
+function HelpLabel({ label, help }: { label: string; help?: string }) {
+  const helpText = help ?? FIELD_HELP[label]
+  return (
+    <span className="irpf-rule-label">
+      <span>{label}</span>
+      {helpText ? (
+        <InfoButton label={`Que significa: ${label}`} size="sm" placement="end" className="wprc-help">
+          <p>{helpText}</p>
+        </InfoButton>
+      ) : null}
+    </span>
+  )
+}
+
+function NumberField({ label, value, onChange, help, hint, max, min = 0, step = 0.01, unit = 'EUR' }: NumberFieldProps) {
   return (
     <label className="irpf-rule-field">
-      <span>{label}</span>
+      <HelpLabel label={label} help={help} />
       <span className="irpf-rule-field__control">
         <input
           aria-label={label}
@@ -46,10 +154,10 @@ function NumberField({ label, value, onChange, hint, max, min = 0, step = 0.01, 
   )
 }
 
-function CountField({ label, value, onChange, max = 12, hint, unit }: NumberFieldProps) {
+function CountField({ label, value, onChange, max = 12, help, hint, unit }: NumberFieldProps) {
   return (
     <label className="irpf-rule-field">
-      <span>{label}</span>
+      <HelpLabel label={label} help={help} />
       <span className="irpf-rule-field__control irpf-rule-field__control--count">
         <input
           aria-label={label}
@@ -68,49 +176,52 @@ function CountField({ label, value, onChange, max = 12, hint, unit }: NumberFiel
   )
 }
 
-function CheckField({ label, checked, onChange, hint }: {
+function CheckField({ label, checked, onChange, help, hint }: {
   label: string
   checked: boolean
   onChange: (checked: boolean) => void
+  help?: string
   hint?: string
 }) {
   return (
     <label className="irpf-rule-check">
       <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} />
       <span>
-        <strong>{label}</strong>
+        <strong><HelpLabel label={label} help={help} /></strong>
         {hint ? <small>{hint}</small> : null}
       </span>
     </label>
   )
 }
 
-function TextField({ label, value, onChange, hint, type = 'text' }: {
+function TextField({ label, value, onChange, help, hint, type = 'text' }: {
   label: string
   value: string
   onChange: (value: string) => void
+  help?: string
   hint?: string
   type?: 'text' | 'url'
 }) {
   return (
     <label className="irpf-rule-field">
-      <span>{label}</span>
+      <HelpLabel label={label} help={help} />
       <input aria-label={label} type={type} value={value} onChange={(event) => onChange(event.target.value)} />
       {hint ? <small>{hint}</small> : null}
     </label>
   )
 }
 
-function SelectField({ label, value, onChange, children, hint }: {
+function SelectField({ label, value, onChange, children, help, hint }: {
   label: string
   value: string
   onChange: (value: string) => void
   children: ReactNode
+  help?: string
   hint?: string
 }) {
   return (
     <label className="irpf-rule-field">
-      <span>{label}</span>
+      <HelpLabel label={label} help={help} />
       <select aria-label={label} value={value} onChange={(event) => onChange(event.target.value)}>
         {children}
       </select>

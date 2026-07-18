@@ -240,22 +240,22 @@
   --info-focus-ring: color-mix(in srgb, var(--fiscal-primary) 24%, transparent);
 }
 
-.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__trigger {
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help, .wprc-help) .info-button__trigger {
   border-color: var(--info-border);
   color: var(--info-fg);
   background: var(--info-bg);
   box-shadow: 0 2px 7px rgba(35, 54, 78, 0.08);
 }
 
-.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__trigger:hover:not(:disabled),
-.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__trigger[aria-expanded='true'] {
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help, .wprc-help) .info-button__trigger:hover:not(:disabled),
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help, .wprc-help) .info-button__trigger[aria-expanded='true'] {
   border-color: var(--info-hover-border);
   color: var(--info-hover-fg);
   background: var(--fiscal-primary-soft);
   box-shadow: 0 3px 9px rgba(20, 125, 117, 0.12);
 }
 
-.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__panel {
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help, .wprc-help) .info-button__panel {
   width: min(20rem, calc(100vw - 2rem));
   padding: 13px 15px;
   border-color: var(--fiscal-line);
@@ -1315,16 +1315,57 @@
 
 .fwd--soft .wctc-switch {
   grid-template-columns: auto auto;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
+.fwd--soft .wctc-switch span {
+  width: 48px;
+  height: 28px;
+  border-color: color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  background: linear-gradient(180deg, #ffffff, #eef5f7);
+  box-shadow:
+    inset 0 1px 2px rgba(34, 61, 79, 0.1),
+    0 6px 15px rgba(55, 89, 115, 0.08);
+}
+
+.fwd--soft .wctc-switch span::after {
+  background: #9db0c1;
+  box-shadow:
+    0 2px 6px rgba(54, 77, 96, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.fwd--soft .wctc-switch:hover span,
+.fwd--soft .wctc-switch input:focus-visible + span {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 45%, var(--fiscal-line));
+  box-shadow:
+    inset 0 1px 2px rgba(34, 61, 79, 0.1),
+    0 0 0 3px color-mix(in srgb, var(--fiscal-primary) 14%, transparent);
+}
+
+.fwd--soft .wctc-switch input:checked + span {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 58%, var(--fiscal-line));
+  background: linear-gradient(135deg, var(--fiscal-primary), var(--fiscal-green));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 9px 18px color-mix(in srgb, var(--fiscal-primary) 18%, transparent);
+}
+
+.fwd--soft .wctc-switch input:checked + span::after {
+  background: #ffffff;
+}
+
 .fwd--soft .wctc-switch em {
-  color: var(--fiscal-copy);
-  font-size: 12px;
+  color: var(--fiscal-ink-soft);
+  font-size: 13px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 800;
   white-space: nowrap;
+}
+
+.fwd--soft .wctc-switch input:checked ~ em {
+  color: var(--fiscal-primary-strong);
 }
 
 .fwd--soft .wcsc {

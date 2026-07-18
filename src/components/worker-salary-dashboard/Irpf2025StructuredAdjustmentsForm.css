@@ -89,6 +89,25 @@
   font-weight: 760;
 }
 
+.irpf-rule-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.irpf-rule-label > span:first-child {
+  min-width: 0;
+}
+
+.wprc-help {
+  flex: 0 0 auto;
+}
+
+.wprc-help .info-button__panel {
+  width: min(21rem, calc(100vw - 2rem));
+}
+
 .irpf-rule-field small,
 .irpf-rule-check small {
   color: #91a7ca;

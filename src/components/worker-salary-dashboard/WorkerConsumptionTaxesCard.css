@@ -562,6 +562,9 @@
 .wctc-switch {
   position: relative;
   display: inline-grid;
+  grid-template-columns: auto auto;
+  gap: 9px;
+  align-items: center;
   justify-self: end;
 }
 
@@ -573,29 +576,72 @@
 
 .wctc-switch span {
   position: relative;
-  width: 45px;
-  height: 24px;
-  border: 1px solid rgba(104, 210, 123, 0.42);
+  width: 48px;
+  height: 28px;
+  border: 1px solid rgba(129, 158, 190, 0.48);
   border-radius: 999px;
-  background: rgba(3, 14, 28, 0.86);
+  background:
+    linear-gradient(180deg, rgba(242, 247, 252, 0.18), rgba(143, 164, 190, 0.12)),
+    rgba(20, 38, 58, 0.72);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.08);
   cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .wctc-switch span::after {
   content: "";
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: #8aa0bd;
-  transition: transform 160ms ease, background 160ms ease;
+  background: #d7e1ec;
+  box-shadow:
+    0 3px 9px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.wctc-switch:hover span {
+  border-color: rgba(130, 206, 218, 0.66);
 }
 
 .wctc-switch input:checked + span::after {
-  transform: translateX(21px);
-  background: #baf4bd;
+  transform: translateX(20px);
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px rgba(0, 76, 68, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+.wctc-switch input:checked + span {
+  border-color: rgba(94, 211, 111, 0.72);
+  background:
+    linear-gradient(135deg, rgba(63, 190, 134, 0.92), rgba(31, 136, 130, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 16px rgba(63, 190, 134, 0.2);
+}
+
+.wctc-switch em {
+  color: #c2cede;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 790;
+  white-space: nowrap;
+}
+
+.wctc-switch input:checked ~ em {
+  color: #dfffe7;
 }
 
 .wctc-ibi-amounts {
