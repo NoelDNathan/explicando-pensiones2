@@ -6,6 +6,8 @@ Fecha: 2026-07-18
 
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.
 
+- Mejorada la tira superior de reducciones en `/calculadora-fiscal`: las tarjetas de descendientes, ascendientes, discapacidad, ayuda/movilidad y estado civil usan contraste alto, valores sin truncado agresivo y selector circular limpio, evitando textos lavados y valores cortados como `Cas...`. Verificacion: TypeScript y Vite build correctos; comprobacion DOM en escritorio y viewport movil del bloque `.wprc-top-grid` sin overflow horizontal y con valores legibles.
+
 - Corregida la alineacion de los simbolos `EUR` y `%` en los campos de IVA de `/calculadora-fiscal`: la regla del contorno decorativo ya no altera el `span.sr-only`, por lo que el input y el sufijo vuelven a ocupar sus dos columnas y quedan centrados verticalmente. Verificacion: TypeScript y Vite build correctos; comprobacion DOM del primer `.wctc-input` confirma sufijo en la celda derecha, centrado verticalmente y sin overflow horizontal.
 
 - Corregida de raiz la desaparicion del borde izquierdo en campos de reducciones/deducciones e IVA de `/calculadora-fiscal`: en modo suave, los controles IRPF y los inputs de IVA dejan de depender del borde del propio elemento y usan una capa decorativa `::before` con contorno completo, pintada por encima del contenido y sin interferir con la interaccion. Verificacion: TypeScript y Vite build correctos; comprobacion DOM del campo "Guarderia pagada por la empresa" y de `.wctc-input` confirma borde base desactivado, contorno `::before` completo, `overflow: visible` y sin overflow horizontal de pagina.

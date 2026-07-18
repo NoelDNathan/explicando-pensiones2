@@ -877,12 +877,98 @@
   box-shadow: none;
 }
 
+.fwd--soft .wprc-top-grid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .fwd--soft .wprc-top-field,
 .fwd--soft .wprc-dependent-number,
 .fwd--soft .wprc-select {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line-strong);
   background: var(--fiscal-surface);
+}
+
+.fwd--soft .wprc-top-field {
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  gap: 14px;
+  min-height: 94px;
+  padding: 16px 14px;
+  border: 1px solid color-mix(in srgb, var(--fiscal-line-strong) 72%, transparent);
+  border-radius: var(--fiscal-radius-control);
+  box-shadow:
+    0 8px 22px rgba(45, 71, 94, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.fwd--soft .wprc-top-field + .wprc-top-field {
+  border-left: 1px solid color-mix(in srgb, var(--fiscal-line-strong) 72%, transparent);
+}
+
+.fwd--soft .wprc-top-field > svg {
+  width: 32px;
+  height: 32px;
+  color: var(--fiscal-primary);
+  filter: none;
+}
+
+.fwd--soft .wprc-top-field__copy span {
+  color: var(--fiscal-copy);
+  font-size: clamp(13px, 1.05vw, 16px);
+  line-height: 1.12;
+  font-weight: 780;
+}
+
+.fwd--soft .wprc-top-field__copy strong {
+  color: var(--fiscal-ink);
+  overflow: visible;
+  font-size: clamp(18px, 1.55vw, 24px);
+  line-height: 1.08;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.fwd--soft .wprc-top-field > .wprc-select {
+  position: relative;
+  top: auto;
+  right: auto;
+  align-self: center;
+  justify-self: end;
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  margin: 0;
+  border-radius: 999px;
+  opacity: 1;
+  transform: none;
+}
+
+.fwd--soft .wprc-top-field > .wprc-select::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--fiscal-primary);
+  border-bottom: 2px solid var(--fiscal-primary);
+  pointer-events: none;
+  transform: translate(-50%, -68%) rotate(45deg);
+}
+
+.fwd--soft .wprc-top-field > .wprc-select select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  color: transparent;
 }
 
 .fwd--soft .wprc-dependent-number input {
