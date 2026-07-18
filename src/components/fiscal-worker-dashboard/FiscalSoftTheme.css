@@ -1379,7 +1379,7 @@
   border-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
 }
 
-.fwd--soft .wctc-input > * {
+.fwd--soft .wctc-input :is(input, b) {
   position: relative;
   z-index: 1;
 }
