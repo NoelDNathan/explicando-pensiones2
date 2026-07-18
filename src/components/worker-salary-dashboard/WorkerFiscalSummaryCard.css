@@ -21,20 +21,163 @@
 /* ---------- Paso 1 (intro): version orientada a publico general ---------- */
 
 .wfsc-summary--intro {
-  --intro-net: #62d76b;
-  --intro-worker: #ff8fa0;
-  --intro-company: #ffad42;
-  --intro-consumption: #c69cff;
   gap: clamp(20px, 2.6vw, 30px);
+  padding: clamp(20px, 3vw, 36px);
+  border: 1px solid var(--intro-border);
+  border-radius: 20px;
+  color: var(--intro-text);
+  background: var(--intro-bg);
+  box-shadow: var(--intro-shadow);
+}
+
+/* Variante A: oscuro calido. Menos neon que el resto de la app, pero sigue
+   encajando visualmente con los pasos 2-10. */
+.wfsc-theme--warm-dark {
+  --intro-net: #5fc98a;
+  --intro-worker: #e8798a;
+  --intro-company: #e5a04f;
+  --intro-consumption: #a894e0;
+
+  --intro-bg:
+    radial-gradient(circle at 6% 0%, rgba(229, 160, 79, 0.1), transparent 34%),
+    radial-gradient(circle at 94% 100%, rgba(95, 201, 138, 0.09), transparent 36%),
+    linear-gradient(150deg, #1a2431, #10171f);
+  --intro-border: rgba(150, 170, 190, 0.22);
+  --intro-shadow: 0 24px 64px rgba(0, 5, 14, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --intro-surface: rgba(255, 255, 255, 0.035);
+  --intro-surface-border: rgba(160, 180, 200, 0.18);
+  --intro-card-base: rgba(16, 23, 31, 0.8);
+  --intro-icon-base: rgba(16, 23, 31, 0.85);
+  --intro-tint: 12%;
+
+  --intro-text-strong: #f4f1ec;
+  --intro-text: #c2c9d1;
+  --intro-text-muted: #96a0ab;
+  --intro-eyebrow: #e5a04f;
+
+  --intro-toggle-bg: rgba(0, 0, 0, 0.25);
+  --intro-toggle-active-bg: linear-gradient(135deg, #3d8f6b, #2d6b50);
+  --intro-toggle-active-text: #f2fff8;
+
+  --intro-cta-bg: linear-gradient(135deg, #4aa87a, #35835f);
+  --intro-cta-border: rgba(95, 201, 138, 0.5);
+  --intro-cta-text: #f2fff8;
+  --intro-cta-shadow: 0 12px 30px rgba(45, 107, 80, 0.32);
+  --intro-focus: rgba(150, 200, 255, 0.7);
+}
+
+/* Variante B: claro editorial, estilo explicador de prensa. */
+.wfsc-theme--light {
+  --intro-net: #12855b;
+  --intro-worker: #c4344c;
+  --intro-company: #b5710f;
+  --intro-consumption: #6b4bb5;
+
+  --intro-bg:
+    radial-gradient(circle at 6% 0%, rgba(181, 113, 15, 0.07), transparent 36%),
+    linear-gradient(160deg, #fdfaf5, #f6efe4);
+  --intro-border: #e6ddd0;
+  --intro-shadow: 0 18px 44px rgba(72, 55, 32, 0.1);
+
+  --intro-surface: #ffffff;
+  --intro-surface-border: #ece3d6;
+  --intro-card-base: #ffffff;
+  --intro-icon-base: #ffffff;
+  --intro-tint: 9%;
+
+  --intro-text-strong: #1c2531;
+  --intro-text: #4a5560;
+  --intro-text-muted: #6f7b87;
+  --intro-eyebrow: #b5710f;
+
+  --intro-toggle-bg: #f1e9dc;
+  --intro-toggle-active-bg: #1c2531;
+  --intro-toggle-active-text: #ffffff;
+
+  --intro-cta-bg: linear-gradient(135deg, #12855b, #0d6b49);
+  --intro-cta-border: rgba(13, 107, 73, 0.4);
+  --intro-cta-text: #ffffff;
+  --intro-cta-shadow: 0 12px 28px rgba(13, 107, 73, 0.22);
+  --intro-focus: rgba(18, 133, 91, 0.55);
+}
+
+/* En la variante clara el SalarySlider (componente compartido, tematizado en
+   oscuro) desentona dentro del panel blanco: se reviste solo aqui. */
+.wfsc-theme--light .salary-slider {
+  border-color: #e3d9c9;
+  background: #fbf7f0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.wfsc-theme--light .salary-slider__value-input,
+.wfsc-theme--light .salary-slider__value-shell > span {
+  color: var(--intro-text-strong);
+}
+
+.wfsc-theme--light .salary-slider__value-input {
+  border-color: #ddd2c0;
+  background: #ffffff;
+}
+
+.wfsc-theme--light .salary-slider__top span,
+.wfsc-theme--light .salary-slider__scale {
+  color: var(--intro-text-muted);
+}
+
+/* Los pseudoelementos de rango van en reglas separadas: si un navegador no
+   reconoce uno de los selectores, descarta la regla entera. */
+.wfsc-theme--light .salary-slider input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    90deg,
+    #12855b 0%,
+    #12855b var(--salary-slider-value),
+    #e3d9c9 var(--salary-slider-value),
+    #e3d9c9 100%
+  );
+  box-shadow: inset 0 1px 2px rgba(72, 55, 32, 0.16);
+}
+
+.wfsc-theme--light .salary-slider input[type="range"]::-moz-range-track {
+  background: linear-gradient(
+    90deg,
+    #12855b 0%,
+    #12855b var(--salary-slider-value),
+    #e3d9c9 var(--salary-slider-value),
+    #e3d9c9 100%
+  );
+  box-shadow: inset 0 1px 2px rgba(72, 55, 32, 0.16);
+}
+
+.wfsc-theme--light .salary-slider input[type="range"]::-webkit-slider-thumb {
+  border-color: #ffffff;
+  background: #12855b;
+  box-shadow: 0 0 0 4px rgba(18, 133, 91, 0.16), 0 2px 6px rgba(72, 55, 32, 0.24);
+}
+
+.wfsc-theme--light .salary-slider input[type="range"]::-moz-range-thumb {
+  border-color: #ffffff;
+  background: #12855b;
+  box-shadow: 0 0 0 4px rgba(18, 133, 91, 0.16), 0 2px 6px rgba(72, 55, 32, 0.24);
+}
+
+.wfsc-theme--light .salary-slider__value-shell > span {
+  color: var(--intro-text-strong);
 }
 
 .wfsc-intro__header {
   max-width: 760px;
 }
 
-.wfsc-intro__header h2 {
+.wfsc-summary--intro .wfsc-summary__eyebrow {
+  color: var(--intro-eyebrow);
+}
+
+/* .fwd-worker-card h2 fija un color claro con la misma especificidad y gana por
+   orden de carga: hay que subir la especificidad para tematizar el titular. */
+.wfsc-summary--intro .wfsc-intro__header h2 {
   margin: 0;
-  color: #f7fbff;
+  color: var(--intro-text-strong);
   font-size: clamp(30px, 4vw, 52px);
   line-height: 1.02;
   letter-spacing: -0.015em;
@@ -42,7 +185,7 @@
 
 .wfsc-intro__lead {
   margin: 14px 0 0;
-  color: #c3d4e6;
+  color: var(--intro-text);
   font-size: clamp(15px, 1.4vw, 17px);
   line-height: 1.55;
 }
@@ -53,9 +196,9 @@
   align-items: center;
   flex-wrap: wrap;
   padding: 18px;
-  border: 1px solid rgba(86, 139, 190, 0.28);
+  border: 1px solid var(--intro-surface-border);
   border-radius: 16px;
-  background: rgba(3, 20, 39, 0.62);
+  background: var(--intro-surface);
 }
 
 .wfsc-intro__salary {
@@ -68,9 +211,9 @@
   grid-template-columns: 1fr 1fr;
   flex: 0 0 auto;
   padding: 4px;
-  border: 1px solid rgba(105, 153, 202, 0.3);
+  border: 1px solid var(--intro-surface-border);
   border-radius: 12px;
-  background: rgba(2, 15, 31, 0.72);
+  background: var(--intro-toggle-bg);
 }
 
 .wfsc-intro__period button {
@@ -78,7 +221,7 @@
   padding: 0 18px;
   border: 0;
   border-radius: 9px;
-  color: #91a8c6;
+  color: var(--intro-text-muted);
   font-size: 14px;
   font-weight: 700;
   background: transparent;
@@ -86,14 +229,13 @@
 }
 
 .wfsc-intro__period button.is-active {
-  color: #fff;
-  background: linear-gradient(135deg, #246fe0, #1854ad);
-  box-shadow: 0 8px 22px rgba(34, 109, 224, 0.28);
+  color: var(--intro-toggle-active-text);
+  background: var(--intro-toggle-active-bg);
 }
 
 .wfsc-intro__period button:focus-visible,
 .wfsc-intro__cta:focus-visible {
-  outline: 3px solid rgba(118, 184, 255, 0.72);
+  outline: 3px solid var(--intro-focus);
   outline-offset: 3px;
 }
 
@@ -102,12 +244,12 @@
   border: 1px solid color-mix(in srgb, var(--intro-net) 32%, transparent);
   border-radius: 18px;
   text-align: center;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--intro-net) 13%, transparent), rgba(3, 19, 37, 0.8));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--intro-net) var(--intro-tint), transparent), var(--intro-card-base));
 }
 
 .wfsc-intro__headline p {
   margin: 0;
-  color: #dce8f4;
+  color: var(--intro-text-strong);
   font-size: clamp(15px, 1.6vw, 19px);
   line-height: 1.4;
 }
@@ -125,7 +267,7 @@
 }
 
 .wfsc-intro__headline-note {
-  color: #93a9c3 !important;
+  color: var(--intro-text-muted) !important;
   font-size: 13px !important;
 }
 
@@ -176,7 +318,7 @@
   padding: 16px;
   border: 1px solid color-mix(in srgb, var(--item-color) 30%, transparent);
   border-radius: 14px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--item-color) 10%, transparent), rgba(3, 19, 37, 0.78));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--item-color) var(--intro-tint), transparent), var(--intro-card-base));
 }
 
 .wfsc-intro__legend-item--net { --item-color: var(--intro-net); }
@@ -191,12 +333,12 @@
   height: 38px;
   border-radius: 11px;
   color: var(--item-color);
-  background: color-mix(in srgb, var(--item-color) 15%, rgba(2, 14, 29, 0.8));
+  background: color-mix(in srgb, var(--item-color) 15%, var(--intro-icon-base));
 }
 
 .wfsc-intro__legend-label {
   margin: 0;
-  color: #dce8f4;
+  color: var(--intro-text-strong);
   font-size: 13px;
   font-weight: 700;
 }
@@ -216,14 +358,14 @@
 }
 
 .wfsc-intro__legend-value span {
-  color: #93a9c3;
+  color: var(--intro-text-muted);
   font-size: 12px;
   font-weight: 700;
 }
 
 .wfsc-intro__legend-detail {
   margin: 0;
-  color: #93a9c3;
+  color: var(--intro-text-muted);
   font-size: 12px;
   line-height: 1.45;
 }
@@ -233,7 +375,7 @@
   gap: 14px;
   justify-items: center;
   padding-top: 20px;
-  border-top: 1px solid rgba(93, 135, 179, 0.24);
+  border-top: 1px solid var(--intro-surface-border);
   text-align: center;
 }
 
@@ -243,25 +385,25 @@
   gap: 10px;
   min-height: 52px;
   padding: 0 28px;
-  border: 1px solid rgba(98, 215, 107, 0.58);
+  border: 1px solid var(--intro-cta-border);
   border-radius: 13px;
-  color: #eaffed;
+  color: var(--intro-cta-text);
   font-size: 16px;
   font-weight: 800;
-  background: linear-gradient(135deg, rgba(52, 151, 69, 0.9), rgba(30, 103, 57, 0.94));
-  box-shadow: 0 12px 30px rgba(48, 153, 71, 0.24);
+  background: var(--intro-cta-bg);
+  box-shadow: var(--intro-cta-shadow);
   cursor: pointer;
 }
 
 .wfsc-intro__cta:hover {
-  border-color: rgba(116, 235, 127, 0.86);
   transform: translateY(-1px);
+  filter: brightness(1.06);
 }
 
 .wfsc-intro__footer p {
   max-width: 620px;
   margin: 0;
-  color: #91a8c6;
+  color: var(--intro-text-muted);
   font-size: 12px;
   line-height: 1.5;
 }

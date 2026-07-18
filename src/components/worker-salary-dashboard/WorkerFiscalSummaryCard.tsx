@@ -39,6 +39,15 @@ function roundEuro(value: number) {
   return Math.round(value)
 }
 
+/**
+ * TEMPORAL: permite comparar las dos paletas candidatas del paso 1 sobre la
+ * pantalla real (?tema=claro). Se elimina al elegir una de las dos.
+ */
+function readIntroTheme(): 'warm-dark' | 'light' {
+  if (typeof window === 'undefined') return 'warm-dark'
+  return new URLSearchParams(window.location.search).get('tema') === 'claro' ? 'light' : 'warm-dark'
+}
+
 export function WorkerFiscalSummaryCard({
   variant = 'intro',
   grossSalaryAnnual = 35_000,
@@ -75,6 +84,7 @@ export function WorkerFiscalSummaryCard({
     : `${formatEuro(workerContributionsRounded)} de cotizaciones + ${formatEuro(irpfRounded)} de IRPF + ${formatEuro(vatRounded)} de IVA`
 
   if (!isFinal) {
+    const introTheme = readIntroTheme()
     const divisor = period === 'month' ? 12 : 1
     const periodSuffix = period === 'month' ? 'al mes' : 'al año'
     const formatPeriodEuro = (value: number) => formatEuro(value / divisor)
@@ -113,7 +123,7 @@ export function WorkerFiscalSummaryCard({
     ].filter((segment) => segment.value > 0)
 
     return (
-      <section className="wfsc-summary wfsc-summary--intro" aria-labelledby="wfsc-summary-title">
+      <section className={`wfsc-summary wfsc-summary--intro wfsc-theme--${introTheme}`} aria-labelledby="wfsc-summary-title">
         <header className="wfsc-intro__header">
           <p className="wfsc-summary__eyebrow">Paso 1 · Empecemos por lo esencial</p>
           <h2 id="wfsc-summary-title">¿A dónde va el dinero que cuesta tu trabajo?</h2>
