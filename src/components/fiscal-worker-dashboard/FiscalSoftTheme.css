@@ -114,6 +114,20 @@
   background-color: var(--fiscal-surface);
 }
 
+.fwd--soft .fwd-main select {
+  color-scheme: light;
+}
+
+.fwd--soft .fwd-main select option {
+  color: var(--fiscal-ink);
+  background-color: #ffffff;
+}
+
+.fwd--soft .fwd-main select option:checked {
+  color: var(--fiscal-primary-strong);
+  background-color: var(--fiscal-primary-soft);
+}
+
 /* Geometría suave compartida por todo el recorrido */
 .fwd--soft :is(
   .wfsc-stage,
@@ -170,6 +184,7 @@
   .wsbc-input-shell,
   .wsbc-select-shell,
   .wclc-mode,
+  .wclc-select-shell,
   .wscc-select-shell,
   .atep-select__trigger,
   .atep-select__panel,
@@ -211,6 +226,46 @@
 .fwd--soft .fwd-main button:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--fiscal-primary) 28%, transparent);
   outline-offset: 2px;
+}
+
+/* Un unico modelo de ayuda contextual en toda la calculadora */
+.fwd--soft .info-button {
+  --info-size: 24px;
+  --info-icon-size: 13px;
+  --info-border: var(--fiscal-line-strong);
+  --info-bg: #ffffff;
+  --info-fg: var(--fiscal-primary);
+  --info-hover-border: color-mix(in srgb, var(--fiscal-primary) 58%, var(--fiscal-line));
+  --info-hover-fg: var(--fiscal-primary-strong);
+  --info-focus-ring: color-mix(in srgb, var(--fiscal-primary) 24%, transparent);
+}
+
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__trigger {
+  border-color: var(--info-border);
+  color: var(--info-fg);
+  background: var(--info-bg);
+  box-shadow: 0 2px 7px rgba(35, 54, 78, 0.08);
+}
+
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__trigger:hover:not(:disabled),
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__trigger[aria-expanded='true'] {
+  border-color: var(--info-hover-border);
+  color: var(--info-hover-fg);
+  background: var(--fiscal-primary-soft);
+  box-shadow: 0 3px 9px rgba(20, 125, 117, 0.12);
+}
+
+.fwd--soft :is(.wsbc-help, .wscc-help, .wctc-help) .info-button__panel {
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 13px 15px;
+  border-color: var(--fiscal-line);
+  border-radius: var(--fiscal-radius-control);
+  color: var(--fiscal-copy);
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(35, 54, 78, 0.14);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .fwd--soft .salary-slider {
@@ -398,6 +453,41 @@
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
   box-shadow: none;
+}
+
+.fwd--soft .wclc-select-shell {
+  min-height: 50px;
+  border-color: var(--fiscal-line-strong);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  box-shadow:
+    0 5px 14px rgba(35, 54, 78, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.fwd--soft .wclc-select-shell:hover,
+.fwd--soft .wclc-select-shell:focus-within {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 46%, var(--fiscal-line));
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--fiscal-primary) 9%, transparent),
+    0 7px 18px rgba(35, 54, 78, 0.09);
+}
+
+.fwd--soft .wclc-select-shell select {
+  min-height: 48px;
+  padding-inline: 18px 52px;
+  color: var(--fiscal-ink);
+  background: transparent;
+}
+
+.fwd--soft .wclc-select-shell svg {
+  right: 13px;
+  box-sizing: content-box;
+  padding: 4px;
+  border-radius: 999px;
+  color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
 }
 
 .fwd--soft .wclc-mode {
@@ -815,11 +905,59 @@
   background: var(--fiscal-green-soft);
 }
 
+.fwd--soft .wprc-calculation-warnings {
+  color: var(--fiscal-ink);
+  border-color: #efc891;
+  background: linear-gradient(180deg, #fff9ef 0%, var(--fiscal-orange-soft) 100%);
+  box-shadow: none;
+}
+
+.fwd--soft .wprc-calculation-warnings strong {
+  color: #8a4d12;
+}
+
+.fwd--soft .wprc-calculation-warnings ul {
+  color: var(--fiscal-copy);
+}
+
 .fwd--soft .wprc-summary-icon {
   color: var(--fiscal-primary);
   border-color: #b8ded7;
   background: var(--fiscal-primary-soft);
   box-shadow: none;
+}
+
+.fwd--soft .wprc-total {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: linear-gradient(180deg, #f4fbf9 0%, var(--fiscal-primary-soft) 100%);
+  box-shadow: none;
+}
+
+.fwd--soft .wprc-total svg {
+  color: var(--fiscal-primary);
+  border-color: #b8ded7;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.fwd--soft .wprc-total :is(span, strong) {
+  color: var(--fiscal-primary-strong);
+  text-shadow: none;
+}
+
+.fwd--soft .wprc-total--deductions {
+  border-color: #d7ccef;
+  background: linear-gradient(180deg, #faf8fe 0%, var(--fiscal-violet-soft) 100%);
+}
+
+.fwd--soft .wprc-total--deductions svg {
+  color: var(--fiscal-violet);
+  border-color: #d7ccef;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.fwd--soft .wprc-total--deductions :is(span, strong) {
+  color: #6044ad;
 }
 
 .fwd--soft :is(.wprc-panel, .wprc-summary, .irpf-rule-group, .irpf-rule-section, .witc-panel, .wirc-panel, .wctc-panel, .wctc-summary, .wcsc-source, .wcsc-values div) {

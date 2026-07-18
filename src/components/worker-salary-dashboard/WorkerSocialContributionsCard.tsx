@@ -1,8 +1,9 @@
-import { ChevronDown, Info } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import atEpParams2025Json from '../../../data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json'
 import meiEvolutionJson from '../../../data/processed/fiscal/2026-07-12_mei-evolucion-programada.json'
+import { InfoButton } from '../ui/InfoButton'
 import { AtEpCategorySelect } from './AtEpCategorySelect'
 import './WorkerSocialContributionsCard.css'
 
@@ -404,10 +405,14 @@ function ContributionRows<Key extends string>({
                 <span className={row.muted ? 'wscc-line__text wscc-line__text--muted' : 'wscc-line__text'}>
                   {row.label}
                 </span>
-                <span className="wscc-tooltip" tabIndex={0} aria-label={row.help}>
-                  <Info size={13} aria-hidden="true" />
-                  <span role="tooltip">{row.help}</span>
-                </span>
+                <InfoButton
+                  label={`Informacion sobre ${row.label}`}
+                  size="sm"
+                  placement="top"
+                  className="wscc-help"
+                >
+                  <p>{row.help}</p>
+                </InfoButton>
               </span>
               <span className="wscc-line__values">
                 {displayMode !== 'amount' && <strong>{formatPercent(row.rate)}</strong>}

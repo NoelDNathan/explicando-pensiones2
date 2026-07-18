@@ -119,8 +119,7 @@
 }
 
 .wscc button:focus-visible,
-.wscc select:focus-visible,
-.wscc-tooltip:focus-visible {
+.wscc select:focus-visible {
   outline: 3px solid rgba(83, 190, 255, 0.42);
   outline-offset: 3px;
 }
@@ -735,48 +734,6 @@
   font-size: 13px;
   font-style: normal;
   font-weight: 780;
-}
-
-.wscc-tooltip {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 19px;
-  height: 19px;
-  border: 1px solid rgba(104, 163, 224, 0.45);
-  border-radius: 999px;
-  color: #76cfff;
-  cursor: help;
-}
-
-.wscc-tooltip span {
-  position: absolute;
-  z-index: 2;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  width: min(260px, 72vw);
-  padding: 9px 10px;
-  border: 1px solid rgba(104, 163, 224, 0.38);
-  border-radius: 9px;
-  color: #eaf3ff;
-  background: rgba(2, 13, 30, 0.9);
-  box-shadow: 0 16px 30px rgba(0, 5, 18, 0.34);
-  font-size: 12px;
-  line-height: 1.35;
-  font-weight: 700;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 4px);
-  transition:
-    opacity 150ms ease,
-    transform 150ms ease;
-}
-
-.wscc-tooltip:hover span,
-.wscc-tooltip:focus-visible span {
-  opacity: 1;
-  transform: translate(-50%, 0);
 }
 
 .wscc-total {
