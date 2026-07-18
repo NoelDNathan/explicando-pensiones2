@@ -402,7 +402,7 @@
 }
 
 .wprc-top-select.is-open {
-  z-index: 20;
+  z-index: 120;
 }
 
 .wprc-top-select__trigger {
@@ -1220,9 +1220,13 @@
 }
 
 .wprc-explained--sticky {
-  position: sticky;
-  z-index: 8;
-  top: 14px;
+  position: fixed;
+  z-index: 80;
+  right: 24px;
+  bottom: 18px;
+  left: 24px;
+  width: min(calc(100vw - 48px), 1540px);
+  margin: 0 auto;
   box-shadow: 0 16px 34px rgba(0, 6, 20, 0.2);
 }
 
@@ -1487,7 +1491,11 @@
   }
 
   .wprc-explained--sticky {
-    top: 8px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: calc(100vw - 20px);
+    top: auto;
     gap: 12px;
     padding: 12px;
   }

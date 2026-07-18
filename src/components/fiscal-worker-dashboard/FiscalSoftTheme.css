@@ -1002,9 +1002,20 @@
 }
 
 .fwd--soft .wprc-explained--sticky {
+  position: fixed;
   border-color: color-mix(in srgb, var(--fiscal-primary) 38%, var(--fiscal-line));
   background: color-mix(in srgb, var(--fiscal-surface) 94%, var(--fiscal-primary-soft));
   box-shadow: 0 12px 28px rgba(35, 54, 78, 0.14);
+}
+
+.fwd--soft .wprc--reductions {
+  padding-bottom: 210px;
+}
+
+@media (max-width: 640px) {
+  .fwd--soft .wprc--reductions {
+    padding-bottom: 350px;
+  }
 }
 
 .fwd--soft .wprc-explained .is-minimum {
