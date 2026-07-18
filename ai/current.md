@@ -1,10 +1,12 @@
 # Estado actual
 
-Fecha: 2026-07-17
+Fecha: 2026-07-18
 
 ## Situacion
 
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.
+
+- Corregido el 404 de subpaginas en Vercel: la app usa rutas por `window.location.pathname` sobre un unico `index.html`, y faltaba rewrite SPA. Creado `vercel.json` con `/(.*) -> /index.html`. Pendiente redesplegar y comprobar en produccion.
 
 - Completados los pasos 4 y 5 del IRPF 2025 con formulario estructurado y motor auditable: gastos sindicales/profesionales/juridicos; movilidad y discapacidad activa; prevision social individual y de empleo; conyuge, pension compensatoria, tributacion conjunta y patrimonios protegidos; minimos por persona y anualidades por alimentos; donativos, vivienda/alquiler transitorios, empresas nuevas; maternidad, guarderia, familia numerosa, discapacidad a cargo; pagos a cuenta y retribuciones en especie. Las reglas autonomicas no catalogadas solo se aplican con importe y metadatos verificados. Verificacion: 23 regresiones, TypeScript y lint correctos; build y comprobacion movil final indicados en el historial de esta sesion. Sigue pendiente el contraste externo integral con Renta WEB 2025 y automatizar, una a una, todas las deducciones autonomicas.
 
