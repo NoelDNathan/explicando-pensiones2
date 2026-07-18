@@ -581,6 +581,26 @@
   font-weight: 760;
 }
 
+.wprc-dependent-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wprc-dependent-label > span {
+  min-width: 0;
+}
+
+.wprc-dependent .wprc-help {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.wprc-dependent .wprc-help .info-button__panel {
+  z-index: 130;
+  width: min(270px, calc(100vw - 38px));
+}
+
 .wprc-dependent .wprc-select {
   width: 100%;
   min-height: 38px;
@@ -637,6 +657,23 @@
 
 .wprc-dependent-check > span {
   line-height: 1.35 !important;
+}
+
+.wprc-dependent-check strong,
+.wprc-dependent-check small {
+  display: block;
+}
+
+.wprc-dependent-check strong {
+  color: #e5efff;
+  font-size: 12px;
+}
+
+.wprc-dependent-check small {
+  margin-top: 3px;
+  color: #aebfe0;
+  font-size: 11px;
+  font-weight: 650;
 }
 
 .wprc-empty {

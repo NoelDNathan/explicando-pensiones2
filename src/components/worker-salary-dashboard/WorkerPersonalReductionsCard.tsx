@@ -14,6 +14,7 @@ import {
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import type { Irpf2025AdjustmentInput } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import { Irpf2025StructuredAdjustmentsForm } from './Irpf2025StructuredAdjustmentsForm'
+import { InfoButton } from '../ui/InfoButton'
 import './WorkerPersonalReductionsCard.css'
 
 export type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed'
@@ -217,6 +218,19 @@ function TopField({ icon: Icon, label, value, options, onChange }: {
   )
 }
 
+function DependentFieldLabel({ label, help }: { label: string; help?: string }) {
+  return (
+    <span className="wprc-dependent-label">
+      <span>{label}</span>
+      {help ? (
+        <InfoButton label={`Ayuda: ${label}`} size="sm" placement="end" className="wprc-help">
+          <p>{help}</p>
+        </InfoButton>
+      ) : null}
+    </span>
+  )
+}
+
 function DependentEditor({ type, title, profiles, count, onChange }: {
   type: 'descendant' | 'ascendant'
   title: string
@@ -239,18 +253,18 @@ function DependentEditor({ type, title, profiles, count, onChange }: {
               <div className="wprc-dependent__head"><strong>{label}</strong><span>{eligible ? 'Computa' : 'No computa'}</span></div>
               <label><span>Edad</span><SelectControl label={`${label}: edad`} value={profile.ageBand} options={ageOptions} onChange={(next) => onChange(index, 'ageBand', next)} /></label>
               <label><span>{type === 'ascendant' ? 'Convive al menos medio ano' : 'Convive o depende economicamente'}</span><SelectControl label={`${label}: convivencia`} value={profile.livesWith} options={yesNoOptions} onChange={(next) => onChange(index, 'livesWith', next as DependentProfile['livesWith'])} /></label>
-              <label><span>Rentas no exentas</span><SelectControl label={`${label}: rentas`} value={profile.ownIncome} options={incomeOptions} onChange={(next) => onChange(index, 'ownIncome', next as DependentProfile['ownIncome'])} /></label>
+              <label><DependentFieldLabel label="Ingresos propios sujetos a IRPF" help="Son sus ingresos anuales que sí tributan. No cuentes becas, prestaciones u otras rentas exentas. El límite habitual para que compute es 8.000 EUR al año." /><SelectControl label={`${label}: ingresos propios sujetos a IRPF`} value={profile.ownIncome} options={incomeOptions} onChange={(next) => onChange(index, 'ownIncome', next as DependentProfile['ownIncome'])} /></label>
               <label><span>Declaracion propia</span><SelectControl label={`${label}: declaracion`} value={profile.filesReturn} options={returnOptions} onChange={(next) => onChange(index, 'filesReturn', next as DependentProfile['filesReturn'])} /></label>
               <label><span>Grado discapacidad</span><SelectControl label={`${label}: discapacidad`} value={profile.disabilityPercent} options={disabilityOptions} onChange={(next) => onChange(index, 'disabilityPercent', next as DependentProfile['disabilityPercent'])} /></label>
               <label><span>Ayuda o movilidad reducida</span><SelectControl label={`${label}: asistencia`} value={profile.assistance} options={yesNoOptions} onChange={(next) => onChange(index, 'assistance', next as DependentProfile['assistance'])} /></label>
-              <label><span>Parte del minimo que corresponde</span><SelectControl label={`${label}: parte del derecho`} value={profile.entitlementShare} options={shareOptions} onChange={(next) => onChange(index, 'entitlementShare', next as DependentProfile['entitlementShare'])} /></label>
+              <label><DependentFieldLabel label="Porcentaje del mínimo que te corresponde" help="El mínimo familiar se reparte entre las personas que pueden aplicarlo: elige 100 % si te corresponde entero o 50 % si lo compartes a partes iguales con otra persona." /><SelectControl label={`${label}: porcentaje del mínimo`} value={profile.entitlementShare} options={shareOptions} onChange={(next) => onChange(index, 'entitlementShare', next as DependentProfile['entitlementShare'])} /></label>
               {type === 'descendant' ? (
                 <>
                   <label>
-                    <span>Anualidad por alimentos pagada</span>
+                    <DependentFieldLabel label="Pensión de alimentos que pagas por este hijo" help="Indica el total anual pagado por alimentos solo si existe una resolución judicial o un convenio regulador formalizado. No es la pensión compensatoria al otro progenitor." />
                     <span className="wprc-dependent-number"><input aria-label={`${label}: anualidad por alimentos`} min="0" step="0.01" type="number" value={profile.childSupportAnnual} onChange={(event) => onChange(index, 'childSupportAnnual', Math.max(0, Number(event.target.value) || 0))} /><span>EUR</span></span>
                   </label>
-                  <label className="wprc-dependent-check"><input type="checkbox" checked={profile.childSupportFormalized} onChange={(event) => onChange(index, 'childSupportFormalized', event.target.checked)} /><span>Resolucion o convenio formalizado; este hijo no usa minimo por descendiente</span></label>
+                  <label className="wprc-dependent-check"><input type="checkbox" checked={profile.childSupportFormalized} onChange={(event) => onChange(index, 'childSupportFormalized', event.target.checked)} /><span><strong>Hay sentencia o convenio regulador formalizado</strong><small>Márcalo solo si el pago se fija en ese documento. En ese caso, este hijo no suma el mínimo por descendiente en esta declaración.</small></span></label>
                 </>
               ) : null}
             </section>
