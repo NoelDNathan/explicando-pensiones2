@@ -45,6 +45,8 @@
 .wprc-hero-panel,
 .wprc-flow,
 .wprc-minimum-panel,
+.wprc-question-intro,
+.wprc-family-preview,
 .wprc-dependent-grid,
 .wprc-dependent-card,
 .wprc-benefits,
@@ -288,6 +290,44 @@
   font-weight: 900;
 }
 
+.wprc-question-intro {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 13px;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 15px 17px;
+  border: 1px solid rgba(88, 241, 113, 0.48);
+  border-radius: 14px;
+  background: linear-gradient(110deg, rgba(12, 57, 61, 0.72), rgba(4, 24, 54, 0.7));
+}
+
+.wprc-question-intro > span {
+  display: grid;
+  width: 40px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 999px;
+  color: #032337;
+  background: #58f171;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.wprc-question-intro h3 {
+  color: #f3f8ff;
+  font-size: 19px;
+  line-height: 1.15;
+}
+
+.wprc-question-intro p {
+  margin-top: 4px;
+  color: #b9c9e3;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
 .wprc-top-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -303,6 +343,15 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+.wprc-top-grid--questions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .wprc-top-field {
   position: relative;
   display: grid;
@@ -315,6 +364,23 @@
 
 .wprc-top-field + .wprc-top-field {
   border-left: 1px solid rgba(63, 121, 195, 0.54);
+}
+
+.wprc-top-grid--questions .wprc-top-field,
+.wprc-top-grid--questions .wprc-top-field + .wprc-top-field {
+  min-height: 98px;
+  padding: 16px 74px 16px 20px;
+  border: 1px solid rgba(63, 121, 195, 0.54);
+  border-radius: 14px;
+  background: rgba(4, 24, 54, 0.66);
+}
+
+.wprc-top-grid--questions .wprc-top-field__copy span {
+  font-size: 15px;
+}
+
+.wprc-family-preview {
+  margin: 2px 0 18px;
 }
 
 .wprc-top-field > svg {
@@ -1495,6 +1561,20 @@
 
   .wprc-minimum-panel {
     padding: 14px;
+  }
+
+  .wprc-question-intro {
+    grid-template-columns: 36px minmax(0, 1fr);
+    padding: 13px;
+  }
+
+  .wprc-question-intro > span {
+    width: 34px;
+    font-size: 16px;
+  }
+
+  .wprc-question-intro h3 {
+    font-size: 17px;
   }
 
   .wprc-dependent {

@@ -1109,6 +1109,42 @@
   overflow: visible;
 }
 
+.fwd--soft .wprc-question-intro {
+  border-color: #b8ded7;
+  background: linear-gradient(115deg, #edf9f5, #f8fbff);
+  box-shadow: var(--fiscal-shadow-soft);
+}
+
+.fwd--soft .wprc-question-intro > span {
+  color: #fff;
+  background: var(--fiscal-primary);
+}
+
+.fwd--soft .wprc-question-intro h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-question-intro p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-top-grid--questions .wprc-top-field,
+.fwd--soft .wprc-top-grid--questions .wprc-top-field + .wprc-top-field {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-soft);
+}
+
+.fwd--soft .wprc-top-grid--questions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  .fwd--soft .wprc-top-grid--questions {
+    grid-template-columns: 1fr;
+  }
+}
+
 .fwd--soft .irpf-rule-group summary {
   color: var(--fiscal-ink);
   background: var(--fiscal-surface-soft);

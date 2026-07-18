@@ -419,6 +419,10 @@ export function WorkerPersonalReductionsCard({
   const explainedQuotaBefore = Math.max(0, quotaBeforeDeductions)
   const appliedFamilyMinimum = Math.max(0, statePersonalFamilyMinimum || familyMinimumPreview)
   const appliedRegionalFamilyMinimum = Math.max(0, regionalPersonalFamilyMinimum)
+  const hasFamilyAnswer = Number(children) > 0
+    || Number(ascendants) > 0
+    || Number(disabilityPercent) > 0
+    || taxpayerAssistance === 'yes'
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -427,16 +431,16 @@ export function WorkerPersonalReductionsCard({
           <div className="wprc-step-orb" aria-hidden="true">{stepNumber}</div>
           <div className="wprc-title">
             <span>Paso {stepNumber} de {totalSteps}</span>
-            <h2 id="wprc-title">{showReductionsSection ? 'Base imponible y mínimo familiar' : 'Deducciones y salario en especie'}</h2>
-            <p>{showReductionsSection ? 'Aquí hay dos efectos distintos: unas partidas bajan la base y tu familia o discapacidad bajan el IRPF al calcular la cuota.' : 'Separa deducciones de cuota, reembolsables, pagos a cuenta y beneficios exentos.'}</p>
+            <h2 id="wprc-title">{showReductionsSection ? 'Responde unas preguntas y ajustamos tu IRPF' : 'Deducciones y salario en especie'}</h2>
+            <p>{showReductionsSection ? 'No necesitas saber de impuestos: responde solo a lo que se parezca a tu situación. Si algo no te aplica, elige No o déjalo cerrado.' : 'Separa deducciones de cuota, reembolsables, pagos a cuenta y beneficios exentos.'}</p>
           </div>
         </header>
         <aside className="wprc-hero-panel">
-          <h3>{showReductionsSection ? 'Dos efectos, sin mezclar' : 'Resultado anual completo'}</h3>
+          <h3>{showReductionsSection ? 'Vamos paso a paso' : 'Resultado anual completo'}</h3>
           <ul>
-            <li><CheckCircle2 /> Planes y pensiones pueden reducir la base.</li>
-            <li><CheckCircle2 /> Familia y discapacidad reducen la cuota, no la base.</li>
-            <li><CheckCircle2 /> Lo no acreditado no reduce el impuesto.</li>
+            <li><CheckCircle2 /> Primero, cuéntanos tu situación personal y familiar.</li>
+            <li><CheckCircle2 /> Después, abre solo las preguntas que te correspondan.</li>
+            <li><CheckCircle2 /> Verás el resultado actualizado en todo momento.</li>
           </ul>
           <strong>{formatEuro(showReductionsSection ? appliedFamilyMinimum : appliedQuotaDeductions)}</strong>
           <span>{showReductionsSection ? 'Mínimo personal y familiar estatal aplicado en la cuota.' : 'Deducciones ordinarias aplicadas a la cuota.'}</span>
@@ -445,22 +449,19 @@ export function WorkerPersonalReductionsCard({
 
       {showReductionsSection ? (
         <>
-          <div className="wprc-flow">
-            <article><span>{minimumDescendants.length}</span><p>Descendientes con minimo</p></article>
-            <article><span>{result.childrenUnder3}</span><p>Menores de 3 anos</p></article>
-            <article><span>{result.eligibleAscendants}</span><p>Ascendientes que computan</p></article>
-            <article><span>{formatEuro(result.dependentDisabilityMinimum)}</span><p>Discapacidad dependiente</p></article>
-          </div>
-          <section className="wprc-minimum-panel">
-            <div><h3>Minimo por descendientes</h3><p>El orden y el porcentaje de derecho se aplican persona a persona.</p></div>
-            <ol>{descendantMinimums.map((amount, index) => <li className={index < minimumDescendants.length ? 'is-active' : ''} key={amount}><span>{index + 1}</span><strong>{formatEuro(amount)}</strong></li>)}</ol>
+          <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
+            <span aria-hidden="true">1</span>
+            <div>
+              <h3 id="wprc-family-questions">Empezamos por ti y tu familia</h3>
+              <p>Estas respuestas sirven para calcular el mínimo personal y familiar. No reducen la base directamente, pero sí pueden bajar el IRPF final.</p>
+            </div>
           </section>
-          <div className="wprc-top-grid">
-            <TopField icon={UsersRound} label="Descendientes" value={children} options={countOptions} onChange={setChildren} />
-            <TopField icon={HandHeart} label="Ascendientes" value={ascendants} options={ascendantCountOptions} onChange={setAscendants} />
-            <TopField icon={Accessibility} label="Tu discapacidad" value={disabilityPercent} options={disabilityOptions} onChange={setDisabilityPercent} />
-            <TopField icon={HandHeart} label="Ayuda o movilidad" value={taxpayerAssistance} options={yesNoOptions} onChange={setTaxpayerAssistance} />
-            <TopField icon={Heart} label="Estado civil" value={maritalStatus} options={maritalOptions} onChange={(next) => setMaritalStatus(next as MaritalStatus)} />
+          <div className="wprc-top-grid wprc-top-grid--questions">
+            <TopField icon={UsersRound} label="¿Cuántos hijos incluyes?" value={children} options={countOptions} onChange={setChildren} />
+            <TopField icon={HandHeart} label="¿Cuántos ascendientes incluyes?" value={ascendants} options={ascendantCountOptions} onChange={setAscendants} />
+            <TopField icon={Accessibility} label="¿Tienes discapacidad reconocida?" value={disabilityPercent} options={disabilityOptions} onChange={setDisabilityPercent} />
+            <TopField icon={HandHeart} label="¿Necesitas ayuda o movilidad reducida?" value={taxpayerAssistance} options={yesNoOptions} onChange={setTaxpayerAssistance} />
+            <TopField icon={Heart} label="¿Cuál es tu estado civil?" value={maritalStatus} options={maritalOptions} onChange={(next) => setMaritalStatus(next as MaritalStatus)} />
           </div>
           <section className="wprc-explained wprc-explained--sticky" aria-label="Cómo cambian la base y el IRPF">
             <div>
@@ -477,9 +478,23 @@ export function WorkerPersonalReductionsCard({
             </dl>
           </section>
           <div className="wprc-dependent-grid">
-            <DependentEditor type="descendant" title="Detalle de descendientes" profiles={descendantProfiles} count={Number(children)} onChange={(index, field, value) => updateDependent('descendant', index, field, value)} />
-            <DependentEditor type="ascendant" title="Detalle de ascendientes" profiles={ascendantProfiles} count={Number(ascendants)} onChange={(index, field, value) => updateDependent('ascendant', index, field, value)} />
+            <DependentEditor type="descendant" title="Cuéntanos un poco de cada hijo" profiles={descendantProfiles} count={Number(children)} onChange={(index, field, value) => updateDependent('descendant', index, field, value)} />
+            <DependentEditor type="ascendant" title="Cuéntanos un poco de cada ascendiente" profiles={ascendantProfiles} count={Number(ascendants)} onChange={(index, field, value) => updateDependent('ascendant', index, field, value)} />
           </div>
+          {hasFamilyAnswer ? (
+            <section className="wprc-family-preview" aria-label="Resumen de tus respuestas familiares">
+              <div className="wprc-flow">
+                <article><span>{minimumDescendants.length}</span><p>Hijos que computan</p></article>
+                <article><span>{result.childrenUnder3}</span><p>Menores de 3 años</p></article>
+                <article><span>{result.eligibleAscendants}</span><p>Ascendientes que computan</p></article>
+                <article><span>{formatEuro(result.dependentDisabilityMinimum)}</span><p>Apoyo por discapacidad</p></article>
+              </div>
+              {Number(children) > 0 ? <section className="wprc-minimum-panel">
+                <div><h3>Así se reparte el mínimo por hijos</h3><p>La cantidad aumenta con cada hijo que cumpla los requisitos.</p></div>
+                <ol>{descendantMinimums.map((amount, index) => <li className={index < minimumDescendants.length ? 'is-active' : ''} key={amount}><span>{index + 1}</span><strong>{formatEuro(amount)}</strong></li>)}</ol>
+              </section> : null}
+            </section>
+          ) : null}
         </>
       ) : null}
 

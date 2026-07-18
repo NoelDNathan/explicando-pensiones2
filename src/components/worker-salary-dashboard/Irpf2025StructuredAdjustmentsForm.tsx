@@ -262,10 +262,9 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
     return (
       <section className="irpf-rule-form" aria-label="Datos exactos para reducciones IRPF 2025">
         <RuleGroup
-          title="Rentas y gastos del trabajo"
-          description="Datos previos al articulo 20: otras rentas, sindicato, colegio y defensa juridica."
+          title="¿Tienes gastos relacionados con tu trabajo o te mudaste por un empleo?"
+          description="Ábrelo solo si pagaste sindicato, colegio profesional, defensa laboral o cambiaste de municipio por un trabajo."
           icon={ReceiptText}
-          open
         >
           <div className="irpf-rule-grid">
             <CheckField
@@ -307,8 +306,8 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
         </RuleGroup>
 
         <RuleGroup
-          title="Prevision social"
-          description="Aportaciones ordinarias, mutualidades, empleo y aportaciones al sistema del conyuge."
+          title="¿Has aportado a un plan de pensiones o mutualidad?"
+          description="Incluye aportaciones tuyas, de tu empresa o al sistema de previsión de tu cónyuge."
           icon={UsersRound}
         >
           <div className="irpf-rule-grid">
@@ -334,8 +333,8 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
         </RuleGroup>
 
         <RuleGroup
-          title="Otras reducciones de base"
-          description="Solo se aplican cuando se confirma el requisito formal correspondiente."
+          title="¿Tienes alguna situación especial que pueda bajar tu base?"
+          description="Pensión compensatoria, declaración conjunta, patrimonio protegido o una reducción autonómica ya comprobada."
           icon={FileCheck2}
         >
           <div className="irpf-rule-grid">
