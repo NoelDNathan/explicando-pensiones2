@@ -1070,7 +1070,7 @@ export function FiscalWorkerDashboard() {
   })()
 
   return (
-    <div className="fwd">
+    <div className="fwd fwd--soft">
       <main className="fwd-main">
         <header className="fwd-header">
           <div>

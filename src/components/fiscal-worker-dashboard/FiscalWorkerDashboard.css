@@ -33,6 +33,137 @@
   box-sizing: border-box;
 }
 
+/* Una única paleta clara y calmada para todos los pasos de la calculadora.
+   Conserva los acentos semánticos, pero evita que el recorrido salte a oscuro. */
+.fwd--soft {
+  /* Paleta fiscal: este es el único bloque que hay que editar para crear una
+     nueva variante. Los tokens de cada tarjeta se conectan más abajo. */
+  --fiscal-canvas: #f3f7fc;
+  --fiscal-surface: #ffffff;
+  --fiscal-surface-muted: #f6f9fd;
+  --fiscal-text: #17212e;
+  --fiscal-muted: #526276;
+  --fiscal-faint: #708096;
+  --fiscal-line: #d8e2ef;
+  --fiscal-blue: #2f6fd0;
+  --fiscal-green: #0d8d62;
+  --fiscal-purple: #8059ca;
+  --fiscal-cyan: #167ca5;
+  --fiscal-orange: #c87916;
+  --fiscal-yellow: #aa7411;
+  --fiscal-red: #c43d53;
+  --fiscal-blue-wash: color-mix(in srgb, var(--fiscal-blue) 10%, transparent);
+  --fiscal-green-wash: color-mix(in srgb, var(--fiscal-green) 10%, transparent);
+
+  --fwd-bg: var(--fiscal-canvas);
+  --fwd-panel: color-mix(in srgb, var(--fiscal-surface) 92%, transparent);
+  --fwd-panel-2: var(--fiscal-surface-muted);
+  --fwd-border: var(--fiscal-line);
+  --fwd-text: var(--fiscal-text);
+  --fwd-muted: var(--fiscal-muted);
+  --fwd-faint: var(--fiscal-faint);
+  --fwd-blue: var(--fiscal-blue);
+  --fwd-green: var(--fiscal-green);
+  --fwd-purple: var(--fiscal-purple);
+  --fwd-cyan: var(--fiscal-cyan);
+  --fwd-orange: var(--fiscal-orange);
+  --fwd-yellow: var(--fiscal-yellow);
+  --fwd-violet: var(--fiscal-purple);
+  --fwd-danger: var(--fiscal-red);
+  color-scheme: light;
+  background:
+    radial-gradient(circle at 12% -8%, rgba(47, 111, 208, 0.1), transparent 34%),
+    radial-gradient(circle at 92% 8%, rgba(13, 141, 98, 0.07), transparent 28%),
+    linear-gradient(145deg, #f9fbff, #edf3fa);
+}
+
+/* Adaptadores: cada componente mantiene su API visual, pero recibe los colores
+   desde la paleta fiscal común. */
+.fwd--soft :is(.wsbc, .wclc, .wscc, .wprc, .witc, .wctc, .wirc, .wcsc, .wfsc, .atep-select, .irpf-rule-form, .fkr, .fpdc, .pie, .ssbe) {
+  color: var(--fiscal-text);
+}
+
+.fwd--soft :is(.wsbc, .wclc, .wscc, .wprc, .witc, .wctc, .wirc, .wcsc, .wfsc, .fpdc, .pie, .ssbe) {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: 0 14px 36px rgba(35, 55, 82, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.fwd--soft .wsbc {
+  --wsbc-lime: var(--fiscal-green); --wsbc-green: var(--fiscal-green); --wsbc-green-soft: var(--fiscal-green-wash);
+  --wsbc-cyan: var(--fiscal-cyan); --wsbc-cyan-soft: var(--fiscal-blue-wash); --wsbc-text: var(--fiscal-text);
+  --wsbc-muted: var(--fiscal-muted); --wsbc-field: var(--fiscal-surface-muted); --wsbc-line: var(--fiscal-line);
+}
+.fwd--soft .wclc {
+  --wclc-blue: var(--fiscal-blue); --wclc-blue-soft: var(--fiscal-blue-wash); --wclc-purple: var(--fiscal-purple);
+  --wclc-orange: var(--fiscal-orange); --wclc-text: var(--fiscal-text); --wclc-muted: var(--fiscal-muted);
+  --wclc-panel: var(--fiscal-surface-muted); --wclc-line: var(--fiscal-line);
+}
+.fwd--soft .wscc {
+  --wscc-blue: var(--fiscal-blue); --wscc-blue-soft: var(--fiscal-blue-wash); --wscc-violet: var(--fiscal-purple);
+  --wscc-violet-soft: color-mix(in srgb, var(--fiscal-purple) 12%, transparent); --wscc-orange: var(--fiscal-orange);
+  --wscc-orange-soft: color-mix(in srgb, var(--fiscal-orange) 12%, transparent); --wscc-text: var(--fiscal-text);
+  --wscc-muted: var(--fiscal-muted); --wscc-panel: var(--fiscal-surface-muted); --wscc-line: var(--fiscal-line);
+}
+.fwd--soft .wprc {
+  --wprc-cyan: var(--fiscal-cyan); --wprc-blue: var(--fiscal-blue); --wprc-blue-soft: var(--fiscal-blue-wash);
+  --wprc-violet: var(--fiscal-purple); --wprc-violet-soft: color-mix(in srgb, var(--fiscal-purple) 12%, transparent);
+  --wprc-text: var(--fiscal-text); --wprc-muted: var(--fiscal-muted); --wprc-line: var(--fiscal-line); --wprc-panel: var(--fiscal-surface-muted);
+}
+.fwd--soft .wctc {
+  --wctc-text: var(--fiscal-text); --wctc-muted: var(--fiscal-muted); --wctc-line: var(--fiscal-line);
+  --wctc-strong-line: var(--fiscal-blue); --wctc-panel: var(--fiscal-surface-muted); --wctc-green: var(--fiscal-green);
+  --wctc-blue: var(--fiscal-blue); --wctc-cyan: var(--fiscal-cyan); --wctc-orange: var(--fiscal-orange);
+  --wctc-purple: var(--fiscal-purple); --wctc-red: var(--fiscal-red); --wctc-neutral: var(--fiscal-faint);
+}
+.fwd--soft :is(.witc, .wirc) {
+  --witc-text: var(--fiscal-text); --witc-muted: var(--fiscal-muted); --witc-line: var(--fiscal-line);
+  --witc-green: var(--fiscal-green); --witc-purple: var(--fiscal-purple); --witc-blue: var(--fiscal-blue);
+  --witc-orange: var(--fiscal-orange); --witc-yellow: var(--fiscal-yellow); --witc-red: var(--fiscal-red);
+  --wirc-text: var(--fiscal-text); --wirc-muted: var(--fiscal-muted); --wirc-line: var(--fiscal-line);
+}
+.fwd--soft .wfsc {
+  --wfsc-bg: var(--fiscal-canvas); --wfsc-panel: var(--fiscal-surface); --wfsc-panel-soft: var(--fiscal-surface-muted);
+  --wfsc-border: var(--fiscal-line); --wfsc-border-strong: var(--fiscal-blue); --wfsc-text: var(--fiscal-text);
+  --wfsc-muted: var(--fiscal-muted); --wfsc-faint: var(--fiscal-faint); --wfsc-blue: var(--fiscal-blue);
+  --wfsc-green: var(--fiscal-green); --wfsc-green-deep: var(--fiscal-green);
+}
+.fwd--soft .atep-select {
+  --atep-blue: var(--fiscal-blue); --atep-blue-soft: var(--fiscal-blue-wash); --atep-violet: var(--fiscal-purple);
+  --atep-violet-soft: color-mix(in srgb, var(--fiscal-purple) 12%, transparent); --atep-orange: var(--fiscal-orange);
+  --atep-orange-soft: color-mix(in srgb, var(--fiscal-orange) 12%, transparent); --atep-text: var(--fiscal-text); --atep-muted: var(--fiscal-muted);
+}
+.fwd--soft .wcsc { --wcsc-text: var(--fiscal-text); --wcsc-muted: var(--fiscal-muted); --wcsc-blue: var(--fiscal-blue); --wcsc-green: var(--fiscal-green); }
+.fwd--soft .fpdc { --fpdc-blue: var(--fiscal-blue); --fpdc-blue-soft: var(--fiscal-blue-wash); --fpdc-blue-border: var(--fiscal-blue); --fpdc-text: var(--fiscal-text); --fpdc-muted: var(--fiscal-muted); --fpdc-line: var(--fiscal-line); }
+.fwd--soft .pie { --pie-bg: var(--fiscal-canvas); --pie-panel: var(--fiscal-surface); --pie-panel-strong: var(--fiscal-surface-muted); --pie-border: var(--fiscal-line); --pie-border-soft: var(--fiscal-line); --pie-text: var(--fiscal-text); --pie-muted: var(--fiscal-muted); --pie-faint: var(--fiscal-faint); --pie-green: var(--fiscal-green); --pie-purple: var(--fiscal-purple); --pie-blue: var(--fiscal-blue); --pie-orange: var(--fiscal-orange); --pie-yellow: var(--fiscal-yellow); --pie-red: var(--fiscal-red); }
+.fwd--soft .ssbe { --ssbe-bg: var(--fiscal-canvas); --ssbe-panel: var(--fiscal-surface); --ssbe-panel-strong: var(--fiscal-surface-muted); --ssbe-border: var(--fiscal-line); --ssbe-border-soft: var(--fiscal-line); --ssbe-text: var(--fiscal-text); --ssbe-muted: var(--fiscal-muted); --ssbe-faint: var(--fiscal-faint); --ssbe-blue: var(--fiscal-blue); --ssbe-blue-strong: var(--fiscal-blue); --ssbe-green: var(--fiscal-green); --ssbe-purple: var(--fiscal-purple); --ssbe-orange: var(--fiscal-orange); --ssbe-yellow: var(--fiscal-yellow); --ssbe-danger: var(--fiscal-red); }
+
+.fwd--soft select,
+.fwd--soft select option,
+.fwd--soft .fwd-worker-card select,
+.fwd--soft .fwd-worker-card select option {
+  color: #243244;
+  background-color: #ffffff;
+}
+
+.fwd--soft .fwd-header h2,
+.fwd--soft .fwd-worker-card h2,
+.fwd--soft .fwd-worker-card h3,
+.fwd--soft .fwd-worker-card .wsbc h2,
+.fwd--soft .fwd-worker-card .wclc h2,
+.fwd--soft .fwd-worker-card .wscc h2,
+.fwd--soft .fwd-worker-card .wprc h2,
+.fwd--soft .fwd-worker-card .witc h2,
+.fwd--soft .fwd-worker-card .wctc h2 {
+  color: #17212e;
+}
+
+.fwd--soft .fwd-actions button {
+  color: #36516f;
+  border-color: #d5e0ed;
+  background: rgba(255, 255, 255, 0.78);
+}
+
 .fwd button,
 .fwd select,
 .fwd input {
