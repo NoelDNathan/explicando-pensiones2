@@ -1033,20 +1033,38 @@
   color: var(--fiscal-ink);
   border-color: color-mix(in srgb, var(--fiscal-line) 42%, transparent);
   background: #ffffff;
+  overflow: visible;
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 38%, transparent),
     0 4px 12px rgba(45, 71, 94, 0.05);
 }
 
 .fwd--soft .irpf-rule-field__control {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
   min-height: 42px;
-  border-color: color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  border: 0;
   border-radius: var(--fiscal-radius-control);
   background: #ffffff;
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line-strong) 46%, transparent),
     inset 0 1px 2px rgba(43, 70, 94, 0.06),
     0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.fwd--soft .irpf-rule-field__control::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1.5px solid color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.fwd--soft .irpf-rule-field__control > * {
+  position: relative;
+  z-index: 1;
 }
 
 .fwd--soft .irpf-rule-field:focus-within {
@@ -1056,7 +1074,7 @@
     0 6px 16px rgba(45, 71, 94, 0.07);
 }
 
-.fwd--soft .irpf-rule-field:focus-within .irpf-rule-field__control {
+.fwd--soft .irpf-rule-field:focus-within .irpf-rule-field__control::before {
   border-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
 }
 
@@ -1066,19 +1084,19 @@
 
 .fwd--soft .irpf-rule-field > :is(input, select) {
   min-height: 42px;
-  border-color: color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  border: 0;
   border-radius: var(--fiscal-radius-control);
+  outline: 1.5px solid color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  outline-offset: -1.5px;
   color: var(--fiscal-ink);
   background: #ffffff;
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line-strong) 46%, transparent),
     inset 0 1px 2px rgba(43, 70, 94, 0.06),
     0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 .fwd--soft .irpf-rule-field > :is(input, select):focus-visible {
-  border-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
-  outline: 0;
+  outline-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--fiscal-primary) 12%, transparent);
 }
 
@@ -1336,10 +1354,34 @@
 }
 
 .fwd--soft .wctc-input {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
   color: var(--fiscal-copy);
-  border-color: var(--fiscal-line-strong);
+  border: 0;
   background: var(--fiscal-surface);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line-strong) 44%, transparent);
+  box-shadow:
+    inset 0 1px 2px rgba(43, 70, 94, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.fwd--soft .wctc-input::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1.5px solid color-mix(in srgb, var(--fiscal-line-strong) 56%, transparent);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.fwd--soft .wctc-input:focus-within::before {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
+}
+
+.fwd--soft .wctc-input > * {
+  position: relative;
+  z-index: 1;
 }
 
 .fwd--soft .wctc-input input {
