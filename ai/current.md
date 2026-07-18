@@ -4,6 +4,10 @@ Fecha: 2026-07-18
 
 ## Situacion
 
+- Clarificado y hecho persistente el resultado del paso de reducciones de `/calculadora-fiscal`: se diferencian las reducciones de base (planes, pensiones, etc.) del mínimo personal y familiar (hijos, ascendientes y discapacidad), que se aplica al calcular la cuota y no resta la base. El resumen se mueve junto a los datos familiares y queda adhesivo durante el scroll; muestra base previa, reducción de base, base liquidable y mínimo estatal/autonómico. Verificación: en el perfil mostrado el mínimo estatal es 5.550 EUR y la reducción de base es 0 EUR porque no hay una partida de base declarada; TypeScript y Vite build correctos; revisión DOM en escritorio y móvil 390 px sin overflow horizontal, con barra `sticky` activa.
+
+- Sustituido el menú nativo estrecho de los selectores superiores de reducciones por un desplegable accesible propio, con menú claro, opciones amplias y opción activa visible. Verificación: TypeScript y Vite build correctos; revisión DOM en escritorio y móvil 390 px sin overflow horizontal.
+
 - Corregido el borde aparentemente cortado de los selectores de las tarjetas superiores de reducciones en `/calculadora-fiscal`: el `<select>` nativo ya no recibe el fondo blanco global dentro del selector circular, por lo que no tapa el contorno del contenedor. Verificacion: TypeScript y Vite build correctos; comprobacion DOM en escritorio y movil 390 px confirma controles circulares de 40 px, fondo interno transparente, radio completo y sin overflow horizontal.
 
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.

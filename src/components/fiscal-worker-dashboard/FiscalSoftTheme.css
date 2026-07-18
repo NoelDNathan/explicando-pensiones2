@@ -933,7 +933,7 @@
   white-space: normal;
 }
 
-.fwd--soft .wprc-top-field > .wprc-select {
+.fwd--soft .wprc-top-field > .wprc-top-select {
   position: relative;
   top: auto;
   right: auto;
@@ -948,30 +948,33 @@
   transform: none;
 }
 
-.fwd--soft .wprc-top-field > .wprc-select::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 9px;
-  height: 9px;
-  border-right: 2px solid var(--fiscal-primary);
-  border-bottom: 2px solid var(--fiscal-primary);
-  pointer-events: none;
-  transform: translate(-50%, -68%) rotate(45deg);
+.fwd--soft .wprc-top-select__trigger {
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-color: var(--fiscal-line-strong);
+  color: var(--fiscal-primary);
+  background: var(--fiscal-surface);
+  box-shadow: 0 3px 10px rgba(35, 54, 78, 0.06);
 }
 
-.fwd--soft .wprc-top-field > .wprc-select select {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  border: 0;
-  border-radius: inherit;
-  color: transparent;
-  background: transparent;
+.fwd--soft .wprc-top-select__menu {
+  min-width: 148px;
+  border-color: var(--fiscal-line-strong);
+  border-radius: var(--fiscal-radius-control);
+  background: var(--fiscal-surface);
+  box-shadow: 0 14px 28px rgba(35, 54, 78, 0.16);
+}
+
+.fwd--soft .wprc-top-select__menu button {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-top-select__menu button:hover,
+.fwd--soft .wprc-top-select__menu button:focus-visible,
+.fwd--soft .wprc-top-select__menu button.is-selected {
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-soft);
 }
 
 .fwd--soft .wprc-dependent-number input {
@@ -992,6 +995,29 @@
 .fwd--soft .wprc-explained .is-result {
   border-color: #b8ded7;
   background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .wprc {
+  overflow: visible;
+}
+
+.fwd--soft .wprc-explained--sticky {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 38%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--fiscal-surface) 94%, var(--fiscal-primary-soft));
+  box-shadow: 0 12px 28px rgba(35, 54, 78, 0.14);
+}
+
+.fwd--soft .wprc-explained .is-minimum {
+  border-color: #d7ccef;
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .wprc-explained .is-minimum dd {
+  color: #6044ad;
+}
+
+.fwd--soft .wprc-explained small {
+  color: var(--fiscal-copy);
 }
 
 .fwd--soft .wprc-calculation-warnings {

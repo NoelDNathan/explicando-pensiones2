@@ -971,6 +971,8 @@ export function FiscalWorkerDashboard() {
             initialBaseBeforeReductions={result.netReducedWorkIncome}
             quotaBeforeDeductions={result.stateIntegralQuota + result.regionalIntegralQuota}
             appliedBaseReductions={result.baseReductionsApplied}
+            statePersonalFamilyMinimum={result.stateMinimum}
+            regionalPersonalFamilyMinimum={result.regionalMinimum}
             appliedQuotaDeductions={result.quotaDeductionsApplied}
             refundableDeductionsGenerated={result.refundableDeductionsGenerated}
             finalDeclarationResult={result.finalDeclarationResult}

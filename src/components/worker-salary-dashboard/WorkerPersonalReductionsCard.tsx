@@ -79,6 +79,8 @@ type WorkerPersonalReductionsCardProps = {
   initialBaseBeforeReductions?: number
   quotaBeforeDeductions?: number
   appliedBaseReductions?: number
+  statePersonalFamilyMinimum?: number
+  regionalPersonalFamilyMinimum?: number
   appliedQuotaDeductions?: number
   refundableDeductionsGenerated?: number
   finalDeclarationResult?: number
@@ -149,6 +151,55 @@ function SelectControl({ value, options, label, onChange }: {
   )
 }
 
+function TopFieldSelect({ value, options, label, onChange }: {
+  value: string
+  options: FieldOption[]
+  label: string
+  onChange: (value: string) => void
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const selected = options.find((option) => option.value === value)
+
+  return (
+    <div
+      className={`wprc-top-select${isOpen ? ' is-open' : ''}`}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false)
+      }}
+    >
+      <button
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-label={`Cambiar ${label}. Valor actual: ${selected?.label ?? value}`}
+        className="wprc-top-select__trigger"
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span aria-hidden="true" />
+      </button>
+      {isOpen ? (
+        <div aria-label={`Opciones para ${label}`} className="wprc-top-select__menu" role="listbox">
+          {options.map((option) => (
+            <button
+              aria-selected={option.value === value}
+              className={option.value === value ? 'is-selected' : ''}
+              key={option.value}
+              role="option"
+              type="button"
+              onClick={() => {
+                onChange(option.value)
+                setIsOpen(false)
+              }}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 function TopField({ icon: Icon, label, value, options, onChange }: {
   icon: IconComponent
   label: string
@@ -158,11 +209,11 @@ function TopField({ icon: Icon, label, value, options, onChange }: {
 }) {
   const selected = options.find((option) => option.value === value)
   return (
-    <label className="wprc-top-field">
+    <div className="wprc-top-field">
       <Icon aria-hidden="true" />
       <span className="wprc-top-field__copy"><span>{label}</span><strong>{selected?.label ?? value}</strong></span>
-      <SelectControl label={label} value={value} options={options} onChange={onChange} />
-    </label>
+      <TopFieldSelect label={label} value={value} options={options} onChange={onChange} />
+    </div>
   )
 }
 
@@ -226,6 +277,8 @@ export function WorkerPersonalReductionsCard({
   initialBaseBeforeReductions = 0,
   quotaBeforeDeductions = 0,
   appliedBaseReductions = 0,
+  statePersonalFamilyMinimum = 0,
+  regionalPersonalFamilyMinimum = 0,
   appliedQuotaDeductions = 0,
   refundableDeductionsGenerated = 0,
   finalDeclarationResult = 0,
@@ -350,6 +403,8 @@ export function WorkerPersonalReductionsCard({
     + result.taxpayerDisabilityAssistanceMinimum
   const explainedBaseInitial = Math.max(0, initialBaseBeforeReductions)
   const explainedQuotaBefore = Math.max(0, quotaBeforeDeductions)
+  const appliedFamilyMinimum = Math.max(0, statePersonalFamilyMinimum || familyMinimumPreview)
+  const appliedRegionalFamilyMinimum = Math.max(0, regionalPersonalFamilyMinimum)
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -358,19 +413,19 @@ export function WorkerPersonalReductionsCard({
           <div className="wprc-step-orb" aria-hidden="true">{stepNumber}</div>
           <div className="wprc-title">
             <span>Paso {stepNumber} de {totalSteps}</span>
-            <h2 id="wprc-title">{showReductionsSection ? 'Reducciones y minimo familiar' : 'Deducciones y salario en especie'}</h2>
-            <p>{showReductionsSection ? 'Introduce los requisitos que determinan la base y el minimo aplicable.' : 'Separa deducciones de cuota, reembolsables, pagos a cuenta y beneficios exentos.'}</p>
+            <h2 id="wprc-title">{showReductionsSection ? 'Base imponible y mínimo familiar' : 'Deducciones y salario en especie'}</h2>
+            <p>{showReductionsSection ? 'Aquí hay dos efectos distintos: unas partidas bajan la base y tu familia o discapacidad bajan el IRPF al calcular la cuota.' : 'Separa deducciones de cuota, reembolsables, pagos a cuenta y beneficios exentos.'}</p>
           </div>
         </header>
         <aside className="wprc-hero-panel">
-          <h3>{showReductionsSection ? 'Calculo con requisitos' : 'Resultado anual completo'}</h3>
+          <h3>{showReductionsSection ? 'Dos efectos, sin mezclar' : 'Resultado anual completo'}</h3>
           <ul>
-            <li><CheckCircle2 /> Los importes se aplican en su fase legal.</li>
-            <li><CheckCircle2 /> Los limites se calculan automaticamente.</li>
+            <li><CheckCircle2 /> Planes y pensiones pueden reducir la base.</li>
+            <li><CheckCircle2 /> Familia y discapacidad reducen la cuota, no la base.</li>
             <li><CheckCircle2 /> Lo no acreditado no reduce el impuesto.</li>
           </ul>
-          <strong>{formatEuro(showReductionsSection ? familyMinimumPreview : appliedQuotaDeductions)}</strong>
-          <span>{showReductionsSection ? 'Mínimo familiar adicional estimado.' : 'Deducciones ordinarias aplicadas a la cuota.'}</span>
+          <strong>{formatEuro(showReductionsSection ? appliedFamilyMinimum : appliedQuotaDeductions)}</strong>
+          <span>{showReductionsSection ? 'Mínimo personal y familiar estatal aplicado en la cuota.' : 'Deducciones ordinarias aplicadas a la cuota.'}</span>
         </aside>
       </div>
 
@@ -393,6 +448,20 @@ export function WorkerPersonalReductionsCard({
             <TopField icon={HandHeart} label="Ayuda o movilidad" value={taxpayerAssistance} options={yesNoOptions} onChange={setTaxpayerAssistance} />
             <TopField icon={Heart} label="Estado civil" value={maritalStatus} options={maritalOptions} onChange={(next) => setMaritalStatus(next as MaritalStatus)} />
           </div>
+          <section className="wprc-explained wprc-explained--sticky" aria-label="Cómo cambian la base y el IRPF">
+            <div>
+              <h3>Tu base, siempre a la vista</h3>
+              <p>{appliedBaseReductions > 0
+                ? 'Las reducciones de base declaradas ya se han descontado con sus límites legales.'
+                : 'Ahora no hay reducciones de base declaradas. Los datos familiares sí se aplican, pero al calcular la cuota del IRPF.'}</p>
+            </div>
+            <dl>
+              <div><dt>Base antes de reducciones</dt><dd>{formatEuro(explainedBaseInitial)}</dd></div>
+              <div className="is-minus"><dt>Reducciones de base aplicadas</dt><dd>- {formatEuro(appliedBaseReductions)}</dd></div>
+              <div className="is-result"><dt>Base liquidable</dt><dd>{formatEuro(Math.max(0, explainedBaseInitial - appliedBaseReductions))}</dd></div>
+              <div className="is-minimum"><dt>Mínimo personal y familiar</dt><dd>{formatEuro(appliedFamilyMinimum)}</dd><small>{appliedRegionalFamilyMinimum > 0 ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica.` : 'Se aplica al calcular la cuota; no resta la base.'}</small></div>
+            </dl>
+          </section>
           <div className="wprc-dependent-grid">
             <DependentEditor type="descendant" title="Detalle de descendientes" profiles={descendantProfiles} count={Number(children)} onChange={(index, field, value) => updateDependent('descendant', index, field, value)} />
             <DependentEditor type="ascendant" title="Detalle de ascendientes" profiles={ascendantProfiles} count={Number(ascendants)} onChange={(index, field, value) => updateDependent('ascendant', index, field, value)} />
@@ -409,27 +478,19 @@ export function WorkerPersonalReductionsCard({
         </aside>
       ) : null}
 
-      <section className="wprc-explained">
-        <div><h3>Resultado explicado</h3><p>{showReductionsSection ? 'Las reducciones bajan la base antes de calcular las escalas.' : 'Las deducciones ordinarias y reembolsables se muestran por separado.'}</p></div>
+      {!showReductionsSection ? <section className="wprc-explained">
+        <div><h3>Resultado explicado</h3><p>Las deducciones ordinarias y reembolsables se muestran por separado.</p></div>
         <dl>
-          {showReductionsSection ? (
-            <>
-              <div><dt>Base antes de reducciones</dt><dd>{formatEuro(explainedBaseInitial)}</dd></div>
-              <div className="is-minus"><dt>Reducciones aplicadas</dt><dd>- {formatEuro(appliedBaseReductions)}</dd></div>
-              <div className="is-result"><dt>Base liquidable</dt><dd>{formatEuro(Math.max(0, explainedBaseInitial - appliedBaseReductions))}</dd></div>
-            </>
-          ) : (
-            <>
-              <div><dt>Cuota antes de deducciones</dt><dd>{formatEuro(explainedQuotaBefore)}</dd></div>
-              <div className="is-minus"><dt>Deducciones ordinarias</dt><dd>- {formatEuro(appliedQuotaDeductions)}</dd></div>
-              <div><dt>Deducciones reembolsables generadas</dt><dd>- {formatEuro(refundableDeductionsGenerated)}</dd></div>
-              <div className="is-result"><dt>Resultado estimado declaracion</dt><dd>{formatEuro(finalDeclarationResult)}</dd></div>
-            </>
-          )}
+          <>
+            <div><dt>Cuota antes de deducciones</dt><dd>{formatEuro(explainedQuotaBefore)}</dd></div>
+            <div className="is-minus"><dt>Deducciones ordinarias</dt><dd>- {formatEuro(appliedQuotaDeductions)}</dd></div>
+            <div><dt>Deducciones reembolsables generadas</dt><dd>- {formatEuro(refundableDeductionsGenerated)}</dd></div>
+            <div className="is-result"><dt>Resultado estimado declaracion</dt><dd>{formatEuro(finalDeclarationResult)}</dd></div>
+          </>
         </dl>
-      </section>
+      </section> : null}
 
-      <footer className="wprc-summary">
+      {!showReductionsSection ? <footer className="wprc-summary">
         <span className="wprc-summary-icon" aria-hidden="true"><FileText /></span>
         <div className="wprc-summary-copy"><p>Calculo 2025 con datos declarados.</p><span>Los requisitos no confirmados quedan como no estimados y no reducen el IRPF.</span></div>
         <output className={`wprc-total ${showReductionsSection ? 'wprc-total--reductions' : 'wprc-total--deductions'}`}>
@@ -437,7 +498,7 @@ export function WorkerPersonalReductionsCard({
           <span>{showReductionsSection ? 'Reducciones aplicadas' : 'Deducciones aplicadas'}</span>
           <strong>{formatEuro(showReductionsSection ? appliedBaseReductions : appliedQuotaDeductions)}</strong>
         </output>
-      </footer>
+      </footer> : null}
     </section>
   )
 }
