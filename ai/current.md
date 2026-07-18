@@ -6,6 +6,8 @@ Fecha: 2026-07-18
 
 Se ha iniciado la estructura documental para coordinar agentes IA en el proyecto de una web sobre pensiones en Espana.
 
+- Corregido el efecto de bordes izquierdos "borrados" en reducciones/deducciones e IVA dentro de `/calculadora-fiscal`: las listas internas dejan de recortar filas con `overflow: hidden`, las filas pasan a tener separacion real y contorno propio, y los campos usan una linea interior continua para que el borde se vea completo sobre fondo blanco. Verificacion: TypeScript y Vite build correctos; revision visual/DOM en escritorio de pasos 4 y 7 y movil 390 px de pasos 4 y 7, sin overflow horizontal de pagina.
+
 - Refinado el formulario de reducciones/deducciones de `/calculadora-fiscal`: las cajas de campos del IRPF en modo suave reducen el borde exterior y dejan el contorno principal al input/select interior, evitando el efecto de doble marco que se veia raro en importes como "Donado a la misma entidad". Se anadieron estados de foco suaves y se mantuvo la geometria coherente con los tokens globales. Verificacion: TypeScript y Vite build correctos; revision visual integrada en escritorio y movil 390 px del paso 5, sin overflow horizontal.
 
 - Ajustado el paso 7 de `/calculadora-fiscal`: el interruptor de IBI/IVA deja de verse como una capsula oscura y usa estados claros coherentes con el modo suave. Anadidos iconos de ayuda unificados en los formularios de reducciones, deducciones, retribuciones en especie, deducciones reembolsables y pagos a cuenta del paso 4/5; las explicaciones quedan centralizadas por etiqueta en `Irpf2025StructuredAdjustmentsForm`. Verificacion: TypeScript y Vite build correctos; revision visual integrada en escritorio y movil 390 px de pasos 4, 5 y 7, sin overflow horizontal.
