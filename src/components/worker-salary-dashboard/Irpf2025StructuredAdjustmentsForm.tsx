@@ -290,168 +290,47 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
   const benefits = calculateInKindBenefits2025(value)
   const benefitsMismatch = benefits.declaredBenefitsTotal > declaredInKindSalary
 
-  const resetWorkExpenses = () => onChange({
-    ...value,
-    otherIncomeKnown: false,
-    otherNonExemptNonWorkIncome: 0,
-    unionDues: 0,
-    professionalDues: 0,
-    professionalMembershipMandatory: false,
-    legalDefenseCosts: 0,
-    wasRegisteredJobseeker: false,
-    acceptedJobOtherMunicipality: false,
-    movedResidence: false,
-    moveTaxYear: 0,
-    newJobIntegralIncome: 0,
-    newJobSpecificExpenses: 0,
-  })
-  const resetPensionContributions = () => onChange({
-    ...value,
-    personalPensionContribution: 0,
-    mutualityContribution: 0,
-    employerPensionContribution: 0,
-    workerEmploymentPensionContribution: 0,
-    grossIncomeFromPensionEmployer: 0,
-    spousePensionContribution: 0,
-    spouseNetWorkAndBusinessIncome: 0,
-    spousePensionEligible: false,
-  })
-  const resetSpecialReductions = () => onChange({
-    ...value,
-    compensatoryPensionPaid: 0,
-    compensatoryPensionFormalized: false,
-    jointTaxationType: 'individual',
-    protectedAssetsContribution: 0,
-    protectedAssetsTotalContributors: 0,
-    protectedAssetsEligible: false,
-    verifiedRegionalReduction: 0,
-    regionalReductionCode: '',
-    regionalReductionSourceUrl: '',
-    regionalReductionCalculation: '',
-    regionalReductionVerified: false,
-  })
-
   if (focus === 'reductions') {
     return (
       <section className="irpf-rule-form" aria-label="Datos exactos para reducciones IRPF 2025">
-        <ReductionQuestion
-          question="¿Tienes algo que contar aparte de tu nómina?"
-          description="Por ejemplo: otros ingresos, sindicato, colegio profesional, abogado laboral o una mudanza por trabajo."
-          initiallyRelevant={value.otherIncomeKnown || value.otherNonExemptNonWorkIncome > 0 || value.unionDues > 0 || value.professionalDues > 0 || value.legalDefenseCosts > 0 || value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence}
-          onNo={resetWorkExpenses}
-        >
-          <div className="irpf-rule-grid">
-            <CheckField
-              label="Conozco todas mis otras rentas no exentas"
-              checked={value.otherIncomeKnown}
-              onChange={(checked) => update('otherIncomeKnown', checked)}
-              hint="Afectan a los umbrales de 6.500 EUR."
-            />
-            <NumberField
-              label="Otras rentas no exentas distintas del trabajo"
-              value={value.otherNonExemptNonWorkIncome}
-              onChange={(amount) => update('otherNonExemptNonWorkIncome', amount)}
-            />
-            <NumberField label="Cuotas sindicales pagadas" value={value.unionDues} onChange={(amount) => update('unionDues', amount)} />
-            <NumberField
-              label="Cuotas de colegio profesional"
-              value={value.professionalDues}
-              onChange={(amount) => update('professionalDues', amount)}
-              hint="El motor limita el gasto a 500 EUR."
-            />
-            <CheckField
-              label="La colegiacion es obligatoria para ejercer"
-              checked={value.professionalMembershipMandatory}
-              onChange={(checked) => update('professionalMembershipMandatory', checked)}
-            />
-            <NumberField
-              label="Defensa juridica laboral"
-              value={value.legalDefenseCosts}
-              onChange={(amount) => update('legalDefenseCosts', amount)}
-              hint="Litigios laborales; maximo 300 EUR."
-            />
-            <CheckField label="Estaba inscrito como demandante de empleo" checked={value.wasRegisteredJobseeker} onChange={(checked) => update('wasRegisteredJobseeker', checked)} />
-            <CheckField label="Acepte un empleo en otro municipio" checked={value.acceptedJobOtherMunicipality} onChange={(checked) => update('acceptedJobOtherMunicipality', checked)} />
-            <CheckField label="Traslade mi residencia" checked={value.movedResidence} onChange={(checked) => update('movedResidence', checked)} />
-            <CountField label="Ejercicio del traslado" value={value.moveTaxYear} onChange={(year) => update('moveTaxYear', year)} max={2025} unit="año" hint="Solo 2024 o 2025 generan incremento en 2025." />
-            <NumberField label="Rendimiento integro del nuevo empleo" value={value.newJobIntegralIncome} onChange={(amount) => update('newJobIntegralIncome', amount)} />
-            <NumberField label="Gastos especificos del nuevo empleo" value={value.newJobSpecificExpenses} onChange={(amount) => update('newJobSpecificExpenses', amount)} />
-          </div>
-        </ReductionQuestion>
-
-        <ReductionQuestion
-          question="¿Has aportado a un plan de pensiones o mutualidad?"
-          description="Incluye aportaciones tuyas, de tu empresa o al sistema de previsión de tu cónyuge."
-          initiallyRelevant={value.personalPensionContribution > 0 || value.mutualityContribution > 0 || value.employerPensionContribution > 0 || value.workerEmploymentPensionContribution > 0 || value.spousePensionContribution > 0}
-          onNo={resetPensionContributions}
-        >
-          <div className="irpf-rule-grid">
-            <NumberField label="Plan personal" value={value.personalPensionContribution} onChange={(amount) => update('personalPensionContribution', amount)} />
-            <NumberField label="Mutualidad admisible" value={value.mutualityContribution} onChange={(amount) => update('mutualityContribution', amount)} />
-            <NumberField label="Contribucion empresarial imputada" value={value.employerPensionContribution} onChange={(amount) => update('employerPensionContribution', amount)} />
-            <NumberField label="Aportacion propia al mismo plan de empleo" value={value.workerEmploymentPensionContribution} onChange={(amount) => update('workerEmploymentPensionContribution', amount)} />
-            <NumberField
-              label="Rendimiento integro del empleador del plan"
-              value={value.grossIncomeFromPensionEmployer}
-              onChange={(amount) => update('grossIncomeFromPensionEmployer', amount)}
-              hint="Determina el coeficiente de la aportacion vinculada."
-            />
-            <NumberField label="Aportacion al sistema del conyuge" value={value.spousePensionContribution} onChange={(amount) => update('spousePensionContribution', amount)} />
-            <NumberField label="Rendimientos netos del conyuge" value={value.spouseNetWorkAndBusinessIncome} onChange={(amount) => update('spouseNetWorkAndBusinessIncome', amount)} />
-            <CheckField
-              label="El sistema del conyuge cumple los requisitos"
-              checked={value.spousePensionEligible}
-              onChange={(checked) => update('spousePensionEligible', checked)}
-              hint="Limite independiente de 1.000 EUR si sus rendimientos son inferiores a 8.000 EUR."
-            />
-          </div>
-        </ReductionQuestion>
-
-        <ReductionQuestion
-          question="¿Tienes alguna situación especial que pueda bajar tu base?"
-          description="Pensión compensatoria, declaración conjunta, patrimonio protegido o una reducción autonómica ya comprobada."
-          initiallyRelevant={value.compensatoryPensionPaid > 0 || value.jointTaxationType !== 'individual' || value.protectedAssetsContribution > 0 || value.verifiedRegionalReduction > 0}
-          onNo={resetSpecialReductions}
-        >
-          <div className="irpf-rule-grid">
-            <NumberField label="Pension compensatoria pagada" value={value.compensatoryPensionPaid} onChange={(amount) => update('compensatoryPensionPaid', amount)} />
-            <CheckField
-              label="Existe resolucion o convenio formalizado"
-              checked={value.compensatoryPensionFormalized}
-              onChange={(checked) => update('compensatoryPensionFormalized', checked)}
-            />
-            <SelectField
-              label="Modalidad de declaracion"
-              value={value.jointTaxationType}
-              onChange={(next) => update('jointTaxationType', next as Irpf2025AdjustmentInput['jointTaxationType'])}
-            >
-              <option value="individual">Individual</option>
-              <option value="married">Conjunta: matrimonio no separado</option>
-              <option value="single_parent">Conjunta: unidad monoparental</option>
-              <option value="single_parent_cohabiting">Monoparental conviviendo con el otro progenitor</option>
-            </SelectField>
-            <NumberField label="Aportacion a patrimonio protegido" value={value.protectedAssetsContribution} onChange={(amount) => update('protectedAssetsContribution', amount)} />
-            <NumberField
-              label="Total aportado por todos al mismo patrimonio"
-              value={value.protectedAssetsTotalContributors}
-              onChange={(amount) => update('protectedAssetsTotalContributors', amount)}
-            />
-            <CheckField
-              label="Aportante, beneficiario y patrimonio cumplen requisitos"
-              checked={value.protectedAssetsEligible}
-              onChange={(checked) => update('protectedAssetsEligible', checked)}
-            />
-            <NumberField label="Reduccion autonomica calculada" value={value.verifiedRegionalReduction} onChange={(amount) => update('verifiedRegionalReduction', amount)} />
-            <TextField label="Codigo o nombre de la reduccion autonomica" value={value.regionalReductionCode} onChange={(next) => update('regionalReductionCode', next)} />
-            <TextField label="Fuente oficial de la reduccion" type="url" value={value.regionalReductionSourceUrl} onChange={(next) => update('regionalReductionSourceUrl', next)} />
-            <TextField label="Base, porcentaje y limite utilizados" value={value.regionalReductionCalculation} onChange={(next) => update('regionalReductionCalculation', next)} />
-            <CheckField
-              label="Reduccion autonomica documentada y verificada"
-              checked={value.regionalReductionVerified}
-              onChange={(checked) => update('regionalReductionVerified', checked)}
-            />
-          </div>
-        </ReductionQuestion>
+        <div className="irpf-reduction-question-list">
+          <ReductionQuestion question="¿Tienes ingresos fuera de tu nómina?" description="Por ejemplo, alquileres, intereses, actividades o ganancias." initiallyRelevant={value.otherIncomeKnown || value.otherNonExemptNonWorkIncome > 0} onNo={() => onChange({ ...value, otherIncomeKnown: false, otherNonExemptNonWorkIncome: 0 })}>
+            <div className="irpf-rule-grid"><CheckField label="Sé si tengo esos otros ingresos" checked={value.otherIncomeKnown} onChange={(checked) => update('otherIncomeKnown', checked)} hint="Es necesario para aplicar algunos límites." /><NumberField label="¿Cuánto suman al año?" value={value.otherNonExemptNonWorkIncome} onChange={(amount) => update('otherNonExemptNonWorkIncome', amount)} unit="EUR" /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} onNo={() => update('unionDues', 0)}>
+            <NumberField label="¿Cuánto has pagado este año?" value={value.unionDues} onChange={(amount) => update('unionDues', amount)} />
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Pagas un colegio profesional obligatorio para trabajar?" description="Por ejemplo, si tu profesión exige estar colegiado." initiallyRelevant={value.professionalDues > 0 || value.professionalMembershipMandatory} onNo={() => onChange({ ...value, professionalDues: 0, professionalMembershipMandatory: false })}>
+            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has pagado este año?" value={value.professionalDues} onChange={(amount) => update('professionalDues', amount)} hint="El máximo aplicable es 500 EUR." /><CheckField label="Estar colegiado es obligatorio para ejercer" checked={value.professionalMembershipMandatory} onChange={(checked) => update('professionalMembershipMandatory', checked)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Has pagado un abogado por un problema con tu trabajo?" description="Solo por un conflicto laboral con tu empresa." initiallyRelevant={value.legalDefenseCosts > 0} onNo={() => update('legalDefenseCosts', 0)}>
+            <NumberField label="¿Cuánto has pagado este año?" value={value.legalDefenseCosts} onChange={(amount) => update('legalDefenseCosts', amount)} hint="El máximo aplicable es 300 EUR." />
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Te mudaste a otro municipio para empezar un trabajo?" description="Debe haber sido un traslado real de residencia después de estar inscrito como demandante de empleo." initiallyRelevant={value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence} onNo={() => onChange({ ...value, wasRegisteredJobseeker: false, acceptedJobOtherMunicipality: false, movedResidence: false, moveTaxYear: 0, newJobIntegralIncome: 0, newJobSpecificExpenses: 0 })}>
+            <div className="irpf-rule-grid"><CheckField label="Estaba inscrito como demandante de empleo" checked={value.wasRegisteredJobseeker} onChange={(checked) => update('wasRegisteredJobseeker', checked)} /><CheckField label="Acepté un empleo en otro municipio" checked={value.acceptedJobOtherMunicipality} onChange={(checked) => update('acceptedJobOtherMunicipality', checked)} /><CheckField label="Me mudé de residencia por ese empleo" checked={value.movedResidence} onChange={(checked) => update('movedResidence', checked)} /><CountField label="¿En qué año te mudaste?" value={value.moveTaxYear} onChange={(year) => update('moveTaxYear', year)} max={2025} unit="año" /><NumberField label="Salario bruto de ese nuevo empleo" value={value.newJobIntegralIncome} onChange={(amount) => update('newJobIntegralIncome', amount)} /><NumberField label="Gastos específicos de ese nuevo empleo" value={value.newJobSpecificExpenses} onChange={(amount) => update('newJobSpecificExpenses', amount)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Pagas tú un plan de pensiones o una mutualidad profesional?" description="Incluye solo tus aportaciones personales." initiallyRelevant={value.personalPensionContribution > 0 || value.mutualityContribution > 0} onNo={() => onChange({ ...value, personalPensionContribution: 0, mutualityContribution: 0 })}>
+            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has aportado a tu plan?" value={value.personalPensionContribution} onChange={(amount) => update('personalPensionContribution', amount)} /><NumberField label="¿Cuánto has aportado a una mutualidad?" value={value.mutualityContribution} onChange={(amount) => update('mutualityContribution', amount)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Tu empresa aporta a un plan de pensiones para ti?" description="Míralo en tu nómina, certificado de la empresa o entidad del plan." initiallyRelevant={value.employerPensionContribution > 0 || value.workerEmploymentPensionContribution > 0} onNo={() => onChange({ ...value, employerPensionContribution: 0, workerEmploymentPensionContribution: 0, grossIncomeFromPensionEmployer: 0 })}>
+            <div className="irpf-rule-grid"><NumberField label="Aportación anual de tu empresa" value={value.employerPensionContribution} onChange={(amount) => update('employerPensionContribution', amount)} /><NumberField label="Tu aportación al mismo plan" value={value.workerEmploymentPensionContribution} onChange={(amount) => update('workerEmploymentPensionContribution', amount)} /><NumberField label="Tu salario bruto en esa empresa" value={value.grossIncomeFromPensionEmployer} onChange={(amount) => update('grossIncomeFromPensionEmployer', amount)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Has aportado al plan de pensiones de tu pareja?" description="Solo se aplica en ciertos casos de ingresos bajos de la pareja." initiallyRelevant={value.spousePensionContribution > 0} onNo={() => onChange({ ...value, spousePensionContribution: 0, spouseNetWorkAndBusinessIncome: 0, spousePensionEligible: false })}>
+            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has aportado?" value={value.spousePensionContribution} onChange={(amount) => update('spousePensionContribution', amount)} /><NumberField label="Ingresos netos anuales de tu pareja" value={value.spouseNetWorkAndBusinessIncome} onChange={(amount) => update('spouseNetWorkAndBusinessIncome', amount)} /><CheckField label="El plan cumple los requisitos" checked={value.spousePensionEligible} onChange={(checked) => update('spousePensionEligible', checked)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Pagas una pensión a tu expareja?" description="Debe estar fijada por sentencia o convenio regulador formalizado." initiallyRelevant={value.compensatoryPensionPaid > 0 || value.compensatoryPensionFormalized} onNo={() => onChange({ ...value, compensatoryPensionPaid: 0, compensatoryPensionFormalized: false })}>
+            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has pagado este año?" value={value.compensatoryPensionPaid} onChange={(amount) => update('compensatoryPensionPaid', amount)} /><CheckField label="Hay sentencia o convenio regulador formalizado" checked={value.compensatoryPensionFormalized} onChange={(checked) => update('compensatoryPensionFormalized', checked)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Vas a hacer la declaración conjunta?" description="Elige la situación que corresponda a tu unidad familiar." initiallyRelevant={value.jointTaxationType !== 'individual'} onNo={() => update('jointTaxationType', 'individual')}>
+            <SelectField label="¿Con quién presentas la declaración?" value={value.jointTaxationType} onChange={(next) => update('jointTaxationType', next as Irpf2025AdjustmentInput['jointTaxationType'])}><option value="individual">La presento individual</option><option value="married">Con mi cónyuge</option><option value="single_parent">Como unidad monoparental</option><option value="single_parent_cohabiting">Monoparental conviviendo con el otro progenitor</option></SelectField>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Has aportado a un patrimonio protegido de una persona con discapacidad?" description="Es una figura específica; déjalo en No si no te suena." initiallyRelevant={value.protectedAssetsContribution > 0} onNo={() => onChange({ ...value, protectedAssetsContribution: 0, protectedAssetsTotalContributors: 0, protectedAssetsEligible: false })}>
+            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has aportado?" value={value.protectedAssetsContribution} onChange={(amount) => update('protectedAssetsContribution', amount)} /><NumberField label="Total aportado entre todas las personas" value={value.protectedAssetsTotalContributors} onChange={(amount) => update('protectedAssetsTotalContributors', amount)} /><CheckField label="La aportación cumple los requisitos" checked={value.protectedAssetsEligible} onChange={(checked) => update('protectedAssetsEligible', checked)} /></div>
+          </ReductionQuestion>
+          <ReductionQuestion question="¿Tienes una reducción autonómica ya calculada y comprobada?" description="Solo si tienes la norma y el cálculo revisados; si no, déjalo en No." initiallyRelevant={value.verifiedRegionalReduction > 0} onNo={() => onChange({ ...value, verifiedRegionalReduction: 0, regionalReductionCode: '', regionalReductionSourceUrl: '', regionalReductionCalculation: '', regionalReductionVerified: false })}>
+            <div className="irpf-rule-grid"><NumberField label="Importe de la reducción" value={value.verifiedRegionalReduction} onChange={(amount) => update('verifiedRegionalReduction', amount)} /><TextField label="Nombre de la reducción" value={value.regionalReductionCode} onChange={(next) => update('regionalReductionCode', next)} /><TextField label="Enlace a la fuente oficial" type="url" value={value.regionalReductionSourceUrl} onChange={(next) => update('regionalReductionSourceUrl', next)} /><TextField label="Cómo has hecho el cálculo" value={value.regionalReductionCalculation} onChange={(next) => update('regionalReductionCalculation', next)} /><CheckField label="He comprobado requisitos y fuente" checked={value.regionalReductionVerified} onChange={(checked) => update('regionalReductionVerified', checked)} /></div>
+          </ReductionQuestion>
+        </div>
       </section>
     )
   }

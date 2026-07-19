@@ -4,6 +4,11 @@
   margin-bottom: 18px;
 }
 
+.irpf-reduction-question-list {
+  display: grid;
+  gap: 12px;
+}
+
 .irpf-reduction-question {
   display: grid;
   gap: 14px;

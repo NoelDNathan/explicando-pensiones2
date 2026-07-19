@@ -242,7 +242,7 @@ function DependentEditor({ type, title, profiles, count, onChange }: {
   const ageOptions = type === 'descendant' ? descendantAgeOptions : ascendantAgeOptions
   return (
     <article className={`wprc-dependent-card wprc-dependent-card--${type}`}>
-      <header><div><h3>{title}</h3><p>Se comprueban edad, convivencia, rentas, declaracion y reparto del derecho.</p></div></header>
+      <header><div><h3>{title}</h3><p>Responde unas preguntas sencillas sobre cada persona para saber si puede incluirse.</p></div></header>
       {activeProfiles.length === 0 ? <p className="wprc-empty">Indica cuantas personas hay para desplegar el detalle.</p> : null}
       <div className="wprc-dependent-list">
         {activeProfiles.map((profile, index) => {
@@ -251,13 +251,13 @@ function DependentEditor({ type, title, profiles, count, onChange }: {
           return (
             <section className={`wprc-dependent ${eligible ? 'is-eligible' : 'is-excluded'}`} key={`${type}-${index}`}>
               <div className="wprc-dependent__head"><strong>{label}</strong><span>{eligible ? 'Computa' : 'No computa'}</span></div>
-              <label><span>Edad</span><SelectControl label={`${label}: edad`} value={profile.ageBand} options={ageOptions} onChange={(next) => onChange(index, 'ageBand', next)} /></label>
-              <label><span>{type === 'ascendant' ? 'Convive al menos medio ano' : 'Convive o depende economicamente'}</span><SelectControl label={`${label}: convivencia`} value={profile.livesWith} options={yesNoOptions} onChange={(next) => onChange(index, 'livesWith', next as DependentProfile['livesWith'])} /></label>
-              <label><DependentFieldLabel label="Ingresos propios sujetos a IRPF" help="Son sus ingresos anuales que sí tributan. No cuentes becas, prestaciones u otras rentas exentas. El límite habitual para que compute es 8.000 EUR al año." /><SelectControl label={`${label}: ingresos propios sujetos a IRPF`} value={profile.ownIncome} options={incomeOptions} onChange={(next) => onChange(index, 'ownIncome', next as DependentProfile['ownIncome'])} /></label>
-              <label><span>Declaracion propia</span><SelectControl label={`${label}: declaracion`} value={profile.filesReturn} options={returnOptions} onChange={(next) => onChange(index, 'filesReturn', next as DependentProfile['filesReturn'])} /></label>
-              <label><span>Grado discapacidad</span><SelectControl label={`${label}: discapacidad`} value={profile.disabilityPercent} options={disabilityOptions} onChange={(next) => onChange(index, 'disabilityPercent', next as DependentProfile['disabilityPercent'])} /></label>
-              <label><span>Ayuda o movilidad reducida</span><SelectControl label={`${label}: asistencia`} value={profile.assistance} options={yesNoOptions} onChange={(next) => onChange(index, 'assistance', next as DependentProfile['assistance'])} /></label>
-              <label><DependentFieldLabel label="Porcentaje del mínimo que te corresponde" help="El mínimo familiar se reparte entre las personas que pueden aplicarlo: elige 100 % si te corresponde entero o 50 % si lo compartes a partes iguales con otra persona." /><SelectControl label={`${label}: porcentaje del mínimo`} value={profile.entitlementShare} options={shareOptions} onChange={(next) => onChange(index, 'entitlementShare', next as DependentProfile['entitlementShare'])} /></label>
+              <label><span>¿Qué edad tiene?</span><SelectControl label={`${label}: edad`} value={profile.ageBand} options={ageOptions} onChange={(next) => onChange(index, 'ageBand', next)} /></label>
+              <label><span>{type === 'ascendant' ? '¿Ha vivido contigo al menos medio año?' : '¿Vive contigo o depende económicamente de ti?'}</span><SelectControl label={`${label}: convivencia`} value={profile.livesWith} options={yesNoOptions} onChange={(next) => onChange(index, 'livesWith', next as DependentProfile['livesWith'])} /></label>
+              <label><DependentFieldLabel label="¿Gana más de 8.000 EUR al año?" help="Cuenta sus ingresos anuales que sí tributan. No incluyas becas, prestaciones u otras rentas exentas." /><SelectControl label={`${label}: ingresos propios`} value={profile.ownIncome} options={incomeOptions} onChange={(next) => onChange(index, 'ownIncome', next as DependentProfile['ownIncome'])} /></label>
+              <label><span>¿Presenta su propia declaración de la renta?</span><SelectControl label={`${label}: declaracion`} value={profile.filesReturn} options={returnOptions} onChange={(next) => onChange(index, 'filesReturn', next as DependentProfile['filesReturn'])} /></label>
+              <label><span>¿Tiene una discapacidad reconocida?</span><SelectControl label={`${label}: discapacidad`} value={profile.disabilityPercent} options={disabilityOptions} onChange={(next) => onChange(index, 'disabilityPercent', next as DependentProfile['disabilityPercent'])} /></label>
+              <label><span>¿Necesita ayuda de otra persona o tiene movilidad reducida?</span><SelectControl label={`${label}: asistencia`} value={profile.assistance} options={yesNoOptions} onChange={(next) => onChange(index, 'assistance', next as DependentProfile['assistance'])} /></label>
+              <label><DependentFieldLabel label="¿Compartes este mínimo con otra persona?" help="Elige 100 % si te corresponde entero o 50 % si lo compartes a partes iguales con otra persona." /><SelectControl label={`${label}: porcentaje del mínimo`} value={profile.entitlementShare} options={shareOptions} onChange={(next) => onChange(index, 'entitlementShare', next as DependentProfile['entitlementShare'])} /></label>
               {type === 'descendant' ? (
                 <>
                   <label>
@@ -457,8 +457,8 @@ export function WorkerPersonalReductionsCard({
             </div>
           </section>
           <div className="wprc-top-grid wprc-top-grid--questions">
-            <TopField icon={UsersRound} label="¿Cuántos hijos incluyes?" value={children} options={countOptions} onChange={setChildren} />
-            <TopField icon={HandHeart} label="¿Cuántos ascendientes incluyes?" value={ascendants} options={ascendantCountOptions} onChange={setAscendants} />
+            <TopField icon={UsersRound} label="¿Cuántos hijos tienes?" value={children} options={countOptions} onChange={setChildren} />
+            <TopField icon={HandHeart} label="¿Cuántos padres o abuelos tienes a cargo?" value={ascendants} options={ascendantCountOptions} onChange={setAscendants} />
             <TopField icon={Accessibility} label="¿Tienes discapacidad reconocida?" value={disabilityPercent} options={disabilityOptions} onChange={setDisabilityPercent} />
             <TopField icon={HandHeart} label="¿Necesitas ayuda o movilidad reducida?" value={taxpayerAssistance} options={yesNoOptions} onChange={setTaxpayerAssistance} />
             <TopField icon={Heart} label="¿Cuál es tu estado civil?" value={maritalStatus} options={maritalOptions} onChange={(next) => setMaritalStatus(next as MaritalStatus)} />
