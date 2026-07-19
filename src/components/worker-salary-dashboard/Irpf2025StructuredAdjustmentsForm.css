@@ -4,6 +4,97 @@
   margin-bottom: 18px;
 }
 
+.irpf-reduction-question {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(75, 134, 205, 0.48);
+  border-radius: 14px;
+  background: rgba(2, 16, 37, 0.72);
+}
+
+.irpf-reduction-question__prompt {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.irpf-reduction-question__prompt > span {
+  display: grid;
+  width: 40px;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(39, 229, 240, 0.45);
+  border-radius: 999px;
+  color: #27e5f0;
+  background: rgba(39, 229, 240, 0.1);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.irpf-reduction-question h3,
+.irpf-reduction-question p {
+  margin: 0;
+}
+
+.irpf-reduction-question h3 {
+  color: #eef5ff;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.irpf-reduction-question__prompt p,
+.irpf-reduction-question__skip {
+  margin-top: 4px;
+  color: #9fb2d4;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.irpf-reduction-question__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.irpf-reduction-question__choices button {
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid rgba(87, 139, 204, 0.48);
+  border-radius: 10px;
+  color: #dfeaff;
+  background: rgba(4, 23, 49, 0.68);
+  cursor: pointer;
+  font: 780 14px/1 var(--sans);
+}
+
+.irpf-reduction-question__choices button.is-selected:first-child {
+  color: #06283a;
+  border-color: rgba(88, 241, 113, 0.64);
+  background: #58f171;
+}
+
+.irpf-reduction-question__choices button.is-selected:last-child {
+  color: #ecf3ff;
+  border-color: rgba(143, 165, 200, 0.62);
+  background: rgba(143, 165, 200, 0.22);
+}
+
+.irpf-reduction-question__body {
+  display: grid;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(75, 134, 205, 0.32);
+}
+
+.irpf-reduction-question__skip {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: rgba(143, 165, 200, 0.1);
+}
+
 .irpf-rule-group {
   overflow: hidden;
   border: 1px solid rgba(75, 134, 205, 0.48);

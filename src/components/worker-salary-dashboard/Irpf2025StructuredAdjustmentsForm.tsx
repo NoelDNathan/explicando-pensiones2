@@ -1,5 +1,5 @@
 import { Baby, BriefcaseBusiness, FileCheck2, HeartHandshake, Landmark, ReceiptText, ShieldCheck, UsersRound } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   calculateInKindBenefits2025,
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
@@ -251,6 +251,38 @@ function RuleGroup({ title, description, icon: Icon, children, open = false }: {
   )
 }
 
+function ReductionQuestion({ question, description, children, initiallyRelevant = false, onNo }: {
+  question: string
+  description: string
+  children: ReactNode
+  initiallyRelevant?: boolean
+  onNo: () => void
+}) {
+  const [answer, setAnswer] = useState<'unanswered' | 'yes' | 'no'>(() => initiallyRelevant ? 'yes' : 'unanswered')
+  const chooseNo = () => {
+    onNo()
+    setAnswer('no')
+  }
+
+  return (
+    <section className={`irpf-reduction-question is-${answer}`} aria-label={question}>
+      <div className="irpf-reduction-question__prompt">
+        <span aria-hidden="true">?</span>
+        <div>
+          <h3>{question}</h3>
+          <p>{description}</p>
+        </div>
+      </div>
+      <div className="irpf-reduction-question__choices" role="group" aria-label={`Respuesta: ${question}`}>
+        <button className={answer === 'yes' ? 'is-selected' : ''} type="button" onClick={() => setAnswer('yes')}>Sí, me aplica</button>
+        <button className={answer === 'no' ? 'is-selected' : ''} type="button" onClick={chooseNo}>No, continuar</button>
+      </div>
+      {answer === 'yes' ? <div className="irpf-reduction-question__body">{children}</div> : null}
+      {answer === 'no' ? <p className="irpf-reduction-question__skip">Perfecto, no aplicaremos nada de este apartado. Puedes cambiar la respuesta cuando quieras.</p> : null}
+    </section>
+  )
+}
+
 export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKindSalary = 0, onChange }: Props) {
   const update = <Key extends keyof Irpf2025AdjustmentInput>(key: Key, nextValue: Irpf2025AdjustmentInput[Key]) => {
     onChange({ ...value, [key]: nextValue })
@@ -258,13 +290,55 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
   const benefits = calculateInKindBenefits2025(value)
   const benefitsMismatch = benefits.declaredBenefitsTotal > declaredInKindSalary
 
+  const resetWorkExpenses = () => onChange({
+    ...value,
+    otherIncomeKnown: false,
+    otherNonExemptNonWorkIncome: 0,
+    unionDues: 0,
+    professionalDues: 0,
+    professionalMembershipMandatory: false,
+    legalDefenseCosts: 0,
+    wasRegisteredJobseeker: false,
+    acceptedJobOtherMunicipality: false,
+    movedResidence: false,
+    moveTaxYear: 0,
+    newJobIntegralIncome: 0,
+    newJobSpecificExpenses: 0,
+  })
+  const resetPensionContributions = () => onChange({
+    ...value,
+    personalPensionContribution: 0,
+    mutualityContribution: 0,
+    employerPensionContribution: 0,
+    workerEmploymentPensionContribution: 0,
+    grossIncomeFromPensionEmployer: 0,
+    spousePensionContribution: 0,
+    spouseNetWorkAndBusinessIncome: 0,
+    spousePensionEligible: false,
+  })
+  const resetSpecialReductions = () => onChange({
+    ...value,
+    compensatoryPensionPaid: 0,
+    compensatoryPensionFormalized: false,
+    jointTaxationType: 'individual',
+    protectedAssetsContribution: 0,
+    protectedAssetsTotalContributors: 0,
+    protectedAssetsEligible: false,
+    verifiedRegionalReduction: 0,
+    regionalReductionCode: '',
+    regionalReductionSourceUrl: '',
+    regionalReductionCalculation: '',
+    regionalReductionVerified: false,
+  })
+
   if (focus === 'reductions') {
     return (
       <section className="irpf-rule-form" aria-label="Datos exactos para reducciones IRPF 2025">
-        <RuleGroup
-          title="¿Tienes gastos relacionados con tu trabajo o te mudaste por un empleo?"
-          description="Ábrelo solo si pagaste sindicato, colegio profesional, defensa laboral o cambiaste de municipio por un trabajo."
-          icon={ReceiptText}
+        <ReductionQuestion
+          question="¿Tienes algo que contar aparte de tu nómina?"
+          description="Por ejemplo: otros ingresos, sindicato, colegio profesional, abogado laboral o una mudanza por trabajo."
+          initiallyRelevant={value.otherIncomeKnown || value.otherNonExemptNonWorkIncome > 0 || value.unionDues > 0 || value.professionalDues > 0 || value.legalDefenseCosts > 0 || value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence}
+          onNo={resetWorkExpenses}
         >
           <div className="irpf-rule-grid">
             <CheckField
@@ -303,12 +377,13 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
             <NumberField label="Rendimiento integro del nuevo empleo" value={value.newJobIntegralIncome} onChange={(amount) => update('newJobIntegralIncome', amount)} />
             <NumberField label="Gastos especificos del nuevo empleo" value={value.newJobSpecificExpenses} onChange={(amount) => update('newJobSpecificExpenses', amount)} />
           </div>
-        </RuleGroup>
+        </ReductionQuestion>
 
-        <RuleGroup
-          title="¿Has aportado a un plan de pensiones o mutualidad?"
+        <ReductionQuestion
+          question="¿Has aportado a un plan de pensiones o mutualidad?"
           description="Incluye aportaciones tuyas, de tu empresa o al sistema de previsión de tu cónyuge."
-          icon={UsersRound}
+          initiallyRelevant={value.personalPensionContribution > 0 || value.mutualityContribution > 0 || value.employerPensionContribution > 0 || value.workerEmploymentPensionContribution > 0 || value.spousePensionContribution > 0}
+          onNo={resetPensionContributions}
         >
           <div className="irpf-rule-grid">
             <NumberField label="Plan personal" value={value.personalPensionContribution} onChange={(amount) => update('personalPensionContribution', amount)} />
@@ -330,12 +405,13 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
               hint="Limite independiente de 1.000 EUR si sus rendimientos son inferiores a 8.000 EUR."
             />
           </div>
-        </RuleGroup>
+        </ReductionQuestion>
 
-        <RuleGroup
-          title="¿Tienes alguna situación especial que pueda bajar tu base?"
+        <ReductionQuestion
+          question="¿Tienes alguna situación especial que pueda bajar tu base?"
           description="Pensión compensatoria, declaración conjunta, patrimonio protegido o una reducción autonómica ya comprobada."
-          icon={FileCheck2}
+          initiallyRelevant={value.compensatoryPensionPaid > 0 || value.jointTaxationType !== 'individual' || value.protectedAssetsContribution > 0 || value.verifiedRegionalReduction > 0}
+          onNo={resetSpecialReductions}
         >
           <div className="irpf-rule-grid">
             <NumberField label="Pension compensatoria pagada" value={value.compensatoryPensionPaid} onChange={(amount) => update('compensatoryPensionPaid', amount)} />
@@ -375,7 +451,7 @@ export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKind
               onChange={(checked) => update('regionalReductionVerified', checked)}
             />
           </div>
-        </RuleGroup>
+        </ReductionQuestion>
       </section>
     )
   }

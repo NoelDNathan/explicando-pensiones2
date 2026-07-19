@@ -1109,6 +1109,53 @@
   overflow: visible;
 }
 
+.fwd--soft .irpf-reduction-question {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-soft);
+}
+
+.fwd--soft .irpf-reduction-question__prompt > span {
+  color: var(--fiscal-primary);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .irpf-reduction-question h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .irpf-reduction-question__prompt p,
+.fwd--soft .irpf-reduction-question__skip {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-reduction-question__choices button {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-reduction-question__choices button.is-selected:first-child {
+  color: #fff;
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary);
+}
+
+.fwd--soft .irpf-reduction-question__choices button.is-selected:last-child {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: #eef3f6;
+}
+
+.fwd--soft .irpf-reduction-question__body {
+  border-color: var(--fiscal-line);
+}
+
+.fwd--soft .irpf-reduction-question__skip {
+  background: var(--fiscal-surface-soft);
+}
+
 .fwd--soft .wprc-question-intro {
   border-color: #b8ded7;
   background: linear-gradient(115deg, #edf9f5, #f8fbff);
