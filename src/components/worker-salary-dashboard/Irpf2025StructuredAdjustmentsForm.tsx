@@ -1,4 +1,4 @@
-import { Baby, BriefcaseBusiness, FileCheck2, HeartHandshake, Landmark, ReceiptText, ShieldCheck, UsersRound } from 'lucide-react'
+import { Baby, BriefcaseBusiness, HeartHandshake, Landmark, ReceiptText, ShieldCheck, UsersRound } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import {
   calculateInKindBenefits2025,

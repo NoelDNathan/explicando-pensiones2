@@ -116,7 +116,7 @@ export function WorkerSalaryBaseCard({
 
       <div className="wsbc-fields">
         <label className="wsbc-label" htmlFor="wsbc-salary">Salario anual o mensual bruto</label>
-        <div className="wsbc-control-row">
+        <div className="wsbc-control-row wsbc-control-row--salary">
           <SalarySlider
             id="wsbc-salary"
             value={salary}
@@ -129,31 +129,31 @@ export function WorkerSalaryBaseCard({
             ariaLabel="Salario anual o mensual en euros"
           />
 
-          <div className="wsbc-select-shell wsbc-select-shell--period">
-            <select
-              value={payPeriod}
-              onChange={(event) => handlePayPeriodChange(event.target.value as PayPeriod)}
-              aria-label="Periodicidad del salario"
-            >
-              <option value="annual">Anual</option>
-              <option value="monthly">Mensual</option>
-            </select>
-            <Euro size={18} strokeWidth={2.4} aria-hidden="true" />
-          </div>
-        </div>
+          <div className="wsbc-salary-side">
+            <div className="wsbc-select-shell wsbc-select-shell--period">
+              <select
+                value={payPeriod}
+                onChange={(event) => handlePayPeriodChange(event.target.value as PayPeriod)}
+                aria-label="Periodicidad del salario"
+              >
+                <option value="annual">Anual</option>
+                <option value="monthly">Mensual</option>
+              </select>
+              <Euro size={18} strokeWidth={2.4} aria-hidden="true" />
+            </div>
 
-        <label className="wsbc-label" htmlFor="wsbc-pay-count">12 o 14 pagas</label>
-        <div className="wsbc-control-row wsbc-control-row--single">
-          <div className="wsbc-select-shell">
-            <select
-              id="wsbc-pay-count"
-              value={payCount}
-              onChange={(event) => setPayCount(event.target.value as PayCount)}
-            >
-              <option value="12">12 pagas</option>
-              <option value="14">14 pagas</option>
-            </select>
-            <ChevronDown size={18} strokeWidth={2.3} aria-hidden="true" />
+            <div className="wsbc-select-shell wsbc-select-shell--pays">
+              <select
+                id="wsbc-pay-count"
+                value={payCount}
+                onChange={(event) => setPayCount(event.target.value as PayCount)}
+                aria-label="12 o 14 pagas"
+              >
+                <option value="12">12 pagas</option>
+                <option value="14">14 pagas</option>
+              </select>
+              <ChevronDown size={18} strokeWidth={2.3} aria-hidden="true" />
+            </div>
           </div>
         </div>
 

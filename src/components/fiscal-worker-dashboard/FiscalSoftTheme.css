@@ -426,8 +426,9 @@
   background: transparent;
 }
 
-.fwd--soft .wsbc-select-shell--period {
-  width: 142px;
+.fwd--soft .wsbc-select-shell--period,
+.fwd--soft .wsbc-select-shell--pays {
+  width: 100%;
 }
 
 .fwd--soft .wsbc-result {

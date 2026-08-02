@@ -1,8 +1,12 @@
 # Estado actual
 
-Fecha: 2026-07-18
+Fecha: 2026-08-02
 
 ## Situacion
+
+- Reubicado el selector de 12/14 pagas en el paso 1 (`WorkerSalaryBaseCard`) de `/calculadora-fiscal`: queda al lado del salario y justo debajo del selector Anual/Mensual, en una columna lateral compartida. En móvil ambos selectores pasan a una fila bajo el slider. Verificación: `pnpm run build` correcto; revisión visual escritorio y móvil 390 px sin overflow horizontal.
+
+- Aumentados dos escalones tipográficos los textos del resumen intro (`WorkerFiscalSummaryCard` variante `--intro`) para mejorar legibilidad; el slider de sueldo de esa tarjeta también sube de tamaño de forma acotada. Corregido de paso un import sin uso que bloqueaba el build. Verificación: `pnpm run build` correcto.
 
 - Sustituidas las preguntas fiscales abstractas del paso de reducciones por hechos cotidianos: ingresos fuera de nómina, cuota sindical, colegio obligatorio, abogado laboral, mudanza por trabajo, plan propio, plan de empresa, plan de la pareja, pensión a la expareja, declaración conjunta, patrimonio protegido y reducción autonómica. También se reescriben las preguntas de cada hijo o ascendiente (edad, convivencia, ingresos, declaración y discapacidad) para no exigir vocabulario fiscal. La cobertura y la limpieza de valores al responder `No` se mantienen. Verificación: TypeScript y Vite build correctos; revisión visual en escritorio confirma preguntas completas y acciones `Sí, me aplica` / `No, continuar` sin términos técnicos iniciales.
 

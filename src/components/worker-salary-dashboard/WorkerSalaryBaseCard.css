@@ -176,6 +176,18 @@
   align-items: start;
 }
 
+.wsbc-control-row--salary {
+  align-items: stretch;
+}
+
+.wsbc-salary-side {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 10px;
+  align-content: start;
+  width: 148px;
+}
+
 .wsbc-control-row--single {
   grid-template-columns: 1fr;
 }
@@ -250,12 +262,14 @@
   color: #8fb1c7;
 }
 
-.wsbc-select-shell--period {
-  width: 132px;
+.wsbc-select-shell--period,
+.wsbc-select-shell--pays {
+  width: 100%;
   min-height: 42px;
 }
 
-.wsbc-select-shell--period select {
+.wsbc-select-shell--period select,
+.wsbc-select-shell--pays select {
   min-height: 40px;
   font-size: 16px;
 }
@@ -321,6 +335,12 @@
     grid-template-columns: 1fr;
   }
 
+  .wsbc-salary-side {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+  }
+
   .wsbc-result {
     grid-template-columns: 1fr;
     gap: 4px;
@@ -340,6 +360,12 @@
 
   .wsbc-control-row {
     grid-template-columns: 1fr;
+  }
+
+  .wsbc-salary-side {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
   }
 
   .wsbc-result {

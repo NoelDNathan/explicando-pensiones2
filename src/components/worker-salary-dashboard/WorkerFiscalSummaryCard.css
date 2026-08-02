@@ -215,6 +215,7 @@
 
 .wfsc-summary--intro .wfsc-summary__eyebrow {
   color: var(--intro-eyebrow);
+  font-size: 16px;
 }
 
 /* .fwd-worker-card h2 fija un color claro con la misma especificidad y gana por
@@ -222,7 +223,7 @@
 .wfsc-summary--intro .wfsc-intro__header h2 {
   margin: 0;
   color: var(--intro-text-strong);
-  font-size: clamp(30px, 4vw, 52px);
+  font-size: clamp(38px, 4.8vw, 64px);
   line-height: 1.02;
   letter-spacing: -0.015em;
 }
@@ -230,7 +231,7 @@
 .wfsc-intro__lead {
   margin: 14px 0 0;
   color: var(--intro-text);
-  font-size: clamp(15px, 1.4vw, 17px);
+  font-size: clamp(19px, 1.8vw, 21px);
   line-height: 1.55;
 }
 
@@ -261,12 +262,12 @@
 }
 
 .wfsc-intro__period button {
-  min-height: 40px;
+  min-height: 44px;
   padding: 0 18px;
   border: 0;
   border-radius: 9px;
   color: var(--intro-text-muted);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
   background: transparent;
   cursor: pointer;
@@ -294,7 +295,7 @@
 .wfsc-intro__headline p {
   margin: 0;
   color: var(--intro-text-strong);
-  font-size: clamp(15px, 1.6vw, 19px);
+  font-size: clamp(19px, 2vw, 23px);
   line-height: 1.4;
 }
 
@@ -304,7 +305,7 @@
 
 .wfsc-intro__headline-number strong {
   color: var(--intro-net);
-  font-size: clamp(56px, 9vw, 104px);
+  font-size: clamp(64px, 10vw, 120px);
   font-weight: 850;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -312,7 +313,7 @@
 
 .wfsc-intro__headline-note {
   color: var(--intro-text-muted) !important;
-  font-size: 13px !important;
+  font-size: 17px !important;
 }
 
 .wfsc-intro__bar {
@@ -383,7 +384,7 @@
 .wfsc-intro__legend-label {
   margin: 0;
   color: var(--intro-text-strong);
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
 }
 
@@ -396,21 +397,21 @@
 
 .wfsc-intro__legend-value strong {
   color: var(--item-color);
-  font-size: clamp(21px, 2.2vw, 28px);
+  font-size: clamp(25px, 2.6vw, 34px);
   font-weight: 850;
   line-height: 1;
 }
 
 .wfsc-intro__legend-value span {
   color: var(--intro-text-muted);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .wfsc-intro__legend-detail {
   margin: 0;
   color: var(--intro-text-muted);
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.45;
 }
 
@@ -427,12 +428,12 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  min-height: 52px;
+  min-height: 56px;
   padding: 0 28px;
   border: 1px solid var(--intro-cta-border);
   border-radius: 13px;
   color: var(--intro-cta-text);
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 800;
   background: var(--intro-cta-bg);
   box-shadow: var(--intro-cta-shadow);
@@ -448,8 +449,25 @@
   max-width: 620px;
   margin: 0;
   color: var(--intro-text-muted);
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.5;
+}
+
+/* Slider de sueldo: dos escalones tipográficos más solo dentro del resumen intro. */
+.wfsc-summary--intro .salary-slider__value-input {
+  font-size: clamp(23px, 2.8vw, 28px);
+}
+
+.wfsc-summary--intro .salary-slider__value-shell > span {
+  font-size: clamp(20px, 2.4vw, 25px);
+}
+
+.wfsc-summary--intro .salary-slider__top span {
+  font-size: 16px;
+}
+
+.wfsc-summary--intro .salary-slider__scale {
+  font-size: 15px;
 }
 
 @media (max-width: 640px) {
