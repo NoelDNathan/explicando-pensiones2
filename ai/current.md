@@ -1,8 +1,10 @@
 # Estado actual
 
-Fecha: 2026-08-02
+Fecha: 2026-08-03
 
 ## Situacion
+
+- Los campos de complementos salariales y salario en especie del paso 1 (`WorkerSalaryBaseCard`) pasan a dos inputs sincronizados: euros anuales y porcentaje del salario fijo anual. El valor canónico sigue siendo euros para el dashboard. Verificación: `pnpm run build` correcto; revisión en `/componentes` escritorio y móvil sin overflow horizontal, con sincronización euro/% comprobada.
 
 - Reubicado el selector de 12/14 pagas en el paso 1 (`WorkerSalaryBaseCard`) de `/calculadora-fiscal`: queda al lado del salario y justo debajo del selector Anual/Mensual, en una columna lateral compartida. En móvil ambos selectores pasan a una fila bajo el slider. Verificación: `pnpm run build` correcto; revisión visual escritorio y móvil 390 px sin overflow horizontal.
 

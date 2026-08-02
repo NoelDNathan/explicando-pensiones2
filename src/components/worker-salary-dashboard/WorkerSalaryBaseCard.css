@@ -192,6 +192,11 @@
   grid-template-columns: 1fr;
 }
 
+.wsbc-control-row--amount {
+  grid-template-columns: minmax(0, 1fr) minmax(108px, 132px);
+  align-items: stretch;
+}
+
 .wsbc-input-shell,
 .wsbc-select-shell {
   position: relative;
@@ -242,6 +247,11 @@
 
 .wsbc-input-shell:has(.wsbc-period-tag) input {
   padding-right: 98px;
+}
+
+.wsbc-input-shell--percent input {
+  padding-right: 42px;
+  text-align: right;
 }
 
 .wsbc select {
@@ -335,6 +345,10 @@
     grid-template-columns: 1fr;
   }
 
+  .wsbc-control-row--amount {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 120px);
+  }
+
   .wsbc-salary-side {
     width: 100%;
     grid-template-columns: 1fr 1fr;
@@ -360,6 +374,10 @@
 
   .wsbc-control-row {
     grid-template-columns: 1fr;
+  }
+
+  .wsbc-control-row--amount {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 120px);
   }
 
   .wsbc-salary-side {

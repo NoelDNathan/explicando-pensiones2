@@ -1,14 +1,14 @@
-import { ChevronDown, Euro } from 'lucide-react'
+import { ChevronDown, Euro, Percent } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { InfoButton } from '../ui/InfoButton'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerSalaryBaseCard.css'
 
 const SALARY_COMPLEMENTS_HELP =
-  'Pagos que sumas al salario fijo durante el año: plus de convenio, nocturnidad, productividad, comisiones u otros conceptos en dinero. Introduce el importe total anual, no el mensual.'
+  'Pagos que sumas al salario fijo durante el año: plus de convenio, nocturnidad, productividad, comisiones u otros conceptos en dinero. Puedes indicar el importe anual en euros o como porcentaje de tu salario fijo; ambos campos se mantienen sincronizados.'
 
 const IN_KIND_SALARY_HELP =
-  'Beneficios que recibes de la empresa en lugar de dinero en la nomina: seguro medico, coche, vales comida o transporte, guarderia, etc. Si los tienes, indica su valor anual estimado para calcular tu base real completa.'
+  'Beneficios que recibes de la empresa en lugar de dinero en la nomina: seguro medico, coche, vales comida o transporte, guarderia, etc. Indica su valor anual estimado en euros o como porcentaje de tu salario fijo para calcular tu base real completa.'
 
 type PayPeriod = 'annual' | 'monthly'
 type PayCount = '12' | '14'
@@ -33,14 +33,33 @@ const euroFormatter = new Intl.NumberFormat('es-ES', {
   maximumFractionDigits: 0,
 })
 
+const percentFormatter = new Intl.NumberFormat('es-ES', {
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 0,
+})
+
 function formatNumber(value: number) {
   return euroFormatter.format(Number.isFinite(value) ? value : 0)
+}
+
+function formatPercent(value: number) {
+  return percentFormatter.format(Number.isFinite(value) ? value : 0)
 }
 
 function parseNumber(value: string) {
   const normalized = value.replace(/\./g, '').replace(',', '.')
   const parsed = Number(normalized)
   return Number.isFinite(parsed) ? parsed : 0
+}
+
+function eurosFromPercent(percent: number, annualSalary: number) {
+  if (annualSalary <= 0) return 0
+  return Math.max(0, Math.round((annualSalary * percent) / 100))
+}
+
+function percentFromEuros(euros: number, annualSalary: number) {
+  if (annualSalary <= 0) return 0
+  return Math.max(0, (euros / annualSalary) * 100)
 }
 
 const salaryRanges: Record<PayPeriod, { min: number; max: number; step: number; markers: number[] }> = {
@@ -77,10 +96,18 @@ export function WorkerSalaryBaseCard({
   const [inKindSalary, setInKindSalary] = useState(initialInKindSalary)
   const salaryRange = salaryRanges[payPeriod]
 
-  const realBase = useMemo(() => {
-    const annualSalary = payPeriod === 'annual' ? salary : salary * Number(payCount)
-    return annualSalary + salaryComplements + inKindSalary
-  }, [inKindSalary, payCount, payPeriod, salary, salaryComplements])
+  const annualSalary = useMemo(
+    () => (payPeriod === 'annual' ? salary : salary * Number(payCount)),
+    [payCount, payPeriod, salary],
+  )
+
+  const complementsPercent = percentFromEuros(salaryComplements, annualSalary)
+  const inKindPercent = percentFromEuros(inKindSalary, annualSalary)
+
+  const realBase = useMemo(
+    () => annualSalary + salaryComplements + inKindSalary,
+    [annualSalary, inKindSalary, salaryComplements],
+  )
 
   useEffect(() => {
     onValuesChange?.({
@@ -168,17 +195,27 @@ export function WorkerSalaryBaseCard({
             <p>{SALARY_COMPLEMENTS_HELP}</p>
           </InfoButton>
         </div>
-        <div className="wsbc-control-row wsbc-control-row--single">
+        <div className="wsbc-control-row wsbc-control-row--amount">
           <div className="wsbc-input-shell">
             <input
               id="wsbc-complements"
               inputMode="decimal"
               value={formatNumber(salaryComplements)}
-              onChange={(event) => setSalaryComplements(parseNumber(event.target.value))}
+              onChange={(event) => setSalaryComplements(Math.max(0, parseNumber(event.target.value)))}
               aria-label="Complementos salariales anuales en euros"
             />
             <span className="wsbc-period-tag">al año</span>
             <Euro size={18} strokeWidth={2.4} aria-hidden="true" />
+          </div>
+          <div className="wsbc-input-shell wsbc-input-shell--percent">
+            <input
+              id="wsbc-complements-percent"
+              inputMode="decimal"
+              value={formatPercent(complementsPercent)}
+              onChange={(event) => setSalaryComplements(eurosFromPercent(parseNumber(event.target.value), annualSalary))}
+              aria-label="Complementos salariales como porcentaje del salario"
+            />
+            <Percent size={18} strokeWidth={2.4} aria-hidden="true" />
           </div>
         </div>
 
@@ -193,17 +230,27 @@ export function WorkerSalaryBaseCard({
             <p>{IN_KIND_SALARY_HELP}</p>
           </InfoButton>
         </div>
-        <div className="wsbc-control-row wsbc-control-row--single">
+        <div className="wsbc-control-row wsbc-control-row--amount">
           <div className="wsbc-input-shell">
             <input
               id="wsbc-kind"
               inputMode="decimal"
               value={formatNumber(inKindSalary)}
-              onChange={(event) => setInKindSalary(parseNumber(event.target.value))}
+              onChange={(event) => setInKindSalary(Math.max(0, parseNumber(event.target.value)))}
               aria-label="Salario en especie anual en euros"
             />
             <span className="wsbc-period-tag">al año</span>
             <Euro size={18} strokeWidth={2.4} aria-hidden="true" />
+          </div>
+          <div className="wsbc-input-shell wsbc-input-shell--percent">
+            <input
+              id="wsbc-kind-percent"
+              inputMode="decimal"
+              value={formatPercent(inKindPercent)}
+              onChange={(event) => setInKindSalary(eurosFromPercent(parseNumber(event.target.value), annualSalary))}
+              aria-label="Salario en especie como porcentaje del salario"
+            />
+            <Percent size={18} strokeWidth={2.4} aria-hidden="true" />
           </div>
         </div>
       </div>
