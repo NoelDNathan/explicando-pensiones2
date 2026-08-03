@@ -332,6 +332,16 @@
   box-shadow: var(--fiscal-shadow);
 }
 
+.fwd--soft .wfsc-chrome {
+  border-top-color: var(--fiscal-line);
+  background: color-mix(in srgb, var(--fiscal-surface) 94%, #ffffff);
+  box-shadow: 0 -10px 28px rgba(35, 54, 78, 0.12);
+}
+
+.fwd--soft:has(.wfsc-chrome) .wprc--reductions {
+  padding-bottom: calc(var(--wfsc-chrome-height) + 220px);
+}
+
 .fwd--soft .wfsc-help {
   border-color: var(--fiscal-line);
   background: rgba(255, 255, 255, 0.72);
@@ -362,7 +372,27 @@
   display: none;
 }
 
-.fwd--soft .wfsc-nav button,
+.fwd--soft .wfsc-nav {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-nav span {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-nav--previous svg {
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface-soft);
+  box-shadow: inset 0 0 0 1px var(--fiscal-line);
+}
+
+.fwd--soft .wfsc-nav--previous:hover:not(:disabled) svg,
+.fwd--soft .wfsc-nav--previous:focus-visible:not(:disabled) svg {
+  color: var(--fiscal-ink);
+  background: var(--fiscal-primary-soft);
+  box-shadow: inset 0 0 0 1px var(--fiscal-primary);
+}
+
 .fwd--soft .wfsc-step-dots button {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
@@ -370,14 +400,12 @@
   box-shadow: none;
 }
 
-.fwd--soft .wfsc-nav button:not(:disabled):hover,
 .fwd--soft .wfsc-step-dots button:hover {
   border-color: var(--fiscal-primary);
   background: var(--fiscal-primary-soft);
 }
 
-.fwd--soft .wfsc-step-dots button.is-active,
-.fwd--soft .wfsc-nav__next {
+.fwd--soft .wfsc-step-dots button.is-active {
   color: #ffffff;
   border-color: var(--fiscal-primary);
   background: var(--fiscal-primary);
@@ -1016,6 +1044,10 @@
 @media (max-width: 640px) {
   .fwd--soft .wprc--reductions {
     padding-bottom: 350px;
+  }
+
+  .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
+    padding-bottom: calc(var(--wfsc-chrome-height) + 360px);
   }
 }
 
@@ -1854,26 +1886,19 @@
     padding: 14px;
   }
 
-  .fwd--soft .wfsc-stage,
-  .fwd--soft .wfsc-stage--compact,
-  .fwd--soft .wfsc-stage--summary {
-    padding-bottom: 142px;
+  .fwd--soft:has(.wfsc-chrome) {
+    --wfsc-chrome-height: 96px;
+  }
+
+  .fwd--soft .wfsc-chrome {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "prev next next"
+      "progress progress progress";
   }
 
   .fwd--soft .wfsc-step-dots {
     display: none;
-  }
-
-  .fwd--soft .wfsc-nav,
-  .fwd--soft .wfsc-stage--compact .wfsc-nav {
-    bottom: 58px;
-  }
-
-  .fwd--soft .wfsc-progress,
-  .fwd--soft .wfsc-stage--compact .wfsc-progress {
-    left: 12px;
-    right: 12px;
-    bottom: 10px;
   }
 
   .fwd--soft .wprc-hero-panel {

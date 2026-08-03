@@ -269,6 +269,24 @@
   padding: 16px 22px 20px;
 }
 
+.fwd:has(.wfsc-chrome) {
+  --wfsc-chrome-height: 112px;
+}
+
+.fwd:has(.wfsc-chrome) .fwd-main {
+  padding-bottom: calc(var(--wfsc-chrome-height) + 28px);
+}
+
+.fwd:has(.wfsc-chrome) .wprc-explained--sticky {
+  bottom: calc(var(--wfsc-chrome-height) + 12px);
+}
+
+@media (max-width: 860px) {
+  .fwd:has(.wfsc-chrome) {
+    --wfsc-chrome-height: 124px;
+  }
+}
+
 .fwd-header {
   display: flex;
   align-items: flex-start;

@@ -715,19 +715,8 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
       aria-labelledby={isCompactStep ? undefined : 'wfsc-title'}
       aria-label={isCompactStep ? 'Navegacion del recorrido fiscal' : undefined}
     >
-      <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isCompactStep ? ' wfsc-stage--compact' : ''}${isSummaryStep ? ' wfsc-stage--summary' : ''}`}>
-        <button
-          className="wfsc-nav wfsc-nav--previous"
-          type="button"
-          onClick={goToPrevious}
-          disabled={activeStep.id === 0}
-          aria-label="Ir al paso anterior"
-        >
-          <ChevronLeft size={26} aria-hidden="true" />
-          <span>Anterior</span>
-        </button>
-
-        {!isCompactStep ? (
+      {!isCompactStep ? (
+        <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isSummaryStep ? ' wfsc-stage--summary' : ''}`}>
           <div className={`wfsc-hero${showPayrollHelp ? '' : ' wfsc-hero--single'}`}>
             <div className="wfsc-hero-main">
               <span className="wfsc-step-orb" aria-hidden="true">
@@ -751,7 +740,35 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
               </aside>
             ) : null}
           </div>
-        ) : null}
+        </div>
+      ) : null}
+
+      <div className="wfsc-chrome" role="navigation" aria-label="Navegacion del recorrido fiscal">
+        <button
+          className="wfsc-nav wfsc-nav--previous"
+          type="button"
+          onClick={goToPrevious}
+          disabled={activeStep.id === 0}
+          aria-label="Ir al paso anterior"
+        >
+          <ChevronLeft size={26} aria-hidden="true" />
+          <span>Anterior</span>
+        </button>
+
+        <nav className="wfsc-step-dots" aria-label="Cambiar paso">
+          {WORKER_FISCAL_STEPS.map((step) => (
+            <button
+              key={step.id}
+              type="button"
+              className={step.id === activeStep.id ? 'is-active' : undefined}
+              onClick={() => setActiveStep(step.id)}
+              aria-current={step.id === activeStep.id ? 'step' : undefined}
+              aria-label={step.id === 0 ? 'Ir al resumen rápido' : `Ir al paso ${step.id}: ${step.title}`}
+            >
+              <span>{step.id === 0 ? 'R' : step.id}</span>
+            </button>
+          ))}
+        </nav>
 
         <button
           className="wfsc-nav wfsc-nav--next"
@@ -768,21 +785,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           <span style={{ width: `${progress}%` }} />
           <b>{Math.round(progress)}% completado</b>
         </div>
-
-        <nav className="wfsc-step-dots" aria-label="Cambiar paso">
-          {WORKER_FISCAL_STEPS.map((step) => (
-            <button
-              key={step.id}
-              type="button"
-              className={step.id === activeStep.id ? 'is-active' : undefined}
-              onClick={() => setActiveStep(step.id)}
-              aria-current={step.id === activeStep.id ? 'step' : undefined}
-              aria-label={step.id === 0 ? 'Ir al resumen rápido' : `Ir al paso ${step.id}: ${step.title}`}
-            >
-              <span>{step.id === 0 ? 'R' : step.id}</span>
-            </button>
-          ))}
-        </nav>
       </div>
     </section>
   )
