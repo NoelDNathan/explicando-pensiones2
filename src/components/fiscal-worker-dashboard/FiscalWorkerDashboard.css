@@ -270,7 +270,7 @@
 }
 
 .fwd:has(.wfsc-chrome) {
-  --wfsc-chrome-height: 112px;
+  --wfsc-chrome-height: 104px;
 }
 
 .fwd:has(.wfsc-chrome) .fwd-main {
@@ -283,7 +283,7 @@
 
 @media (max-width: 860px) {
   .fwd:has(.wfsc-chrome) {
-    --wfsc-chrome-height: 124px;
+    --wfsc-chrome-height: 136px;
   }
 }
 

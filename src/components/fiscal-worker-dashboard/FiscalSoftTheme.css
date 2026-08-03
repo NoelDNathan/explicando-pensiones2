@@ -353,11 +353,32 @@
   color: var(--fiscal-copy);
 }
 
-.fwd--soft .wfsc-progress b {
-  left: 50%;
-  color: #ffffff;
+.fwd--soft .wfsc-chrome__status {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-progress {
+  background: color-mix(in srgb, var(--fiscal-line) 80%, #ffffff);
+}
+
+.fwd--soft .wfsc-progress span {
   background: var(--fiscal-primary);
   box-shadow: none;
+}
+
+.fwd--soft .wfsc-nav--next {
+  color: #ffffff;
+  background: var(--fiscal-primary);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--fiscal-primary) 28%, transparent);
+}
+
+.fwd--soft .wfsc-nav__next-text em {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.fwd--soft .wfsc-nav--next:hover:not(:disabled),
+.fwd--soft .wfsc-nav--next:focus-visible:not(:disabled) {
+  filter: brightness(1.04);
 }
 
 .fwd--soft .wfsc-nav--next:disabled {
@@ -372,11 +393,11 @@
   display: none;
 }
 
-.fwd--soft .wfsc-nav {
+.fwd--soft .wfsc-nav--previous {
   color: var(--fiscal-ink);
 }
 
-.fwd--soft .wfsc-nav span {
+.fwd--soft .wfsc-nav--previous > span {
   color: var(--fiscal-ink);
 }
 
@@ -402,6 +423,12 @@
 
 .fwd--soft .wfsc-step-dots button:hover {
   border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wfsc-step-dots button.is-done {
+  color: var(--fiscal-primary-strong);
+  border-color: color-mix(in srgb, var(--fiscal-primary) 40%, var(--fiscal-line));
   background: var(--fiscal-primary-soft);
 }
 
@@ -1887,14 +1914,15 @@
   }
 
   .fwd--soft:has(.wfsc-chrome) {
-    --wfsc-chrome-height: 96px;
+    --wfsc-chrome-height: 136px;
   }
 
   .fwd--soft .wfsc-chrome {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
-      "prev next next"
-      "progress progress progress";
+      "prev next"
+      "center center"
+      "progress progress";
   }
 
   .fwd--soft .wfsc-step-dots {

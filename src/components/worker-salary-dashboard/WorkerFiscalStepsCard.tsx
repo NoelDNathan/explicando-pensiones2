@@ -2,6 +2,7 @@ import {
   BarChart3,
   BookOpenCheck,
   Calculator,
+  Check,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
@@ -294,9 +295,9 @@ La calculadora lo convierte en una referencia mensual dividiendo el total anual 
     id: 2,
     title: 'Limites de cotizacion',
     subtitle: 'Del bruto a la base de cotizacion',
-    description: `La Seguridad Social aplica una base mínima y máxima según tu grupo de cotización. Si tu base queda dentro del rango, se usa tal cual; si queda fuera, se ajusta al límite correspondiente.
-
-Esta base determina las cuotas del trabajador y de la empresa y puede influir en prestaciones futuras.`,
+    description: ` Para calcular cuánto pagas a la Seguridad Social, se toma como referencia tu salario. Sin embargo, cada grupo de cotización establece una base mínima y una máxima.
+                   
+    Si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pension más alta que si cotizaras por tu salario). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.`,
     checklist: [],
     helpTitle: 'Que es el grupo de cotizacion?',
     helpBody: 'Es una categoria laboral de la Seguridad Social. Agrupa puestos parecidos y fija limites de cotizacion. No siempre coincide con tu puesto comercial o tu convenio.',
@@ -680,10 +681,14 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const descriptionParagraphs = activeDescription.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
   const detailStepCount = WORKER_FISCAL_STEPS.length - 1
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
+  const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
   const ActiveIcon = activeStep.Icon
   const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 9 && activeStep.id !== 10
   const isSummaryStep = activeStep.id === 0
   const isCompactStep = activeStep.id === 9 || activeStep.id === 10
+  const statusLabel = activeStep.id === 0
+    ? 'Resumen rápido'
+    : `Paso ${activeStep.id} de ${detailStepCount} · ${activeStep.title}`
 
   const setActiveStep = (nextStepId: number) => {
     const clampedStepId = Math.min(detailStepCount, Math.max(0, nextStepId))
@@ -751,39 +756,56 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           disabled={activeStep.id === 0}
           aria-label="Ir al paso anterior"
         >
-          <ChevronLeft size={26} aria-hidden="true" />
+          <ChevronLeft size={22} aria-hidden="true" />
           <span>Anterior</span>
         </button>
 
-        <nav className="wfsc-step-dots" aria-label="Cambiar paso">
-          {WORKER_FISCAL_STEPS.map((step) => (
-            <button
-              key={step.id}
-              type="button"
-              className={step.id === activeStep.id ? 'is-active' : undefined}
-              onClick={() => setActiveStep(step.id)}
-              aria-current={step.id === activeStep.id ? 'step' : undefined}
-              aria-label={step.id === 0 ? 'Ir al resumen rápido' : `Ir al paso ${step.id}: ${step.title}`}
-            >
-              <span>{step.id === 0 ? 'R' : step.id}</span>
-            </button>
-          ))}
-        </nav>
+        <div className="wfsc-chrome__center">
+          <p className="wfsc-chrome__status">{statusLabel}</p>
+          <nav className="wfsc-step-dots" aria-label="Cambiar paso">
+            {WORKER_FISCAL_STEPS.map((step) => {
+              const isActive = step.id === activeStep.id
+              const isDone = step.id < activeStep.id
+              return (
+                <button
+                  key={step.id}
+                  type="button"
+                  className={isActive ? 'is-active' : isDone ? 'is-done' : undefined}
+                  onClick={() => setActiveStep(step.id)}
+                  aria-current={isActive ? 'step' : undefined}
+                  aria-label={step.id === 0 ? 'Ir al resumen rápido' : `Ir al paso ${step.id}: ${step.title}`}
+                  title={step.title}
+                >
+                  {isDone ? <Check size={14} strokeWidth={2.6} aria-hidden="true" /> : <span>{step.id === 0 ? 'R' : step.id}</span>}
+                </button>
+              )
+            })}
+          </nav>
+        </div>
 
         <button
           className="wfsc-nav wfsc-nav--next"
           type="button"
           onClick={goToNext}
-          disabled={activeStep.id === detailStepCount}
-          aria-label="Ir al paso siguiente"
+          disabled={!nextStep}
+          aria-label={nextStep ? `Ir al siguiente paso: ${nextStep.title}` : 'No hay más pasos'}
         >
-          <ChevronRight size={26} aria-hidden="true" />
-          <span>Siguiente</span>
+          <span className="wfsc-nav__next-text">
+            <strong>{activeStep.id === 0 ? 'Empezar' : 'Continuar'}</strong>
+            {nextStep ? <em>{nextStep.title}</em> : null}
+          </span>
+          <ChevronRight size={22} aria-hidden="true" />
         </button>
 
-        <div className="wfsc-progress" aria-label={`${Math.round(progress)}% completado`}>
+        <div
+          className="wfsc-progress"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(progress)}
+          aria-label={statusLabel}
+        >
           <span style={{ width: `${progress}%` }} />
-          <b>{Math.round(progress)}% completado</b>
         </div>
       </div>
     </section>

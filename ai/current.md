@@ -4,6 +4,8 @@ Fecha: 2026-08-03
 
 ## Situacion
 
+- Rediseñada la barra inferior del recorrido fiscal: texto único “Paso X de 10 · título”, botón primario “Continuar” con el nombre del siguiente paso, puntos con estados hecho/activo y barra de progreso fina sin badge de porcentaje. Sigue fija abajo. Verificación: `pnpm run build` correcto; paso 1 en escritorio y móvil 390 px sin overflow horizontal.
+
 - La navegación del recorrido fiscal (`WorkerFiscalStepsCard`: Anterior/Siguiente, puntos y progreso) queda fija al borde inferior de la pantalla en una barra `.wfsc-chrome`. El contenido reserva padding inferior y, en el paso de reducciones, la bandeja sticky se sitúa por encima. Verificación: `pnpm run build` correcto; comprobado en paso 1 escritorio y móvil 390 px, sin overflow horizontal.
 
 - Los campos de complementos salariales y salario en especie del paso 1 (`WorkerSalaryBaseCard`) pasan a dos inputs sincronizados: euros anuales y porcentaje del salario fijo anual. El valor canónico sigue siendo euros para el dashboard. Verificación: `pnpm run build` correcto; revisión en `/componentes` escritorio y móvil sin overflow horizontal, con sincronización euro/% comprobada.
