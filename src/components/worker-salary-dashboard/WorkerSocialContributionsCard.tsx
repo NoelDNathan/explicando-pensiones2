@@ -752,16 +752,26 @@ export function WorkerSocialContributionsCard({
               <div className="wscc-atep-note">
                 <span>AT/EP 2025: {formatPercent(selectedAtEpRate)}</span>
                 <p>
-                  AT/EP es la cotizacion que cubre accidentes de trabajo y enfermedades causadas por la actividad
-                  laboral. La paga la empresa y se calcula sobre la base de contingencias profesionales.
+                  AT/EP es como un seguro que paga la empresa para proteger al trabajador frente a accidentes o
+                  enfermedades causadas por el trabajo.
                 </p>
                 <p>
-                  El porcentaje sale de sumar dos partes:
-                  <strong> IT {formatPercent(selectedAtEpCategory.it_percent / 100)}</strong> por incapacidad temporal
-                  {' + '}
-                  <strong>IMS {formatPercent(selectedAtEpCategory.ims_percent / 100)}</strong> por incapacidad
-                  permanente, muerte y supervivencia. IT financia bajas temporales por accidente laboral o enfermedad
-                  profesional; IMS cubre situaciones mas graves o definitivas.
+                  El porcentaje no es igual para todos los trabajadores. Depende principalmente de la actividad
+                  profesional y del nivel de riesgo. Por eso, una persona que trabaja en una oficina puede tener un
+                  porcentaje diferente a alguien que trabaja en construcción.
+                </p>
+                <p>En este caso, el {formatPercent(selectedAtEpRate)} se divide en:</p>
+                <p>
+                  <strong>IT ({formatPercent(selectedAtEpCategory.it_percent / 100)}):</strong> cubre las bajas
+                  temporales por accidentes de trabajo o enfermedades profesionales.
+                </p>
+                <p>
+                  <strong>IMS ({formatPercent(selectedAtEpCategory.ims_percent / 100)}):</strong> cubre situaciones más
+                  graves, como incapacidad permanente, fallecimiento o supervivencia.
+                </p>
+                <p>
+                  Este porcentaje lo paga la empresa, no se descuenta del salario del trabajador. Se calcula sobre la
+                  base de contingencias profesionales.
                 </p>
                 {selectedAtEpCategory.note && <em>{selectedAtEpCategory.note}</em>}
               </div>

@@ -1,6 +1,6 @@
 import { ArrowDown, ChevronDown } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import type { CSSProperties } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerContributionLimitsCard.css'
 
@@ -194,6 +194,216 @@ function getDisplayValue(result: ContributionLimitResult, mode: ContributionView
   return `${formatEuro(value)} ${suffix}`
 }
 
+function getGroupBaseValue(group: ContributionGroup, mode: ContributionViewMode, key: 'min' | 'max') {
+  if (key === 'min') {
+    return mode === 'monthly' ? group.minBaseMonthly : group.minBaseMonthly * 12
+  }
+  return mode === 'monthly' ? group.maxBaseMonthly : group.maxBaseMonthly * 12
+}
+
+function GroupBasePills({
+  group,
+  viewMode,
+  compact = false,
+}: {
+  group: ContributionGroup
+  viewMode: ContributionViewMode
+  compact?: boolean
+}) {
+  const period = viewMode === 'monthly' ? '/ mes' : '/ año'
+
+  return (
+    <span className={`wclc-group-select__bases${compact ? ' wclc-group-select__bases--compact' : ''}`}>
+      <span className="wclc-group-select__base wclc-group-select__base--min">
+        <span>Mín.</span>
+        <strong>{formatEuro(getGroupBaseValue(group, viewMode, 'min'))}</strong>
+        {!compact ? <em>{period}</em> : null}
+      </span>
+      <span className="wclc-group-select__base wclc-group-select__base--max">
+        <span>Máx.</span>
+        <strong>{formatEuro(getGroupBaseValue(group, viewMode, 'max'))}</strong>
+        {!compact ? <em>{period}</em> : null}
+      </span>
+    </span>
+  )
+}
+
+function ContributionGroupSelect({
+  groups,
+  selectedGroupId,
+  viewMode,
+  onChange,
+}: {
+  groups: ContributionGroup[]
+  selectedGroupId: number | undefined
+  viewMode: ContributionViewMode
+  onChange: (groupId: number) => void
+}) {
+  const listboxId = useId()
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const selectedGroup = useMemo(
+    () => groups.find((group) => group.id === selectedGroupId) ?? groups[0],
+    [groups, selectedGroupId],
+  )
+
+  useEffect(() => {
+    if (!isOpen) return undefined
+
+    const selectedIndex = Math.max(0, groups.findIndex((group) => group.id === selectedGroup?.id))
+    setActiveIndex(selectedIndex)
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false)
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [groups, isOpen, selectedGroup?.id])
+
+  const selectGroup = (groupId: number) => {
+    onChange(groupId)
+    setIsOpen(false)
+  }
+
+  const moveActive = (delta: number) => {
+    setActiveIndex((current) => clamp(current + delta, 0, Math.max(groups.length - 1, 0)))
+  }
+
+  const handleTriggerKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      setIsOpen(true)
+    }
+  }
+
+  const handleListKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      moveActive(1)
+      return
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      moveActive(-1)
+      return
+    }
+
+    if (event.key === 'Home') {
+      event.preventDefault()
+      setActiveIndex(0)
+      return
+    }
+
+    if (event.key === 'End') {
+      event.preventDefault()
+      setActiveIndex(Math.max(groups.length - 1, 0))
+      return
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      const activeGroup = groups[activeIndex]
+      if (!activeGroup) return
+      event.preventDefault()
+      selectGroup(activeGroup.id)
+    }
+  }
+
+  return (
+    <div
+      className={`wclc-group-select${isOpen ? ' wclc-group-select--open' : ''}`}
+      ref={rootRef}
+    >
+      <span className="wclc-group-select__label" id={`${listboxId}-label`}>
+        Grupo de cotización
+      </span>
+
+      <button
+        type="button"
+        className="wclc-group-select__trigger"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls={listboxId}
+        aria-labelledby={`${listboxId}-label`}
+        aria-label={
+          selectedGroup
+            ? `Grupo ${selectedGroup.id}: ${selectedGroup.name}. Mínimo ${formatEuro(getGroupBaseValue(selectedGroup, viewMode, 'min'))}, máximo ${formatEuro(getGroupBaseValue(selectedGroup, viewMode, 'max'))}`
+            : 'Selecciona tu grupo de cotización'
+        }
+        onClick={() => setIsOpen((current) => !current)}
+        onKeyDown={handleTriggerKeyDown}
+      >
+        {selectedGroup ? (
+          <span className="wclc-group-select__preview wclc-group-select__preview--trigger">
+            <span className="wclc-group-select__identity">
+              <span className="wclc-group-select__badge">G{selectedGroup.id}</span>
+              <span className="wclc-group-select__name">{selectedGroup.name}</span>
+            </span>
+            <GroupBasePills group={selectedGroup} viewMode={viewMode} compact />
+          </span>
+        ) : (
+          <span>Selecciona tu grupo</span>
+        )}
+        <ChevronDown size={19} strokeWidth={2.4} aria-hidden="true" className="wclc-group-select__chevron" />
+      </button>
+
+      {isOpen ? (
+        <div
+          id={listboxId}
+          role="listbox"
+          tabIndex={-1}
+          aria-labelledby={`${listboxId}-label`}
+          className="wclc-group-select__panel"
+          onKeyDown={handleListKeyDown}
+        >
+          {groups.map((group, index) => {
+            const isSelected = group.id === selectedGroup?.id
+            const isActive = index === activeIndex
+
+            return (
+              <button
+                key={group.id}
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                className={[
+                  'wclc-group-select__option',
+                  isSelected ? 'wclc-group-select__option--selected' : '',
+                  isActive ? 'wclc-group-select__option--active' : '',
+                ].filter(Boolean).join(' ')}
+                onMouseEnter={() => setActiveIndex(index)}
+                onClick={() => selectGroup(group.id)}
+              >
+                <span className="wclc-group-select__preview">
+                  <span className="wclc-group-select__identity">
+                    <span className="wclc-group-select__badge">Grupo {group.id}</span>
+                    <span className="wclc-group-select__name">{group.name}</span>
+                  </span>
+                  <GroupBasePills group={group} viewMode={viewMode} />
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export function WorkerContributionLimitsCard({
   calculationYear: _calculationYear = 2026,
   groups = DEMO_CONTRIBUTION_GROUPS,
@@ -308,27 +518,16 @@ export function WorkerContributionLimitsCard({
       )}
 
       <div className="wclc-controls">
-        <label className="wclc-field">
-          <span>Grupo de cotizacion</span>
-          <span className="wclc-select-shell">
-            <select
-              value={selectedGroupId ?? ''}
-              onChange={(event) => {
-                const nextGroupId = Number(event.target.value)
-                setSelectedGroupId(nextGroupId)
-                onGroupChange?.(nextGroupId)
-                setSimulationMode('case')
-              }}
-            >
-              {groups.map((group) => (
-                <option key={group.id} value={group.id}>
-                  Grupo {group.id} - {group.name}
-                </option>
-              ))}
-            </select>
-            <ChevronDown size={19} strokeWidth={2.4} aria-hidden="true" />
-          </span>
-        </label>
+        <ContributionGroupSelect
+          groups={groups}
+          selectedGroupId={selectedGroupId}
+          viewMode={viewMode}
+          onChange={(nextGroupId) => {
+            setSelectedGroupId(nextGroupId)
+            onGroupChange?.(nextGroupId)
+            setSimulationMode('case')
+          }}
+        />
 
         <div className="wclc-mode" role="group" aria-label="Unidad de visualizacion">
           <button

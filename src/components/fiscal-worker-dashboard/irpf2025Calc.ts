@@ -5,6 +5,7 @@ import {
   calculateIntegralQuotas2025,
   calculateRefundableDeductions2025,
   createEmptyIrpf2025Adjustments,
+  protectedAssetsMeetsRequirements,
 } from './irpf2025Adjustments.ts'
 import type {
   BaseReductionResult,
@@ -158,17 +159,17 @@ function buildWarnings(adjustments: Irpf2025AdjustmentInput) {
   if (adjustments.professionalDues > 0 && !adjustments.professionalMembershipMandatory) {
     warnings.push('Las cuotas colegiales no se aplican porque no se ha confirmado que la colegiacion sea obligatoria.')
   }
-  if (
-    adjustments.employerPensionContribution + adjustments.workerEmploymentPensionContribution > 0
-    && adjustments.grossIncomeFromPensionEmployer <= 0
-  ) {
-    warnings.push('El incremento de prevision social de empleo queda no estimado hasta indicar el rendimiento del empleador.')
-  }
   if (adjustments.compensatoryPensionPaid > 0 && !adjustments.compensatoryPensionFormalized) {
     warnings.push('La pension compensatoria no se aplica sin resolucion o convenio formalizado.')
   }
-  if (adjustments.protectedAssetsContribution > 0 && !adjustments.protectedAssetsEligible) {
-    warnings.push('La aportacion al patrimonio protegido no se aplica sin confirmar beneficiario y requisitos legales.')
+  if (adjustments.protectedAssetsContribution > 0 && !protectedAssetsMeetsRequirements(adjustments)) {
+    if (!adjustments.protectedAssetsFormalEstate) {
+      warnings.push('La aportacion al patrimonio protegido no se aplica sin un patrimonio protegido constituido formalmente.')
+    } else if (!adjustments.protectedAssetsValidContributor) {
+      warnings.push('La aportacion al patrimonio protegido no se aplica sin parentesco o legitimacion validos para aportar.')
+    } else if (!adjustments.protectedAssetsContributorNotBeneficiary) {
+      warnings.push('La aportacion al patrimonio protegido no se aplica si eres tu el titular del patrimonio.')
+    }
   }
   if (adjustments.verifiedRegionalReduction > 0 && !(
     adjustments.regionalReductionVerified
@@ -248,6 +249,7 @@ export function calculateIrpf2025Core(input: Irpf2025CoreInput): Irpf2025CoreRes
     netReducedWorkIncome,
     input.basicPensionContributions,
     input.verifiedBaseReductions,
+    grossWorkIncome,
   )
   const taxableBase = Math.max(0, netReducedWorkIncome - baseReductions.totalApplied)
   const integralQuotas = calculateIntegralQuotas2025(

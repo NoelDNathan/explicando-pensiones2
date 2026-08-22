@@ -156,7 +156,6 @@
   .wprc-top-grid,
   .wprc-panel,
   .wprc-minimum-panel,
-  .wprc-dependent-card,
   .wprc-benefits,
   .wprc-explained,
   .wprc-summary,
@@ -170,6 +169,9 @@
   .wctc-left,
   .wctc-summary,
   .wctc-home-strip,
+  .wctc-ownership-gate,
+  .wctc-ibi-block,
+  .wctc-purchase-block,
   .wctc-rows,
   .wcsc-source,
   .fwd-faq-item,
@@ -184,14 +186,16 @@
   .wsbc-input-shell,
   .wsbc-select-shell,
   .wclc-mode,
-  .wclc-select-shell,
+  .wclc-group-select__trigger,
+  .wclc-group-select__panel,
+  .wclc-group-select__option,
   .wscc-select-shell,
   .atep-select__trigger,
   .atep-select__panel,
   .atep-select__search,
   .wscc-segments,
   .wprc-top-field,
-  .wprc-dependent-number,
+  .wprc-person-amount input,
   .wprc-select,
   .irpf-rule-field,
   .irpf-rule-check,
@@ -201,6 +205,10 @@
   .wctc-input,
   .wctc-total-cell,
   .wctc-ibi-amount,
+  .wctc-purchase-row,
+  .wctc-purchase-add,
+  .wctc-purchase-remove,
+  .wctc-ownership-gate__choices button,
   .wctc-action,
   .wfsc-summary__mode,
   .wfsc-summary__metric,
@@ -333,13 +341,22 @@
 }
 
 .fwd--soft .wfsc-chrome {
-  border-top-color: var(--fiscal-line);
+  border-top-color: transparent;
   background: color-mix(in srgb, var(--fiscal-surface) 94%, #ffffff);
+  box-shadow: none;
+}
+
+.fwd--soft:has(.wprc-explained--sticky) .wfsc-chrome {
+  border-top-color: transparent;
+}
+
+.fwd--soft:not(:has(.wprc-explained--sticky)) .wfsc-chrome {
+  border-top-color: var(--fiscal-line);
   box-shadow: 0 -10px 28px rgba(35, 54, 78, 0.12);
 }
 
 .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
-  padding-bottom: calc(var(--wfsc-chrome-height) + 220px);
+  padding-bottom: calc(var(--wfsc-chrome-height) + 96px);
 }
 
 .fwd--soft .wfsc-help {
@@ -391,6 +408,29 @@
 
 .fwd--soft .wfsc-stage--step-7 .wfsc-help {
   display: none;
+}
+
+.fwd--soft .wfsc-help--concept {
+  border-color: var(--fiscal-line);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 20px rgba(35, 54, 78, 0.06);
+}
+
+.fwd--soft .wfsc-help--concept .wfsc-help__eyebrow {
+  color: var(--fiscal-primary);
+}
+
+.fwd--soft .wfsc-help--concept h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-help--concept > p:not(.wfsc-help__eyebrow):not(.wfsc-help__note) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-help--concept .wfsc-help__note {
+  border-top-color: color-mix(in srgb, var(--fiscal-primary) 28%, var(--fiscal-line));
+  color: var(--fiscal-ink);
 }
 
 .fwd--soft .wfsc-nav--previous {
@@ -482,7 +522,8 @@
 }
 
 .fwd--soft .wsbc-select-shell--period,
-.fwd--soft .wsbc-select-shell--pays {
+.fwd--soft .wsbc-select-shell--pays,
+.fwd--soft .wsbc-select-shell--amount {
   width: 100%;
 }
 
@@ -511,9 +552,14 @@
   box-shadow: none;
 }
 
-.fwd--soft .wclc-select-shell {
-  min-height: 50px;
+.fwd--soft .wclc-group-select__label {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wclc-group-select__trigger {
+  min-height: 54px;
   border-color: var(--fiscal-line-strong);
+  color: var(--fiscal-ink);
   background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   box-shadow:
     0 5px 14px rgba(35, 54, 78, 0.07),
@@ -521,8 +567,9 @@
   transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
 }
 
-.fwd--soft .wclc-select-shell:hover,
-.fwd--soft .wclc-select-shell:focus-within {
+.fwd--soft .wclc-group-select__trigger:hover,
+.fwd--soft .wclc-group-select__trigger:focus-visible,
+.fwd--soft .wclc-group-select--open .wclc-group-select__trigger {
   border-color: color-mix(in srgb, var(--fiscal-primary) 46%, var(--fiscal-line));
   background: #ffffff;
   box-shadow:
@@ -530,20 +577,66 @@
     0 7px 18px rgba(35, 54, 78, 0.09);
 }
 
-.fwd--soft .wclc-select-shell select {
-  min-height: 48px;
-  padding-inline: 18px 52px;
-  color: var(--fiscal-ink);
-  background: transparent;
-}
-
-.fwd--soft .wclc-select-shell svg {
+.fwd--soft .wclc-group-select__chevron {
   right: 13px;
   box-sizing: content-box;
   padding: 4px;
   border-radius: 999px;
   color: var(--fiscal-primary);
   background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wclc-group-select__panel {
+  border-color: var(--fiscal-line-strong);
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  box-shadow:
+    0 18px 36px rgba(35, 54, 78, 0.14),
+    0 0 0 1px rgba(35, 54, 78, 0.04);
+}
+
+.fwd--soft .wclc-group-select__option {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wclc-group-select__option:hover,
+.fwd--soft .wclc-group-select__option--active,
+.fwd--soft .wclc-group-select__option--selected {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 34%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--fiscal-primary-soft) 70%, #ffffff);
+}
+
+.fwd--soft .wclc-group-select__name {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wclc-group-select__badge {
+  color: var(--fiscal-blue);
+  border-color: #bdd4ef;
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .wclc-group-select__base--min {
+  color: #5d469c;
+  border-color: #d8cbed;
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .wclc-group-select__base--min strong {
+  color: var(--fiscal-violet);
+  text-shadow: none;
+}
+
+.fwd--soft .wclc-group-select__base--max {
+  color: #8b5418;
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wclc-group-select__base--max strong {
+  color: var(--fiscal-orange);
+  text-shadow: none;
 }
 
 .fwd--soft .wclc-mode {
@@ -817,8 +910,36 @@
   box-shadow: none;
 }
 
-.fwd--soft :is(.wscc-base-note, .wscc-mei-note, .wscc-atep-note, .wscc-total, .wscc-panel__mei-extra) {
+.fwd--soft :is(.wscc-base-note, .wscc-mei-note, .wscc-atep-note, .wscc-alert, .wscc-total, .wscc-panel__mei-extra) {
   border-radius: var(--fiscal-radius-control);
+}
+
+.fwd--soft .wscc-alert--maximum {
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wscc-alert--minimum {
+  border-color: #d5c9ee;
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .wscc-alert--maximum :is(strong, span, em) {
+  color: #8b5418;
+}
+
+.fwd--soft .wscc-alert--maximum span,
+.fwd--soft .wscc-alert--maximum em {
+  color: var(--fiscal-orange);
+}
+
+.fwd--soft .wscc-alert--minimum :is(strong, span, em) {
+  color: #5d469c;
+}
+
+.fwd--soft .wscc-alert--minimum span,
+.fwd--soft .wscc-alert--minimum em {
+  color: var(--fiscal-violet);
 }
 
 .fwd--soft .wscc-summary__item--total :is(span, strong, em) { color: var(--fiscal-red); }
@@ -898,8 +1019,6 @@
 .fwd--soft .wprc-flow article,
 .fwd--soft .wprc-minimum-panel,
 .fwd--soft .wprc-top-grid,
-.fwd--soft .wprc-dependent-card,
-.fwd--soft .wprc-dependent,
 .fwd--soft .wprc-benefits,
 .fwd--soft .wprc-explained,
 .fwd--soft .wprc-explained dl div,
@@ -943,7 +1062,6 @@
 }
 
 .fwd--soft .wprc-top-field,
-.fwd--soft .wprc-dependent-number,
 .fwd--soft .wprc-select {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line-strong);
@@ -1033,14 +1151,56 @@
   background: var(--fiscal-primary-soft);
 }
 
-.fwd--soft .wprc-dependent-number input {
+.fwd--soft .wprc-person + .wprc-person {
+  border-top-color: var(--fiscal-line);
+}
+
+.fwd--soft .wprc-person__head > span {
+  color: #fff;
+  background: var(--fiscal-primary);
+  box-shadow: none;
+}
+
+.fwd--soft .wprc-person__head h4 {
   color: var(--fiscal-ink);
 }
 
-.fwd--soft .wprc-empty {
+.fwd--soft .wprc-person__head p,
+.fwd--soft .wprc-person-note,
+.fwd--soft .wprc-person-amount > span {
   color: var(--fiscal-copy);
-  border-color: var(--fiscal-line-strong);
-  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wprc-person-ask__prompt p {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-person__status {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wprc-person.is-excluded .wprc-person__status {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-person-ask__status {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-person-amount input {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-person-note {
+  background: var(--fiscal-surface-soft);
 }
 
 .fwd--soft .wprc-explained :is(h3, dd),
@@ -1059,22 +1219,23 @@
 
 .fwd--soft .wprc-explained--sticky {
   position: fixed;
-  border-color: color-mix(in srgb, var(--fiscal-primary) 38%, var(--fiscal-line));
-  background: color-mix(in srgb, var(--fiscal-surface) 94%, var(--fiscal-primary-soft));
-  box-shadow: 0 12px 28px rgba(35, 54, 78, 0.14);
+  border-color: var(--fiscal-line);
+  border-bottom-color: transparent;
+  background: color-mix(in srgb, var(--fiscal-surface) 96%, var(--fiscal-primary-soft));
+  box-shadow: 0 -8px 22px rgba(35, 54, 78, 0.1);
 }
 
 .fwd--soft .wprc--reductions {
-  padding-bottom: 210px;
+  padding-bottom: 110px;
 }
 
 @media (max-width: 640px) {
   .fwd--soft .wprc--reductions {
-    padding-bottom: 350px;
+    padding-bottom: 210px;
   }
 
   .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
-    padding-bottom: calc(var(--wfsc-chrome-height) + 360px);
+    padding-bottom: calc(var(--wfsc-chrome-height) + 210px);
   }
 }
 
@@ -1153,7 +1314,7 @@
   box-shadow: none;
 }
 
-.fwd--soft :is(.wprc-dependent, .wprc-explained dl div, .irpf-rule-result span) {
+.fwd--soft :is(.wprc-explained dl div, .irpf-rule-result span) {
   border-radius: var(--fiscal-radius-small);
 }
 
@@ -1185,18 +1346,38 @@
   color: var(--fiscal-ink);
 }
 
+.fwd--soft .irpf-question-effect--minimum {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .irpf-question-effect--reduction {
+  color: #1f4f7a;
+  border-color: #bfd7ef;
+  background: #eaf4fc;
+}
+
+.fwd--soft .irpf-question-effect--minimum[aria-label^="Resta"] {
+  color: #8a4b12;
+  border-color: #efd0a8;
+  background: #fff3e4;
+}
+
 .fwd--soft .irpf-reduction-question__prompt p,
 .fwd--soft .irpf-reduction-question__skip {
   color: var(--fiscal-copy);
 }
 
-.fwd--soft .irpf-reduction-question__choices button {
+.fwd--soft .irpf-reduction-question__choices button,
+.fwd--soft .irpf-reduction-question__options button {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
 }
 
-.fwd--soft .irpf-reduction-question__choices button.is-selected:first-child {
+.fwd--soft .irpf-reduction-question__choices button.is-selected:first-child,
+.fwd--soft .irpf-reduction-question__options button.is-selected {
   color: #fff;
   border-color: var(--fiscal-primary);
   background: var(--fiscal-primary);
@@ -1208,12 +1389,66 @@
   background: #eef3f6;
 }
 
+.fwd--soft .wprc-family-questions .irpf-reduction-question__body > p {
+  color: var(--fiscal-copy);
+}
+
 .fwd--soft .irpf-reduction-question__body {
   border-color: var(--fiscal-line);
 }
 
 .fwd--soft .irpf-reduction-question__skip {
   background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-marital-subask p {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .irpf-marital-subask small {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-marital-note {
+  color: var(--fiscal-copy);
+  border-color: #bfd7ef;
+  background: #eaf4fc;
+}
+
+.fwd--soft .irpf-marital-note strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .irpf-marital-note--muted {
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-marital-infobox {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-marital-infobox__toggle {
+  color: var(--fiscal-violet);
+}
+
+.fwd--soft .irpf-marital-infobox__toggle:hover {
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .irpf-marital-infobox__toggle:focus-visible {
+  outline-color: color-mix(in srgb, var(--fiscal-violet) 55%, transparent);
+}
+
+.fwd--soft .irpf-marital-infobox dt {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .irpf-marital-infobox dd {
+  color: var(--fiscal-copy);
 }
 
 .fwd--soft .wprc-question-intro {
@@ -1233,23 +1468,6 @@
 
 .fwd--soft .wprc-question-intro p {
   color: var(--fiscal-copy);
-}
-
-.fwd--soft .wprc-top-grid--questions .wprc-top-field,
-.fwd--soft .wprc-top-grid--questions .wprc-top-field + .wprc-top-field {
-  border-color: var(--fiscal-line);
-  background: var(--fiscal-surface);
-  box-shadow: var(--fiscal-shadow-soft);
-}
-
-.fwd--soft .wprc-top-grid--questions {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-@media (max-width: 640px) {
-  .fwd--soft .wprc-top-grid--questions {
-    grid-template-columns: 1fr;
-  }
 }
 
 .fwd--soft .irpf-rule-group summary {
@@ -1573,6 +1791,25 @@
   box-shadow: none;
 }
 
+.fwd--soft .wctc-tip {
+  color: var(--fiscal-ink);
+  border-color: color-mix(in srgb, var(--fiscal-orange) 38%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--fiscal-orange) 10%, #ffffff);
+}
+
+.fwd--soft .wctc-tip svg {
+  color: var(--fiscal-orange);
+  filter: none;
+}
+
+.fwd--soft .wctc-tip p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-tip strong {
+  color: var(--fiscal-ink);
+}
+
 .fwd--soft .wctc-action {
   color: var(--fiscal-copy);
   border-color: var(--fiscal-line-strong);
@@ -1663,10 +1900,92 @@
 
 .fwd--soft .wctc-row--total,
 .fwd--soft .wctc-home-strip,
-.fwd--soft .wctc-ibi-row {
+.fwd--soft .wctc-ownership-gate,
+.fwd--soft .wctc-ibi-block,
+.fwd--soft .wctc-ibi-row,
+.fwd--soft .wctc-purchase-block {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wctc-ownership-gate {
+  background: #ffffff;
+  box-shadow: var(--fiscal-shadow-soft);
+}
+
+.fwd--soft .wctc-ownership-gate__prompt > span {
+  color: var(--fiscal-primary);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wctc-ownership-gate h4 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-ownership-gate__prompt p,
+.fwd--soft .wctc-ownership-gate__skip {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-ownership-gate__choices button {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wctc-ownership-gate__choices button:hover,
+.fwd--soft .wctc-ownership-gate__choices button:focus-visible {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 45%, var(--fiscal-line));
+}
+
+.fwd--soft .wctc-ownership-gate__choices button.is-selected:first-child {
+  color: var(--fiscal-primary-strong);
+  border-color: color-mix(in srgb, var(--fiscal-primary) 55%, var(--fiscal-line));
+  background: var(--fiscal-primary-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-primary) 18%, transparent);
+}
+
+.fwd--soft .wctc-ownership-gate__choices button.is-selected:last-child {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: #eef3f6;
+}
+
+.fwd--soft .wctc-ownership-gate__body {
+  border-color: var(--fiscal-line);
+}
+
+.fwd--soft .wctc-ownership-gate__body > .wctc-ibi-block,
+.fwd--soft .wctc-ownership-gate__body > .wctc-purchase-block,
+.fwd--soft .wctc-ownership-gate__body > .wctc-purchase-block--vehicle {
+  background: transparent;
+  box-shadow: none;
+}
+
+.fwd--soft .wctc-ownership-gate__skip {
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wctc-ibi-block {
+  background: transparent;
+}
+
+.fwd--soft .wctc-ibi-row {
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 72%, transparent),
+    0 4px 12px rgba(45, 71, 94, 0.04);
+}
+
+.fwd--soft .wctc-ibi-head strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-ibi-head small {
+  color: var(--fiscal-copy);
 }
 
 .fwd--soft .wctc-total-cell,
@@ -1750,6 +2069,108 @@
 
 .fwd--soft .wctc-switch input:checked ~ em {
   color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .wctc-home-strip__title,
+.fwd--soft .wctc-home-strip h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-home-strip h3 span {
+  color: var(--fiscal-copy);
+  font-weight: 650;
+}
+
+.fwd--soft .wctc-ibi-link {
+  color: var(--fiscal-primary);
+}
+
+.fwd--soft .wctc-ibi-link:hover,
+.fwd--soft .wctc-ibi-link:focus-visible {
+  color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .wctc-row-note {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .wctc-purchase-block {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wctc-purchase-title strong,
+.fwd--soft .wctc-ibi-row strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-purchase-head small,
+.fwd--soft .wctc-purchase-field span,
+.fwd--soft .wctc-purchase-tax small,
+.fwd--soft .wctc-purchase-total small,
+.fwd--soft .wctc-ibi-row small,
+.fwd--soft .wctc-ibi-field > span {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-purchase-row {
+  border-color: color-mix(in srgb, var(--fiscal-line) 74%, transparent);
+  border-radius: var(--fiscal-radius-control);
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 48%, transparent),
+    0 4px 12px rgba(45, 71, 94, 0.05);
+}
+
+.fwd--soft .wctc-purchase-index {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 42%, var(--fiscal-line));
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-soft);
+  box-shadow: none;
+}
+
+.fwd--soft .wctc-purchase-tax strong,
+.fwd--soft .wctc-purchase-total strong,
+.fwd--soft .wctc-ibi-amount strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-purchase-row :is(input, select),
+.fwd--soft .wctc-ibi-row input[type='number'] {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: inset 0 1px 2px rgba(43, 70, 94, 0.06);
+}
+
+.fwd--soft .wctc-purchase-add {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wctc-purchase-add:hover,
+.fwd--soft .wctc-purchase-add:focus-visible {
+  color: var(--fiscal-primary-strong);
+  border-color: color-mix(in srgb, var(--fiscal-primary) 38%, var(--fiscal-line));
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wctc-purchase-remove {
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wctc-purchase-remove:not(:disabled):hover,
+.fwd--soft .wctc-purchase-remove:not(:disabled):focus-visible {
+  color: var(--fiscal-red);
+  border-color: color-mix(in srgb, var(--fiscal-red) 42%, var(--fiscal-line));
+  background: var(--fiscal-red-soft);
 }
 
 .fwd--soft .wcsc {
@@ -1914,7 +2335,7 @@
   }
 
   .fwd--soft:has(.wfsc-chrome) {
-    --wfsc-chrome-height: 136px;
+    --wfsc-chrome-height: 118px;
   }
 
   .fwd--soft .wfsc-chrome {

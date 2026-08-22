@@ -9,6 +9,130 @@
   gap: 12px;
 }
 
+.irpf-marital-subflow {
+  display: grid;
+  gap: 14px;
+}
+
+.irpf-marital-subask {
+  display: grid;
+  gap: 8px;
+}
+
+.irpf-marital-subask p {
+  margin: 0;
+  color: #eef5ff;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 720;
+}
+
+.irpf-marital-subask small {
+  color: #9fb2d4;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.irpf-marital-note {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(74, 183, 255, 0.35);
+  border-radius: 9px;
+  color: #c8e8ff;
+  background: rgba(74, 183, 255, 0.1);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.irpf-marital-note strong {
+  color: #eef5ff;
+  font-weight: 820;
+}
+
+.irpf-marital-note--muted {
+  border-color: rgba(143, 165, 200, 0.28);
+  color: #aebbd1;
+  background: rgba(143, 165, 200, 0.08);
+}
+
+.irpf-marital-infobox {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border: 1px solid rgba(75, 134, 205, 0.38);
+  border-radius: 10px;
+  background: rgba(3, 18, 37, 0.55);
+}
+
+.irpf-marital-infobox__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 10px;
+  color: #eef5ff;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 820;
+  text-align: left;
+  cursor: pointer;
+}
+
+.irpf-marital-infobox__toggle:hover {
+  background: rgba(74, 183, 255, 0.08);
+}
+
+.irpf-marital-infobox__toggle:focus-visible {
+  outline: 2px solid rgba(74, 183, 255, 0.65);
+  outline-offset: 2px;
+}
+
+.irpf-marital-infobox__toggle svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.irpf-marital-infobox__toggle svg.is-open {
+  transform: rotate(180deg);
+}
+
+.irpf-marital-infobox__details {
+  display: grid;
+  gap: 10px;
+  padding: 0 14px 12px;
+}
+
+.irpf-marital-infobox dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.irpf-marital-infobox div {
+  display: grid;
+  gap: 4px;
+}
+
+.irpf-marital-infobox dt {
+  color: #c8e8ff;
+  font-size: 13px;
+  font-weight: 780;
+}
+
+.irpf-marital-infobox dd {
+  margin: 0;
+  color: #9fb2d4;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.irpf-reduction-question__options--wrap {
+  flex-wrap: wrap;
+}
+
 .irpf-reduction-question {
   display: grid;
   gap: 14px;
@@ -43,10 +167,56 @@
   margin: 0;
 }
 
+.irpf-reduction-question__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.irpf-reduction-question__title-row h3 {
+  flex: 1 1 auto;
+  min-width: min(100%, 220px);
+}
+
 .irpf-reduction-question h3 {
   color: #eef5ff;
   font-size: 18px;
   line-height: 1.2;
+}
+
+.irpf-question-effect {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 26px;
+  padding: 0 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(88, 241, 113, 0.45);
+  color: #b8ffc8;
+  background: rgba(88, 241, 113, 0.12);
+  font: 780 12px/1 var(--sans);
+  font-style: normal;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.irpf-question-effect--minimum {
+  border-color: rgba(88, 241, 113, 0.45);
+  color: #b8ffc8;
+  background: rgba(88, 241, 113, 0.12);
+}
+
+.irpf-question-effect--reduction {
+  border-color: rgba(74, 183, 255, 0.48);
+  color: #c8e8ff;
+  background: rgba(74, 183, 255, 0.14);
+}
+
+.irpf-question-effect--minimum[aria-label^="Resta"] {
+  border-color: rgba(255, 176, 102, 0.5);
+  color: #ffd7b0;
+  background: rgba(255, 160, 80, 0.14);
 }
 
 .irpf-reduction-question__prompt p,
@@ -57,13 +227,19 @@
   line-height: 1.4;
 }
 
-.irpf-reduction-question__choices {
+.irpf-reduction-question__guide {
+  margin-top: 8px;
+}
+
+.irpf-reduction-question__choices,
+.irpf-reduction-question__options {
   display: flex;
   flex-wrap: wrap;
   gap: 9px;
 }
 
-.irpf-reduction-question__choices button {
+.irpf-reduction-question__choices button,
+.irpf-reduction-question__options button {
   min-height: 42px;
   padding: 0 15px;
   border: 1px solid rgba(87, 139, 204, 0.48);
@@ -74,7 +250,8 @@
   font: 780 14px/1 var(--sans);
 }
 
-.irpf-reduction-question__choices button.is-selected:first-child {
+.irpf-reduction-question__choices button.is-selected:first-child,
+.irpf-reduction-question__options button.is-selected {
   color: #06283a;
   border-color: rgba(88, 241, 113, 0.64);
   background: #58f171;

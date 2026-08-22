@@ -1,17 +1,54 @@
-import { Baby, BriefcaseBusiness, HeartHandshake, Landmark, ReceiptText, ShieldCheck, UsersRound } from 'lucide-react'
+import { Baby, BriefcaseBusiness, ChevronDown, HeartHandshake, Landmark, ReceiptText, ShieldCheck, UsersRound } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import {
+  calculateAdditionalWorkExpenses2025,
+  calculateBaseReductions2025,
+  calculateGeographicMobilityIncrement2025,
   calculateInKindBenefits2025,
+  createEmptyIrpf2025Adjustments,
+  GEOGRAPHIC_MOBILITY_INCREMENT_2025,
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import type { Irpf2025AdjustmentInput } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import { InfoButton } from '../ui/InfoButton'
 import './Irpf2025StructuredAdjustmentsForm.css'
 
+type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed'
+
 type Props = {
   focus: 'reductions' | 'deductions-benefits'
   value: Irpf2025AdjustmentInput
   declaredInKindSalary?: number
+  declaredGrossWorkIncome?: number
+  previewBaseAvailable?: number
   onChange: (value: Irpf2025AdjustmentInput) => void
+}
+const OTHER_INCOME_THRESHOLD = 6_500
+const SPOUSE_INCOME_THRESHOLD = 8_000
+const SPOUSE_PENSION_MAX_REDUCTION = 1_000
+
+function QuestionEffect({ amount }: { amount?: number }) {
+  if (!amount) return null
+  const formatted = Math.abs(amount).toLocaleString('es-ES', { maximumFractionDigits: 2 })
+  return (
+    <em className="irpf-question-effect irpf-question-effect--reduction" aria-label={`Reduce la base en ${formatted} EUR`}>
+      −{formatted} EUR
+    </em>
+  )
+}
+
+function sliceBaseReduction(
+  value: Irpf2025AdjustmentInput,
+  keys: Array<keyof Irpf2025AdjustmentInput>,
+  previewBaseAvailable: number,
+  grossWorkIncome = 0,
+) {
+  const empty = createEmptyIrpf2025Adjustments()
+  const slice = { ...empty } as Irpf2025AdjustmentInput
+  for (const key of keys) {
+    ;(slice as Record<string, unknown>)[key] = value[key]
+  }
+  const available = Math.max(0, previewBaseAvailable)
+  return calculateBaseReductions2025(slice, available, available, 0, 0, grossWorkIncome)
 }
 
 type NumberFieldProps = {
@@ -52,7 +89,6 @@ const FIELD_HELP: Record<string, string> = {
   'Modalidad de declaracion': 'Individual o conjunta. La tributacion conjunta puede generar reduccion, pero depende de la unidad familiar.',
   'Aportacion a patrimonio protegido': 'Aportaciones a un patrimonio protegido de persona con discapacidad. Tienen limites y requisitos especificos.',
   'Total aportado por todos al mismo patrimonio': 'Suma de aportaciones de todos los aportantes al mismo patrimonio protegido. Sirve para aplicar limites globales.',
-  'Aportante, beneficiario y patrimonio cumplen requisitos': 'Confirmacion formal para no aplicar una reduccion de patrimonio protegido sin base documental suficiente.',
   'Reduccion autonomica calculada': 'Importe de una reduccion propia de tu comunidad autonoma ya calculada fuera de esta pantalla.',
   'Codigo o nombre de la reduccion autonomica': 'Nombre identificable de la regla autonomica usada, para que el calculo sea trazable.',
   'Fuente oficial de la reduccion': 'Enlace a la norma, manual o fuente oficial que justifica la reduccion autonomica.',
@@ -251,11 +287,13 @@ function RuleGroup({ title, description, icon: Icon, children, open = false }: {
   )
 }
 
-function ReductionQuestion({ question, description, children, initiallyRelevant = false, onNo }: {
+function ReductionQuestion({ question, description, guide, children, initiallyRelevant = false, effectAmount, onNo }: {
   question: string
   description: string
+  guide?: ReactNode
   children: ReactNode
   initiallyRelevant?: boolean
+  effectAmount?: number
   onNo: () => void
 }) {
   const [answer, setAnswer] = useState<'unanswered' | 'yes' | 'no'>(() => initiallyRelevant ? 'yes' : 'unanswered')
@@ -269,8 +307,12 @@ function ReductionQuestion({ question, description, children, initiallyRelevant 
       <div className="irpf-reduction-question__prompt">
         <span aria-hidden="true">?</span>
         <div>
-          <h3>{question}</h3>
+          <div className="irpf-reduction-question__title-row">
+            <h3>{question}</h3>
+            <QuestionEffect amount={effectAmount} />
+          </div>
           <p>{description}</p>
+          {guide ? <div className="irpf-reduction-question__guide">{guide}</div> : null}
         </div>
       </div>
       <div className="irpf-reduction-question__choices" role="group" aria-label={`Respuesta: ${question}`}>
@@ -283,51 +325,995 @@ function ReductionQuestion({ question, description, children, initiallyRelevant 
   )
 }
 
-export function Irpf2025StructuredAdjustmentsForm({ focus, value, declaredInKindSalary = 0, onChange }: Props) {
+function JointTaxationGuide({
+  maritalStatus,
+  childrenCount,
+  jointUnitChildrenCount,
+}: {
+  maritalStatus: MaritalStatus
+  childrenCount: number
+  jointUnitChildrenCount: number
+}) {
+  const [expanded, setExpanded] = useState(false)
+  const married = maritalStatus === 'married'
+
+  return (
+    <aside className="irpf-marital-infobox" aria-label="Quién puede declarar conjunta y requisitos">
+      <button
+        type="button"
+        className="irpf-marital-infobox__toggle"
+        aria-expanded={expanded}
+        onClick={() => setExpanded((open) => !open)}
+      >
+        ¿Quién y cuándo puedes declarar conjunta?
+        <ChevronDown size={14} aria-hidden="true" className={expanded ? 'is-open' : undefined} />
+      </button>
+      <div className="irpf-marital-infobox__details" hidden={!expanded}>
+        <p className="irpf-marital-note">
+          {childrenCount === 0 ? (
+            married
+              ? 'No indicaste hijos en la primera pregunta. La unidad familiar puede ser solo tú y tu cónyuge; no hace falta tener hijos para declarar conjunta.'
+              : 'No indicaste hijos en la primera pregunta. Si no convives con hijos que formen unidad, lo habitual es la declaración individual.'
+          ) : jointUnitChildrenCount === childrenCount ? (
+            `Arriba indicaste ${childrenCount} hijo(s). Si conviven contigo y cumplen edad o discapacidad, esos mismos pueden formar parte de la unidad familiar al declarar conjunta.`
+          ) : jointUnitChildrenCount > 0 ? (
+            `Arriba indicaste ${childrenCount} hijo(s). Según convivencia y edad que marcaste, ${jointUnitChildrenCount} podrían entrar en la unidad familiar. Revisa el detalle de cada hijo si falta alguno.`
+          ) : (
+            `Arriba indicaste ${childrenCount} hijo(s), pero según convivencia y edad que marcaste ninguno entraría en la unidad familiar por ahora.`
+          )}
+          {' '}Para el mínimo por hijos pedimos más datos (ingresos, declaración propia…). Aquí solo importa quién puede ir en la misma declaración conjunta.
+        </p>
+        <dl>
+          {married ? (
+            <div>
+              <dt>Con tu cónyuge</dt>
+              <dd>
+                Si no estáis separados legalmente. La unidad incluye, si los hay, hijos menores que viven con
+                vosotros o hijos mayores incapacitados bajo patria potestad. Puedes tributar conjunta aunque solo
+                uno tenga rentas. Reduce la base <strong>3.400 €</strong>.
+              </dd>
+            </div>
+          ) : (
+            <div>
+              <dt>Como padre o madre sola/o</dt>
+              <dd>
+                Sin vínculo matrimonial o separado/a legalmente: con todos los hijos que conviven contigo y cumplen
+                los requisitos de edad o discapacidad. Reduce la base <strong>2.150 €</strong> si no convives con el
+                otro progenitor de esos hijos.
+              </dd>
+            </div>
+          )}
+          {!married ? (
+            <div>
+              <dt>Si convives con el otro progenitor</dt>
+              <dd>
+                Puedes presentar declaración conjunta como unidad monoparental, pero no se aplica la reducción de
+                2.150 € en la base.
+              </dd>
+            </div>
+          ) : null}
+          <div>
+            <dt>Requisitos comunes</dt>
+            <dd>
+              Todos los miembros deben tributar por IRPF. Todos deben usar el mismo régimen: si uno presenta
+              individual, el resto también. La unidad familiar se determina a 31 de diciembre. Nadie puede estar en
+              dos unidades a la vez.
+            </dd>
+          </div>
+          <div>
+            <dt>Ejemplos de hijos que forman unidad</dt>
+            <dd>
+              Los de la primera pregunta que conviven contigo: menores (no los que viven independientes con
+              consentimiento de los padres) o mayores incapacitados judicialmente bajo patria potestad.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </aside>
+  )
+}
+
+function SpousePensionProductInfobox() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <aside className="irpf-marital-infobox" aria-label="Tipos de producto válidos">
+      <button
+        type="button"
+        className="irpf-marital-infobox__toggle"
+        aria-expanded={expanded}
+        onClick={() => setExpanded((open) => !open)}
+      >
+        ¿Cuál es cuál?
+        <ChevronDown size={14} aria-hidden="true" className={expanded ? 'is-open' : undefined} />
+      </button>
+      <div className="irpf-marital-infobox__details" hidden={!expanded}>
+        <dl>
+          <div>
+            <dt>Plan de pensiones</dt>
+            <dd>Cuenta de ahorro para la jubilación en un banco o gestora. Tu pareja debe constar en el contrato.</dd>
+          </div>
+          <div>
+            <dt>Mutualidad profesional</dt>
+            <dd>Ahorro para la jubilación del colegio de su profesión (médicos, abogados…).</dd>
+          </div>
+          <div>
+            <dt>Seguro de jubilación</dt>
+            <dd>Contrato con una aseguradora para ahorrar hasta jubilarse. Tu pareja como titular.</dd>
+          </div>
+        </dl>
+      </div>
+    </aside>
+  )
+}
+
+function clearSpousePensionFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
+  return {
+    ...value,
+    spousePensionContribution: 0,
+    spouseNetWorkAndBusinessIncome: 0,
+    spousePensionEligible: false,
+    spousePensionProductType: 'none',
+  }
+}
+
+function markSpousePensionContribution(
+  value: Irpf2025AdjustmentInput,
+  amount: number,
+): Irpf2025AdjustmentInput {
+  if (amount <= 0) {
+    return clearSpousePensionFields({ ...value, spousePensionContribution: 0 })
+  }
+  return {
+    ...value,
+    spousePensionContribution: amount,
+    spousePensionEligible: true,
+    spousePensionProductType: 'pension_plan',
+  }
+}
+function YesNoChips({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: 'yes' | 'no' | ''
+  onChange: (next: 'yes' | 'no') => void
+}) {
+  return (
+    <div className="irpf-reduction-question__options" role="group" aria-label={label}>
+      <button
+        type="button"
+        className={value === 'yes' ? 'is-selected' : ''}
+        aria-pressed={value === 'yes'}
+        onClick={() => onChange('yes')}
+      >
+        Sí
+      </button>
+      <button
+        type="button"
+        className={value === 'no' ? 'is-selected' : ''}
+        aria-pressed={value === 'no'}
+        onClick={() => onChange('no')}
+      >
+        No
+      </button>
+    </div>
+  )
+}
+
+function clearOtherIncomeFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
+  return {
+    ...value,
+    otherIncomeKnown: false,
+    otherNonExemptNonWorkIncome: 0,
+  }
+}
+
+function confirmNoOtherIncome(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
+  return {
+    ...value,
+    otherIncomeKnown: true,
+    otherNonExemptNonWorkIncome: 0,
+  }
+}
+
+function OtherIncomeQuestions({
+  value,
+  onChange,
+}: {
+  value: Irpf2025AdjustmentInput
+  onChange: (value: Irpf2025AdjustmentInput) => void
+}) {
+  const [knownAnswer, setKnownAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.otherIncomeKnown) return 'yes'
+    if (value.otherNonExemptNonWorkIncome > 0) return 'yes'
+    return ''
+  })
+
+  return (
+    <div className="irpf-marital-subflow">
+      <div className="irpf-marital-subask">
+        <p>¿Sabes cuánto suman al año?</p>
+        <small>
+          Algunas ventajas del trabajo solo aplican si otras rentas no exentas no superan{' '}
+          {OTHER_INCOME_THRESHOLD.toLocaleString('es-ES')} €.
+        </small>
+        <YesNoChips
+          label="Conocimiento del importe anual de otras rentas"
+          value={knownAnswer}
+          onChange={(next) => {
+            setKnownAnswer(next)
+            if (next === 'yes') {
+              onChange({ ...value, otherIncomeKnown: true })
+              return
+            }
+            onChange(clearOtherIncomeFields(value))
+          }}
+        />
+      </div>
+
+      {knownAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Sin ese dato no podemos aplicar la reducción por rendimientos del trabajo ni la deducción por rentas
+          bajas hasta que lo confirmes.
+        </p>
+      ) : null}
+
+      {knownAnswer === 'yes' ? (
+        <>
+          <NumberField
+            label="¿Cuánto suman al año?"
+            value={value.otherNonExemptNonWorkIncome}
+            onChange={(amount) => onChange({
+              ...value,
+              otherIncomeKnown: true,
+              otherNonExemptNonWorkIncome: amount,
+            })}
+            unit="EUR"
+            hint={`Solo rentas no exentas fuera de la nómina. Si superan ${OTHER_INCOME_THRESHOLD.toLocaleString('es-ES')} €, no aplican esas ventajas.`}
+          />
+          {value.otherNonExemptNonWorkIncome > OTHER_INCOME_THRESHOLD ? (
+            <p className="irpf-marital-note irpf-marital-note--muted">
+              Con más de {OTHER_INCOME_THRESHOLD.toLocaleString('es-ES')} € en otras rentas, la reducción por
+              rendimientos del trabajo y la deducción por rentas bajas no se aplican.
+            </p>
+          ) : null}
+        </>
+      ) : null}
+    </div>
+  )
+}
+
+const PROTECTED_ASSETS_MAX_PER_CONTRIBUTOR = 10_000
+const PROTECTED_ASSETS_MAX_TOTAL = 24_250
+
+function clearProtectedAssetsFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
+  return {
+    ...value,
+    protectedAssetsContribution: 0,
+    protectedAssetsFormalEstate: false,
+    protectedAssetsValidContributor: false,
+    protectedAssetsContributorNotBeneficiary: false,
+    protectedAssetsTotalContributors: 0,
+  }
+}
+
+function ProtectedAssetsQuestions({
+  value,
+  onChange,
+}: {
+  value: Irpf2025AdjustmentInput
+  onChange: (value: Irpf2025AdjustmentInput) => void
+}) {
+  const [formalEstateAnswer, setFormalEstateAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.protectedAssetsFormalEstate) return 'yes'
+    if (
+      value.protectedAssetsValidContributor
+      || value.protectedAssetsContributorNotBeneficiary
+      || value.protectedAssetsContribution > 0
+    ) return 'yes'
+    return ''
+  })
+  const [validContributorAnswer, setValidContributorAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.protectedAssetsValidContributor) return 'yes'
+    if (value.protectedAssetsContributorNotBeneficiary || value.protectedAssetsContribution > 0) return 'yes'
+    if (value.protectedAssetsFormalEstate) return ''
+    return ''
+  })
+  const [notBeneficiaryAnswer, setNotBeneficiaryAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.protectedAssetsContributorNotBeneficiary) return 'yes'
+    if (value.protectedAssetsContribution > 0) return 'yes'
+    if (value.protectedAssetsValidContributor) return ''
+    return ''
+  })
+  const [otherContributorsAnswer, setOtherContributorsAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.protectedAssetsTotalContributors > value.protectedAssetsContribution) return 'yes'
+    if (value.protectedAssetsContribution > 0) return 'no'
+    return ''
+  })
+
+  return (
+    <div className="irpf-marital-subflow">
+      <div className="irpf-marital-subask">
+        <p>¿Existe un patrimonio protegido ya constituido?</p>
+        <small>
+          No basta con ayudar económicamente: tiene que ser una figura formal para cubrir las necesidades de una
+          persona con discapacidad.
+        </small>
+        <YesNoChips
+          label="Patrimonio protegido constituido formalmente"
+          value={formalEstateAnswer}
+          onChange={(next) => {
+            setFormalEstateAnswer(next)
+            setValidContributorAnswer('')
+            setNotBeneficiaryAnswer('')
+            setOtherContributorsAnswer('')
+            if (next === 'yes') {
+              onChange({ ...value, protectedAssetsFormalEstate: true })
+              return
+            }
+            onChange(clearProtectedAssetsFields(value))
+          }}
+        />
+      </div>
+
+      {formalEstateAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Sin patrimonio protegido constituido, esta reducción no aplica aunque hayas ayudado económicamente.
+        </p>
+      ) : null}
+
+      {formalEstateAnswer === 'yes' ? (
+        <div className="irpf-marital-subask">
+          <p>¿Eres familiar hasta tercer grado, cónyuge o tutor/acogedor de esa persona?</p>
+          <small>Solo pueden aportar con derecho a reducción quienes tengan esa relación o legitimación.</small>
+          <YesNoChips
+            label="Parentesco o legitimación para aportar"
+            value={validContributorAnswer}
+            onChange={(next) => {
+              setValidContributorAnswer(next)
+              setNotBeneficiaryAnswer('')
+              setOtherContributorsAnswer('')
+              if (next === 'yes') {
+                onChange({
+                  ...value,
+                  protectedAssetsFormalEstate: true,
+                  protectedAssetsValidContributor: true,
+                })
+                return
+              }
+              onChange({
+                ...clearProtectedAssetsFields(value),
+                protectedAssetsFormalEstate: true,
+              })
+            }}
+          />
+        </div>
+      ) : null}
+
+      {formalEstateAnswer === 'yes' && validContributorAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Sin parentesco o legitimación válidos, la aportación no genera reducción en tu declaración.
+        </p>
+      ) : null}
+
+      {formalEstateAnswer === 'yes' && validContributorAnswer === 'yes' ? (
+        <div className="irpf-marital-subask">
+          <p>¿La aportación la haces tú por esa persona (no eres tú quien tiene el patrimonio)?</p>
+          <small>La propia persona con discapacidad titular no puede reducir la base por sus propias aportaciones.</small>
+          <YesNoChips
+            label="Aportante distinto del titular del patrimonio"
+            value={notBeneficiaryAnswer}
+            onChange={(next) => {
+              setNotBeneficiaryAnswer(next)
+              setOtherContributorsAnswer('')
+              if (next === 'yes') {
+                onChange({
+                  ...value,
+                  protectedAssetsFormalEstate: true,
+                  protectedAssetsValidContributor: true,
+                  protectedAssetsContributorNotBeneficiary: true,
+                })
+                return
+              }
+              onChange({
+                ...clearProtectedAssetsFields(value),
+                protectedAssetsFormalEstate: true,
+                protectedAssetsValidContributor: true,
+              })
+            }}
+          />
+        </div>
+      ) : null}
+
+      {formalEstateAnswer === 'yes' && validContributorAnswer === 'yes' && notBeneficiaryAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Si eres tú el titular del patrimonio protegido, tus propias aportaciones no generan esta reducción.
+        </p>
+      ) : null}
+
+      {formalEstateAnswer === 'yes' && validContributorAnswer === 'yes' && notBeneficiaryAnswer === 'yes' ? (
+        <>
+          <p className="irpf-marital-note">
+            Si cumples los requisitos, tu aportación puede reducir la base hasta{' '}
+            <strong>{PROTECTED_ASSETS_MAX_PER_CONTRIBUTOR.toLocaleString('es-ES')} € al año</strong>. Si varias
+            personas aportan al mismo patrimonio, el conjunto no puede superar{' '}
+            <strong>{PROTECTED_ASSETS_MAX_TOTAL.toLocaleString('es-ES')} €</strong>.
+          </p>
+          <NumberField
+            label="¿Cuánto has aportado tú este año?"
+            value={value.protectedAssetsContribution}
+            onChange={(amount) => {
+              const total = otherContributorsAnswer === 'no'
+                ? amount
+                : Math.max(amount, value.protectedAssetsTotalContributors)
+              onChange({
+                ...value,
+                protectedAssetsFormalEstate: true,
+                protectedAssetsValidContributor: true,
+                protectedAssetsContributorNotBeneficiary: true,
+                protectedAssetsContribution: amount,
+                protectedAssetsTotalContributors: total,
+              })
+            }}
+            hint={`Máximo por aportante: ${PROTECTED_ASSETS_MAX_PER_CONTRIBUTOR.toLocaleString('es-ES')} €`}
+          />
+
+          {value.protectedAssetsContribution > 0 ? (
+            <div className="irpf-marital-subask">
+              <p>¿Otras personas también aportaron al mismo patrimonio este año?</p>
+              <small>Sirve para repartir el límite global si varios familiares aportan.</small>
+              <YesNoChips
+                label="Otras aportaciones al mismo patrimonio"
+                value={otherContributorsAnswer}
+                onChange={(next) => {
+                  setOtherContributorsAnswer(next)
+                  if (next === 'no') {
+                    onChange({
+                      ...value,
+                      protectedAssetsTotalContributors: value.protectedAssetsContribution,
+                    })
+                    return
+                  }
+                  onChange({
+                    ...value,
+                    protectedAssetsTotalContributors: Math.max(
+                      value.protectedAssetsContribution,
+                      value.protectedAssetsTotalContributors,
+                    ),
+                  })
+                }}
+              />
+            </div>
+          ) : null}
+
+          {value.protectedAssetsContribution > 0 && otherContributorsAnswer === 'yes' ? (
+            <NumberField
+              label="¿Cuánto suman todas las aportaciones?"
+              value={value.protectedAssetsTotalContributors}
+              onChange={(amount) => onChange({
+                ...value,
+                protectedAssetsTotalContributors: Math.max(amount, value.protectedAssetsContribution),
+              })}
+              hint={`Incluye la tuya. Si supera ${PROTECTED_ASSETS_MAX_TOTAL.toLocaleString('es-ES')} €, la reducción se reparte proporcionalmente.`}
+            />
+          ) : null}
+
+          {value.protectedAssetsContribution > PROTECTED_ASSETS_MAX_PER_CONTRIBUTOR ? (
+            <p className="irpf-marital-note irpf-marital-note--muted">
+              Por encima de {PROTECTED_ASSETS_MAX_PER_CONTRIBUTOR.toLocaleString('es-ES')} €, solo reducirá la base
+              hasta ese tope.
+            </p>
+          ) : null}
+        </>
+      ) : null}
+    </div>
+  )
+}
+
+function clearGeographicMobilityFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
+  return {
+    ...value,
+    wasRegisteredJobseeker: false,
+    acceptedJobOtherMunicipality: false,
+    movedResidence: false,
+    moveTaxYear: 0,
+    newJobIntegralIncome: 0,
+    newJobSpecificExpenses: 0,
+  }
+}
+
+function GeographicMobilityQuestions({
+  value,
+  onChange,
+  declaredGrossWorkIncome = 0,
+}: {
+  value: Irpf2025AdjustmentInput
+  onChange: (value: Irpf2025AdjustmentInput) => void
+  declaredGrossWorkIncome?: number
+}) {
+  const [registeredAnswer, setRegisteredAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.wasRegisteredJobseeker) return 'yes'
+    if (
+      value.acceptedJobOtherMunicipality
+      || value.movedResidence
+      || value.moveTaxYear > 0
+      || value.newJobSpecificExpenses > 0
+    ) return 'yes'
+    return ''
+  })
+  const [acceptedJobAnswer, setAcceptedJobAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.acceptedJobOtherMunicipality) return 'yes'
+    if (value.movedResidence || value.moveTaxYear > 0 || value.newJobSpecificExpenses > 0) return 'yes'
+    if (value.wasRegisteredJobseeker) return ''
+    return ''
+  })
+  const [movedAnswer, setMovedAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.movedResidence) return 'yes'
+    if (value.moveTaxYear > 0 || value.newJobSpecificExpenses > 0) return 'yes'
+    if (value.acceptedJobOtherMunicipality) return ''
+    return ''
+  })
+  const [recentMoveAnswer, setRecentMoveAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.moveTaxYear === 2024 || value.moveTaxYear === 2025) return 'yes'
+    if (value.newJobSpecificExpenses > 0) return 'yes'
+    if (value.movedResidence) return ''
+    return ''
+  })
+
+  return (
+    <div className="irpf-marital-subflow">
+      <div className="irpf-marital-subask">
+        <p>¿Estabas inscrito como demandante de empleo?</p>
+        <small>Debes figurar en las oficinas de empleo antes de aceptar el nuevo trabajo.</small>
+        <YesNoChips
+          label="Inscripción como demandante de empleo"
+          value={registeredAnswer}
+          onChange={(next) => {
+            setRegisteredAnswer(next)
+            setAcceptedJobAnswer('')
+            setMovedAnswer('')
+            setRecentMoveAnswer('')
+            if (next === 'yes') {
+              onChange({ ...value, wasRegisteredJobseeker: true })
+              return
+            }
+            onChange(clearGeographicMobilityFields(value))
+          }}
+        />
+      </div>
+
+      {registeredAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Sin inscripción previa como demandante de empleo, el incremento por movilidad geográfica no suele aplicar.
+        </p>
+      ) : null}
+
+      {registeredAnswer === 'yes' ? (
+        <div className="irpf-marital-subask">
+          <p>¿Aceptaste un empleo en otro municipio?</p>
+          <small>El puesto debe estar en un municipio distinto al de tu residencia anterior.</small>
+          <YesNoChips
+            label="Empleo en otro municipio"
+            value={acceptedJobAnswer}
+            onChange={(next) => {
+              setAcceptedJobAnswer(next)
+              setMovedAnswer('')
+              setRecentMoveAnswer('')
+              if (next === 'yes') {
+                onChange({
+                  ...value,
+                  wasRegisteredJobseeker: true,
+                  acceptedJobOtherMunicipality: true,
+                })
+                return
+              }
+              onChange({
+                ...clearGeographicMobilityFields(value),
+                wasRegisteredJobseeker: true,
+              })
+            }}
+          />
+        </div>
+      ) : null}
+
+      {registeredAnswer === 'yes' && acceptedJobAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Si el trabajo no exigía cambiar de municipio, esta reducción no aplica.
+        </p>
+      ) : null}
+
+      {registeredAnswer === 'yes' && acceptedJobAnswer === 'yes' ? (
+        <div className="irpf-marital-subask">
+          <p>¿Te mudaste de residencia por ese empleo?</p>
+          <small>No basta con desplazarte: tiene que ser un traslado real de domicilio.</small>
+          <YesNoChips
+            label="Traslado de residencia"
+            value={movedAnswer}
+            onChange={(next) => {
+              setMovedAnswer(next)
+              setRecentMoveAnswer('')
+              if (next === 'yes') {
+                onChange({
+                  ...value,
+                  wasRegisteredJobseeker: true,
+                  acceptedJobOtherMunicipality: true,
+                  movedResidence: true,
+                })
+                return
+              }
+              onChange({
+                ...clearGeographicMobilityFields(value),
+                wasRegisteredJobseeker: true,
+                acceptedJobOtherMunicipality: true,
+              })
+            }}
+          />
+        </div>
+      ) : null}
+
+      {registeredAnswer === 'yes' && acceptedJobAnswer === 'yes' && movedAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Sin cambio de residencia, el incremento por movilidad geográfica no se aplica.
+        </p>
+      ) : null}
+
+      {registeredAnswer === 'yes' && acceptedJobAnswer === 'yes' && movedAnswer === 'yes' ? (
+        <>
+          <p className="irpf-marital-note">
+            Si cumples los tres requisitos, puedes incrementar tus gastos deducibles hasta{' '}
+            <strong>{GEOGRAPHIC_MOBILITY_INCREMENT_2025.toLocaleString('es-ES')} €</strong> en el año del traslado
+            y el siguiente. El límite del incremento es 2.000 € y no puede superar tu salario bruto del paso 1
+            menos los gastos específicos de ese empleo.
+          </p>
+          <div className="irpf-marital-subask">
+            <p>¿Te mudaste en 2024 o 2025?</p>
+            <small>El incremento solo aplica si el traslado fue en uno de esos dos ejercicios.</small>
+            <YesNoChips
+              label="Traslado en 2024 o 2025"
+              value={recentMoveAnswer}
+              onChange={(next) => {
+                setRecentMoveAnswer(next)
+                if (next === 'yes') {
+                  onChange({
+                    ...value,
+                    wasRegisteredJobseeker: true,
+                    acceptedJobOtherMunicipality: true,
+                    movedResidence: true,
+                    moveTaxYear: value.moveTaxYear === 2024 ? 2024 : 2025,
+                  })
+                  return
+                }
+                onChange({
+                  ...value,
+                  wasRegisteredJobseeker: true,
+                  acceptedJobOtherMunicipality: true,
+                  movedResidence: true,
+                  moveTaxYear: 0,
+                  newJobSpecificExpenses: 0,
+                })
+              }}
+            />
+          </div>
+
+          {recentMoveAnswer === 'no' ? (
+            <p className="irpf-marital-note irpf-marital-note--muted">
+              Si el traslado fue antes de 2024, el incremento por movilidad geográfica no aplica en esta declaración.
+            </p>
+          ) : null}
+
+          {recentMoveAnswer === 'yes' ? (
+            <div className="irpf-rule-grid">
+              {declaredGrossWorkIncome > 0 ? (
+                <p className="irpf-marital-note irpf-marital-note--muted">
+                  Usamos tu salario bruto del paso 1 ({declaredGrossWorkIncome.toLocaleString('es-ES')} €) como tope
+                  máximo del incremento.
+                </p>
+              ) : null}
+              <NumberField
+                label="¿Cuánto suman los gastos específicos de ese empleo?"
+                value={value.newJobSpecificExpenses}
+                onChange={(amount) => onChange({ ...value, newJobSpecificExpenses: amount })}
+                hint={`Solo gastos vinculados a ese trabajo. El incremento máximo es ${GEOGRAPHIC_MOBILITY_INCREMENT_2025.toLocaleString('es-ES')} €.`}
+              />
+            </div>
+          ) : null}
+        </>
+      ) : null}
+    </div>
+  )
+}
+
+function SpousePensionQuestions({
+  value,
+  onChange,
+}: {
+  value: Irpf2025AdjustmentInput
+  onChange: (value: Irpf2025AdjustmentInput) => void
+}) {
+  const [lowIncomeAnswer, setLowIncomeAnswer] = useState<'yes' | 'no' | ''>(() => {
+    if (value.spouseNetWorkAndBusinessIncome >= SPOUSE_INCOME_THRESHOLD) return 'no'
+    if (
+      value.spousePensionContribution > 0
+      || value.spousePensionEligible
+      || value.spousePensionProductType !== 'none'
+    ) return 'yes'
+    return ''
+  })
+
+  return (
+    <div className="irpf-marital-subflow">
+      <SpousePensionProductInfobox />
+      <div className="irpf-marital-subask">
+        <p>¿Tu pareja gana menos de 8.000 € al año por nómina o por trabajar por cuenta propia?</p>
+        <small>Solo cuenta lo que gana por trabajo o por su actividad. No incluyas alquileres, pensiones u otras rentas.</small>
+        <YesNoChips
+          label="Ingresos de la pareja por trabajo o actividad"
+          value={lowIncomeAnswer}
+          onChange={(next) => {
+            setLowIncomeAnswer(next)
+            if (next === 'yes') {
+              onChange({
+                ...value,
+                spouseNetWorkAndBusinessIncome: Math.min(value.spouseNetWorkAndBusinessIncome, SPOUSE_INCOME_THRESHOLD - 1),
+              })
+              return
+            }
+            onChange(clearSpousePensionFields({
+              ...value,
+              spouseNetWorkAndBusinessIncome: SPOUSE_INCOME_THRESHOLD,
+            }))
+          }}
+        />
+      </div>
+
+      {lowIncomeAnswer === 'yes' ? (
+        <>
+          <p className="irpf-marital-note">
+            Si cumple ese requisito, lo que tú aportes a su plan puede reducir tu base imponible como máximo{' '}
+            <strong>{SPOUSE_PENSION_MAX_REDUCTION.toLocaleString('es-ES')} € al año</strong>.
+          </p>
+          <NumberField
+            label="¿Cuánto has aportado tú este año?"
+            value={value.spousePensionContribution}
+            onChange={(amount) => onChange(markSpousePensionContribution(value, amount))}
+            hint={`Máximo que puede reducir la base: ${SPOUSE_PENSION_MAX_REDUCTION.toLocaleString('es-ES')} €`}
+          />
+        </>
+      ) : lowIncomeAnswer === 'no' ? (
+        <p className="irpf-marital-note irpf-marital-note--muted">
+          Con ingresos de 8.000 € o más al año por trabajo o actividad, esta reducción no suele aplicar.
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
+function getMaritalReductionVisibility(maritalStatus: MaritalStatus) {
+  return {
+    jointTaxation: true,
+    spousePension: maritalStatus === 'married',
+    compensatoryPension: maritalStatus === 'divorced',
+  }
+}
+
+function MaritalReductionsGroup({
+  maritalStatus,
+  childrenCount = 0,
+  jointUnitChildrenCount = 0,
+  value,
+  onChange,
+  previewBaseAvailable,
+}: {
+  maritalStatus: MaritalStatus
+  childrenCount?: number
+  jointUnitChildrenCount?: number
+  value: Irpf2025AdjustmentInput
+  onChange: (value: Irpf2025AdjustmentInput) => void
+  previewBaseAvailable: number
+}) {
+  const visibility = getMaritalReductionVisibility(maritalStatus)
+  const update = <Key extends keyof Irpf2025AdjustmentInput>(key: Key, nextValue: Irpf2025AdjustmentInput[Key]) => {
+    onChange({ ...value, [key]: nextValue })
+  }
+  const available = previewBaseAvailable > 0 ? previewBaseAvailable : 1_000_000
+  const spousePensionEffect = sliceBaseReduction(
+    value,
+    ['spousePensionContribution', 'spouseNetWorkAndBusinessIncome', 'spousePensionProductType'],
+    available,
+  ).spousePensionApplied
+  const compensatoryEffect = sliceBaseReduction(
+    value,
+    ['compensatoryPensionPaid', 'compensatoryPensionFormalized'],
+    available,
+  ).compensatoryPensionApplied
+  const jointEffect = sliceBaseReduction(value, ['jointTaxationType'], available).jointTaxationApplied
+
+  return (
+    <>
+      {visibility.spousePension ? (
+        <ReductionQuestion
+          question="¿Has aportado a la previsión para la jubilación de tu pareja?"
+          description="Plan de pensiones, mutualidad profesional o seguro de jubilación. Solo si tu pareja gana poco por trabajo."
+          initiallyRelevant={
+            value.spousePensionContribution > 0
+            || value.spousePensionEligible
+            || value.spousePensionProductType !== 'none'
+            || (value.spouseNetWorkAndBusinessIncome > 0 && value.spouseNetWorkAndBusinessIncome < SPOUSE_INCOME_THRESHOLD)
+          }
+          effectAmount={spousePensionEffect}
+          onNo={() => onChange(clearSpousePensionFields(value))}
+        >
+          <SpousePensionQuestions value={value} onChange={onChange} />
+        </ReductionQuestion>
+      ) : null}
+
+      {visibility.compensatoryPension ? (
+        <ReductionQuestion
+          question="¿Pagas una pensión a tu expareja?"
+          description="Debe estar fijada por sentencia o convenio regulador formalizado."
+          initiallyRelevant={value.compensatoryPensionPaid > 0}
+          effectAmount={compensatoryEffect}
+          onNo={() => onChange({ ...value, compensatoryPensionPaid: 0, compensatoryPensionFormalized: false })}
+        >
+          <NumberField
+            label="¿Cuánto has pagado este año?"
+            value={value.compensatoryPensionPaid}
+            onChange={(amount) => onChange({
+              ...value,
+              compensatoryPensionPaid: amount,
+              compensatoryPensionFormalized: amount > 0,
+            })}
+          />
+        </ReductionQuestion>
+      ) : null}
+
+      {visibility.jointTaxation ? (
+        <ReductionQuestion
+          question="¿Vas a hacer la declaración conjunta?"
+          description="Cada año puedes elegir entre declaración individual o conjunta. Los hijos de la primera pregunta pueden formar la unidad si conviven contigo y cumplen edad o discapacidad."
+          guide={
+            <JointTaxationGuide
+              maritalStatus={maritalStatus}
+              childrenCount={childrenCount}
+              jointUnitChildrenCount={jointUnitChildrenCount}
+            />
+          }
+          initiallyRelevant={value.jointTaxationType !== 'individual'}
+          effectAmount={jointEffect}
+          onNo={() => update('jointTaxationType', 'individual')}
+        >
+          <SelectField
+            label="¿Con quién presentas la declaración?"
+            value={value.jointTaxationType}
+            onChange={(next) => update('jointTaxationType', next as Irpf2025AdjustmentInput['jointTaxationType'])}
+          >
+            <option value="individual">La presento individual</option>
+            {maritalStatus === 'married' ? (
+              <option value="married">Con mi cónyuge</option>
+            ) : (
+              <>
+                <option value="single_parent">Como unidad monoparental</option>
+                <option value="single_parent_cohabiting">Monoparental conviviendo con el otro progenitor</option>
+              </>
+            )}
+          </SelectField>
+        </ReductionQuestion>
+      ) : null}
+    </>
+  )
+}
+
+export { MaritalReductionsGroup }
+
+export function Irpf2025StructuredAdjustmentsForm({
+  focus,
+  value,
+  declaredInKindSalary = 0,
+  declaredGrossWorkIncome = 0,
+  previewBaseAvailable = 0,
+  onChange,
+}: Props) {
   const update = <Key extends keyof Irpf2025AdjustmentInput>(key: Key, nextValue: Irpf2025AdjustmentInput[Key]) => {
     onChange({ ...value, [key]: nextValue })
   }
   const benefits = calculateInKindBenefits2025(value)
   const benefitsMismatch = benefits.declaredBenefitsTotal > declaredInKindSalary
+  const workExpenses = calculateAdditionalWorkExpenses2025(value)
+  // Si aún no hay base liquidable, mostramos el efecto teórico de las respuestas.
+  const available = previewBaseAvailable > 0 ? previewBaseAvailable : 1_000_000
+  const personalPlanEffect = sliceBaseReduction(
+    value,
+    ['personalPensionContribution'],
+    available,
+  ).pensionApplied
+  const personalAndMutualityEffect = sliceBaseReduction(
+    value,
+    ['personalPensionContribution', 'mutualityContribution'],
+    available,
+  ).pensionApplied
+  const mutualityEffect = Math.max(0, personalAndMutualityEffect - personalPlanEffect)
+  const withEmployment = sliceBaseReduction(
+    value,
+    [
+      'personalPensionContribution',
+      'mutualityContribution',
+      'employerPensionContribution',
+      'workerEmploymentPensionContribution',
+    ],
+    available,
+    declaredGrossWorkIncome,
+  ).pensionApplied
+  const employmentPensionEffect = Math.max(0, withEmployment - personalAndMutualityEffect)
+  const protectedEffect = sliceBaseReduction(
+    value,
+    [
+      'protectedAssetsContribution',
+      'protectedAssetsFormalEstate',
+      'protectedAssetsValidContributor',
+      'protectedAssetsContributorNotBeneficiary',
+      'protectedAssetsTotalContributors',
+    ],
+    available,
+  ).protectedAssetsApplied
+  const regionalEffect = sliceBaseReduction(
+    value,
+    [
+      'verifiedRegionalReduction',
+      'regionalReductionVerified',
+      'regionalReductionCode',
+      'regionalReductionSourceUrl',
+      'regionalReductionCalculation',
+    ],
+    available,
+  ).regionalReductionApplied
+  const mobilityEffect = calculateGeographicMobilityIncrement2025(value, declaredGrossWorkIncome)
 
   if (focus === 'reductions') {
     return (
       <section className="irpf-rule-form" aria-label="Datos exactos para reducciones IRPF 2025">
         <div className="irpf-reduction-question-list">
-          <ReductionQuestion question="¿Tienes ingresos fuera de tu nómina?" description="Por ejemplo, alquileres, intereses, actividades o ganancias." initiallyRelevant={value.otherIncomeKnown || value.otherNonExemptNonWorkIncome > 0} onNo={() => onChange({ ...value, otherIncomeKnown: false, otherNonExemptNonWorkIncome: 0 })}>
-            <div className="irpf-rule-grid"><CheckField label="Sé si tengo esos otros ingresos" checked={value.otherIncomeKnown} onChange={(checked) => update('otherIncomeKnown', checked)} hint="Es necesario para aplicar algunos límites." /><NumberField label="¿Cuánto suman al año?" value={value.otherNonExemptNonWorkIncome} onChange={(amount) => update('otherNonExemptNonWorkIncome', amount)} unit="EUR" /></div>
+          <ReductionQuestion question="¿Tienes ingresos fuera de tu nómina?" description="Por ejemplo, alquileres, intereses, actividades o ganancias." initiallyRelevant={value.otherNonExemptNonWorkIncome > 0} onNo={() => onChange(confirmNoOtherIncome(value))}>
+            <OtherIncomeQuestions value={value} onChange={onChange} />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} onNo={() => update('unionDues', 0)}>
+          <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} effectAmount={workExpenses.unionDues} onNo={() => update('unionDues', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.unionDues} onChange={(amount) => update('unionDues', amount)} />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Pagas un colegio profesional obligatorio para trabajar?" description="Por ejemplo, si tu profesión exige estar colegiado." initiallyRelevant={value.professionalDues > 0 || value.professionalMembershipMandatory} onNo={() => onChange({ ...value, professionalDues: 0, professionalMembershipMandatory: false })}>
+          <ReductionQuestion question="¿Pagas un colegio profesional obligatorio para trabajar?" description="Por ejemplo, si tu profesión exige estar colegiado." initiallyRelevant={value.professionalDues > 0 || value.professionalMembershipMandatory} effectAmount={workExpenses.professionalDues} onNo={() => onChange({ ...value, professionalDues: 0, professionalMembershipMandatory: false })}>
             <div className="irpf-rule-grid"><NumberField label="¿Cuánto has pagado este año?" value={value.professionalDues} onChange={(amount) => update('professionalDues', amount)} hint="El máximo aplicable es 500 EUR." /><CheckField label="Estar colegiado es obligatorio para ejercer" checked={value.professionalMembershipMandatory} onChange={(checked) => update('professionalMembershipMandatory', checked)} /></div>
           </ReductionQuestion>
-          <ReductionQuestion question="¿Has pagado un abogado por un problema con tu trabajo?" description="Solo por un conflicto laboral con tu empresa." initiallyRelevant={value.legalDefenseCosts > 0} onNo={() => update('legalDefenseCosts', 0)}>
+          <ReductionQuestion question="¿Has pagado un abogado por un problema con tu trabajo?" description="Solo por un conflicto laboral con tu empresa." initiallyRelevant={value.legalDefenseCosts > 0} effectAmount={workExpenses.legalDefense} onNo={() => update('legalDefenseCosts', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.legalDefenseCosts} onChange={(amount) => update('legalDefenseCosts', amount)} hint="El máximo aplicable es 300 EUR." />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Te mudaste a otro municipio para empezar un trabajo?" description="Debe haber sido un traslado real de residencia después de estar inscrito como demandante de empleo." initiallyRelevant={value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence} onNo={() => onChange({ ...value, wasRegisteredJobseeker: false, acceptedJobOtherMunicipality: false, movedResidence: false, moveTaxYear: 0, newJobIntegralIncome: 0, newJobSpecificExpenses: 0 })}>
-            <div className="irpf-rule-grid"><CheckField label="Estaba inscrito como demandante de empleo" checked={value.wasRegisteredJobseeker} onChange={(checked) => update('wasRegisteredJobseeker', checked)} /><CheckField label="Acepté un empleo en otro municipio" checked={value.acceptedJobOtherMunicipality} onChange={(checked) => update('acceptedJobOtherMunicipality', checked)} /><CheckField label="Me mudé de residencia por ese empleo" checked={value.movedResidence} onChange={(checked) => update('movedResidence', checked)} /><CountField label="¿En qué año te mudaste?" value={value.moveTaxYear} onChange={(year) => update('moveTaxYear', year)} max={2025} unit="año" /><NumberField label="Salario bruto de ese nuevo empleo" value={value.newJobIntegralIncome} onChange={(amount) => update('newJobIntegralIncome', amount)} /><NumberField label="Gastos específicos de ese nuevo empleo" value={value.newJobSpecificExpenses} onChange={(amount) => update('newJobSpecificExpenses', amount)} /></div>
+          <ReductionQuestion question="¿Te mudaste a otro municipio para empezar un trabajo?" description="Aplica si estabas en paro, aceptaste un empleo en otro municipio y cambiaste de residencia." initiallyRelevant={value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence} effectAmount={mobilityEffect} onNo={() => onChange(clearGeographicMobilityFields(value))}>
+            <GeographicMobilityQuestions
+              value={value}
+              onChange={onChange}
+              declaredGrossWorkIncome={declaredGrossWorkIncome}
+            />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Pagas tú un plan de pensiones o una mutualidad profesional?" description="Incluye solo tus aportaciones personales." initiallyRelevant={value.personalPensionContribution > 0 || value.mutualityContribution > 0} onNo={() => onChange({ ...value, personalPensionContribution: 0, mutualityContribution: 0 })}>
-            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has aportado a tu plan?" value={value.personalPensionContribution} onChange={(amount) => update('personalPensionContribution', amount)} /><NumberField label="¿Cuánto has aportado a una mutualidad?" value={value.mutualityContribution} onChange={(amount) => update('mutualityContribution', amount)} /></div>
+          <ReductionQuestion question="¿Pagas tú un plan de pensiones?" description="Solo tus aportaciones personales, no las de tu empresa." initiallyRelevant={value.personalPensionContribution > 0} effectAmount={personalPlanEffect} onNo={() => update('personalPensionContribution', 0)}>
+            <NumberField label="¿Cuánto has aportado este año?" value={value.personalPensionContribution} onChange={(amount) => update('personalPensionContribution', amount)} />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Tu empresa aporta a un plan de pensiones para ti?" description="Míralo en tu nómina, certificado de la empresa o entidad del plan." initiallyRelevant={value.employerPensionContribution > 0 || value.workerEmploymentPensionContribution > 0} onNo={() => onChange({ ...value, employerPensionContribution: 0, workerEmploymentPensionContribution: 0, grossIncomeFromPensionEmployer: 0 })}>
-            <div className="irpf-rule-grid"><NumberField label="Aportación anual de tu empresa" value={value.employerPensionContribution} onChange={(amount) => update('employerPensionContribution', amount)} /><NumberField label="Tu aportación al mismo plan" value={value.workerEmploymentPensionContribution} onChange={(amount) => update('workerEmploymentPensionContribution', amount)} /><NumberField label="Tu salario bruto en esa empresa" value={value.grossIncomeFromPensionEmployer} onChange={(amount) => update('grossIncomeFromPensionEmployer', amount)} /></div>
+          <ReductionQuestion question="¿Pagas una mutualidad profesional?" description="Por ejemplo, la del colegio de médicos o abogados." initiallyRelevant={value.mutualityContribution > 0} effectAmount={mutualityEffect} onNo={() => update('mutualityContribution', 0)}>
+            <NumberField label="¿Cuánto has aportado este año?" value={value.mutualityContribution} onChange={(amount) => update('mutualityContribution', amount)} />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Has aportado al plan de pensiones de tu pareja?" description="Solo se aplica en ciertos casos de ingresos bajos de la pareja." initiallyRelevant={value.spousePensionContribution > 0} onNo={() => onChange({ ...value, spousePensionContribution: 0, spouseNetWorkAndBusinessIncome: 0, spousePensionEligible: false })}>
-            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has aportado?" value={value.spousePensionContribution} onChange={(amount) => update('spousePensionContribution', amount)} /><NumberField label="Ingresos netos anuales de tu pareja" value={value.spouseNetWorkAndBusinessIncome} onChange={(amount) => update('spouseNetWorkAndBusinessIncome', amount)} /><CheckField label="El plan cumple los requisitos" checked={value.spousePensionEligible} onChange={(checked) => update('spousePensionEligible', checked)} /></div>
+          <ReductionQuestion question="¿Tu empresa aporta a un plan de pensiones para ti?" description="Míralo en tu nómina, certificado de la empresa o entidad del plan." initiallyRelevant={value.employerPensionContribution > 0 || value.workerEmploymentPensionContribution > 0} effectAmount={employmentPensionEffect} onNo={() => onChange({ ...value, employerPensionContribution: 0, workerEmploymentPensionContribution: 0 })}>
+            <div className="irpf-rule-grid">
+              {declaredGrossWorkIncome > 0 ? (
+                <p className="irpf-marital-note irpf-marital-note--muted">
+                  Usamos tu salario bruto del paso 1 ({declaredGrossWorkIncome.toLocaleString('es-ES')} €) para calcular el límite de tu aportación al plan.
+                </p>
+              ) : null}
+              <NumberField label="Aportación anual de tu empresa" value={value.employerPensionContribution} onChange={(amount) => update('employerPensionContribution', amount)} />
+              <NumberField label="Tu aportación al mismo plan" value={value.workerEmploymentPensionContribution} onChange={(amount) => update('workerEmploymentPensionContribution', amount)} />
+            </div>
           </ReductionQuestion>
-          <ReductionQuestion question="¿Pagas una pensión a tu expareja?" description="Debe estar fijada por sentencia o convenio regulador formalizado." initiallyRelevant={value.compensatoryPensionPaid > 0 || value.compensatoryPensionFormalized} onNo={() => onChange({ ...value, compensatoryPensionPaid: 0, compensatoryPensionFormalized: false })}>
-            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has pagado este año?" value={value.compensatoryPensionPaid} onChange={(amount) => update('compensatoryPensionPaid', amount)} /><CheckField label="Hay sentencia o convenio regulador formalizado" checked={value.compensatoryPensionFormalized} onChange={(checked) => update('compensatoryPensionFormalized', checked)} /></div>
+          <ReductionQuestion question="¿Has aportado a un patrimonio protegido de una persona con discapacidad?" description="Es una figura específica; déjalo en No si no te suena." initiallyRelevant={value.protectedAssetsContribution > 0 || value.protectedAssetsFormalEstate} effectAmount={protectedEffect} onNo={() => onChange(clearProtectedAssetsFields(value))}>
+            <ProtectedAssetsQuestions value={value} onChange={onChange} />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Vas a hacer la declaración conjunta?" description="Elige la situación que corresponda a tu unidad familiar." initiallyRelevant={value.jointTaxationType !== 'individual'} onNo={() => update('jointTaxationType', 'individual')}>
-            <SelectField label="¿Con quién presentas la declaración?" value={value.jointTaxationType} onChange={(next) => update('jointTaxationType', next as Irpf2025AdjustmentInput['jointTaxationType'])}><option value="individual">La presento individual</option><option value="married">Con mi cónyuge</option><option value="single_parent">Como unidad monoparental</option><option value="single_parent_cohabiting">Monoparental conviviendo con el otro progenitor</option></SelectField>
-          </ReductionQuestion>
-          <ReductionQuestion question="¿Has aportado a un patrimonio protegido de una persona con discapacidad?" description="Es una figura específica; déjalo en No si no te suena." initiallyRelevant={value.protectedAssetsContribution > 0} onNo={() => onChange({ ...value, protectedAssetsContribution: 0, protectedAssetsTotalContributors: 0, protectedAssetsEligible: false })}>
-            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has aportado?" value={value.protectedAssetsContribution} onChange={(amount) => update('protectedAssetsContribution', amount)} /><NumberField label="Total aportado entre todas las personas" value={value.protectedAssetsTotalContributors} onChange={(amount) => update('protectedAssetsTotalContributors', amount)} /><CheckField label="La aportación cumple los requisitos" checked={value.protectedAssetsEligible} onChange={(checked) => update('protectedAssetsEligible', checked)} /></div>
-          </ReductionQuestion>
-          <ReductionQuestion question="¿Tienes una reducción autonómica ya calculada y comprobada?" description="Solo si tienes la norma y el cálculo revisados; si no, déjalo en No." initiallyRelevant={value.verifiedRegionalReduction > 0} onNo={() => onChange({ ...value, verifiedRegionalReduction: 0, regionalReductionCode: '', regionalReductionSourceUrl: '', regionalReductionCalculation: '', regionalReductionVerified: false })}>
+          <ReductionQuestion question="¿Tienes una reducción autonómica ya calculada y comprobada?" description="Solo si tienes la norma y el cálculo revisados; si no, déjalo en No." initiallyRelevant={value.verifiedRegionalReduction > 0} effectAmount={regionalEffect} onNo={() => onChange({ ...value, verifiedRegionalReduction: 0, regionalReductionCode: '', regionalReductionSourceUrl: '', regionalReductionCalculation: '', regionalReductionVerified: false })}>
             <div className="irpf-rule-grid"><NumberField label="Importe de la reducción" value={value.verifiedRegionalReduction} onChange={(amount) => update('verifiedRegionalReduction', amount)} /><TextField label="Nombre de la reducción" value={value.regionalReductionCode} onChange={(next) => update('regionalReductionCode', next)} /><TextField label="Enlace a la fuente oficial" type="url" value={value.regionalReductionSourceUrl} onChange={(next) => update('regionalReductionSourceUrl', next)} /><TextField label="Cómo has hecho el cálculo" value={value.regionalReductionCalculation} onChange={(next) => update('regionalReductionCalculation', next)} /><CheckField label="He comprobado requisitos y fuente" checked={value.regionalReductionVerified} onChange={(checked) => update('regionalReductionVerified', checked)} /></div>
           </ReductionQuestion>
         </div>

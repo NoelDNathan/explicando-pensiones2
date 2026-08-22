@@ -142,11 +142,16 @@
 }
 
 .salary-slider__scale {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  position: relative;
+  height: 11px;
   color: #91a6bd;
   font-size: 11px;
   line-height: 1;
   font-weight: 700;
+}
+
+.salary-slider__scale-marker {
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
 }

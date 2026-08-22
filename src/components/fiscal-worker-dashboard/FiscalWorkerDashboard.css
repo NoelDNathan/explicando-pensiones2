@@ -270,7 +270,7 @@
 }
 
 .fwd:has(.wfsc-chrome) {
-  --wfsc-chrome-height: 104px;
+  --wfsc-chrome-height: 80px;
 }
 
 .fwd:has(.wfsc-chrome) .fwd-main {
@@ -278,12 +278,12 @@
 }
 
 .fwd:has(.wfsc-chrome) .wprc-explained--sticky {
-  bottom: calc(var(--wfsc-chrome-height) + 12px);
+  bottom: var(--wfsc-chrome-height);
 }
 
 @media (max-width: 860px) {
   .fwd:has(.wfsc-chrome) {
-    --wfsc-chrome-height: 136px;
+    --wfsc-chrome-height: 118px;
   }
 }
 

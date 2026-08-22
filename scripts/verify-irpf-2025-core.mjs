@@ -75,6 +75,14 @@ assert.equal(reductionBlockedByOtherIncome.applied, 0)
 const deductionBlockedByOtherIncome = calculateLowWorkIncomeDeduction2025(16_000, 500, 500, 6_500.01)
 assert.equal(deductionBlockedByOtherIncome.applied, 0)
 
+const confirmedNoOtherIncome = createEmptyIrpf2025Adjustments()
+confirmedNoOtherIncome.otherIncomeKnown = true
+confirmedNoOtherIncome.otherNonExemptNonWorkIncome = 0
+const confirmedNoOtherIncomeResult = calculateCase(18_000, 0, confirmedNoOtherIncome)
+assert.equal(roundCents(confirmedNoOtherIncomeResult.workReductionApplied), 3_834.2)
+assert.equal(roundCents(confirmedNoOtherIncomeResult.lowWorkIncomeDeductionApplied), 55.2)
+assert.equal(confirmedNoOtherIncomeResult.warnings.length, 0)
+
 const unionOnly = createEmptyIrpf2025Adjustments()
 unionOnly.unionDues = 250
 unionOnly.professionalDues = 500
@@ -148,7 +156,6 @@ assert.equal(calculateRefundableDeductions2025(employerDaycare, 3_000).daycareGe
 const employmentPension = createEmptyIrpf2025Adjustments()
 employmentPension.employerPensionContribution = 500
 employmentPension.workerEmploymentPensionContribution = 1_250
-employmentPension.grossIncomeFromPensionEmployer = 35_000
 const employmentPensionResult = calculateCase(35_000, 0, employmentPension)
 assert.equal(roundCents(employmentPensionResult.pensionReductionApplied), 1_750)
 assert.equal(roundCents(employmentPensionResult.baseReductions.pensionAbsoluteLimit), 3_250)
@@ -195,5 +202,5 @@ largeFamily.largeFamilyEntitlementShare = 1
 largeFamily.refundableContributionLimit = 5_000
 assert.equal(calculateRefundableDeductions2025(largeFamily, 3_000).largeFamilyGenerated, 1_800)
 
-const checks = goldenCases.length + 19
+const checks = goldenCases.length + 20
 console.log(`IRPF 2025 verificado: ${checks} comprobaciones superadas.`)

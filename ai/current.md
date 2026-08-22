@@ -1,8 +1,92 @@
 # Estado actual
 
-Fecha: 2026-08-03
+Fecha: 2026-08-20
 
 ## Situacion
+
+- En sliders de salario anual (14.000–500.000 €), resumen intro/final y paso 1 usan escala logarítmica: las marcas 14.000 y 50.000 ya no quedan pegadas. Verificación: `pnpm run build` correcto.
+
+- En `SalarySlider`, las marcas de escala se posicionan según el valor real en la escala (lineal o log), no con espaciado uniforme. Corrige que 133.000 € pareciera estar en 50.000 € con max 500.000. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la reducción por patrimonio protegido deja el checkbox «cumple los requisitos» y pasa a un subflujo de preguntas Sí/No: patrimonio constituido, parentesco o legitimación, aportante distinto del titular, importe propio y aportaciones de otras personas. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, con estado civil casado/a, la declaración conjunta con cónyuge es el valor por defecto del selector «¿Con quién presentas la declaración?». Verificación: `pnpm run build` correcto.
+
+- En el paso 4, plan de pensiones personal y mutualidad profesional son dos preguntas separadas con su importe. Verificación: `pnpm run build` correcto.
+
+- En movilidad geográfica (paso 4) se eliminó la pregunta de salario bruto del nuevo empleo: el tope del incremento usa el salario del paso 1. Solo queda gastos específicos; el texto indica límite de 2.000 €. Verificación: `pnpm run build` y `pnpm run verify:irpf2025` (24 comprobaciones) correctos.
+
+- En el paso 4, responder «No» a ingresos fuera de la nómina confirma 0 € de otras rentas y permite aplicar reducción por trabajo y deducción por rentas bajas. Verificación: `pnpm run build` y `pnpm run verify:irpf2025` (24 comprobaciones) correctos.
+
+- En el paso 4, la pregunta de ingresos fuera de la nómina deja la casilla y el importe sueltos y pasa a un subflujo de preguntas: primero si sabes cuánto suman al año; si respondes Sí, pides el importe y se explica el límite de 6.500 € para la reducción por rendimientos y la deducción por rentas bajas. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la reducción por movilidad geográfica pregunta «¿Te mudaste en 2024 o 2025?» con Sí/No en lugar del campo numérico de año; salario y gastos solo aparecen si responde Sí. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la reducción por movilidad geográfica (mudanza por trabajo) deja los tres checkboxes y pasa a un flujo de preguntas Sí/No encadenadas: inscripción como demandante de empleo, empleo en otro municipio y traslado de residencia; solo al cumplir las tres aparecen año, salario y gastos. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la guía de declaración conjunta enlaza con la pregunta de hijos: resume cuántos indicaste y cuántos podrían formar unidad (convivencia + edad/discapacidad), y aclara que el mínimo por hijos usa más requisitos. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la pregunta de declaración conjunta incluye ejemplos en la descripción y un desplegable «¿Quién y cuándo puedes declarar conjunta?» con casos (cónyuge, padre/madre sola/o, convivencia con otro progenitor), requisitos comunes y quién cuenta como hijo en la unidad. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la pregunta de declaración conjunta se muestra después de la de previsión del cónyuge (casado/a) o pensión compensatoria (divorciado/a), no antes. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la reducción por aportación a la previsión del cónyuge (casado/a) ya no pide elegir tipo de producto: plan de pensiones, mutualidad y plan asegurado se tratan igual. La pregunta principal habla de previsión para la jubilación; el bloque «¿Cuál es cuál?» es desplegable con las tres definiciones. Verificacion: `pnpm run build` correcto.
+
+- En el paso 7 (`WorkerConsumptionTaxesCard`), el bloque de coche en propiedad incluye IVTM (circulacion) anual estimado por potencia fiscal y tipo €/CV, con varias filas y total; debajo sigue el impuesto de compra (IVA, IGIC o ITP). El resumen lateral y el paso 8 suman el IVTM en otros impuestos. La fila Gasolina apunta al bloque. Verificacion: `pnpm run build` correcto.
+
+- En el paso 7 (`WorkerConsumptionTaxesCard`), vivienda y coche empiezan con una pregunta Si/No antes de mostrar calculadoras: vivienda en propiedad (aunque quede hipoteca) y coche en propiedad. Eliminado el interruptor «Incluido» del IBI. El IBI admite varias viviendas con valor catastral y tipo por fila, mas total estimado. Las preguntas de propiedad usan colores alineados con el tema suave (como las preguntas del paso 4). Verificacion: `pnpm run build` correcto.
+
+- En el paso 4, el plan del conyuge pide elegir el tipo de producto (plan de pensiones, mutualidad o seguro de jubilacion) con recuadro explicativo; la reduccion solo aplica con tipo valido, ingresos &lt; 8.000 € y aportacion &lt;= 1.000 €. Verificacion: `pnpm run build` correcto.
+
+- En el paso 4, el plan de pensiones del conyuge (casado/a) pregunta si la pareja gana menos de 8.000 €/ano, avisa del tope de 1.000 € y si el producto es un plan de jubilacion valido, en lenguaje sencillo. Verificacion: `pnpm run build` correcto.
+
+- En el paso 4, el estado civil condiciona tres preguntas que van justo debajo, en la misma seccion familiar (plan del conyuge si casado/a, pension compensatoria si divorciado/a, declaracion conjunta), no mas abajo entre otras reducciones. Verificacion: `pnpm run build` correcto.
+
+- En la pregunta de pension compensatoria (divorciado/a), eliminada la casilla duplicada de sentencia o convenio regulador; el requisito queda solo en la descripcion de la pregunta y el importe activa la reduccion. Verificacion: `pnpm run build` correcto.
+
+- En el paso 7 (`WorkerConsumptionTaxesCard`), nuevo bloque opcional «Si has comprado un coche»: estima IVA o IGIC (nuevo y concesionario), ITP entre particulares y matriculacion por CO2 en obra nueva; admite varios vehiculos y total informativo (pago unico, no mensual). La fila Gasolina indica que mas abajo se puede estimar ese impuesto. Verificacion: `pnpm run build` correcto.
+
+- En el paso 7 (`WorkerConsumptionTaxesCard`), el bloque de vivienda permite editar valor catastral y tipo IBI estimado, con enlace a la Sede del Catastro. La fila Hipoteca / deudas indica que mas abajo se puede estimar el IVA o ITP de la compra. Nuevo bloque para varias viviendas: precio, comunidad autonoma y tipo (obra nueva o segunda mano) con total estimado de impuesto en la compra (no IBI ni mensual). Verificacion: `pnpm run build` correcto.
+
+- En el paso 7, hipoteca/deudas no suma IVA: el impuesto de la compra fue único (IVA o ITP) y no se reparte en las cuotas; el gasto recurrente de vivienda en propiedad es el IBI. La etiqueta sigue siendo «0% en la cuota». Verificacion: `pnpm run build` correcto.
+
+- En el paso 7 (`WorkerConsumptionTaxesCard`), los importes de cada categoria, el total y el resumen (gasto, IVA, especiales, IBI e impacto) se editan y muestran en mensual. El modelo interno sigue anual. Hay un consejo para copiar gasto y % de la app del banco. Verificacion: `pnpm run build` correcto.
+
+- En el paso 3 (`WorkerSocialContributionsCard`), la nota explicativa de AT/EP en el panel de empresa se reescribe con lenguaje orientado al público general: analogía de seguro, variación del porcentaje según actividad/riesgo, desglose IT/IMS y aclaración de que lo paga la empresa. Los porcentajes siguen siendo dinámicos según la categoría seleccionada. Verificación: `pnpm run build` correcto.
+
+- En el paso 4 (`WorkerPersonalReductionsCard`), eliminado el título «Así se reparte el mínimo por hijos» del panel de escalones por hijo; se mantiene el texto explicativo y la lista de importes. Verificación: `pnpm run build` correcto.
+
+- En el paso 4 (`WorkerPersonalReductionsCard`), el resumen fijo de «Reducciones de base aplicadas» y la base liquidable se calculan en tiempo real con `calculateBaseReductions2025` a partir de las respuestas del formulario (antes dependía del valor del padre y podía quedarse en 0). Verificación: `pnpm run build` correcto.
+
+- En el paso 4 (`WorkerPersonalReductionsCard`), cada pregunta del detalle de hijo/ascendiente cuya respuesta excluye del mínimo muestra a la derecha la pastilla `Hace que no sume`. Si hay varios factores (convivencia, ingresos, declaración, edad+discapacidad, pensión formalizada), aparece en todos a la vez. Verificación: `pnpm run build` correcto.
+
+- En el paso 1 (`WorkerSalaryBaseCard`), complementos y salario en especie muestran un desplegable de porcentajes (0–25 %) y un input de euros anuales sincronizados; el porcentaje es la referencia y los euros se recalculan al mover el salario fijo. Al escribir euros se actualiza el porcentaje exacto aunque no coincida con un preset; el desplegable muestra entonces ese % calculado (p. ej. `6,14 %`) hasta que el usuario elija un preset. Verificación: `pnpm run build` correcto.
+
+- En el paso 1, complementos y salario en especie pasaban de inputs libres a desplegables con porcentajes fijos (0–25 %), mostrando también el equivalente en euros sobre el salario. Verificación: `pnpm run build` correcto.
+
+- En el detalle de hijo/ascendiente: trabajo y discapacidad por defecto en No; edad «25 o más» / «Menos de 65» ya no premarca discapacidad. Verificación: `pnpm run build` correcto.
+
+- La pregunta de ayuda/movilidad del paso 4 solo aparece con discapacidad del 33 % (Sí → +3.000 EUR; No → sin badge). Con el 65 % el incremento es automático y se suma al badge de discapacidad (+12.000), con nota explicativa. Verificación: `pnpm run build` correcto.
+
+- En el detalle de cada hijo del paso 4: menor de 3 omite preguntas de trabajo/ingresos; si tiene 3 o más se pregunta primero si trabaja; «25+ con discapacidad» premaca 33 %; el reparto del mínimo se formula como solo a ti / a medias con el otro progenitor; la pensión de alimentos arranca en 3.600 EUR/año al decir Sí. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, cada pregunta muestra al lado su efecto en euros (`+2.400 EUR` al mínimo o `−500 EUR` de base) solo cuando hay impacto; si no hay efecto, el badge no aparece. Cubre familia, detalle de hijo/ascendiente y reducciones. Verificación: `pnpm run build` correcto; en `/calculadora-fiscal` con hijo menor de 3 y discapacidad 33 % aparecen `+8200`, `+2800` y `+3000`.
+
+- En el paso 4, la pensión de alimentos del detalle del hijo pasa por puerta Sí/No: el importe y la pregunta de sentencia/convenio solo aparecen si responde Sí; al decir No se limpia el importe. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, el detalle de cada hijo o ascendiente aparece justo debajo de la pregunta de cantidad (al decir Sí) y deja el formulario en rejilla: ahora es un flujo de preguntas con chips, tipografía conversacional y sin cajas anidadas. Verificación: `pnpm run build` correcto; revisión visual en `/componentes`.
+
+- En el paso 4, las preguntas de familia (hijos, ascendientes, discapacidad, ayuda y estado civil) dejan la rejilla de selectores compactos y pasan al mismo patrón que las reducciones: `Sí, me aplica` / `No, continuar`, con chips de detalle al afirmar. La ayuda/movilidad solo aparece si hay discapacidad. El número de hijos y de ascendientes admite hasta 10 (antes 4 y 3). Verificación: `pnpm run build` correcto.
+
+- En el paso 5 (`Deducciones y salario en especie`) se elimina la nómina de ejemplo del encabezado: esas partidas no son deducciones de nómina. El hero pasa a layout compacto con un aside conceptual (`¿Deducción o beneficio exento?` / no aparece en la nómina). Verificación: `pnpm run build` correcto; escritorio stage ~244 px y móvil 390 px sin overflow horizontal.
+
+- Compactada la bandeja fija del paso 4 (`WorkerPersonalReductionsCard`): eliminados título y párrafo; solo quedan las 4 métricas, a ancho completo y pegadas al chrome inferior (sin hueco flotante). Ajustada `--wfsc-chrome-height` a 80 px en escritorio. Verificación: `pnpm run build` correcto; gap bandeja–chrome ≈ 1 px en escritorio.
+
+- Corregido el color del aviso de tope de cotización en el paso 3 (`WorkerSocialContributionsCard`): en tema suave, `.wscc-alert--maximum` / `--minimum` usan fondos naranja/violeta claros y texto oscuro legible en lugar de los colores crema del tema oscuro. Verificación: `pnpm run build` correcto; revisión visual del alert máximo en escritorio.
+
+- En el paso 1 (`WorkerSalaryBaseCard`), al mover el salario fijo se mantienen los porcentajes de complementos y salario en especie y se recalculan los euros. Antes ocurría lo contrario: los euros quedaban fijos y cambiaba el %. Verificación: `pnpm run build` correcto; en `/calculadora-fiscal` con 10 % fijo, al pasar de 50.000 a 70.000 € los complementos pasan de 5.000 a 7.000 €.
+
+- Mejorado el selector de grupo de cotización del paso 2 (`WorkerContributionLimitsCard`): el `<select>` nativo pasa a un desplegable propio donde cada opción muestra base mínima y máxima (mensual/anual según el modo activo). El trigger cerrado también resume esas bases. Verificación: `pnpm run build` correcto; revisión en `/calculadora-fiscal` escritorio y móvil 390 px sin overflow horizontal.
 
 - Rediseñada la barra inferior del recorrido fiscal: texto único “Paso X de 10 · título”, botón primario “Continuar” con el nombre del siguiente paso, puntos con estados hecho/activo y barra de progreso fina sin badge de porcentaje. Sigue fija abajo. Verificación: `pnpm run build` correcto; paso 1 en escritorio y móvil 390 px sin overflow horizontal.
 

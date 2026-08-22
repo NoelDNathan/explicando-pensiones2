@@ -193,8 +193,29 @@
 }
 
 .wsbc-control-row--amount {
-  grid-template-columns: minmax(0, 1fr) minmax(108px, 132px);
+  grid-template-columns: minmax(0, 1fr) minmax(108px, 0.32fr);
+  gap: 10px;
   align-items: stretch;
+}
+
+.wsbc-select-shell--percent {
+  width: 100%;
+  min-height: 42px;
+}
+
+.wsbc-select-shell--percent select {
+  min-height: 40px;
+  font-size: clamp(15px, 1.8vw, 18px);
+}
+
+.wsbc-input-shell--amount {
+  width: 100%;
+  min-height: 42px;
+}
+
+.wsbc-input-shell--amount input {
+  min-height: 40px;
+  font-size: clamp(15px, 1.8vw, 18px);
 }
 
 .wsbc-input-shell,
@@ -346,7 +367,7 @@
   }
 
   .wsbc-control-row--amount {
-    grid-template-columns: minmax(0, 1fr) minmax(100px, 120px);
+    grid-template-columns: minmax(0, 1fr) minmax(96px, 0.38fr);
   }
 
   .wsbc-salary-side {
@@ -377,7 +398,7 @@
   }
 
   .wsbc-control-row--amount {
-    grid-template-columns: minmax(0, 1fr) minmax(100px, 120px);
+    grid-template-columns: minmax(0, 1fr) minmax(96px, 0.38fr);
   }
 
   .wsbc-salary-side {

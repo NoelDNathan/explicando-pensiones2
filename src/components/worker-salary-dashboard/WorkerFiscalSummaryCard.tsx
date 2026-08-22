@@ -112,8 +112,7 @@ export function WorkerFiscalSummaryCard({
     return (
       <section className="wfsc-summary wfsc-summary--intro wfsc-theme--soft" aria-labelledby="wfsc-summary-title">
         <header className="wfsc-intro__header">
-          <p className="wfsc-summary__eyebrow">Resumen rápido · Empecemos por lo esencial</p>
-          <h2 id="wfsc-summary-title">¿A dónde va el dinero que cuesta tu trabajo?</h2>
+          <h2 id="wfsc-summary-title">¿Cuántos impuestos pagas?</h2>
           <p className="wfsc-intro__lead">
             Mueve tu sueldo y verás, en un vistazo, cuánto acaba en tu bolsillo y cuánto se
             reparte entre impuestos y cotizaciones. Después lo iremos afinando paso a paso.
@@ -130,6 +129,7 @@ export function WorkerFiscalSummaryCard({
               max={500_000}
               step={1_000}
               markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+              scale="log"
               unitLabel="brutos al año"
               ariaLabel="Salario bruto anual para el resumen fiscal"
             />
@@ -260,6 +260,7 @@ export function WorkerFiscalSummaryCard({
           max={500_000}
           step={1_000}
           markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+          scale="log"
           unitLabel="brutos al año"
           ariaLabel="Salario bruto anual para el resumen fiscal"
         />

@@ -52,6 +52,13 @@ export function qualifiesDependent(profile: DependentProfile, type: 'descendant'
   return true
 }
 
+export function countsForJointUnit(profile: DependentProfile) {
+  if (profile.livesWith !== 'yes') return false
+  if (profile.ageBand === 'under3' || profile.ageBand === '3_to_24') return true
+  if (profile.ageBand === '25_plus_disabled' && profile.disabilityPercent !== '0') return true
+  return false
+}
+
 function disabilityMinimum(
   minimums: Minimums2025,
   profile: DependentProfile,

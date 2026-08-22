@@ -138,8 +138,7 @@
   transform: translateY(-1px);
 }
 
-.wclc button:focus-visible,
-.wclc select:focus-visible {
+.wclc button:focus-visible {
   outline: 3px solid rgba(83, 190, 255, 0.42);
   outline-offset: 3px;
 }
@@ -164,45 +163,240 @@
   align-items: end;
 }
 
-.wclc-field {
+.wclc:has(.wclc-group-select--open) {
+  overflow: visible;
+  z-index: 4;
+}
+
+.fwd-worker-card:has(.wclc-group-select--open),
+.fwd-worker-dashboard:has(.wclc-group-select--open) {
+  overflow: visible;
+  z-index: 5;
+}
+
+.wclc-group-select {
+  position: relative;
   display: grid;
   gap: 8px;
+  min-width: 0;
   color: var(--wclc-muted);
   font-size: clamp(14px, 1.7vw, 17px);
   font-weight: 760;
 }
 
-.wclc-select-shell {
+.wclc-group-select__label {
+  color: inherit;
+}
+
+.wclc-group-select__trigger,
+.wclc-group-select__option {
+  width: 100%;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.wclc-group-select__trigger {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
   align-items: center;
-  min-height: 44px;
+  min-height: 52px;
+  padding: 8px 46px 8px 12px;
   border: 1px solid rgba(64, 112, 161, 0.56);
   border-radius: 8px;
+  color: #eef5ff;
   background:
     linear-gradient(180deg, rgba(8, 30, 57, 0.94), rgba(3, 15, 32, 0.92));
   box-shadow:
     0 12px 22px rgba(0, 6, 18, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
-.wclc-select-shell select {
-  appearance: none;
-  width: 100%;
-  min-height: 42px;
-  padding: 0 46px 0 18px;
-  border: 0;
-  color: #eef5ff;
-  background: transparent;
-  cursor: pointer;
-  font: 780 clamp(15px, 1.8vw, 18px)/1.2 var(--sans);
+.wclc-group-select__trigger:hover,
+.wclc-group-select__trigger:focus-visible,
+.wclc-group-select--open .wclc-group-select__trigger {
+  border-color: rgba(83, 190, 255, 0.58);
+  box-shadow:
+    0 14px 24px rgba(0, 6, 18, 0.24),
+    0 0 0 1px rgba(83, 190, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  outline: none;
 }
 
-.wclc-select-shell svg {
+.wclc-group-select__chevron {
   position: absolute;
+  top: 50%;
   right: 14px;
   color: #8fa6c3;
   pointer-events: none;
+  transform: translateY(-50%);
+  transition: transform 160ms ease;
+}
+
+.wclc-group-select--open .wclc-group-select__chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.wclc-group-select__panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  display: grid;
+  gap: 6px;
+  max-height: min(360px, 56vh);
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid rgba(83, 190, 255, 0.34);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(21, 169, 255, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(8, 28, 52, 0.98), rgba(2, 12, 28, 0.98));
+  box-shadow:
+    0 22px 40px rgba(0, 6, 20, 0.42),
+    0 0 0 1px rgba(83, 190, 255, 0.08);
+}
+
+.wclc-group-select__option {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid rgba(80, 139, 191, 0.18);
+  border-radius: 11px;
+  color: inherit;
+  background: rgba(3, 18, 39, 0.42);
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.wclc-group-select__option:hover,
+.wclc-group-select__option--active {
+  border-color: rgba(83, 190, 255, 0.34);
+  background: rgba(12, 52, 86, 0.5);
+}
+
+.wclc-group-select__option--selected {
+  border-color: rgba(83, 190, 255, 0.52);
+  background:
+    linear-gradient(135deg, rgba(12, 76, 124, 0.42), rgba(8, 28, 52, 0.5));
+}
+
+.wclc-group-select__preview {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.wclc-group-select__preview--trigger {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.wclc-group-select__identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.wclc-group-select__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #9fe6ff;
+  background: rgba(21, 169, 255, 0.16);
+  border: 1px solid rgba(21, 169, 255, 0.34);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.wclc-group-select__option .wclc-group-select__badge {
+  min-width: 72px;
+}
+
+.wclc-group-select__name {
+  min-width: 0;
+  color: #dbe7f8;
+  font-size: clamp(14px, 1.5vw, 16px);
+  line-height: 1.25;
+  font-weight: 780;
+}
+
+.wclc-group-select__bases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wclc-group-select__bases--compact {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+.wclc-group-select__base {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 26px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 820;
+  white-space: nowrap;
+}
+
+.wclc-group-select__base > span {
+  opacity: 0.88;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.wclc-group-select__base strong {
+  font-size: 12px;
+  font-weight: 920;
+}
+
+.wclc-group-select__base em {
+  font-style: normal;
+  opacity: 0.72;
+  font-weight: 720;
+}
+
+.wclc-group-select__base--min {
+  color: #e2c8ff;
+  background: rgba(183, 131, 255, 0.16);
+  border: 1px solid rgba(183, 131, 255, 0.34);
+}
+
+.wclc-group-select__base--min strong {
+  color: var(--wclc-purple);
+  text-shadow: 0 0 10px rgba(183, 131, 255, 0.28);
+}
+
+.wclc-group-select__base--max {
+  color: #ffd89b;
+  background: rgba(255, 155, 34, 0.16);
+  border: 1px solid rgba(255, 155, 34, 0.42);
+}
+
+.wclc-group-select__base--max strong {
+  color: var(--wclc-orange);
+  text-shadow: 0 0 10px rgba(255, 155, 34, 0.28);
 }
 
 .wclc-mode,
@@ -707,6 +901,16 @@
   .wclc-controls {
     grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  .wclc-group-select__preview--trigger {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .wclc-group-select__bases--compact {
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .wclc-mode,

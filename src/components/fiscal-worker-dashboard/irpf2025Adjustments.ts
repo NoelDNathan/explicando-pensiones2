@@ -28,11 +28,14 @@ export type Irpf2025AdjustmentInput = {
   spousePensionContribution: number
   spouseNetWorkAndBusinessIncome: number
   spousePensionEligible: boolean
+  spousePensionProductType: 'none' | 'pension_plan' | 'mutuality' | 'insured_plan'
   compensatoryPensionPaid: number
   compensatoryPensionFormalized: boolean
   jointTaxationType: 'individual' | 'married' | 'single_parent' | 'single_parent_cohabiting'
   protectedAssetsContribution: number
-  protectedAssetsEligible: boolean
+  protectedAssetsFormalEstate: boolean
+  protectedAssetsValidContributor: boolean
+  protectedAssetsContributorNotBeneficiary: boolean
   protectedAssetsTotalContributors: number
   verifiedRegionalReduction: number
   regionalReductionVerified: boolean
@@ -104,7 +107,13 @@ export type Irpf2025AdjustmentInput = {
   paymentOnAccountNotPassedOn: number
 }
 
-export function createEmptyIrpf2025Adjustments(): Irpf2025AdjustmentInput {
+type CreateEmptyIrpf2025AdjustmentsOptions = {
+  maritalStatus?: 'single' | 'married' | 'divorced' | 'widowed'
+}
+
+export function createEmptyIrpf2025Adjustments(
+  options?: CreateEmptyIrpf2025AdjustmentsOptions,
+): Irpf2025AdjustmentInput {
   return {
     otherIncomeKnown: false,
     otherNonExemptNonWorkIncome: 0,
@@ -126,11 +135,14 @@ export function createEmptyIrpf2025Adjustments(): Irpf2025AdjustmentInput {
     spousePensionContribution: 0,
     spouseNetWorkAndBusinessIncome: 0,
     spousePensionEligible: false,
+    spousePensionProductType: 'none',
     compensatoryPensionPaid: 0,
     compensatoryPensionFormalized: false,
-    jointTaxationType: 'individual',
+    jointTaxationType: options?.maritalStatus === 'married' ? 'married' : 'individual',
     protectedAssetsContribution: 0,
-    protectedAssetsEligible: false,
+    protectedAssetsFormalEstate: false,
+    protectedAssetsValidContributor: false,
+    protectedAssetsContributorNotBeneficiary: false,
     protectedAssetsTotalContributors: 0,
     verifiedRegionalReduction: 0,
     regionalReductionVerified: false,
@@ -278,6 +290,31 @@ export function calculateInKindBenefits2025(input: Irpf2025AdjustmentInput): InK
   }
 }
 
+export const GEOGRAPHIC_MOBILITY_INCREMENT_2025 = 2_000
+
+export function calculateGeographicMobilityIncrement2025(
+  input: Pick<
+    Irpf2025AdjustmentInput,
+    'wasRegisteredJobseeker' | 'acceptedJobOtherMunicipality' | 'movedResidence' | 'moveTaxYear' | 'newJobSpecificExpenses'
+  >,
+  grossWorkIncome: number,
+  maxIncrement = GEOGRAPHIC_MOBILITY_INCREMENT_2025,
+) {
+  if (
+    !input.wasRegisteredJobseeker
+    || !input.acceptedJobOtherMunicipality
+    || !input.movedResidence
+    || (input.moveTaxYear !== 2024 && input.moveTaxYear !== 2025)
+  ) {
+    return 0
+  }
+
+  return Math.min(
+    maxIncrement,
+    Math.max(0, positive(grossWorkIncome) - positive(input.newJobSpecificExpenses)),
+  )
+}
+
 export function calculateAdditionalWorkExpenses2025(input: Irpf2025AdjustmentInput) {
   const unionDues = positive(input.unionDues)
   const professionalDues = input.professionalMembershipMandatory
@@ -293,9 +330,12 @@ export function calculateAdditionalWorkExpenses2025(input: Irpf2025AdjustmentInp
   }
 }
 
-function workerEmploymentContributionLimit(input: Irpf2025AdjustmentInput) {
+function workerEmploymentContributionLimit(
+  input: Irpf2025AdjustmentInput,
+  grossWorkIncome: number,
+) {
   const employer = positive(input.employerPensionContribution)
-  if (positive(input.grossIncomeFromPensionEmployer) > 60_000) return employer
+  if (positive(grossWorkIncome) > 60_000) return employer
   if (employer <= 500) return employer * 2.5
   if (employer <= 1_500) return 1_250 + 0.25 * (employer - 500)
   return employer
@@ -316,26 +356,30 @@ export type BaseReductionResult = {
   excessPending: number
 }
 
+export function protectedAssetsMeetsRequirements(input: Irpf2025AdjustmentInput): boolean {
+  return input.protectedAssetsFormalEstate
+    && input.protectedAssetsValidContributor
+    && input.protectedAssetsContributorNotBeneficiary
+    && positive(input.protectedAssetsContribution) > 0
+}
+
 export function calculateBaseReductions2025(
   input: Irpf2025AdjustmentInput,
   netWorkIncome: number,
   baseAvailable: number,
   legacyBasicPensionContributions = 0,
   legacyVerifiedBaseReductions = 0,
+  grossWorkIncome = 0,
 ): BaseReductionResult {
   let available = positive(baseAvailable)
   const ordinaryContributions = positive(input.personalPensionContribution)
     + positive(input.mutualityContribution)
     + positive(legacyBasicPensionContributions)
-  const employmentInputsComplete = (
-    positive(input.employerPensionContribution) + positive(input.workerEmploymentPensionContribution) === 0
-    || positive(input.grossIncomeFromPensionEmployer) > 0
-  )
-  const employerContribution = employmentInputsComplete ? positive(input.employerPensionContribution) : 0
-  const workerEmploymentContribution = employmentInputsComplete ? positive(input.workerEmploymentPensionContribution) : 0
+  const employerContribution = positive(input.employerPensionContribution)
+  const workerEmploymentContribution = positive(input.workerEmploymentPensionContribution)
   const admissibleWorkerEmployment = Math.min(
     workerEmploymentContribution,
-    workerEmploymentContributionLimit(input),
+    workerEmploymentContributionLimit(input, grossWorkIncome),
   )
   const pensionEmploymentIncrease = Math.min(
     8_500,
@@ -354,7 +398,10 @@ export function calculateBaseReductions2025(
   )
   available -= pensionApplied
 
-  const spousePensionApplied = input.spousePensionEligible
+  const spousePensionProductValid = input.spousePensionProductType === 'pension_plan'
+    || input.spousePensionProductType === 'mutuality'
+    || input.spousePensionProductType === 'insured_plan'
+  const spousePensionApplied = spousePensionProductValid
     && positive(input.spouseNetWorkAndBusinessIncome) < 8_000
     ? Math.min(positive(input.spousePensionContribution), 1_000, available)
     : 0
@@ -376,7 +423,7 @@ export function calculateBaseReductions2025(
   const protectedAssetsProportionalLimit = positive(input.protectedAssetsTotalContributors) > 24_250
     ? positive(input.protectedAssetsContribution) * 24_250 / positive(input.protectedAssetsTotalContributors)
     : positive(input.protectedAssetsContribution)
-  const protectedAssetsApplied = input.protectedAssetsEligible
+  const protectedAssetsApplied = protectedAssetsMeetsRequirements(input)
     ? Math.min(positive(input.protectedAssetsContribution), 10_000, protectedAssetsProportionalLimit, available)
     : 0
   available -= protectedAssetsApplied

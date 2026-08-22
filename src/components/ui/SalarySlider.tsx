@@ -74,6 +74,9 @@ export function SalarySlider({
     Math.round((Math.log(clamp(v, min, max) / min) / Math.log(ratio)) * LOG_STEPS);
   const posToValue = (p: number) => clamp(roundNice(min * Math.pow(ratio, p / LOG_STEPS)), min, max);
 
+  const valueToPercent = (v: number) =>
+    isLog ? (valueToPos(v) / LOG_STEPS) * 100 : ((clamp(v, min, max) - min) / (max - min)) * 100;
+
   const fillPercent = isLog
     ? (valueToPos(safeValue) / LOG_STEPS) * 100
     : ((safeValue - min) / (max - min)) * 100;
@@ -132,9 +135,23 @@ export function SalarySlider({
       />
       {markers && markers.length > 0 && (
         <div className="salary-slider__scale" aria-hidden="true">
-          {markers.map((marker) => (
-            <span key={marker}>{formatNumber(marker)}</span>
-          ))}
+          {markers.map((marker, index) => {
+            const percent = valueToPercent(marker);
+            const isFirst = index === 0;
+            const isLast = index === markers.length - 1;
+            return (
+              <span
+                key={marker}
+                className="salary-slider__scale-marker"
+                style={{
+                  left: `${percent}%`,
+                  transform: isFirst ? "none" : isLast ? "translateX(-100%)" : "translateX(-50%)",
+                }}
+              >
+                {formatNumber(marker)}
+              </span>
+            );
+          })}
         </div>
       )}
     </div>

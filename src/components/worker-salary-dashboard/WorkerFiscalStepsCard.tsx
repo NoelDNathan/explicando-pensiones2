@@ -297,7 +297,9 @@ La calculadora lo convierte en una referencia mensual dividiendo el total anual 
     subtitle: 'Del bruto a la base de cotizacion',
     description: ` Para calcular cuánto pagas a la Seguridad Social, se toma como referencia tu salario. Sin embargo, cada grupo de cotización establece una base mínima y una máxima.
                    
-    Si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pension más alta que si cotizaras por tu salario). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.`,
+    Si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pension). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.
+    
+    En este paso, calculamos tu base de cotización y en el siguiente veremos cuanto pagas en consecuencia de esta base.`,
     checklist: [],
     helpTitle: 'Que es el grupo de cotizacion?',
     helpBody: 'Es una categoria laboral de la Seguridad Social. Agrupa puestos parecidos y fija limites de cotizacion. No siempre coincide con tu puesto comercial o tu convenio.',
@@ -349,18 +351,16 @@ Completa solo los apartados que correspondan a tu situación.`,
     id: 5,
     title: 'Deducciones y salario en especie',
     subtitle: 'Ajustes sobre la cuota y beneficios exentos',
-    description: `Las deducciones restan directamente de la cuota calculada. El salario en especie sigue reglas distintas: algunos beneficios pueden quedar exentos si cumplen requisitos y límites.
-
-Selecciona únicamente los beneficios o deducciones que realmente puedas acreditar.`,
+    description: 'Marca solo las deducciones y beneficios en especie que puedas acreditar. Bajan la cuota del IRPF o quedan exentos; no son los descuentos mensuales de la nómina.',
     checklist: [],
-    helpTitle: 'Deduccion o beneficio exento?',
-    helpBody: 'Las deducciones bajan la cuota final del impuesto. Los beneficios en especie pueden quedar exentos si cumplen requisitos y limites legales.',
+    helpTitle: '¿Deducción o beneficio exento?',
+    helpBody: 'Las deducciones restan de la cuota final del impuesto. El salario en especie puede quedar exento si cumple requisitos y límites legales.',
     details: [
       'Las deducciones se revisan al final y dependen mucho de requisitos, ejercicio fiscal y comunidad autonoma.',
       'El salario en especie no siempre reduce la base: cada beneficio se trata por separado segun su regimen.',
       'Los limites exentos impiden usar retribuciones en especie como sustituto total del salario en efectivo.',
     ],
-    important: 'Un beneficio en especie puede no tributar aunque no sea tecnicamente una deduccion ni una reduccion.',
+    important: 'Estas partidas se aplican en el cálculo del IRPF, no como línea de deducciones de la nómina mensual.',
     Icon: Gift,
   },
   {
@@ -385,7 +385,7 @@ El tipo marginal afecta al siguiente euro; el tipo efectivo resume lo pagado sob
     id: 7,
     title: 'IVA y otros impuestos',
     subtitle: 'Impuestos que dependen de tu gasto',
-    description: `El IVA y los impuestos especiales dependen de cómo gastas, no solo de lo que cobras. Distribuye tu gasto anual para obtener una estimación por categorías.
+    description: `El IVA y los impuestos especiales dependen de cómo gastas, no solo de lo que cobras. Distribuye tu gasto mensual para obtener una estimación por categorías.
 
 Si no completas el reparto, el resumen mantendrá una aproximación general claramente identificada.`,
     checklist: [],
@@ -495,11 +495,6 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
     resultLabel: 'BASE IRPF',
     resultValue: '1.750,00',
     highlightRows: ['irpf-base', 'irpf'],
-  },
-  5: {
-    resultLabel: 'BASE IRPF ESPECIE',
-    resultValue: '',
-    highlightRows: ['in-kind'],
   },
   6: {
     resultLabel: 'RETENCION IRPF',
@@ -683,9 +678,11 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 9 && activeStep.id !== 10
+  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 5 && activeStep.id !== 9 && activeStep.id !== 10
+  const showConceptHelp = activeStep.id === 5
   const isSummaryStep = activeStep.id === 0
   const isCompactStep = activeStep.id === 9 || activeStep.id === 10
+  const heroIsSingle = !showPayrollHelp && !showConceptHelp
   const statusLabel = activeStep.id === 0
     ? 'Resumen rápido'
     : `Paso ${activeStep.id} de ${detailStepCount} · ${activeStep.title}`
@@ -721,8 +718,8 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
       aria-label={isCompactStep ? 'Navegacion del recorrido fiscal' : undefined}
     >
       {!isCompactStep ? (
-        <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isSummaryStep ? ' wfsc-stage--summary' : ''}`}>
-          <div className={`wfsc-hero${showPayrollHelp ? '' : ' wfsc-hero--single'}`}>
+        <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isSummaryStep ? ' wfsc-stage--summary' : ''}${showConceptHelp ? ' wfsc-stage--concept' : ''}`}>
+          <div className={`wfsc-hero${heroIsSingle ? ' wfsc-hero--single' : ''}${showConceptHelp ? ' wfsc-hero--concept' : ''}`}>
             <div className="wfsc-hero-main">
               <span className="wfsc-step-orb" aria-hidden="true">
                 <ActiveIcon size={34} strokeWidth={2.35} />
@@ -742,6 +739,15 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
             {showPayrollHelp ? (
               <aside className="wfsc-help" aria-label="Ayuda del paso activo">
                 <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
+              </aside>
+            ) : null}
+
+            {showConceptHelp ? (
+              <aside className="wfsc-help wfsc-help--concept" aria-label="Aclaración del paso activo">
+                <p className="wfsc-help__eyebrow">No aparece en la nómina</p>
+                <h3>{activeStep.helpTitle}</h3>
+                <p>{activeStep.helpBody}</p>
+                <p className="wfsc-help__note">{activeStep.important}</p>
               </aside>
             ) : null}
           </div>

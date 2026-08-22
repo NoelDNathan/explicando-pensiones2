@@ -36,7 +36,7 @@ import type {
 import type { DisabilityMode } from './types'
 import { calculateFamilyMinimum2025 } from './familyMinimum2025'
 import { calculateIrpf2025Core } from './irpf2025Calc'
-import { calculateInKindBenefits2025 } from './irpf2025Adjustments'
+import { calculateGeographicMobilityIncrement2025, calculateInKindBenefits2025 } from './irpf2025Adjustments'
 import { estimateVatFromNetSalary } from './vatEpFProxy'
 import './FiscalWorkerDashboard.css'
 import './FiscalSoftTheme.css'
@@ -478,7 +478,9 @@ export function FiscalWorkerDashboard() {
       const annualConsumption = hasAssignedConsumption ? consumptionTaxes!.totalBudgetAnnual : epfVatEstimate.annualConsumption
       const vatRate = hasAssignedConsumption ? consumptionTaxes!.effectiveRate : epfVatEstimate.vatRate
       const vat = hasAssignedConsumption ? consumptionTaxes!.vatAnnual : epfVatEstimate.vatAnnual
-      const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
+      const contextualOtherTaxes = otherTaxes + (consumptionTaxes
+        ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual
+        : 0)
       const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
       return {
@@ -547,13 +549,10 @@ export function FiscalWorkerDashboard() {
           : 0
     const structuredMobility = personalAdjustments?.adjustments
     const mobilityIncrement = structuredMobility
-      && structuredMobility.wasRegisteredJobseeker
-      && structuredMobility.acceptedJobOtherMunicipality
-      && structuredMobility.movedResidence
-      && (structuredMobility.moveTaxYear === 2024 || structuredMobility.moveTaxYear === 2025)
-      ? Math.min(
+      ? calculateGeographicMobilityIncrement2025(
+        structuredMobility,
+        grossSalaryAnnual,
         fiscalParams2025.irpf.work_income_deductible_expenses_eur.geographic_mobility_increment,
-        Math.max(0, structuredMobility.newJobIntegralIncome - structuredMobility.newJobSpecificExpenses),
       )
       : 0
     const deductibleExpenses =
@@ -611,7 +610,9 @@ export function FiscalWorkerDashboard() {
     const annualConsumption = hasAssignedConsumption ? consumptionTaxes!.totalBudgetAnnual : epfVatEstimate.annualConsumption
     const vatRate = hasAssignedConsumption ? consumptionTaxes!.effectiveRate : epfVatEstimate.vatRate
     const vat = hasAssignedConsumption ? consumptionTaxes!.vatAnnual : epfVatEstimate.vatAnnual
-    const contextualOtherTaxes = otherTaxes + (consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual : 0)
+    const contextualOtherTaxes = otherTaxes + (consumptionTaxes
+      ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual
+      : 0)
     const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
     return {
@@ -896,7 +897,9 @@ export function FiscalWorkerDashboard() {
       title: 'Otros impuestos',
       left: {
         label: consumptionTaxes ? 'Especiales + IBI' : 'Declarado',
-        value: formatEuro(consumptionTaxes ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + otherTaxes : otherTaxes),
+        value: formatEuro(consumptionTaxes
+          ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual + otherTaxes
+          : otherTaxes),
       },
       right: { label: 'Modulo', value: 'separado' },
       badge: 'No altera el neto laboral',
@@ -969,6 +972,7 @@ export function FiscalWorkerDashboard() {
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
             initialResult={personalAdjustments}
             initialBaseBeforeReductions={result.netReducedWorkIncome}
+            initialNetWorkIncome={result.netWorkIncome}
             quotaBeforeDeductions={result.stateIntegralQuota + result.regionalIntegralQuota}
             appliedBaseReductions={result.baseReductionsApplied}
             statePersonalFamilyMinimum={result.stateMinimum}
@@ -977,6 +981,7 @@ export function FiscalWorkerDashboard() {
             refundableDeductionsGenerated={result.refundableDeductionsGenerated}
             finalDeclarationResult={result.finalDeclarationResult}
             declaredInKindSalary={inKindSalary}
+            declaredGrossWorkIncome={result.grossSalaryAnnual}
             engineWarnings={result.calculationWarnings}
             onResultChange={handlePersonalResultChange}
           />
@@ -1021,7 +1026,9 @@ export function FiscalWorkerDashboard() {
           <WorkerConsumptionTaxesCard
             initialBudgetAnnual={result.annualConsumption}
             onResultChange={(nextResult) => setConsumptionTaxes(
-              nextResult.assignedSpendAnnual > 0 || nextResult.propertyTaxAnnual > 0 ? nextResult : null,
+              nextResult.assignedSpendAnnual > 0 || nextResult.propertyTaxAnnual > 0 || nextResult.vehicleTaxAnnual > 0
+                ? nextResult
+                : null,
             )}
           />
         )
@@ -1037,7 +1044,7 @@ export function FiscalWorkerDashboard() {
               vatAnnual={result.vat}
               otherTaxesAnnual={
                 consumptionTaxes
-                  ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + otherTaxes
+                  ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual + otherTaxes
                   : otherTaxes
               }
               onSalaryChange={setSalary}
