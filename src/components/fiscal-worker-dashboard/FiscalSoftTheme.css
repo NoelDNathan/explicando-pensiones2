@@ -155,7 +155,6 @@
   .wprc-hero-panel,
   .wprc-top-grid,
   .wprc-panel,
-  .wprc-minimum-panel,
   .wprc-benefits,
   .wprc-explained,
   .wprc-summary,
@@ -1016,8 +1015,6 @@
   filter: none;
 }
 
-.fwd--soft .wprc-flow article,
-.fwd--soft .wprc-minimum-panel,
 .fwd--soft .wprc-top-grid,
 .fwd--soft .wprc-benefits,
 .fwd--soft .wprc-explained,
@@ -1029,27 +1026,8 @@
   box-shadow: none;
 }
 
-.fwd--soft .wprc-flow span,
-.fwd--soft .wprc-minimum-panel h3 {
-  color: var(--fiscal-primary-strong);
-}
-
-.fwd--soft :is(.wprc-flow p, .wprc-minimum-panel p, .wprc-benefits__heading p, .wprc-explained p, .wprc-explained dt, .wprc-summary-copy span) {
+.fwd--soft :is(.wprc-benefits__heading p, .wprc-explained p, .wprc-explained dt, .wprc-summary-copy span) {
   color: var(--fiscal-copy);
-}
-
-.fwd--soft .wprc-minimum-panel li {
-  border-radius: var(--fiscal-radius-small);
-  color: var(--fiscal-copy);
-  border-color: var(--fiscal-line);
-  background: var(--fiscal-surface);
-}
-
-.fwd--soft .wprc-minimum-panel li.is-active {
-  color: var(--fiscal-primary-strong);
-  border-color: #b8ded7;
-  background: var(--fiscal-primary-soft);
-  box-shadow: none;
 }
 
 .fwd--soft .wprc-top-grid {

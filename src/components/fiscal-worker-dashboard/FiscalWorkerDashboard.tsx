@@ -982,6 +982,7 @@ export function FiscalWorkerDashboard() {
             finalDeclarationResult={result.finalDeclarationResult}
             declaredInKindSalary={inKindSalary}
             declaredGrossWorkIncome={result.grossSalaryAnnual}
+            lowWorkIncomeDeductionApplied={result.lowWorkIncomeDeductionApplied}
             engineWarnings={result.calculationWarnings}
             onResultChange={handlePersonalResultChange}
           />

@@ -1,8 +1,28 @@
 # Estado actual
 
-Fecha: 2026-08-20
+Fecha: 2026-08-23
 
 ## Situacion
+
+- En el paso 4, la pregunta de otras rentas pasa al bloque «Ventajas del trabajo» (sección 2), con copy que excluye complementos y especie del paso 1; se oculta si el salario ya descarta esas ventajas. El panel sticky muestra el desglose: rendimiento neto → reducción por rendimientos del trabajo → base antes de reducciones → reducciones declaradas → base liquidable; si aplica, la deducción por rentas bajas se indica como efecto en cuota (paso 6). En el paso 6, la etiqueta pasa a «Deducción por rentas del trabajo bajas». Verificación: `pnpm run build` y `pnpm run verify:irpf2025` (24 comprobaciones) correctos.
+
+- En el paso 4, colegio profesional es una sola pregunta («¿Pagas un colegio profesional donde es obligatorio estar colegiado?») con cuatro ejemplos claros (médico, abogado, farmacéutico, arquitecto); al responder Sí solo se pide el importe. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la pregunta de colegiado obligatorio dentro del colegio profesional usa el mismo formato que otras subpreguntas (texto + chips Sí/No), no un checkbox. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, el checkbox de colegiado obligatorio para ejercer usa formato pregunta: «¿Es obligatorio estar colegiado para ejercer?». Verificación: `pnpm run build` correcto.
+
+- En el paso 4, el detalle de cada hijo ya no pregunta por la pensión de alimentos (ni el importe ni la sentencia). El motor conserva los campos en 0; no se aplica la especialidad de anualidades ni se excluye el mínimo por ese motivo. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, previsión del cónyuge, pensión compensatoria y declaración conjunta aparecen justo después del estado civil, antes de hijos y ascendientes. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, «¿Cuál es tu estado civil?» aparece antes de «¿Tienes hijos?». El reparto del mínimo por hijo (100 % / 50 %) solo se pregunta si no vas en declaración conjunta con tu cónyuge; en conjunta se asume 100 %. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, la pregunta «¿Este hijo trabaja o tiene ingresos propios?» ya no muestra el icono de ayuda contextual. Verificación: `pnpm run build` correcto.
+
+- Eliminadas del paso 4 las preguntas de reducción y deducción autonómica manual («ya calculada y comprobada»): no encajaban en el flujo de hechos cotidianos y casi nadie puede responderlas. El motor conserva los campos con valor 0 por defecto. Verificación: `pnpm run build` correcto.
+
+- En el paso 4, el plan de pensiones de la empresa ya no pide el salario bruto: el límite de la aportación del trabajador usa el salario del paso 1 (como en movilidad geográfica). Verificación: `pnpm run build` y `pnpm run verify:irpf2025` (24 comprobaciones) correctos.
 
 - En sliders de salario anual (14.000–500.000 €), resumen intro/final y paso 1 usan escala logarítmica: las marcas 14.000 y 50.000 ya no quedan pegadas. Verificación: `pnpm run build` correcto.
 

@@ -9,6 +9,10 @@ import {
   GEOGRAPHIC_MOBILITY_INCREMENT_2025,
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import type { Irpf2025AdjustmentInput } from '../fiscal-worker-dashboard/irpf2025Adjustments'
+import {
+  WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR,
+  workBenefitsCouldApply,
+} from '../fiscal-worker-dashboard/irpf2025Calc'
 import { InfoButton } from '../ui/InfoButton'
 import './Irpf2025StructuredAdjustmentsForm.css'
 
@@ -22,7 +26,7 @@ type Props = {
   previewBaseAvailable?: number
   onChange: (value: Irpf2025AdjustmentInput) => void
 }
-const OTHER_INCOME_THRESHOLD = 6_500
+const OTHER_INCOME_THRESHOLD = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
 const SPOUSE_INCOME_THRESHOLD = 8_000
 const SPOUSE_PENSION_MAX_REDUCTION = 1_000
 
@@ -89,11 +93,6 @@ const FIELD_HELP: Record<string, string> = {
   'Modalidad de declaracion': 'Individual o conjunta. La tributacion conjunta puede generar reduccion, pero depende de la unidad familiar.',
   'Aportacion a patrimonio protegido': 'Aportaciones a un patrimonio protegido de persona con discapacidad. Tienen limites y requisitos especificos.',
   'Total aportado por todos al mismo patrimonio': 'Suma de aportaciones de todos los aportantes al mismo patrimonio protegido. Sirve para aplicar limites globales.',
-  'Reduccion autonomica calculada': 'Importe de una reduccion propia de tu comunidad autonoma ya calculada fuera de esta pantalla.',
-  'Codigo o nombre de la reduccion autonomica': 'Nombre identificable de la regla autonomica usada, para que el calculo sea trazable.',
-  'Fuente oficial de la reduccion': 'Enlace a la norma, manual o fuente oficial que justifica la reduccion autonomica.',
-  'Base, porcentaje y limite utilizados': 'Resumen de la formula aplicada: sobre que base se calcula, porcentaje usado y limite maximo.',
-  'Reduccion autonomica documentada y verificada': 'Solo al marcar esto la calculadora trata la reduccion como utilizable. Evita mezclar importes no comprobados.',
   'La tarjeta comida cumple los requisitos': 'Vales o tarjeta restaurante con condiciones fiscales. Si cumple, una parte puede estar exenta.',
   'Importe diario de tarjeta comida': 'Importe por dia de uso de la tarjeta comida. La exencion se limita por dia admisible.',
   'Dias admisibles de tarjeta comida': 'Dias reales que cumplen requisitos. No todos los dias del ano tienen por que computar.',
@@ -124,10 +123,6 @@ const FIELD_HELP: Record<string, string> = {
   'Requisitos del 9 % catalan verificados': 'Algunas situaciones en Cataluna usan un porcentaje autonomico especial. Marcado solo si esta comprobado.',
   'Inversion en empresa nueva': 'Inversion en empresas de nueva o reciente creacion con derecho potencial a deduccion.',
   'Certificacion y requisitos societarios verificados': 'Confirma que la empresa y la inversion cumplen los requisitos fiscales.',
-  'Deduccion autonomica ya calculada': 'Importe de una deduccion propia de tu comunidad autonoma calculada aparte.',
-  'Codigo o nombre de la deduccion autonomica': 'Nombre identificable de la deduccion autonomica para poder auditar el calculo.',
-  'Fuente oficial de la deduccion': 'Enlace oficial que justifica la regla autonomica usada.',
-  'Regla autonomica, fuente y requisitos verificados': 'Solo al marcarlo se considera que la deduccion autonomica es suficientemente trazable.',
   'Cumple los requisitos de maternidad': 'Deduccion reembolsable vinculada a hijos menores de 3 anos y situacion laboral o prestacion habilitante.',
   'Hijos que generan deduccion por maternidad': 'Numero de hijos que pueden generar derecho a la deduccion.',
   'Suma de meses-hijo con derecho': 'Cuenta meses por hijo. Dos hijos durante doce meses equivalen a veinticuatro meses-hijo.',
@@ -230,23 +225,6 @@ function CheckField({ label, checked, onChange, help, hint }: {
   )
 }
 
-function TextField({ label, value, onChange, help, hint, type = 'text' }: {
-  label: string
-  value: string
-  onChange: (value: string) => void
-  help?: string
-  hint?: string
-  type?: 'text' | 'url'
-}) {
-  return (
-    <label className="irpf-rule-field">
-      <HelpLabel label={label} help={help} />
-      <input aria-label={label} type={type} value={value} onChange={(event) => onChange(event.target.value)} />
-      {hint ? <small>{hint}</small> : null}
-    </label>
-  )
-}
-
 function SelectField({ label, value, onChange, children, help, hint }: {
   label: string
   value: string
@@ -287,16 +265,21 @@ function RuleGroup({ title, description, icon: Icon, children, open = false }: {
   )
 }
 
-function ReductionQuestion({ question, description, guide, children, initiallyRelevant = false, effectAmount, onNo }: {
+function ReductionQuestion({ question, description, guide, children, initiallyRelevant = false, effectAmount, onYes, onNo }: {
   question: string
   description: string
   guide?: ReactNode
   children: ReactNode
   initiallyRelevant?: boolean
   effectAmount?: number
+  onYes?: () => void
   onNo: () => void
 }) {
   const [answer, setAnswer] = useState<'unanswered' | 'yes' | 'no'>(() => initiallyRelevant ? 'yes' : 'unanswered')
+  const chooseYes = () => {
+    onYes?.()
+    setAnswer('yes')
+  }
   const chooseNo = () => {
     onNo()
     setAnswer('no')
@@ -316,7 +299,7 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
         </div>
       </div>
       <div className="irpf-reduction-question__choices" role="group" aria-label={`Respuesta: ${question}`}>
-        <button className={answer === 'yes' ? 'is-selected' : ''} type="button" onClick={() => setAnswer('yes')}>Sí, me aplica</button>
+        <button className={answer === 'yes' ? 'is-selected' : ''} type="button" onClick={chooseYes}>Sí, me aplica</button>
         <button className={answer === 'no' ? 'is-selected' : ''} type="button" onClick={chooseNo}>No, continuar</button>
       </div>
       {answer === 'yes' ? <div className="irpf-reduction-question__body">{children}</div> : null}
@@ -352,14 +335,14 @@ function JointTaxationGuide({
         <p className="irpf-marital-note">
           {childrenCount === 0 ? (
             married
-              ? 'No indicaste hijos en la primera pregunta. La unidad familiar puede ser solo tú y tu cónyuge; no hace falta tener hijos para declarar conjunta.'
-              : 'No indicaste hijos en la primera pregunta. Si no convives con hijos que formen unidad, lo habitual es la declaración individual.'
+              ? 'Aún no has indicado hijos. La unidad familiar puede ser solo tú y tu cónyuge; no hace falta tener hijos para declarar conjunta.'
+              : 'Aún no has indicado hijos. Si no convives con hijos que formen unidad, lo habitual es la declaración individual.'
           ) : jointUnitChildrenCount === childrenCount ? (
-            `Arriba indicaste ${childrenCount} hijo(s). Si conviven contigo y cumplen edad o discapacidad, esos mismos pueden formar parte de la unidad familiar al declarar conjunta.`
+            `Más abajo puedes indicar ${childrenCount} hijo(s). Si conviven contigo y cumplen edad o discapacidad, esos mismos pueden formar parte de la unidad familiar al declarar conjunta.`
           ) : jointUnitChildrenCount > 0 ? (
-            `Arriba indicaste ${childrenCount} hijo(s). Según convivencia y edad que marcaste, ${jointUnitChildrenCount} podrían entrar en la unidad familiar. Revisa el detalle de cada hijo si falta alguno.`
+            `Más abajo puedes indicar ${childrenCount} hijo(s). Según convivencia y edad, ${jointUnitChildrenCount} podrían entrar en la unidad familiar. Revisa el detalle de cada hijo si falta alguno.`
           ) : (
-            `Arriba indicaste ${childrenCount} hijo(s), pero según convivencia y edad que marcaste ninguno entraría en la unidad familiar por ahora.`
+            `Más abajo puedes indicar ${childrenCount} hijo(s), pero según convivencia y edad ninguno entraría en la unidad familiar por ahora.`
           )}
           {' '}Para el mínimo por hijos pedimos más datos (ingresos, declaración propia…). Aquí solo importa quién puede ir en la misma declaración conjunta.
         </p>
@@ -1172,7 +1155,7 @@ function MaritalReductionsGroup({
       {visibility.jointTaxation ? (
         <ReductionQuestion
           question="¿Vas a hacer la declaración conjunta?"
-          description="Cada año puedes elegir entre declaración individual o conjunta. Los hijos de la primera pregunta pueden formar la unidad si conviven contigo y cumplen edad o discapacidad."
+          description="Cada año puedes elegir entre declaración individual o conjunta. Si tienes hijos, los que indiques a continuación pueden formar la unidad si conviven contigo y cumplen edad o discapacidad."
           guide={
             <JointTaxationGuide
               maritalStatus={maritalStatus}
@@ -1206,6 +1189,39 @@ function MaritalReductionsGroup({
 }
 
 export { MaritalReductionsGroup }
+
+export function WorkIncomeBenefitsSection({
+  value,
+  onChange,
+  netWorkIncome = 0,
+  grossWorkIncome = 0,
+}: {
+  value: Irpf2025AdjustmentInput
+  onChange: (value: Irpf2025AdjustmentInput) => void
+  netWorkIncome?: number
+  grossWorkIncome?: number
+}) {
+  if (!workBenefitsCouldApply(netWorkIncome, grossWorkIncome)) {
+    return (
+      <p className="wprc-work-benefits-note">
+        Con este nivel de salario, otras rentas no cambian las ventajas del trabajo previstas en la ley.
+      </p>
+    )
+  }
+
+  return (
+    <div className="irpf-reduction-question-list wprc-work-benefits">
+      <ReductionQuestion
+        question="¿Tienes otros ingresos además de tu trabajo?"
+        description="Por ejemplo alquileres, intereses o actividades por tu cuenta. No cuentan el salario, complementos ni especie del paso 1. Si superan 6.500 €/año, no aplican algunas ventajas del trabajo."
+        initiallyRelevant={value.otherNonExemptNonWorkIncome > 0}
+        onNo={() => onChange(confirmNoOtherIncome(value))}
+      >
+        <OtherIncomeQuestions value={value} onChange={onChange} />
+      </ReductionQuestion>
+    </div>
+  )
+}
 
 export function Irpf2025StructuredAdjustmentsForm({
   focus,
@@ -1257,31 +1273,37 @@ export function Irpf2025StructuredAdjustmentsForm({
     ],
     available,
   ).protectedAssetsApplied
-  const regionalEffect = sliceBaseReduction(
-    value,
-    [
-      'verifiedRegionalReduction',
-      'regionalReductionVerified',
-      'regionalReductionCode',
-      'regionalReductionSourceUrl',
-      'regionalReductionCalculation',
-    ],
-    available,
-  ).regionalReductionApplied
   const mobilityEffect = calculateGeographicMobilityIncrement2025(value, declaredGrossWorkIncome)
 
   if (focus === 'reductions') {
     return (
       <section className="irpf-rule-form" aria-label="Datos exactos para reducciones IRPF 2025">
         <div className="irpf-reduction-question-list">
-          <ReductionQuestion question="¿Tienes ingresos fuera de tu nómina?" description="Por ejemplo, alquileres, intereses, actividades o ganancias." initiallyRelevant={value.otherNonExemptNonWorkIncome > 0} onNo={() => onChange(confirmNoOtherIncome(value))}>
-            <OtherIncomeQuestions value={value} onChange={onChange} />
-          </ReductionQuestion>
           <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} effectAmount={workExpenses.unionDues} onNo={() => update('unionDues', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.unionDues} onChange={(amount) => update('unionDues', amount)} />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Pagas un colegio profesional obligatorio para trabajar?" description="Por ejemplo, si tu profesión exige estar colegiado." initiallyRelevant={value.professionalDues > 0 || value.professionalMembershipMandatory} effectAmount={workExpenses.professionalDues} onNo={() => onChange({ ...value, professionalDues: 0, professionalMembershipMandatory: false })}>
-            <div className="irpf-rule-grid"><NumberField label="¿Cuánto has pagado este año?" value={value.professionalDues} onChange={(amount) => update('professionalDues', amount)} hint="El máximo aplicable es 500 EUR." /><CheckField label="Estar colegiado es obligatorio para ejercer" checked={value.professionalMembershipMandatory} onChange={(checked) => update('professionalMembershipMandatory', checked)} /></div>
+          <ReductionQuestion
+            question="¿Pagas un colegio profesional donde es obligatorio estar colegiado?"
+            description="Solo si tu profesión exige colegiarse para trabajar, como médico, abogado, farmacéutico o arquitecto."
+            initiallyRelevant={value.professionalDues > 0 || value.professionalMembershipMandatory}
+            effectAmount={workExpenses.professionalDues}
+            onYes={() => {
+              if (!value.professionalMembershipMandatory) {
+                onChange({ ...value, professionalMembershipMandatory: true })
+              }
+            }}
+            onNo={() => onChange({ ...value, professionalDues: 0, professionalMembershipMandatory: false })}
+          >
+            <NumberField
+              label="¿Cuánto has pagado este año?"
+              value={value.professionalDues}
+              onChange={(amount) => onChange({
+                ...value,
+                professionalDues: amount,
+                professionalMembershipMandatory: true,
+              })}
+              hint="El máximo aplicable es 500 EUR."
+            />
           </ReductionQuestion>
           <ReductionQuestion question="¿Has pagado un abogado por un problema con tu trabajo?" description="Solo por un conflicto laboral con tu empresa." initiallyRelevant={value.legalDefenseCosts > 0} effectAmount={workExpenses.legalDefense} onNo={() => update('legalDefenseCosts', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.legalDefenseCosts} onChange={(amount) => update('legalDefenseCosts', amount)} hint="El máximo aplicable es 300 EUR." />
@@ -1312,9 +1334,6 @@ export function Irpf2025StructuredAdjustmentsForm({
           </ReductionQuestion>
           <ReductionQuestion question="¿Has aportado a un patrimonio protegido de una persona con discapacidad?" description="Es una figura específica; déjalo en No si no te suena." initiallyRelevant={value.protectedAssetsContribution > 0 || value.protectedAssetsFormalEstate} effectAmount={protectedEffect} onNo={() => onChange(clearProtectedAssetsFields(value))}>
             <ProtectedAssetsQuestions value={value} onChange={onChange} />
-          </ReductionQuestion>
-          <ReductionQuestion question="¿Tienes una reducción autonómica ya calculada y comprobada?" description="Solo si tienes la norma y el cálculo revisados; si no, déjalo en No." initiallyRelevant={value.verifiedRegionalReduction > 0} effectAmount={regionalEffect} onNo={() => onChange({ ...value, verifiedRegionalReduction: 0, regionalReductionCode: '', regionalReductionSourceUrl: '', regionalReductionCalculation: '', regionalReductionVerified: false })}>
-            <div className="irpf-rule-grid"><NumberField label="Importe de la reducción" value={value.verifiedRegionalReduction} onChange={(amount) => update('verifiedRegionalReduction', amount)} /><TextField label="Nombre de la reducción" value={value.regionalReductionCode} onChange={(next) => update('regionalReductionCode', next)} /><TextField label="Enlace a la fuente oficial" type="url" value={value.regionalReductionSourceUrl} onChange={(next) => update('regionalReductionSourceUrl', next)} /><TextField label="Cómo has hecho el cálculo" value={value.regionalReductionCalculation} onChange={(next) => update('regionalReductionCalculation', next)} /><CheckField label="He comprobado requisitos y fuente" checked={value.regionalReductionVerified} onChange={(checked) => update('regionalReductionVerified', checked)} /></div>
           </ReductionQuestion>
         </div>
       </section>
@@ -1357,7 +1376,7 @@ export function Irpf2025StructuredAdjustmentsForm({
 
       <RuleGroup
         title="Deducciones generales de cuota"
-        description="Donativos, alquiler y vivienda transitorios, empresa nueva y deduccion autonomica verificada."
+        description="Donativos, alquiler y vivienda transitorios y empresa nueva."
         icon={Landmark}
       >
         <div className="irpf-rule-grid">
@@ -1384,11 +1403,6 @@ export function Irpf2025StructuredAdjustmentsForm({
           <CheckField label="Requisitos del 9 % catalan verificados" checked={value.homeRegionalSpecialVerified} onChange={(checked) => update('homeRegionalSpecialVerified', checked)} />
           <NumberField label="Inversion en empresa nueva" value={value.newCompanyInvestment} onChange={(amount) => update('newCompanyInvestment', amount)} />
           <CheckField label="Certificacion y requisitos societarios verificados" checked={value.newCompanyRequirementsVerified} onChange={(checked) => update('newCompanyRequirementsVerified', checked)} />
-          <NumberField label="Deduccion autonomica ya calculada" value={value.verifiedRegionalDeduction} onChange={(amount) => update('verifiedRegionalDeduction', amount)} />
-          <TextField label="Codigo o nombre de la deduccion autonomica" value={value.regionalDeductionCode} onChange={(next) => update('regionalDeductionCode', next)} />
-          <TextField label="Fuente oficial de la deduccion" type="url" value={value.regionalDeductionSourceUrl} onChange={(next) => update('regionalDeductionSourceUrl', next)} />
-          <TextField label="Base, porcentaje y limite utilizados" value={value.regionalDeductionCalculation} onChange={(next) => update('regionalDeductionCalculation', next)} />
-          <CheckField label="Regla autonomica, fuente y requisitos verificados" checked={value.regionalDeductionVerified} onChange={(checked) => update('regionalDeductionVerified', checked)} />
         </div>
       </RuleGroup>
 

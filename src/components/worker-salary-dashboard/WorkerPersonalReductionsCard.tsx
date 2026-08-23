@@ -11,7 +11,11 @@ import type {
 } from "../fiscal-worker-dashboard/familyMinimum2025";
 import { createEmptyIrpf2025Adjustments, calculateBaseReductions2025 } from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import type { Irpf2025AdjustmentInput } from "../fiscal-worker-dashboard/irpf2025Adjustments";
-import { Irpf2025StructuredAdjustmentsForm, MaritalReductionsGroup } from "./Irpf2025StructuredAdjustmentsForm";
+import { Irpf2025StructuredAdjustmentsForm, MaritalReductionsGroup, WorkIncomeBenefitsSection } from "./Irpf2025StructuredAdjustmentsForm";
+import {
+  WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR,
+  workBenefitsCouldApply,
+} from "../fiscal-worker-dashboard/irpf2025Calc";
 import { InfoButton } from "../ui/InfoButton";
 import "./Irpf2025StructuredAdjustmentsForm.css";
 import "./WorkerPersonalReductionsCard.css";
@@ -28,7 +32,6 @@ type ReductionKey =
   | "childSupport"
   | "jointTaxation"
   | "protectedAssets"
-  | "regionalReductions"
   | "unionAndProfessionalFees";
 
 type DeductionKey =
@@ -39,8 +42,7 @@ type DeductionKey =
   | "donations"
   | "rent"
   | "oldHomePurchase"
-  | "newCompanyInvestment"
-  | "regionalDeductions";
+  | "newCompanyInvestment";
 
 export type PersonalReductionResult = {
   children: number;
@@ -87,6 +89,7 @@ type WorkerPersonalReductionsCardProps = {
   finalDeclarationResult?: number;
   declaredInKindSalary?: number;
   declaredGrossWorkIncome?: number;
+  lowWorkIncomeDeductionApplied?: number;
   engineWarnings?: string[];
   onResultChange?: (result: PersonalReductionResult) => void;
 };
@@ -149,11 +152,16 @@ const disabilityPersonOptions: FieldOption[] = [
   { value: "65", label: "Sí, 65 %" },
 ];
 const descendantMinimums = [2_400, 2_700, 4_000, 4_500];
-const DEFAULT_CHILD_SUPPORT_ANNUAL = 3_600;
 const qualifyingIncomePatch = {
   ownIncome: "no_more_than_8000" as const,
   filesReturn: "no_or_up_to_1800" as const,
 };
+
+function asksDescendantMinimumShare(
+  jointTaxationType: Irpf2025AdjustmentInput["jointTaxationType"],
+) {
+  return jointTaxationType !== "married";
+}
 
 type QuestionEffectKind = "minimum" | "reduction";
 
@@ -246,6 +254,11 @@ function dependentAssistanceAmount(profile: DependentProfile) {
 
 function isMinimumExcludedByChildSupport(profile: DependentProfile) {
   return profile.childSupportAnnual > 0 && profile.childSupportFormalized;
+}
+
+function withoutChildSupport(profile: DependentProfile): DependentProfile {
+  if (profile.childSupportAnnual === 0 && !profile.childSupportFormalized) return profile;
+  return { ...profile, childSupportAnnual: 0, childSupportFormalized: false };
 }
 
 function dependentAgeIncrement(
@@ -406,93 +419,6 @@ function PersonAsk({
   );
 }
 
-function ChildSupportAsks({
-  label,
-  profile,
-  excludedMinimum,
-  onChange,
-}: {
-  label: string;
-  profile: DependentProfile;
-  excludedMinimum: number;
-  onChange: (patch: Partial<DependentProfile>) => void;
-}) {
-  const [answer, setAnswer] = useState<"unanswered" | "yes" | "no">(() =>
-    profile.childSupportAnnual > 0 || profile.childSupportFormalized ? "yes" : "unanswered",
-  );
-  const paysChildSupport = answer === "yes";
-  const exclusionEffect =
-    isMinimumExcludedByChildSupport(profile) && excludedMinimum > 0 ? -excludedMinimum : 0;
-
-  return (
-    <>
-      <PersonAsk
-        question="¿Pagas una pensión de alimentos por este hijo?"
-        help="Solo si hay sentencia o convenio regulador. No es la pensión compensatoria al otro progenitor."
-        effectAmount={exclusionEffect}
-        showsExclusion={fieldExcludesMinimum("childSupport", profile, "descendant")}
-      >
-        <OptionChips
-          label={`${label}: pensión de alimentos`}
-          value={answer === "unanswered" ? "" : answer}
-          options={yesNoOptions}
-          onChange={(next) => {
-            if (next === "yes") {
-              setAnswer("yes");
-              if (profile.childSupportAnnual <= 0) {
-                onChange({ childSupportAnnual: DEFAULT_CHILD_SUPPORT_ANNUAL });
-              }
-              return;
-            }
-            setAnswer("no");
-            onChange({ childSupportAnnual: 0, childSupportFormalized: false });
-          }}
-        />
-      </PersonAsk>
-      {paysChildSupport ? (
-        <>
-          <PersonAsk question="¿Cuánto pagas al año?">
-            <div className="wprc-person-amount">
-              <input
-                aria-label={`${label}: pensión de alimentos anual`}
-                min="0"
-                step="0.01"
-                type="number"
-                value={profile.childSupportAnnual}
-                onChange={(event) =>
-                  onChange({
-                    childSupportAnnual: Math.max(0, Number(event.target.value) || 0),
-                  })
-                }
-              />
-              <span>EUR / año</span>
-            </div>
-          </PersonAsk>
-          {profile.childSupportAnnual > 0 ? (
-            <PersonAsk
-              question="¿Esa pensión está fijada en sentencia o convenio regulador?"
-              effectAmount={exclusionEffect}
-              showsExclusion={fieldExcludesMinimum("childSupport", profile, "descendant")}
-            >
-              <OptionChips
-                label={`${label}: formalización de alimentos`}
-                value={profile.childSupportFormalized ? "yes" : "no"}
-                options={yesNoOptions}
-                onChange={(next) => onChange({ childSupportFormalized: next === "yes" })}
-              />
-              {profile.childSupportFormalized ? (
-                <p className="wprc-person-note">
-                  En ese caso, este hijo no suma el mínimo por descendiente en esta declaración.
-                </p>
-              ) : null}
-            </PersonAsk>
-          ) : null}
-        </>
-      ) : null}
-    </>
-  );
-}
-
 function DescendantIncomeAsks({
   label,
   profile,
@@ -509,10 +435,7 @@ function DescendantIncomeAsks({
 
   return (
     <>
-      <PersonAsk
-        question="¿Este hijo trabaja o tiene ingresos propios?"
-        help="Si no trabaja ni tiene rentas propias, no hace falta preguntar por el umbral de 8.000 € ni por su declaración."
-      >
+      <PersonAsk question="¿Este hijo trabaja o tiene ingresos propios?">
         <OptionChips
           label={`${label}: trabaja o tiene ingresos`}
           value={works}
@@ -567,11 +490,13 @@ function DependentEditor({
   profiles,
   count,
   onChange,
+  jointTaxationType,
 }: {
   type: "descendant" | "ascendant";
   profiles: DependentProfile[];
   count: number;
   onChange: (index: number, patch: Partial<DependentProfile>) => void;
+  jointTaxationType?: Irpf2025AdjustmentInput["jointTaxationType"];
 }) {
   const activeProfiles = profiles.slice(0, count);
   if (activeProfiles.length === 0) return null;
@@ -609,21 +534,12 @@ function DependentEditor({
             ? 3_000 * share
             : 0;
         const asksAssistance = profile.disabilityPercent === "33";
-        const hypotheticalIndex = activeProfiles
-          .slice(0, index)
-          .filter(
-            (item) =>
-              qualifiesDependent(item, type) &&
-              !(type === "descendant" && isMinimumExcludedByChildSupport(item)),
-          ).length;
-        const wouldContributeWithoutExclusion =
-          type === "descendant" && qualifies
-            ? dependentCoreMinimum(type, profile, hypotheticalIndex) +
-              dependentAgeIncrement(type, profile) * share +
-              (dependentDisabilityBase(profile) + dependentAssistanceAmount(profile)) * share
-            : 0;
         const isUnder3 = type === "descendant" && profile.ageBand === "under3";
         const requiresDisability = needsDisabilityToQualify(type, profile);
+        const asksMinimumShare =
+          type === "descendant"
+            ? asksDescendantMinimumShare(jointTaxationType ?? "individual")
+            : true;
 
         return (
           <section
@@ -781,42 +697,35 @@ function DependentEditor({
                 </PersonAsk>
               ) : null}
 
-              <PersonAsk
-                question={
-                  type === "descendant"
-                    ? "¿Este mínimo te corresponde solo a ti o lo repartís con el otro progenitor?"
-                    : "¿Este mínimo te corresponde solo a ti o lo compartes con otras personas?"
-                }
-                help={
-                  type === "descendant"
-                    ? "Elige 100 % si solo tú lo aplicas en tu declaración. Elige 50 % si ambos progenitores os lo repartís a medias."
-                    : "Elige 100 % si solo tú lo aplicas. Elige 50 % si lo repartís a medias, por ejemplo con hermanos."
-                }
-                effectAmount={
-                  countsForMinimum && profile.entitlementShare === "0.5"
-                    ? -contribution
-                    : undefined
-                }
-              >
-                <OptionChips
-                  label={`${label}: porcentaje del mínimo`}
-                  value={profile.entitlementShare}
-                  options={shareOptions}
-                  onChange={(next) =>
-                    onChange(index, {
-                      entitlementShare: next as DependentProfile["entitlementShare"],
-                    })
+              {asksMinimumShare ? (
+                <PersonAsk
+                  question={
+                    type === "descendant"
+                      ? "¿Este mínimo te corresponde solo a ti o lo repartís con el otro progenitor?"
+                      : "¿Este mínimo te corresponde solo a ti o lo compartes con otras personas?"
                   }
-                />
-              </PersonAsk>
-
-              {type === "descendant" ? (
-                <ChildSupportAsks
-                  label={label}
-                  profile={profile}
-                  excludedMinimum={wouldContributeWithoutExclusion}
-                  onChange={(patch) => onChange(index, patch)}
-                />
+                  help={
+                    type === "descendant"
+                      ? "Elige 100 % si solo tú lo aplicas en tu declaración. Elige 50 % si presentáis la renta por separado y ambos progenitores os repartís el mínimo a medias."
+                      : "Elige 100 % si solo tú lo aplicas. Elige 50 % si lo repartís a medias, por ejemplo con hermanos."
+                  }
+                  effectAmount={
+                    countsForMinimum && profile.entitlementShare === "0.5"
+                      ? -contribution
+                      : undefined
+                  }
+                >
+                  <OptionChips
+                    label={`${label}: porcentaje del mínimo`}
+                    value={profile.entitlementShare}
+                    options={shareOptions}
+                    onChange={(next) =>
+                      onChange(index, {
+                        entitlementShare: next as DependentProfile["entitlementShare"],
+                      })
+                    }
+                  />
+                </PersonAsk>
               ) : null}
             </div>
           </section>
@@ -850,6 +759,7 @@ export function WorkerPersonalReductionsCard({
   finalDeclarationResult = 0,
   declaredInKindSalary = 0,
   declaredGrossWorkIncome = 0,
+  lowWorkIncomeDeductionApplied = 0,
   engineWarnings = [],
   onResultChange,
 }: WorkerPersonalReductionsCardProps) {
@@ -870,7 +780,7 @@ export function WorkerPersonalReductionsCard({
     () => initialResult?.maritalStatus ?? initialMaritalStatus,
   );
   const [descendantProfiles, setDescendantProfiles] = useState(() => {
-    const existing = initialResult?.descendantProfiles ?? [];
+    const existing = (initialResult?.descendantProfiles ?? []).map(withoutChildSupport);
     if (existing.length >= MAX_DEPENDENT_COUNT) return existing;
     return [
       ...existing,
@@ -886,10 +796,25 @@ export function WorkerPersonalReductionsCard({
     ];
   });
   const [adjustments, setAdjustments] = useState<Irpf2025AdjustmentInput>(() => {
-    if (initialResult?.adjustments) return initialResult.adjustments;
     const maritalStatusForDefaults = initialResult?.maritalStatus ?? initialMaritalStatus;
-    return createEmptyIrpf2025Adjustments({ maritalStatus: maritalStatusForDefaults });
+    const empty = createEmptyIrpf2025Adjustments({ maritalStatus: maritalStatusForDefaults });
+    if (!initialResult?.adjustments) return empty;
+    return {
+      ...initialResult.adjustments,
+      childSupportPaid: 0,
+      childSupportFormalized: false,
+      childSupportMinimumExcluded: false,
+    };
   });
+
+  useEffect(() => {
+    setDescendantProfiles((profiles) => {
+      if (!profiles.some((profile) => profile.childSupportAnnual > 0 || profile.childSupportFormalized)) {
+        return profiles;
+      }
+      return profiles.map(withoutChildSupport);
+    });
+  }, []);
 
   useEffect(() => {
     setAdjustments((current) => {
@@ -934,6 +859,14 @@ export function WorkerPersonalReductionsCard({
     });
   }, [maritalStatus]);
 
+  useEffect(() => {
+    if (adjustments.jointTaxationType !== "married") return;
+    setDescendantProfiles((profiles) => {
+      if (!profiles.some((profile) => profile.entitlementShare !== "1")) return profiles;
+      return profiles.map((profile) => ({ ...profile, entitlementShare: "1" }));
+    });
+  }, [adjustments.jointTaxationType]);
+
   const updateDependent = (
     type: "descendant" | "ascendant",
     index: number,
@@ -956,22 +889,11 @@ export function WorkerPersonalReductionsCard({
     const eligibleAscendants = selectedAscendants.filter((profile) =>
       qualifiesDependent(profile, "ascendant"),
     );
-    const childSupportProfiles = selectedDescendants.filter(
-      (profile) => profile.childSupportAnnual > 0,
-    );
-    const childSupportPaid = childSupportProfiles.reduce(
-      (sum, profile) => sum + profile.childSupportAnnual,
-      0,
-    );
     const effectiveAdjustments: Irpf2025AdjustmentInput = {
       ...adjustments,
-      childSupportPaid,
-      childSupportFormalized:
-        childSupportProfiles.length > 0 &&
-        childSupportProfiles.every((profile) => profile.childSupportFormalized),
-      childSupportMinimumExcluded:
-        childSupportProfiles.length > 0 &&
-        childSupportProfiles.every((profile) => profile.childSupportFormalized),
+      childSupportPaid: 0,
+      childSupportFormalized: false,
+      childSupportMinimumExcluded: false,
     };
     const dependentDisabilityMinimum = [...eligibleDescendants, ...eligibleAscendants].reduce(
       (sum, profile) => {
@@ -1007,8 +929,7 @@ export function WorkerPersonalReductionsCard({
       effectiveAdjustments.donationAmount +
       effectiveAdjustments.rentPaid +
       effectiveAdjustments.homeInvestmentPaid +
-      effectiveAdjustments.newCompanyInvestment +
-      effectiveAdjustments.verifiedRegionalDeduction;
+      effectiveAdjustments.newCompanyInvestment;
 
     return {
       children: Number(children),
@@ -1023,7 +944,7 @@ export function WorkerPersonalReductionsCard({
       ascendantsOver75: eligibleAscendants.filter((profile) => profile.ageBand === "75_plus")
         .length,
       dependentDisabilityMinimum,
-      descendantProfiles,
+      descendantProfiles: descendantProfiles.map(withoutChildSupport),
       ascendantProfiles,
       adjustments: effectiveAdjustments,
       reductionsTotal,
@@ -1036,10 +957,9 @@ export function WorkerPersonalReductionsCard({
           effectiveAdjustments.workerEmploymentPensionContribution,
         mutualities: effectiveAdjustments.mutualityContribution,
         compensatoryPension: effectiveAdjustments.compensatoryPensionPaid,
-        childSupport: childSupportPaid,
+        childSupport: 0,
         jointTaxation: effectiveAdjustments.jointTaxationType !== "individual",
         protectedAssets: effectiveAdjustments.protectedAssetsContribution,
-        regionalReductions: effectiveAdjustments.verifiedRegionalReduction,
         unionAndProfessionalFees:
           effectiveAdjustments.unionDues + effectiveAdjustments.professionalDues,
       },
@@ -1052,7 +972,6 @@ export function WorkerPersonalReductionsCard({
         rent: String(effectiveAdjustments.rentPaid),
         oldHomePurchase: String(effectiveAdjustments.homeInvestmentPaid),
         newCompanyInvestment: String(effectiveAdjustments.newCompanyInvestment),
-        regionalDeductions: effectiveAdjustments.regionalDeductionVerified ? "verified" : "none",
       },
     };
   }, [
@@ -1060,6 +979,7 @@ export function WorkerPersonalReductionsCard({
     ascendantProfiles,
     ascendants,
     children,
+    declaredGrossWorkIncome,
     descendantProfiles,
     disabilityPercent,
     initialBaseBeforeReductions,
@@ -1102,6 +1022,12 @@ export function WorkerPersonalReductionsCard({
     result.taxpayerDisabilityAssistanceMinimum;
   const explainedBaseInitial = Math.max(0, initialBaseBeforeReductions);
   const explainedNetWorkIncome = Math.max(0, initialNetWorkIncome || explainedBaseInitial);
+  const workReductionApplied = Math.max(0, explainedNetWorkIncome - explainedBaseInitial);
+  const workBenefitsRelevant = workBenefitsCouldApply(explainedNetWorkIncome, declaredGrossWorkIncome);
+  const workReductionBlocked = workBenefitsRelevant && !adjustments.otherIncomeKnown;
+  const workReductionOverThreshold = workBenefitsRelevant
+    && adjustments.otherIncomeKnown
+    && adjustments.otherNonExemptNonWorkIncome > WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR;
   const appliedBaseReductionsLive = useMemo(
     () =>
       calculateBaseReductions2025(
@@ -1120,11 +1046,6 @@ export function WorkerPersonalReductionsCard({
   const explainedQuotaBefore = Math.max(0, quotaBeforeDeductions);
   const appliedFamilyMinimum = Math.max(0, statePersonalFamilyMinimum || familyMinimumPreview);
   const appliedRegionalFamilyMinimum = Math.max(0, regionalPersonalFamilyMinimum);
-  const hasFamilyAnswer =
-    Number(children) > 0 ||
-    Number(ascendants) > 0 ||
-    Number(disabilityPercent) > 0 ||
-    taxpayerAssistance === "yes";
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -1186,6 +1107,36 @@ export function WorkerPersonalReductionsCard({
             </div>
           </section>
           <div className="irpf-reduction-question-list wprc-family-questions">
+            <section
+              className="irpf-reduction-question is-yes"
+              aria-label="¿Cuál es tu estado civil?"
+            >
+              <div className="irpf-reduction-question__prompt">
+                <span aria-hidden="true">?</span>
+                <div>
+                  <div className="irpf-reduction-question__title-row">
+                    <h3>¿Cuál es tu estado civil?</h3>
+                  </div>
+                  <p>Las siguientes preguntas dependen de esta respuesta.</p>
+                </div>
+              </div>
+              <div className="irpf-reduction-question__body">
+                <OptionChips
+                  label="Estado civil"
+                  value={maritalStatus}
+                  options={maritalOptions}
+                  onChange={(next) => setMaritalStatus(next as MaritalStatus)}
+                />
+              </div>
+            </section>
+            <MaritalReductionsGroup
+              maritalStatus={maritalStatus}
+              childrenCount={Number(children)}
+              jointUnitChildrenCount={jointUnitChildrenCount}
+              value={adjustments}
+              onChange={setAdjustments}
+              previewBaseAvailable={explainedBaseInitial}
+            />
             <FamilyQuestion
               question="¿Tienes hijos?"
               description="Cuenta los que viven contigo o dependen económicamente de ti. Luego te pediremos un detalle sencillo de cada uno."
@@ -1218,6 +1169,7 @@ export function WorkerPersonalReductionsCard({
                 type="descendant"
                 profiles={descendantProfiles}
                 count={Number(children)}
+                jointTaxationType={adjustments.jointTaxationType}
                 onChange={(index, patch) => updateDependent("descendant", index, patch)}
               />
             </FamilyQuestion>
@@ -1303,43 +1255,58 @@ export function WorkerPersonalReductionsCard({
                 onNo={() => setTaxpayerAssistance("no")}
               />
             ) : null}
-            <section
-              className="irpf-reduction-question is-yes"
-              aria-label="¿Cuál es tu estado civil?"
-            >
-              <div className="irpf-reduction-question__prompt">
-                <span aria-hidden="true">?</span>
-                <div>
-                  <div className="irpf-reduction-question__title-row">
-                    <h3>¿Cuál es tu estado civil?</h3>
-                  </div>
-                  <p>Las siguientes preguntas dependen de esta respuesta.</p>
-                </div>
-              </div>
-              <div className="irpf-reduction-question__body">
-                <OptionChips
-                  label="Estado civil"
-                  value={maritalStatus}
-                  options={maritalOptions}
-                  onChange={(next) => setMaritalStatus(next as MaritalStatus)}
-                />
-              </div>
-            </section>
-            <MaritalReductionsGroup
-              maritalStatus={maritalStatus}
-              childrenCount={Number(children)}
-              jointUnitChildrenCount={jointUnitChildrenCount}
-              value={adjustments}
-              onChange={setAdjustments}
-              previewBaseAvailable={explainedBaseInitial}
-            />
           </div>
+          <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
+            <span aria-hidden="true">2</span>
+            <div>
+              <h3 id="wprc-work-benefits">Ventajas del trabajo</h3>
+              <p>
+                Algunas reducciones solo aplican si no tienes otras rentas elevadas. Tu respuesta afecta a la
+                reducción por rendimientos del trabajo que verás en el panel.
+              </p>
+            </div>
+          </section>
+          <WorkIncomeBenefitsSection
+            value={adjustments}
+            onChange={setAdjustments}
+            netWorkIncome={explainedNetWorkIncome}
+            grossWorkIncome={declaredGrossWorkIncome}
+          />
           <section
             className="wprc-explained wprc-explained--sticky"
             aria-label="Cómo cambian la base y el IRPF"
           >
             <dl>
               <div>
+                <dt>Rendimiento neto del trabajo</dt>
+                <dd>{formatEuro(explainedNetWorkIncome)}</dd>
+              </div>
+              <div className={`is-minus${workReductionApplied > 0 ? " is-applied" : ""}`}>
+                <dt>Reducción por rendimientos del trabajo</dt>
+                <dd>
+                  {workReductionBlocked ? (
+                    <span className="wprc-explained__status wprc-explained__status--pending">
+                      Pendiente
+                      <small>confirma otras rentas</small>
+                    </span>
+                  ) : workReductionOverThreshold ? (
+                    <span className="wprc-explained__status wprc-explained__status--muted">
+                      No aplica
+                      <small>otras rentas &gt; {WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR.toLocaleString("es-ES")} €</small>
+                    </span>
+                  ) : !workBenefitsRelevant ? (
+                    <span className="wprc-explained__status wprc-explained__status--muted">
+                      No aplica
+                      <small>con este nivel de salario</small>
+                    </span>
+                  ) : workReductionApplied > 0 ? (
+                    `- ${formatEuro(workReductionApplied)}`
+                  ) : (
+                    <span className="wprc-explained__status wprc-explained__status--muted">No aplica</span>
+                  )}
+                </dd>
+              </div>
+              <div className="is-subtotal">
                 <dt>Base antes de reducciones</dt>
                 <dd>{formatEuro(explainedBaseInitial)}</dd>
               </div>
@@ -1351,6 +1318,15 @@ export function WorkerPersonalReductionsCard({
                 <dt>Base liquidable</dt>
                 <dd>{formatEuro(Math.max(0, explainedBaseInitial - displayedBaseReductions))}</dd>
               </div>
+              {lowWorkIncomeDeductionApplied > 0 ? (
+                <div className="is-hint">
+                  <dt>Deducción por rentas bajas</dt>
+                  <dd>
+                    - {formatEuro(lowWorkIncomeDeductionApplied)}
+                    <small>se aplica en la cuota (paso 6)</small>
+                  </dd>
+                </div>
+              ) : null}
               <div className="is-minimum">
                 <dt>Mínimo personal y familiar</dt>
                 <dd>{formatEuro(appliedFamilyMinimum)}</dd>
@@ -1362,49 +1338,15 @@ export function WorkerPersonalReductionsCard({
               </div>
             </dl>
           </section>
-          {hasFamilyAnswer ? (
-            <section
-              className="wprc-family-preview"
-              aria-label="Resumen de tus respuestas familiares"
-            >
-              <div className="wprc-flow">
-                <article>
-                  <span>{minimumDescendants.length}</span>
-                  <p>Hijos que computan</p>
-                </article>
-                <article>
-                  <span>{result.childrenUnder3}</span>
-                  <p>Menores de 3 años</p>
-                </article>
-                <article>
-                  <span>{result.eligibleAscendants}</span>
-                  <p>Ascendientes que computan</p>
-                </article>
-                <article>
-                  <span>{formatEuro(result.dependentDisabilityMinimum)}</span>
-                  <p>Apoyo por discapacidad</p>
-                </article>
-              </div>
-              {Number(children) > 0 ? (
-                <section className="wprc-minimum-panel">
-                  <div>
-                    <p>La cantidad aumenta con cada hijo que cumpla los requisitos.</p>
-                  </div>
-                  <ol>
-                    {descendantMinimums.map((amount, index) => (
-                      <li
-                        className={index < minimumDescendants.length ? "is-active" : ""}
-                        key={amount}
-                      >
-                        <span>{index + 1}</span>
-                        <strong>{formatEuro(amount)}</strong>
-                      </li>
-                    ))}
-                  </ol>
-                </section>
-              ) : null}
-            </section>
-          ) : null}
+          <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
+            <span aria-hidden="true">3</span>
+            <div>
+              <h3 id="wprc-declared-reductions">Gastos y aportaciones que reduces de base</h3>
+              <p>
+                Sindicato, colegio, planes de pensiones y otros importes que puedas acreditar este año.
+              </p>
+            </div>
+          </section>
         </>
       ) : null}
 

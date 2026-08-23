@@ -80,8 +80,18 @@ export type Irpf2025CoreResult = {
   warnings: string[]
 }
 
-const WORK_REDUCTION_OTHER_INCOME_LIMIT = 6_500
-const LOW_WORK_INCOME_DEDUCTION_OTHER_INCOME_LIMIT = 6_500
+export const WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR = 6_500
+export const WORK_REDUCTION_BASIS_LIMIT_EUR = 19_747.5
+export const LOW_WORK_INCOME_GROSS_LIMIT_EUR = 18_276
+
+const WORK_REDUCTION_OTHER_INCOME_LIMIT = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
+const LOW_WORK_INCOME_DEDUCTION_OTHER_INCOME_LIMIT = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
+
+export function workBenefitsCouldApply(netWorkIncome: number, grossWorkIncome: number) {
+  const net = Math.max(0, netWorkIncome)
+  const gross = Math.max(0, grossWorkIncome)
+  return net < WORK_REDUCTION_BASIS_LIMIT_EUR || gross < LOW_WORK_INCOME_GROSS_LIMIT_EUR
+}
 
 function nonNegative(value: number | undefined) {
   return Math.max(0, Number.isFinite(value) ? (value ?? 0) : 0)
@@ -108,7 +118,7 @@ export function calculateWorkReduction2025(
   const availableNetWorkIncome = nonNegative(netWorkIncome)
   const otherIncome = nonNegative(otherNonExemptNonWorkIncome)
 
-  if (basis >= 19_747.5 || otherIncome > WORK_REDUCTION_OTHER_INCOME_LIMIT) {
+  if (basis >= WORK_REDUCTION_BASIS_LIMIT_EUR || otherIncome > WORK_REDUCTION_OTHER_INCOME_LIMIT) {
     return { theoretical: 0, applied: 0 }
   }
 
@@ -135,7 +145,7 @@ export function calculateLowWorkIncomeDeduction2025(
   const availableQuota = nonNegative(liquidQuotaAvailable)
   const otherIncome = nonNegative(otherNonExemptNonWorkIncome)
 
-  if (gross >= 18_276 || otherIncome > LOW_WORK_INCOME_DEDUCTION_OTHER_INCOME_LIMIT) {
+  if (gross >= LOW_WORK_INCOME_GROSS_LIMIT_EUR || otherIncome > LOW_WORK_INCOME_DEDUCTION_OTHER_INCOME_LIMIT) {
     return { theoretical: 0, limit: attributableQuota, applied: 0 }
   }
 
