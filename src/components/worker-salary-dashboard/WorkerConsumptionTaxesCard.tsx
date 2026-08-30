@@ -149,7 +149,6 @@ export function ConsumptionTaxesIntroDialog({
             className="wctc-intro-choice wctc-intro-choice--average"
             onClick={() => onChoose('average')}
           >
-            <Sparkles size={22} aria-hidden="true" />
             <span>
               <strong>Usar valores medios</strong>
               <small>
@@ -937,7 +936,6 @@ export function WorkerConsumptionTaxesCard({
 
         <div className="wctc-header-actions">
           <button type="button" className="wctc-action wctc-action--primary" onClick={applyAverageSharePresets}>
-            <Sparkles size={18} aria-hidden="true" />
             <span>Valores medios (España)</span>
           </button>
           <button type="button" className="wctc-action" onClick={resetShares}>

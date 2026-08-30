@@ -1290,6 +1290,135 @@
   line-height: 1.2;
 }
 
+/* La barra fija se lee como una ecuacion en una sola fila: neto - reducciones = base. */
+.wprc-explained--sticky .wprc-chain {
+  --wprc-chain-gap: clamp(15px, 1.7vw, 26px);
+
+  display: flex;
+  align-items: stretch;
+  gap: var(--wprc-chain-gap);
+  width: min(100%, 1540px);
+  margin-inline: auto;
+}
+
+.wprc-explained--sticky .wprc-chain__flow,
+.wprc-explained--sticky .wprc-chain__aside {
+  display: flex;
+  align-items: stretch;
+  gap: var(--wprc-chain-gap);
+  width: auto;
+  margin: 0;
+}
+
+.wprc-explained--sticky .wprc-chain__flow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wprc-explained--sticky .wprc-chain__aside {
+  flex: 0 0 auto;
+  gap: 10px;
+  padding-left: var(--wprc-chain-gap);
+  border-left: 1px solid rgba(99, 147, 205, 0.36);
+}
+
+.wprc-explained--sticky .wprc-chain__step {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 0;
+  padding: 7px 12px;
+  border: 1px solid rgba(99, 147, 205, 0.36);
+  border-radius: 11px;
+  background: rgba(3, 18, 40, 0.64);
+}
+
+.wprc-explained--sticky .wprc-chain__step[data-op]::before {
+  content: "−";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--wprc-chain-gap) / -2);
+  transform: translate(-50%, -50%);
+  color: #8ea3c6;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.wprc-explained--sticky .wprc-chain__step[data-op="equals"]::before {
+  content: "=";
+  color: #58f171;
+  font-size: 17px;
+}
+
+.wprc-explained--sticky .wprc-chain__step dt {
+  font-size: 11px;
+  line-height: 1.15;
+}
+
+.wprc-explained--sticky .wprc-chain__step dd {
+  display: grid;
+  gap: 1px;
+  font-size: 17px;
+  line-height: 1.05;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.wprc-explained--sticky .wprc-chain__step small {
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+/* Un unico numero protagonista: la base liquidable. */
+.wprc-explained--sticky .is-result {
+  padding-inline: 16px;
+}
+
+.wprc-explained--sticky .is-result dt {
+  font-size: 12px;
+}
+
+.wprc-explained--sticky .is-result dd {
+  font-size: clamp(21px, 1.9vw, 28px);
+  font-weight: 900;
+}
+
+.wprc-explained--sticky .wprc-explained__status {
+  justify-items: start;
+  text-align: left;
+  font-size: 14px;
+}
+
+@keyframes wprc-chain-flash {
+  from {
+    box-shadow: 0 0 0 0 rgba(88, 241, 113, 0.5);
+  }
+
+  to {
+    box-shadow: 0 0 0 9px rgba(88, 241, 113, 0);
+  }
+}
+
+.wprc-explained--sticky .wprc-chain__step.is-changed {
+  animation: wprc-chain-flash 620ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wprc-explained--sticky .wprc-chain__step.is-changed {
+    animation: none;
+  }
+}
+
+/* La tarjeta reserva la altura real de la barra, no un valor fijo. */
+.wprc--reductions:has(.wprc-explained--sticky) {
+  padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
+}
+
 .wprc-summary {
   display: grid;
   grid-template-columns: 72px minmax(0, 1fr) minmax(210px, 292px) minmax(210px, 292px);
@@ -1423,6 +1552,18 @@
 
   .wprc-explained--sticky dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wprc-explained--sticky .wprc-chain {
+    --wprc-chain-gap: 12px;
+  }
+
+  .wprc-explained--sticky .wprc-chain__flow {
+    flex-wrap: wrap;
+  }
+
+  .wprc-explained--sticky .wprc-chain__step[data-op]::before {
+    content: none;
   }
 
   .wprc-top-field + .wprc-top-field {
@@ -1576,6 +1717,24 @@
 
   .wprc-explained--sticky dd {
     font-size: 17px;
+  }
+
+  /* En movil solo caben las dos cifras que importan; el desglose esta en la pagina. */
+  .wprc-explained--sticky .wprc-chain__flow > .wprc-chain__step:not(.is-result),
+  .wprc-explained--sticky .wprc-chain__aside > .wprc-chain__step:not(.is-minimum) {
+    display: none;
+  }
+
+  .wprc-explained--sticky .wprc-chain {
+    --wprc-chain-gap: 8px;
+  }
+
+  .wprc-explained--sticky .wprc-chain__aside {
+    padding-left: 8px;
+  }
+
+  .wprc-explained--sticky .is-result dd {
+    font-size: 20px;
   }
 
   .wprc-panel {

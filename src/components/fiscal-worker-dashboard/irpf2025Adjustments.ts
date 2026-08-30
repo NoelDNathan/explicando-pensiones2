@@ -112,10 +112,10 @@ type CreateEmptyIrpf2025AdjustmentsOptions = {
 }
 
 export function createEmptyIrpf2025Adjustments(
-  options?: CreateEmptyIrpf2025AdjustmentsOptions,
+  _options?: CreateEmptyIrpf2025AdjustmentsOptions,
 ): Irpf2025AdjustmentInput {
   return {
-    otherIncomeKnown: false,
+    otherIncomeKnown: true,
     otherNonExemptNonWorkIncome: 0,
     unionDues: 0,
     professionalDues: 0,
@@ -138,7 +138,7 @@ export function createEmptyIrpf2025Adjustments(
     spousePensionProductType: 'none',
     compensatoryPensionPaid: 0,
     compensatoryPensionFormalized: false,
-    jointTaxationType: options?.maritalStatus === 'married' ? 'married' : 'individual',
+    jointTaxationType: 'individual',
     protectedAssetsContribution: 0,
     protectedAssetsFormalEstate: false,
     protectedAssetsValidContributor: false,

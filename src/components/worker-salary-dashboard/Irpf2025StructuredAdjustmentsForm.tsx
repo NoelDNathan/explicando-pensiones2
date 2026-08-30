@@ -275,7 +275,7 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
   onYes?: () => void
   onNo: () => void
 }) {
-  const [answer, setAnswer] = useState<'unanswered' | 'yes' | 'no'>(() => initiallyRelevant ? 'yes' : 'unanswered')
+  const [answer, setAnswer] = useState<'unanswered' | 'yes' | 'no'>(() => initiallyRelevant ? 'yes' : 'no')
   const chooseYes = () => {
     onYes?.()
     setAnswer('yes')
@@ -299,11 +299,10 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
         </div>
       </div>
       <div className="irpf-reduction-question__choices" role="group" aria-label={`Respuesta: ${question}`}>
-        <button className={answer === 'yes' ? 'is-selected' : ''} type="button" onClick={chooseYes}>Sí, me aplica</button>
-        <button className={answer === 'no' ? 'is-selected' : ''} type="button" onClick={chooseNo}>No, continuar</button>
+        <button className={answer === 'yes' ? 'is-selected' : ''} type="button" aria-pressed={answer === 'yes'} onClick={chooseYes}>Sí</button>
+        <button className={answer === 'no' ? 'is-selected' : ''} type="button" aria-pressed={answer === 'no'} onClick={chooseNo}>No</button>
       </div>
       {answer === 'yes' ? <div className="irpf-reduction-question__body">{children}</div> : null}
-      {answer === 'no' ? <p className="irpf-reduction-question__skip">Perfecto, no aplicaremos nada de este apartado. Puedes cambiar la respuesta cuando quieras.</p> : null}
     </section>
   )
 }
@@ -509,7 +508,6 @@ function OtherIncomeQuestions({
   onChange: (value: Irpf2025AdjustmentInput) => void
 }) {
   const [knownAnswer, setKnownAnswer] = useState<'yes' | 'no' | ''>(() => {
-    if (value.otherIncomeKnown) return 'yes'
     if (value.otherNonExemptNonWorkIncome > 0) return 'yes'
     return ''
   })
@@ -810,11 +808,9 @@ function clearGeographicMobilityFields(value: Irpf2025AdjustmentInput): Irpf2025
 function GeographicMobilityQuestions({
   value,
   onChange,
-  declaredGrossWorkIncome = 0,
 }: {
   value: Irpf2025AdjustmentInput
   onChange: (value: Irpf2025AdjustmentInput) => void
-  declaredGrossWorkIncome?: number
 }) {
   const [registeredAnswer, setRegisteredAnswer] = useState<'yes' | 'no' | ''>(() => {
     if (value.wasRegisteredJobseeker) return 'yes'
@@ -988,12 +984,6 @@ function GeographicMobilityQuestions({
 
           {recentMoveAnswer === 'yes' ? (
             <div className="irpf-rule-grid">
-              {declaredGrossWorkIncome > 0 ? (
-                <p className="irpf-marital-note irpf-marital-note--muted">
-                  Usamos tu salario bruto del paso 1 ({declaredGrossWorkIncome.toLocaleString('es-ES')} €) como tope
-                  máximo del incremento.
-                </p>
-              ) : null}
               <NumberField
                 label="¿Cuánto suman los gastos específicos de ese empleo?"
                 value={value.newJobSpecificExpenses}
@@ -1165,6 +1155,10 @@ function MaritalReductionsGroup({
           }
           initiallyRelevant={value.jointTaxationType !== 'individual'}
           effectAmount={jointEffect}
+          onYes={() => {
+            if (value.jointTaxationType !== 'individual') return
+            update('jointTaxationType', maritalStatus === 'married' ? 'married' : 'single_parent')
+          }}
           onNo={() => update('jointTaxationType', 'individual')}
         >
           <SelectField
@@ -1312,7 +1306,6 @@ export function Irpf2025StructuredAdjustmentsForm({
             <GeographicMobilityQuestions
               value={value}
               onChange={onChange}
-              declaredGrossWorkIncome={declaredGrossWorkIncome}
             />
           </ReductionQuestion>
           <ReductionQuestion question="¿Pagas tú un plan de pensiones?" description="Solo tus aportaciones personales, no las de tu empresa." initiallyRelevant={value.personalPensionContribution > 0} effectAmount={personalPlanEffect} onNo={() => update('personalPensionContribution', 0)}>
@@ -1323,11 +1316,6 @@ export function Irpf2025StructuredAdjustmentsForm({
           </ReductionQuestion>
           <ReductionQuestion question="¿Tu empresa aporta a un plan de pensiones para ti?" description="Míralo en tu nómina, certificado de la empresa o entidad del plan." initiallyRelevant={value.employerPensionContribution > 0 || value.workerEmploymentPensionContribution > 0} effectAmount={employmentPensionEffect} onNo={() => onChange({ ...value, employerPensionContribution: 0, workerEmploymentPensionContribution: 0 })}>
             <div className="irpf-rule-grid">
-              {declaredGrossWorkIncome > 0 ? (
-                <p className="irpf-marital-note irpf-marital-note--muted">
-                  Usamos tu salario bruto del paso 1 ({declaredGrossWorkIncome.toLocaleString('es-ES')} €) para calcular el límite de tu aportación al plan.
-                </p>
-              ) : null}
               <NumberField label="Aportación anual de tu empresa" value={value.employerPensionContribution} onChange={(amount) => update('employerPensionContribution', amount)} />
               <NumberField label="Tu aportación al mismo plan" value={value.workerEmploymentPensionContribution} onChange={(amount) => update('workerEmploymentPensionContribution', amount)} />
             </div>

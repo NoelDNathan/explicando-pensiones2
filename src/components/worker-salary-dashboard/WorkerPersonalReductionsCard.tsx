@@ -1,5 +1,5 @@
 import { CheckCircle2, FileText, Percent, TrendingDown } from "lucide-react";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   createDependentProfiles,
   countsForJointUnit,
@@ -342,7 +342,7 @@ function FamilyQuestion({
   onNo: () => void;
 }) {
   const [answer, setAnswer] = useState<"unanswered" | "yes" | "no">(() =>
-    initiallyRelevant ? "yes" : "unanswered",
+    initiallyRelevant ? "yes" : "no",
   );
   const chooseYes = () => {
     onYes?.();
@@ -366,20 +366,25 @@ function FamilyQuestion({
         </div>
       </div>
       <div className="irpf-reduction-question__choices" role="group" aria-label={`Respuesta: ${question}`}>
-        <button className={answer === "yes" ? "is-selected" : ""} type="button" onClick={chooseYes}>
-          Sí, me aplica
+        <button
+          className={answer === "yes" ? "is-selected" : ""}
+          type="button"
+          aria-pressed={answer === "yes"}
+          onClick={chooseYes}
+        >
+          Sí
         </button>
-        <button className={answer === "no" ? "is-selected" : ""} type="button" onClick={chooseNo}>
-          No, continuar
+        <button
+          className={answer === "no" ? "is-selected" : ""}
+          type="button"
+          aria-pressed={answer === "no"}
+          onClick={chooseNo}
+        >
+          No
         </button>
       </div>
       {answer === "yes" && children ? (
         <div className="irpf-reduction-question__body">{children}</div>
-      ) : null}
-      {answer === "no" ? (
-        <p className="irpf-reduction-question__skip">
-          Perfecto, no aplicaremos nada de este apartado. Puedes cambiar la respuesta cuando quieras.
-        </p>
       ) : null}
     </section>
   );
@@ -736,7 +741,72 @@ function DependentEditor({
 }
 
 function formatEuro(value: number) {
-  return `${value.toLocaleString("es-ES", { maximumFractionDigits: 2 })} EUR`;
+  return `${value.toLocaleString("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    useGrouping: true,
+  })} €`;
+}
+
+function formatEuroRounded(value: number) {
+  return `${value.toLocaleString("es-ES", {
+    maximumFractionDigits: 0,
+    useGrouping: true,
+  })} €`;
+}
+
+const CHANGE_FLASH_MS = 620;
+
+/** Marca un valor durante un instante cuando cambia, para que se vea que la barra reacciona. */
+function useChangeFlash(value: number) {
+  const [flashing, setFlashing] = useState(false);
+  const previousValue = useRef(value);
+
+  useEffect(() => {
+    if (previousValue.current === value) return;
+    previousValue.current = value;
+    setFlashing(true);
+    const timeout = window.setTimeout(() => setFlashing(false), CHANGE_FLASH_MS);
+    return () => window.clearTimeout(timeout);
+  }, [value]);
+
+  return flashing;
+}
+
+/**
+ * Publica la altura real de la barra fija en --wprc-sticky-height para que la tarjeta
+ * reserve justo ese hueco en lugar de un valor fijo que se queda corto.
+ */
+function useStickyBarHeight(enabled: boolean) {
+  const barRef = useRef<HTMLElement | null>(null);
+
+  const publishHeight = () => {
+    const bar = barRef.current;
+    const host = bar?.closest(".wprc") as HTMLElement | null;
+    if (!bar || !host) return;
+    host.style.setProperty("--wprc-sticky-height", `${Math.ceil(bar.getBoundingClientRect().height)}px`);
+  };
+
+  // Tras cada render: el contenido de la barra cambia con las respuestas.
+  useLayoutEffect(publishHeight);
+
+  // Y ante reflows que no vienen de React (viewport, carga de fuentes).
+  useEffect(() => {
+    const bar = barRef.current;
+    const host = bar?.closest(".wprc") as HTMLElement | null;
+    if (!enabled || !bar || !host || typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(publishHeight);
+    observer.observe(bar);
+
+    return () => {
+      observer.disconnect();
+      host.style.removeProperty("--wprc-sticky-height");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled]);
+
+  return barRef;
 }
 
 export function WorkerPersonalReductionsCard({
@@ -1047,6 +1117,27 @@ export function WorkerPersonalReductionsCard({
   const appliedFamilyMinimum = Math.max(0, statePersonalFamilyMinimum || familyMinimumPreview);
   const appliedRegionalFamilyMinimum = Math.max(0, regionalPersonalFamilyMinimum);
 
+  const workReductionStatus = workReductionBlocked
+    ? "pending"
+    : workReductionOverThreshold
+      ? "over-threshold"
+      : !workBenefitsRelevant
+        ? "not-relevant"
+        : workReductionApplied > 0
+          ? "applied"
+          : "none";
+  // Los eslabones que no aportan nada (misma cifra repetida) no entran en la cadena.
+  const showWorkReductionStep =
+    workReductionStatus === "applied"
+    || workReductionStatus === "pending"
+    || workReductionStatus === "over-threshold";
+  const showBaseReductionStep = displayedBaseReductions > 0;
+  const showChainSteps = showWorkReductionStep || showBaseReductionStep;
+  const explainedTaxableBase = Math.max(0, explainedBaseInitial - displayedBaseReductions);
+  const taxableBaseFlash = useChangeFlash(explainedTaxableBase);
+  const baseReductionsFlash = useChangeFlash(displayedBaseReductions);
+  const stickyBarRef = useStickyBarHeight(showReductionsSection);
+
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
       <div className="wprc-hero">
@@ -1273,70 +1364,88 @@ export function WorkerPersonalReductionsCard({
             grossWorkIncome={declaredGrossWorkIncome}
           />
           <section
+            ref={stickyBarRef}
             className="wprc-explained wprc-explained--sticky"
             aria-label="Cómo cambian la base y el IRPF"
           >
-            <dl>
-              <div>
-                <dt>Rendimiento neto del trabajo</dt>
-                <dd>{formatEuro(explainedNetWorkIncome)}</dd>
-              </div>
-              <div className={`is-minus${workReductionApplied > 0 ? " is-applied" : ""}`}>
-                <dt>Reducción por rendimientos del trabajo</dt>
-                <dd>
-                  {workReductionBlocked ? (
-                    <span className="wprc-explained__status wprc-explained__status--pending">
-                      Pendiente
-                      <small>confirma otras rentas</small>
-                    </span>
-                  ) : workReductionOverThreshold ? (
-                    <span className="wprc-explained__status wprc-explained__status--muted">
-                      No aplica
-                      <small>otras rentas &gt; {WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR.toLocaleString("es-ES")} €</small>
-                    </span>
-                  ) : !workBenefitsRelevant ? (
-                    <span className="wprc-explained__status wprc-explained__status--muted">
-                      No aplica
-                      <small>con este nivel de salario</small>
-                    </span>
-                  ) : workReductionApplied > 0 ? (
-                    `- ${formatEuro(workReductionApplied)}`
-                  ) : (
-                    <span className="wprc-explained__status wprc-explained__status--muted">No aplica</span>
-                  )}
-                </dd>
-              </div>
-              <div className="is-subtotal">
-                <dt>Base antes de reducciones</dt>
-                <dd>{formatEuro(explainedBaseInitial)}</dd>
-              </div>
-              <div className="is-minus">
-                <dt>Reducciones de base aplicadas</dt>
-                <dd>- {formatEuro(displayedBaseReductions)}</dd>
-              </div>
-              <div className="is-result">
-                <dt>Base liquidable</dt>
-                <dd>{formatEuro(Math.max(0, explainedBaseInitial - displayedBaseReductions))}</dd>
-              </div>
-              {lowWorkIncomeDeductionApplied > 0 ? (
-                <div className="is-hint">
-                  <dt>Deducción por rentas bajas</dt>
+            <div className="wprc-chain">
+              <dl className="wprc-chain__flow">
+                {showChainSteps ? (
+                  <div className="wprc-chain__step">
+                    <dt>Rendimiento neto del trabajo</dt>
+                    <dd>{formatEuro(explainedNetWorkIncome)}</dd>
+                  </div>
+                ) : null}
+                {showWorkReductionStep ? (
+                  <div
+                    className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
+                    data-op="minus"
+                  >
+                    <dt>Reducción por rendimientos del trabajo</dt>
+                    <dd>
+                      {workReductionStatus === "applied" ? (
+                        `− ${formatEuro(workReductionApplied)}`
+                      ) : workReductionStatus === "pending" ? (
+                        <span className="wprc-explained__status wprc-explained__status--pending">
+                          Pendiente
+                          <small>confirma otras rentas</small>
+                        </span>
+                      ) : (
+                        <span className="wprc-explained__status wprc-explained__status--muted">
+                          No aplica
+                          <small>
+                            otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
+                          </small>
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                ) : null}
+                {showBaseReductionStep ? (
+                  <div
+                    className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
+                    data-op="minus"
+                  >
+                    <dt>Reducciones de base</dt>
+                    <dd>− {formatEuro(displayedBaseReductions)}</dd>
+                  </div>
+                ) : null}
+                <div
+                  className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
+                  data-op={showChainSteps ? "equals" : undefined}
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <dt>Base liquidable</dt>
                   <dd>
-                    - {formatEuro(lowWorkIncomeDeductionApplied)}
-                    <small>se aplica en la cuota (paso 6)</small>
+                    {formatEuro(explainedTaxableBase)}
+                    {showChainSteps ? null : <small>sin reducciones aplicables</small>}
                   </dd>
                 </div>
-              ) : null}
-              <div className="is-minimum">
-                <dt>Mínimo personal y familiar</dt>
-                <dd>{formatEuro(appliedFamilyMinimum)}</dd>
-                <small>
-                  {appliedRegionalFamilyMinimum > 0
-                    ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica.`
-                    : "Se aplica al calcular la cuota; no resta la base."}
-                </small>
-              </div>
-            </dl>
+              </dl>
+              <dl className="wprc-chain__aside">
+                {lowWorkIncomeDeductionApplied > 0 ? (
+                  <div className="wprc-chain__step is-hint">
+                    <dt>Deducción por rentas bajas</dt>
+                    <dd>
+                      − {formatEuro(lowWorkIncomeDeductionApplied)}
+                      <small>en la cuota (paso 6)</small>
+                    </dd>
+                  </div>
+                ) : null}
+                <div className="wprc-chain__step is-minimum">
+                  <dt>Mínimo personal y familiar</dt>
+                  <dd>
+                    {formatEuro(appliedFamilyMinimum)}
+                    <small>
+                      {appliedRegionalFamilyMinimum > 0
+                        ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
+                        : "no resta base · se aplica en la cuota"}
+                    </small>
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </section>
           <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
             <span aria-hidden="true">3</span>
