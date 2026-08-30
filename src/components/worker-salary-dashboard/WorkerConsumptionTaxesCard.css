@@ -688,6 +688,17 @@
   white-space: nowrap;
 }
 
+.wctc-row--total .wctc-rule--total {
+  display: block;
+  margin: 0;
+  color: #c9d6eb;
+  font-weight: 820;
+}
+
+.wctc-row--total.is-warn .wctc-rule--total {
+  color: #ffbc62;
+}
+
 .wctc-home-strip {
   margin-top: 12px;
   min-width: 0;

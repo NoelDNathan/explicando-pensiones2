@@ -778,6 +778,25 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
   )
 }
 
+function getAverageConsumptionTaxRate(
+  lines: ConsumptionTaxLine[],
+  assignedSpendAnnual: number,
+  vatAnnual: number,
+  specialTaxesAnnual: number,
+) {
+  if (assignedSpendAnnual > 0) {
+    return ((vatAnnual + specialTaxesAnnual) / assignedSpendAnnual) * 100
+  }
+
+  const totalSharePercent = lines.reduce((total, line) => total + line.sharePercent, 0)
+  if (totalSharePercent <= 0) return 0
+
+  return lines.reduce(
+    (total, line) => total + line.sharePercent * (line.vatRate + (line.specialRate ?? 0)),
+    0,
+  ) / totalSharePercent
+}
+
 function clampNumber(value: number, min = 0, max = Number.POSITIVE_INFINITY) {
   if (!Number.isFinite(value)) return min
   return Math.min(max, Math.max(min, value))
@@ -1029,6 +1048,13 @@ export function WorkerConsumptionTaxesCard({
   const shareDifference = 100 - result.totalSharePercent
   const shareGapPercent = Math.abs(shareDifference)
   const amountGapMonthly = toMonthly(budgetAnnual * shareGapPercent / 100)
+  const averageConsumptionTaxRate = getAverageConsumptionTaxRate(
+    result.lines,
+    result.assignedSpendAnnual,
+    result.vatAnnual,
+    result.specialTaxesAnnual,
+  )
+  const showAverageConsumptionTaxRate = result.assignedSpendAnnual > 0 || result.totalSharePercent > 0
   const formatShareOfSpend = (value: number) => result.assignedSpendAnnual > 0
     ? `${formatNumber((value / result.assignedSpendAnnual) * 100)}% del gasto`
     : 'Sin gasto asignado'
@@ -1141,7 +1167,11 @@ export function WorkerConsumptionTaxesCard({
                 <span className="wctc-index" aria-hidden="true">Σ</span>
                 <strong>TOTAL</strong>
               </div>
-              <p className="wctc-rule">—</p>
+              <output className="wctc-rule wctc-rule--total" aria-label="Tipo impositivo medio del reparto">
+                {showAverageConsumptionTaxRate
+                  ? `${formatNumber(averageConsumptionTaxRate)} % medio`
+                  : '—'}
+              </output>
               <output className="wctc-total-cell">{formatEuro(toMonthly(result.assignedSpendAnnual))}</output>
               <output className="wctc-total-cell">{formatNumber(result.totalSharePercent)}%</output>
               <small className="wctc-total-hint">

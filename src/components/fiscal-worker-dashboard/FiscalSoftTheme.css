@@ -1940,6 +1940,10 @@
   color: var(--fiscal-copy);
 }
 
+.fwd--soft .wctc-row--total.is-warn .wctc-rule--total {
+  color: var(--fiscal-orange);
+}
+
 .fwd--soft .wctc-input {
   position: relative;
   isolation: isolate;
