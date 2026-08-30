@@ -354,8 +354,9 @@
   box-shadow: 0 -10px 28px rgba(35, 54, 78, 0.12);
 }
 
+/* .fwd-main ya reserva la nav inferior; aqui solo hace falta el alto de la barra. */
 .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
-  padding-bottom: calc(var(--wfsc-chrome-height) + 96px);
+  padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
 }
 
 .fwd--soft .wfsc-help {
@@ -1230,7 +1231,7 @@
   }
 
   .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
-    padding-bottom: calc(var(--wfsc-chrome-height) + var(--wprc-sticky-height, 96px) + 18px);
+    padding-bottom: calc(var(--wprc-sticky-height, 96px) + 18px);
   }
 }
 
@@ -1779,6 +1780,45 @@
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
   box-shadow: none;
+}
+
+.fwd--soft .wctc-spend-chart {
+  --wctc-chart-saving: #18865b;
+  --wctc-chart-mortgage-debt: #64748b;
+  --wctc-chart-basic-food: #0f766e;
+  --wctc-chart-general-food: #b45309;
+  --wctc-chart-restaurants: #c2410c;
+  --wctc-chart-shopping: #1d4ed8;
+  --wctc-chart-leisure: #7c3aed;
+  --wctc-chart-public-transport: #047857;
+  --wctc-chart-fuel: #b91c1c;
+  --wctc-chart-electricity: #0e7490;
+  --wctc-chart-health: #4338ca;
+  --wctc-chart-tobacco: #991b1b;
+  --wctc-chart-alcohol: #a21caf;
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wctc-spend-chart__title,
+.fwd--soft .wctc-spend-chart__legend-value,
+.fwd--soft .wctc-spend-chart__center strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft :is(.wctc-spend-chart__center span, .wctc-spend-chart__legend-label, .wctc-spend-chart--empty p) {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-spend-chart__tooltip {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wctc-spend-chart__tooltip span {
+  color: var(--fiscal-copy);
 }
 
 .fwd--soft .wctc-tip {

@@ -4,6 +4,8 @@ Fecha: 2026-08-30
 
 ## Situacion
 
+- En el paso 7, el bloque de distribucion del gasto incluye un grafico circular (donut) con el reparto por categoria; cada categoria tiene un color propio en el grafico y la leyenda. Verificacion: `pnpm run build` correcto.
+
 - En el paso 7, al entrar aparece una sola vez un dialogo para elegir valores medios de IVA o rellenar a mano; si eliges a mano se recomienda la app del banco. La eleccion se guarda en el navegador. Verificacion: `pnpm run build` y `tsc -b` correctos; comprobado en `/calculadora-fiscal` paso 7 en escritorio y movil 390 px.
 
 - En el paso 4, eliminado el aviso «Perfecto, no aplicaremos nada de este apartado…» al responder No. Verificación: `pnpm run build` correcto; comprobado en `/calculadora-fiscal` paso 4.

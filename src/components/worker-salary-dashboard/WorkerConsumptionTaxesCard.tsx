@@ -10,11 +10,12 @@ import {
   Plus,
   Receipt,
   RotateCcw,
-  Sparkles,
   Trash2,
   WalletCards,
 } from 'lucide-react'
 import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import type { TooltipProps } from 'recharts'
 import { InfoButton } from '../ui/InfoButton'
 import './WorkerConsumptionTaxesCard.css'
 
@@ -665,6 +666,118 @@ function formatNumber(value: number, decimals = 2) {
   }).format(value)
 }
 
+type SpendChartSlice = {
+  id: string
+  name: string
+  sharePercent: number
+  amountMonthly: number
+  color: string
+}
+
+function getCategoryChartColor(categoryId: string) {
+  return `var(--wctc-chart-${categoryId})`
+}
+
+type SpendDonutTooltipProps = TooltipProps<number, string> & {
+  payload?: Array<{
+    payload?: SpendChartSlice
+  }>
+}
+
+function SpendDonutTooltip({ active, payload }: SpendDonutTooltipProps) {
+  const slice = payload?.[0]?.payload
+  if (!active || !slice) return null
+
+  return (
+    <div className="wctc-spend-chart__tooltip" role="status">
+      <strong>{slice.name}</strong>
+      <span>{formatNumber(slice.sharePercent)} % del gasto</span>
+      <span>{formatEuro(slice.amountMonthly)} / mes</span>
+    </div>
+  )
+}
+
+type ConsumptionSpendDonutProps = {
+  lines: ConsumptionTaxLine[]
+  monthlyTotal: number
+}
+
+function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutProps) {
+  const slices = useMemo<SpendChartSlice[]>(() => (
+    lines
+      .filter((line) => line.sharePercent > 0.005)
+      .map((line) => ({
+        id: line.id,
+        name: line.label.replace(/\s*\*$/, '').trim(),
+        sharePercent: line.sharePercent,
+        amountMonthly: line.spendAnnual / 12,
+        color: getCategoryChartColor(line.id),
+      }))
+  ), [lines])
+
+  const chartSummary = slices.length > 0
+    ? slices.map((slice) => `${slice.name}: ${formatNumber(slice.sharePercent)} %`).join('; ')
+    : 'Sin gasto asignado'
+
+  if (slices.length === 0) {
+    return (
+      <figure className="wctc-spend-chart wctc-spend-chart--empty" aria-label={chartSummary}>
+        <figcaption className="wctc-spend-chart__title">Distribución del gasto</figcaption>
+        <p>Asigna importe o porcentaje a las categorías para ver el reparto.</p>
+      </figure>
+    )
+  }
+
+  return (
+    <figure className="wctc-spend-chart" aria-label={`Distribución del gasto. ${chartSummary}`}>
+      <figcaption className="wctc-spend-chart__title">Distribución del gasto</figcaption>
+      <div className="wctc-spend-chart__body">
+        <div className="wctc-spend-chart__viz">
+          <ResponsiveContainer width="100%" height={210}>
+            <PieChart>
+              <Pie
+                data={slices}
+                dataKey="sharePercent"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius="56%"
+                outerRadius="84%"
+                paddingAngle={slices.length > 1 ? 1.5 : 0}
+                strokeWidth={2}
+                stroke="transparent"
+              >
+                {slices.map((slice) => (
+                  <Cell key={slice.id} fill={slice.color} />
+                ))}
+              </Pie>
+              <Tooltip content={<SpendDonutTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="wctc-spend-chart__center" aria-hidden="true">
+            <strong>{formatEuro(monthlyTotal)}</strong>
+            <span>al mes</span>
+          </div>
+        </div>
+
+        <ul className="wctc-spend-chart__legend">
+          {slices.map((slice) => (
+            <li key={slice.id}>
+              <span
+                className="wctc-spend-chart__swatch"
+                style={{ background: slice.color, boxShadow: `0 0 10px color-mix(in srgb, ${slice.color} 45%, transparent)` }}
+                aria-hidden="true"
+              />
+              <span className="wctc-spend-chart__legend-label">{slice.name}</span>
+              <span className="wctc-spend-chart__legend-value">{formatNumber(slice.sharePercent)} %</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </figure>
+  )
+}
+
 function clampNumber(value: number, min = 0, max = Number.POSITIVE_INFINITY) {
   if (!Number.isFinite(value)) return min
   return Math.min(max, Math.max(min, value))
@@ -956,6 +1069,10 @@ export function WorkerConsumptionTaxesCard({
 
       <div className="wctc-layout">
         <section className="wctc-left" aria-label="Distribucion del gasto">
+          <ConsumptionSpendDonut
+            lines={result.lines}
+            monthlyTotal={toMonthly(result.assignedSpendAnnual)}
+          />
           <div className="wctc-spend-scroll">
             <div className="wctc-grid-head" aria-hidden="true">
               <span>Categoria de gasto</span>

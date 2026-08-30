@@ -803,7 +803,6 @@ function useStickyBarHeight(enabled: boolean) {
       observer.disconnect();
       host.style.removeProperty("--wprc-sticky-height");
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 
   return barRef;

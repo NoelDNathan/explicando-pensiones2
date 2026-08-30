@@ -320,6 +320,140 @@
   max-width: 100%;
 }
 
+.wctc-spend-chart {
+  --wctc-chart-saving: #6ce37a;
+  --wctc-chart-mortgage-debt: #94a3b8;
+  --wctc-chart-basic-food: #2dd4bf;
+  --wctc-chart-general-food: #facc15;
+  --wctc-chart-restaurants: #fb923c;
+  --wctc-chart-shopping: #38bdf8;
+  --wctc-chart-leisure: #c084fc;
+  --wctc-chart-public-transport: #4ade80;
+  --wctc-chart-fuel: #f87171;
+  --wctc-chart-electricity: #22d3ee;
+  --wctc-chart-health: #818cf8;
+  --wctc-chart-tobacco: #ef4444;
+  --wctc-chart-alcohol: #e879f9;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(42, 92, 145, 0.42);
+  border-radius: 10px;
+  background: rgba(4, 18, 37, 0.3);
+}
+
+.wctc-spend-chart__title {
+  margin: 0 0 10px;
+  color: #eef4ff;
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 820;
+}
+
+.wctc-spend-chart__body {
+  display: grid;
+  grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+  gap: 10px 16px;
+  align-items: center;
+}
+
+.wctc-spend-chart__viz {
+  position: relative;
+  min-height: 210px;
+}
+
+.wctc-spend-chart__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 2px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.wctc-spend-chart__center strong {
+  color: #f7f9ff;
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1;
+  font-weight: 860;
+}
+
+.wctc-spend-chart__center span {
+  color: #a9b5cc;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.wctc-spend-chart__legend {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wctc-spend-chart__legend li {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.wctc-spend-chart__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--wctc-blue);
+}
+
+.wctc-spend-chart__legend-label {
+  min-width: 0;
+  color: #d5deef;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 680;
+}
+
+.wctc-spend-chart__legend-value {
+  color: #eef4ff;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 820;
+  white-space: nowrap;
+}
+
+.wctc-spend-chart__tooltip {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid rgba(55, 145, 255, 0.55);
+  border-radius: 10px;
+  color: #eef4ff;
+  background: rgba(5, 23, 48, 0.94);
+  box-shadow: 0 10px 28px rgba(0, 6, 22, 0.35);
+}
+
+.wctc-spend-chart__tooltip strong {
+  font-size: 13px;
+  font-weight: 820;
+}
+
+.wctc-spend-chart__tooltip span {
+  color: #b8c6de;
+  font-size: 12px;
+  font-weight: 680;
+}
+
+.wctc-spend-chart--empty p {
+  margin: 0;
+  color: #a9b5cc;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 680;
+}
+
 .wctc-row {
   --tone: var(--wctc-blue);
   min-height: 40px;
@@ -1355,6 +1489,15 @@
 }
 
 @container wctc-left (max-width: 520px) {
+  .wctc-spend-chart__body {
+    grid-template-columns: 1fr;
+  }
+
+  .wctc-spend-chart__viz {
+    max-width: 240px;
+    margin-inline: auto;
+  }
+
   .wctc-ibi-row__fields {
     grid-template-columns: 1fr;
   }
