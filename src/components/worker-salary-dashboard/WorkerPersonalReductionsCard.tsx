@@ -1135,7 +1135,7 @@ export function WorkerPersonalReductionsCard({
   const explainedTaxableBase = Math.max(0, explainedBaseInitial - displayedBaseReductions);
   const taxableBaseFlash = useChangeFlash(explainedTaxableBase);
   const baseReductionsFlash = useChangeFlash(displayedBaseReductions);
-  const stickyBarRef = useStickyBarHeight(showReductionsSection);
+  const stickyBarRef = useStickyBarHeight(showReductionsSection && showChainSteps);
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -1362,90 +1362,87 @@ export function WorkerPersonalReductionsCard({
             netWorkIncome={explainedNetWorkIncome}
             grossWorkIncome={declaredGrossWorkIncome}
           />
-          <section
-            ref={stickyBarRef}
-            className="wprc-explained wprc-explained--sticky"
-            aria-label="Cómo cambian la base y el IRPF"
-          >
-            <div className="wprc-chain">
-              <dl className="wprc-chain__flow">
-                {showChainSteps ? (
+          {showChainSteps ? (
+            <section
+              ref={stickyBarRef}
+              className="wprc-explained wprc-explained--sticky"
+              aria-label="Cómo cambian la base y el IRPF"
+            >
+              <div className="wprc-chain">
+                <dl className="wprc-chain__flow">
                   <div className="wprc-chain__step">
                     <dt>Rendimiento neto del trabajo</dt>
                     <dd>{formatEuro(explainedNetWorkIncome)}</dd>
                   </div>
-                ) : null}
-                {showWorkReductionStep ? (
+                  {showWorkReductionStep ? (
+                    <div
+                      className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
+                      data-op="minus"
+                    >
+                      <dt>Reducción por rendimientos del trabajo</dt>
+                      <dd>
+                        {workReductionStatus === "applied" ? (
+                          `− ${formatEuro(workReductionApplied)}`
+                        ) : workReductionStatus === "pending" ? (
+                          <span className="wprc-explained__status wprc-explained__status--pending">
+                            Pendiente
+                            <small>confirma otras rentas</small>
+                          </span>
+                        ) : (
+                          <span className="wprc-explained__status wprc-explained__status--muted">
+                            No aplica
+                            <small>
+                              otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
+                            </small>
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  ) : null}
+                  {showBaseReductionStep ? (
+                    <div
+                      className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
+                      data-op="minus"
+                    >
+                      <dt>Reducciones de base</dt>
+                      <dd>{formatEuro(displayedBaseReductions)}</dd>
+                    </div>
+                  ) : null}
                   <div
-                    className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
-                    data-op="minus"
+                    className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
+                    data-op="equals"
+                    aria-live="polite"
+                    aria-atomic="true"
                   >
-                    <dt>Reducción por rendimientos del trabajo</dt>
+                    <dt>Base liquidable</dt>
+                    <dd>{formatEuro(explainedTaxableBase)}</dd>
+                  </div>
+                </dl>
+                <dl className="wprc-chain__aside">
+                  {lowWorkIncomeDeductionApplied > 0 ? (
+                    <div className="wprc-chain__step is-hint">
+                      <dt>Deducción por rentas bajas</dt>
+                      <dd>
+                        − {formatEuro(lowWorkIncomeDeductionApplied)}
+                        <small>en la cuota (paso 6)</small>
+                      </dd>
+                    </div>
+                  ) : null}
+                  <div className="wprc-chain__step is-minimum">
+                    <dt>Mínimo personal y familiar</dt>
                     <dd>
-                      {workReductionStatus === "applied" ? (
-                        `− ${formatEuro(workReductionApplied)}`
-                      ) : workReductionStatus === "pending" ? (
-                        <span className="wprc-explained__status wprc-explained__status--pending">
-                          Pendiente
-                          <small>confirma otras rentas</small>
-                        </span>
-                      ) : (
-                        <span className="wprc-explained__status wprc-explained__status--muted">
-                          No aplica
-                          <small>
-                            otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
-                          </small>
-                        </span>
-                      )}
+                      {formatEuro(appliedFamilyMinimum)}
+                      <small>
+                        {appliedRegionalFamilyMinimum > 0
+                          ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
+                          : "no resta base · se aplica en la cuota"}
+                      </small>
                     </dd>
                   </div>
-                ) : null}
-                {showBaseReductionStep ? (
-                  <div
-                    className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
-                    data-op="minus"
-                  >
-                    <dt>Reducciones de base</dt>
-                    <dd>− {formatEuro(displayedBaseReductions)}</dd>
-                  </div>
-                ) : null}
-                <div
-                  className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
-                  data-op={showChainSteps ? "equals" : undefined}
-                  aria-live="polite"
-                  aria-atomic="true"
-                >
-                  <dt>Base liquidable</dt>
-                  <dd>
-                    {formatEuro(explainedTaxableBase)}
-                    {showChainSteps ? null : <small>sin reducciones aplicables</small>}
-                  </dd>
-                </div>
-              </dl>
-              <dl className="wprc-chain__aside">
-                {lowWorkIncomeDeductionApplied > 0 ? (
-                  <div className="wprc-chain__step is-hint">
-                    <dt>Deducción por rentas bajas</dt>
-                    <dd>
-                      − {formatEuro(lowWorkIncomeDeductionApplied)}
-                      <small>en la cuota (paso 6)</small>
-                    </dd>
-                  </div>
-                ) : null}
-                <div className="wprc-chain__step is-minimum">
-                  <dt>Mínimo personal y familiar</dt>
-                  <dd>
-                    {formatEuro(appliedFamilyMinimum)}
-                    <small>
-                      {appliedRegionalFamilyMinimum > 0
-                        ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
-                        : "no resta base · se aplica en la cuota"}
-                    </small>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </section>
+                </dl>
+              </div>
+            </section>
+          ) : null}
           <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
             <span aria-hidden="true">3</span>
             <div>

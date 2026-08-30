@@ -355,7 +355,7 @@
 }
 
 /* .fwd-main ya reserva la nav inferior; aqui solo hace falta el alto de la barra. */
-.fwd--soft:has(.wfsc-chrome) .wprc--reductions {
+.fwd--soft:has(.wfsc-chrome) .wprc--reductions:has(.wprc-explained--sticky) {
   padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
 }
 
@@ -1220,17 +1220,17 @@
   color: var(--fiscal-green);
 }
 
-/* La altura la publica el componente con un ResizeObserver: --wprc-sticky-height. */
-.fwd--soft .wprc--reductions {
+/* La altura real de la barra la publica el componente en --wprc-sticky-height. */
+.fwd--soft .wprc--reductions:has(.wprc-explained--sticky) {
   padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
 }
 
 @media (max-width: 640px) {
-  .fwd--soft .wprc--reductions {
+  .fwd--soft .wprc--reductions:has(.wprc-explained--sticky) {
     padding-bottom: calc(var(--wprc-sticky-height, 96px) + 18px);
   }
 
-  .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
+  .fwd--soft:has(.wfsc-chrome) .wprc--reductions:has(.wprc-explained--sticky) {
     padding-bottom: calc(var(--wprc-sticky-height, 96px) + 18px);
   }
 }
@@ -2067,6 +2067,19 @@
 
 .fwd--soft .wctc-ibi-head small {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-row--total.is-warn .wctc-total-hint {
+  border-color: color-mix(in srgb, var(--fiscal-orange) 42%, var(--fiscal-line));
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wctc-row--total.is-warn .wctc-total-hint__percent {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-row--total.is-warn .wctc-total-hint__amount {
+  color: var(--fiscal-orange);
 }
 
 .fwd--soft .wctc-total-cell,

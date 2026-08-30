@@ -1024,14 +1024,11 @@ export function WorkerConsumptionTaxesCard({
   }
 
   const maxLineAmount = Math.max(...result.lines.map((line) => line.spendAnnual), 1)
+  const toMonthly = (value: number) => value / 12
   const totalStatus = Math.abs(result.totalSharePercent - 100) <= 0.05 ? 'ok' : 'warn'
   const shareDifference = 100 - result.totalSharePercent
-  const totalHint = totalStatus === 'ok'
-    ? 'Distribución completa'
-    : shareDifference > 0
-      ? `Falta ${formatNumber(shareDifference)}%`
-      : `Sobran ${formatNumber(Math.abs(shareDifference))}%`
-  const toMonthly = (value: number) => value / 12
+  const shareGapPercent = Math.abs(shareDifference)
+  const amountGapMonthly = toMonthly(budgetAnnual * shareGapPercent / 100)
   const formatShareOfSpend = (value: number) => result.assignedSpendAnnual > 0
     ? `${formatNumber((value / result.assignedSpendAnnual) * 100)}% del gasto`
     : 'Sin gasto asignado'
@@ -1147,7 +1144,20 @@ export function WorkerConsumptionTaxesCard({
               <p className="wctc-rule">—</p>
               <output className="wctc-total-cell">{formatEuro(toMonthly(result.assignedSpendAnnual))}</output>
               <output className="wctc-total-cell">{formatNumber(result.totalSharePercent)}%</output>
-              <small>{totalHint}</small>
+              <small className="wctc-total-hint">
+                {totalStatus === 'ok' ? (
+                  'Distribución completa'
+                ) : (
+                  <>
+                    <span className="wctc-total-hint__percent">
+                      {shareDifference > 0
+                        ? `Falta ${formatNumber(shareGapPercent)} %`
+                        : `Sobran ${formatNumber(shareGapPercent)} %`}
+                    </span>
+                    <span className="wctc-total-hint__amount">{formatEuro(amountGapMonthly)} / mes</span>
+                  </>
+                )}
+              </small>
             </article>
           </div>
           </div>
