@@ -14,7 +14,7 @@ import { SalaryNationalityDashboard } from './components/salary-nationality/Sala
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
-import { WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
+import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
@@ -335,6 +335,8 @@ const INDICATORS_2025: IndicatorItem[] = [
 
 function ComponentLab() {
   const [indicatorInfoOpen, setIndicatorInfoOpen] = React.useState(false)
+  const [consumptionIntroOpen, setConsumptionIntroOpen] = React.useState(false)
+  const closeConsumptionIntro = React.useCallback(() => setConsumptionIntroOpen(false), [])
   const [demoChildren, setDemoChildren] = React.useState(0)
   const [demoChildrenUnder3, setDemoChildrenUnder3] = React.useState(0)
   const [demoAscendants, setDemoAscendants] = React.useState(0)
@@ -778,11 +780,20 @@ function ComponentLab() {
             Paso editable para estimar impuestos indirectos por categoria:
             cada fila sincroniza porcentaje e importe anual en euros y anade
             vivienda en propiedad como modulo simplificado de IBI.
+            Al entrar en el paso 7 de la calculadora, un dialogo pregunta una sola
+            vez si se usan valores medios o se rellena a mano.
           </p>
         </div>
 
         <div className="component-preview component-preview--dark component-preview--worker-consumption">
-          <WorkerConsumptionTaxesCard />
+          <button
+            type="button"
+            className="component-info-modal-trigger"
+            onClick={() => setConsumptionIntroOpen(true)}
+          >
+            Ver pregunta inicial
+          </button>
+          <WorkerConsumptionTaxesCard introChoiceMode="off" />
         </div>
       </section>
 
@@ -821,6 +832,10 @@ function ComponentLab() {
         open={indicatorInfoOpen}
         onClose={() => setIndicatorInfoOpen(false)}
         content={POPULATION_PYRAMID_INFO}
+      />
+      <ConsumptionTaxesIntroDialog
+        open={consumptionIntroOpen}
+        onChoose={closeConsumptionIntro}
       />
     </main>
   )

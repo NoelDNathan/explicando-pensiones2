@@ -5,6 +5,7 @@ import {
   Home,
   Info,
   Lightbulb,
+  PenLine,
   Percent,
   Plus,
   Receipt,
@@ -13,7 +14,7 @@ import {
   Trash2,
   WalletCards,
 } from 'lucide-react'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { InfoButton } from '../ui/InfoButton'
 import './WorkerConsumptionTaxesCard.css'
 
@@ -57,7 +58,126 @@ type WorkerConsumptionTaxesCardProps = {
   initialBudgetAnnual?: number
   initialCadastralValue?: number
   initialHasOwnedHome?: boolean
+  /** `once` muestra el dialogo de valores medios solo la primera vez. */
+  introChoiceMode?: 'once' | 'off'
   onResultChange?: (result: ConsumptionTaxesResult) => void
+}
+
+export type ConsumptionTaxesIntroChoice = 'average' | 'manual'
+
+const INTRO_STORAGE_KEY = 'explicando-pensiones.wctc-iva-intro-seen'
+
+function readIntroChoice(): ConsumptionTaxesIntroChoice | null {
+  try {
+    const stored = window.localStorage.getItem(INTRO_STORAGE_KEY)
+    if (stored === 'average' || stored === 'manual') return stored
+    if (stored === '1') return 'manual'
+    return null
+  } catch {
+    return null
+  }
+}
+
+function markIvaIntroChoice(choice: ConsumptionTaxesIntroChoice) {
+  try {
+    window.localStorage.setItem(INTRO_STORAGE_KEY, choice)
+  } catch {
+    // modo privado o cuota: el dialogo puede volver a salir
+  }
+}
+
+type ConsumptionTaxesIntroDialogProps = {
+  open: boolean
+  onChoose: (choice: ConsumptionTaxesIntroChoice) => void
+}
+
+export function ConsumptionTaxesIntroDialog({
+  open,
+  onChoose,
+}: ConsumptionTaxesIntroDialogProps) {
+  const titleId = useId()
+  const descriptionId = useId()
+  const firstChoiceRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+
+    firstChoiceRef.current?.focus()
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onChoose('manual')
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open, onChoose])
+
+  if (!open) return null
+
+  return (
+    <div className="wctc-intro-layer" role="presentation">
+      <div className="wctc-intro-backdrop" />
+      <section
+        className="wctc-intro-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+      >
+        <header className="wctc-intro-header">
+          <span className="wctc-intro-icon" aria-hidden="true">
+            <Receipt size={26} strokeWidth={2.1} />
+          </span>
+          <div>
+            <h2 id={titleId}>¿Cómo quieres rellenar el IVA?</h2>
+            <p id={descriptionId}>
+            Ahora vamos a calcular cuánto pagas de IVA. Puedes utilizar los valores por defecto, basados en el gasto medio de una persona en España, o introducir tus propios gastos manualmente para obtener una estimación más ajustada a ti.
+            </p>
+          </div>
+        </header>
+
+        <div className="wctc-intro-choices">
+          <button
+            ref={firstChoiceRef}
+            type="button"
+            className="wctc-intro-choice wctc-intro-choice--average"
+            onClick={() => onChoose('average')}
+          >
+            <Sparkles size={22} aria-hidden="true" />
+            <span>
+              <strong>Usar valores medios</strong>
+              <small>
+                Rellena cada categoría con un porcentaje orientativo del gasto
+                medio en España. Luego puedes ajustarlo.
+              </small>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            className="wctc-intro-choice"
+            onClick={() => onChoose('manual')}
+          >
+            <PenLine size={22} aria-hidden="true" />
+            <span>
+              <strong>Rellenarlos yo</strong>
+              <small>
+                Abre la app de tu banco. Según el banco, suele haber un resumen
+                de gasto por categorías (alimentación, ocio, transporte…)
+                para copiar importe y %.
+              </small>
+            </span>
+          </button>
+        </div>
+      </section>
+    </div>
+  )
 }
 
 const DEFAULT_BUDGET_ANNUAL = 28145.92
@@ -586,13 +706,17 @@ export function WorkerConsumptionTaxesCard({
   initialBudgetAnnual = DEFAULT_BUDGET_ANNUAL,
   initialCadastralValue = 0,
   initialHasOwnedHome = false,
+  introChoiceMode = 'once',
   onResultChange,
 }: WorkerConsumptionTaxesCardProps) {
   const [budgetAnnual, setBudgetAnnual] = useState(initialBudgetAnnual)
+  const storedIntroChoice = introChoiceMode === 'once' ? readIntroChoice() : null
   const [shares, setShares] = useState(() =>
     categories.map((category) => ({
       ...category,
-      sharePercent: category.initialSharePercent,
+      sharePercent: storedIntroChoice === 'average'
+        ? AVERAGE_SPAIN_SHARE_PRESETS[category.id] ?? 0
+        : category.initialSharePercent,
     })),
   )
   const [hasOwnedHome, setHasOwnedHome] = useState<OwnershipAnswer>(() => (
@@ -606,6 +730,9 @@ export function WorkerConsumptionTaxesCard({
   const [propertyPurchases, setPropertyPurchases] = useState<PropertyPurchase[]>([createEmptyPurchase()])
   const [vehiclePurchases, setVehiclePurchases] = useState<VehiclePurchase[]>([createEmptyVehiclePurchase()])
   const [vehicleIvtms, setVehicleIvtms] = useState<VehicleIvtm[]>([createEmptyVehicleIvtm()])
+  const [introOpen, setIntroOpen] = useState(() => (
+    introChoiceMode === 'once' && storedIntroChoice === null
+  ))
 
   useEffect(() => {
     setBudgetAnnual(initialBudgetAnnual)
@@ -694,6 +821,19 @@ export function WorkerConsumptionTaxesCard({
       })),
     )
   }
+
+  const handleIntroChoice = useCallback((choice: ConsumptionTaxesIntroChoice) => {
+    if (choice === 'average') {
+      setShares((current) =>
+        current.map((row) => ({
+          ...row,
+          sharePercent: AVERAGE_SPAIN_SHARE_PRESETS[row.id] ?? 0,
+        })),
+      )
+    }
+    if (introChoiceMode === 'once') markIvaIntroChoice(choice)
+    setIntroOpen(false)
+  }, [introChoiceMode])
 
   function updatePurchase(id: string, patch: Partial<Omit<PropertyPurchase, 'id'>>) {
     setPropertyPurchases((current) =>
@@ -785,6 +925,8 @@ export function WorkerConsumptionTaxesCard({
     : 'Sin gasto asignado'
 
   return (
+    <>
+    <ConsumptionTaxesIntroDialog open={introOpen} onChoose={handleIntroChoice} />
     <section className="wctc" aria-labelledby="wctc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
@@ -1347,6 +1489,7 @@ export function WorkerConsumptionTaxesCard({
         </aside>
       </div>
     </section>
+    </>
   )
 }
 

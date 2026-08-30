@@ -1,8 +1,18 @@
 # Estado actual
 
-Fecha: 2026-08-23
+Fecha: 2026-08-30
 
 ## Situacion
+
+- En el paso 7, al entrar aparece una sola vez un dialogo para elegir valores medios de IVA o rellenar a mano; si eliges a mano se recomienda la app del banco. La eleccion se guarda en el navegador. Verificacion: `pnpm run build` y `tsc -b` correctos; comprobado en `/calculadora-fiscal` paso 7 en escritorio y movil 390 px.
+
+- En el paso 4, eliminado el aviso «Perfecto, no aplicaremos nada de este apartado…» al responder No. Verificación: `pnpm run build` correcto; comprobado en `/calculadora-fiscal` paso 4.
+
+- En el paso 4, las preguntas raíz Sí/No (`ReductionQuestion` y `FamilyQuestion`) usan las etiquetas «Sí» y «No» y arrancan con «No» marcado, salvo si ya hay datos que las hacen relevantes. La declaración conjunta y las otras rentas coinciden con ese No: individual y otras rentas confirmadas a 0 €. Verificación: `pnpm run build` y `pnpm run verify:irpf2025` (24 comprobaciones) correctos; comprobado en `/calculadora-fiscal` paso 4.
+
+- En el plan de pensiones de la empresa (paso 4), eliminada la nota «Usamos tu salario bruto del paso 1… para calcular el límite de tu aportación al plan»; el límite sigue aplicándose en el motor con el salario del paso 1. Verificación: `pnpm run build` correcto.
+
+- En movilidad geográfica (paso 4), eliminada la nota «Usamos tu salario bruto del paso 1… como tope máximo del incremento»; el tope sigue aplicándose en el motor con el salario del paso 1. Verificación: `pnpm run build` correcto.
 
 - En el paso 4, la pregunta de otras rentas pasa al bloque «Ventajas del trabajo» (sección 2), con copy que excluye complementos y especie del paso 1; se oculta si el salario ya descarta esas ventajas. El panel sticky muestra el desglose: rendimiento neto → reducción por rendimientos del trabajo → base antes de reducciones → reducciones declaradas → base liquidable; si aplica, la deducción por rentas bajas se indica como efecto en cuota (paso 6). En el paso 6, la etiqueta pasa a «Deducción por rentas del trabajo bajas». Verificación: `pnpm run build` y `pnpm run verify:irpf2025` (24 comprobaciones) correctos.
 
@@ -30,7 +40,7 @@ Fecha: 2026-08-23
 
 - En el paso 4, la reducción por patrimonio protegido deja el checkbox «cumple los requisitos» y pasa a un subflujo de preguntas Sí/No: patrimonio constituido, parentesco o legitimación, aportante distinto del titular, importe propio y aportaciones de otras personas. Verificación: `pnpm run build` correcto.
 
-- En el paso 4, con estado civil casado/a, la declaración conjunta con cónyuge es el valor por defecto del selector «¿Con quién presentas la declaración?». Verificación: `pnpm run build` correcto.
+- En el paso 4, la declaración conjunta arranca en No (individual). Si respondes Sí y estás casado/a, el selector «¿Con quién presentas la declaración?» sigue proponiendo «Con mi cónyuge». Verificación: `pnpm run build` correcto.
 
 - En el paso 4, plan de pensiones personal y mutualidad profesional son dos preguntas separadas con su importe. Verificación: `pnpm run build` correcto.
 

@@ -48,6 +48,8 @@ export type {
 export type {
   ConsumptionTaxCategory,
   ConsumptionTaxLine,
+  ConsumptionTaxesIntroChoice,
   ConsumptionTaxesResult,
 } from './WorkerConsumptionTaxesCard'
+export { ConsumptionTaxesIntroDialog } from './WorkerConsumptionTaxesCard'
 export type { CalculationSourceItem } from './WorkerCalculationSourcesCard'

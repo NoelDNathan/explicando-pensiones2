@@ -1203,17 +1203,34 @@
   box-shadow: 0 -8px 22px rgba(35, 54, 78, 0.1);
 }
 
+.fwd--soft .wprc-explained--sticky .wprc-chain__aside {
+  border-left-color: var(--fiscal-line);
+}
+
+.fwd--soft .wprc-explained--sticky .wprc-chain__step[data-op]::before {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .wprc-explained--sticky .wprc-chain__step[data-op="equals"]::before {
+  color: var(--fiscal-green);
+}
+
+.fwd--soft .wprc-explained--sticky .is-result dd {
+  color: var(--fiscal-green);
+}
+
+/* La altura la publica el componente con un ResizeObserver: --wprc-sticky-height. */
 .fwd--soft .wprc--reductions {
-  padding-bottom: 110px;
+  padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
 }
 
 @media (max-width: 640px) {
   .fwd--soft .wprc--reductions {
-    padding-bottom: 210px;
+    padding-bottom: calc(var(--wprc-sticky-height, 96px) + 18px);
   }
 
   .fwd--soft:has(.wfsc-chrome) .wprc--reductions {
-    padding-bottom: calc(var(--wfsc-chrome-height) + 210px);
+    padding-bottom: calc(var(--wfsc-chrome-height) + var(--wprc-sticky-height, 96px) + 18px);
   }
 }
 
@@ -1342,8 +1359,7 @@
   background: #fff3e4;
 }
 
-.fwd--soft .irpf-reduction-question__prompt p,
-.fwd--soft .irpf-reduction-question__skip {
+.fwd--soft .irpf-reduction-question__prompt p {
   color: var(--fiscal-copy);
 }
 
@@ -1373,10 +1389,6 @@
 
 .fwd--soft .irpf-reduction-question__body {
   border-color: var(--fiscal-line);
-}
-
-.fwd--soft .irpf-reduction-question__skip {
-  background: var(--fiscal-surface-soft);
 }
 
 .fwd--soft .irpf-marital-subask p {
@@ -1799,6 +1811,57 @@
   color: #ffffff;
   border-color: var(--fiscal-primary);
   background: var(--fiscal-primary);
+}
+
+.fwd--soft .wctc-intro-backdrop {
+  background: color-mix(in srgb, var(--fiscal-ink) 42%, transparent);
+}
+
+.fwd--soft .wctc-intro-dialog {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+}
+
+.fwd--soft .wctc-intro-icon {
+  color: var(--fiscal-green);
+  border-color: color-mix(in srgb, var(--fiscal-green) 32%, var(--fiscal-line));
+  background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .wctc-intro-header h2 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wctc-intro-header p,
+.fwd--soft .wctc-intro-choice small {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-intro-choice {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface-soft);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wctc-intro-choice--average {
+  border-color: color-mix(in srgb, var(--fiscal-green) 46%, var(--fiscal-line));
+  background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .wctc-intro-choice svg {
+  color: var(--fiscal-blue);
+}
+
+.fwd--soft .wctc-intro-choice--average svg {
+  color: var(--fiscal-green);
+}
+
+.fwd--soft .wctc-intro-choice:hover,
+.fwd--soft .wctc-intro-choice:focus-visible {
+  border-color: var(--fiscal-primary);
 }
 
 .fwd--soft .wctc-grid-head {
