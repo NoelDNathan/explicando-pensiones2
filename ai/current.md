@@ -1,8 +1,18 @@
 # Estado actual
 
-Fecha: 2026-08-31
+Fecha: 2026-09-01
 
 ## Situacion
+
+- En el paso 4, cuando el salario descarta las ventajas del trabajo, un único aviso naranja en `WorkIncomeReductionExplainer` (sin nota duplicada arriba) mezcla: no aplica con tus cifras, no hace falta indicar otros ingresos, por qué conviene entenderla y enlace al simulador.
+
+- En el paso 4, eliminada la nota puente «Con el rendimiento neto ya calculado, ahora vienen las reducciones y el mínimo personal y familiar» entre gastos deducibles y ventajas del trabajo; también se quitaron los estilos `.wprc-chain-note` que ya no se usan.
+
+- En el paso 6, la cuota del mínimo del bloque explicativo deja el morado (segundo tramo) y usa el verde del primer tramo, que es por donde recorre el mínimo; el 1033,57 € de la resta va en el mismo verde. El bloque hereda el tema suave. Verificacion: en `/calculadora-fiscal` paso 6 con 35.000 € y Madrid, tarjeta y ecuación en `--fiscal-green` (`rgb(24, 134, 91)`); escritorio 1280 px y movil 390 px sin desborde.
+
+- En el paso 7, IBI e impuesto de compra (IVA/IGIC/ITP) van en una sola ficha por vivienda: IBI de este año (entra en el resumen mensual) y pago unico de entonces (no se suma al mes). Sin 0,00 € de relleno; País Vasco y Navarra no estimados; el selector de vivienda habitual solo aparece si cambia el ITP. Verificacion: `pnpm run build` correcto; en `/calculadora-fiscal` paso 7, 85.000 € catastral y 0,6 % → 510 €/año y 42,50 €/mes; ITP Madrid 180.000 € → 10.800 €; obra nueva Madrid IVA+AJD 17.713,64 €; Cantabria muestra «¿Era tu vivienda habitual?»; foral «No estimado»; sin overflow horizontal a 375 px.
+
+- En el paso 5, las deducciones y el salario en especie dejan el formulario de ~50 campos en `<details>` y pasan al patrón del paso 4: conceptos en cabecera (reducción vs deducción, deducción reembolsable), descripción encadenada con los pasos 4 y 6, ocho preguntas Sí/No con efecto en euros, ecuación de cuota íntegra − mínimo, cadena sticky y aviso de que las deducciones autonómicas propias no están en el motor. Verificación: en `/calculadora-fiscal` paso 5, 35.000 €, cuota antes 5.899,62 €; conceptos y las 8 preguntas visibles; `tsc` de los archivos tocados correcto (el `pnpm run build` sigue fallando por unused en `WorkerConsumptionTaxesCard.tsx`, previo).
 
 - En el paso 4, el titulo «Base liquidable» ya no se solapa con la segunda linea ni con el subtitulo: interlineado 1.18, hueco en la cabecera y el margen del subtitulo deja de quedar anulado por el `p` general. Verificacion: en `/calculadora-fiscal` paso 4, titulo de dos lineas (~58 px / line-height 68 px, altura 135 px) sin solape.
 

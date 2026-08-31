@@ -797,8 +797,9 @@ function ComponentLab() {
           <h2 id="worker-consumption-taxes-title">IVA y otros impuestos</h2>
           <p>
             Paso editable para estimar impuestos indirectos por categoria:
-            cada fila sincroniza porcentaje e importe anual en euros y anade
-            vivienda en propiedad como modulo simplificado de IBI.
+            cada fila sincroniza porcentaje e importe anual en euros.
+            La vivienda en propiedad agrupa IBI anual e impuesto de compra
+            (IVA, IGIC o ITP) en una sola ficha por inmueble.
             Al entrar en el paso 7 de la calculadora, un dialogo pregunta una sola
             vez si se usan valores medios o se rellena a mano.
           </p>

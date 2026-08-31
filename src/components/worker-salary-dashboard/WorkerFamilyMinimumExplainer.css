@@ -6,6 +6,17 @@
 .wfme {
   --wfme-line: var(--witc-line, rgba(77, 123, 188, 0.34));
   --wfme-muted: var(--witc-muted, #a9b6d2);
+  --wfme-ink: #f6f8ff;
+  --wfme-copy: #c3cee5;
+  --wfme-amount: #f2f6ff;
+  --wfme-minimum: var(--witc-green, #44d247);
+  --wfme-result: #6aa8ff;
+  --wfme-panel: rgba(6, 24, 49, 0.55);
+  --wfme-minimum-line: rgba(68, 210, 71, 0.45);
+  --wfme-minimum-fill: rgba(16, 61, 49, 0.42);
+  --wfme-result-line: rgba(76, 145, 255, 0.45);
+  --wfme-result-fill: rgba(8, 32, 66, 0.55);
+  --wfme-surface: linear-gradient(180deg, rgba(4, 20, 43, 0.82), rgba(2, 13, 29, 0.84));
 
   display: grid;
   gap: 12px;
@@ -13,7 +24,7 @@
   padding: clamp(12px, 1.3vw, 18px);
   border: 1px solid var(--wfme-line);
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(4, 20, 43, 0.82), rgba(2, 13, 29, 0.84));
+  background: var(--wfme-surface);
 }
 
 .wfme *,
@@ -34,21 +45,21 @@
 }
 
 .wfme__head h3 {
-  color: #f6f8ff;
+  color: var(--wfme-ink);
   font-size: clamp(17px, 1.4vw, 23px);
   line-height: 1.15;
   font-weight: 860;
 }
 
 .wfme__head p {
-  color: #c3cee5;
+  color: var(--wfme-copy);
   font-size: clamp(13px, 1.1vw, 16px);
   line-height: 1.35;
   font-weight: 700;
 }
 
 .wfme__head strong {
-  color: #f4f7ff;
+  color: var(--wfme-ink);
   font-weight: 880;
   white-space: nowrap;
 }
@@ -66,17 +77,17 @@
   padding: 12px 14px;
   border: 1px solid var(--wfme-line);
   border-radius: 9px;
-  background: rgba(6, 24, 49, 0.55);
+  background: var(--wfme-panel);
 }
 
 .wfme__way--minimum {
-  border-color: rgba(167, 102, 255, 0.42);
-  background: rgba(35, 16, 63, 0.42);
+  border-color: var(--wfme-minimum-line);
+  background: var(--wfme-minimum-fill);
 }
 
 .wfme__way--result {
-  border-color: rgba(76, 145, 255, 0.45);
-  background: rgba(8, 32, 66, 0.55);
+  border-color: var(--wfme-result-line);
+  background: var(--wfme-result-fill);
 }
 
 .wfme__tag {
@@ -87,7 +98,7 @@
 }
 
 .wfme__amount {
-  color: #f2f6ff;
+  color: var(--wfme-amount);
   font-size: clamp(17px, 1.5vw, 23px);
   line-height: 1.05;
   font-weight: 880;
@@ -95,15 +106,15 @@
 }
 
 .wfme__amount--gross {
-  color: #e7edff;
+  color: var(--wfme-amount);
 }
 
 .wfme__amount--minimum {
-  color: #cb9bff;
+  color: var(--wfme-minimum);
 }
 
 .wfme__amount--result {
-  color: #6aa8ff;
+  color: var(--wfme-result);
 }
 
 .wfme__arrow {
@@ -126,10 +137,14 @@
 
 .wfme__equation {
   margin: 4px 0;
-  color: #dbe4f7;
+  color: var(--wfme-copy);
   font-size: clamp(12px, 1.05vw, 15px);
   line-height: 1.2;
   font-weight: 800;
+}
+
+.wfme__equation-minimum {
+  color: var(--wfme-minimum);
 }
 
 .wfme__note {

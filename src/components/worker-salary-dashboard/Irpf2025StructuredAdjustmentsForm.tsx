@@ -1176,11 +1176,7 @@ export function WorkIncomeBenefitsSection({
   grossWorkIncome?: number
 }) {
   if (!workBenefitsCouldApply(netWorkIncome, grossWorkIncome)) {
-    return (
-      <p className="wprc-work-benefits-note">
-        Con este nivel de salario, otras rentas no cambian las ventajas del trabajo previstas en la ley.
-      </p>
-    )
+    return null
   }
 
   return (

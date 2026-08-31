@@ -18,7 +18,7 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
 7. Cada dato usado en la web debe poder rastrearse hasta su fuente original.
 8. Cada dataset usado o candidato debe tener metadata documentada antes de usarse editorialmente. La metadata minima obligatoria incluye:
    - fuente, institucion, URL y fecha de descarga;
-   - periodo, unidad, licencia o condiciones de uso y metodologia;
+   - periodo, unidad, licencia o condiciones de **uso** y metodologia;
    - estado del dato: observado, estimado, proyectado, muestra, pendiente o no estimado;
    - transformaciones aplicadas;
    - checksums de los archivos brutos y procesados cuando existan;
@@ -48,18 +48,6 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
 7. Cada cambio visual debe comprobarse en escritorio y movil cuando afecte layout, tamanos, interaccion o legibilidad.
 8. Considerar Tailwind cuando haya mas UI repetida: es una buena opcion si se crean muchas tarjetas, botones, layouts, estados responsive y paginas narrativas, pero debe configurarse con tokens propios del proyecto y no con colores sueltos como `bg-blue-500`.
 
-## Norma de commit y push
-
-Despues de cada interaccion con la IA:
-
-```powershell
-git status --short
-git add .
-git commit -m "Describe brevemente la interaccion"
-git push
-```
-
-Si no existe repositorio Git, remoto o credenciales, el agente debe dejarlo indicado en `ai/current.md` y no simular el push.
 
 # Fuentes 
 Usar solamente fuentes oficiales o institucionales:

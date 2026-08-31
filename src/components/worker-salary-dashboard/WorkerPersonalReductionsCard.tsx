@@ -1180,7 +1180,6 @@ export function WorkerPersonalReductionsCard({
     [
       adjustments,
       explainedBaseInitial,
-      explainedQuotaBefore,
       explainedTaxableBase,
       regionalIntegralQuota,
       stateIntegralQuota,
@@ -1297,10 +1296,6 @@ export function WorkerPersonalReductionsCard({
                 </div>
               </dl>
             ) : null}
-            <p className="wprc-net-income__note">
-              Puedes tener más gastos deducibles de los {formatEuroRounded(generalOtherExpenses)} de serie.
-              Responde las preguntas de aquí abajo y la cifra se actualiza.
-            </p>
             <details className="wprc-net-income__more">
               <summary>¿Pueden ser más de {formatEuroRounded(generalOtherExpenses)}?</summary>
               <ul>
@@ -1334,10 +1329,6 @@ export function WorkerPersonalReductionsCard({
             previewBaseAvailable={explainedBaseInitial}
             onChange={setAdjustments}
           />
-          <p className="wprc-chain-note">
-            Con el rendimiento neto ya calculado, ahora vienen las reducciones y el mínimo personal y
-            familiar.
-          </p>
           <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
             <span aria-hidden="true">2</span>
             <div>

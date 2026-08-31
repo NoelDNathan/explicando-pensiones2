@@ -191,6 +191,8 @@ const IBI_HELP =
 
 type OwnershipAnswer = 'unanswered' | 'yes' | 'no'
 
+type ResidenceRole = 'habitual' | 'additional'
+
 type PropertyIbi = {
   id: string
   cadastralValue: number
@@ -213,8 +215,6 @@ const CAR_PURCHASE_TAX_HELP =
 
 const IVTM_HELP =
   'El IVTM (impuesto sobre vehiculos de traccion mecanica), tambien llamado impuesto de circulacion, lo cobra tu ayuntamiento por tener un vehiculo matriculado. Este bloque es opcional y no forma parte del reparto del 100 % de gasto. La calculadora estima una cuota anual aproximada como potencia fiscal x tipo IVTM; el tipo real lo fija cada municipio segun CV, combustible y antiguedad. No es IVA ni impuesto de compra.'
-
-type ResidenceRole = 'habitual' | 'additional'
 
 type PropertyPurchase = {
   id: string

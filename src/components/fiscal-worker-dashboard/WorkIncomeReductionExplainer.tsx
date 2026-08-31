@@ -592,20 +592,39 @@ export function WorkIncomeReductionExplainer({
             </div>
           </aside>
         ) : realOutOfRange ? (
-          <aside className="wir-callout">
+          <aside className={`wir-callout${embedded ? ' wir-callout--out-of-range' : ''}`}>
             <CircleSlash size={20} aria-hidden="true" />
             <div>
-              <h3>En tu caso no se aplica, pero merece la pena entenderla</h3>
-              <p>
-                Con {euro(realGross)} de bruto tu RNT es de {euro(realBasis)} y supera el límite de{' '}
-                {euro(REDUCTION_LIMIT, 2)}: esta reducción no te resta nada. Aun así explica por qué
-                los sueldos bajos apenas pagan IRPF y, sobre todo, por qué entre {euro(humpStart)} y{' '}
-                {euro(humpEnd)} de bruto cada euro extra tributa más que en el tramo más alto de la
-                escala. <strong>Todo lo que hay debajo es un simulador</strong>
-                {realGrossInSliderRange
-                  ? '.'
-                  : `, que arranca en ${euro(DEFAULT_SIMULATED_GROSS)} porque tu sueldo se sale de la franja donde ocurre algo.`}
-              </p>
+              <h3>En tu caso no aplica, pero merece la pena entenderla</h3>
+              {embedded ? (
+                <>
+                  <p>
+                    Con {euro(realGross)} de bruto tu RNT es de {euro(realBasis)} y supera el límite de{' '}
+                    {euro(REDUCTION_LIMIT, 2)}: esta reducción no te resta nada. No hace falta indicar si
+                    tienes otros ingresos; con este salario no cambiaría nada.
+                  </p>
+                  <p>
+                    Aun así conviene saber cómo funciona: explica por qué los sueldos bajos apenas pagan
+                    IRPF y, sobre todo, por qué entre {euro(humpStart)} y {euro(humpEnd)} de bruto cada euro
+                    extra tributa más que en el tramo más alto de la escala.{' '}
+                    <strong>Todo lo que hay debajo es un simulador</strong>
+                    {realGrossInSliderRange
+                      ? ' para explorarlo.'
+                      : `, que arranca en ${euro(DEFAULT_SIMULATED_GROSS)} porque tu sueldo se sale de la franja donde ocurre algo.`}
+                  </p>
+                </>
+              ) : (
+                <p>
+                  Con {euro(realGross)} de bruto tu RNT es de {euro(realBasis)} y supera el límite de{' '}
+                  {euro(REDUCTION_LIMIT, 2)}: esta reducción no te resta nada. Aun así explica por qué
+                  los sueldos bajos apenas pagan IRPF y, sobre todo, por qué entre {euro(humpStart)} y{' '}
+                  {euro(humpEnd)} de bruto cada euro extra tributa más que en el tramo más alto de la
+                  escala. <strong>Todo lo que hay debajo es un simulador</strong>
+                  {realGrossInSliderRange
+                    ? '.'
+                    : `, que arranca en ${euro(DEFAULT_SIMULATED_GROSS)} porque tu sueldo se sale de la franja donde ocurre algo.`}
+                </p>
+              )}
             </div>
           </aside>
         ) : null}

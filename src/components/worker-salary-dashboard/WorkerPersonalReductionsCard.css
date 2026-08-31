@@ -396,16 +396,6 @@
   font-weight: 800;
 }
 
-/* Puente entre los gastos deducibles y el bloque de reducciones y minimos. */
-.wprc-chain-note {
-  margin: 14px 0 12px;
-  color: #b9c9e3;
-  font-size: 13px;
-  line-height: 1.4;
-  font-weight: 650;
-  text-align: center;
-}
-
 .wprc-top-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1399,17 +1389,6 @@
 
 .wprc-explained__status--muted {
   color: #9eb0cc;
-}
-
-.wprc-work-benefits-note {
-  margin: 0 0 14px;
-  padding: 12px 14px;
-  border: 1px solid rgba(129, 103, 218, 0.34);
-  border-radius: 12px;
-  background: rgba(34, 24, 62, 0.35);
-  color: #c9d5ea;
-  font-size: 14px;
-  line-height: 1.45;
 }
 
 .wprc-work-benefits {

@@ -365,6 +365,10 @@
   line-height: 1.55;
 }
 
+.wir.wir .wir-callout p + p {
+  margin-top: 8px;
+}
+
 .wir-callout--blocked {
   border-color: var(--wir-yellow-line);
   border-left-color: var(--wir-yellow);
@@ -372,6 +376,24 @@
 }
 
 .wir-callout--blocked svg { color: var(--wir-yellow); }
+
+.wir-callout--out-of-range {
+  border-color: var(--wir-orange-line);
+  border-left-color: var(--wir-orange);
+  background: var(--wir-orange-tint);
+}
+
+.wir-callout--out-of-range svg {
+  color: var(--wir-orange);
+}
+
+.wir.wir .wir-callout--out-of-range h3 {
+  color: var(--wir-warn-text);
+}
+
+.wir.wir .wir-callout--out-of-range p {
+  color: #ffe8c4;
+}
 
 /* ── Regla y tramos ── */
 

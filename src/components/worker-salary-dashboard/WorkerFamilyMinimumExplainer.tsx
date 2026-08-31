@@ -186,7 +186,8 @@ export function WorkerFamilyMinimumExplainer({
         <article className="wfme__way wfme__way--result">
           <span className="wfme__tag">Y se restan</span>
           <p className="wfme__equation">
-            {formatEuro(grossQuota, 2)} {"−"} {formatEuro(minimumQuota, 2)}
+            {formatEuro(grossQuota, 2)} {"−"}{" "}
+            <span className="wfme__equation-minimum">{formatEuro(minimumQuota, 2)}</span>
           </p>
           <span className="wfme__tag">Cuota íntegra</span>
           <strong className="wfme__amount wfme__amount--result">

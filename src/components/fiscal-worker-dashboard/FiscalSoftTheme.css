@@ -171,6 +171,7 @@
   .wctc-ownership-gate,
   .wctc-ibi-block,
   .wctc-purchase-block,
+  .wctc-homes,
   .wctc-rows,
   .wcsc-source,
   .fwd-faq-item,
@@ -1500,6 +1501,25 @@
   color: var(--fiscal-copy);
 }
 
+.fwd--soft .wir-callout--out-of-range {
+  border-color: #f0c878;
+  border-left-color: var(--fiscal-orange);
+  background: var(--fiscal-orange-soft);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wir-callout--out-of-range svg {
+  color: var(--fiscal-orange);
+}
+
+.fwd--soft .wir.wir .wir-callout--out-of-range h3 {
+  color: var(--fiscal-orange);
+}
+
+.fwd--soft .wir.wir .wir-callout--out-of-range p {
+  color: var(--fiscal-copy);
+}
+
 .fwd--soft .wprc-net-income {
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface);
@@ -1537,10 +1557,6 @@
 .fwd--soft .wprc-net-income__num {
   color: #fff;
   background: var(--fiscal-primary);
-}
-
-.fwd--soft .wprc-chain-note {
-  color: var(--fiscal-copy);
 }
 
 .fwd--soft .wprc-net-income__pill {
@@ -1822,6 +1838,57 @@
 
 .fwd--soft .witc-total-deduction strong {
   color: #8b5418;
+}
+
+.fwd--soft .wfme {
+  --wfme-ink: var(--fiscal-ink);
+  --wfme-copy: var(--fiscal-copy);
+  --wfme-muted: var(--fiscal-muted);
+  --wfme-amount: var(--fiscal-ink);
+  --wfme-minimum: var(--fiscal-green);
+  --wfme-result: var(--fiscal-blue);
+  --wfme-line: var(--fiscal-line);
+  --wfme-panel: var(--fiscal-surface);
+  --wfme-minimum-line: #b8ded7;
+  --wfme-minimum-fill: var(--fiscal-green-soft);
+  --wfme-result-line: #bdd4ef;
+  --wfme-result-fill: var(--fiscal-blue-soft);
+  --wfme-surface: var(--fiscal-surface-soft);
+  border-radius: var(--fiscal-radius-panel);
+  box-shadow: none;
+}
+
+.fwd--soft .wfme__way {
+  border-radius: var(--fiscal-radius-small);
+}
+
+.fwd--soft .wfme__saving {
+  color: var(--fiscal-copy);
+  border-color: #bdd4ef;
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .wfme__warning {
+  color: #7a4a17;
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .wfme__more {
+  border-top-color: var(--fiscal-line);
+}
+
+.fwd--soft .wfme__more summary,
+.fwd--soft .wfme__more summary::marker {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfme__more > p,
+.fwd--soft .wfme__note,
+.fwd--soft .wfme__arrow,
+.fwd--soft .wfme__arrow::before,
+.fwd--soft .wfme__more > p.wfme__source {
+  color: var(--fiscal-copy);
 }
 
 .fwd--soft .wirc {
@@ -2124,7 +2191,8 @@
 .fwd--soft .wctc-ownership-gate,
 .fwd--soft .wctc-ibi-block,
 .fwd--soft .wctc-ibi-row,
-.fwd--soft .wctc-purchase-block {
+.fwd--soft .wctc-purchase-block,
+.fwd--soft .wctc-home-card {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
@@ -2181,7 +2249,8 @@
 
 .fwd--soft .wctc-ownership-gate__body > .wctc-ibi-block,
 .fwd--soft .wctc-ownership-gate__body > .wctc-purchase-block,
-.fwd--soft .wctc-ownership-gate__body > .wctc-purchase-block--vehicle {
+.fwd--soft .wctc-ownership-gate__body > .wctc-purchase-block--vehicle,
+.fwd--soft .wctc-ownership-gate__body > .wctc-homes {
   background: transparent;
   box-shadow: none;
 }
@@ -2199,6 +2268,23 @@
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 72%, transparent),
     0 4px 12px rgba(45, 71, 94, 0.04);
+}
+
+.fwd--soft .wctc-home-card {
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 72%, transparent),
+    0 4px 12px rgba(45, 71, 94, 0.04);
+}
+
+.fwd--soft .wctc-home-card__now,
+.fwd--soft .wctc-home-card__then {
+  border-color: color-mix(in srgb, var(--fiscal-line) 74%, transparent);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wctc-home-card__then {
+  background: color-mix(in srgb, var(--fiscal-primary) 8%, #ffffff);
 }
 
 .fwd--soft .wctc-ibi-head strong {
@@ -2336,7 +2422,8 @@
 }
 
 .fwd--soft .wctc-purchase-title strong,
-.fwd--soft .wctc-ibi-row strong {
+.fwd--soft .wctc-ibi-row strong,
+.fwd--soft .wctc-home-card strong {
   color: var(--fiscal-ink);
 }
 
@@ -2345,7 +2432,9 @@
 .fwd--soft .wctc-purchase-tax small,
 .fwd--soft .wctc-purchase-total small,
 .fwd--soft .wctc-ibi-row small,
-.fwd--soft .wctc-ibi-field > span {
+.fwd--soft .wctc-ibi-field > span,
+.fwd--soft .wctc-home-card__hint,
+.fwd--soft .wctc-home-card__tax small {
   color: var(--fiscal-copy);
 }
 
@@ -2367,12 +2456,14 @@
 
 .fwd--soft .wctc-purchase-tax strong,
 .fwd--soft .wctc-purchase-total strong,
-.fwd--soft .wctc-ibi-amount strong {
+.fwd--soft .wctc-ibi-amount strong,
+.fwd--soft .wctc-home-card__tax > strong {
   color: var(--fiscal-ink);
 }
 
 .fwd--soft .wctc-purchase-row :is(input, select),
-.fwd--soft .wctc-ibi-row input[type='number'] {
+.fwd--soft .wctc-ibi-row input[type='number'],
+.fwd--soft .wctc-home-card :is(input[type='number'], select) {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line-strong);
   background: var(--fiscal-surface);

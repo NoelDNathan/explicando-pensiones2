@@ -178,6 +178,8 @@
 .wctc-ownership-gate__choices button:focus-visible,
 .wctc-purchase-row input:focus-visible,
 .wctc-purchase-row select:focus-visible,
+.wctc-home-card input:focus-visible,
+.wctc-home-card select:focus-visible,
 .wctc-purchase-add:focus-visible,
 .wctc-purchase-remove:focus-visible {
   outline: 3px solid rgba(70, 166, 255, 0.38);
@@ -850,7 +852,8 @@
 
 .wctc-ownership-gate__body > .wctc-ibi-block,
 .wctc-ownership-gate__body > .wctc-purchase-block,
-.wctc-ownership-gate__body > .wctc-purchase-block--vehicle {
+.wctc-ownership-gate__body > .wctc-purchase-block--vehicle,
+.wctc-ownership-gate__body > .wctc-homes {
   margin-top: 0;
   padding: 0;
   border: 0;
@@ -1009,7 +1012,9 @@
 
 .wctc-ibi-row input[type="number"],
 .wctc-purchase-row input[type="number"],
-.wctc-purchase-row select {
+.wctc-purchase-row select,
+.wctc-home-card input[type="number"],
+.wctc-home-card select {
   width: 100%;
   min-width: 0;
   height: 34px;
@@ -1022,14 +1027,17 @@
   padding: 0 10px;
 }
 
-.wctc-purchase-row select {
+.wctc-purchase-row select,
+.wctc-home-card select {
   text-align: left;
   cursor: pointer;
 }
 
 .wctc-ibi-row input:disabled,
 .wctc-purchase-row input:disabled,
-.wctc-purchase-row select:disabled {
+.wctc-purchase-row select:disabled,
+.wctc-home-card input:disabled,
+.wctc-home-card select:disabled {
   opacity: 0.54;
 }
 
@@ -1252,9 +1260,174 @@
 .wctc-ibi-amount strong {
   color: var(--wctc-text);
   font-size: 15px;
-  line-height: 1;
-  font-weight: 850;
+  line-height: 1.1;
+  font-weight: 880;
   font-variant-numeric: tabular-nums;
+}
+
+.wctc-homes,
+.wctc-homes__list {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.wctc-home-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 88%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--wctc-panel) 82%, transparent);
+}
+
+.wctc-home-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.wctc-home-card__header strong {
+  flex: 1;
+  min-width: 0;
+  color: var(--wctc-text);
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+.wctc-home-card__now,
+.wctc-home-card__then {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 80%, transparent);
+  border-radius: 8px;
+}
+
+.wctc-home-card__now {
+  background: color-mix(in srgb, var(--wctc-panel) 92%, transparent);
+}
+
+.wctc-home-card__then {
+  background: color-mix(in srgb, var(--wctc-blue) 8%, var(--wctc-panel));
+}
+
+.wctc-home-card__hint {
+  margin: 0;
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 650;
+}
+
+.wctc-home-card__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.wctc-home-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border: 1px solid color-mix(in srgb, var(--wctc-blue) 35%, var(--wctc-line));
+  border-radius: 999px;
+  color: var(--wctc-blue);
+  background: color-mix(in srgb, var(--wctc-blue) 12%, transparent);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 780;
+}
+
+.wctc-home-card__check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+  min-width: 0;
+  color: var(--wctc-text);
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 680;
+}
+
+.wctc-home-card__check input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  accent-color: var(--wctc-blue);
+}
+
+.wctc-home-card__tax {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.wctc-home-card__tax small {
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 680;
+}
+
+.wctc-home-card__tax > strong {
+  color: var(--wctc-text);
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.wctc-home-card__tax-lines {
+  display: grid;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wctc-home-card__tax-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 650;
+}
+
+.wctc-home-card__tax-lines li span:last-child {
+  color: var(--wctc-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+}
+
+.wctc-homes__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wctc-homes__footer .wctc-purchase-total strong {
+  display: grid;
+  gap: 4px;
+}
+
+.wctc-homes__footer .wctc-purchase-total strong small {
+  font-size: 12px;
+  font-weight: 680;
+  color: var(--wctc-muted);
 }
 
 .wctc-summary {
@@ -1546,7 +1719,8 @@
     margin-inline: auto;
   }
 
-  .wctc-ibi-row__fields {
+  .wctc-ibi-row__fields,
+  .wctc-home-card__fields {
     grid-template-columns: 1fr;
   }
 }
@@ -1585,10 +1759,6 @@
 
   .wctc-ownership-gate__body .wctc-purchase-list {
     overflow-x: visible;
-  }
-
-  .wctc-purchase-row {
-    min-width: 920px;
   }
 
   .wctc-purchase-row--vehicle {
