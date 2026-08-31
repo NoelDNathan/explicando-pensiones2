@@ -1,4 +1,4 @@
-import { CheckCircle2, FileText, Percent, TrendingDown } from "lucide-react";
+import { FileText, Percent, TrendingDown } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   createDependentProfiles,
@@ -89,6 +89,10 @@ type WorkerPersonalReductionsCardProps = {
   finalDeclarationResult?: number;
   declaredInKindSalary?: number;
   declaredGrossWorkIncome?: number;
+  taxableWorkIncome?: number;
+  socialSecurityWorkExpense?: number;
+  otherDeductibleWorkExpenses?: number;
+  generalOtherExpenses?: number;
   lowWorkIncomeDeductionApplied?: number;
   engineWarnings?: string[];
   onResultChange?: (result: PersonalReductionResult) => void;
@@ -828,6 +832,10 @@ export function WorkerPersonalReductionsCard({
   finalDeclarationResult = 0,
   declaredInKindSalary = 0,
   declaredGrossWorkIncome = 0,
+  taxableWorkIncome = 0,
+  socialSecurityWorkExpense = 0,
+  otherDeductibleWorkExpenses = 0,
+  generalOtherExpenses = 2000,
   lowWorkIncomeDeductionApplied = 0,
   engineWarnings = [],
   onResultChange,
@@ -1136,6 +1144,14 @@ export function WorkerPersonalReductionsCard({
   const taxableBaseFlash = useChangeFlash(explainedTaxableBase);
   const baseReductionsFlash = useChangeFlash(displayedBaseReductions);
   const stickyBarRef = useStickyBarHeight(showReductionsSection && showChainSteps);
+  // Ecuacion de apertura: bruto - Seguridad Social - gastos deducibles = rendimiento neto.
+  const showNetIncomeEquation = taxableWorkIncome > 0;
+  const equationNetWorkIncome = Math.max(
+    0,
+    taxableWorkIncome - socialSecurityWorkExpense - otherDeductibleWorkExpenses,
+  );
+  const extraDeductibleExpenses = Math.max(0, otherDeductibleWorkExpenses - generalOtherExpenses);
+  const deductibleExpensesCapped = otherDeductibleWorkExpenses < generalOtherExpenses;
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -1160,34 +1176,130 @@ export function WorkerPersonalReductionsCard({
             </p>
           </div>
         </header>
-        <aside className="wprc-hero-panel">
-          <h3>{showReductionsSection ? "Vamos paso a paso" : "Resultado anual completo"}</h3>
-          <ul>
-            <li>
-              <CheckCircle2 /> Primero, cuéntanos tu situación personal y familiar.
-            </li>
-            <li>
-              <CheckCircle2 /> Después, abre solo las preguntas que te correspondan.
-            </li>
-            <li>
-              <CheckCircle2 /> Verás el resultado actualizado en todo momento.
-            </li>
-          </ul>
-          <strong>
-            {formatEuro(showReductionsSection ? appliedFamilyMinimum : appliedQuotaDeductions)}
-          </strong>
-          <span>
-            {showReductionsSection
-              ? "Mínimo personal y familiar estatal aplicado en la cuota."
-              : "Deducciones ordinarias aplicadas a la cuota."}
-          </span>
-        </aside>
+ 
       </div>
 
       {showReductionsSection ? (
         <>
+          <section className="wprc-net-income" aria-labelledby="wprc-net-income-title">
+            <header className="wprc-net-income__head">
+              <span className="wprc-net-income__num" aria-hidden="true">1</span>
+              <div>
+                <h3 id="wprc-net-income-title">Gastos deducibles</h3>
+                <p>
+                  Hacienda no calcula el IRPF sobre tu salario bruto. Primero resta lo que te cuesta
+                  ganarlo: tu parte de la Seguridad Social y unos{" "}
+                  <strong>gastos deducibles de {formatEuroRounded(generalOtherExpenses)}</strong> que se
+                  aplican de forma automática a todos los trabajadores por cuenta ajena. No hay que
+                  pedirlos ni justificarlos con facturas: representan lo que cuesta ir a trabajar
+                  (transporte, ropa, comer fuera). Un autónomo no tiene esta cantidad fija: él deduce sus
+                  gastos reales (local, material, suministros) uno a uno y con factura.
+                </p>
+              </div>
+              <span className="wprc-net-income__pill">Ya aplicado</span>
+            </header>
+            {showNetIncomeEquation ? (
+              <dl className="wprc-net-income__equation">
+                <div className="wprc-net-income__term">
+                  <dt>Salario bruto anual</dt>
+                  <dd>{formatEuro(taxableWorkIncome)}</dd>
+                </div>
+                <div className="wprc-net-income__term" data-op="minus">
+                  <dt>Seguridad Social (tu parte, paso 3)</dt>
+                  <dd>{formatEuro(socialSecurityWorkExpense)}</dd>
+                </div>
+                <div className="wprc-net-income__term" data-op="minus">
+                  <dt>
+                    Gastos deducibles
+                    {extraDeductibleExpenses > 0 ? (
+                      <small>
+                        {formatEuroRounded(generalOtherExpenses)} para todo el mundo +{" "}
+                        {formatEuroRounded(extraDeductibleExpenses)} de tus gastos y tu situación
+                      </small>
+                    ) : deductibleExpensesCapped ? (
+                      <small>limitados: no pueden superar lo que has ganado</small>
+                    ) : (
+                      <small>iguales para todo el mundo, sin justificar nada</small>
+                    )}
+                  </dt>
+                  <dd>{formatEuro(otherDeductibleWorkExpenses)}</dd>
+                </div>
+                <div className="wprc-net-income__term is-result" data-op="equals">
+                  <dt>Rendimiento neto del trabajo</dt>
+                  <dd>{formatEuro(equationNetWorkIncome)}</dd>
+                </div>
+              </dl>
+            ) : null}
+            <p className="wprc-net-income__note">
+              Puedes tener más gastos deducibles de los {formatEuroRounded(generalOtherExpenses)} de serie.
+              Responde las preguntas de aquí abajo y la cifra se actualiza.
+            </p>
+            <details className="wprc-net-income__more">
+              <summary>¿Pueden ser más de {formatEuroRounded(generalOtherExpenses)}?</summary>
+              <ul>
+                <li>
+                  Los {formatEuroRounded(generalOtherExpenses)} suben <strong>+2.000 €</strong> si estabas
+                  en paro, aceptaste un empleo en otro municipio y te mudaste.
+                </li>
+                <li>
+                  Y suben <strong>+3.500 €</strong> con discapacidad del 33 % siendo trabajador en activo,
+                  o <strong>+7.750 €</strong> con el 65 % o si necesitas ayuda de otra persona.
+                </li>
+                <li>
+                  Aparte, también son gastos deducibles la cuota de sindicato, el colegio profesional
+                  obligatorio (máx. 500 €) y la defensa jurídica frente a tu empresa (máx. 300 €). No
+                  engordan los {formatEuroRounded(generalOtherExpenses)}: se suman por su cuenta.
+                </li>
+                <li>
+                  Nunca pueden restar más de lo que has ganado: si cobras muy poco, el rendimiento neto
+                  se queda en cero, no en negativo.
+                </li>
+              </ul>
+            </details>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            reductionsGroup="work-expenses"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedBaseInitial}
+            onChange={setAdjustments}
+          />
+          <p className="wprc-chain-note">
+            Con el rendimiento neto ya calculado, ahora vienen las reducciones y el mínimo personal y
+            familiar.
+          </p>
+          <div className="wprc-concepts">
+            <section className="wprc-concept" aria-labelledby="wprc-concept-reductions">
+              <h3 id="wprc-concept-reductions">¿Qué son las reducciones?</h3>
+              <p>
+                Una reducción es una cantidad que puedes restar de tu base imponible si cumples
+                determinados requisitos. Por ejemplo, con una base imponible de 30.000 € y una reducción
+                de 2.000 €:
+              </p>
+              <p className="wprc-concept__formula">30.000 € − 2.000 € = 28.000 € de base liquidable</p>
+              <p>
+                Los tramos del IRPF se aplican entonces sobre 28.000 € en lugar de sobre 30.000 €, así que
+                pagas menos. Las que puedes aplicar dependen de tu situación personal y económica.
+              </p>
+            </section>
+            <section className="wprc-concept" aria-labelledby="wprc-concept-minimum">
+              <h3 id="wprc-concept-minimum">¿Qué es el mínimo personal y familiar?</h3>
+              <p>
+                Es la cantidad que el Estado considera que necesitas para cubrir tus necesidades básicas y
+                las de tu familia. Esa parte no paga IRPF: se tiene en cuenta al calcular el impuesto,
+                pero la parte de cuota que le correspondería se deja sin pagar.
+              </p>
+              <p>
+                El resto de tu renta sí tributa según los tramos. El mínimo puede ser mayor según tu edad,
+                tu discapacidad o tu situación familiar.
+              </p>
+            </section>
+          </div>
           <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
-            <span aria-hidden="true">1</span>
+            <span aria-hidden="true">2</span>
             <div>
               <h3 id="wprc-family-questions">Empezamos por ti y tu familia</h3>
               <p>
@@ -1347,7 +1459,7 @@ export function WorkerPersonalReductionsCard({
             ) : null}
           </div>
           <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
-            <span aria-hidden="true">2</span>
+            <span aria-hidden="true">3</span>
             <div>
               <h3 id="wprc-work-benefits">Ventajas del trabajo</h3>
               <p>
@@ -1444,25 +1556,37 @@ export function WorkerPersonalReductionsCard({
             </section>
           ) : null}
           <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
-            <span aria-hidden="true">3</span>
+            <span aria-hidden="true">4</span>
             <div>
-              <h3 id="wprc-declared-reductions">Gastos y aportaciones que reduces de base</h3>
+              <h3 id="wprc-declared-reductions">Aportaciones que reducen tu base</h3>
               <p>
-                Sindicato, colegio, planes de pensiones y otros importes que puedas acreditar este año.
+                Estas restan después, ya sobre la base imponible: planes de pensiones, mutualidad y
+                patrimonio protegido.
               </p>
             </div>
           </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            reductionsGroup="base-reductions"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedBaseInitial}
+            onChange={setAdjustments}
+          />
         </>
-      ) : null}
-
-      <Irpf2025StructuredAdjustmentsForm
-        focus={focus}
-        value={adjustments}
-        declaredInKindSalary={declaredInKindSalary}
-        declaredGrossWorkIncome={declaredGrossWorkIncome}
-        previewBaseAvailable={explainedBaseInitial}
-        onChange={setAdjustments}
-      />
+      ) : (
+        <Irpf2025StructuredAdjustmentsForm
+          focus={focus}
+          value={adjustments}
+          declaredInKindSalary={declaredInKindSalary}
+          declaredGrossWorkIncome={declaredGrossWorkIncome}
+          netWorkIncome={explainedNetWorkIncome}
+          previewBaseAvailable={explainedBaseInitial}
+          onChange={setAdjustments}
+        />
+      )}
 
       {engineWarnings.length > 0 ? (
         <aside className="wprc-calculation-warnings" aria-label="Ajustes no estimados">
@@ -1484,7 +1608,15 @@ export function WorkerPersonalReductionsCard({
           <dl>
             <>
               <div>
-                <dt>Cuota antes de deducciones</dt>
+                <dt>
+                  Cuota antes de deducciones
+                  {appliedFamilyMinimum > 0 ? (
+                    <small>
+                      tu mínimo personal y familiar ({formatEuro(appliedFamilyMinimum)}) ya ha
+                      reducido esta cuota; cómo lo hace, en el paso 6
+                    </small>
+                  ) : null}
+                </dt>
                 <dd>{formatEuro(explainedQuotaBefore)}</dd>
               </div>
               <div className="is-minus">

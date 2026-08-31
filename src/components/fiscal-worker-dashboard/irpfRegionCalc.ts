@@ -116,8 +116,29 @@ export function getComparableRegions(): string[] {
   return coverage.scope.included_territories
 }
 
-/** Calcula el IRPF anual del perfil base para una comunidad y un bruto anual. */
-export function computeRegionalIrpf2025(grossSalaryAnnual: number, region: string): RegionalIrpfResult {
+export type BaseProfileIrpfDetail = {
+  region: string
+  grossSalaryAnnual: number
+  employeeSocialSecurity: number
+  core: ReturnType<typeof calculateIrpf2025Core>
+  /** Escalas y minimos usados, para poder recalcular escenarios contrafactuales. */
+  context: {
+    stateMinimum: number
+    regionalMinimum: number
+    stateScale: ScaleBracket[]
+    regionalScale: ScaleBracket[]
+  }
+}
+
+/**
+ * Detalle completo del motor 2025 para el perfil base de la comparativa.
+ * Lo usan los explicadores que necesitan las magnitudes intermedias
+ * (base del articulo 20, reduccion teorica y aplicada, deduccion de 340).
+ */
+export function computeBaseProfileIrpf2025Detail(
+  grossSalaryAnnual: number,
+  region = 'madrid',
+): BaseProfileIrpfDetail {
   const gross = Math.max(0, grossSalaryAnnual)
   const monthlySalary = gross / 12
 
@@ -157,11 +178,24 @@ export function computeRegionalIrpf2025(grossSalaryAnnual: number, region: strin
   return {
     region,
     grossSalaryAnnual: gross,
-    taxableBase: coreIrpf.taxableBase,
-    stateTax: coreIrpf.stateTax,
-    regionalTax: coreIrpf.regionalTax,
-    lowWorkIncomeDeduction: coreIrpf.lowWorkIncomeDeductionApplied,
-    irpf: coreIrpf.irpf,
-    effectiveRate: gross > 0 ? (coreIrpf.irpf / gross) * 100 : 0,
+    employeeSocialSecurity,
+    core: coreIrpf,
+    context: { stateMinimum, regionalMinimum, stateScale, regionalScale },
+  }
+}
+
+/** Calcula el IRPF anual del perfil base para una comunidad y un bruto anual. */
+export function computeRegionalIrpf2025(grossSalaryAnnual: number, region: string): RegionalIrpfResult {
+  const { grossSalaryAnnual: gross, core } = computeBaseProfileIrpf2025Detail(grossSalaryAnnual, region)
+
+  return {
+    region,
+    grossSalaryAnnual: gross,
+    taxableBase: core.taxableBase,
+    stateTax: core.stateTax,
+    regionalTax: core.regionalTax,
+    lowWorkIncomeDeduction: core.lowWorkIncomeDeductionApplied,
+    irpf: core.irpf,
+    effectiveRate: gross > 0 ? (core.irpf / gross) * 100 : 0,
   }
 }

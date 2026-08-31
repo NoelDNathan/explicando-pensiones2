@@ -1,0 +1,210 @@
+/*
+ * Bloque explicativo del minimo personal y familiar. Vive dentro de la tarjeta
+ * de tramos (.witc) y hereda sus tokens; los valores de reserva permiten usarlo
+ * suelto en /componentes sin perder contraste.
+ */
+.wfme {
+  --wfme-line: var(--witc-line, rgba(77, 123, 188, 0.34));
+  --wfme-muted: var(--witc-muted, #a9b6d2);
+
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: clamp(12px, 1.3vw, 18px);
+  border: 1px solid var(--wfme-line);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(4, 20, 43, 0.82), rgba(2, 13, 29, 0.84));
+}
+
+.wfme *,
+.wfme *::before,
+.wfme *::after {
+  box-sizing: border-box;
+}
+
+.wfme h3,
+.wfme h4,
+.wfme p {
+  margin: 0;
+}
+
+.wfme__head {
+  display: grid;
+  gap: 6px;
+}
+
+.wfme__head h3 {
+  color: #f6f8ff;
+  font-size: clamp(17px, 1.4vw, 23px);
+  line-height: 1.15;
+  font-weight: 860;
+}
+
+.wfme__head p {
+  color: #c3cee5;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.wfme__head strong {
+  color: #f4f7ff;
+  font-weight: 880;
+  white-space: nowrap;
+}
+
+.wfme__ways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.wfme__way {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--wfme-line);
+  border-radius: 9px;
+  background: rgba(6, 24, 49, 0.55);
+}
+
+.wfme__way--minimum {
+  border-color: rgba(167, 102, 255, 0.42);
+  background: rgba(35, 16, 63, 0.42);
+}
+
+.wfme__way--result {
+  border-color: rgba(76, 145, 255, 0.45);
+  background: rgba(8, 32, 66, 0.55);
+}
+
+.wfme__tag {
+  color: var(--wfme-muted);
+  font-size: clamp(11px, 0.95vw, 13px);
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.wfme__amount {
+  color: #f2f6ff;
+  font-size: clamp(17px, 1.5vw, 23px);
+  line-height: 1.05;
+  font-weight: 880;
+  white-space: nowrap;
+}
+
+.wfme__amount--gross {
+  color: #e7edff;
+}
+
+.wfme__amount--minimum {
+  color: #cb9bff;
+}
+
+.wfme__amount--result {
+  color: #6aa8ff;
+}
+
+.wfme__arrow {
+  position: relative;
+  margin: 6px 0 4px;
+  padding-left: 18px;
+  color: #8fa0c4;
+  font-size: clamp(11px, 0.95vw, 13px);
+  line-height: 1.2;
+  font-weight: 760;
+}
+
+.wfme__arrow::before {
+  content: "\2193";
+  position: absolute;
+  left: 2px;
+  color: #6c86bd;
+  font-weight: 900;
+}
+
+.wfme__equation {
+  margin: 4px 0;
+  color: #dbe4f7;
+  font-size: clamp(12px, 1.05vw, 15px);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.wfme__note {
+  margin-top: 4px;
+  color: #8fa0c4;
+  font-size: clamp(11px, 0.95vw, 13px);
+  line-height: 1.2;
+  font-weight: 720;
+}
+
+.wfme__saving,
+.wfme__warning {
+  padding: 9px 12px;
+  border: 1px solid rgba(76, 145, 255, 0.32);
+  border-radius: 9px;
+  color: #d3e0f7;
+  background: rgba(9, 30, 60, 0.5);
+  font-size: clamp(12px, 1.05vw, 15px);
+  line-height: 1.3;
+  font-weight: 760;
+}
+
+.wfme__warning {
+  border-color: rgba(255, 184, 107, 0.42);
+  color: #f3ddc3;
+  background: rgba(65, 35, 12, 0.42);
+}
+
+.wfme__more {
+  border-top: 1px dashed rgba(94, 120, 170, 0.3);
+  padding-top: 8px;
+}
+
+.wfme__more summary {
+  color: #b9c8e6;
+  font-size: clamp(12px, 1.05vw, 15px);
+  line-height: 1.25;
+  font-weight: 820;
+  cursor: pointer;
+}
+
+.wfme__more summary::marker {
+  color: #6c86bd;
+}
+
+.wfme__more summary:focus-visible {
+  outline: 3px solid rgba(86, 163, 255, 0.38);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wfme__more > p {
+  margin-top: 8px;
+  color: #c0cbe2;
+  font-size: clamp(12px, 1.05vw, 15px);
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.wfme__more .witc-calc-cols {
+  margin-top: 10px;
+}
+
+.wfme__more > p.wfme__source {
+  color: #8fa0c4;
+  font-size: clamp(11px, 0.95vw, 13px);
+  font-weight: 700;
+}
+
+@container (max-width: 1020px) {
+  .wfme__ways {
+    grid-template-columns: 1fr;
+  }
+
+  .wfme__amount {
+    white-space: normal;
+  }
+}

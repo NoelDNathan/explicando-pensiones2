@@ -184,6 +184,49 @@
   font-weight: 680;
 }
 
+/* Los dos conceptos base del paso: reduccion y minimo personal y familiar. */
+.wprc-concepts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.wprc-concept {
+  padding: 15px 17px;
+  border: 1px solid rgba(70, 148, 236, 0.36);
+  border-radius: 14px;
+  background: rgba(3, 18, 40, 0.6);
+}
+
+.wprc-concept h3 {
+  margin-bottom: 7px;
+  color: #f3f8ff;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.wprc-concept p {
+  color: #b9c9e3;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 620;
+}
+
+.wprc-concept p + p {
+  margin-top: 8px;
+}
+
+.wprc-concept .wprc-concept__formula {
+  padding: 9px 12px;
+  border: 1px solid rgba(88, 241, 113, 0.4);
+  border-radius: 10px;
+  color: #58f171;
+  background: rgba(9, 45, 48, 0.5);
+  font-weight: 800;
+  text-align: center;
+}
+
 .wprc-question-intro {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
@@ -220,6 +263,186 @@
   font-size: 13px;
   line-height: 1.35;
   font-weight: 650;
+}
+
+/* Bloque de apertura: bruto - Seguridad Social - gastos deducibles = rendimiento neto. */
+.wprc-net-income {
+  margin-bottom: 12px;
+  padding: 16px 18px;
+  border: 1px solid rgba(70, 148, 236, 0.42);
+  border-radius: 14px;
+  background: linear-gradient(120deg, rgba(6, 33, 68, 0.72), rgba(3, 17, 41, 0.7));
+}
+
+.wprc-net-income__head {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 13px;
+  align-items: start;
+}
+
+.wprc-net-income__num {
+  display: grid;
+  width: 40px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 999px;
+  color: #032337;
+  background: #58f171;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.wprc-net-income h3 {
+  color: #f3f8ff;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.wprc-net-income__head p {
+  margin-top: 6px;
+  max-width: 78ch;
+  color: #b9c9e3;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 620;
+}
+
+.wprc-net-income__head strong {
+  color: #eaf3ff;
+  font-weight: 800;
+}
+
+.wprc-net-income__pill {
+  padding: 5px 11px;
+  border: 1px solid rgba(88, 241, 113, 0.5);
+  border-radius: 999px;
+  color: #58f171;
+  background: rgba(12, 57, 61, 0.6);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.wprc-net-income__equation {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.wprc-net-income__term {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 13px;
+  border: 1px solid rgba(99, 147, 205, 0.34);
+  border-radius: 11px;
+  background: rgba(3, 18, 40, 0.6);
+}
+
+.wprc-net-income__term::before {
+  content: "";
+  color: #8ea3c6;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.wprc-net-income__term[data-op="minus"]::before {
+  content: "−";
+}
+
+.wprc-net-income__term[data-op="equals"]::before {
+  content: "=";
+  color: #58f171;
+}
+
+.wprc-net-income__term dt {
+  display: grid;
+  gap: 2px;
+  color: #cfdcf3;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.wprc-net-income__term dt small {
+  color: #93a6cf;
+  font-size: 11px;
+  line-height: 1.25;
+  font-weight: 620;
+}
+
+.wprc-net-income__term dd {
+  color: #eef4ff;
+  font-size: 17px;
+  line-height: 1.05;
+  font-weight: 820;
+  white-space: nowrap;
+}
+
+.wprc-net-income__term.is-result {
+  border-color: rgba(88, 241, 113, 0.45);
+  background: rgba(9, 45, 48, 0.5);
+}
+
+.wprc-net-income__term.is-result dd {
+  color: #58f171;
+  font-size: 20px;
+}
+
+.wprc-net-income__note {
+  margin-top: 10px;
+  color: #93a6cf;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 620;
+}
+
+.wprc-net-income__more {
+  margin-top: 10px;
+}
+
+.wprc-net-income__more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border: 1px solid rgba(99, 147, 205, 0.34);
+  border-radius: 999px;
+  color: #cfdcf3;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.wprc-net-income__more ul {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #b9c9e3;
+  font-size: 12.5px;
+  line-height: 1.4;
+  font-weight: 620;
+}
+
+.wprc-net-income__more strong {
+  color: #eaf3ff;
+  font-weight: 800;
+}
+
+/* Puente entre los gastos deducibles y el bloque de reducciones y minimos. */
+.wprc-chain-note {
+  margin: 14px 0 12px;
+  color: #b9c9e3;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 650;
+  text-align: center;
 }
 
 .wprc-top-grid {
@@ -1157,6 +1380,16 @@
   font-weight: 760;
 }
 
+/* Remite al paso 6, donde se explica de donde sale esta cuota. */
+.wprc-explained dt small {
+  display: block;
+  margin-top: 4px;
+  color: #8fa3c6;
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 680;
+}
+
 .wprc-explained dd {
   margin: 0;
   color: #eff6ff;
@@ -1640,6 +1873,51 @@
 
   .wprc-benefit__amount {
     width: 100%;
+  }
+
+  .wprc-concepts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wprc-concept {
+    padding: 13px;
+  }
+
+  .wprc-net-income {
+    padding: 13px;
+  }
+
+  .wprc-net-income__head {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .wprc-net-income__num {
+    width: 34px;
+    font-size: 16px;
+  }
+
+  .wprc-net-income__pill {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .wprc-net-income h3 {
+    font-size: 16px;
+  }
+
+  .wprc-net-income__term {
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 6px 8px;
+    padding: 9px 11px;
+  }
+
+  .wprc-net-income__term dd {
+    grid-column: 2;
+    font-size: 16px;
+  }
+
+  .wprc-net-income__term.is-result dd {
+    font-size: 18px;
   }
 
   .wprc-question-intro {

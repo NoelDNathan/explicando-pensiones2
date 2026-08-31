@@ -269,6 +269,32 @@
   border-top: 1px solid rgba(75, 134, 205, 0.32);
 }
 
+/* Aviso breve del limite del 30 % dentro de la pregunta del plan de pensiones. */
+.irpf-pension-limit summary {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border: 1px solid rgba(75, 134, 205, 0.42);
+  border-radius: 999px;
+  color: #cfdcf3;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.irpf-pension-limit p {
+  margin-top: 9px;
+  color: #b9c9e3;
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 620;
+}
+
+.irpf-pension-limit strong {
+  color: #eaf3ff;
+  font-weight: 800;
+}
+
 .irpf-rule-group {
   overflow: hidden;
   border: 1px solid rgba(75, 134, 205, 0.48);

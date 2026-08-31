@@ -59,9 +59,11 @@ type WorkerConsumptionTaxesCardProps = {
   initialBudgetAnnual?: number
   initialCadastralValue?: number
   initialHasOwnedHome?: boolean
+  initialDraft?: ConsumptionTaxesDraft | null
   /** `once` muestra el dialogo de valores medios solo la primera vez. */
   introChoiceMode?: 'once' | 'off'
   onResultChange?: (result: ConsumptionTaxesResult) => void
+  onDraftChange?: (draft: ConsumptionTaxesDraft) => void
 }
 
 export type ConsumptionTaxesIntroChoice = 'average' | 'manual'
@@ -469,6 +471,17 @@ function calculateVehicleIvtmAnnual(vehicle: VehicleIvtm) {
   return vehicle.fiscalPowerCv * vehicle.ivtmRatePerCv
 }
 
+export interface ConsumptionTaxesDraft {
+  budgetAnnual: number
+  sharePercents: Record<string, number>
+  hasOwnedHome: OwnershipAnswer
+  ownsVehicle: OwnershipAnswer
+  propertyIbis: PropertyIbi[]
+  propertyPurchases: PropertyPurchase[]
+  vehiclePurchases: VehiclePurchase[]
+  vehicleIvtms: VehicleIvtm[]
+}
+
 function getVehicleIncludedTaxRate(region: string) {
   return region === 'canarias' ? CAR_IGIC_RATE_PERCENT : NEW_CAR_VAT_RATE_PERCENT
 }
@@ -837,37 +850,62 @@ export function WorkerConsumptionTaxesCard({
   initialBudgetAnnual = DEFAULT_BUDGET_ANNUAL,
   initialCadastralValue = 0,
   initialHasOwnedHome = false,
+  initialDraft = null,
   introChoiceMode = 'once',
   onResultChange,
+  onDraftChange,
 }: WorkerConsumptionTaxesCardProps) {
-  const [budgetAnnual, setBudgetAnnual] = useState(initialBudgetAnnual)
   const storedIntroChoice = introChoiceMode === 'once' ? readIntroChoice() : null
+  const [budgetAnnual, setBudgetAnnual] = useState(
+    initialDraft?.budgetAnnual ?? initialBudgetAnnual,
+  )
   const [shares, setShares] = useState(() =>
     categories.map((category) => ({
       ...category,
-      sharePercent: storedIntroChoice === 'average'
-        ? AVERAGE_SPAIN_SHARE_PRESETS[category.id] ?? 0
-        : category.initialSharePercent,
+      sharePercent: initialDraft?.sharePercents[category.id]
+        ?? (storedIntroChoice === 'average'
+          ? AVERAGE_SPAIN_SHARE_PRESETS[category.id] ?? 0
+          : category.initialSharePercent),
     })),
   )
   const [hasOwnedHome, setHasOwnedHome] = useState<OwnershipAnswer>(() => (
-    initialHasOwnedHome || initialCadastralValue > 0 ? 'yes' : 'unanswered'
+    initialDraft?.hasOwnedHome
+    ?? (initialHasOwnedHome || initialCadastralValue > 0 ? 'yes' : 'unanswered')
   ))
-  const [ownsVehicle, setOwnsVehicle] = useState<OwnershipAnswer>('unanswered')
-  const [propertyIbis, setPropertyIbis] = useState<PropertyIbi[]>(() => [{
-    ...createEmptyPropertyIbi(),
-    cadastralValue: initialCadastralValue,
-  }])
-  const [propertyPurchases, setPropertyPurchases] = useState<PropertyPurchase[]>([createEmptyPurchase()])
-  const [vehiclePurchases, setVehiclePurchases] = useState<VehiclePurchase[]>([createEmptyVehiclePurchase()])
-  const [vehicleIvtms, setVehicleIvtms] = useState<VehicleIvtm[]>([createEmptyVehicleIvtm()])
+  const [ownsVehicle, setOwnsVehicle] = useState<OwnershipAnswer>(
+    () => initialDraft?.ownsVehicle ?? 'unanswered',
+  )
+  const [propertyIbis, setPropertyIbis] = useState<PropertyIbi[]>(() => (
+    initialDraft?.propertyIbis.length
+      ? initialDraft.propertyIbis.map((property) => ({ ...property }))
+      : [{
+        ...createEmptyPropertyIbi(),
+        cadastralValue: initialCadastralValue,
+      }]
+  ))
+  const [propertyPurchases, setPropertyPurchases] = useState<PropertyPurchase[]>(() => (
+    initialDraft?.propertyPurchases.length
+      ? initialDraft.propertyPurchases.map((purchase) => ({ ...purchase }))
+      : [createEmptyPurchase()]
+  ))
+  const [vehiclePurchases, setVehiclePurchases] = useState<VehiclePurchase[]>(() => (
+    initialDraft?.vehiclePurchases.length
+      ? initialDraft.vehiclePurchases.map((purchase) => ({ ...purchase }))
+      : [createEmptyVehiclePurchase()]
+  ))
+  const [vehicleIvtms, setVehicleIvtms] = useState<VehicleIvtm[]>(() => (
+    initialDraft?.vehicleIvtms.length
+      ? initialDraft.vehicleIvtms.map((vehicle) => ({ ...vehicle }))
+      : [createEmptyVehicleIvtm()]
+  ))
   const [introOpen, setIntroOpen] = useState(() => (
-    introChoiceMode === 'once' && storedIntroChoice === null
+    introChoiceMode === 'once' && storedIntroChoice === null && initialDraft === null
   ))
 
   useEffect(() => {
+    if (initialDraft) return
     setBudgetAnnual(initialBudgetAnnual)
-  }, [initialBudgetAnnual])
+  }, [initialBudgetAnnual, initialDraft])
 
   const propertyTaxAnnual = hasOwnedHome === 'yes'
     ? propertyIbis.reduce((total, property) => total + calculatePropertyIbiAnnual(property), 0)
@@ -918,6 +956,29 @@ export function WorkerConsumptionTaxesCard({
   useEffect(() => {
     onResultChange?.(result)
   }, [onResultChange, result])
+
+  useEffect(() => {
+    onDraftChange?.({
+      budgetAnnual,
+      sharePercents: Object.fromEntries(shares.map((row) => [row.id, row.sharePercent])),
+      hasOwnedHome,
+      ownsVehicle,
+      propertyIbis,
+      propertyPurchases,
+      vehiclePurchases,
+      vehicleIvtms,
+    })
+  }, [
+    budgetAnnual,
+    hasOwnedHome,
+    onDraftChange,
+    ownsVehicle,
+    propertyIbis,
+    propertyPurchases,
+    shares,
+    vehicleIvtms,
+    vehiclePurchases,
+  ])
 
   function updateShare(id: string, nextSharePercent: number) {
     setShares((current) =>

@@ -4,6 +4,7 @@ export { WorkerSocialContributionsCard } from './WorkerSocialContributionsCard'
 export { AtEpCategorySelect } from './AtEpCategorySelect'
 export { WorkerPersonalReductionsCard } from './WorkerPersonalReductionsCard'
 export { WorkerIrpfTranchesCard } from './WorkerIrpfTranchesCard'
+export { WorkerFamilyMinimumExplainer } from './WorkerFamilyMinimumExplainer'
 export { WorkerIrpfRegionComparison } from './WorkerIrpfRegionComparison'
 export { WorkerConsumptionTaxesCard } from './WorkerConsumptionTaxesCard'
 export { WorkerFiscalStepsCard } from './WorkerFiscalStepsCard'
@@ -45,9 +46,11 @@ export type {
   WorkerIrpfTrancheLine,
   WorkerIrpfTranchesResult,
 } from './WorkerIrpfTranchesCard'
+export type { FamilyMinimumScaleLine } from './WorkerFamilyMinimumExplainer'
 export type {
   ConsumptionTaxCategory,
   ConsumptionTaxLine,
+  ConsumptionTaxesDraft,
   ConsumptionTaxesIntroChoice,
   ConsumptionTaxesResult,
 } from './WorkerConsumptionTaxesCard'

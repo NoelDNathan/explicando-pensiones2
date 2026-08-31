@@ -1461,6 +1461,107 @@
   color: var(--fiscal-copy);
 }
 
+.fwd--soft .wprc-net-income,
+.fwd--soft .wprc-concept {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wprc-concept h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-concept p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-concept .wprc-concept__formula {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .irpf-pension-limit summary {
+  color: var(--fiscal-primary-strong);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-pension-limit p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-pension-limit strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-net-income h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-net-income__head p,
+.fwd--soft .wprc-net-income__note,
+.fwd--soft .wprc-net-income__more ul {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft :is(.wprc-net-income__head strong, .wprc-net-income__more strong) {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-net-income__num {
+  color: #fff;
+  background: var(--fiscal-primary);
+}
+
+.fwd--soft .wprc-chain-note {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-net-income__pill {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wprc-net-income__term {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-net-income__term::before {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .wprc-net-income__term dt {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-net-income__term dt small {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .wprc-net-income__term dd {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wprc-net-income__term.is-result {
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
+}
+
+.fwd--soft .wprc-net-income__term.is-result::before,
+.fwd--soft .wprc-net-income__term.is-result dd {
+  color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .wprc-net-income__more summary {
+  color: var(--fiscal-primary-strong);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
 .fwd--soft .irpf-rule-group summary {
   color: var(--fiscal-ink);
   background: var(--fiscal-surface-soft);

@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { SalarySlider } from "../ui/SalarySlider";
+import { WorkerFamilyMinimumExplainer } from "./WorkerFamilyMinimumExplainer";
 import "./WorkerIrpfTranchesCard.css";
 
 export type WorkerIrpfBracketTone = "green" | "purple" | "blue" | "orange" | "yellow" | "red";
@@ -75,6 +76,18 @@ type WorkerIrpfTranchesCardProps = {
   stateMinimum?: number;
   /** Minimo personal y familiar autonomico aplicado a la escala. */
   regionalMinimum?: number;
+  /**
+   * Cuota que resulta de aplicar la escala estatal al minimo personal y
+   * familiar (art. 63.1.2 LIRPF). Es lo que se resta de la cuota, y no
+   * coincide con `stateGross - stateTax` cuando hay deducciones generales.
+   */
+  stateMinimumQuota?: number;
+  /** Cuota del minimo en la escala autonomica (art. 74 LIRPF). */
+  regionalMinimumQuota?: number;
+  /** Parte estatal de las deducciones generales de cuota ya aplicadas. */
+  stateGeneralQuotaDeductions?: number;
+  /** Parte autonomica de las deducciones generales de cuota ya aplicadas. */
+  regionalGeneralQuotaDeductions?: number;
   /** Etiqueta del tramo territorial ("Autonomico" o "Complementario"). */
   regionalTaxLabel?: string;
   /** Salario bruto anual actual. Si se pasa junto a `onSalaryChange`, se muestra un control para ajustarlo. */
@@ -171,6 +184,10 @@ export function WorkerIrpfTranchesCard({
   regionalScale,
   stateMinimum,
   regionalMinimum,
+  stateMinimumQuota,
+  regionalMinimumQuota,
+  stateGeneralQuotaDeductions = 0,
+  regionalGeneralQuotaDeductions = 0,
   regionalTaxLabel = "Autonomico",
   grossSalary,
   onSalaryChange,
@@ -253,11 +270,34 @@ export function WorkerIrpfTranchesCard({
   // Vista de doble escala: solo cuando hay cuotas autoritativas y escalas reales.
   const hasScales = isAuthoritative && stateLines.length > 0 && regionalLines.length > 0;
 
+  // Recorrido del minimo personal y familiar por cada escala: es el calculo que
+  // convierte el minimo en la cuota que despues se resta.
+  const stateMinimumLines = useMemo(
+    () => (stateScale && stateScale.length > 0 ? computeScaleLines(stateScale, stateMinimum ?? 0) : []),
+    [stateScale, stateMinimum],
+  );
+  const regionalMinimumLines = useMemo(
+    () =>
+      regionalScale && regionalScale.length > 0
+        ? computeScaleLines(regionalScale, regionalMinimum ?? 0)
+        : [],
+    [regionalScale, regionalMinimum],
+  );
+
   const stateGross = useMemo(() => stateLines.reduce((t, l) => t + l.quota, 0), [stateLines]);
   const regionalGross = useMemo(() => regionalLines.reduce((t, l) => t + l.quota, 0), [regionalLines]);
-  const stateReduction = Math.max(0, stateGross - (stateTax ?? 0));
-  const regionalReduction = Math.max(0, regionalGross - (regionalTax ?? 0));
+  const stateGeneralDeduction = Math.max(0, stateGeneralQuotaDeductions);
+  const regionalGeneralDeduction = Math.max(0, regionalGeneralQuotaDeductions);
+  const hasGeneralDeductionSplit = stateGeneralDeduction + regionalGeneralDeduction > 0;
+  // La fila del minimo solo debe recoger la cuota del minimo. Cuando el motor la
+  // pasa se usa tal cual; si no, se deduce descontando las deducciones generales
+  // para no imputarlas dos veces.
+  const stateReduction =
+    stateMinimumQuota ?? Math.max(0, stateGross - (stateTax ?? 0) - stateGeneralDeduction);
+  const regionalReduction =
+    regionalMinimumQuota ?? Math.max(0, regionalGross - (regionalTax ?? 0) - regionalGeneralDeduction);
   const splitQuota = Math.max(0, (stateTax ?? 0) + (regionalTax ?? 0));
+  const showMinimumExplainer = hasScales && stateReduction + regionalReduction > 0;
 
   const activeLines = result.lines.filter((line) => line.taxableAmount > 0);
   const visibleLines = activeLines.slice(0, 4);
@@ -281,16 +321,27 @@ export function WorkerIrpfTranchesCard({
     );
   };
 
-  const renderTramoColumn = (
-    title: string,
-    titleTone: "state" | "region",
-    lines: ScaleLine[],
-    gross: number,
-    reduction: number,
-    tax: number,
-    totalLabel: string,
-    minimumBase: number | undefined,
-  ) => {
+  const renderTramoColumn = ({
+    title,
+    titleTone,
+    lines,
+    gross,
+    reduction,
+    generalDeduction,
+    tax,
+    totalLabel,
+    minimumBase,
+  }: {
+    title: string;
+    titleTone: "state" | "region";
+    lines: ScaleLine[];
+    gross: number;
+    reduction: number;
+    generalDeduction: number;
+    tax: number;
+    totalLabel: string;
+    minimumBase: number | undefined;
+  }) => {
     const active = lines.filter((line) => line.taxableAmount > 0);
     return (
       <div className="witc-calc-col">
@@ -311,7 +362,7 @@ export function WorkerIrpfTranchesCard({
           <li className="witc-tramo witc-tramo--summary">
             <span className="witc-tramo__dot witc-tramo__dot--ghost" aria-hidden="true" />
             <div className="witc-tramo__main">
-              <p className="witc-tramo__range">Cuota integra (escala)</p>
+              <p className="witc-tramo__range">La escala sobre tu base</p>
             </div>
             <strong className="witc-tramo__amount">{formatEuro(gross, 2)}</strong>
           </li>
@@ -319,12 +370,25 @@ export function WorkerIrpfTranchesCard({
             <li className="witc-tramo witc-tramo--minus">
               <span className="witc-tramo__dot witc-tramo__dot--ghost" aria-hidden="true" />
               <div className="witc-tramo__main">
-                <p className="witc-tramo__range">Minimo personal y familiar</p>
+                <p className="witc-tramo__range">Cuota del mínimo personal y familiar</p>
                 {minimumBase !== undefined && minimumBase > 0 && (
-                  <p className="witc-tramo__calc">base exenta {formatEuro(minimumBase, 0)}</p>
+                  <p className="witc-tramo__calc">
+                    {formatEuro(minimumBase, 0)} por la misma escala
+                  </p>
                 )}
               </div>
               <strong className="witc-tramo__amount">{"\u2212"} {formatEuro(reduction, 2)}</strong>
+            </li>
+          )}
+          {generalDeduction > 0 && (
+            <li className="witc-tramo witc-tramo--minus">
+              <span className="witc-tramo__dot witc-tramo__dot--ghost" aria-hidden="true" />
+              <div className="witc-tramo__main">
+                <p className="witc-tramo__range">Deducciones generales de cuota</p>
+              </div>
+              <strong className="witc-tramo__amount">
+                {"\u2212"} {formatEuro(generalDeduction, 2)}
+              </strong>
             </li>
           )}
           <li className={`witc-tramo witc-tramo--total witc-tramo--total-${titleTone}`}>
@@ -453,6 +517,21 @@ export function WorkerIrpfTranchesCard({
         </div>
       )}
 
+      {showMinimumExplainer ? (
+        <WorkerFamilyMinimumExplainer
+          taxableBase={result.taxableBase}
+          grossQuota={stateGross + regionalGross}
+          integralQuota={Math.max(0, stateGross + regionalGross - stateReduction - regionalReduction)}
+          stateMinimum={stateMinimum ?? 0}
+          regionalMinimum={regionalMinimum ?? 0}
+          stateMinimumQuota={stateReduction}
+          regionalMinimumQuota={regionalReduction}
+          stateMinimumLines={stateMinimumLines}
+          regionalMinimumLines={regionalMinimumLines}
+          regionLabel={regionLabel}
+        />
+      ) : null}
+
       <div className="witc-lower">
         <aside className="witc-base-card" aria-label="Base liquidable">
           <span className="witc-base-card__hint" aria-hidden="true" />
@@ -465,28 +544,34 @@ export function WorkerIrpfTranchesCard({
           {hasScales ? (
             <>
               <div className="witc-calc-cols">
-                {renderTramoColumn(
-                  "Estatal",
-                  "state",
-                  stateLines,
-                  stateGross,
-                  stateReduction,
-                  stateTax ?? 0,
-                  generalQuotaDeductions > 0 ? "Cuota estatal tras deducciones" : "Cuota estatal",
-                  stateMinimum,
-                )}
-                {renderTramoColumn(
-                  `${regionLabel}`,
-                  "region",
-                  regionalLines,
-                  regionalGross,
-                  regionalReduction,
-                  regionalTax ?? 0,
-                  generalQuotaDeductions > 0 ? `Cuota ${regionLabel} tras deducciones` : `Cuota ${regionLabel}`,
-                  regionalMinimum,
-                )}
+                {renderTramoColumn({
+                  title: "Estatal",
+                  titleTone: "state",
+                  lines: stateLines,
+                  gross: stateGross,
+                  reduction: stateReduction,
+                  generalDeduction: stateGeneralDeduction,
+                  tax: stateTax ?? 0,
+                  totalLabel:
+                    stateGeneralDeduction > 0 ? "Cuota estatal tras deducciones" : "Cuota estatal",
+                  minimumBase: stateMinimum,
+                })}
+                {renderTramoColumn({
+                  title: regionLabel,
+                  titleTone: "region",
+                  lines: regionalLines,
+                  gross: regionalGross,
+                  reduction: regionalReduction,
+                  generalDeduction: regionalGeneralDeduction,
+                  tax: regionalTax ?? 0,
+                  totalLabel:
+                    regionalGeneralDeduction > 0
+                      ? `Cuota ${regionLabel} tras deducciones`
+                      : `Cuota ${regionLabel}`,
+                  minimumBase: regionalMinimum,
+                })}
               </div>
-              {generalQuotaDeductions > 0 ? (
+              {generalQuotaDeductions > 0 && !hasGeneralDeductionSplit ? (
                 <div className="witc-total-deduction">
                   <span>Deducciones generales de cuota aplicadas</span>
                   <strong>- {formatEuro(generalQuotaDeductions, 2)}</strong>

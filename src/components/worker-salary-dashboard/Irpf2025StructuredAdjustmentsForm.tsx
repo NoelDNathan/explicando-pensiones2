@@ -20,15 +20,20 @@ type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed'
 
 type Props = {
   focus: 'reductions' | 'deductions-benefits'
+  // Los gastos del art. 19 y las reducciones de base se preguntan por separado:
+  // no restan en el mismo momento del calculo.
+  reductionsGroup?: 'all' | 'work-expenses' | 'base-reductions'
   value: Irpf2025AdjustmentInput
   declaredInKindSalary?: number
   declaredGrossWorkIncome?: number
+  netWorkIncome?: number
   previewBaseAvailable?: number
   onChange: (value: Irpf2025AdjustmentInput) => void
 }
 const OTHER_INCOME_THRESHOLD = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
 const SPOUSE_INCOME_THRESHOLD = 8_000
 const SPOUSE_PENSION_MAX_REDUCTION = 1_000
+const PERSONAL_PENSION_ABSOLUTE_LIMIT = 1_500
 
 function QuestionEffect({ amount }: { amount?: number }) {
   if (!amount) return null
@@ -1217,11 +1222,49 @@ export function WorkIncomeBenefitsSection({
   )
 }
 
+function euros(value: number) {
+  return `${Math.round(value).toLocaleString('es-ES', { useGrouping: true })} €`
+}
+
+function PensionLimitNote({ netWorkIncome }: { netWorkIncome: number }) {
+  const example = netWorkIncome > 0 ? netWorkIncome : 20_000
+  const thirtyPercent = example * 0.3
+  const percentLimitBinds = thirtyPercent < PERSONAL_PENSION_ABSOLUTE_LIMIT
+  const reduced = Math.max(0, example - 2_000)
+
+  return (
+    <details className="irpf-pension-limit">
+      <summary>¿Qué significa el límite del 30 %?</summary>
+      <p>
+        Lo que aportas se reduce de la base, pero con dos topes: <strong>1.500 € al año</strong> y el{' '}
+        <strong>30 % de tu rendimiento neto del trabajo</strong>. Manda el más pequeño de los dos. El
+        tope de 1.500 € sube si tu empresa también aporta a un plan para ti.
+      </p>
+      <p>
+        Con {euros(example)} de rendimiento neto, ese 30 % son {euros(thirtyPercent)}, así que en tu caso
+        manda{' '}
+        {percentLimitBinds
+          ? <>el 30 %: <strong>{euros(thirtyPercent)}</strong></>
+          : <>el tope de <strong>{euros(PERSONAL_PENSION_ABSOLUTE_LIMIT)}</strong></>}
+        .
+      </p>
+      <p>
+        Ojo con el 30 %: se calcula sobre el rendimiento neto, así que tus gastos deducibles también lo
+        bajan. Con {euros(reduced)} de rendimiento, ese 30 % serían {euros(reduced * 0.3)}. Es la otra
+        cara de los gastos deducibles: te bajan la base, pero pueden bajarte el máximo que puedes aportar
+        al plan con ventaja fiscal.
+      </p>
+    </details>
+  )
+}
+
 export function Irpf2025StructuredAdjustmentsForm({
   focus,
+  reductionsGroup = 'all',
   value,
   declaredInKindSalary = 0,
   declaredGrossWorkIncome = 0,
+  netWorkIncome = 0,
   previewBaseAvailable = 0,
   onChange,
 }: Props) {
@@ -1270,9 +1313,21 @@ export function Irpf2025StructuredAdjustmentsForm({
   const mobilityEffect = calculateGeographicMobilityIncrement2025(value, declaredGrossWorkIncome)
 
   if (focus === 'reductions') {
+    const showWorkExpenses = reductionsGroup !== 'base-reductions'
+    const showBaseReductions = reductionsGroup !== 'work-expenses'
+
     return (
-      <section className="irpf-rule-form" aria-label="Datos exactos para reducciones IRPF 2025">
+      <section
+        className="irpf-rule-form"
+        aria-label={showWorkExpenses && showBaseReductions
+          ? 'Datos exactos para reducciones IRPF 2025'
+          : showWorkExpenses
+            ? 'Gastos deducibles de tu trabajo'
+            : 'Aportaciones que reducen la base'}
+      >
         <div className="irpf-reduction-question-list">
+          {showWorkExpenses ? (
+            <>
           <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} effectAmount={workExpenses.unionDues} onNo={() => update('unionDues', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.unionDues} onChange={(amount) => update('unionDues', amount)} />
           </ReductionQuestion>
@@ -1308,8 +1363,13 @@ export function Irpf2025StructuredAdjustmentsForm({
               onChange={onChange}
             />
           </ReductionQuestion>
+            </>
+          ) : null}
+          {showBaseReductions ? (
+            <>
           <ReductionQuestion question="¿Pagas tú un plan de pensiones?" description="Solo tus aportaciones personales, no las de tu empresa." initiallyRelevant={value.personalPensionContribution > 0} effectAmount={personalPlanEffect} onNo={() => update('personalPensionContribution', 0)}>
             <NumberField label="¿Cuánto has aportado este año?" value={value.personalPensionContribution} onChange={(amount) => update('personalPensionContribution', amount)} />
+            <PensionLimitNote netWorkIncome={netWorkIncome} />
           </ReductionQuestion>
           <ReductionQuestion question="¿Pagas una mutualidad profesional?" description="Por ejemplo, la del colegio de médicos o abogados." initiallyRelevant={value.mutualityContribution > 0} effectAmount={mutualityEffect} onNo={() => update('mutualityContribution', 0)}>
             <NumberField label="¿Cuánto has aportado este año?" value={value.mutualityContribution} onChange={(amount) => update('mutualityContribution', amount)} />
@@ -1323,6 +1383,8 @@ export function Irpf2025StructuredAdjustmentsForm({
           <ReductionQuestion question="¿Has aportado a un patrimonio protegido de una persona con discapacidad?" description="Es una figura específica; déjalo en No si no te suena." initiallyRelevant={value.protectedAssetsContribution > 0 || value.protectedAssetsFormalEstate} effectAmount={protectedEffect} onNo={() => onChange(clearProtectedAssetsFields(value))}>
             <ProtectedAssetsQuestions value={value} onChange={onChange} />
           </ReductionQuestion>
+            </>
+          ) : null}
         </div>
       </section>
     )

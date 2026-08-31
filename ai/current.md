@@ -1,8 +1,14 @@
 # Estado actual
 
-Fecha: 2026-08-30
+Fecha: 2026-08-31
 
 ## Situacion
+
+- En el paso 4, las preguntas se reparten en «3 · Gastos de tu trabajo» (sindicato, colegio profesional, defensa juridica y movilidad geografica: gastos del art. 19 que bajan el rendimiento neto) y «4 · Aportaciones que reducen tu base» (plan personal, mutualidad, plan de empresa y patrimonio protegido). El paso abre con dos bloques que explican que es una reduccion (ejemplo 30.000 - 2.000 = 28.000 €) y que es el minimo personal y familiar, y la cabecera pasa a «Reducciones y minimo personal y familiar», encadenada con el paso 3. La pregunta del plan de pensiones incluye un desplegable con el limite del 30 %. Verificacion: `pnpm run build` y `tsc -b` correctos; comprobado en `/calculadora-fiscal` paso 4 en escritorio 1280 px y movil 375 px.
+
+- En el paso 4, un bloque de apertura explica los gastos deducibles de 2.000 €: se aplican automaticamente a todos los trabajadores por cuenta ajena y representan lo que cuesta trabajar (el autonomo, en cambio, deduce gastos reales con factura). Muestra la ecuacion `salario bruto - Seguridad Social - gastos deducibles = rendimiento neto del trabajo` con los valores del usuario, y un desplegable con los casos que la suben (movilidad, discapacidad, cuotas) y el tope. Verificacion: `pnpm run build` y `tsc -b` correctos; en `/calculadora-fiscal` paso 4, 35.000 - 2.268 - 2.000 = 30.732 € y con discapacidad 33 % 35.000 - 2.268 - 5.500 = 27.232 €; revisado en escritorio y movil 375 px.
+
+- En el paso 7, los importes, porcentajes y el resto del formulario se conservan al ir a otro paso y volver: el dashboard guarda un borrador y lo restaura al reentrar. Verificacion: `pnpm run build` correcto; en `/calculadora-fiscal` 250 € en alimentacion basica se mantiene tras pasar al paso 8.
 
 - En el paso 7, el bloque de distribucion del gasto incluye un grafico circular (donut) con el reparto por categoria; cada categoria tiene un color propio en el grafico y la leyenda. Verificacion: `pnpm run build` correcto.
 

@@ -331,20 +331,24 @@ Aquí puedes comparar ambas aportaciones y ver qué financia cada concepto.`,
   },
   {
     id: 4,
-    title: 'Reducciones y minimos',
-    subtitle: 'Datos personales que reducen la base del IRPF',
-    description: `Las reducciones actúan antes de calcular el IRPF: disminuyen la base sobre la que se aplican los tramos. Los mínimos personales y familiares protegen una parte de la renta según edad, convivencia, discapacidad y familiares a cargo.
+    title: 'Reducciones y mínimo personal y familiar',
+    subtitle: 'Del rendimiento neto a la base liquidable',
+    description: `En el paso anterior hemos calculado el importe que pagas a la Seguridad Social como trabajador.
 
-Completa solo los apartados que correspondan a tu situación.`,
+Ahora vamos a calcular tu base liquidable, que es la cantidad que se utiliza para calcular cuánto IRPF tienes que pagar.
+
+Para hacerlo, primero veremos si puedes aplicar alguna reducción y calcularemos tu mínimo personal y familiar.
+
+Completa únicamente los apartados que correspondan a tu situación.`,
     checklist: [],
-    helpTitle: 'Que es una reduccion?',
-    helpBody: 'Una reduccion baja la base sobre la que se calcula el impuesto, antes de aplicar los tramos del IRPF.',
+    helpTitle: 'Gasto deducible, reducción y mínimo',
+    helpBody: 'Un gasto deducible resta del salario bruto y da el rendimiento neto. Una reducción resta después, de la base imponible. El mínimo no resta de la base: deja sin pagar la parte de cuota que le corresponde.',
     details: [
-      'Los minimos personales y familiares intentan dejar una parte de renta fuera de tributacion por necesidades basicas.',
-      'Las reducciones se aplican antes de calcular la cuota; por eso cambian la base que entra en los tramos.',
-      'Convivencia, edad, discapacidad y rentas propias pueden hacer que un familiar compute o quede fuera.',
+      'Los gastos deducibles (Seguridad Social, los 2.000 EUR generales, sindicato, colegio o defensa jurídica) se restan primero y dan el rendimiento neto del trabajo.',
+      'Las reducciones (planes de pensiones, pensión compensatoria, declaración conjunta, patrimonio protegido) se restan después y dan la base liquidable, que es la que entra en los tramos.',
+      'Los mínimos personales y familiares protegen una parte de la renta según edad, convivencia, discapacidad y familiares a cargo; convivencia, rentas propias o presentar declaración pueden dejar fuera a un familiar.',
     ],
-    important: 'Dos personas con el mismo salario pueden pagar IRPF distinto por su situacion personal y comunidad.',
+    important: 'Dos personas con el mismo salario pueden pagar IRPF distinto por su situación personal y su comunidad.',
     Icon: UserRound,
   },
   {

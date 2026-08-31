@@ -28,6 +28,7 @@ import {
 import type {
   CalculationSourceItem,
   ContributionGroup,
+  ConsumptionTaxesDraft,
   ConsumptionTaxesResult,
   PersonalReductionResult,
   SocialContributionRates,
@@ -400,6 +401,7 @@ export function FiscalWorkerDashboard() {
   const [occupationalAccidentsCategoryId, setOccupationalAccidentsCategoryId] = useState(DEFAULT_AT_EP_2025_CATEGORY_ID)
   const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
   const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
+  const [consumptionTaxesDraft, setConsumptionTaxesDraft] = useState<ConsumptionTaxesDraft | null>(null)
   const [activeWorkerStepId, setActiveWorkerStepId] = useState(0)
   const hasAssignedConsumption = (consumptionTaxes?.assignedSpendAnnual ?? 0) > 0
 
@@ -444,6 +446,18 @@ export function FiscalWorkerDashboard() {
   const handleIrpfResultChange = useCallback((irpfResult: { region: string }) => {
     if (taxYear !== '2005') setRegion(irpfResult.region)
   }, [taxYear])
+
+  const handleConsumptionTaxesChange = useCallback((nextResult: ConsumptionTaxesResult) => {
+    setConsumptionTaxes(
+      nextResult.assignedSpendAnnual > 0 || nextResult.propertyTaxAnnual > 0 || nextResult.vehicleTaxAnnual > 0
+        ? nextResult
+        : null,
+    )
+  }, [])
+
+  const handleConsumptionDraftChange = useCallback((draft: ConsumptionTaxesDraft) => {
+    setConsumptionTaxesDraft(draft)
+  }, [])
 
   const result = useMemo(() => {
     const effectiveRegion = taxYear === '2005' ? 'madrid' : region
@@ -502,6 +516,12 @@ export function FiscalWorkerDashboard() {
         regionalScale: fiscalParams2005.irpf.madrid_or_complementary_general_scale.scale,
         stateMinimum: 0,
         regionalMinimum: 0,
+        // En 2005 el minimo personal reducia la base, no la cuota: no hay cuota
+        // del minimo que restar ni reparto territorial de deducciones.
+        stateMinimumQuota: 0,
+        regionalMinimumQuota: 0,
+        stateGeneralQuotaDeductions: 0,
+        regionalGeneralQuotaDeductions: 0,
         irpfBeforeDeductions,
         irpf,
         workReductionBasis: netWorkIncomeBeforeReduction,
@@ -604,6 +624,11 @@ export function FiscalWorkerDashboard() {
       adjustments: personalAdjustments?.adjustments,
     })
     const { taxableBase, stateTax, regionalTax, irpf } = coreIrpf
+    // Reparto de los gastos del art. 19 para explicar la ecuacion del paso 4:
+    // bruto - Seguridad Social - gastos deducibles = rendimiento neto del trabajo.
+    const socialSecurityWorkExpense = Math.min(employeeSocialSecurity, coreIrpf.article19ExpensesBeforeOtherExpenses)
+    const otherDeductibleWorkExpenses =
+      coreIrpf.article19ExpensesBeforeOtherExpenses - socialSecurityWorkExpense + coreIrpf.article19OtherExpensesApplied
     const irpfBeforeDeductions = coreIrpf.liquidQuotaBeforeWorkDeduction
     const netSalary = grossSalaryAnnual - employeeSocialSecurity - irpf
     const epfVatEstimate = estimateVatFromNetSalary(netSalary)
@@ -634,6 +659,10 @@ export function FiscalWorkerDashboard() {
       regionalScale,
       stateMinimum,
       regionalMinimum,
+      stateMinimumQuota: coreIrpf.stateMinimumQuota,
+      regionalMinimumQuota: coreIrpf.regionalMinimumQuota,
+      stateGeneralQuotaDeductions: coreIrpf.generalDeductions.stateApplied,
+      regionalGeneralQuotaDeductions: coreIrpf.generalDeductions.regionalApplied,
       irpfBeforeDeductions,
       irpf,
       workReductionBasis: coreIrpf.workReductionBasis,
@@ -641,6 +670,10 @@ export function FiscalWorkerDashboard() {
       netWorkIncome: coreIrpf.netWorkIncome,
       netReducedWorkIncome: coreIrpf.netReducedWorkIncome,
       article19OtherExpensesApplied: coreIrpf.article19OtherExpensesApplied,
+      taxableWorkIncome,
+      socialSecurityWorkExpense,
+      otherDeductibleWorkExpenses,
+      generalOtherExpenses: fiscalParams2025.irpf.work_income_deductible_expenses_eur.general_other_expenses,
       pensionReductionApplied: coreIrpf.pensionReductionApplied,
       lowWorkIncomeDeductionApplied: coreIrpf.lowWorkIncomeDeductionApplied,
       baseReductionsApplied: coreIrpf.baseReductions.totalApplied,
@@ -982,6 +1015,10 @@ export function FiscalWorkerDashboard() {
             finalDeclarationResult={result.finalDeclarationResult}
             declaredInKindSalary={inKindSalary}
             declaredGrossWorkIncome={result.grossSalaryAnnual}
+            taxableWorkIncome={result.taxableWorkIncome}
+            socialSecurityWorkExpense={result.socialSecurityWorkExpense}
+            otherDeductibleWorkExpenses={result.otherDeductibleWorkExpenses}
+            generalOtherExpenses={result.generalOtherExpenses}
             lowWorkIncomeDeductionApplied={result.lowWorkIncomeDeductionApplied}
             engineWarnings={result.calculationWarnings}
             onResultChange={handlePersonalResultChange}
@@ -1005,6 +1042,10 @@ export function FiscalWorkerDashboard() {
               regionalScale={result.regionalScale}
               stateMinimum={result.stateMinimum}
               regionalMinimum={result.regionalMinimum}
+              stateMinimumQuota={result.stateMinimumQuota}
+              regionalMinimumQuota={result.regionalMinimumQuota}
+              stateGeneralQuotaDeductions={result.stateGeneralQuotaDeductions}
+              regionalGeneralQuotaDeductions={result.regionalGeneralQuotaDeductions}
               regionalTaxLabel={result.regionalTaxLabel}
               grossSalary={salary}
               onSalaryChange={setSalary}
@@ -1025,12 +1066,10 @@ export function FiscalWorkerDashboard() {
       case 7:
         return (
           <WorkerConsumptionTaxesCard
-            initialBudgetAnnual={result.annualConsumption}
-            onResultChange={(nextResult) => setConsumptionTaxes(
-              nextResult.assignedSpendAnnual > 0 || nextResult.propertyTaxAnnual > 0 || nextResult.vehicleTaxAnnual > 0
-                ? nextResult
-                : null,
-            )}
+            initialBudgetAnnual={consumptionTaxesDraft?.budgetAnnual ?? result.annualConsumption}
+            initialDraft={consumptionTaxesDraft}
+            onDraftChange={handleConsumptionDraftChange}
+            onResultChange={handleConsumptionTaxesChange}
           />
         )
       case 8:
