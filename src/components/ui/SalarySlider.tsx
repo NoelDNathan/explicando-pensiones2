@@ -1,8 +1,18 @@
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./SalarySlider.css";
 
 export type SalarySliderScale = "linear" | "log";
+
+/** Punto de referencia dibujado sobre la barra (p.ej. SMI o salario medio). */
+export type SalarySliderReference = {
+  /** Importe en euros, en la misma unidad que el slider. */
+  value: number;
+  /** Etiqueta corta mostrada sobre la barra. */
+  label: string;
+  /** Texto del tooltip; por defecto "etiqueta: importe €". */
+  title?: string;
+};
 
 type SalarySliderProps = {
   /** Valor actual en euros. */
@@ -15,6 +25,8 @@ type SalarySliderProps = {
   step?: number;
   /** Marcas de referencia a mostrar bajo el slider. */
   markers?: number[];
+  /** Puntos de referencia (SMI, salario medio...) marcados sobre la barra. */
+  references?: SalarySliderReference[];
   /** Texto auxiliar a la derecha del valor (p.ej. "brutos al año"). */
   unitLabel?: string;
   /**
@@ -27,6 +39,12 @@ type SalarySliderProps = {
 };
 
 const LOG_STEPS = 1000;
+
+/** Ancho del pulgar del slider: la barra util empieza y acaba a la mitad de el. */
+const THUMB_WIDTH = 22;
+
+/** Separacion minima entre etiquetas de referencia. */
+const REF_LABEL_GAP = 6;
 
 const euroFormatter = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0 });
 
@@ -60,6 +78,7 @@ export function SalarySlider({
   max = 120000,
   step = 500,
   markers,
+  references,
   unitLabel,
   scale = "linear",
   id = "salary-slider",
@@ -81,6 +100,14 @@ export function SalarySlider({
     ? (valueToPos(safeValue) / LOG_STEPS) * 100
     : ((safeValue - min) / (max - min)) * 100;
 
+  const visibleReferences = (references ?? [])
+    .filter((reference) => reference.value >= min && reference.value <= max)
+    .map((reference) => ({ ...reference, percent: valueToPercent(reference.value) }))
+    .sort((a, b) => a.percent - b.percent);
+
+  const refsRef = useRef<HTMLDivElement | null>(null);
+  const refsLayoutKey = visibleReferences.map((r) => `${r.label}:${r.percent.toFixed(2)}`).join("|");
+
   const handleChange = (raw: number) => {
     onChange(isLog ? posToValue(raw) : clamp(raw, min, max));
   };
@@ -96,6 +123,63 @@ export function SalarySlider({
   useEffect(() => {
     setTextValue(formatNumber(safeValue));
   }, [safeValue]);
+
+  /**
+   * Coloca las etiquetas de referencia centradas sobre su punto, pero las separa
+   * cuando dos textos se solapan (p.ej. SMI y salario medio en pantallas estrechas).
+   */
+  useLayoutEffect(() => {
+    const container = refsRef.current;
+    if (!container) return;
+
+    const layout = () => {
+      const labels = Array.from(
+        container.querySelectorAll<HTMLElement>(".salary-slider__ref-label"),
+      );
+      const width = container.clientWidth;
+      if (labels.length === 0 || width === 0) return;
+
+      const trackWidth = Math.max(0, width - THUMB_WIDTH);
+      const boxes = labels.map((element) => {
+        element.style.left = "";
+        element.style.transform = "";
+        const percent = Number(element.dataset.percent ?? "0") / 100;
+        const labelWidth = element.offsetWidth;
+        return {
+          element,
+          width: labelWidth,
+          left: THUMB_WIDTH / 2 + trackWidth * percent - labelWidth / 2,
+        };
+      });
+
+      let minLeft = 0;
+      for (const box of boxes) {
+        box.left = Math.max(box.left, minLeft);
+        minLeft = box.left + box.width + REF_LABEL_GAP;
+      }
+
+      let maxRight = width;
+      for (let index = boxes.length - 1; index >= 0; index -= 1) {
+        const box = boxes[index];
+        box.left = Math.max(0, Math.min(box.left, maxRight - box.width));
+        maxRight = box.left - REF_LABEL_GAP;
+      }
+
+      for (const box of boxes) {
+        box.element.style.left = `${box.left}px`;
+        box.element.style.transform = "none";
+      }
+    };
+
+    layout();
+    const observer = new ResizeObserver(layout);
+    observer.observe(container);
+    window.addEventListener("resize", layout);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", layout);
+    };
+  }, [refsLayoutKey]);
 
   return (
     <div className="salary-slider" style={{ "--salary-slider-value": `${fillPercent}%` } as CSSProperties}>
@@ -123,16 +207,42 @@ export function SalarySlider({
         </div>
         {unitLabel && <span>{unitLabel}</span>}
       </div>
-      <input
-        id={id}
-        type="range"
-        min={isLog ? 0 : min}
-        max={isLog ? LOG_STEPS : max}
-        step={isLog ? 1 : step}
-        value={isLog ? valueToPos(safeValue) : safeValue}
-        onChange={(event) => handleChange(Number(event.target.value))}
-        aria-label={ariaLabel}
-      />
+      {visibleReferences.length > 0 && (
+        <div className="salary-slider__refs" ref={refsRef}>
+          {visibleReferences.map((reference) => (
+            <button
+              key={reference.label}
+              type="button"
+              className="salary-slider__ref-label"
+              data-percent={reference.percent}
+              title={reference.title ?? `${reference.label}: ${formatNumber(reference.value)} €`}
+              onClick={() => onChange(reference.value)}
+            >
+              {reference.label}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="salary-slider__track">
+        <input
+          id={id}
+          type="range"
+          min={isLog ? 0 : min}
+          max={isLog ? LOG_STEPS : max}
+          step={isLog ? 1 : step}
+          value={isLog ? valueToPos(safeValue) : safeValue}
+          onChange={(event) => handleChange(Number(event.target.value))}
+          aria-label={ariaLabel}
+        />
+        {visibleReferences.map((reference) => (
+          <span
+            key={reference.label}
+            className="salary-slider__ref-dot"
+            style={{ "--salary-slider-ref": `${reference.percent / 100}` } as CSSProperties}
+            aria-hidden="true"
+          />
+        ))}
+      </div>
       {markers && markers.length > 0 && (
         <div className="salary-slider__scale" aria-hidden="true">
           {markers.map((marker, index) => {

@@ -73,6 +73,63 @@
   text-align: right;
 }
 
+.salary-slider__refs {
+  position: relative;
+  height: 15px;
+  margin-bottom: -2px;
+}
+
+/* La posicion horizontal la calcula SalarySlider (evita solapes entre etiquetas). */
+.salary-slider__ref-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0 5px 3px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #c4d8ea;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+:is(.salary-slider) .salary-slider__ref-label {
+  /* Gana a reglas de tema como `.fwd button { font-size: inherit }`. */
+  font-size: 10px;
+}
+
+.salary-slider__ref-label:hover,
+.salary-slider__ref-label:focus-visible {
+  color: #ffffff;
+}
+
+.salary-slider__ref-label:focus-visible {
+  outline: 2px solid rgba(66, 184, 255, 0.5);
+  outline-offset: 1px;
+}
+
+.salary-slider__track {
+  position: relative;
+}
+
+.salary-slider__ref-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(11px + (100% - 22px) * var(--salary-slider-ref, 0));
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border: 2px solid rgba(2, 18, 36, 0.85);
+  border-radius: 999px;
+  background: #ffd166;
+  box-shadow: 0 0 6px rgba(255, 209, 102, 0.55);
+  pointer-events: none;
+}
+
 .salary-slider input[type="range"] {
   width: 100%;
   min-height: 24px;

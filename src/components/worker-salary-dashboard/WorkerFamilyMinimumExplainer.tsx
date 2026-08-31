@@ -24,6 +24,10 @@ type WorkerFamilyMinimumExplainerProps = {
   stateMinimum: number;
   /** Importe del minimo personal y familiar en la escala autonomica. */
   regionalMinimum: number;
+  /** Parte del minimo estatal que cabe en la base liquidable y llega a aplicarse. */
+  stateMinimumApplied: number;
+  /** Parte del minimo autonomico que cabe en la base liquidable. */
+  regionalMinimumApplied: number;
   /** Cuota que corresponde al minimo en la escala estatal. */
   stateMinimumQuota: number;
   /** Cuota que corresponde al minimo en la escala autonomica. */
@@ -71,6 +75,8 @@ export function WorkerFamilyMinimumExplainer({
   integralQuota,
   stateMinimum,
   regionalMinimum,
+  stateMinimumApplied,
+  regionalMinimumApplied,
   stateMinimumQuota,
   regionalMinimumQuota,
   stateMinimumLines,
@@ -80,6 +86,10 @@ export function WorkerFamilyMinimumExplainer({
   const minimumQuota = stateMinimumQuota + regionalMinimumQuota;
   const sameMinimum = Math.abs(stateMinimum - regionalMinimum) < 1;
   const exhausted = minimumQuota >= grossQuota - 0.005;
+  // El minimo no puede superar la base liquidable: con bases bajas se aplica solo
+  // una parte y la cuota se queda en cero.
+  const capped =
+    stateMinimumApplied < stateMinimum - 0.005 || regionalMinimumApplied < regionalMinimum - 0.005;
   const savedShare = grossQuota > 0 ? Math.min(100, (minimumQuota / grossQuota) * 100) : 0;
 
   const renderBreakdown = (
@@ -161,6 +171,11 @@ export function WorkerFamilyMinimumExplainer({
               y {formatEuro(regionalMinimum, 2)} en la escala de {regionLabel}
             </p>
           )}
+          {capped ? (
+            <p className="wfme__note">
+              tu base no da para tanto: solo se aplican {formatEuro(stateMinimumApplied, 2)}
+            </p>
+          ) : null}
           <p className="wfme__arrow">pasa por la misma escala</p>
           <span className="wfme__tag">Cuota del mínimo</span>
           <strong className="wfme__amount wfme__amount--minimum">
@@ -184,7 +199,8 @@ export function WorkerFamilyMinimumExplainer({
       {exhausted ? (
         <p className="wfme__warning">
           Tu mínimo cubre toda la cuota de la escala: el IRPF de la base general se queda en 0, nunca
-          en negativo. Hacienda no devuelve la diferencia por este motivo.
+          en negativo. El mínimo tampoco puede pasar de tu base liquidable, así que la parte que
+          sobra no se acumula ni se devuelve.
         </p>
       ) : (
         <p className="wfme__saving">
@@ -201,11 +217,17 @@ export function WorkerFamilyMinimumExplainer({
           entera desde el primer tramo, igual que a tu base.
         </p>
         <div className="witc-calc-cols">
-          {renderBreakdown("Estatal", "state", stateMinimum, stateMinimumLines, stateMinimumQuota)}
+          {renderBreakdown(
+            "Estatal",
+            "state",
+            stateMinimumApplied,
+            stateMinimumLines,
+            stateMinimumQuota,
+          )}
           {renderBreakdown(
             regionLabel,
             "region",
-            regionalMinimum,
+            regionalMinimumApplied,
             regionalMinimumLines,
             regionalMinimumQuota,
           )}

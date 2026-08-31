@@ -294,6 +294,21 @@
   color: var(--fiscal-copy);
 }
 
+.fwd--soft .salary-slider__ref-label {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .salary-slider__ref-label:hover,
+.fwd--soft .salary-slider__ref-label:focus-visible {
+  color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .salary-slider__ref-dot {
+  border-color: #ffffff;
+  background: var(--fiscal-blue);
+  box-shadow: 0 1px 3px rgba(35, 54, 78, 0.28);
+}
+
 .fwd--soft .salary-slider input[type="range"]::-webkit-slider-runnable-track {
   background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), #dbe4ec var(--salary-slider-value), #dbe4ec 100%);
   box-shadow: inset 0 1px 2px rgba(35, 54, 78, 0.12);
@@ -368,6 +383,30 @@
 .fwd--soft .wfsc-description p,
 .fwd--soft .wfsc-payroll figcaption {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-copy__subtitle {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-concept {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wfsc-concept h3 {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-concept p {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-concept .wfsc-concept__formula {
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
 }
 
 .fwd--soft .wfsc-chrome__status {
@@ -1461,25 +1500,10 @@
   color: var(--fiscal-copy);
 }
 
-.fwd--soft .wprc-net-income,
-.fwd--soft .wprc-concept {
+.fwd--soft .wprc-net-income {
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface);
   box-shadow: var(--fiscal-shadow-control);
-}
-
-.fwd--soft .wprc-concept h3 {
-  color: var(--fiscal-ink);
-}
-
-.fwd--soft .wprc-concept p {
-  color: var(--fiscal-copy);
-}
-
-.fwd--soft .wprc-concept .wprc-concept__formula {
-  color: var(--fiscal-primary-strong);
-  border-color: #b8ded7;
-  background: var(--fiscal-primary-soft);
 }
 
 .fwd--soft .irpf-pension-limit summary {

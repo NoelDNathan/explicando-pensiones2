@@ -15,6 +15,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import type {
   SocialContributionRates,
   SocialContributionResult,
@@ -22,11 +23,18 @@ import type {
 } from './WorkerSocialContributionsCard'
 import './WorkerFiscalStepsCard.css'
 
+type WorkerFiscalStepConcept = {
+  id: string
+  title: string
+  body: ReactNode
+}
+
 type WorkerFiscalStep = {
   id: number
   title: string
   subtitle: string
   description: string
+  concepts?: WorkerFiscalStepConcept[]
   checklist: string[]
   helpTitle: string
   helpBody: string
@@ -331,15 +339,56 @@ Aquí puedes comparar ambas aportaciones y ver qué financia cada concepto.`,
   },
   {
     id: 4,
-    title: 'Reducciones y mínimo personal y familiar',
-    subtitle: 'Del rendimiento neto a la base liquidable',
+    title: 'Base liquidable',
+    subtitle: 'Calculando las reducciones y el mínimo personal y familiar',
     description: `En el paso anterior hemos calculado el importe que pagas a la Seguridad Social como trabajador.
 
 Ahora vamos a calcular tu base liquidable, que es la cantidad que se utiliza para calcular cuánto IRPF tienes que pagar.
 
-Para hacerlo, primero veremos si puedes aplicar alguna reducción y calcularemos tu mínimo personal y familiar.
+Para hacerlo, empezamos por los gastos deducibles de tu trabajo; después veremos si puedes aplicar alguna reducción y calcularemos tu mínimo personal y familiar.
 
 Completa únicamente los apartados que correspondan a tu situación.`,
+    concepts: [
+      {
+        id: 'reductions',
+        title: '¿Qué son las reducciones?',
+        body: (
+          <>
+            <p>
+              Una reducción es una cantidad que puedes restar de tu base imponible si cumples
+              determinados requisitos. Por ejemplo, con una base imponible de 30.000 € y una reducción
+              de 2.000 €:
+            </p>
+            <p className="wfsc-concept__formula">30.000 € − 2.000 € = 28.000 € de base liquidable</p>
+            <p>
+              Los tramos del IRPF se aplican entonces sobre 28.000 € en lugar de sobre 30.000 €, así que
+              pagas menos. Las que puedes aplicar dependen de tu situación personal y económica.
+            </p>
+          </>
+        ),
+      },
+      {
+        id: 'minimum',
+        title: '¿Qué es el mínimo personal y familiar?',
+        body: (
+          <>
+            <p>
+              Es la cantidad que el Estado considera que necesitas para cubrir tus necesidades básicas y
+              las de tu familia. Esa parte no paga IRPF: se tiene en cuenta al calcular el impuesto,
+              pero la parte de cuota que le correspondería se deja sin pagar.
+            </p>
+            <p>
+              El resto de tu renta sí tributa según los tramos. El mínimo puede ser mayor según tu edad,
+              tu discapacidad o tu situación familiar.
+            </p>
+            <p className="wfsc-concept__later">
+              Por eso su efecto no se ve aquí, en la base liquidable: aquí solo calculamos su importe. Lo
+              verás restando en el paso 6, «IRPF por tramos», cuando ya haya una cuota de la que descontarlo.
+            </p>
+          </>
+        ),
+      },
+    ],
     checklist: [],
     helpTitle: 'Gasto deducible, reducción y mínimo',
     helpBody: 'Un gasto deducible resta del salario bruto y da el rendimiento neto. Una reducción resta después, de la base imponible. El mínimo no resta de la base: deja sin pagar la parte de cuota que le corresponde.',
@@ -678,6 +727,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const activeStep = WORKER_FISCAL_STEPS[activeIndex] ?? WORKER_FISCAL_STEPS[0]
   const activeDescription = getStepDescription(activeStep, payrollLiveData)
   const descriptionParagraphs = activeDescription.split(/\n\s*\n/).map((paragraph) => paragraph.trim()).filter(Boolean)
+  const stepConcepts = activeStep.concepts ?? []
   const detailStepCount = WORKER_FISCAL_STEPS.length - 1
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
@@ -732,6 +782,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
               <div className="wfsc-copy">
                 <p>{activeStep.id === 0 ? 'Antes de empezar' : `Paso ${activeStep.id} de ${detailStepCount}`}</p>
                 <h2 id="wfsc-title">{activeStep.title}</h2>
+                <p className="wfsc-copy__subtitle">{activeStep.subtitle}</p>
                 <div className="wfsc-description">
                   {descriptionParagraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
@@ -755,6 +806,21 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
               </aside>
             ) : null}
           </div>
+
+          {stepConcepts.length > 0 ? (
+            <div className="wfsc-concepts">
+              {stepConcepts.map((concept) => (
+                <section
+                  key={concept.id}
+                  className="wfsc-concept"
+                  aria-labelledby={`wfsc-concept-${concept.id}`}
+                >
+                  <h3 id={`wfsc-concept-${concept.id}`}>{concept.title}</h3>
+                  {concept.body}
+                </section>
+              ))}
+            </div>
+          ) : null}
         </div>
       ) : null}
 

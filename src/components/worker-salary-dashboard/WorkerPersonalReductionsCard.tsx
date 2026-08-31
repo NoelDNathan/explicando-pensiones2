@@ -1271,33 +1271,6 @@ export function WorkerPersonalReductionsCard({
             Con el rendimiento neto ya calculado, ahora vienen las reducciones y el mínimo personal y
             familiar.
           </p>
-          <div className="wprc-concepts">
-            <section className="wprc-concept" aria-labelledby="wprc-concept-reductions">
-              <h3 id="wprc-concept-reductions">¿Qué son las reducciones?</h3>
-              <p>
-                Una reducción es una cantidad que puedes restar de tu base imponible si cumples
-                determinados requisitos. Por ejemplo, con una base imponible de 30.000 € y una reducción
-                de 2.000 €:
-              </p>
-              <p className="wprc-concept__formula">30.000 € − 2.000 € = 28.000 € de base liquidable</p>
-              <p>
-                Los tramos del IRPF se aplican entonces sobre 28.000 € en lugar de sobre 30.000 €, así que
-                pagas menos. Las que puedes aplicar dependen de tu situación personal y económica.
-              </p>
-            </section>
-            <section className="wprc-concept" aria-labelledby="wprc-concept-minimum">
-              <h3 id="wprc-concept-minimum">¿Qué es el mínimo personal y familiar?</h3>
-              <p>
-                Es la cantidad que el Estado considera que necesitas para cubrir tus necesidades básicas y
-                las de tu familia. Esa parte no paga IRPF: se tiene en cuenta al calcular el impuesto,
-                pero la parte de cuota que le correspondería se deja sin pagar.
-              </p>
-              <p>
-                El resto de tu renta sí tributa según los tramos. El mínimo puede ser mayor según tu edad,
-                tu discapacidad o tu situación familiar.
-              </p>
-            </section>
-          </div>
           <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
             <span aria-hidden="true">2</span>
             <div>

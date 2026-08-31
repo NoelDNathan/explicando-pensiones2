@@ -270,18 +270,24 @@ export function WorkerIrpfTranchesCard({
   // Vista de doble escala: solo cuando hay cuotas autoritativas y escalas reales.
   const hasScales = isAuthoritative && stateLines.length > 0 && regionalLines.length > 0;
 
+  // El minimo solo se aplica hasta donde llega la base liquidable (art. 63.1.2
+  // LIRPF), igual que hace el motor al calcular la cuota del minimo.
+  const appliedStateMinimum = Math.min(stateMinimum ?? 0, result.taxableBase);
+  const appliedRegionalMinimum = Math.min(regionalMinimum ?? 0, result.taxableBase);
+
   // Recorrido del minimo personal y familiar por cada escala: es el calculo que
   // convierte el minimo en la cuota que despues se resta.
   const stateMinimumLines = useMemo(
-    () => (stateScale && stateScale.length > 0 ? computeScaleLines(stateScale, stateMinimum ?? 0) : []),
-    [stateScale, stateMinimum],
+    () =>
+      stateScale && stateScale.length > 0 ? computeScaleLines(stateScale, appliedStateMinimum) : [],
+    [stateScale, appliedStateMinimum],
   );
   const regionalMinimumLines = useMemo(
     () =>
       regionalScale && regionalScale.length > 0
-        ? computeScaleLines(regionalScale, regionalMinimum ?? 0)
+        ? computeScaleLines(regionalScale, appliedRegionalMinimum)
         : [],
-    [regionalScale, regionalMinimum],
+    [regionalScale, appliedRegionalMinimum],
   );
 
   const stateGross = useMemo(() => stateLines.reduce((t, l) => t + l.quota, 0), [stateLines]);
@@ -524,6 +530,8 @@ export function WorkerIrpfTranchesCard({
           integralQuota={Math.max(0, stateGross + regionalGross - stateReduction - regionalReduction)}
           stateMinimum={stateMinimum ?? 0}
           regionalMinimum={regionalMinimum ?? 0}
+          stateMinimumApplied={appliedStateMinimum}
+          regionalMinimumApplied={appliedRegionalMinimum}
           stateMinimumQuota={stateReduction}
           regionalMinimumQuota={regionalReduction}
           stateMinimumLines={stateMinimumLines}
@@ -554,7 +562,7 @@ export function WorkerIrpfTranchesCard({
                   tax: stateTax ?? 0,
                   totalLabel:
                     stateGeneralDeduction > 0 ? "Cuota estatal tras deducciones" : "Cuota estatal",
-                  minimumBase: stateMinimum,
+                  minimumBase: appliedStateMinimum,
                 })}
                 {renderTramoColumn({
                   title: regionLabel,
@@ -568,7 +576,7 @@ export function WorkerIrpfTranchesCard({
                     regionalGeneralDeduction > 0
                       ? `Cuota ${regionLabel} tras deducciones`
                       : `Cuota ${regionLabel}`,
-                  minimumBase: regionalMinimum,
+                  minimumBase: appliedRegionalMinimum,
                 })}
               </div>
               {generalQuotaDeductions > 0 && !hasGeneralDeductionSplit ? (

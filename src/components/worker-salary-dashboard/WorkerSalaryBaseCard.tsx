@@ -1,7 +1,8 @@
 import { ChevronDown, Euro } from 'lucide-react'
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { InfoButton } from '../ui/InfoButton'
-import { SalarySlider } from '../ui/SalarySlider'
+import { SalarySlider, type SalarySliderReference } from '../ui/SalarySlider'
+import { AVERAGE_SALARY_ANNUAL, SMI_ANNUAL } from '../ui/salaryReferences'
 import './WorkerSalaryBaseCard.css'
 
 const SALARY_COMPLEMENTS_HELP =
@@ -83,6 +84,26 @@ const salaryRanges: Record<PayPeriod, { min: number; max: number; step: number; 
     step: 100,
     markers: [1000, 5000, 12000, 25000, 42000],
   },
+}
+
+/** SMI y salario medio referidos a la periodicidad del slider. */
+function salaryReferences(payPeriod: PayPeriod, payCount: PayCount): SalarySliderReference[] {
+  const divisor = payPeriod === 'annual' ? 1 : Number(payCount)
+  const perPeriod = (annual: number) => Math.round(annual / divisor)
+  const suffix = payPeriod === 'annual' ? 'brutos al año' : `brutos por paga (${payCount} pagas)`
+
+  return [
+    {
+      value: perPeriod(SMI_ANNUAL),
+      label: 'SMI',
+      title: `Salario mínimo interprofesional 2025: ${formatNumber(perPeriod(SMI_ANNUAL))} € ${suffix}`,
+    },
+    {
+      value: perPeriod(AVERAGE_SALARY_ANNUAL),
+      label: 'Salario medio',
+      title: `Salario medio en España (INE 2023): ${formatNumber(perPeriod(AVERAGE_SALARY_ANNUAL))} € ${suffix}`,
+    },
+  ]
 }
 
 function clamp(value: number, min: number, max: number) {
@@ -185,6 +206,10 @@ export function WorkerSalaryBaseCard({
     percentFromEuros(initialInKindSalary, initialAnnual),
   )
   const salaryRange = salaryRanges[payPeriod]
+  const salaryReferencePoints = useMemo(
+    () => salaryReferences(payPeriod, payCount),
+    [payCount, payPeriod],
+  )
 
   const annualSalary = useMemo(
     () => (payPeriod === 'annual' ? salary : salary * Number(payCount)),
@@ -242,6 +267,7 @@ export function WorkerSalaryBaseCard({
             max={salaryRange.max}
             step={salaryRange.step}
             markers={salaryRange.markers}
+            references={salaryReferencePoints}
             scale={payPeriod === 'annual' ? 'log' : 'linear'}
             unitLabel={payPeriod === 'annual' ? 'brutos al año' : 'brutos al mes'}
             ariaLabel="Salario anual o mensual en euros"

@@ -2,9 +2,12 @@ import { ArrowDown, ChevronDown } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
+import { annualSalaryReferences } from '../ui/salaryReferences'
 import './WorkerContributionLimitsCard.css'
 
 const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 250000, 500000] }
+
+const SALARY_REFERENCES = annualSalaryReferences()
 
 export type ContributionViewMode = 'monthly' | 'annual'
 
@@ -509,6 +512,7 @@ export function WorkerContributionLimitsCard({
               min={SALARY_RANGE.min}
               max={SALARY_RANGE.max}
               markers={SALARY_RANGE.markers}
+              references={SALARY_REFERENCES}
               scale="log"
               unitLabel="brutos al año"
               ariaLabel="Salario bruto anual en euros"

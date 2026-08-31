@@ -16,10 +16,11 @@ Dejar de llamar «reducciones de base» a cuatro preguntas que son gastos deduci
 
 ## Resumen
 
-`Irpf2025StructuredAdjustmentsForm` acepta `reductionsGroup` (`all` | `work-expenses` | `base-reductions`) y el paso 4 lo renderiza dos veces:
+`Irpf2025StructuredAdjustmentsForm` acepta `reductionsGroup` (`all` | `work-expenses` | `base-reductions`) y el paso 4 lo renderiza dos veces. El orden del paso queda:
 
-- **3 · Gastos de tu trabajo**: sindicato, colegio profesional, defensa jurídica y movilidad geográfica. Son gastos del art. 19: suman a los 2.000 € y bajan el rendimiento neto.
-- **4 · Aportaciones que reducen tu base**: plan de pensiones personal, mutualidad, plan de empresa y patrimonio protegido. Restan después, sobre la base imponible.
+- **1 · Gastos deducibles**: el panel con la explicación y la ecuación lleva ahora el número 1 (ya no dice «Antes de empezar») y justo debajo van sus preguntas: sindicato, colegio profesional, defensa jurídica y movilidad geográfica. Son gastos del art. 19: suman a los 2.000 € y bajan el rendimiento neto que muestra el propio panel.
+- Bloques de concepto (qué es una reducción, qué es el mínimo personal y familiar).
+- **2 · Empezamos por ti y tu familia**, **3 · Ventajas del trabajo** y **4 · Aportaciones que reducen tu base** (plan de pensiones personal, mutualidad, plan de empresa y patrimonio protegido), que restan después, sobre la base imponible.
 
 El motor ya trataba bien los dos grupos; el cambio es de estructura y copy. Corregido también el bullet del desplegable de gastos deducibles: sindicato, colegio y defensa jurídica no engordan los 2.000 €, se suman aparte y con sus propios topes (500 y 300 €).
 

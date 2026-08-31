@@ -11,7 +11,7 @@ import { SalarySlider } from './components/ui/SalarySlider'
 import { ReformSimulator } from './components/pension-overview/ReformSimulator'
 import { HealthExpenditureDashboard } from './components/health-expenditure/HealthExpenditureDashboard'
 import { SalaryNationalityDashboard } from './components/salary-nationality/SalaryNationalityDashboard'
-import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer } from './components/fiscal-worker-dashboard'
+import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer, WorkIncomeReductionExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
@@ -662,6 +662,22 @@ function ComponentLab() {
         </div>
       </section>
 
+      <section className="component-section component-section--wide" aria-labelledby="wir-showcase-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 15</p>
+          <h2 id="wir-showcase-title">Reduccion por rendimientos del trabajo y joroba del IRPF</h2>
+          <p>
+            Explicador de los tres tramos del articulo 20, simulador de salario y
+            dos graficos: como se apaga la reduccion y como dispara el tipo
+            marginal mientras se retira.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dashboard component-preview--bleed">
+          <WorkIncomeReductionExplainer />
+        </div>
+      </section>
+
       <section className="component-section" aria-labelledby="salary-slider-title">
         <div className="component-section__intro">
           <p className="eyebrow">Componente reutilizable</p>
@@ -1029,6 +1045,7 @@ function App() {
   const isFiscalWorkerPage = path === '/calculadora-fiscal'
   const isSocialSecurityBasesPage = path === '/bases-cotizacion'
   const isProgressiveIrpfPage = path === '/irpf'
+  const isWorkReductionPage = path === '/reduccion-trabajo'
   const isPensionOverviewPage = path === '/resumen'
 
   if (isPensionOverviewPage) return <PensionOverviewPage />
@@ -1039,6 +1056,7 @@ function App() {
   if (isFiscalWorkerPage) return <FiscalWorkerDashboard />
   if (isSocialSecurityBasesPage) return <SocialSecurityBasesExplainer />
   if (isProgressiveIrpfPage) return <ProgressiveIrpfExplainer />
+  if (isWorkReductionPage) return <WorkIncomeReductionExplainer />
   return <Home />
 }
 
