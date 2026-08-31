@@ -238,6 +238,10 @@
   align-items: start;
 }
 
+.wprc-net-income__head--no-num {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
 .wprc-net-income__num {
   display: grid;
   width: 40px;
@@ -1838,6 +1842,14 @@
 
   .wprc-net-income__head {
     grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .wprc-net-income__head--no-num {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wprc-net-income__head--no-num .wprc-net-income__pill {
+    grid-column: 1;
   }
 
   .wprc-net-income__num {

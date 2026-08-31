@@ -763,13 +763,16 @@ function ComponentLab() {
           <h2 id="worker-personal-reductions-title">Reducciones y situacion personal</h2>
           <p>
             Paso visual para recoger hijos, discapacidad, estado civil,
-            ascendientes a cargo, reducciones de base y deducciones de cuota
-            antes de cerrar el calculo del IRPF.
+            ascendientes a cargo, reducciones de base y, en el paso 5, deducciones
+            de cuota en forma de preguntas Sí/No.
           </p>
         </div>
 
         <div className="component-preview component-preview--dark component-preview--worker-personal">
           <WorkerPersonalReductionsCard />
+        </div>
+        <div className="component-preview component-preview--dark component-preview--worker-personal">
+          <WorkerPersonalReductionsCard focus="deductions-benefits" stepNumber={5} />
         </div>
       </section>
 

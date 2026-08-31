@@ -207,10 +207,16 @@
   background: rgba(88, 241, 113, 0.12);
 }
 
-.irpf-question-effect--reduction {
-  border-color: rgba(74, 183, 255, 0.48);
-  color: #c8e8ff;
-  background: rgba(74, 183, 255, 0.14);
+.irpf-question-effect--deduction {
+  border-color: rgba(88, 241, 113, 0.5);
+  color: #b8ffc8;
+  background: rgba(88, 241, 113, 0.14);
+}
+
+.irpf-question-effect--exempt {
+  border-color: rgba(255, 210, 90, 0.5);
+  color: #ffe7a8;
+  background: rgba(255, 196, 60, 0.12);
 }
 
 .irpf-question-effect--minimum[aria-label^="Resta"] {

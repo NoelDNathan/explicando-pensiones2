@@ -1,4 +1,4 @@
-import { FileText, Percent, TrendingDown } from "lucide-react";
+import { FileText, Percent } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   createDependentProfiles,
@@ -9,7 +9,12 @@ import type {
   DependentProfile,
   DisabilityPercent,
 } from "../fiscal-worker-dashboard/familyMinimum2025";
-import { createEmptyIrpf2025Adjustments, calculateBaseReductions2025 } from "../fiscal-worker-dashboard/irpf2025Adjustments";
+import {
+  createEmptyIrpf2025Adjustments,
+  calculateBaseReductions2025,
+  calculateGeneralDeductions2025,
+  calculateRefundableDeductions2025,
+} from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import type { Irpf2025AdjustmentInput } from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import { Irpf2025StructuredAdjustmentsForm, MaritalReductionsGroup, WorkIncomeBenefitsSection } from "./Irpf2025StructuredAdjustmentsForm";
 import { WorkIncomeReductionExplainer } from "../fiscal-worker-dashboard/WorkIncomeReductionExplainer";
@@ -82,6 +87,12 @@ type WorkerPersonalReductionsCardProps = {
   initialBaseBeforeReductions?: number;
   initialNetWorkIncome?: number;
   quotaBeforeDeductions?: number;
+  stateIntegralQuota?: number;
+  regionalIntegralQuota?: number;
+  stateGrossQuota?: number;
+  regionalGrossQuota?: number;
+  stateMinimumQuotaAmount?: number;
+  regionalMinimumQuotaAmount?: number;
   appliedBaseReductions?: number;
   statePersonalFamilyMinimum?: number;
   regionalPersonalFamilyMinimum?: number;
@@ -828,6 +839,12 @@ export function WorkerPersonalReductionsCard({
   initialBaseBeforeReductions = 0,
   initialNetWorkIncome = 0,
   quotaBeforeDeductions = 0,
+  stateIntegralQuota = 0,
+  regionalIntegralQuota = 0,
+  stateGrossQuota = 0,
+  regionalGrossQuota = 0,
+  stateMinimumQuotaAmount = 0,
+  regionalMinimumQuotaAmount = 0,
   appliedBaseReductions = 0,
   statePersonalFamilyMinimum = 0,
   regionalPersonalFamilyMinimum = 0,
@@ -1129,6 +1146,8 @@ export function WorkerPersonalReductionsCard({
   const explainedQuotaBefore = Math.max(0, quotaBeforeDeductions);
   const appliedFamilyMinimum = Math.max(0, statePersonalFamilyMinimum || familyMinimumPreview);
   const appliedRegionalFamilyMinimum = Math.max(0, regionalPersonalFamilyMinimum);
+  const grossQuota = Math.max(0, stateGrossQuota + regionalGrossQuota);
+  const familyMinimumQuota = Math.max(0, stateMinimumQuotaAmount + regionalMinimumQuotaAmount);
 
   const workReductionStatus = workReductionBlocked
     ? "pending"
@@ -1149,7 +1168,49 @@ export function WorkerPersonalReductionsCard({
   const explainedTaxableBase = Math.max(0, explainedBaseInitial - displayedBaseReductions);
   const taxableBaseFlash = useChangeFlash(explainedTaxableBase);
   const baseReductionsFlash = useChangeFlash(displayedBaseReductions);
-  const stickyBarRef = useStickyBarHeight(showReductionsSection && showChainSteps);
+  const liveGeneralDeductions = useMemo(
+    () =>
+      calculateGeneralDeductions2025(
+        adjustments,
+        explainedBaseInitial,
+        explainedTaxableBase,
+        stateIntegralQuota,
+        regionalIntegralQuota,
+      ),
+    [
+      adjustments,
+      explainedBaseInitial,
+      explainedQuotaBefore,
+      explainedTaxableBase,
+      regionalIntegralQuota,
+      stateIntegralQuota,
+    ],
+  );
+  const ordinaryQuotaDeductions = showReductionsSection
+    ? appliedQuotaDeductions
+    : liveGeneralDeductions.totalApplied + lowWorkIncomeDeductionApplied;
+  const quotaAfterOrdinary = Math.max(0, explainedQuotaBefore - ordinaryQuotaDeductions);
+  const liveRefundable = useMemo(
+    () => calculateRefundableDeductions2025(adjustments, quotaAfterOrdinary),
+    [adjustments, quotaAfterOrdinary],
+  );
+  const liveRefundableGenerated = showReductionsSection
+    ? refundableDeductionsGenerated
+    : liveRefundable.generatedTotal;
+  const liveRefundableNet = showReductionsSection
+    ? refundableDeductionsGenerated
+    : liveRefundable.netRefundable;
+  const liveWithholdings = Math.max(0, adjustments.withholdings) + Math.max(0, adjustments.paymentsOnAccount);
+  const liveDeclarationResult = showReductionsSection
+    ? finalDeclarationResult
+    : liveRefundable.finalDeclarationResult;
+  const ordinaryDeductionsFlash = useChangeFlash(ordinaryQuotaDeductions);
+  const refundableFlash = useChangeFlash(liveRefundableNet);
+  const withholdingsFlash = useChangeFlash(liveWithholdings);
+  const declarationFlash = useChangeFlash(liveDeclarationResult);
+  const stickyBarRef = useStickyBarHeight(
+    (showReductionsSection && showChainSteps) || !showReductionsSection,
+  );
   // Ecuacion de apertura: bruto - Seguridad Social - gastos deducibles = rendimiento neto.
   const showNetIncomeEquation = taxableWorkIncome > 0;
   const equationNetWorkIncome = Math.max(
@@ -1173,12 +1234,12 @@ export function WorkerPersonalReductionsCard({
             <h2 id="wprc-title">
               {showReductionsSection
                 ? "Responde unas preguntas y ajustamos tu IRPF"
-                : "Deducciones y salario en especie"}
+                : "Responde y restamos de tu cuota"}
             </h2>
             <p>
               {showReductionsSection
                 ? "No necesitas saber de impuestos: responde solo a lo que se parezca a tu situación. Si algo no te aplica, elige No o déjalo cerrado."
-                : "Separa deducciones de cuota, reembolsables, pagos a cuenta y beneficios exentos."}
+                : "No hace falta el BOE: responde solo a lo que se parezca a tu situación. Mira los importes en tu nómina o certificado de retenciones. Si algo no te aplica, elige No."}
             </p>
           </div>
         </header>
@@ -1571,15 +1632,213 @@ export function WorkerPersonalReductionsCard({
           </div>
         </>
       ) : (
-        <Irpf2025StructuredAdjustmentsForm
-          focus={focus}
-          value={adjustments}
-          declaredInKindSalary={declaredInKindSalary}
-          declaredGrossWorkIncome={declaredGrossWorkIncome}
-          netWorkIncome={explainedNetWorkIncome}
-          previewBaseAvailable={explainedBaseInitial}
-          onChange={setAdjustments}
-        />
+        <>
+          <section className="wprc-net-income" aria-labelledby="wprc-quota-equation-title">
+            <header className="wprc-net-income__head wprc-net-income__head--no-num">
+              <div>
+                <h3 id="wprc-quota-equation-title">De la cuota íntegra a lo que resta pagar</h3>
+                <p>
+                  En el paso 4 calculamos la base liquidable. Sobre esa base salen los tramos (paso 6) y una{" "}
+                  <strong>cuota íntegra</strong>. El mínimo personal y familiar ya ha bajado esa cuota: aquí
+                  partimos de lo que queda. Lo que respondas abajo resta euro a euro.
+                </p>
+              </div>
+              <span className="wprc-net-income__pill">Ya aplicado</span>
+            </header>
+            {grossQuota > 0 || explainedQuotaBefore > 0 ? (
+              <dl className="wprc-net-income__equation">
+                <div className="wprc-net-income__term">
+                  <dt>Cuota íntegra</dt>
+                  <dd>{formatEuro(grossQuota || explainedQuotaBefore + familyMinimumQuota)}</dd>
+                </div>
+                <div className="wprc-net-income__term" data-op="minus">
+                  <dt>
+                    Mínimo personal y familiar
+                    <small>deja sin pagar la cuota de esa parte de renta; el detalle está en el paso 6</small>
+                  </dt>
+                  <dd>{formatEuro(familyMinimumQuota)}</dd>
+                </div>
+                <div className="wprc-net-income__term is-result" data-op="equals">
+                  <dt>Cuota antes de deducciones</dt>
+                  <dd>{formatEuro(explainedQuotaBefore)}</dd>
+                </div>
+              </dl>
+            ) : null}
+            <p className="wprc-net-income__note">
+              Deducciones ordinarias, reembolsables y retenciones se restan de esta cifra. El resultado puede
+              salir a pagar o a devolver.
+            </p>
+            <details className="wprc-net-income__more">
+              <summary>¿Puede salir a devolver?</summary>
+              <ul>
+                <li>
+                  Si te han retenido en la nómina más de lo que sale a pagar, Hacienda te devuelve la
+                  diferencia.
+                </li>
+                <li>
+                  Las deducciones reembolsables (maternidad, guardería, familia numerosa, discapacidad a
+                  cargo) se abonan aunque la cuota sea 0 €. El anticipo ya cobrado se descuenta.
+                </li>
+                <li>
+                  1 € de deducción te ahorra 1 €. No es como una reducción de base, que solo ahorra tu tipo
+                  marginal.
+                </li>
+              </ul>
+            </details>
+          </section>
+
+          <section
+            ref={stickyBarRef}
+            className="wprc-explained wprc-explained--sticky"
+            aria-label="Cómo cambian la cuota y el resultado"
+          >
+            <div className="wprc-chain">
+              <dl className="wprc-chain__flow">
+                <div className="wprc-chain__step">
+                  <dt>Cuota antes de deducciones</dt>
+                  <dd>{formatEuro(explainedQuotaBefore)}</dd>
+                </div>
+                <div
+                  className={`wprc-chain__step is-minus${ordinaryQuotaDeductions > 0 ? " is-applied" : ""}${ordinaryDeductionsFlash ? " is-changed" : ""}`}
+                  data-op="minus"
+                >
+                  <dt>Deducciones ordinarias</dt>
+                  <dd>− {formatEuro(ordinaryQuotaDeductions)}</dd>
+                </div>
+                <div
+                  className={`wprc-chain__step is-minus${liveRefundableNet > 0 ? " is-applied" : ""}${refundableFlash ? " is-changed" : ""}`}
+                  data-op="minus"
+                >
+                  <dt>Deducciones reembolsables</dt>
+                  <dd>− {formatEuro(liveRefundableNet)}</dd>
+                </div>
+                <div
+                  className={`wprc-chain__step is-minus${liveWithholdings > 0 ? " is-applied" : ""}${withholdingsFlash ? " is-changed" : ""}`}
+                  data-op="minus"
+                >
+                  <dt>Retenciones y pagos a cuenta</dt>
+                  <dd>− {formatEuro(liveWithholdings)}</dd>
+                </div>
+                <div
+                  className={`wprc-chain__step is-result${declarationFlash ? " is-changed" : ""}`}
+                  data-op="equals"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <dt>{liveDeclarationResult > 0 ? "A pagar" : liveDeclarationResult < 0 ? "A devolver" : "Resultado"}</dt>
+                  <dd>{formatEuro(liveDeclarationResult)}</dd>
+                </div>
+              </dl>
+              {lowWorkIncomeDeductionApplied > 0 ? (
+                <dl className="wprc-chain__aside">
+                  <div className="wprc-chain__step is-hint">
+                    <dt>Deducción por rentas bajas</dt>
+                    <dd>
+                      − {formatEuro(lowWorkIncomeDeductionApplied)}
+                      <small>incluida en las ordinarias</small>
+                    </dd>
+                  </div>
+                </dl>
+              ) : null}
+            </div>
+          </section>
+
+          <section className="wprc-question-intro" aria-labelledby="wprc-in-kind">
+            <span aria-hidden="true">1</span>
+            <div>
+              <h3 id="wprc-in-kind">Retribuciones en especie</h3>
+              <p>
+                Comida, transporte, seguro o guardería que paga la empresa. Separa la parte exenta de la que
+                tributa. Míralo en la nómina.
+              </p>
+            </div>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            deductionsGroup="in-kind"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedTaxableBase}
+            previewTaxableIncome={explainedBaseInitial}
+            stateIntegralQuota={stateIntegralQuota}
+            regionalIntegralQuota={regionalIntegralQuota}
+            onChange={setAdjustments}
+          />
+
+          <section className="wprc-question-intro" aria-labelledby="wprc-quota-deductions">
+            <span aria-hidden="true">2</span>
+            <div>
+              <h3 id="wprc-quota-deductions">Deducciones de cuota</h3>
+              <p>
+                Donativos, alquiler o vivienda transitorios e inversión en empresa nueva. Cada euro que
+                entre aquí resta un euro de la cuota, si hay cuota de la que restar.
+              </p>
+            </div>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            deductionsGroup="quota"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedTaxableBase}
+            previewTaxableIncome={explainedBaseInitial}
+            stateIntegralQuota={stateIntegralQuota}
+            regionalIntegralQuota={regionalIntegralQuota}
+            onChange={setAdjustments}
+          />
+
+          <section className="wprc-question-intro" aria-labelledby="wprc-refundable">
+            <span aria-hidden="true">3</span>
+            <div>
+              <h3 id="wprc-refundable">Reembolsables</h3>
+              <p>
+                Maternidad, guardería, familia numerosa y discapacidad a cargo. Te las pagan aunque la cuota
+                sea 0 €; el anticipo ya cobrado se descuenta.
+              </p>
+            </div>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            deductionsGroup="refundable"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedTaxableBase}
+            previewTaxableIncome={explainedBaseInitial}
+            stateIntegralQuota={stateIntegralQuota}
+            regionalIntegralQuota={regionalIntegralQuota}
+            onChange={setAdjustments}
+          />
+
+          <section className="wprc-question-intro" aria-labelledby="wprc-withholdings">
+            <span aria-hidden="true">4</span>
+            <div>
+              <h3 id="wprc-withholdings">Retenciones y resultado</h3>
+              <p>
+                Lo que ya te han retenido este año. Compáralo con la cuota: si has pagado de más, sale a
+                devolver.
+              </p>
+            </div>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            deductionsGroup="withholdings"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedTaxableBase}
+            previewTaxableIncome={explainedBaseInitial}
+            stateIntegralQuota={stateIntegralQuota}
+            regionalIntegralQuota={regionalIntegralQuota}
+            onChange={setAdjustments}
+          />
+        </>
       )}
 
       {engineWarnings.length > 0 ? (
@@ -1594,40 +1853,19 @@ export function WorkerPersonalReductionsCard({
       ) : null}
 
       {!showReductionsSection ? (
-        <section className="wprc-explained">
-          <div>
-            <h3>Resultado explicado</h3>
-            <p>Las deducciones ordinarias y reembolsables se muestran por separado.</p>
-          </div>
-          <dl>
-            <>
-              <div>
-                <dt>
-                  Cuota antes de deducciones
-                  {appliedFamilyMinimum > 0 ? (
-                    <small>
-                      tu mínimo personal y familiar ({formatEuro(appliedFamilyMinimum)}) ya ha
-                      reducido esta cuota; cómo lo hace, en el paso 6
-                    </small>
-                  ) : null}
-                </dt>
-                <dd>{formatEuro(explainedQuotaBefore)}</dd>
-              </div>
-              <div className="is-minus">
-                <dt>Deducciones ordinarias</dt>
-                <dd>- {formatEuro(appliedQuotaDeductions)}</dd>
-              </div>
-              <div>
-                <dt>Deducciones reembolsables generadas</dt>
-                <dd>- {formatEuro(refundableDeductionsGenerated)}</dd>
-              </div>
-              <div className="is-result">
-                <dt>Resultado estimado declaracion</dt>
-                <dd>{formatEuro(finalDeclarationResult)}</dd>
-              </div>
-            </>
-          </dl>
-        </section>
+        <aside className="wprc-calculation-warnings" aria-label="Deducciones autonómicas no incluidas">
+          <strong>Deducciones autonómicas propias: no están en este cálculo</strong>
+          <ul>
+            <li>
+              Aquí entran las deducciones estatales y el tramo autonómico transitorio de vivienda (7,5 % o
+              9 % catalán si lo verificas).
+            </li>
+            <li>
+              Casi todas las comunidades tienen además deducciones propias (nacimiento, alquiler, discapacidad,
+              etc.). Este motor no las calcula: no van a aparecer aunque existan en tu comunidad.
+            </li>
+          </ul>
+        </aside>
       ) : null}
 
       {!showReductionsSection ? (
@@ -1636,18 +1874,18 @@ export function WorkerPersonalReductionsCard({
             <FileText />
           </span>
           <div className="wprc-summary-copy">
-            <p>Calculo 2025 con datos declarados.</p>
+            <p>Cálculo 2025 con datos declarados.</p>
             <span>
               Los requisitos no confirmados quedan como no estimados y no reducen el IRPF.
             </span>
           </div>
           <output
-            className={`wprc-total ${showReductionsSection ? "wprc-total--reductions" : "wprc-total--deductions"}`}
+            className="wprc-total wprc-total--deductions"
           >
-            {showReductionsSection ? <TrendingDown /> : <Percent />}
-            <span>{showReductionsSection ? "Reducciones aplicadas" : "Deducciones aplicadas"}</span>
+            <Percent />
+            <span>Deducciones aplicadas</span>
             <strong>
-              {formatEuro(showReductionsSection ? displayedBaseReductions : appliedQuotaDeductions)}
+              {formatEuro(ordinaryQuotaDeductions + liveRefundableGenerated)}
             </strong>
           </output>
         </footer>

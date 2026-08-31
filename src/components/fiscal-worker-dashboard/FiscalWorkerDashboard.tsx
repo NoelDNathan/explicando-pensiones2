@@ -512,6 +512,8 @@ export function FiscalWorkerDashboard() {
         regionalTax,
         stateIntegralQuota: stateTax,
         regionalIntegralQuota: regionalTax,
+        stateGrossQuota: stateTax,
+        regionalGrossQuota: regionalTax,
         stateScale: fiscalParams2005.irpf.state_general_scale,
         regionalScale: fiscalParams2005.irpf.madrid_or_complementary_general_scale.scale,
         stateMinimum: 0,
@@ -655,6 +657,8 @@ export function FiscalWorkerDashboard() {
       regionalTax,
       stateIntegralQuota: coreIrpf.stateIntegralQuota,
       regionalIntegralQuota: coreIrpf.regionalIntegralQuota,
+      stateGrossQuota: coreIrpf.stateGrossQuota,
+      regionalGrossQuota: coreIrpf.regionalGrossQuota,
       stateScale: fiscalParams2025.irpf.state_general_scale,
       regionalScale,
       stateMinimum,
@@ -1007,6 +1011,12 @@ export function FiscalWorkerDashboard() {
             initialBaseBeforeReductions={result.netReducedWorkIncome}
             initialNetWorkIncome={result.netWorkIncome}
             quotaBeforeDeductions={result.stateIntegralQuota + result.regionalIntegralQuota}
+            stateIntegralQuota={result.stateIntegralQuota}
+            regionalIntegralQuota={result.regionalIntegralQuota}
+            stateGrossQuota={result.stateGrossQuota}
+            regionalGrossQuota={result.regionalGrossQuota}
+            stateMinimumQuotaAmount={result.stateMinimumQuota}
+            regionalMinimumQuotaAmount={result.regionalMinimumQuota}
             appliedBaseReductions={result.baseReductionsApplied}
             statePersonalFamilyMinimum={result.stateMinimum}
             regionalPersonalFamilyMinimum={result.regionalMinimum}
