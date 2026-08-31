@@ -249,7 +249,7 @@
 
 .wfsc-stage--concept .wfsc-copy h2 {
   font-size: clamp(26px, 3vw, 40px);
-  line-height: 1.08;
+  line-height: 1.18;
 }
 
 .wfsc-stage--concept .wfsc-description {
@@ -302,11 +302,12 @@
 
 .wfsc-copy {
   display: grid;
+  gap: 8px;
   min-width: 0;
 }
 
 .wfsc-copy p {
-  margin: 0 0 8px;
+  margin: 0;
   color: var(--wfsc-green);
   font-size: clamp(14px, 1.2vw, 19px);
   font-weight: 860;
@@ -315,10 +316,19 @@
 .wfsc-copy h2 {
   margin: 0;
   color: var(--wfsc-text);
-  font-size: clamp(38px, 5vw, 74px);
-  line-height: 1.03;
+  font-size: clamp(32px, 4.2vw, 58px);
+  line-height: 1.18;
   font-weight: 900;
-  letter-spacing: 0;
+  letter-spacing: 0.01em;
+  overflow-wrap: break-word;
+}
+
+.wfsc-copy .wfsc-copy__subtitle {
+  margin: 2px 0 0;
+  color: var(--wfsc-muted);
+  font-size: clamp(16px, 1.5vw, 22px);
+  line-height: 1.35;
+  font-weight: 760;
 }
 
 .wfsc-description {
@@ -334,6 +344,62 @@
   font-size: clamp(15px, 1.22vw, 18px);
   line-height: 1.52;
   font-weight: 500;
+}
+
+/* Conceptos clave del paso: se explican antes de tocar los formularios. */
+.wfsc-concepts {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.wfsc-concept {
+  padding: 16px 18px;
+  border: 1px solid var(--wfsc-border);
+  border-radius: 14px;
+  background: var(--wfsc-panel-soft);
+}
+
+.wfsc-concept h3 {
+  margin: 0 0 8px;
+  color: var(--wfsc-text);
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.2;
+  font-weight: 820;
+}
+
+.wfsc-concept p {
+  margin: 0;
+  color: var(--wfsc-muted);
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.48;
+  font-weight: 560;
+}
+
+.wfsc-concept p + p {
+  margin-top: 9px;
+}
+
+/* Aviso de que el efecto de este concepto se ve en un paso posterior. */
+.wfsc-concept .wfsc-concept__later {
+  margin-top: 10px;
+  padding: 9px 12px;
+  border-left: 3px solid color-mix(in srgb, var(--wfsc-green) 55%, transparent);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--wfsc-green) 9%, transparent);
+  font-weight: 640;
+}
+
+.wfsc-concept .wfsc-concept__formula {
+  padding: 9px 12px;
+  border: 1px solid color-mix(in srgb, var(--wfsc-green) 45%, transparent);
+  border-radius: 10px;
+  color: var(--wfsc-green);
+  background: color-mix(in srgb, var(--wfsc-green) 12%, transparent);
+  font-weight: 800;
+  text-align: center;
 }
 
 .wfsc-help {
@@ -856,6 +922,14 @@
 }
 
 @media (max-width: 860px) {
+  .wfsc-concepts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wfsc-concept {
+    padding: 14px;
+  }
+
   .wfsc-stage {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
