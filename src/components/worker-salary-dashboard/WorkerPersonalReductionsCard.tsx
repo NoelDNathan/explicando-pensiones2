@@ -1412,7 +1412,7 @@ export function WorkerPersonalReductionsCard({
           <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
             <span aria-hidden="true">4</span>
             <div>
-              <h3 id="wprc-family-questions">Calculemos tu mínimo personal y familiar</h3>
+              <h3 id="wprc-family-questions">Calculemost tu mínimo personal y familiar</h3>
               <p>
                 Estas respuestas sirven para calcular el mínimo personal y familiar. No reducen la
                 base directamente, pero sí pueden bajar el IRPF final.

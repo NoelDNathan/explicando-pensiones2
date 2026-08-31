@@ -1813,6 +1813,17 @@
   color: var(--fiscal-copy);
 }
 
+.fwd--soft .witc-total-deduction {
+  border-radius: var(--fiscal-radius-small);
+  color: #8b5418;
+  border-color: #efd2a9;
+  background: var(--fiscal-orange-soft);
+}
+
+.fwd--soft .witc-total-deduction strong {
+  color: #8b5418;
+}
+
 .fwd--soft .wirc {
   --wirc-text: var(--fiscal-ink);
   --wirc-muted: var(--fiscal-copy);

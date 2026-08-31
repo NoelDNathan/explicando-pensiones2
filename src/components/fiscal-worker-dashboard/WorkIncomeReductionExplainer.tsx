@@ -12,7 +12,6 @@ import {
   Calculator,
   ChevronsDownUp,
   CircleSlash,
-  Coins,
   Info,
   Layers,
   Percent,
@@ -442,22 +441,16 @@ export function WorkIncomeReductionExplainer({
               desaparece, cada euro extra de sueldo tributa por encima del tipo máximo de la escala.
             </p>
           </div>
-          <div className="wir-profile">
-            <Info size={16} aria-hidden="true" />
-            {embedded ? (
-              <p>
-                Usa tu grupo de cotización, tu comunidad y tu mínimo personal
-                {realGrossInSliderRange ? ', y arranca en tu salario' : ''}. El IRPF que muestra no
-                incluye el resto de reducciones ni deducciones que completes más abajo, así que
-                sirve para entender la reducción, no como liquidación final.
-              </p>
-            ) : (
+          {/* Empotrado el perfil es el del propio usuario, asi que no hay nada que aclarar. */}
+          {embedded ? null : (
+            <div className="wir-profile">
+              <Info size={16} aria-hidden="true" />
               <p>
                 Perfil del simulador: soltero, 40 años, sin hijos, Madrid, grupo de cotización 7 y
                 solo rendimientos del trabajo.
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </header>
 
         {realBlocked ? (
@@ -594,16 +587,6 @@ export function WorkIncomeReductionExplainer({
               <strong>{euro(core.netReducedWorkIncome)}</strong>
             </li>
           </ol>
-
-          <aside className="wir-note wir-note--warn">
-            <TriangleAlert size={18} aria-hidden="true" />
-            <p>
-              El error más común: el tramo se elige con el <strong>RNT de {euro(basis)}</strong>, no
-              con el rendimiento neto de {euro(core.netWorkIncome)}. Los {euro(2_000)} de «otros
-              gastos» se restan <em>después</em> de elegir tramo, aunque la reducción sí se aplica
-              sobre el neto ya minorado.
-            </p>
-          </aside>
 
           {capApplies ? (
             <aside className="wir-note wir-note--info">
@@ -907,15 +890,6 @@ export function WorkIncomeReductionExplainer({
             </article>
           </div>
         </section>
-
-        <footer className="wir-sources">
-          <Coins size={16} aria-hidden="true" />
-          <p>
-            Importes 2025 del artículo 20 LIRPF y de la deducción por obtención de rendimientos del
-            trabajo, según el Manual práctico de Renta 2025 de la AEAT. El simulador usa el mismo
-            motor que la calculadora fiscal del sitio.
-          </p>
-        </footer>
       </div>
     </section>
   )
