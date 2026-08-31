@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSpreadLabels } from "./useSpreadLabels";
 import "./SalarySlider.css";
 
 export type SalarySliderScale = "linear" | "log";
@@ -42,9 +43,6 @@ const LOG_STEPS = 1000;
 
 /** Ancho del pulgar del slider: la barra util empieza y acaba a la mitad de el. */
 const THUMB_WIDTH = 22;
-
-/** Separacion minima entre etiquetas de referencia. */
-const REF_LABEL_GAP = 6;
 
 const euroFormatter = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0 });
 
@@ -124,62 +122,7 @@ export function SalarySlider({
     setTextValue(formatNumber(safeValue));
   }, [safeValue]);
 
-  /**
-   * Coloca las etiquetas de referencia centradas sobre su punto, pero las separa
-   * cuando dos textos se solapan (p.ej. SMI y salario medio en pantallas estrechas).
-   */
-  useLayoutEffect(() => {
-    const container = refsRef.current;
-    if (!container) return;
-
-    const layout = () => {
-      const labels = Array.from(
-        container.querySelectorAll<HTMLElement>(".salary-slider__ref-label"),
-      );
-      const width = container.clientWidth;
-      if (labels.length === 0 || width === 0) return;
-
-      const trackWidth = Math.max(0, width - THUMB_WIDTH);
-      const boxes = labels.map((element) => {
-        element.style.left = "";
-        element.style.transform = "";
-        const percent = Number(element.dataset.percent ?? "0") / 100;
-        const labelWidth = element.offsetWidth;
-        return {
-          element,
-          width: labelWidth,
-          left: THUMB_WIDTH / 2 + trackWidth * percent - labelWidth / 2,
-        };
-      });
-
-      let minLeft = 0;
-      for (const box of boxes) {
-        box.left = Math.max(box.left, minLeft);
-        minLeft = box.left + box.width + REF_LABEL_GAP;
-      }
-
-      let maxRight = width;
-      for (let index = boxes.length - 1; index >= 0; index -= 1) {
-        const box = boxes[index];
-        box.left = Math.max(0, Math.min(box.left, maxRight - box.width));
-        maxRight = box.left - REF_LABEL_GAP;
-      }
-
-      for (const box of boxes) {
-        box.element.style.left = `${box.left}px`;
-        box.element.style.transform = "none";
-      }
-    };
-
-    layout();
-    const observer = new ResizeObserver(layout);
-    observer.observe(container);
-    window.addEventListener("resize", layout);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", layout);
-    };
-  }, [refsLayoutKey]);
+  useSpreadLabels(refsRef, refsLayoutKey, { edgeInset: THUMB_WIDTH / 2 });
 
   return (
     <div className="salary-slider" style={{ "--salary-slider-value": `${fillPercent}%` } as CSSProperties}>

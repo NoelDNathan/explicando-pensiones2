@@ -12,6 +12,7 @@ import type {
 import { createEmptyIrpf2025Adjustments, calculateBaseReductions2025 } from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import type { Irpf2025AdjustmentInput } from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import { Irpf2025StructuredAdjustmentsForm, MaritalReductionsGroup, WorkIncomeBenefitsSection } from "./Irpf2025StructuredAdjustmentsForm";
+import { WorkIncomeReductionExplainer } from "../fiscal-worker-dashboard/WorkIncomeReductionExplainer";
 import {
   WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR,
   workBenefitsCouldApply,
@@ -89,6 +90,9 @@ type WorkerPersonalReductionsCardProps = {
   finalDeclarationResult?: number;
   declaredInKindSalary?: number;
   declaredGrossWorkIncome?: number;
+  /** Comunidad y grupo de cotizacion reales: el explicador los necesita. */
+  region?: string;
+  contributionGroup?: number;
   taxableWorkIncome?: number;
   socialSecurityWorkExpense?: number;
   otherDeductibleWorkExpenses?: number;
@@ -832,6 +836,8 @@ export function WorkerPersonalReductionsCard({
   finalDeclarationResult = 0,
   declaredInKindSalary = 0,
   declaredGrossWorkIncome = 0,
+  region,
+  contributionGroup,
   taxableWorkIncome = 0,
   socialSecurityWorkExpense = 0,
   otherDeductibleWorkExpenses = 0,
@@ -1271,10 +1277,142 @@ export function WorkerPersonalReductionsCard({
             Con el rendimiento neto ya calculado, ahora vienen las reducciones y el mínimo personal y
             familiar.
           </p>
-          <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
+          <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
             <span aria-hidden="true">2</span>
             <div>
-              <h3 id="wprc-family-questions">Empezamos por ti y tu familia</h3>
+              <h3 id="wprc-work-benefits">Ventajas del trabajo</h3>
+              <p>
+                Algunas reducciones solo aplican si no tienes otras rentas elevadas. Tu respuesta afecta a la
+                reducción por rendimientos del trabajo que verás en el panel.
+              </p>
+            </div>
+          </section>
+          <WorkIncomeBenefitsSection
+            value={adjustments}
+            onChange={setAdjustments}
+            netWorkIncome={explainedNetWorkIncome}
+            grossWorkIncome={declaredGrossWorkIncome}
+          />
+          {/*
+            * Se muestra siempre: cuando el sueldo deja la reduccion fuera de
+            * rango el propio panel lo dice en cabecera, y sigue explicando como
+            * afecta a las rentas mas bajas.
+            */}
+          <WorkIncomeReductionExplainer
+            variant="embedded"
+            initialGrossSalaryAnnual={declaredGrossWorkIncome}
+            region={region}
+            contributionGroup={contributionGroup}
+            stateMinimum={statePersonalFamilyMinimum || undefined}
+            regionalMinimum={regionalPersonalFamilyMinimum || undefined}
+            otherNonExemptNonWorkIncome={adjustments.otherNonExemptNonWorkIncome}
+            otherIncomeKnown={adjustments.otherIncomeKnown}
+          />
+          {showChainSteps ? (
+            <section
+              ref={stickyBarRef}
+              className="wprc-explained wprc-explained--sticky"
+              aria-label="Cómo cambian la base y el IRPF"
+            >
+              <div className="wprc-chain">
+                <dl className="wprc-chain__flow">
+                  <div className="wprc-chain__step">
+                    <dt>Rendimiento neto del trabajo</dt>
+                    <dd>{formatEuro(explainedNetWorkIncome)}</dd>
+                  </div>
+                  {showWorkReductionStep ? (
+                    <div
+                      className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
+                      data-op="minus"
+                    >
+                      <dt>Reducción por rendimientos del trabajo</dt>
+                      <dd>
+                        {workReductionStatus === "applied" ? (
+                          `− ${formatEuro(workReductionApplied)}`
+                        ) : workReductionStatus === "pending" ? (
+                          <span className="wprc-explained__status wprc-explained__status--pending">
+                            Pendiente
+                            <small>confirma otras rentas</small>
+                          </span>
+                        ) : (
+                          <span className="wprc-explained__status wprc-explained__status--muted">
+                            No aplica
+                            <small>
+                              otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
+                            </small>
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  ) : null}
+                  {showBaseReductionStep ? (
+                    <div
+                      className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
+                      data-op="minus"
+                    >
+                      <dt>Reducciones de base</dt>
+                      <dd>{formatEuro(displayedBaseReductions)}</dd>
+                    </div>
+                  ) : null}
+                  <div
+                    className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
+                    data-op="equals"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    <dt>Base liquidable</dt>
+                    <dd>{formatEuro(explainedTaxableBase)}</dd>
+                  </div>
+                </dl>
+                <dl className="wprc-chain__aside">
+                  {lowWorkIncomeDeductionApplied > 0 ? (
+                    <div className="wprc-chain__step is-hint">
+                      <dt>Deducción por rentas bajas</dt>
+                      <dd>
+                        − {formatEuro(lowWorkIncomeDeductionApplied)}
+                        <small>en la cuota (paso 6)</small>
+                      </dd>
+                    </div>
+                  ) : null}
+                  <div className="wprc-chain__step is-minimum">
+                    <dt>Mínimo personal y familiar</dt>
+                    <dd>
+                      {formatEuro(appliedFamilyMinimum)}
+                      <small>
+                        {appliedRegionalFamilyMinimum > 0
+                          ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
+                          : "no resta base · se aplica en la cuota"}
+                      </small>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
+          ) : null}
+          <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
+            <span aria-hidden="true">3</span>
+            <div>
+              <h3 id="wprc-declared-reductions">Aportaciones que reducen tu base</h3>
+              <p>
+                Estas restan después, ya sobre la base imponible: planes de pensiones, mutualidad y
+                patrimonio protegido.
+              </p>
+            </div>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            reductionsGroup="base-reductions"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedBaseInitial}
+            onChange={setAdjustments}
+          />
+          <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
+            <span aria-hidden="true">4</span>
+            <div>
+              <h3 id="wprc-family-questions">Calculemos tu mínimo personal y familiar</h3>
               <p>
                 Estas respuestas sirven para calcular el mínimo personal y familiar. No reducen la
                 base directamente, pero sí pueden bajar el IRPF final.
@@ -1431,123 +1569,6 @@ export function WorkerPersonalReductionsCard({
               />
             ) : null}
           </div>
-          <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
-            <span aria-hidden="true">3</span>
-            <div>
-              <h3 id="wprc-work-benefits">Ventajas del trabajo</h3>
-              <p>
-                Algunas reducciones solo aplican si no tienes otras rentas elevadas. Tu respuesta afecta a la
-                reducción por rendimientos del trabajo que verás en el panel.
-              </p>
-            </div>
-          </section>
-          <WorkIncomeBenefitsSection
-            value={adjustments}
-            onChange={setAdjustments}
-            netWorkIncome={explainedNetWorkIncome}
-            grossWorkIncome={declaredGrossWorkIncome}
-          />
-          {showChainSteps ? (
-            <section
-              ref={stickyBarRef}
-              className="wprc-explained wprc-explained--sticky"
-              aria-label="Cómo cambian la base y el IRPF"
-            >
-              <div className="wprc-chain">
-                <dl className="wprc-chain__flow">
-                  <div className="wprc-chain__step">
-                    <dt>Rendimiento neto del trabajo</dt>
-                    <dd>{formatEuro(explainedNetWorkIncome)}</dd>
-                  </div>
-                  {showWorkReductionStep ? (
-                    <div
-                      className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
-                      data-op="minus"
-                    >
-                      <dt>Reducción por rendimientos del trabajo</dt>
-                      <dd>
-                        {workReductionStatus === "applied" ? (
-                          `− ${formatEuro(workReductionApplied)}`
-                        ) : workReductionStatus === "pending" ? (
-                          <span className="wprc-explained__status wprc-explained__status--pending">
-                            Pendiente
-                            <small>confirma otras rentas</small>
-                          </span>
-                        ) : (
-                          <span className="wprc-explained__status wprc-explained__status--muted">
-                            No aplica
-                            <small>
-                              otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
-                            </small>
-                          </span>
-                        )}
-                      </dd>
-                    </div>
-                  ) : null}
-                  {showBaseReductionStep ? (
-                    <div
-                      className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
-                      data-op="minus"
-                    >
-                      <dt>Reducciones de base</dt>
-                      <dd>{formatEuro(displayedBaseReductions)}</dd>
-                    </div>
-                  ) : null}
-                  <div
-                    className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
-                    data-op="equals"
-                    aria-live="polite"
-                    aria-atomic="true"
-                  >
-                    <dt>Base liquidable</dt>
-                    <dd>{formatEuro(explainedTaxableBase)}</dd>
-                  </div>
-                </dl>
-                <dl className="wprc-chain__aside">
-                  {lowWorkIncomeDeductionApplied > 0 ? (
-                    <div className="wprc-chain__step is-hint">
-                      <dt>Deducción por rentas bajas</dt>
-                      <dd>
-                        − {formatEuro(lowWorkIncomeDeductionApplied)}
-                        <small>en la cuota (paso 6)</small>
-                      </dd>
-                    </div>
-                  ) : null}
-                  <div className="wprc-chain__step is-minimum">
-                    <dt>Mínimo personal y familiar</dt>
-                    <dd>
-                      {formatEuro(appliedFamilyMinimum)}
-                      <small>
-                        {appliedRegionalFamilyMinimum > 0
-                          ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
-                          : "no resta base · se aplica en la cuota"}
-                      </small>
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </section>
-          ) : null}
-          <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
-            <span aria-hidden="true">4</span>
-            <div>
-              <h3 id="wprc-declared-reductions">Aportaciones que reducen tu base</h3>
-              <p>
-                Estas restan después, ya sobre la base imponible: planes de pensiones, mutualidad y
-                patrimonio protegido.
-              </p>
-            </div>
-          </section>
-          <Irpf2025StructuredAdjustmentsForm
-            focus={focus}
-            reductionsGroup="base-reductions"
-            value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
-            declaredGrossWorkIncome={declaredGrossWorkIncome}
-            netWorkIncome={explainedNetWorkIncome}
-            previewBaseAvailable={explainedBaseInitial}
-            onChange={setAdjustments}
-          />
         </>
       ) : (
         <Irpf2025StructuredAdjustmentsForm

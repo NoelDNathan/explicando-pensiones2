@@ -1015,6 +1015,8 @@ export function FiscalWorkerDashboard() {
             finalDeclarationResult={result.finalDeclarationResult}
             declaredInKindSalary={inKindSalary}
             declaredGrossWorkIncome={result.grossSalaryAnnual}
+            region={result.effectiveRegion}
+            contributionGroup={result.contributionGroupId}
             taxableWorkIncome={result.taxableWorkIncome}
             socialSecurityWorkExpense={result.socialSecurityWorkExpense}
             otherDeductibleWorkExpenses={result.otherDeductibleWorkExpenses}

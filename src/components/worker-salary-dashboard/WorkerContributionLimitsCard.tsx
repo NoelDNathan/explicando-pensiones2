@@ -2,12 +2,17 @@ import { ArrowDown, ChevronDown } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
-import { annualSalaryReferences } from '../ui/salaryReferences'
+import { AVERAGE_SALARY_ANNUAL, SMI_ANNUAL } from '../ui/salaryReferences'
+import { useSpreadLabels } from '../ui/useSpreadLabels'
 import './WorkerContributionLimitsCard.css'
 
 const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 250000, 500000] }
 
-const SALARY_REFERENCES = annualSalaryReferences()
+/** Referencias salariales dibujadas sobre la escala de bases (base = salario / 12). */
+const SCALE_REFERENCES = [
+  { label: 'SMI', baseMonthly: SMI_ANNUAL / 12, title: 'Salario minimo interprofesional 2025' },
+  { label: 'Salario medio', baseMonthly: AVERAGE_SALARY_ANNUAL / 12, title: 'Salario medio en Espana (INE 2023)' },
+]
 
 export type ContributionViewMode = 'monthly' | 'annual'
 
@@ -469,6 +474,19 @@ export function WorkerContributionLimitsCard({
   const minPosition = selectedGroup ? getMarkerPosition(selectedGroup.minBaseMonthly, visualMin, visualMax) : 20
   const maxPosition = selectedGroup ? getMarkerPosition(selectedGroup.maxBaseMonthly, visualMin, visualMax) : 78
   const userPosition = result ? getMarkerPosition(result.userBaseMonthly, visualMin, visualMax) : 50
+  const scaleReferences = selectedGroup
+    ? SCALE_REFERENCES.map((reference) => ({
+        ...reference,
+        percent: getMarkerPosition(reference.baseMonthly, visualMin, visualMax),
+        display: viewMode === 'monthly'
+          ? `${formatEuro(reference.baseMonthly)} / mes`
+          : `${formatEuro(reference.baseMonthly * 12)} / año`,
+      }))
+    : []
+  const scaleRefsRef = useRef<HTMLDivElement | null>(null)
+  const scaleRefsKey = scaleReferences.map((reference) => `${reference.label}:${reference.percent.toFixed(2)}`).join('|')
+  useSpreadLabels(scaleRefsRef, scaleRefsKey)
+
   const isUserCloseToMinimum = Math.abs(userPosition - minPosition) < 18
   const isUserCloseToMaximum = Math.abs(userPosition - maxPosition) < 18
   const scaleTopClassName = [
@@ -512,7 +530,6 @@ export function WorkerContributionLimitsCard({
               min={SALARY_RANGE.min}
               max={SALARY_RANGE.max}
               markers={SALARY_RANGE.markers}
-              references={SALARY_REFERENCES}
               scale="log"
               unitLabel="brutos al año"
               ariaLabel="Salario bruto anual en euros"
@@ -586,10 +603,33 @@ export function WorkerContributionLimitsCard({
               } as CSSProperties}
             >
               <span className="wclc-track-fill" aria-hidden="true"></span>
+              {scaleReferences.map((reference) => (
+                <span
+                  key={reference.label}
+                  className="wclc-ref-dot"
+                  style={{ left: `${reference.percent}%` }}
+                  aria-hidden="true"
+                ></span>
+              ))}
               <span className="wclc-tick wclc-tick--min" aria-hidden="true"></span>
               <span className="wclc-tick wclc-tick--user" aria-hidden="true"></span>
               <span className="wclc-tick wclc-tick--max" aria-hidden="true"></span>
             </div>
+
+            {scaleReferences.length > 0 && (
+              <div className="wclc-scale-refs" ref={scaleRefsRef}>
+                {scaleReferences.map((reference) => (
+                  <span
+                    key={reference.label}
+                    className="wclc-scale-ref"
+                    data-percent={reference.percent}
+                    title={`${reference.title}: ${reference.display}`}
+                  >
+                    {reference.label}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="wclc-scale-bottom">
               <span>Debajo del minimo</span>

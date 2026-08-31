@@ -14,6 +14,7 @@
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
 import autonomicCoverageJson from '../../../data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json'
 import { calculateIrpf2025Core } from './irpf2025Calc'
+import type { Irpf2025AdjustmentInput } from './irpf2025Adjustments'
 
 type ScaleBracket = {
   base_from_eur: number
@@ -130,20 +131,32 @@ export type BaseProfileIrpfDetail = {
   }
 }
 
+export type BaseProfileOptions = {
+  region?: string
+  /** Grupo de cotizacion: fija las bases minima y maxima y, con ellas, el RNT. */
+  contributionGroup?: number
+  /** Minimo personal y familiar real; por defecto, solo el del contribuyente. */
+  stateMinimum?: number
+  regionalMinimum?: number
+  /** Ajustes del contribuyente; sin ellos se asume el perfil base sin extras. */
+  adjustments?: Irpf2025AdjustmentInput
+}
+
 /**
- * Detalle completo del motor 2025 para el perfil base de la comparativa.
- * Lo usan los explicadores que necesitan las magnitudes intermedias
- * (base del articulo 20, reduccion teorica y aplicada, deduccion de 340).
+ * Detalle completo del motor 2025 para un perfil de trabajador por cuenta ajena.
+ * Sin opciones devuelve el perfil base de la comparativa por CCAA; con ellas
+ * sirve para explicadores empotrados que deben cuadrar con el resto del panel.
  */
 export function computeBaseProfileIrpf2025Detail(
   grossSalaryAnnual: number,
-  region = 'madrid',
+  options: BaseProfileOptions = {},
 ): BaseProfileIrpfDetail {
+  const region = options.region ?? 'madrid'
   const gross = Math.max(0, grossSalaryAnnual)
   const monthlySalary = gross / 12
 
   const group = params.social_security.base_limits_monthly_eur.min_by_group.find(
-    (item) => item.group === CONTRIBUTION_GROUP,
+    (item) => item.group === (options.contributionGroup ?? CONTRIBUTION_GROUP),
   )
   const minBase = group?.min ?? 0
   const maxBase = group?.max ?? params.social_security.base_limits_monthly_eur.max_common_contingencies
@@ -160,11 +173,12 @@ export function computeBaseProfileIrpf2025Detail(
     (annualContributionBase * employeeRate) / 100 + solidarityEmployee(monthlySalary)
 
   const stateScale = params.irpf.state_general_scale
-  const stateMinimum = baseMinimum(params.irpf.personal_and_family_minimum_state_eur)
+  const stateMinimum =
+    options.stateMinimum ?? baseMinimum(params.irpf.personal_and_family_minimum_state_eur)
   const regionalScale =
     coverage.autonomic_general_scales[region]?.brackets ??
     coverage.autonomic_general_scales.madrid.brackets
-  const regionalMinimum = baseMinimum(getMinimums(region))
+  const regionalMinimum = options.regionalMinimum ?? baseMinimum(getMinimums(region))
   const coreIrpf = calculateIrpf2025Core({
     grossWorkIncome: gross,
     article19ExpensesBeforeOtherExpenses: employeeSocialSecurity,
@@ -173,6 +187,7 @@ export function computeBaseProfileIrpf2025Detail(
     regionalMinimum,
     stateScale,
     regionalScale,
+    adjustments: options.adjustments,
   })
 
   return {
@@ -186,7 +201,7 @@ export function computeBaseProfileIrpf2025Detail(
 
 /** Calcula el IRPF anual del perfil base para una comunidad y un bruto anual. */
 export function computeRegionalIrpf2025(grossSalaryAnnual: number, region: string): RegionalIrpfResult {
-  const { grossSalaryAnnual: gross, core } = computeBaseProfileIrpf2025Detail(grossSalaryAnnual, region)
+  const { grossSalaryAnnual: gross, core } = computeBaseProfileIrpf2025Detail(grossSalaryAnnual, { region })
 
   return {
     region,

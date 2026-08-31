@@ -11,16 +11,20 @@ import {
   AlertTriangle,
   Calculator,
   ChevronsDownUp,
+  CircleSlash,
   Coins,
   Info,
   Layers,
   Percent,
+  RotateCcw,
   TrendingDown,
   TriangleAlert,
 } from 'lucide-react'
 import { SalarySlider } from '../ui/SalarySlider'
 import { applyIrpfScale } from './irpf2025Calc'
+import { createEmptyIrpf2025Adjustments } from './irpf2025Adjustments'
 import { computeBaseProfileIrpf2025Detail } from './irpfRegionCalc'
+import type { BaseProfileOptions } from './irpfRegionCalc'
 import './WorkIncomeReductionExplainer.css'
 
 const MIN_GROSS = 8_000
@@ -90,12 +94,12 @@ type CurvePoint = {
   averageIrpf: number
 }
 
-function buildCurve(): CurvePoint[] {
+function buildCurve(profile: BaseProfileOptions): CurvePoint[] {
   const points: CurvePoint[] = []
   for (let gross = MIN_GROSS; gross <= MAX_GROSS; gross += CURVE_STEP) {
-    const here = computeBaseProfileIrpf2025Detail(gross)
-    const low = computeBaseProfileIrpf2025Detail(gross - MARGINAL_DELTA)
-    const high = computeBaseProfileIrpf2025Detail(gross + MARGINAL_DELTA)
+    const here = computeBaseProfileIrpf2025Detail(gross, profile)
+    const low = computeBaseProfileIrpf2025Detail(gross - MARGINAL_DELTA, profile)
+    const high = computeBaseProfileIrpf2025Detail(gross + MARGINAL_DELTA, profile)
     const span = MARGINAL_DELTA * 2
     const marginalIrpf = ((high.core.irpf - low.core.irpf) / span) * 100
     const marginalSocialSecurity =
@@ -113,6 +117,10 @@ function buildCurve(): CurvePoint[] {
   }
   return points
 }
+
+const DEFAULT_SIMULATED_GROSS = 18_000
+
+const clampGross = (value: number) => Math.min(MAX_GROSS, Math.max(MIN_GROSS, Math.round(value)))
 
 /** Primer bruto de la curva en el que la base del articulo 20 supera un umbral. */
 function grossWhereBasisReaches(curve: CurvePoint[], basisThreshold: number) {
@@ -266,28 +274,103 @@ function CurrentMarker({
 
 // ─── Componente ──────────────────────────────────────────────────────────────
 
-export function WorkIncomeReductionExplainer() {
-  const [gross, setGross] = useState(18_000)
+export type WorkIncomeReductionExplainerProps = {
+  /** 'page' ocupa la pantalla; 'embedded' se integra dentro de otra tarjeta. */
+  variant?: 'page' | 'embedded'
+  /** Salario real del usuario: el simulador arranca ahi. */
+  initialGrossSalaryAnnual?: number
+  region?: string
+  contributionGroup?: number
+  stateMinimum?: number
+  regionalMinimum?: number
+  /** Respuesta del usuario sobre otras rentas: decide si la reduccion aplica. */
+  otherNonExemptNonWorkIncome?: number
+  otherIncomeKnown?: boolean
+}
 
-  const curve = useMemo(buildCurve, [])
-  const detail = useMemo(() => computeBaseProfileIrpf2025Detail(gross), [gross])
+export function WorkIncomeReductionExplainer({
+  variant = 'page',
+  initialGrossSalaryAnnual,
+  region,
+  contributionGroup,
+  stateMinimum,
+  regionalMinimum,
+  otherNonExemptNonWorkIncome = 0,
+  otherIncomeKnown = true,
+}: WorkIncomeReductionExplainerProps = {}) {
+  const embedded = variant === 'embedded'
+  // "Tu caso" se calcula siempre con el salario real, aunque quede fuera del
+  // rango del simulador; el slider solo controla el escenario que se explora.
+  const realGross = Math.max(0, initialGrossSalaryAnnual ?? 18_000)
+  const realGrossInSliderRange = realGross >= MIN_GROSS && realGross <= MAX_GROSS
+  const anchorGross = realGrossInSliderRange ? clampGross(realGross) : DEFAULT_SIMULATED_GROSS
+  const [gross, setGross] = useState(anchorGross)
+
+  const profile = useMemo<BaseProfileOptions>(() => {
+    const adjustments = createEmptyIrpf2025Adjustments()
+    adjustments.otherIncomeKnown = otherIncomeKnown
+    adjustments.otherNonExemptNonWorkIncome = Math.max(0, otherNonExemptNonWorkIncome)
+    return { region, contributionGroup, stateMinimum, regionalMinimum, adjustments }
+  }, [contributionGroup, otherIncomeKnown, otherNonExemptNonWorkIncome, region, regionalMinimum, stateMinimum])
+
+  const curve = useMemo(() => buildCurve(profile), [profile])
+  const detail = useMemo(() => computeBaseProfileIrpf2025Detail(gross, profile), [gross, profile])
   const core = detail.core
 
   const irpfWithout = useMemo(() => irpfWithoutWorkReduction(detail), [detail])
   const savings = Math.max(0, irpfWithout - core.irpf)
 
+  // Cuanto cuesta realmente haber cruzado el umbral de otras rentas: mismo
+  // salario y mismo perfil, pero sin rentas ajenas al trabajo.
+  const thresholdCost = useMemo(() => {
+    const clean = createEmptyIrpf2025Adjustments()
+    const detailClean = computeBaseProfileIrpf2025Detail(gross, { ...profile, adjustments: clean })
+    return Math.max(0, core.irpf - detailClean.core.irpf)
+  }, [core.irpf, gross, profile])
+
+  // Caso real del usuario, independiente de donde este el slider.
+  const realCore = useMemo(
+    () => computeBaseProfileIrpf2025Detail(realGross, profile).core,
+    [profile, realGross],
+  )
+  const reductionWithoutOtherIncome = useMemo(
+    () =>
+      computeBaseProfileIrpf2025Detail(realGross, {
+        ...profile,
+        adjustments: createEmptyIrpf2025Adjustments(),
+      }).core.workReductionApplied,
+    [profile, realGross],
+  )
+  const realBasis = realCore.workReductionBasis
+  const realBlocked = realCore.workReductionTheoretical <= 0 && realBasis < REDUCTION_LIMIT
+  const realOutOfRange = realBasis >= REDUCTION_LIMIT
+
   const marginalHere = useMemo(() => {
-    const low = computeBaseProfileIrpf2025Detail(gross - MARGINAL_DELTA)
-    const high = computeBaseProfileIrpf2025Detail(gross + MARGINAL_DELTA)
+    const low = computeBaseProfileIrpf2025Detail(gross - MARGINAL_DELTA, profile)
+    const high = computeBaseProfileIrpf2025Detail(gross + MARGINAL_DELTA, profile)
     const span = MARGINAL_DELTA * 2
     const irpf = ((high.core.irpf - low.core.irpf) / span) * 100
     const socialSecurity =
       ((high.employeeSocialSecurity - low.employeeSocialSecurity) / span) * 100
     return { irpf, total: irpf + socialSecurity }
-  }, [gross])
+  }, [gross, profile])
+
+  const movedFromRealSalary =
+    realGrossInSliderRange && initialGrossSalaryAnnual !== undefined && Math.abs(gross - anchorGross) > 1
 
   const basis = core.workReductionBasis
-  const activeTier = basis >= REDUCTION_LIMIT ? 4 : basis <= TIER_1_TOP ? 1 : basis <= TIER_2_TOP ? 2 : 3
+  // El motor pone la reduccion teorica a cero cuando el umbral de otras rentas
+  // la bloquea: en ese caso ningun tramo aplica, aunque el RNT este en rango.
+  const reductionBlocked = core.workReductionTheoretical <= 0 && basis < REDUCTION_LIMIT
+  const activeTier = reductionBlocked
+    ? 0
+    : basis >= REDUCTION_LIMIT
+      ? 4
+      : basis <= TIER_1_TOP
+        ? 1
+        : basis <= TIER_2_TOP
+          ? 2
+          : 3
 
   const humpStart = grossWhereBasisReaches(curve, TIER_1_TOP)
   const humpEnd = grossWhereBasisReaches(curve, REDUCTION_LIMIT)
@@ -343,12 +426,16 @@ export function WorkIncomeReductionExplainer() {
   const hasReduction = core.workReductionApplied > 0.5
 
   return (
-    <section className="wir" aria-labelledby="wir-title">
+    <section className={`wir${embedded ? ' wir--embedded' : ''}`} aria-labelledby="wir-title">
       <div className="wir-shell">
         <header className="wir-header">
           <div>
             <span className="wir-eyebrow">IRPF 2025 · artículo 20 LIRPF</span>
-            <h1 id="wir-title">La reducción por rendimientos del trabajo, y la joroba que crea</h1>
+            {embedded ? (
+              <h2 id="wir-title">Cómo funciona tu reducción por rendimientos del trabajo</h2>
+            ) : (
+              <h1 id="wir-title">La reducción por rendimientos del trabajo, y la joroba que crea</h1>
+            )}
             <p>
               Es la mayor rebaja del IRPF para sueldos bajos: hasta {euro(MAX_REDUCTION)} que se
               restan del rendimiento del trabajo. Pero se retira tan deprisa que, mientras
@@ -357,18 +444,75 @@ export function WorkIncomeReductionExplainer() {
           </div>
           <div className="wir-profile">
             <Info size={16} aria-hidden="true" />
-            <p>
-              Perfil del simulador: soltero, 40 años, sin hijos, Madrid, grupo de cotización 7 y
-              solo rendimientos del trabajo.
-            </p>
+            {embedded ? (
+              <p>
+                Usa tu grupo de cotización, tu comunidad y tu mínimo personal
+                {realGrossInSliderRange ? ', y arranca en tu salario' : ''}. El IRPF que muestra no
+                incluye el resto de reducciones ni deducciones que completes más abajo, así que
+                sirve para entender la reducción, no como liquidación final.
+              </p>
+            ) : (
+              <p>
+                Perfil del simulador: soltero, 40 años, sin hijos, Madrid, grupo de cotización 7 y
+                solo rendimientos del trabajo.
+              </p>
+            )}
           </div>
         </header>
+
+        {realBlocked ? (
+          <aside className="wir-callout wir-callout--blocked">
+            <TriangleAlert size={20} aria-hidden="true" />
+            <div>
+              <h3>En tu caso no se aplica: te la bloquean las otras rentas</h3>
+              <p>
+                {otherIncomeKnown ? (
+                  <>
+                    Has declarado {euro(otherNonExemptNonWorkIncome)} de otras rentas, por encima
+                    del umbral de {euro(OTHER_INCOME_LIMIT)}, así que la reducción cae a cero
+                    entera: no se reduce poco a poco, desaparece. Con {euro(realGross)} de bruto te
+                    habrían correspondido {euro(reductionWithoutOtherIncome)}.
+                  </>
+                ) : (
+                  <>
+                    Hasta que confirmes si tienes otras rentas, la reducción queda en suspenso y los
+                    importes asumen que superas el umbral de {euro(OTHER_INCOME_LIMIT)}. Responde a
+                    la pregunta de arriba para ver tu caso real.
+                  </>
+                )}
+              </p>
+            </div>
+          </aside>
+        ) : realOutOfRange ? (
+          <aside className="wir-callout">
+            <CircleSlash size={20} aria-hidden="true" />
+            <div>
+              <h3>En tu caso no se aplica, pero merece la pena entenderla</h3>
+              <p>
+                Con {euro(realGross)} de bruto tu RNT es de {euro(realBasis)} y supera el límite de{' '}
+                {euro(REDUCTION_LIMIT, 2)}: esta reducción no te resta nada. Aun así explica por qué
+                los sueldos bajos apenas pagan IRPF y, sobre todo, por qué entre {euro(humpStart)} y{' '}
+                {euro(humpEnd)} de bruto cada euro extra tributa más que en el tramo más alto de la
+                escala. <strong>Todo lo que hay debajo es un simulador</strong>
+                {realGrossInSliderRange
+                  ? '.'
+                  : `, que arranca en ${euro(DEFAULT_SIMULATED_GROSS)} porque tu sueldo se sale de la franja donde ocurre algo.`}
+              </p>
+            </div>
+          </aside>
+        ) : null}
 
         {/* ── Simulador ── */}
         <section className="wir-panel wir-sim" aria-labelledby="wir-sim-title">
           <div className="wir-panel__title">
             <Calculator size={20} aria-hidden="true" />
-            <h2 id="wir-sim-title">Juega con el salario</h2>
+            <h3 id="wir-sim-title">{embedded ? 'Prueba con otro salario' : 'Juega con el salario'}</h3>
+            {movedFromRealSalary ? (
+              <button type="button" className="wir-reset" onClick={() => setGross(anchorGross)}>
+                <RotateCcw size={14} aria-hidden="true" />
+                Volver a tu salario ({euro(anchorGross)})
+              </button>
+            ) : null}
           </div>
 
           <SalarySlider
@@ -377,7 +521,7 @@ export function WorkIncomeReductionExplainer() {
             min={MIN_GROSS}
             max={MAX_GROSS}
             step={100}
-            markers={[MIN_GROSS, 14_000, 18_000, 24_000, MAX_GROSS]}
+            markers={[10_000, 14_000, 18_000, 24_000, MAX_GROSS]}
             unitLabel="brutos al año"
             id="wir-salary"
             ariaLabel="Salario bruto anual para el simulador de la reducción"
@@ -389,10 +533,16 @@ export function WorkIncomeReductionExplainer() {
               <strong>{euro(basis)}</strong>
               <small>Bruto − cotizaciones, sin restar los {euro(2_000)}</small>
             </article>
-            <article className={`wir-kpi wir-kpi--${activeTier === 4 ? 'muted' : 'green'}`}>
+            <article className={`wir-kpi wir-kpi--${hasReduction ? 'green' : 'muted'}`}>
               <span>Reducción aplicada</span>
               <strong>{euro(core.workReductionApplied)}</strong>
-              <small>{activeTier === 4 ? 'Fuera de rango' : `Tramo ${activeTier}`}</small>
+              <small>
+                {reductionBlocked
+                  ? 'Bloqueada por otras rentas'
+                  : activeTier === 4
+                    ? 'Fuera de rango'
+                    : `Tramo ${activeTier}`}
+              </small>
             </article>
             <article className="wir-kpi wir-kpi--purple">
               <span>Te ahorra en IRPF</span>
@@ -411,7 +561,7 @@ export function WorkIncomeReductionExplainer() {
         <section className="wir-panel" aria-labelledby="wir-chain-title">
           <div className="wir-panel__title">
             <Layers size={20} aria-hidden="true" />
-            <h2 id="wir-chain-title">De dónde sale el número</h2>
+            <h3 id="wir-chain-title">De dónde sale el número</h3>
           </div>
 
           <ol className="wir-chain">
@@ -471,7 +621,7 @@ export function WorkIncomeReductionExplainer() {
         <section className="wir-panel" aria-labelledby="wir-tiers-title">
           <div className="wir-panel__title">
             <ChevronsDownUp size={20} aria-hidden="true" />
-            <h2 id="wir-tiers-title">Los tres tramos de la fórmula</h2>
+            <h3 id="wir-tiers-title">Los tres tramos de la fórmula</h3>
           </div>
 
           <div className="wir-ruler" aria-hidden="true">
@@ -493,6 +643,13 @@ export function WorkIncomeReductionExplainer() {
             <span style={{ left: '100%' }}>{euro(REDUCTION_LIMIT, 2)}</span>
           </div>
 
+          {reductionBlocked ? (
+            <p className="wir-tiers-blocked">
+              Con tus respuestas actuales ninguno de estos tramos se aplica: el umbral de otras
+              rentas deja la reducción en cero sea cual sea tu RNT.
+            </p>
+          ) : null}
+
           <div className="wir-tiers">
             {tiers.map((tier) => {
               const isActive = tier.id === activeTier
@@ -502,7 +659,7 @@ export function WorkIncomeReductionExplainer() {
                   className={`wir-tier wir-tier--${isActive ? tier.tone : 'off'}${isActive ? ' is-active' : ''}`}
                 >
                   <header>
-                    <h3>{tier.title}</h3>
+                    <h4>{tier.title}</h4>
                     {isActive ? <span className="wir-tier__badge">Tu tramo</span> : null}
                   </header>
                   <p className="wir-tier__range">{tier.range}</p>
@@ -525,7 +682,7 @@ export function WorkIncomeReductionExplainer() {
         <section className="wir-panel" aria-labelledby="wir-curve-title">
           <div className="wir-panel__title">
             <TrendingDown size={20} aria-hidden="true" />
-            <h2 id="wir-curve-title">Cómo se apaga la reducción al subir el sueldo</h2>
+            <h3 id="wir-curve-title">Cómo se apaga la reducción al subir el sueldo</h3>
           </div>
 
           <ul className="wir-legend">
@@ -588,7 +745,7 @@ export function WorkIncomeReductionExplainer() {
         <section className="wir-panel wir-panel--hump" aria-labelledby="wir-hump-title">
           <div className="wir-panel__title">
             <Percent size={20} aria-hidden="true" />
-            <h2 id="wir-hump-title">La joroba del IRPF</h2>
+            <h3 id="wir-hump-title">La joroba del IRPF</h3>
           </div>
 
           <div className="wir-hump-copy">
@@ -689,12 +846,12 @@ export function WorkIncomeReductionExplainer() {
         <section className="wir-panel" aria-labelledby="wir-traps-title">
           <div className="wir-panel__title">
             <AlertTriangle size={20} aria-hidden="true" />
-            <h2 id="wir-traps-title">Tres detalles que cambian el resultado</h2>
+            <h3 id="wir-traps-title">Tres detalles que cambian el resultado</h3>
           </div>
 
           <div className="wir-traps">
             <article className="wir-trap wir-trap--red">
-              <h3>El escalón de los 6.500 €</h3>
+              <h4>El escalón de los 6.500 €</h4>
               <p>
                 Si tus rentas no exentas distintas del trabajo superan {euro(OTHER_INCOME_LIMIT)},
                 la reducción no cae poco a poco: <strong>desaparece entera</strong>.{' '}
@@ -705,17 +862,23 @@ export function WorkIncomeReductionExplainer() {
                     <strong>{euro(savings)}</strong> más de IRPF. Es un auténtico error de salto:
                     ganar 1 € puede dejarte con menos dinero.
                   </>
+                ) : reductionBlocked ? (
+                  <>
+                    Es justo lo que te está pasando: por superar el umbral has perdido la reducción
+                    entera, y eso te cuesta <strong>{euro(thresholdCost)}</strong> más de IRPF que
+                    si esas rentas no existieran.
+                  </>
                 ) : (
                   <>
-                    Con tu sueldo actual ya no queda reducción, así que el umbral no te afecta. Para
-                    quien está en el tramo 1 sí es un error de salto de libro: se pierden los{' '}
-                    {euro(MAX_REDUCTION)} de golpe por ganar 1 € de más.
+                    Con tu sueldo actual ya no queda reducción por el nivel de RNT, así que el
+                    umbral no cambia nada. Para quien está en el tramo 1 sí es un error de salto de
+                    libro: se pierden los {euro(MAX_REDUCTION)} de golpe por ganar 1 € de más.
                   </>
                 )}
               </p>
             </article>
             <article className="wir-trap wir-trap--yellow">
-              <h3>Cuotas sindicales y colegiales adelantan el tramo</h3>
+              <h4>Cuotas sindicales y colegiales adelantan el tramo</h4>
               <p>
                 Las cuotas a sindicatos y colegios obligatorios (máximo {euro(500)}) y la defensa
                 jurídica (máximo {euro(300)}) se restan <em>antes</em> de elegir tramo, así que
@@ -724,7 +887,7 @@ export function WorkIncomeReductionExplainer() {
               </p>
             </article>
             <article className="wir-trap wir-trap--blue">
-              <h3>La reducción no es una devolución</h3>
+              <h4>La reducción no es una devolución</h4>
               <p>
                 {hasReduction ? (
                   <>

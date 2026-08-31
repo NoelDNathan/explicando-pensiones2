@@ -1,11 +1,25 @@
+/*
+ * Todo el color pasa por tokens. La variante de pagina usa la paleta oscura de
+ * los explicadores; la variante empotrada solo redefine los tokens para heredar
+ * el tema claro de la calculadora, sin duplicar ni una regla de layout.
+ */
 .wir {
-  --wir-bg: #020713;
+  --wir-page-bg:
+    radial-gradient(circle at 12% 6%, rgba(23, 184, 255, 0.15), transparent 32%),
+    radial-gradient(circle at 78% 12%, rgba(255, 79, 88, 0.1), transparent 28%),
+    radial-gradient(circle at 60% 92%, rgba(190, 116, 255, 0.1), transparent 30%),
+    linear-gradient(135deg, #020713 0%, #05162b 48%, #020713 100%);
+  --wir-header-bg: linear-gradient(140deg, rgba(23, 184, 255, 0.12), rgba(4, 17, 32, 0.92) 55%);
   --wir-panel: rgba(4, 17, 32, 0.9);
+  --wir-panel-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+  --wir-surface: rgba(2, 10, 22, 0.65);
   --wir-border: rgba(76, 143, 211, 0.34);
   --wir-border-soft: rgba(123, 157, 196, 0.2);
+
   --wir-text: #f6f9ff;
   --wir-muted: #b9c5d6;
   --wir-faint: #7f91a8;
+
   --wir-green: #6cf146;
   --wir-purple: #be74ff;
   --wir-blue: #17b8ff;
@@ -13,14 +27,43 @@
   --wir-yellow: #ffc635;
   --wir-red: #ff4f58;
 
+  --wir-green-tint: rgba(108, 241, 70, 0.1);
+  --wir-green-line: rgba(108, 241, 70, 0.5);
+  --wir-blue-tint: rgba(23, 184, 255, 0.11);
+  --wir-blue-line: rgba(23, 184, 255, 0.4);
+  --wir-yellow-tint: rgba(255, 198, 53, 0.1);
+  --wir-yellow-line: rgba(255, 198, 53, 0.45);
+  --wir-orange-tint: rgba(255, 173, 24, 0.1);
+  --wir-orange-line: rgba(255, 173, 24, 0.5);
+  --wir-red-tint: rgba(255, 79, 88, 0.1);
+  --wir-red-line: rgba(255, 79, 88, 0.38);
+  --wir-muted-tint: rgba(127, 145, 168, 0.1);
+  --wir-muted-line: rgba(127, 145, 168, 0.45);
+
+  --wir-warn-text: #ffe6a3;
+  --wir-info-text: #cbe9ff;
+  --wir-punch-text: #ffd7d9;
+
+  --wir-badge-bg: rgba(255, 255, 255, 0.16);
+  --wir-handle: #fff;
+  --wir-handle-ring: rgba(2, 7, 19, 0.9);
+
+  --wir-chart-grid: rgba(123, 157, 196, 0.16);
+  --wir-chart-axis: rgba(123, 157, 196, 0.45);
+  --wir-chart-band: rgba(255, 173, 24, 0.09);
+  --wir-chart-area-green: rgba(108, 241, 70, 0.14);
+  --wir-chart-area-red: rgba(255, 79, 88, 0.12);
+  --wir-chart-reference: rgba(246, 249, 255, 0.4);
+  --wir-chart-reference-text: rgba(246, 249, 255, 0.6);
+  --wir-chart-point-fill: #fff;
+  --wir-chart-point-stroke: #020713;
+  --wir-chart-marker-line: rgba(255, 255, 255, 0.55);
+  --wir-chart-marker-text: #f6f9ff;
+
   min-height: 100svh;
   padding: clamp(12px, 1.6vw, 26px);
   color: var(--wir-text);
-  background:
-    radial-gradient(circle at 12% 6%, rgba(23, 184, 255, 0.15), transparent 32%),
-    radial-gradient(circle at 78% 12%, rgba(255, 79, 88, 0.1), transparent 28%),
-    radial-gradient(circle at 60% 92%, rgba(190, 116, 255, 0.1), transparent 30%),
-    linear-gradient(135deg, #020713 0%, #05162b 48%, #020713 100%);
+  background: var(--wir-page-bg);
   font-family: Aptos, "Avenir Next", "Segoe UI", system-ui, sans-serif;
 }
 
@@ -30,10 +73,16 @@
   box-sizing: border-box;
 }
 
-/* El reset global tine los encabezados en oscuro: aqui el fondo es oscuro. */
-.wir h1,
-.wir h2,
-.wir h3 {
+/*
+ * El reset global tine los encabezados en oscuro y el tema de la calculadora
+ * colorea `p` y `h2-h4` con especificidad 0,2,1. En las reglas que pintan esos
+ * elementos repetimos la clase raiz para ganar sin !important ni acoplar este
+ * archivo a las clases del tema.
+ */
+.wir.wir.wir h1,
+.wir.wir.wir h2,
+.wir.wir.wir h3,
+.wir.wir.wir h4 {
   color: var(--wir-text);
 }
 
@@ -52,7 +101,7 @@
   padding: clamp(18px, 2vw, 28px);
   border: 1px solid var(--wir-border);
   border-radius: 16px;
-  background: linear-gradient(140deg, rgba(23, 184, 255, 0.12), rgba(4, 17, 32, 0.92) 55%);
+  background: var(--wir-header-bg);
 }
 
 .wir-eyebrow {
@@ -71,7 +120,7 @@
   line-height: 1.15;
 }
 
-.wir-header p {
+.wir.wir .wir-header p {
   margin: 0;
   max-width: 74ch;
   color: var(--wir-muted);
@@ -90,9 +139,9 @@
   font-size: 0.86rem;
 }
 
-.wir-profile p {
+.wir.wir .wir-profile p {
   margin: 0;
-  color: inherit;
+  color: var(--wir-faint);
   font-size: inherit;
 }
 
@@ -103,7 +152,7 @@
   border: 1px solid var(--wir-border-soft);
   border-radius: 16px;
   background: var(--wir-panel);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+  box-shadow: var(--wir-panel-shadow);
 }
 
 .wir-panel__title {
@@ -114,16 +163,37 @@
   color: var(--wir-blue);
 }
 
-.wir-panel__title h2 {
+.wir.wir .wir-panel__title h3 {
   margin: 0;
   color: var(--wir-text);
   font-size: 1.18rem;
 }
 
+.wir-reset {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+  padding: 4px 10px;
+  border: 1px solid var(--wir-border-soft);
+  border-radius: 999px;
+  background: var(--wir-surface);
+  color: var(--wir-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wir-reset:hover {
+  border-color: var(--wir-blue);
+  color: var(--wir-blue);
+}
+
 /* ── Simulador ── */
 
 .wir-sim {
-  border-color: rgba(23, 184, 255, 0.36);
+  border-color: var(--wir-blue-line);
 }
 
 .wir-kpis {
@@ -140,7 +210,7 @@
   border: 1px solid var(--wir-border-soft);
   border-left: 4px solid var(--wir-faint);
   border-radius: 12px;
-  background: rgba(2, 10, 22, 0.7);
+  background: var(--wir-surface);
 }
 
 .wir-kpi span {
@@ -191,7 +261,7 @@
   justify-content: space-between;
   padding: 9px 14px;
   border-radius: 9px;
-  background: rgba(2, 10, 22, 0.6);
+  background: var(--wir-surface);
   font-size: 0.94rem;
 }
 
@@ -205,19 +275,21 @@
 .wir-chain li.is-minus strong { color: var(--wir-red); }
 
 .wir-chain li.is-key {
-  border: 1px solid rgba(23, 184, 255, 0.45);
-  background: rgba(23, 184, 255, 0.12);
+  border: 1px solid var(--wir-blue-line);
+  background: var(--wir-blue-tint);
 }
 
 .wir-chain li.is-key span,
 .wir-chain li.is-key strong { color: var(--wir-blue); }
 
 .wir-chain li.is-total {
-  border: 1px solid rgba(108, 241, 70, 0.4);
-  background: rgba(108, 241, 70, 0.1);
+  border: 1px solid var(--wir-green-line);
+  background: var(--wir-green-tint);
 }
 
 .wir-chain li.is-total strong { color: var(--wir-green); }
+
+/* ── Avisos ── */
 
 .wir-note {
   display: flex;
@@ -233,20 +305,68 @@
 .wir-note p { margin: 0; }
 
 .wir-note--warn {
-  border: 1px solid rgba(255, 198, 53, 0.4);
-  background: rgba(255, 198, 53, 0.1);
-  color: #ffe6a3;
+  border: 1px solid var(--wir-yellow-line);
+  background: var(--wir-yellow-tint);
+}
+
+.wir.wir .wir-note--warn,
+.wir.wir .wir-note--warn p {
+  color: var(--wir-warn-text);
 }
 
 .wir-note--warn svg { color: var(--wir-yellow); flex-shrink: 0; }
 
 .wir-note--info {
-  border: 1px solid rgba(23, 184, 255, 0.35);
-  background: rgba(23, 184, 255, 0.09);
-  color: #cbe9ff;
+  border: 1px solid var(--wir-blue-line);
+  background: var(--wir-blue-tint);
+}
+
+.wir.wir .wir-note--info,
+.wir.wir .wir-note--info p {
+  color: var(--wir-info-text);
 }
 
 .wir-note--info svg { color: var(--wir-blue); flex-shrink: 0; }
+
+.wir-note--standalone { margin-top: 0; }
+
+/* Aviso de cabecera para "esto no te aplica" / "esto esta bloqueado". */
+.wir-callout {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 17px;
+  border: 1px solid var(--wir-muted-line);
+  border-left: 4px solid var(--wir-faint);
+  border-radius: 12px;
+  background: var(--wir-muted-tint);
+}
+
+.wir-callout svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--wir-faint);
+}
+
+.wir.wir .wir-callout h3 {
+  margin: 0 0 5px;
+  font-size: 1rem;
+}
+
+.wir.wir .wir-callout p {
+  margin: 0;
+  color: var(--wir-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.wir-callout--blocked {
+  border-color: var(--wir-yellow-line);
+  border-left-color: var(--wir-yellow);
+  background: var(--wir-yellow-tint);
+}
+
+.wir-callout--blocked svg { color: var(--wir-yellow); }
 
 /* ── Regla y tramos ── */
 
@@ -261,11 +381,12 @@
 .wir-ruler__seg {
   border-radius: 3px;
   flex-basis: 0;
+  opacity: 0.75;
 }
 
-.wir-ruler__seg--green { background: rgba(108, 241, 70, 0.65); }
-.wir-ruler__seg--yellow { background: rgba(255, 198, 53, 0.7); }
-.wir-ruler__seg--orange { background: rgba(255, 173, 24, 0.75); }
+.wir-ruler__seg--green { background: var(--wir-green); }
+.wir-ruler__seg--yellow { background: var(--wir-yellow); }
+.wir-ruler__seg--orange { background: var(--wir-orange); }
 
 .wir-ruler__handle {
   position: absolute;
@@ -274,8 +395,8 @@
   height: 24px;
   margin-left: -1.5px;
   border-radius: 2px;
-  background: #fff;
-  box-shadow: 0 0 0 2px rgba(2, 7, 19, 0.9), 0 0 12px rgba(255, 255, 255, 0.6);
+  background: var(--wir-handle);
+  box-shadow: 0 0 0 2px var(--wir-handle-ring);
   transition: left 0.15s ease-out;
 }
 
@@ -299,6 +420,17 @@
 .wir-ruler__labels span:first-child { transform: none; }
 .wir-ruler__labels span:last-child { transform: translateX(-100%); }
 
+.wir.wir .wir-tiers-blocked {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--wir-yellow-line);
+  border-radius: 10px;
+  background: var(--wir-yellow-tint);
+  color: var(--wir-warn-text);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .wir-tiers {
   display: grid;
   gap: 12px;
@@ -312,7 +444,7 @@
   padding: 14px 16px;
   border: 1px solid var(--wir-border-soft);
   border-radius: 12px;
-  background: rgba(2, 10, 22, 0.6);
+  background: var(--wir-surface);
   transition: transform 0.15s ease-out, border-color 0.15s ease-out;
 }
 
@@ -323,7 +455,7 @@
   justify-content: space-between;
 }
 
-.wir-tier h3 {
+.wir.wir .wir-tier h4 {
   flex: 1;
   margin: 0;
   font-size: 0.95rem;
@@ -333,7 +465,7 @@
   flex-shrink: 0;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--wir-badge-bg);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -341,14 +473,14 @@
   white-space: nowrap;
 }
 
-.wir-tier__range {
+.wir.wir .wir-tier__range {
   margin: 0;
   color: var(--wir-faint);
   font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
 }
 
-.wir-tier__formula {
+.wir.wir .wir-tier__formula {
   margin: 0;
   color: var(--wir-muted);
   font-family: "Cascadia Mono", "SF Mono", Consolas, monospace;
@@ -356,7 +488,7 @@
   line-height: 1.4;
 }
 
-.wir-tier__applied {
+.wir.wir .wir-tier__applied {
   margin: 0;
   padding-top: 8px;
   border-top: 1px dashed var(--wir-border-soft);
@@ -369,14 +501,14 @@
 .wir-tier.is-active { transform: translateY(-2px); }
 .wir-tier--off { opacity: 0.48; }
 
-.wir-tier--green { border-color: rgba(108, 241, 70, 0.55); background: rgba(108, 241, 70, 0.09); }
-.wir-tier--green .wir-tier__applied { color: var(--wir-green); }
-.wir-tier--yellow { border-color: rgba(255, 198, 53, 0.55); background: rgba(255, 198, 53, 0.09); }
-.wir-tier--yellow .wir-tier__applied { color: var(--wir-yellow); }
-.wir-tier--orange { border-color: rgba(255, 173, 24, 0.55); background: rgba(255, 173, 24, 0.09); }
-.wir-tier--orange .wir-tier__applied { color: var(--wir-orange); }
-.wir-tier--muted { border-color: rgba(127, 145, 168, 0.5); background: rgba(127, 145, 168, 0.1); }
-.wir-tier--muted .wir-tier__applied { color: var(--wir-faint); }
+.wir-tier--green { border-color: var(--wir-green-line); background: var(--wir-green-tint); }
+.wir.wir .wir-tier--green .wir-tier__applied { color: var(--wir-green); }
+.wir-tier--yellow { border-color: var(--wir-yellow-line); background: var(--wir-yellow-tint); }
+.wir.wir .wir-tier--yellow .wir-tier__applied { color: var(--wir-yellow); }
+.wir-tier--orange { border-color: var(--wir-orange-line); background: var(--wir-orange-tint); }
+.wir.wir .wir-tier--orange .wir-tier__applied { color: var(--wir-orange); }
+.wir-tier--muted { border-color: var(--wir-muted-line); background: var(--wir-muted-tint); }
+.wir.wir .wir-tier--muted .wir-tier__applied { color: var(--wir-faint); }
 
 /* ── Graficos ── */
 
@@ -421,12 +553,12 @@
 }
 
 .wir-chart__grid {
-  stroke: rgba(123, 157, 196, 0.16);
+  stroke: var(--wir-chart-grid);
   stroke-width: 1;
 }
 
 .wir-chart__axis {
-  stroke: rgba(123, 157, 196, 0.45);
+  stroke: var(--wir-chart-axis);
   stroke-width: 1;
 }
 
@@ -443,9 +575,7 @@
   letter-spacing: 0.04em;
 }
 
-.wir-chart__band--warn {
-  fill: rgba(255, 173, 24, 0.09);
-}
+.wir-chart__band--warn { fill: var(--wir-chart-band); }
 
 .wir-chart__line {
   fill: none;
@@ -466,40 +596,40 @@
 }
 
 .wir-chart__area { stroke: none; }
-.wir-chart__area--green { fill: rgba(108, 241, 70, 0.14); }
-.wir-chart__area--red { fill: rgba(255, 79, 88, 0.12); }
+.wir-chart__area--green { fill: var(--wir-chart-area-green); }
+.wir-chart__area--red { fill: var(--wir-chart-area-red); }
 
 .wir-chart__reference {
-  stroke: rgba(246, 249, 255, 0.4);
+  stroke: var(--wir-chart-reference);
   stroke-width: 1;
   stroke-dasharray: 4 4;
 }
 
 .wir-chart__reference-label {
-  fill: rgba(246, 249, 255, 0.6);
+  fill: var(--wir-chart-reference-text);
   font-size: 10.5px;
 }
 
 .wir-chart__point {
-  fill: #fff;
-  stroke: #020713;
+  fill: var(--wir-chart-point-fill);
+  stroke: var(--wir-chart-point-stroke);
   stroke-width: 2;
 }
 
 .wir-chart__marker line {
-  stroke: rgba(255, 255, 255, 0.55);
+  stroke: var(--wir-chart-marker-line);
   stroke-width: 1.5;
   stroke-dasharray: 3 4;
 }
 
 .wir-chart__marker text {
-  fill: #fff;
+  fill: var(--wir-chart-marker-text);
   font-size: 11.5px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
-.wir-footnote {
+.wir.wir .wir-footnote {
   margin: 14px 0 0;
   color: var(--wir-faint);
   font-size: 0.86rem;
@@ -508,28 +638,31 @@
 
 /* ── Joroba ── */
 
-.wir-panel--hump {
-  border-color: rgba(255, 79, 88, 0.32);
-}
+.wir-panel--hump { border-color: var(--wir-red-line); }
 
 .wir-hump-copy {
   display: grid;
   gap: 10px;
   max-width: 88ch;
   margin-bottom: 18px;
+}
+
+.wir.wir .wir-hump-copy,
+.wir.wir .wir-hump-copy p {
+  margin: 0;
   color: var(--wir-muted);
   font-size: 0.95rem;
   line-height: 1.6;
 }
 
-.wir-hump-copy p { margin: 0; }
+.wir-hump-copy { margin-bottom: 18px; }
 
-.wir-hump-punch {
+.wir.wir .wir-hump-copy p.wir-hump-punch {
   padding: 12px 15px;
-  border: 1px solid rgba(255, 79, 88, 0.38);
+  border: 1px solid var(--wir-red-line);
   border-radius: 11px;
-  background: rgba(255, 79, 88, 0.1);
-  color: #ffd7d9;
+  background: var(--wir-red-tint);
+  color: var(--wir-punch-text);
 }
 
 .wir-hump-punch strong { color: var(--wir-red); }
@@ -547,15 +680,15 @@
   border: 1px solid var(--wir-border-soft);
   border-top: 3px solid var(--wir-faint);
   border-radius: 12px;
-  background: rgba(2, 10, 22, 0.6);
+  background: var(--wir-surface);
 }
 
-.wir-trap h3 {
+.wir.wir .wir-trap h4 {
   margin: 0 0 8px;
   font-size: 1rem;
 }
 
-.wir-trap p {
+.wir.wir .wir-trap p {
   margin: 0;
   color: var(--wir-muted);
   font-size: 0.89rem;
@@ -563,11 +696,11 @@
 }
 
 .wir-trap--red { border-top-color: var(--wir-red); }
-.wir-trap--red h3 { color: var(--wir-red); }
+.wir.wir .wir-trap--red h4 { color: var(--wir-red); }
 .wir-trap--yellow { border-top-color: var(--wir-yellow); }
-.wir-trap--yellow h3 { color: var(--wir-yellow); }
+.wir.wir .wir-trap--yellow h4 { color: var(--wir-yellow); }
 .wir-trap--blue { border-top-color: var(--wir-blue); }
-.wir-trap--blue h3 { color: var(--wir-blue); }
+.wir.wir .wir-trap--blue h4 { color: var(--wir-blue); }
 
 /* ── Pie ── */
 
@@ -581,7 +714,11 @@
   line-height: 1.5;
 }
 
-.wir-sources p { margin: 0; max-width: 92ch; }
+.wir.wir .wir-sources p {
+  margin: 0;
+  max-width: 92ch;
+  color: var(--wir-faint);
+}
 
 @media (max-width: 640px) {
   .wir-chain li {
@@ -589,4 +726,89 @@
     gap: 2px;
     align-items: flex-start;
   }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * Variante empotrada: mismo layout, paleta clara de la calculadora fiscal.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+.wir--embedded {
+  --wir-page-bg: none;
+  --wir-header-bg: linear-gradient(140deg, #e9f1fd, #ffffff 62%);
+  --wir-panel: #ffffff;
+  --wir-panel-shadow: 0 4px 12px rgba(35, 54, 78, 0.07);
+  --wir-surface: #f8fafc;
+  --wir-border: #c4d2df;
+  --wir-border-soft: #dbe4ec;
+
+  --wir-text: #172033;
+  --wir-muted: #4f5f70;
+  --wir-faint: #646f7e;
+
+  --wir-green: #14724e;
+  --wir-purple: #7557c8;
+  --wir-blue: #2a63b8;
+  --wir-orange: #9d5a13;
+  --wir-yellow: #7a5b10;
+  --wir-red: #b23a50;
+
+  --wir-green-tint: #e3f5ec;
+  --wir-green-line: #9ed7bd;
+  --wir-blue-tint: #e9f1fd;
+  --wir-blue-line: #a9c7ee;
+  --wir-yellow-tint: #fff7d9;
+  --wir-yellow-line: #ddc271;
+  --wir-orange-tint: #fff1df;
+  --wir-orange-line: #e8bd85;
+  --wir-red-tint: #fcecef;
+  --wir-red-line: #e7a5b1;
+  --wir-muted-tint: #f1f4f8;
+  --wir-muted-line: #cfd8e3;
+
+  --wir-warn-text: #6b4f0d;
+  --wir-info-text: #1d4a8a;
+  --wir-punch-text: #8a2436;
+
+  --wir-badge-bg: rgba(23, 32, 51, 0.1);
+  --wir-handle: #172033;
+  --wir-handle-ring: #ffffff;
+
+  --wir-chart-grid: rgba(35, 54, 78, 0.12);
+  --wir-chart-axis: rgba(35, 54, 78, 0.32);
+  --wir-chart-band: rgba(185, 107, 24, 0.08);
+  --wir-chart-area-green: rgba(24, 134, 91, 0.12);
+  --wir-chart-area-red: rgba(196, 69, 91, 0.1);
+  --wir-chart-reference: rgba(23, 32, 51, 0.35);
+  --wir-chart-reference-text: rgba(23, 32, 51, 0.6);
+  --wir-chart-point-fill: #172033;
+  --wir-chart-point-stroke: #ffffff;
+  --wir-chart-marker-line: rgba(23, 32, 51, 0.42);
+  --wir-chart-marker-text: #172033;
+
+  min-height: 0;
+  padding: 0;
+  background: none;
+}
+
+.wir--embedded .wir-shell {
+  max-width: none;
+  gap: 12px;
+}
+
+.wir--embedded .wir-header {
+  padding: 16px 18px;
+}
+
+.wir.wir.wir--embedded .wir-header h2 {
+  margin: 0 0 8px;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.2;
+}
+
+.wir.wir.wir--embedded .wir-header p {
+  font-size: 0.9rem;
+}
+
+.wir--embedded .wir-kpi strong {
+  font-size: 1.3rem;
 }
