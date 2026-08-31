@@ -403,15 +403,58 @@ Completa únicamente los apartados que correspondan a tu situación.`,
   {
     id: 5,
     title: 'Deducciones y salario en especie',
-    subtitle: 'Ajustes sobre la cuota y beneficios exentos',
-    description: 'Marca solo las deducciones y beneficios en especie que puedas acreditar. Bajan la cuota del IRPF o quedan exentos; no son los descuentos mensuales de la nómina.',
+    subtitle: 'Lo que restas de la cuota, no de la base',
+    description: `En el paso 4 calculamos la base liquidable; en el 6 saldrá la cuota por tramos. Lo que respondas aquí resta de esa cuota, euro a euro.
+
+También puedes detallar el salario en especie (comida, transporte, seguro o guardería) para separar la parte exenta.
+
+Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o certificado de retenciones.`,
+    concepts: [
+      {
+        id: 'reduction-vs-deduction',
+        title: '¿Reducción o deducción?',
+        body: (
+          <>
+            <p>
+              No es lo mismo restar de la base que restar de la cuota. Una reducción baja la cantidad sobre
+              la que se calculan los tramos: ahorras tu tipo marginal. Una deducción resta al final, de lo
+              que ya salía a pagar: 1 € de deducción te ahorra 1 €.
+            </p>
+            <p className="wfsc-concept__formula">1 € de deducción = 1 € menos a pagar</p>
+            <p className="wfsc-concept__formula">1 € de reducción ≈ tu tipo marginal (por ejemplo, 0,30 €)</p>
+            <p className="wfsc-concept__later">
+              La cuota de la que restamos aquí se calcula en el paso 6, «IRPF por tramos». Por eso este
+              paso y aquel se miran juntos: aquí dices los hechos; allí ves cómo sale la cuota.
+            </p>
+          </>
+        ),
+      },
+      {
+        id: 'refundable',
+        title: '¿Qué es una deducción reembolsable?',
+        body: (
+          <>
+            <p>
+              La mayoría de deducciones solo pueden bajar la cuota hasta cero: si no te sale a pagar, no
+              te devuelven el resto. Las reembolsables (maternidad, guardería, familia numerosa, discapacidad
+              a cargo) sí: te las abonan aunque tu cuota sea 0 €.
+            </p>
+            <p className="wfsc-concept__formula">cuota 0 € − 1.200 € de maternidad = 1.200 € a devolver</p>
+            <p>
+              Si ya has cobrado el abono anticipado durante el año, ese importe se descuenta para no
+              pagártelo dos veces.
+            </p>
+          </>
+        ),
+      },
+    ],
     checklist: [],
     helpTitle: '¿Deducción o beneficio exento?',
     helpBody: 'Las deducciones restan de la cuota final del impuesto. El salario en especie puede quedar exento si cumple requisitos y límites legales.',
     details: [
-      'Las deducciones se revisan al final y dependen mucho de requisitos, ejercicio fiscal y comunidad autonoma.',
-      'El salario en especie no siempre reduce la base: cada beneficio se trata por separado segun su regimen.',
-      'Los limites exentos impiden usar retribuciones en especie como sustituto total del salario en efectivo.',
+      'Las deducciones se revisan al final y dependen de requisitos, ejercicio fiscal y comunidad autónoma.',
+      'El salario en especie no siempre reduce la base: cada beneficio se trata por separado según su régimen.',
+      'Los límites exentos impiden usar retribuciones en especie como sustituto total del salario en efectivo.',
     ],
     important: 'Estas partidas se aplican en el cálculo del IRPF, no como línea de deducciones de la nómina mensual.',
     Icon: Gift,

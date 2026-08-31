@@ -59,6 +59,11 @@
   --wir-chart-point-stroke: #020713;
   --wir-chart-marker-line: rgba(255, 255, 255, 0.55);
   --wir-chart-marker-text: #f6f9ff;
+  --wir-chart-hover-line: rgba(246, 249, 255, 0.32);
+  --wir-chart-tip-bg: rgba(3, 10, 24, 0.94);
+  --wir-chart-tip-line: rgba(123, 157, 196, 0.35);
+  --wir-chart-tip-text: #f6f9ff;
+  --wir-chart-tip-muted: rgba(246, 249, 255, 0.7);
 
   min-height: 100svh;
   padding: clamp(12px, 1.6vw, 26px);
@@ -539,7 +544,6 @@
 .wir-dot--green { background: var(--wir-green); }
 .wir-dot--blue { background: var(--wir-blue); }
 .wir-dot--red { background: var(--wir-red); }
-.wir-dot--orange { background: var(--wir-orange); }
 
 .wir-dot--dashed {
   background: repeating-linear-gradient(90deg, var(--wir-faint) 0 4px, transparent 4px 7px);
@@ -587,7 +591,6 @@
 .wir-chart__line--green { stroke: var(--wir-green); }
 .wir-chart__line--blue { stroke: var(--wir-blue); stroke-width: 2; }
 .wir-chart__line--red { stroke: var(--wir-red); }
-.wir-chart__line--orange { stroke: var(--wir-orange); stroke-width: 2; }
 
 .wir-chart__line--dashed {
   stroke: var(--wir-faint);
@@ -627,6 +630,63 @@
   font-size: 11.5px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+/*
+ * La capa de exploracion cubre el area de dibujo y captura el puntero; todo lo
+ * que hay debajo es decorativo, asi que no pierde ninguna interaccion.
+ */
+.wir-chart__hover-surface {
+  fill: transparent;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.wir-chart__hover-line {
+  stroke: var(--wir-chart-hover-line);
+  stroke-width: 1.5;
+}
+
+.wir-chart__hover-dot {
+  stroke: var(--wir-chart-point-stroke);
+  stroke-width: 2;
+}
+
+.wir-chart__hover-dot--red { fill: var(--wir-red); }
+.wir-chart__hover-dot--blue { fill: var(--wir-blue); }
+
+.wir-chart__hover-box {
+  fill: var(--wir-chart-tip-bg);
+  stroke: var(--wir-chart-tip-line);
+  stroke-width: 1;
+}
+
+.wir-chart__hover-title {
+  fill: var(--wir-chart-tip-text);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.wir-chart__hover-label {
+  fill: var(--wir-chart-tip-muted);
+  font-size: 11.5px;
+}
+
+.wir-chart__hover-value {
+  fill: var(--wir-chart-tip-text);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.wir-chart__hover-value--red { fill: var(--wir-red); }
+.wir-chart__hover-value--blue { fill: var(--wir-blue); }
+
+.wir.wir .wir-chart-hint {
+  margin: -6px 0 10px;
+  color: var(--wir-faint);
+  font-size: 0.8rem;
 }
 
 .wir.wir .wir-footnote {
@@ -702,24 +762,6 @@
 .wir-trap--blue { border-top-color: var(--wir-blue); }
 .wir.wir .wir-trap--blue h4 { color: var(--wir-blue); }
 
-/* ── Pie ── */
-
-.wir-sources {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 4px 6px 10px;
-  color: var(--wir-faint);
-  font-size: 0.8rem;
-  line-height: 1.5;
-}
-
-.wir.wir .wir-sources p {
-  margin: 0;
-  max-width: 92ch;
-  color: var(--wir-faint);
-}
-
 @media (max-width: 640px) {
   .wir-chain li {
     flex-direction: column;
@@ -784,6 +826,11 @@
   --wir-chart-point-stroke: #ffffff;
   --wir-chart-marker-line: rgba(23, 32, 51, 0.42);
   --wir-chart-marker-text: #172033;
+  --wir-chart-hover-line: rgba(23, 32, 51, 0.3);
+  --wir-chart-tip-bg: rgba(255, 255, 255, 0.97);
+  --wir-chart-tip-line: rgba(35, 54, 78, 0.22);
+  --wir-chart-tip-text: #172033;
+  --wir-chart-tip-muted: #4f5f70;
 
   min-height: 0;
   padding: 0;

@@ -1,10 +1,12 @@
-import { Baby, BriefcaseBusiness, ChevronDown, HeartHandshake, Landmark, ReceiptText, ShieldCheck, UsersRound } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import {
   calculateAdditionalWorkExpenses2025,
   calculateBaseReductions2025,
+  calculateGeneralDeductions2025,
   calculateGeographicMobilityIncrement2025,
   calculateInKindBenefits2025,
+  calculateRefundableDeductions2025,
   createEmptyIrpf2025Adjustments,
   GEOGRAPHIC_MOBILITY_INCREMENT_2025,
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
@@ -23,11 +25,15 @@ type Props = {
   // Los gastos del art. 19 y las reducciones de base se preguntan por separado:
   // no restan en el mismo momento del calculo.
   reductionsGroup?: 'all' | 'work-expenses' | 'base-reductions'
+  deductionsGroup?: 'all' | 'in-kind' | 'quota' | 'refundable' | 'withholdings'
   value: Irpf2025AdjustmentInput
   declaredInKindSalary?: number
   declaredGrossWorkIncome?: number
   netWorkIncome?: number
   previewBaseAvailable?: number
+  previewTaxableIncome?: number
+  stateIntegralQuota?: number
+  regionalIntegralQuota?: number
   onChange: (value: Irpf2025AdjustmentInput) => void
 }
 const OTHER_INCOME_THRESHOLD = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
@@ -35,12 +41,19 @@ const SPOUSE_INCOME_THRESHOLD = 8_000
 const SPOUSE_PENSION_MAX_REDUCTION = 1_000
 const PERSONAL_PENSION_ABSOLUTE_LIMIT = 1_500
 
-function QuestionEffect({ amount }: { amount?: number }) {
+type QuestionEffectKind = 'reduction' | 'deduction' | 'exempt'
+
+function QuestionEffect({ amount, kind = 'reduction' }: { amount?: number; kind?: QuestionEffectKind }) {
   if (!amount) return null
   const formatted = Math.abs(amount).toLocaleString('es-ES', { maximumFractionDigits: 2 })
+  const label = kind === 'exempt'
+    ? `${formatted} EUR exentos`
+    : kind === 'deduction'
+      ? `Resta ${formatted} EUR de la cuota`
+      : `Reduce la base en ${formatted} EUR`
   return (
-    <em className="irpf-question-effect irpf-question-effect--reduction" aria-label={`Reduce la base en ${formatted} EUR`}>
-      −{formatted} EUR
+    <em className={`irpf-question-effect irpf-question-effect--${kind}`} aria-label={label}>
+      {kind === 'exempt' ? `${formatted} EUR exentos` : `−${formatted} EUR`}
     </em>
   )
 }
@@ -249,34 +262,14 @@ function SelectField({ label, value, onChange, children, help, hint }: {
   )
 }
 
-function RuleGroup({ title, description, icon: Icon, children, open = false }: {
-  title: string
-  description: string
-  icon: typeof ReceiptText
-  children: ReactNode
-  open?: boolean
-}) {
-  return (
-    <details className="irpf-rule-group" open={open}>
-      <summary>
-        <span aria-hidden="true"><Icon /></span>
-        <span>
-          <strong>{title}</strong>
-          <small>{description}</small>
-        </span>
-      </summary>
-      <div className="irpf-rule-group__body">{children}</div>
-    </details>
-  )
-}
-
-function ReductionQuestion({ question, description, guide, children, initiallyRelevant = false, effectAmount, onYes, onNo }: {
+function ReductionQuestion({ question, description, guide, children, initiallyRelevant = false, effectAmount, effectKind, onYes, onNo }: {
   question: string
   description: string
   guide?: ReactNode
-  children: ReactNode
+  children?: ReactNode
   initiallyRelevant?: boolean
   effectAmount?: number
+  effectKind?: QuestionEffectKind
   onYes?: () => void
   onNo: () => void
 }) {
@@ -297,7 +290,7 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
         <div>
           <div className="irpf-reduction-question__title-row">
             <h3>{question}</h3>
-            <QuestionEffect amount={effectAmount} />
+            <QuestionEffect amount={effectAmount} kind={effectKind} />
           </div>
           <p>{description}</p>
           {guide ? <div className="irpf-reduction-question__guide">{guide}</div> : null}

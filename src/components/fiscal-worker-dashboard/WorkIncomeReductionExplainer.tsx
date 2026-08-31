@@ -271,6 +271,120 @@ function CurrentMarker({
   )
 }
 
+/** `plotted` marca las filas que ademas tienen linea en el grafico. */
+type HoverRow = { label: string; value: number; tone: 'red' | 'blue' | 'plain'; plotted?: boolean }
+
+/**
+ * Capa transparente sobre el area de dibujo que convierte la posicion del raton
+ * en un salario y engancha el punto mas cercano de la curva. Mide sobre el rect
+ * real del elemento, asi que funciona con cualquier escalado del viewBox.
+ */
+function ChartHoverLayer({
+  points,
+  scale,
+  xMin,
+  xMax,
+  hovered,
+  onHover,
+  rows,
+}: {
+  points: CurvePoint[]
+  scale: ChartScale
+  xMin: number
+  xMax: number
+  hovered: CurvePoint | null
+  onHover: (point: CurvePoint | null) => void
+  rows: (point: CurvePoint) => HoverRow[]
+}) {
+  const plotTop = PAD_TOP
+  const plotBottom = CHART_HEIGHT - PAD_BOTTOM
+
+  const track = (event: React.PointerEvent<SVGRectElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    if (rect.width === 0 || points.length === 0) {
+      onHover(null)
+      return
+    }
+    const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width))
+    const target = xMin + ratio * (xMax - xMin)
+    onHover(
+      points.reduce(
+        (best, point) =>
+          Math.abs(point.gross - target) < Math.abs(best.gross - target) ? point : best,
+        points[0],
+      ),
+    )
+  }
+
+  const readings = hovered ? rows(hovered) : []
+  const x = hovered ? scale.x(hovered.gross) : 0
+  const boxWidth = 196
+  const boxHeight = 26 + readings.length * 18
+  const flip = x + 14 + boxWidth > CHART_WIDTH - PAD_RIGHT
+  const boxX = flip ? x - 14 - boxWidth : x + 14
+
+  return (
+    <g>
+      {hovered ? (
+        <g className="wir-chart__hover" aria-hidden="true">
+          <line className="wir-chart__hover-line" x1={x} x2={x} y1={plotTop} y2={plotBottom} />
+          {readings.map((row) =>
+            row.plotted ? (
+              <circle
+                key={row.label}
+                className={`wir-chart__hover-dot wir-chart__hover-dot--${row.tone}`}
+                cx={x}
+                cy={scale.y(Math.max(0, row.value))}
+                r={4}
+              />
+            ) : null,
+          )}
+          <rect
+            className="wir-chart__hover-box"
+            x={boxX}
+            y={plotTop + 6}
+            width={boxWidth}
+            height={boxHeight}
+            rx={8}
+          />
+          <text className="wir-chart__hover-title" x={boxX + 12} y={plotTop + 24}>
+            {euro(hovered.gross)} de bruto
+          </text>
+          {readings.map((row, index) => (
+            <g key={row.label}>
+              <text
+                className="wir-chart__hover-label"
+                x={boxX + 12}
+                y={plotTop + 44 + index * 18}
+              >
+                {row.label}
+              </text>
+              <text
+                className={`wir-chart__hover-value wir-chart__hover-value--${row.tone}`}
+                x={boxX + boxWidth - 12}
+                y={plotTop + 44 + index * 18}
+                textAnchor="end"
+              >
+                {percent(row.value)}
+              </text>
+            </g>
+          ))}
+        </g>
+      ) : null}
+      <rect
+        className="wir-chart__hover-surface"
+        x={PAD_LEFT}
+        y={plotTop}
+        width={CHART_WIDTH - PAD_LEFT - PAD_RIGHT}
+        height={plotBottom - plotTop}
+        onPointerMove={track}
+        onPointerDown={track}
+        onPointerLeave={() => onHover(null)}
+      />
+    </g>
+  )
+}
+
 // ─── Componente ──────────────────────────────────────────────────────────────
 
 export type WorkIncomeReductionExplainerProps = {
@@ -304,6 +418,7 @@ export function WorkIncomeReductionExplainer({
   const realGrossInSliderRange = realGross >= MIN_GROSS && realGross <= MAX_GROSS
   const anchorGross = realGrossInSliderRange ? clampGross(realGross) : DEFAULT_SIMULATED_GROSS
   const [gross, setGross] = useState(anchorGross)
+  const [hoveredMarginal, setHoveredMarginal] = useState<CurvePoint | null>(null)
 
   const profile = useMemo<BaseProfileOptions>(() => {
     const adjustments = createEmptyIrpf2025Adjustments()
@@ -753,9 +868,9 @@ export function WorkIncomeReductionExplainer({
 
           <ul className="wir-legend">
             <li><i className="wir-dot wir-dot--red" />Tipo marginal (IRPF + cotizaciones)</li>
-            <li><i className="wir-dot wir-dot--orange" />Tipo marginal solo IRPF</li>
             <li><i className="wir-dot wir-dot--blue" />Tipo medio (IRPF ÷ bruto)</li>
           </ul>
+          <p className="wir-chart-hint">Pasa el ratón por el gráfico para ver el tipo de cada sueldo.</p>
 
           <ChartFrame
             scale={marginalScale}
@@ -797,10 +912,6 @@ export function WorkIncomeReductionExplainer({
               d={linePath(visibleCurve, marginalScale, (point) => point.marginalTotal)}
             />
             <path
-              className="wir-chart__line wir-chart__line--orange"
-              d={linePath(visibleCurve, marginalScale, (point) => point.marginalIrpf)}
-            />
-            <path
               className="wir-chart__line wir-chart__line--blue"
               d={linePath(visibleCurve, marginalScale, (point) => point.averageIrpf)}
             />
@@ -810,10 +921,31 @@ export function WorkIncomeReductionExplainer({
               cy={marginalScale.y(Math.min(80, marginalHere.total))}
               r={5}
             />
-            <CurrentMarker
+            {/* La guia del raton sustituye a la del slider mientras se explora. */}
+            {hoveredMarginal ? null : (
+              <CurrentMarker
+                scale={marginalScale}
+                gross={Math.min(Math.max(gross, MIN_GROSS), MAX_GROSS)}
+                caption={percent(marginalHere.total)}
+              />
+            )}
+            <ChartHoverLayer
+              points={visibleCurve}
               scale={marginalScale}
-              gross={Math.min(Math.max(gross, MIN_GROSS), MAX_GROSS)}
-              caption={percent(marginalHere.total)}
+              xMin={MIN_GROSS}
+              xMax={MAX_GROSS}
+              hovered={hoveredMarginal}
+              onHover={setHoveredMarginal}
+              rows={(point) => [
+                {
+                  label: 'Marginal (IRPF + SS)',
+                  value: point.marginalTotal,
+                  tone: 'red',
+                  plotted: true,
+                },
+                { label: 'Marginal solo IRPF', value: point.marginalIrpf, tone: 'plain' },
+                { label: 'Tipo medio', value: point.averageIrpf, tone: 'blue', plotted: true },
+              ]}
             />
           </ChartFrame>
 
