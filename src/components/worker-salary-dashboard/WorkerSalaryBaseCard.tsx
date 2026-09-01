@@ -7,9 +7,6 @@ import './WorkerSalaryBaseCard.css'
 const SALARY_COMPLEMENTS_HELP =
   'Pagos que sumas al salario fijo durante el año: plus de convenio, nocturnidad, productividad, comisiones u otros conceptos en dinero. Elige un porcentaje prefijado o escribe el importe anual; el porcentaje es la referencia y los euros se recalculan si mueves el salario fijo.'
 
-const IN_KIND_SALARY_HELP =
-  'Beneficios que recibes de la empresa en lugar de dinero en la nómina: seguro médico, coche, vales comida o transporte, guardería, etc. Elige un porcentaje prefijado o escribe el importe anual; el porcentaje es la referencia y los euros se recalculan si mueves el salario fijo.'
-
 type PayPeriod = 'annual' | 'monthly'
 type PayCount = '12' | '14'
 
@@ -18,13 +15,11 @@ type WorkerSalaryBaseCardProps = {
   initialPayPeriod?: PayPeriod
   initialPayCount?: PayCount
   initialSalaryComplements?: number
-  initialInKindSalary?: number
   onValuesChange?: (values: {
     salary: number
     payPeriod: PayPeriod
     payCount: PayCount
     salaryComplements: number
-    inKindSalary: number
     realBaseAnnual: number
   }) => void
 }
@@ -42,7 +37,7 @@ const percentDetailFormatter = new Intl.NumberFormat('es-ES', {
   maximumFractionDigits: 2,
 })
 
-/** Preset percentages for complements and in-kind salary. */
+/** Preset percentages for salary complements. */
 const AMOUNT_PERCENT_PRESETS = [0, 2, 5, 8, 10, 12, 15, 20, 25] as const
 type AmountPercentPreset = (typeof AMOUNT_PERCENT_PRESETS)[number]
 
@@ -171,7 +166,6 @@ export function WorkerSalaryBaseCard({
   initialPayPeriod = 'annual',
   initialPayCount = '14',
   initialSalaryComplements = 2000,
-  initialInKindSalary = 500,
   onValuesChange,
 }: WorkerSalaryBaseCardProps) {
   const initialAnnual = initialAnnualSalary(initialSalary, initialPayPeriod, initialPayCount)
@@ -181,9 +175,6 @@ export function WorkerSalaryBaseCard({
   const [complementsPercent, setComplementsPercent] = useState(() =>
     percentFromEuros(initialSalaryComplements, initialAnnual),
   )
-  const [inKindPercent, setInKindPercent] = useState(() =>
-    percentFromEuros(initialInKindSalary, initialAnnual),
-  )
   const salaryRange = salaryRanges[payPeriod]
   const annualSalary = useMemo(
     () => (payPeriod === 'annual' ? salary : salary * Number(payCount)),
@@ -191,11 +182,10 @@ export function WorkerSalaryBaseCard({
   )
 
   const salaryComplements = eurosFromPercent(complementsPercent, annualSalary)
-  const inKindSalary = eurosFromPercent(inKindPercent, annualSalary)
 
   const realBase = useMemo(
-    () => annualSalary + salaryComplements + inKindSalary,
-    [annualSalary, inKindSalary, salaryComplements],
+    () => annualSalary + salaryComplements,
+    [annualSalary, salaryComplements],
   )
 
   useEffect(() => {
@@ -204,10 +194,9 @@ export function WorkerSalaryBaseCard({
       payPeriod,
       payCount,
       salaryComplements,
-      inKindSalary,
       realBaseAnnual: realBase,
     })
-  }, [inKindSalary, onValuesChange, payCount, payPeriod, realBase, salary, salaryComplements])
+  }, [onValuesChange, payCount, payPeriod, realBase, salary, salaryComplements])
 
   const handlePayPeriodChange = (nextPayPeriod: PayPeriod) => {
     if (nextPayPeriod === payPeriod) return
@@ -294,29 +283,6 @@ export function WorkerSalaryBaseCard({
             percent={complementsPercent}
             annualSalary={annualSalary}
             onPercentChange={setComplementsPercent}
-          />
-        </div>
-
-        <div className="wsbc-label-row">
-          <label className="wsbc-label" htmlFor="wsbc-kind">Salario en especie anual</label>
-          <InfoButton
-            label="Que es el salario en especie anual"
-            size="sm"
-            placement="end"
-            className="wsbc-help"
-          >
-            <p>{IN_KIND_SALARY_HELP}</p>
-          </InfoButton>
-        </div>
-        <div className="wsbc-control-row wsbc-control-row--amount">
-          <AmountPercentPair
-            percentSelectId="wsbc-kind-percent"
-            eurosInputId="wsbc-kind"
-            percentLabel="Porcentaje de salario en especie sobre el salario fijo"
-            eurosLabel="Salario en especie anual en euros"
-            percent={inKindPercent}
-            annualSalary={annualSalary}
-            onPercentChange={setInKindPercent}
           />
         </div>
       </div>

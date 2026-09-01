@@ -1,0 +1,591 @@
+/* Resumen final del recorrido fiscal (paso 10).
+   Tokens propios en el primer bloque: el tema claro los reescribe en
+   FiscalSoftTheme.css sin tocar el resto de reglas. */
+
+.wfin {
+  --wfin-text: #f3f7ff;
+  --wfin-muted: #a9b8d2;
+  --wfin-faint: #8395b3;
+  --wfin-line: rgba(37, 123, 213, 0.42);
+  --wfin-line-strong: rgba(48, 151, 255, 0.78);
+  --wfin-panel: rgba(4, 21, 43, 0.72);
+  --wfin-panel-soft: rgba(6, 27, 52, 0.55);
+  --wfin-shadow: 0 26px 90px rgba(0, 5, 19, 0.55);
+  --wfin-radius: 18px;
+
+  --wfin-chart-take-home: #62d96f;
+  --wfin-chart-employer-contributions: #35a8ff;
+  --wfin-chart-worker-contributions: #31d6dd;
+  --wfin-chart-irpf: #a765ff;
+  --wfin-chart-vat: #ff9828;
+  --wfin-chart-special-taxes: #ff5b59;
+  --wfin-chart-wealth-taxes: #f2c14b;
+
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2vw, 26px);
+  width: min(100%, 1500px);
+  padding: clamp(18px, 1.6vw, 28px);
+  border: 1px solid var(--wfin-line-strong);
+  border-radius: var(--wfin-radius);
+  color: var(--wfin-text);
+  background:
+    radial-gradient(circle at 5% -14%, rgba(34, 150, 255, 0.23), transparent 28%),
+    radial-gradient(circle at 85% 2%, rgba(38, 106, 181, 0.2), transparent 24%),
+    linear-gradient(135deg, #061a31 0%, #031327 48%, #051427 100%);
+  box-shadow: var(--wfin-shadow);
+}
+
+.wfin *,
+.wfin *::before,
+.wfin *::after {
+  box-sizing: border-box;
+}
+
+.wfin :is(h2, h3, h4, p, dl, dd, dt, ul, li, figure, figcaption) {
+  margin: 0;
+}
+
+.wfin ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* Cabecera */
+
+.wfin-step {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wfin-chart-take-home);
+}
+
+.wfin-header h2 {
+  margin-top: 6px;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  line-height: 1.2;
+}
+
+.wfin-lead {
+  max-width: 76ch;
+  margin-top: 8px;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--wfin-muted);
+}
+
+/* Controles */
+
+.wfin-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.wfin-controls__salary {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.wfin-period {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--wfin-line);
+  border-radius: 999px;
+  background: var(--wfin-panel-soft);
+}
+
+.wfin-period button {
+  padding: 7px 16px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--wfin-muted);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.wfin-period button.is-active {
+  color: #04182c;
+  background: var(--wfin-chart-employer-contributions);
+}
+
+/* Rejilla principal: grafico + lateral */
+
+.wfin-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(14px, 1.6vw, 22px);
+  align-items: start;
+}
+
+.wfin-chart,
+.wfin-headline,
+.wfin-home,
+.wfin-state {
+  padding: clamp(14px, 1.4vw, 20px);
+  border: 1px solid var(--wfin-line);
+  border-radius: var(--wfin-radius);
+  background: var(--wfin-panel);
+}
+
+.wfin-chart__title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.wfin-chart__title span {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.wfin-chart__title small {
+  font-size: 0.82rem;
+  color: var(--wfin-muted);
+}
+
+.wfin-chart__viz {
+  position: relative;
+}
+
+.wfin-chart__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.wfin-chart__center strong {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1;
+  color: var(--wfin-chart-take-home);
+}
+
+.wfin-chart__center span {
+  max-width: 12ch;
+  font-size: 0.74rem;
+  line-height: 1.25;
+  color: var(--wfin-muted);
+}
+
+.wfin-chart__tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 12px;
+  font-size: 0.8rem;
+  color: var(--wfin-text);
+  border: 1px solid var(--wfin-line-strong);
+  border-radius: 12px;
+  background: #04182c;
+  box-shadow: 0 12px 28px rgba(0, 5, 19, 0.5);
+}
+
+.wfin-chart__tooltip span {
+  color: var(--wfin-muted);
+}
+
+/* Leyenda */
+
+.wfin-legend {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.wfin-legend__item {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--wfin-panel-soft);
+}
+
+.wfin-legend__item--take-home {
+  border-color: color-mix(in srgb, var(--wfin-chart-take-home) 45%, transparent);
+}
+
+.wfin-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--wfin-legend-color, var(--wfin-faint));
+}
+
+.wfin-legend__item--take-home .wfin-legend__swatch { background: var(--wfin-chart-take-home); }
+.wfin-legend__item--employer-contributions .wfin-legend__swatch { background: var(--wfin-chart-employer-contributions); }
+.wfin-legend__item--worker-contributions .wfin-legend__swatch { background: var(--wfin-chart-worker-contributions); }
+.wfin-legend__item--irpf .wfin-legend__swatch { background: var(--wfin-chart-irpf); }
+.wfin-legend__item--vat .wfin-legend__swatch { background: var(--wfin-chart-vat); }
+.wfin-legend__item--special-taxes .wfin-legend__swatch { background: var(--wfin-chart-special-taxes); }
+.wfin-legend__item--wealth-taxes .wfin-legend__swatch { background: var(--wfin-chart-wealth-taxes); }
+
+.wfin-legend__label {
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.wfin-legend__detail {
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: var(--wfin-faint);
+}
+
+.wfin-legend__value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  text-align: right;
+}
+
+.wfin-legend__value strong {
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.wfin-legend__value span {
+  font-size: 0.76rem;
+  color: var(--wfin-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lateral */
+
+.wfin-side {
+  display: grid;
+  gap: clamp(12px, 1.2vw, 18px);
+}
+
+.wfin-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-color: color-mix(in srgb, var(--wfin-chart-employer-contributions) 45%, var(--wfin-line));
+}
+
+.wfin-headline p {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--wfin-muted);
+}
+
+.wfin-headline strong {
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.wfin-headline span {
+  font-size: 0.82rem;
+  color: var(--wfin-faint);
+}
+
+/* Casa y coche */
+
+.wfin-home__header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.wfin-home__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  color: #04182c;
+  background: var(--wfin-chart-wealth-taxes);
+}
+
+.wfin-home h3 {
+  font-size: 1rem;
+}
+
+.wfin-home__rows {
+  display: grid;
+  gap: 6px;
+}
+
+.wfin-home__rows li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--wfin-panel-soft);
+}
+
+.wfin-home__row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--wfin-chart-wealth-taxes);
+  background: color-mix(in srgb, var(--wfin-chart-wealth-taxes) 18%, transparent);
+}
+
+.wfin-home__rows p {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.wfin-home__rows small {
+  font-size: 0.74rem;
+  color: var(--wfin-faint);
+}
+
+.wfin-home__rows strong {
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.wfin-home__note,
+.wfin-home__empty,
+.wfin-home__oneoff {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--wfin-muted);
+}
+
+.wfin-home__oneoff {
+  padding: 9px 11px;
+  border: 1px dashed var(--wfin-line);
+  border-radius: 12px;
+}
+
+.wfin-home__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: #04182c;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wfin-chart-wealth-taxes);
+  cursor: pointer;
+}
+
+/* Bloque del Estado */
+
+.wfin-state__header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.wfin-state__header h3 {
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+}
+
+.wfin-state__header p {
+  max-width: 82ch;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--wfin-muted);
+}
+
+.wfin-state__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 12px;
+}
+
+.wfin-state__item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--wfin-line);
+  border-left: 3px solid var(--wfin-state-color, var(--wfin-faint));
+  border-radius: 14px;
+  background: var(--wfin-panel-soft);
+}
+
+.wfin-state__item--social_contributions { --wfin-state-color: var(--wfin-chart-worker-contributions); }
+.wfin-state__item--irpf { --wfin-state-color: var(--wfin-chart-irpf); }
+.wfin-state__item--vat { --wfin-state-color: var(--wfin-chart-vat); }
+.wfin-state__item--special_taxes { --wfin-state-color: var(--wfin-chart-special-taxes); }
+.wfin-state__item--property_tax { --wfin-state-color: var(--wfin-chart-wealth-taxes); }
+.wfin-state__item--vehicle_tax { --wfin-state-color: var(--wfin-chart-wealth-taxes); }
+
+.wfin-state__head h4 {
+  font-size: 1rem;
+  color: var(--wfin-state-color, var(--wfin-text));
+}
+
+.wfin-state__head p {
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: var(--wfin-faint);
+}
+
+.wfin-state__figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.wfin-state__figures > div {
+  padding: 8px 9px;
+  border-radius: 10px;
+  background: var(--wfin-panel);
+}
+
+.wfin-state__figures dt {
+  font-size: 0.68rem;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--wfin-faint);
+}
+
+.wfin-state__figures dd {
+  margin-top: 3px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.wfin-state__lines {
+  display: grid;
+  gap: 7px;
+}
+
+.wfin-state__line {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 8px;
+  font-size: 0.81rem;
+  line-height: 1.5;
+  color: var(--wfin-muted);
+}
+
+.wfin-state__line b {
+  color: var(--wfin-text);
+}
+
+.wfin-state__line-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  color: var(--wfin-state-color, var(--wfin-text));
+  background: color-mix(in srgb, var(--wfin-state-color, #ffffff) 16%, transparent);
+}
+
+.wfin-state__source {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--wfin-faint);
+}
+
+/* Pie */
+
+.wfin-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wfin-footer p {
+  flex: 1 1 380px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--wfin-faint);
+}
+
+.wfin-footer__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: #04182c;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wfin-chart-take-home);
+  cursor: pointer;
+}
+
+.wfin :is(.wfin-period button, .wfin-home__cta, .wfin-footer__cta):focus-visible {
+  outline: 2px solid var(--wfin-chart-employer-contributions);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+
+@container (max-width: 940px) {
+  .wfin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container (max-width: 560px) {
+  .wfin-legend__item {
+    grid-template-columns: 12px minmax(0, 1fr);
+    row-gap: 4px;
+  }
+
+  .wfin-legend__value {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .wfin-state__figures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Por debajo del minimo de auto-fit la columna se desbordaria. */
+  .wfin-state__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wfin-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wfin-footer__cta {
+    justify-content: center;
+  }
+}

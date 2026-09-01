@@ -122,6 +122,25 @@
 - uso previsto en la web: serie observada de gasto publico en sanidad desde 1995, separada de las proyecciones del Ageing Report.
 - nota metodologica: COFOG `07 Salud` no equivale necesariamente al gasto sanitario total ni a la definicion OCDE de gasto sanitario publico/obligatorio.
 
+## IGAE - Impuestos y cotizaciones sociales de las Administraciones publicas
+
+- nombre de la fuente: Contabilidad nacional. Serie anual. Impuestos y cotizaciones sociales de las Administraciones publicas (S.13)
+- institucion: Intervencion General de la Administracion del Estado (IGAE)
+- URL pagina: https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Paginas/iaimpuestosycotizaciones.aspx
+- URL archivo XLSX: https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Documents/AAPP_A/A_AAPP_Imp.xlsx
+- fecha de descarga: 2026-09-01
+- fecha de transformacion: 2026-09-01
+- fecha de actualizacion de la fuente: 2025-09-30
+- periodo procesado: 2024 (la fuente cubre 1995-2024)
+- ambito geografico: Espana, sector Administraciones Publicas (S.13)
+- formato descargado: XLSX
+- archivo bruto: `data/raw/igae/impuestos-cotizaciones-aapp/2026-09-01_igae_aapp-impuestos-y-cotizaciones-sec2010_1995-2024.xlsx`
+- archivo procesado: `data/processed/fiscal/2026-09-01_igae-recaudacion-por-figura-aapp-2024.json`
+- licencia o condiciones de uso: reutilizacion segun condiciones generales del portal de la Administracion Presupuestaria
+- descripcion breve: recaudacion anual por figura tributaria (D.2, D.5, D.91) y cotizaciones sociales (D.61) del conjunto de Administraciones Publicas, en millones de euros (hoja `Tabla1a`) y en porcentaje del PIB (hoja `Tabla1b`).
+- uso previsto en la web: bloque de contexto del paso 10 de la calculadora fiscal, con recaudacion de IRPF, IVA, impuestos especiales, IBI, IVTM y cotizaciones sociales en valor absoluto, sobre ingresos publicos y sobre PIB.
+- nota metodologica: 2024 es provisional (P). Es contabilidad nacional del total de AAPP, no recaudacion de caja de la AEAT ni carga fiscal individual; no debe compararse directamente con el Informe Anual de Recaudacion Tributaria. Detalle de filas y exclusiones en `data/methodology/recaudacion-por-figura-tributaria-2024.md`.
+
 ## Comision Europea - Ageing Report 2024, anexos estadisticos
 
 - nombre de la fuente: 2024 Ageing Report - Statistical annexes all country fiches

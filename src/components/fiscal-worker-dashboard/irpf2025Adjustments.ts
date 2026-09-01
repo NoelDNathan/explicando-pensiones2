@@ -206,7 +206,7 @@ export function createEmptyIrpf2025Adjustments(
     transportCardEligibleMonths: 0,
     healthInsuranceEligible: false,
     healthInsuranceOrdinaryPersonsCount: 1,
-    healthInsuranceDisabledPersonsCount: 1,
+    healthInsuranceDisabledPersonsCount: 0,
     healthInsurancePremiumOrdinaryPersons: 0,
     healthInsurancePremiumDisabledPersons: 0,
     companyDaycareEligible: false,
@@ -232,6 +232,9 @@ function applyScale(base: number, scale: IrpfScaleBracket[]) {
 function boundedMonths(value: number) {
   return Math.min(12, Math.max(0, Math.trunc(value)))
 }
+
+export const HEALTH_INSURANCE_EXEMPT_PER_PERSON_2025 = 500
+export const HEALTH_INSURANCE_EXEMPT_PER_DISABLED_PERSON_2025 = 1_500
 
 export type InKindBenefitResult = {
   declaredBenefitsTotal: number
@@ -263,10 +266,12 @@ export function calculateInKindBenefits2025(input: Irpf2025AdjustmentInput): InK
   const ordinaryPremiums = positive(input.healthInsurancePremiumOrdinaryPersons)
   const disabledPremiums = positive(input.healthInsurancePremiumDisabledPersons)
   const healthTotal = ordinaryPremiums + disabledPremiums
-  const healthExempt = input.healthInsuranceEligible
-    ? Math.min(ordinaryPremiums, positive(input.healthInsuranceOrdinaryPersonsCount) * 500)
-      + Math.min(disabledPremiums, positive(input.healthInsuranceDisabledPersonsCount) * 1_500)
-    : 0
+  const ordinaryPeople = Math.max(0, Math.trunc(input.healthInsuranceOrdinaryPersonsCount))
+  const disabledPeople = Math.max(0, Math.trunc(input.healthInsuranceDisabledPersonsCount))
+  const healthCap =
+    ordinaryPeople * HEALTH_INSURANCE_EXEMPT_PER_PERSON_2025
+    + disabledPeople * HEALTH_INSURANCE_EXEMPT_PER_DISABLED_PERSON_2025
+  const healthExempt = input.healthInsuranceEligible ? Math.min(healthTotal, healthCap) : 0
   const daycareTotal = positive(input.companyDaycareAnnualAmount)
   const daycareExempt = input.companyDaycareEligible ? daycareTotal : 0
   const declaredBenefitsTotal = mealTotal + transportTotal + healthTotal + daycareTotal

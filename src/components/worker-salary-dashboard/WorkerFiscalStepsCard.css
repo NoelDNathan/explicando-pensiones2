@@ -402,6 +402,75 @@
   text-align: center;
 }
 
+/* Un unico concepto ocupa todo el ancho: sin hueco muerto al lado. */
+.wfsc-concepts--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.wfsc-concepts--single .wfsc-concept {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px 26px;
+  padding: 20px 24px;
+}
+
+.wfsc-concepts--single .wfsc-concept h3 {
+  grid-area: 1 / 1 / 2 / 2;
+  margin-bottom: 0;
+}
+
+.wfsc-concept__lead {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+}
+
+.wfsc-concepts--single .wfsc-concept__lead {
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+/* Las tres formas de pagar menos se leen en paralelo, no en fila apilada. */
+.wfsc-concept__formulas {
+  display: grid;
+  gap: 10px;
+}
+
+.wfsc-concept .wfsc-concept__formulas p + p {
+  margin-top: 0;
+}
+
+.wfsc-concepts--single .wfsc-concept__formulas {
+  grid-area: 1 / 2 / 3 / 3;
+  align-content: center;
+}
+
+.wfsc-concept .wfsc-concept__formula {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.wfsc-concept .wfsc-concept__formula b {
+  font-size: clamp(14px, 1.1vw, 16px);
+  font-weight: 860;
+  letter-spacing: 0.01em;
+}
+
+.wfsc-concept .wfsc-concept__formula span {
+  font-weight: 620;
+  opacity: 0.9;
+}
+
+.wfsc-concept .wfsc-concept__formula em {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 760;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
 .wfsc-help {
   position: relative;
   display: grid;
@@ -928,6 +997,19 @@
 
   .wfsc-concept {
     padding: 14px;
+  }
+
+  .wfsc-concepts--single .wfsc-concept {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .wfsc-concepts--single .wfsc-concept h3,
+  .wfsc-concepts--single .wfsc-concept__lead,
+  .wfsc-concepts--single .wfsc-concept__formulas {
+    grid-area: auto;
   }
 
   .wfsc-stage {

@@ -392,10 +392,11 @@
 }
 
 .wctc-oneoff__summary {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  grid-template-areas: "chevron badge label value";
+  gap: 6px 8px;
   align-items: center;
-  gap: 8px;
   padding: 9px 10px;
   border-radius: 8px;
   cursor: pointer;
@@ -412,9 +413,14 @@
 }
 
 .wctc-oneoff__chevron {
-  flex: 0 0 auto;
+  grid-area: chevron;
   color: var(--wctc-muted);
   transition: transform 160ms ease;
+}
+
+.wctc-oneoff__summary .wctc-home-card__badge {
+  grid-area: badge;
+  justify-self: start;
 }
 
 .wctc-oneoff[open] .wctc-oneoff__chevron {
@@ -422,7 +428,7 @@
 }
 
 .wctc-oneoff__label {
-  flex: 1;
+  grid-area: label;
   min-width: 0;
   color: var(--wctc-text);
   font-size: 13px;
@@ -431,6 +437,8 @@
 }
 
 .wctc-oneoff__value {
+  grid-area: value;
+  justify-self: end;
   color: var(--wctc-muted);
   font-size: 13px;
   line-height: 1.1;
@@ -724,6 +732,14 @@
   .wctc-ibi-row__fields,
   .wctc-home-card__fields {
     grid-template-columns: 1fr;
+  }
+
+  /* El titulo baja a su propia linea para que el importe no lo estruje. */
+  .wctc-oneoff__summary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "chevron badge value"
+      "chevron label label";
   }
 }
 

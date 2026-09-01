@@ -220,6 +220,14 @@
   background: rgba(72, 140, 220, 0.14);
 }
 
+/* Gasto deducible: baja el rendimiento neto, no la base. Color propio para que
+   no se confunda con el azul de lo que resta de la base o de la cuota. */
+.irpf-question-effect--expense {
+  border-color: rgba(94, 214, 200, 0.5);
+  color: #b6f2e8;
+  background: rgba(48, 176, 162, 0.16);
+}
+
 .irpf-question-effect--exempt {
   border-color: rgba(255, 210, 90, 0.5);
   color: #ffe7a8;
@@ -558,5 +566,104 @@
 
   .irpf-rule-group__body {
     padding: 12px;
+  }
+}
+
+/* Importe de especie con selector mes/ano: la cifra que no se teclea se calcula sola. */
+.irpf-period-field__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.irpf-period-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid rgba(87, 139, 204, 0.48);
+  border-radius: 999px;
+  background: rgba(1, 11, 29, 0.8);
+}
+
+.irpf-period-toggle button {
+  padding: 6px 11px;
+  border: 0;
+  border-radius: 999px;
+  color: #9db2d2;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+.irpf-period-toggle button.is-selected {
+  color: #04182f;
+  background: #27e5f0;
+}
+
+.irpf-period-field__mirror strong {
+  color: #eaf2ff;
+}
+
+.irpf-period-field__split {
+  color: #8fe6a4;
+}
+
+.irpf-period-field__split strong {
+  color: #58f171;
+}
+
+.irpf-health-block {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 10px;
+}
+
+.irpf-health-block__people {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.irpf-inkind-total {
+  display: grid;
+  gap: 3px;
+  padding: 11px 13px;
+  border: 1px solid rgba(88, 241, 113, 0.28);
+  border-radius: 11px;
+  background: rgba(15, 55, 45, 0.35);
+}
+
+.irpf-inkind-total span {
+  color: #9db2d2;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.irpf-inkind-total strong {
+  color: #58f171;
+  font-size: 17px;
+}
+
+.irpf-inkind-total small {
+  color: #91a7ca;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+@media (max-width: 440px) {
+  .irpf-period-field__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .irpf-health-block__people {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .irpf-period-toggle {
+    justify-self: start;
   }
 }

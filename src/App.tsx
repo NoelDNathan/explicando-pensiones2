@@ -14,7 +14,7 @@ import { SalaryNationalityDashboard } from './components/salary-nationality/Sala
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer, WorkIncomeReductionExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
-import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
+import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
@@ -716,7 +716,7 @@ function ComponentLab() {
           <h2 id="worker-salary-base-title">Base real salarial</h2>
           <p>
             Tarjeta editable para calcular la base real desde salario,
-            periodicidad, pagas, complementos y salario en especie.
+            periodicidad, pagas y complementos. La retribución en especie, si la hay, ya va dentro del salario.
           </p>
         </div>
 
@@ -842,7 +842,7 @@ function ComponentLab() {
           <p className="eyebrow">Componente 22</p>
           <h2 id="worker-fiscal-steps-title">Navegacion fiscal del trabajador</h2>
           <p>
-            Cabecera guiada de doce pasos para recorrer base real, limites,
+            Cabecera guiada de trece pasos para recorrer base real, limites,
             cotizaciones, retribucion en especie, reducciones, IRPF, deducciones,
             consumo, vivienda y coche, y salario neto.
           </p>
@@ -853,9 +853,38 @@ function ComponentLab() {
         </div>
       </section>
 
+      <section className="component-section component-section--wide" aria-labelledby="worker-final-summary-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 24</p>
+          <h2 id="worker-final-summary-title">Resumen final del recorrido</h2>
+          <p>
+            Paso 10 de la calculadora: grafico de reparto del coste laboral entre
+            neto e impuestos, ficha de vivienda y coche, y bloque de recaudacion
+            del Estado por figura con destino y efecto de cada una. La vista de
+            ejemplo incluye impuestos especiales, IBI e IVTM; sin ellos el grafico
+            oculta esas porciones y la ficha muestra su estado vacio.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--dashboard">
+          <WorkerFinalSummaryCard
+            grossSalaryAnnual={35_000}
+            employerContributionsAnnual={11_060}
+            workerContributionsAnnual={2_223}
+            irpfAnnual={4_468}
+            vatAnnual={1_836}
+            specialTaxesAnnual={620}
+            propertyTaxAnnual={480}
+            vehicleTaxAnnual={92}
+            propertyPurchaseTaxTotal={14_000}
+            vehiclePurchaseTaxTotal={1_260}
+          />
+        </div>
+      </section>
+
       <section className="component-section component-section--wide" aria-labelledby="worker-calculation-sources-title">
         <div className="component-section__intro">
-          <p className="eyebrow">Componente 23</p>
+          <p className="eyebrow">Componente 25</p>
           <h2 id="worker-calculation-sources-title">Fuentes del calculo</h2>
           <p>
             Pantalla final de trazabilidad con el nombre de cada parametro, el organismo oficial,
@@ -865,6 +894,24 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dark component-preview--dashboard">
           <WorkerCalculationSourcesCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-knowledge-check-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 26</p>
+          <h2 id="worker-knowledge-check-title">Comprueba lo aprendido</h2>
+          <p>
+            Paso 11 de la calculadora, opcional y de 10 a 15 minutos: 35 preguntas
+            repartidas en diez apartados, uno por bloque del recorrido. Ninguna se
+            responde escribiendo (opcion unica, opcion multiple, verdadero o falso,
+            ordenar, emparejar, clasificar y deslizador) y cada una se puede marcar
+            como mal explicada.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dashboard">
+          <WorkerKnowledgeCheckCard />
         </div>
       </section>
 

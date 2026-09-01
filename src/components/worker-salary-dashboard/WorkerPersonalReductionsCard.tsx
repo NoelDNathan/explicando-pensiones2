@@ -106,7 +106,6 @@ type WorkerPersonalReductionsCardProps = {
   appliedQuotaDeductions?: number;
   refundableDeductionsGenerated?: number;
   finalDeclarationResult?: number;
-  declaredInKindSalary?: number;
   declaredGrossWorkIncome?: number;
   /** Comunidad y grupo de cotizacion reales: el explicador los necesita. */
   region?: string;
@@ -1053,7 +1052,7 @@ function useStickyBarHeight(enabled: boolean) {
 export function WorkerPersonalReductionsCard({
   focus = "reductions",
   stepNumber = 5,
-  totalSteps = 12,
+  totalSteps = 13,
   initialChildren = 1,
   initialDisabilityPercent = 0,
   initialMaritalStatus = "married",
@@ -1074,7 +1073,6 @@ export function WorkerPersonalReductionsCard({
   appliedQuotaDeductions = 0,
   refundableDeductionsGenerated = 0,
   finalDeclarationResult = 0,
-  declaredInKindSalary = 0,
   declaredGrossWorkIncome = 0,
   region,
   contributionGroup,
@@ -1394,6 +1392,8 @@ export function WorkerPersonalReductionsCard({
   const explainedTaxableBase = Math.max(0, explainedBaseInitial - displayedBaseReductions);
   const taxableBaseFlash = useChangeFlash(explainedTaxableBase);
   const baseReductionsFlash = useChangeFlash(displayedBaseReductions);
+  const expensesFlash = useChangeFlash(otherDeductibleWorkExpenses);
+  const netWorkIncomeFlash = useChangeFlash(explainedNetWorkIncome);
   const liveGeneralDeductions = useMemo(
     () =>
       calculateGeneralDeductions2025(
@@ -1451,12 +1451,11 @@ export function WorkerPersonalReductionsCard({
   // arrancan los pasos siguientes. Se calcula en vivo para que la cadena
   // responda mientras el usuario rellena los importes.
   const inKindLive = useMemo(() => calculateInKindBenefits2025(adjustments), [adjustments]);
-  const inKindExemptApplied = Math.min(declaredInKindSalary, inKindLive.exemptAmount);
+  const inKindExemptApplied = inKindLive.exemptAmount;
   const inKindTaxableGross = Math.max(
     0,
     declaredGrossWorkIncome - inKindExemptApplied + inKindLive.paymentOnAccountAdded,
   );
-  const inKindMismatch = inKindLive.declaredBenefitsTotal > declaredInKindSalary;
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -1566,7 +1565,6 @@ export function WorkerPersonalReductionsCard({
             focus={focus}
             reductionsGroup="work-expenses"
             value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
             declaredGrossWorkIncome={declaredGrossWorkIncome}
             netWorkIncome={explainedNetWorkIncome}
             previewBaseAvailable={explainedBaseInitial}
@@ -1623,7 +1621,47 @@ export function WorkerPersonalReductionsCard({
             />
             <div className="wprc-chain">
               <dl className="wprc-chain__flow">
-                <div className="wprc-chain__step">
+                {/*
+                  * La cadena arranca en el bruto, no en el rendimiento neto: los
+                  * gastos deducibles ya iban dentro del neto y el usuario no veia
+                  * moverse nada al responder las preguntas del apartado 1.
+                  */}
+                {showNetIncomeEquation ? (
+                  <>
+                    <div className="wprc-chain__step is-context">
+                      <dt>Salario bruto anual</dt>
+                      <dd>{formatEuro(taxableWorkIncome)}</dd>
+                    </div>
+                    <div className="wprc-chain__step is-minus is-applied is-context" data-op="minus">
+                      <dt>Seguridad Social</dt>
+                      <dd>
+                        {formatEuro(socialSecurityWorkExpense)}
+                        <small>tu parte, paso 3</small>
+                      </dd>
+                    </div>
+                    <div
+                      className={`wprc-chain__step is-minus is-applied is-context${expensesFlash ? " is-changed" : ""}`}
+                      data-op="minus"
+                    >
+                      <dt>Gastos deducibles</dt>
+                      <dd>
+                        {formatEuro(otherDeductibleWorkExpenses)}
+                        {extraDeductibleExpenses > 0 ? (
+                          <small>
+                            {formatEuroRounded(generalOtherExpenses)} fijos +{" "}
+                            {formatEuroRounded(extraDeductibleExpenses)} tuyos
+                          </small>
+                        ) : (
+                          <small>iguales para todo el mundo</small>
+                        )}
+                      </dd>
+                    </div>
+                  </>
+                ) : null}
+                <div
+                  className={`wprc-chain__step${showNetIncomeEquation ? " is-subresult" : ""}${netWorkIncomeFlash ? " is-changed" : ""}`}
+                  data-op={showNetIncomeEquation ? "equals" : undefined}
+                >
                   <dt>Rendimiento neto del trabajo</dt>
                   <dd>{formatEuro(explainedNetWorkIncome)}</dd>
                 </div>
@@ -1666,7 +1704,16 @@ export function WorkerPersonalReductionsCard({
                     <dt>Reducciones de base</dt>
                     <dd>
                       {formatEuro(0)}
-                      <small>no tienes ninguna</small>
+                      {/*
+                        * Las cuotas de sindicato o colegio son gastos deducibles:
+                        * ya han restado en el rendimiento neto de arriba, no aqui.
+                        * Sin esta nota parece que la respuesta no se ha sumado.
+                        */}
+                      <small>
+                        {extraDeductibleExpenses > 0
+                          ? `tus ${formatEuroRounded(extraDeductibleExpenses)} de gastos ya restan en el rendimiento neto`
+                          : "no tienes ninguna"}
+                      </small>
                     </dd>
                   </div>
                 ) : null}
@@ -1723,7 +1770,6 @@ export function WorkerPersonalReductionsCard({
             focus={focus}
             reductionsGroup="base-reductions"
             value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
             declaredGrossWorkIncome={declaredGrossWorkIncome}
             netWorkIncome={explainedNetWorkIncome}
             previewBaseAvailable={explainedBaseInitial}
@@ -1910,7 +1956,7 @@ export function WorkerPersonalReductionsCard({
                 <div className="wprc-net-income__term">
                   <dt>
                     Salario bruto anual
-                    <small>lo que declaraste en el paso 1, especie incluida</small>
+                    <small>lo que declaraste en el paso 1, especie incluida si la tienes</small>
                   </dt>
                   <dd>{formatEuro(declaredGrossWorkIncome)}</dd>
                 </div>
@@ -1918,9 +1964,9 @@ export function WorkerPersonalReductionsCard({
                   <dt>
                     Especie exenta
                     <small>
-                      {declaredInKindSalary > 0
-                        ? `dentro de los ${formatEuro(declaredInKindSalary)} de especie del paso 1`
-                        : "no declaraste especie en el paso 1"}
+                      {inKindLive.declaredBenefitsTotal > 0
+                        ? `de los ${formatEuro(inKindLive.declaredBenefitsTotal)} que reparte este paso`
+                        : "reparte abajo a qué beneficio va cada parte"}
                     </small>
                   </dt>
                   <dd>{formatEuro(inKindExemptApplied)}</dd>
@@ -1969,13 +2015,16 @@ export function WorkerPersonalReductionsCard({
             </details>
           </section>
 
-          <section className="wprc-question-intro" aria-labelledby="wprc-in-kind">
-            <span aria-hidden="true">1</span>
+          <section
+            className="wprc-question-intro wprc-question-intro--no-num"
+            aria-labelledby="wprc-in-kind"
+          >
             <div>
               <h3 id="wprc-in-kind">Retribuciones en especie</h3>
               <p>
-                Ticket restaurante, ticket transporte, seguro médico o guardería que paga la empresa. Pon
-                lo que cobras al año de cada uno; lo que no tengas, déjalo en 0 €. Míralo en la nómina.
+                El salario del paso 1 ya incluye estos beneficios si los tienes. Aquí solo reparte cuánto
+                va a ticket restaurante, transporte, seguro médico o guardería, al mes o al año como lo
+                tengas en la nómina. Lo que no tengas, déjalo en 0 €.
               </p>
             </div>
           </section>
@@ -1983,7 +2032,6 @@ export function WorkerPersonalReductionsCard({
             focus={focus}
             deductionsGroup="in-kind"
             value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
             declaredGrossWorkIncome={declaredGrossWorkIncome}
             netWorkIncome={explainedNetWorkIncome}
             previewBaseAvailable={explainedTaxableBase}
@@ -1993,21 +2041,6 @@ export function WorkerPersonalReductionsCard({
             onChange={setAdjustments}
           />
 
-          {inKindMismatch ? (
-            <aside className="wprc-calculation-warnings" aria-label="Especie declarada y detallada no cuadran">
-              <strong>Lo detallado aquí supera la especie del paso 1</strong>
-              <ul>
-                <li>
-                  En el paso 1 declaraste {formatEuro(declaredInKindSalary)} de salario en especie y aquí
-                  has detallado {formatEuro(inKindLive.declaredBenefitsTotal)}.
-                </li>
-                <li>
-                  La exención se limita al importe del paso 1. Vuelve allí y sube la especie, o ajusta los
-                  importes de abajo, para que las dos cifras cuadren.
-                </li>
-              </ul>
-            </aside>
-          ) : null}
         </>
       ) : (
         <>
@@ -2140,7 +2173,6 @@ export function WorkerPersonalReductionsCard({
             focus={focus}
             deductionsGroup="quota"
             value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
             declaredGrossWorkIncome={declaredGrossWorkIncome}
             netWorkIncome={explainedNetWorkIncome}
             previewBaseAvailable={explainedTaxableBase}
@@ -2164,7 +2196,6 @@ export function WorkerPersonalReductionsCard({
             focus={focus}
             deductionsGroup="refundable"
             value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
             declaredGrossWorkIncome={declaredGrossWorkIncome}
             netWorkIncome={explainedNetWorkIncome}
             previewBaseAvailable={explainedTaxableBase}

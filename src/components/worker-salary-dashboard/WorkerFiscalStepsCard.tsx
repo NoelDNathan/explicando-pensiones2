@@ -8,6 +8,7 @@ import {
   ChevronRight,
   CircleHelp,
   Gift,
+  GraduationCap,
   Home,
   Scale,
   Shield,
@@ -81,7 +82,7 @@ export type PayrollLiveData = {
   grossSalaryAnnual: number
   salaryAnnual: number
   salaryComplementsAnnual: number
-  /** Retribucion en especie declarada en el paso 1: alimenta la linea BASE IRPF ESPECIE. */
+  /** Retribucion en especie detallada en el paso 4: alimenta la linea BASE IRPF ESPECIE. */
   inKindSalaryAnnual: number
   contributionBaseMonthly: number
   socialContributions: SocialContributionResult
@@ -279,7 +280,7 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 0,
     title: 'Resumen rápido',
     subtitle: 'Las cifras esenciales antes de entrar en detalle',
-    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los doce pasos del recorrido.',
+    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los trece pasos del recorrido.',
     checklist: [],
     helpTitle: 'Una primera aproximación',
     helpBody: 'El resumen reúne los resultados principales. Los pasos siguientes explican las bases, límites, cuotas y ajustes que hay detrás.',
@@ -347,29 +348,46 @@ Aquí puedes comparar ambas aportaciones y ver qué financia cada concepto.`,
     id: 4,
     title: 'Retribución en especie',
     subtitle: 'Lo que la empresa te paga sin darte dinero',
-    description: `Algunas empresas pagan una parte de lo que ganas sin que sea dinero: ticket restaurante, abono de transporte, seguro médico o guardería. Si no tienes ninguno de estos beneficios, responde «No» y continúa: es un paso de una sola pregunta.
+    description: `Algunas empresas pagan parte de lo que ganas en forma de beneficios, no de dinero: ticket restaurante, abono de transporte, seguro médico o guardería. Si no tienes ninguno, responde «No» y continúa. Es un paso de una sola pregunta.
+ 
+ 
+    Aquí es donde la Seguridad Social y el IRPF dejan de ir juntos. El salario del paso 1 que has puesto ya debería incluir la retribución en especie, asegúrate de haberlo puesto bien. 
 
-Este es el punto donde la Seguridad Social y el IRPF dejan de ir juntos. Para cotizar, la especie cuenta entera y ya está dentro de la base del paso 2. Para el IRPF, una parte puede quedar exenta hasta ciertos límites y no tributa.
-
-Por eso viene antes de la base liquidable: lo que quede exento se resta de tu bruto y el paso 5 empieza a contar desde esa cifra.`,
+`,
     concepts: [
       {
         id: 'exemption',
         title: '¿Exención, reducción o deducción?',
         body: (
           <>
-            <p>
-              Son tres formas distintas de pagar menos y actúan en tres momentos distintos del cálculo.
-              La <strong>exención</strong> es la primera: esa renta ni siquiera llega a contarse como
-              ingreso.
-            </p>
-            <p className="wfsc-concept__formula">exención → no entra en el bruto (este paso)</p>
-            <p className="wfsc-concept__formula">reducción → resta de la base (paso 5)</p>
-            <p className="wfsc-concept__formula">deducción → resta de la cuota (paso 7)</p>
-            <p>
-              Por eso los tickets exentos no aparecen luego como una resta: simplemente el bruto sobre el
-              que se calcula todo lo demás ya sale más bajo.
-            </p>
+            <div className="wfsc-concept__lead">
+              <p>
+                Son tres formas distintas de pagar menos y actúan en tres momentos distintos del cálculo.
+                La <strong>exención</strong> es la primera: esa renta ni siquiera llega a contarse como
+                ingreso.
+              </p>
+              <p>
+                Por eso los tickets exentos no aparecen luego como una resta: simplemente el bruto sobre
+                el que se calcula todo lo demás ya sale más bajo.
+              </p>
+            </div>
+            <div className="wfsc-concept__formulas">
+              <p className="wfsc-concept__formula">
+                <b>exención</b>
+                <span>no entra en el bruto</span>
+                <em>este paso</em>
+              </p>
+              <p className="wfsc-concept__formula">
+                <b>reducción</b>
+                <span>resta de la base: baja la cantidad sobre la que se calcula cuánto tienes que pagar</span>
+                <em>paso 5</em>
+              </p>
+              <p className="wfsc-concept__formula">
+                <b>deducción</b>
+                <span>resta de la cuota: baja directamente el impuesto que tienes que pagar</span>
+                <em>paso 7</em>
+              </p>
+            </div>
           </>
         ),
       },
@@ -410,8 +428,7 @@ Completa únicamente los apartados que correspondan a tu situación.`,
             </p>
             <p className="wfsc-concept__formula">30.000 € − 2.000 € = 28.000 € de base liquidable</p>
             <p>
-              Los tramos del IRPF se aplican entonces sobre 28.000 € en lugar de sobre 30.000 €, así que
-              pagas menos. Las que puedes aplicar dependen de tu situación personal y económica.
+            Los tramos del IRPF se calculan como si estuvieras «cobrando» 28.000 € en lugar de 30.000 €, así que pagas menos. La cantidad que puedes dejar exenta depende de tu situación personal y económica.
             </p>
           </>
         ),
@@ -422,17 +439,13 @@ Completa únicamente los apartados que correspondan a tu situación.`,
         body: (
           <>
             <p>
-              Es la cantidad que el Estado considera que necesitas para cubrir tus necesidades básicas y
-              las de tu familia. Esa parte no paga IRPF: se tiene en cuenta al calcular el impuesto,
-              pero la parte de cuota que le correspondería se deja sin pagar.
+            Es la cantidad que el Estado considera necesaria para cubrir tus necesidades básicas y las de tu familia, y es por eso que no paga IRPF.
+            Pero si se tienen en cuenta para calcular el IRPF, ya que primero se aplica los tramos a tu renta y luego se resta la parte que corresponde al mínimo personal y familiar.
             </p>
-            <p>
-              El resto de tu renta sí tributa según los tramos. El mínimo puede ser mayor según tu edad,
-              tu discapacidad o tu situación familiar.
-            </p>
+            
             <p className="wfsc-concept__later">
-              Por eso su efecto no se ve aquí, en la base liquidable: aquí solo calculamos su importe. Lo
-              verás restando en el paso 6, «IRPF por tramos», cuando ya haya una cuota de la que descontarlo.
+              Por eso su efecto no se ve aquí, aquí solo calculamos su valor. Su efecto se verá
+               en el paso 6, «IRPF por tramos», cuando ya tengamos la cuota de IRPF que tienes que pagar calculada, que es donde se descontará.
             </p>
           </>
         ),
@@ -567,21 +580,43 @@ Si no tienes vivienda ni coche en propiedad, responde «No» a las dos preguntas
   {
     id: 10,
     title: 'Resumen del cálculo',
-    subtitle: 'Todas las cifras del recorrido en un solo vistazo',
-    description: 'Este paso reúne el resultado completo: coste de empresa, cotizaciones, IRPF, IVA y lo que te queda después de la nómina y del consumo estimado. Sirve para comprobar que las piezas de los pasos anteriores encajan.',
-    checklist: ['Coste de empresa', 'Cotizaciones e IRPF', 'IVA y otros', 'Neto laboral y resto tras consumo'],
+    subtitle: 'A dónde va el dinero que cuesta tu trabajo',
+    description: `El gráfico reparte el coste total de tu puesto entre lo que te llevas y cada impuesto: cotizaciones de empresa, cotizaciones tuyas, IRPF, IVA, impuestos especiales y el IBI y el IVTM de tu casa y tu coche.
+
+Debajo verás la otra cara de esas mismas figuras: cuánto recauda el conjunto de Administraciones Públicas con cada una, en euros, sobre los ingresos públicos y sobre el PIB, en qué se gasta y qué efecto tiene sobre ti.`,
+    checklist: ['Reparto del coste laboral', 'Casa y coche', 'Recaudación por impuesto', 'Destino y efecto de cada figura'],
     helpTitle: 'Como leer este resumen?',
-    helpBody: 'Primero mira el coste total de contratarte y lo que pagas tú. Después separa el neto laboral (bruto menos cotizaciones e IRPF) de los impuestos de consumo, que dependen de como gastas.',
+    helpBody: 'Empieza por el gráfico: la porción verde es lo que te queda de cada 100 € que cuesta tu puesto. El resto son impuestos y cotizaciones ordenados por tamaño. Después contrasta tu cifra con lo que recauda el Estado por esa misma figura.',
     details: [
-      'El bruto y las cotizaciones de empresa explican cuanto cuesta tu trabajo antes de que cobres.',
-      'Las cotizaciones del trabajador y el IRPF bajan tu nomina; el IVA y otros impuestos salen despues, al consumir.',
-      'Si cambias el salario bruto aqui, se recalculan las cifras vivas de todo el recorrido.',
+      'El reparto usa el coste laboral (bruto mas cotizaciones de empresa) como total, no el salario bruto.',
+      'El IBI y el IVTM se pagan por tener vivienda o coche, aunque ese ano no ingreses nada por ellos.',
+      'Las cifras de recaudacion son de 2024 en contabilidad nacional y corresponden al conjunto de Administraciones Publicas, no a una persona.',
     ],
-    important: 'El resumen no inventa datos nuevos: consolida lo que ya has calculado en los pasos anteriores.',
+    important: 'El resumen no inventa datos nuevos: consolida lo que ya has calculado y lo compara con la recaudacion oficial de cada figura.',
     Icon: WalletCards,
   },
   {
     id: 11,
+    title: 'Comprueba lo aprendido',
+    subtitle: 'Repaso opcional por apartados · 10-15 min',
+    description: `Este paso es opcional: puedes saltarlo y seguir con el recorrido sin perder ninguna cifra.
+
+Si le dedicas 10 o 15 minutos, para nosotros es muy importante. Cada pregunta está atada a un paso concreto, así que cuando muchas personas fallan en el mismo sitio sabemos que ese apartado no está bien explicado y lo reescribimos.
+
+No hay que escribir nada: se responde eligiendo, ordenando, emparejando, clasificando o moviendo un deslizador. Se corrige apartado a apartado, con la explicación al momento.`,
+    checklist: [],
+    helpTitle: 'Para que sirve el repaso?',
+    helpBody: 'No es un examen ni guarda nota en ningun sitio. Sirve para localizar los apartados que no se entienden y reescribirlos.',
+    details: [
+      'Diez apartados, uno por cada bloque del recorrido, con preguntas de varios tipos.',
+      'Cada pregunta se puede marcar como «esto no estaba bien explicado», aunque la aciertes.',
+      'Las respuestas se guardan en tu navegador: puedes salir, seguir con el recorrido y volver donde lo dejaste.',
+    ],
+    important: 'Es un paso opcional, pero es la mejor forma de decirnos donde nos hemos explicado mal.',
+    Icon: GraduationCap,
+  },
+  {
+    id: 12,
     title: 'Preguntas frecuentes',
     subtitle: 'Resuelve dudas despues del resumen',
     description: 'Cierra el recorrido con respuestas rapidas a las dudas mas habituales: que se descuenta de la nomina, que paga la empresa y que queda fuera del salario neto.',
@@ -597,7 +632,7 @@ Si no tienes vivienda ni coche en propiedad, responde «No» a las dos preguntas
     Icon: CircleHelp,
   },
   {
-    id: 12,
+    id: 13,
     title: 'Fuentes del calculo',
     subtitle: 'Origen y valor de cada parametro',
     description: 'Consulta en una sola pantalla las fuentes oficiales utilizadas, el enlace al documento original y el valor concreto aplicado a tu calculo.',
@@ -854,10 +889,10 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 7 && activeStep.id !== 11 && activeStep.id !== 12
+  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 7 && activeStep.id < 11
   const showConceptHelp = activeStep.id === 7
   const isSummaryStep = activeStep.id === 0
-  const isCompactStep = activeStep.id === 11 || activeStep.id === 12
+  const isCompactStep = activeStep.id >= 11
   const heroIsSingle = !showPayrollHelp && !showConceptHelp
   const statusLabel = activeStep.id === 0
     ? 'Resumen rápido'
@@ -930,7 +965,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           </div>
 
           {stepConcepts.length > 0 ? (
-            <div className="wfsc-concepts">
+            <div className={`wfsc-concepts${stepConcepts.length === 1 ? ' wfsc-concepts--single' : ''}`}>
               {stepConcepts.map((concept) => (
                 <section
                   key={concept.id}

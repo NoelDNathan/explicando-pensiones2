@@ -1,0 +1,137 @@
+{
+  "dataset_id": "igae-recaudacion-por-figura-aapp-2024",
+  "created_at": "2026-09-01",
+  "reference_year": 2024,
+  "status": "observado_provisional",
+  "unit": "millones de euros corrientes",
+  "accounting_framework": "Contabilidad nacional SEC 2010, sector Administraciones Publicas (S.13)",
+  "source": {
+    "institution": "Intervencion General de la Administracion del Estado (IGAE)",
+    "publication": "Contabilidad nacional. Serie anual. Impuestos y cotizaciones sociales de las Administraciones publicas",
+    "table": "Administraciones publicas (S.13). Tabla1a (millones de euros) y Tabla1b (porcentaje del PIB)",
+    "update_date": "2025-09-30",
+    "urls": [
+      "https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Paginas/iaimpuestosycotizaciones.aspx",
+      "https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/Documents/AAPP_A/A_AAPP_Imp.xlsx"
+    ],
+    "raw_files": [
+      "data/raw/igae/impuestos-cotizaciones-aapp/2026-09-01_igae_aapp-impuestos-y-cotizaciones-sec2010_1995-2024.xlsx"
+    ]
+  },
+  "denominators": {
+    "gdp_million_eur": 1594330,
+    "gdp_source": "IGAE/SEPG BDMACRO abril 2026, ya procesado en data/processed/igae/2026-05-25_igae-bdmacro_aapp-principales-series-fiscales-espana_1975-2024.csv",
+    "public_revenue_non_financial_million_eur": 673734,
+    "public_revenue_derivation": "Gasto publico total 2024 (725.001) menos deficit publico 2024 (-51.267) de la misma serie BDMACRO. Son los recursos no financieros del total de AAPP.",
+    "public_revenue_status": "observado_derivado",
+    "total_tax_revenue_million_eur": 381342,
+    "total_tax_revenue_code": "D.2+D.5+D.91",
+    "total_social_contributions_million_eur": 210337,
+    "total_social_contributions_note": "Suma de D.611 (151.551), D.612 imputadas (7.039) y D.613 (51.747)."
+  },
+  "reference_spending": {
+    "source": "IGAE/SEPG BDMACRO abril 2026, via data/processed/fiscal/2026-05-25_series-fiscales-espana_1975-2070.csv",
+    "total_public_spending_million_eur": 725001,
+    "pensions_million_eur": 200475,
+    "pensions_status": "observado_aproximado",
+    "health_million_eur": 102942,
+    "debt_interest_million_eur": 38801
+  },
+  "figures": [
+    {
+      "id": "social_contributions",
+      "label": "Cotizaciones sociales",
+      "sec_codes": ["D.611", "D.613"],
+      "revenue_million_eur": 203298,
+      "components": [
+        { "concept": "Cotizaciones sociales efectivas a cargo de los empleadores", "code": "D.611", "million_eur": 151551 },
+        { "concept": "Cotizaciones sociales efectivas a cargo de los hogares", "code": "D.613", "million_eur": 51747 }
+      ],
+      "excluded": "D.612 cotizaciones imputadas (7.039) queda fuera porque no es un pago efectivo a la Seguridad Social."
+    },
+    {
+      "id": "irpf",
+      "label": "IRPF",
+      "sec_codes": ["D.51"],
+      "revenue_million_eur": 145873,
+      "components": [
+        { "concept": "Impuesto sobre la Renta de las Personas Fisicas / Impuesto sobre la Renta de No Residentes (personas fisicas)", "code": "D.51", "million_eur": 145873 }
+      ],
+      "excluded": "No incluye Impuesto sobre Sociedades (45.665) ni el gravamen temporal de entidades de credito (1.787)."
+    },
+    {
+      "id": "vat",
+      "label": "IVA",
+      "sec_codes": ["D.211"],
+      "revenue_million_eur": 100170,
+      "components": [
+        { "concept": "Impuesto sobre el Valor Anadido (IVA)", "code": "D.211", "million_eur": 100170 }
+      ],
+      "excluded": "No incluye el IGIC canario (2.325) ni el IPSI de Ceuta y Melilla."
+    },
+    {
+      "id": "special_taxes",
+      "label": "Impuestos especiales de fabricacion",
+      "sec_codes": ["D.214"],
+      "revenue_million_eur": 23626,
+      "components": [
+        { "concept": "Impuesto sobre Hidrocarburos", "million_eur": 13613 },
+        { "concept": "Impuesto sobre las Labores del Tabaco", "million_eur": 7524 },
+        { "concept": "Impuesto Especial sobre la Electricidad", "million_eur": 1175 },
+        { "concept": "Impuesto sobre el Alcohol y Bebidas Derivadas", "million_eur": 894 },
+        { "concept": "Impuesto sobre la Cerveza", "million_eur": 377 },
+        { "concept": "Impuesto sobre Productos Intermedios", "million_eur": 23 },
+        { "concept": "Impuesto Especial sobre el Carbon", "million_eur": 20 }
+      ],
+      "excluded": "No incluye matriculacion, envases de plastico, gases fluorados ni bebidas azucaradas, que se contabilizan aparte."
+    },
+    {
+      "id": "property_tax",
+      "label": "IBI",
+      "sec_codes": ["D.29", "D.59"],
+      "revenue_million_eur": 14957,
+      "components": [
+        { "concept": "Impuesto sobre Bienes Inmuebles (IBI) / Recargo sobre el IBI", "code": "D.29", "million_eur": 14104 },
+        { "concept": "IBI (viviendas desocupadas)", "code": "D.59", "million_eur": 853 }
+      ],
+      "excluded": "No incluye IAE (2.040) ni el gravamen especial sobre inmuebles de entidades no residentes (2)."
+    },
+    {
+      "id": "vehicle_tax",
+      "label": "IVTM",
+      "sec_codes": ["D.29", "D.59"],
+      "revenue_million_eur": 2309,
+      "components": [
+        { "concept": "Impuesto sobre Vehiculos de Traccion Mecanica (empresas)", "code": "D.29", "million_eur": 500 },
+        { "concept": "Impuesto sobre Vehiculos de Traccion Mecanica (hogares)", "code": "D.59", "million_eur": 1809 }
+      ]
+    },
+    {
+      "id": "transfer_tax",
+      "label": "ITP y AJD",
+      "sec_codes": ["D.214"],
+      "revenue_million_eur": 12523,
+      "components": [
+        { "concept": "Impuestos sobre Transmisiones Patrimoniales y Actos Juridicos Documentados", "million_eur": 12523 }
+      ],
+      "usage": "Contexto del impuesto de compra de vivienda del paso 9."
+    },
+    {
+      "id": "registration_tax",
+      "label": "Impuesto de matriculacion",
+      "sec_codes": ["D.214"],
+      "revenue_million_eur": 914,
+      "components": [
+        { "concept": "Impuesto Especial sobre Determinados Medios de Transporte", "million_eur": 914 }
+      ],
+      "usage": "Contexto del impuesto de compra de coche del paso 9."
+    }
+  ],
+  "limitations": [
+    "2024 es dato provisional (P) en la fuente IGAE.",
+    "Las cifras son recaudacion del conjunto de Administraciones Publicas en contabilidad nacional, no carga fiscal de una persona concreta.",
+    "El porcentaje sobre ingresos publicos usa los recursos no financieros de las AAPP, no solo los ingresos del Estado central.",
+    "Las figuras listadas no suman el total de ingresos: quedan fuera Sociedades, sucesiones, plusvalia municipal, tasas y transferencias.",
+    "El reparto entre Estado, comunidades autonomas y ayuntamientos no se detalla en este fichero; para eso hay tablas separadas por subsector en la misma publicacion."
+  ]
+}

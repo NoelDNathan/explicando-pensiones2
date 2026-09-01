@@ -798,7 +798,7 @@ export function WorkerWealthTaxesCard({
     <section className="wctc" aria-labelledby="wwtc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
-          <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 12</span>
+          <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 13</span>
           <h2 id="wwtc-title">9. Vivienda y coche</h2>
           <p>
             Aquí no pagas por gastar, sino por tener: el <b>IBI</b> (Impuesto sobre Bienes

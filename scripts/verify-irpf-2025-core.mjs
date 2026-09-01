@@ -117,9 +117,20 @@ const healthBenefits = createEmptyIrpf2025Adjustments()
 healthBenefits.healthInsuranceEligible = true
 healthBenefits.healthInsurancePremiumOrdinaryPersons = 600
 healthBenefits.healthInsurancePremiumDisabledPersons = 1_700
+healthBenefits.healthInsuranceOrdinaryPersonsCount = 1
+healthBenefits.healthInsuranceDisabledPersonsCount = 1
 const healthResult = calculateInKindBenefits2025(healthBenefits)
 assert.equal(roundCents(healthResult.exemptAmount), 2_000)
 assert.equal(roundCents(healthResult.taxableAmount), 300)
+
+const healthPeople = createEmptyIrpf2025Adjustments()
+healthPeople.healthInsuranceEligible = true
+healthPeople.healthInsurancePremiumOrdinaryPersons = 2_000
+healthPeople.healthInsuranceOrdinaryPersonsCount = 3
+healthPeople.healthInsuranceDisabledPersonsCount = 0
+const healthPeopleResult = calculateInKindBenefits2025(healthPeople)
+assert.equal(roundCents(healthPeopleResult.exemptAmount), 1_500)
+assert.equal(roundCents(healthPeopleResult.taxableAmount), 500)
 
 const donation = createEmptyIrpf2025Adjustments()
 donation.donationAmount = 400
@@ -202,5 +213,5 @@ largeFamily.largeFamilyEntitlementShare = 1
 largeFamily.refundableContributionLimit = 5_000
 assert.equal(calculateRefundableDeductions2025(largeFamily, 3_000).largeFamilyGenerated, 1_800)
 
-const checks = goldenCases.length + 20
+const checks = goldenCases.length + 22
 console.log(`IRPF 2025 verificado: ${checks} comprobaciones superadas.`)

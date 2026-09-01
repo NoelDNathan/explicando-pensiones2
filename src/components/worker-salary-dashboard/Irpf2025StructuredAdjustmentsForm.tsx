@@ -9,6 +9,8 @@ import {
   calculateRefundableDeductions2025,
   createEmptyIrpf2025Adjustments,
   GEOGRAPHIC_MOBILITY_INCREMENT_2025,
+  HEALTH_INSURANCE_EXEMPT_PER_DISABLED_PERSON_2025,
+  HEALTH_INSURANCE_EXEMPT_PER_PERSON_2025,
 } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import type { Irpf2025AdjustmentInput } from '../fiscal-worker-dashboard/irpf2025Adjustments'
 import {
@@ -27,7 +29,6 @@ type Props = {
   reductionsGroup?: 'all' | 'work-expenses' | 'base-reductions'
   deductionsGroup?: 'all' | 'in-kind' | 'quota' | 'refundable' | 'withholdings'
   value: Irpf2025AdjustmentInput
-  declaredInKindSalary?: number
   declaredGrossWorkIncome?: number
   netWorkIncome?: number
   previewBaseAvailable?: number
@@ -41,7 +42,10 @@ const SPOUSE_INCOME_THRESHOLD = 8_000
 const SPOUSE_PENSION_MAX_REDUCTION = 1_000
 const PERSONAL_PENSION_ABSOLUTE_LIMIT = 1_500
 
-type QuestionEffectKind = 'reduction' | 'deduction' | 'exempt'
+// 'expense' son gastos deducibles: bajan el rendimiento neto del trabajo, no la
+// base liquidable. Etiquetarlos como "reduccion" hacia creer que debian aparecer
+// en la linea "Reducciones de base" del panel, que solo suma reducciones de base.
+type QuestionEffectKind = 'reduction' | 'deduction' | 'exempt' | 'expense'
 
 function QuestionEffect({ amount, kind = 'reduction' }: { amount?: number; kind?: QuestionEffectKind }) {
   if (!amount) return null
@@ -50,12 +54,16 @@ function QuestionEffect({ amount, kind = 'reduction' }: { amount?: number; kind?
     ? `${formatted} EUR exentos`
     : kind === 'deduction'
       ? `Resta ${formatted} EUR de la cuota`
-      : `Reduce la base en ${formatted} EUR`
+      : kind === 'expense'
+        ? `Resta ${formatted} EUR del rendimiento neto del trabajo`
+        : `Reduce la base en ${formatted} EUR`
   const visible = kind === 'exempt'
     ? `${formatted} € exentos`
     : kind === 'deduction'
       ? `−${formatted} € deducción`
-      : `−${formatted} € reducción`
+      : kind === 'expense'
+        ? `−${formatted} € gasto deducible`
+        : `−${formatted} € reducción`
   return (
     <em className={`irpf-question-effect irpf-question-effect--${kind}`} aria-label={label}>
       {visible}
@@ -191,6 +199,7 @@ function NumberField({ label, value, onChange, help, hint, max, min = 0, step = 
     <label className="irpf-rule-field">
       <HelpLabel label={label} help={help} />
       <span className="irpf-rule-field__control">
+        {/* El 0 se pinta vacio: si no, al teclear encima queda "0009990". */}
         <input
           aria-label={label}
           inputMode="decimal"
@@ -198,7 +207,7 @@ function NumberField({ label, value, onChange, help, hint, max, min = 0, step = 
           min={min}
           step={step}
           type="number"
-          value={value}
+          value={value === 0 ? '' : value}
           onChange={(event) => onChange(Math.max(min, Number(event.target.value) || 0))}
         />
         <span>{unit}</span>
@@ -1188,7 +1197,7 @@ export function WorkIncomeBenefitsSection({
     <div className="irpf-reduction-question-list wprc-work-benefits">
       <ReductionQuestion
         question="¿Tienes otros ingresos además de tu trabajo?"
-        description="Por ejemplo alquileres, intereses o actividades por tu cuenta. No cuentan el salario, complementos ni especie del paso 1. Si superan 6.500 €/año, no aplican algunas ventajas del trabajo."
+        description="Por ejemplo alquileres, intereses o actividades por tu cuenta. No cuentan el salario ni los complementos del paso 1: la especie, si la hay, ya va dentro de ese salario. Si superan 6.500 €/año, no aplican algunas ventajas del trabajo."
         initiallyRelevant={value.otherNonExemptNonWorkIncome > 0}
         onNo={() => onChange(confirmNoOtherIncome(value))}
       >
@@ -1274,7 +1283,7 @@ function clearInKindFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentIn
     transportCardEligibleMonths: 0,
     healthInsuranceEligible: false,
     healthInsuranceOrdinaryPersonsCount: 1,
-    healthInsuranceDisabledPersonsCount: 1,
+    healthInsuranceDisabledPersonsCount: 0,
     healthInsurancePremiumOrdinaryPersons: 0,
     healthInsurancePremiumDisabledPersons: 0,
     companyDaycareEligible: false,
@@ -1373,6 +1382,144 @@ function roundCents(amount: number) {
   return Math.round(Math.max(0, amount) * 100) / 100
 }
 
+function formatEuroAmount(amount: number) {
+  return amount.toLocaleString('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  })
+}
+
+// En especie la nomina unas veces trae el importe mensual y otras el anual. Pedimos el que
+// tenga a mano y calculamos el otro: dentro del estado siempre se guarda el anual.
+type AmountPeriod = 'monthly' | 'annual'
+
+function PeriodAmountField({
+  label,
+  annualValue,
+  onChangeAnnual,
+  period,
+  onPeriodChange,
+  periodsPerYear = 12,
+  help,
+  hint,
+  exempt,
+  taxable,
+  splitExplanation,
+}: {
+  label: string
+  annualValue: number
+  onChangeAnnual: (annual: number) => void
+  period: AmountPeriod
+  onPeriodChange: (period: AmountPeriod) => void
+  periodsPerYear?: number
+  help?: string
+  hint?: string
+  exempt?: number
+  taxable?: number
+  splitExplanation?: ReactNode
+}) {
+  const perYear = periodsPerYear > 0 ? periodsPerYear : 12
+  const annual = roundCents(annualValue)
+  const periodic = roundCents(annual / perYear)
+  const isMonthly = period === 'monthly'
+
+  return (
+    <div className="irpf-rule-field irpf-period-field">
+      <HelpLabel label={label} help={help} />
+      <div className="irpf-period-field__row">
+        <span className="irpf-rule-field__control">
+          <input
+            aria-label={`${label} (${isMonthly ? 'al mes' : 'al año'})`}
+            inputMode="decimal"
+            min={0}
+            step={0.01}
+            type="number"
+            value={isMonthly ? periodic : annual}
+            onChange={(event) => {
+              const typed = Math.max(0, Number(event.target.value) || 0)
+              onChangeAnnual(roundCents(isMonthly ? typed * perYear : typed))
+            }}
+          />
+          <span>{isMonthly ? '€/mes' : '€/año'}</span>
+        </span>
+        <span className="irpf-period-toggle" role="group" aria-label={`Cómo prefieres ponerlo: ${label}`}>
+          <button
+            type="button"
+            className={isMonthly ? 'is-selected' : ''}
+            aria-pressed={isMonthly}
+            onClick={() => onPeriodChange('monthly')}
+          >
+            Al mes
+          </button>
+          <button
+            type="button"
+            className={isMonthly ? '' : 'is-selected'}
+            aria-pressed={!isMonthly}
+            onClick={() => onPeriodChange('annual')}
+          >
+            Al año
+          </button>
+        </span>
+      </div>
+      <small className="irpf-period-field__mirror">
+        {isMonthly ? 'Al año: ' : 'Al mes: '}
+        <strong>{formatEuroAmount(isMonthly ? annual : periodic)}</strong>
+        {perYear !== 12 ? ` (repartido en ${perYear} meses)` : null}
+      </small>
+      {annual > 0 && splitExplanation ? splitExplanation : null}
+      {annual > 0 && !splitExplanation && exempt !== undefined ? (
+        <small className="irpf-period-field__split">
+          Exento <strong>{formatEuroAmount(roundCents(exempt))}</strong>
+          {taxable && taxable > 0 ? ` · tributa ${formatEuroAmount(roundCents(taxable))}` : null}
+        </small>
+      ) : null}
+      {hint ? <small>{hint}</small> : null}
+    </div>
+  )
+}
+
+type InKindPeriodKey = 'meal' | 'transport' | 'health' | 'daycare'
+
+const HEALTH_PEOPLE_MAX = 20
+
+function HealthExemptSplit({
+  ordinaryCount,
+  disabledCount,
+  taxable,
+}: {
+  ordinaryCount: number
+  disabledCount: number
+  taxable: number
+}) {
+  const parts: string[] = []
+  if (ordinaryCount > 0) {
+    parts.push(
+      `${formatEuroAmount(HEALTH_INSURANCE_EXEMPT_PER_PERSON_2025)} /persona × ${ordinaryCount}`,
+    )
+  }
+  if (disabledCount > 0) {
+    parts.push(
+      `${formatEuroAmount(HEALTH_INSURANCE_EXEMPT_PER_DISABLED_PERSON_2025)} /persona × ${disabledCount}`,
+    )
+  }
+  const cap =
+    ordinaryCount * HEALTH_INSURANCE_EXEMPT_PER_PERSON_2025
+    + disabledCount * HEALTH_INSURANCE_EXEMPT_PER_DISABLED_PERSON_2025
+  const formula = parts.length > 0
+    ? `${parts.join(' + ')} = ${formatEuroAmount(cap)}`
+    : formatEuroAmount(0)
+  const taxableAmount = roundCents(taxable)
+
+  return (
+    <small className="irpf-period-field__split">
+      Exento {formula}
+      {taxableAmount > 0 ? <> · tributa <strong>{formatEuroAmount(taxableAmount)}</strong></> : null}
+    </small>
+  )
+}
+
 function InKindBenefitQuestions({
   value,
   onChange,
@@ -1380,6 +1527,16 @@ function InKindBenefitQuestions({
   value: Irpf2025AdjustmentInput
   onChange: (value: Irpf2025AdjustmentInput) => void
 }) {
+  const [periods, setPeriods] = useState<Record<InKindPeriodKey, AmountPeriod>>({
+    meal: 'monthly',
+    transport: 'monthly',
+    health: 'annual',
+    daycare: 'monthly',
+  })
+  const setPeriod = (key: InKindPeriodKey, next: AmountPeriod) => {
+    setPeriods((current) => ({ ...current, [key]: next }))
+  }
+  const benefits = calculateInKindBenefits2025(value)
   const mealDays = value.mealCardEligibleDays > 0 ? value.mealCardEligibleDays : MEAL_CARD_DEFAULT_DAYS
   const transportMonths = value.transportCardEligibleMonths > 0
     ? value.transportCardEligibleMonths
@@ -1388,9 +1545,18 @@ function InKindBenefitQuestions({
   const transportAnnual = roundCents(
     Math.max(0, value.transportCardMonthlyAmount) * Math.max(0, value.transportCardEligibleMonths),
   )
+  const healthPremium = roundCents(
+    Math.max(0, value.healthInsurancePremiumOrdinaryPersons)
+    + Math.max(0, value.healthInsurancePremiumDisabledPersons),
+  )
+  const coveredPeople = Math.max(
+    0,
+    Math.trunc(value.healthInsuranceOrdinaryPersonsCount)
+    + Math.trunc(value.healthInsuranceDisabledPersonsCount),
+  )
+  const disabledPeople = Math.max(0, Math.trunc(value.healthInsuranceDisabledPersonsCount))
+  const ordinaryPeople = Math.max(0, coveredPeople - disabledPeople)
 
-  // Los topes legales son por dia (comida) y por mes (transporte), pero al trabajador solo le
-  // pedimos el importe anual: repartimos ese importe sobre los dias o meses del detalle.
   const setMealAnnual = (annual: number, days = mealDays) => {
     const safeDays = days > 0 ? days : MEAL_CARD_DEFAULT_DAYS
     const amount = roundCents(annual)
@@ -1413,107 +1579,124 @@ function InKindBenefitQuestions({
     })
   }
 
-  const setHealthPremiums = (ordinary: number, disabled: number) => {
-    const ordinaryPremium = roundCents(ordinary)
-    const disabledPremium = roundCents(disabled)
+  const setHealthCoverage = (premium: number, nextCovered: number, nextDisabled: number) => {
+    const amount = roundCents(premium)
+    const covered = Math.min(
+      HEALTH_PEOPLE_MAX,
+      Math.max(amount > 0 ? 1 : 0, Math.trunc(nextCovered) || 0),
+    )
+    const disabled = Math.min(covered, Math.max(0, Math.trunc(nextDisabled) || 0))
     onChange({
       ...value,
-      healthInsuranceEligible: ordinaryPremium > 0 || disabledPremium > 0,
-      healthInsurancePremiumOrdinaryPersons: ordinaryPremium,
-      healthInsurancePremiumDisabledPersons: disabledPremium,
-      healthInsuranceOrdinaryPersonsCount: Math.max(1, value.healthInsuranceOrdinaryPersonsCount),
-      healthInsuranceDisabledPersonsCount: Math.max(1, value.healthInsuranceDisabledPersonsCount),
+      healthInsuranceEligible: amount > 0,
+      healthInsurancePremiumOrdinaryPersons: amount,
+      healthInsurancePremiumDisabledPersons: 0,
+      healthInsuranceOrdinaryPersonsCount: covered - disabled,
+      healthInsuranceDisabledPersonsCount: disabled,
     })
   }
 
   return (
     <div className="irpf-marital-subflow">
       <p className="irpf-marital-note irpf-marital-note--muted">
-        Escribe lo que la empresa te paga al año en cada beneficio. Lo que no tengas, déjalo en 0 €.
+        Escribe cuánto te paga la empresa en cada beneficio. Ponlo como lo tengas a mano, al mes o al año:
+        la otra cifra se calcula sola. Lo que no tengas, déjalo en 0 €.
       </p>
       <div className="irpf-rule-grid">
-        <NumberField
+        <PeriodAmountField
           label="Ticket restaurante o tarjeta comida"
-          value={mealAnnual}
-          onChange={(amount) => setMealAnnual(amount)}
-          help="Todo lo que te han cargado en el año en cheques o tarjeta de comida. Hacienda exime hasta 11 € por día trabajado."
+          annualValue={mealAnnual}
+          onChangeAnnual={(amount) => setMealAnnual(amount)}
+          period={periods.meal}
+          onPeriodChange={(next) => setPeriod('meal', next)}
+          exempt={benefits.breakdown.mealExempt}
+          taxable={benefits.breakdown.mealTaxable}
+          help="Lo que te cargan en cheques o tarjeta de comida. Hacienda exime hasta 11 € por día trabajado; con los 220 días por defecto, hasta 2.420 € al año."
           hint="Si no lo tienes, déjalo en 0 €."
         />
-        <NumberField
+        <PeriodAmountField
           label="Ticket transporte o abono"
-          value={transportAnnual}
-          onChange={(amount) => setTransportAnnual(amount)}
+          annualValue={transportAnnual}
+          onChangeAnnual={(amount) => setTransportAnnual(amount)}
+          period={periods.transport}
+          onPeriodChange={(next) => setPeriod('transport', next)}
+          periodsPerYear={transportMonths}
+          exempt={benefits.breakdown.transportExempt}
+          taxable={benefits.breakdown.transportTaxable}
           help="Tarjeta o abono de transporte público que paga la empresa. La exención tiene tope de 136,36 € al mes y 1.500 € al año."
           hint="Si no lo tienes, déjalo en 0 €."
         />
-        <NumberField
-          label="Seguro médico pagado por la empresa"
-          value={value.healthInsurancePremiumOrdinaryPersons}
-          onChange={(amount) => setHealthPremiums(amount, value.healthInsurancePremiumDisabledPersons)}
-          help="Prima anual que paga la empresa por ti y por tu familia. La exención llega a 500 € por persona cubierta al año."
-          hint="Si no lo tienes, déjalo en 0 €."
-        />
-        <NumberField
+        <div className="irpf-health-block">
+          <PeriodAmountField
+            label="Seguro médico pagado por la empresa"
+            annualValue={healthPremium}
+            onChangeAnnual={(amount) => setHealthCoverage(amount, coveredPeople, disabledPeople)}
+            period={periods.health}
+            onPeriodChange={(next) => setPeriod('health', next)}
+            exempt={benefits.breakdown.healthExempt}
+            taxable={benefits.breakdown.healthTaxable}
+            splitExplanation={healthPremium > 0 ? (
+              <HealthExemptSplit
+                ordinaryCount={ordinaryPeople}
+                disabledCount={disabledPeople}
+                taxable={benefits.breakdown.healthTaxable}
+              />
+            ) : null}
+            help="Prima que paga la empresa por ti y por tu familia. La exención llega a 500 € por persona al año, o 1.500 € si tiene discapacidad reconocida."
+            hint="Si no lo tienes, déjalo en 0 €."
+          />
+          <div className="irpf-health-block__people">
+            <CountField
+              label="Personas cubiertas por el seguro"
+              value={coveredPeople}
+              onChange={(count) => setHealthCoverage(healthPremium, count, disabledPeople)}
+              max={HEALTH_PEOPLE_MAX}
+              unit="uds."
+              help="Inclúyete si estás cubierto. Si hay prima, tiene que haber al menos una persona."
+              hint={healthPremium > 0 ? 'Mínimo 1 persona si el seguro no es 0 €.' : undefined}
+            />
+            <CountField
+              label="Personas con discapacidad"
+              value={disabledPeople}
+              onChange={(count) => setHealthCoverage(healthPremium, coveredPeople, count)}
+              max={HEALTH_PEOPLE_MAX}
+              unit="uds."
+              help="De las cubiertas, cuántas tienen discapacidad reconocida. El tope de exención sube a 1.500 € por cada una."
+              hint="No puede ser más que las personas cubiertas."
+            />
+          </div>
+        </div>
+        <PeriodAmountField
           label="Guardería pagada por la empresa"
-          value={value.companyDaycareAnnualAmount}
-          onChange={(amount) => onChange({
+          annualValue={value.companyDaycareAnnualAmount}
+          onChangeAnnual={(amount) => onChange({
             ...value,
             companyDaycareAnnualAmount: amount,
             companyDaycareEligible: amount > 0,
           })}
+          period={periods.daycare}
+          onPeriodChange={(next) => setPeriod('daycare', next)}
+          exempt={benefits.breakdown.daycareExempt}
+          taxable={benefits.breakdown.daycareTaxable}
           help="Solo si la paga la empresa directamente, no un plus en metálico. Si cumple los requisitos, queda exenta."
           hint="Si no lo tienes, déjalo en 0 €."
         />
       </div>
-      <details className="irpf-inkind-detail">
-        <summary>Afinar el detalle (días, meses y personas cubiertas)</summary>
-        <div className="irpf-rule-grid">
-          <CountField
-            label="Días de comida al año"
-            value={mealDays}
-            onChange={(count) => setMealAnnual(mealAnnual, count)}
-            max={366}
-            unit="días"
-            help="Días de trabajo en que usaste la tarjeta. Se usan para el tope de 11 € al día. Por defecto, 220 días."
-          />
-          <CountField
-            label="Meses con transporte"
-            value={transportMonths}
-            onChange={(count) => setTransportAnnual(transportAnnual, count)}
-            help="Meses del año en los que el beneficio cumple requisitos. Por defecto, 12."
-          />
-          <CountField
-            label="Personas cubiertas por el seguro"
-            value={value.healthInsuranceOrdinaryPersonsCount}
-            onChange={(count) => onChange({ ...value, healthInsuranceOrdinaryPersonsCount: count })}
-            max={20}
-            unit="uds."
-            help="Inclúyete si estás cubierto. La exención llega a 500 € por persona al año."
-          />
-          <CountField
-            label="Personas cubiertas con discapacidad"
-            value={value.healthInsuranceDisabledPersonsCount}
-            onChange={(count) => onChange({ ...value, healthInsuranceDisabledPersonsCount: count })}
-            max={20}
-            unit="uds."
-            help="Con discapacidad reconocida el tope de exención sube a 1.500 € por persona."
-          />
-          <NumberField
-            label="Prima anual de las personas con discapacidad"
-            value={value.healthInsurancePremiumDisabledPersons}
-            onChange={(amount) => setHealthPremiums(value.healthInsurancePremiumOrdinaryPersons, amount)}
-            help="Parte de la prima que corresponde a personas con discapacidad reconocida."
-            hint="Si no aplica, déjalo en 0 €."
-          />
-          <NumberField
-            label="Ingreso a cuenta que asume la empresa"
-            value={value.paymentOnAccountNotPassedOn}
-            onChange={(amount) => onChange({ ...value, paymentOnAccountNotPassedOn: amount })}
-            help="A veces la empresa paga el IRPF de la especie y no te lo cobra. Ese importe puede sumar a la valoración."
-            hint="Si no te suena, déjalo en 0 €."
-          />
-        </div>
-      </details>
+      {benefits.declaredBenefitsTotal > 0 ? (
+        <p className="irpf-inkind-total">
+          <span>Total que te da la empresa en especie</span>
+          <strong>
+            {formatEuroAmount(roundCents(benefits.declaredBenefitsTotal))} al año
+          </strong>
+          <small>
+            {formatEuroAmount(roundCents(benefits.declaredBenefitsTotal / 12))} al mes · queda exento{' '}
+            {formatEuroAmount(roundCents(benefits.exemptAmount))}
+            {benefits.taxableAmount > 0
+              ? ` y tributan ${formatEuroAmount(roundCents(benefits.taxableAmount))}`
+              : null}
+          </small>
+        </p>
+      ) : null}
     </div>
   )
 }
@@ -2004,7 +2187,6 @@ export function Irpf2025StructuredAdjustmentsForm({
   reductionsGroup = 'all',
   deductionsGroup = 'all',
   value,
-  declaredInKindSalary = 0,
   declaredGrossWorkIncome = 0,
   netWorkIncome = 0,
   previewBaseAvailable = 0,
@@ -2017,7 +2199,6 @@ export function Irpf2025StructuredAdjustmentsForm({
     onChange({ ...value, [key]: nextValue })
   }
   const benefits = calculateInKindBenefits2025(value)
-  const benefitsMismatch = benefits.declaredBenefitsTotal > declaredInKindSalary
   const workExpenses = calculateAdditionalWorkExpenses2025(value)
   // Si aún no hay base liquidable, mostramos el efecto teórico de las respuestas.
   const available = previewBaseAvailable > 0 ? previewBaseAvailable : 1_000_000
@@ -2155,7 +2336,7 @@ export function Irpf2025StructuredAdjustmentsForm({
         <div className="irpf-reduction-question-list">
           {showWorkExpenses ? (
             <>
-          <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} effectAmount={workExpenses.unionDues} onNo={() => update('unionDues', 0)}>
+          <ReductionQuestion question="¿Pagas cuota de un sindicato?" description="Indica solo lo que hayas pagado tú este año." initiallyRelevant={value.unionDues > 0} effectAmount={workExpenses.unionDues} effectKind="expense" onNo={() => update('unionDues', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.unionDues} onChange={(amount) => update('unionDues', amount)} />
           </ReductionQuestion>
           <ReductionQuestion
@@ -2163,6 +2344,7 @@ export function Irpf2025StructuredAdjustmentsForm({
             description="Solo si tu profesión exige colegiarse para trabajar, como médico, abogado, farmacéutico o arquitecto."
             initiallyRelevant={value.professionalDues > 0 || value.professionalMembershipMandatory}
             effectAmount={workExpenses.professionalDues}
+            effectKind="expense"
             onYes={() => {
               if (!value.professionalMembershipMandatory) {
                 onChange({ ...value, professionalMembershipMandatory: true })
@@ -2181,10 +2363,10 @@ export function Irpf2025StructuredAdjustmentsForm({
               hint="El máximo aplicable es 500 EUR."
             />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Has pagado un abogado por un problema con tu trabajo?" description="Solo por un conflicto laboral con tu empresa." initiallyRelevant={value.legalDefenseCosts > 0} effectAmount={workExpenses.legalDefense} onNo={() => update('legalDefenseCosts', 0)}>
+          <ReductionQuestion question="¿Has pagado un abogado por un problema con tu trabajo?" description="Solo por un conflicto laboral con tu empresa." initiallyRelevant={value.legalDefenseCosts > 0} effectAmount={workExpenses.legalDefense} effectKind="expense" onNo={() => update('legalDefenseCosts', 0)}>
             <NumberField label="¿Cuánto has pagado este año?" value={value.legalDefenseCosts} onChange={(amount) => update('legalDefenseCosts', amount)} hint="El máximo aplicable es 300 EUR." />
           </ReductionQuestion>
-          <ReductionQuestion question="¿Te mudaste a otro municipio para empezar un trabajo?" description="Aplica si estabas en paro, aceptaste un empleo en otro municipio y cambiaste de residencia." initiallyRelevant={value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence} effectAmount={mobilityEffect} onNo={() => onChange(clearGeographicMobilityFields(value))}>
+          <ReductionQuestion question="¿Te mudaste a otro municipio para empezar un trabajo?" description="Aplica si estabas en paro, aceptaste un empleo en otro municipio y cambiaste de residencia." initiallyRelevant={value.wasRegisteredJobseeker || value.acceptedJobOtherMunicipality || value.movedResidence} effectAmount={mobilityEffect} effectKind="expense" onNo={() => onChange(clearGeographicMobilityFields(value))}>
             <GeographicMobilityQuestions
               value={value}
               onChange={onChange}
@@ -2223,18 +2405,12 @@ export function Irpf2025StructuredAdjustmentsForm({
         {showInKind ? (
           <ReductionQuestion
             question="¿Tu empresa te paga comida, transporte, seguro o guardería?"
-            description="¿Tu empresa te ofrece algún beneficio como ticket restaurante, ticket transporte, seguro médico o guardería? Míralo en la nómina o en el certificado de retenciones: no es dinero en metálico, es un beneficio que te dan."
+            description="El salario del paso 1 ya los incluye si los tienes. Aquí solo indica a qué beneficio va cada parte: ticket restaurante, transporte, seguro médico o guardería. Míralo en la nómina o en el certificado de retenciones."
             initiallyRelevant={inKindInitiallyRelevant}
             effectAmount={benefits.exemptAmount}
             effectKind="exempt"
             onNo={() => onChange(clearInKindFields(value))}
           >
-            {benefitsMismatch ? (
-              <p className="irpf-rule-alert">
-                Lo que has detallado supera el salario en especie del paso 1. Hasta igualarlo, la exención
-                se queda limitada a ese importe.
-              </p>
-            ) : null}
             <InKindBenefitQuestions value={value} onChange={onChange} />
           </ReductionQuestion>
         ) : null}

@@ -442,11 +442,11 @@
   visibility: hidden;
 }
 
-.fwd--soft :is(.wfsc-stage--step-7, .wfsc-stage--step-8) .wfsc-hero {
+.fwd--soft :is(.wfsc-stage--step-8, .wfsc-stage--step-9) .wfsc-hero {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.fwd--soft :is(.wfsc-stage--step-7, .wfsc-stage--step-8) .wfsc-help {
+.fwd--soft :is(.wfsc-stage--step-8, .wfsc-stage--step-9) .wfsc-help {
   display: none;
 }
 
@@ -1264,6 +1264,10 @@
   color: var(--fiscal-green);
 }
 
+.fwd--soft .wprc-explained--sticky .wprc-chain__step.is-subresult[data-op="equals"]::before {
+  color: var(--fiscal-muted);
+}
+
 .fwd--soft .wprc-explained--sticky .wprc-chain__step.is-empty dd {
   color: var(--fiscal-muted);
 }
@@ -1423,6 +1427,12 @@
   color: #1f4f7a;
   border-color: #bfd7ef;
   background: #eaf4fc;
+}
+
+.fwd--soft .irpf-question-effect--expense {
+  color: #14614f;
+  border-color: #b6ded3;
+  background: #e6f6f1;
 }
 
 .fwd--soft .irpf-question-effect--exempt {
@@ -2776,4 +2786,134 @@
   .fwd--soft .wscc-toolbar {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Especie: selector mes/ano y total detallado en el tema suave. */
+.fwd--soft .irpf-period-toggle {
+  border-color: color-mix(in srgb, var(--fiscal-line) 70%, transparent);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .irpf-period-toggle button {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-period-toggle button.is-selected {
+  color: #ffffff;
+  background: var(--fiscal-primary);
+}
+
+.fwd--soft .irpf-period-toggle button:focus-visible {
+  outline: 2px solid var(--fiscal-primary);
+  outline-offset: 1px;
+}
+
+.fwd--soft .irpf-period-field__mirror {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-period-field__mirror strong {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .irpf-period-field__split,
+.fwd--soft .irpf-period-field__split strong {
+  color: var(--fiscal-green);
+}
+
+.fwd--soft .irpf-inkind-total {
+  border-color: #b8ded7;
+  background: var(--fiscal-green-soft);
+}
+
+.fwd--soft .irpf-inkind-total span {
+  color: var(--fiscal-copy);
+}
+
+.fwd--soft .irpf-inkind-total strong {
+  color: var(--fiscal-green);
+}
+
+.fwd--soft .irpf-inkind-total small {
+  color: var(--fiscal-copy);
+}
+
+/* Resumen final del recorrido (paso 10) */
+.fwd--soft .wfin {
+  --wfin-text: var(--fiscal-ink);
+  --wfin-muted: var(--fiscal-copy);
+  --wfin-faint: var(--fiscal-muted);
+  --wfin-line: var(--fiscal-line);
+  --wfin-line-strong: var(--fiscal-line-strong);
+  --wfin-panel: var(--fiscal-surface);
+  --wfin-panel-soft: var(--fiscal-surface-soft);
+  --wfin-shadow: var(--fiscal-shadow);
+  --wfin-radius: var(--fiscal-radius-card);
+
+  --wfin-chart-take-home: var(--fiscal-green);
+  --wfin-chart-employer-contributions: var(--fiscal-blue);
+  --wfin-chart-worker-contributions: var(--fiscal-primary);
+  --wfin-chart-irpf: var(--fiscal-violet);
+  --wfin-chart-vat: var(--fiscal-orange);
+  --wfin-chart-special-taxes: var(--fiscal-red);
+  --wfin-chart-wealth-taxes: var(--fiscal-yellow);
+
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wfin :is(.wfin-chart, .wfin-headline, .wfin-home, .wfin-state) {
+  border-radius: var(--fiscal-radius-panel);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wfin :is(.wfin-legend__item, .wfin-home__rows li, .wfin-state__item, .wfin-state__figures > div) {
+  border-radius: var(--fiscal-radius-small);
+}
+
+.fwd--soft .wfin :is(.wfin-legend__item, .wfin-home__rows li) {
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wfin-state__item {
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wfin-state__figures > div {
+  border: 1px solid var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.fwd--soft .wfin-chart__tooltip {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+}
+
+.fwd--soft .wfin-period {
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wfin-period button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-primary);
+}
+
+.fwd--soft .wfin :is(.wfin-home__icon, .wfin-home__cta, .wfin-footer__cta) {
+  color: #ffffff;
+}
+
+.fwd--soft .wfin-home__icon,
+.fwd--soft .wfin-home__cta {
+  background: var(--fiscal-orange);
+}
+
+.fwd--soft .wfin-footer__cta {
+  background: var(--fiscal-primary);
+}
+
+/* El color de acento del titulo pierde ante la regla general de encabezados. */
+.fwd--soft .wfin .wfin-state__head h4 {
+  color: var(--wfin-state-color, var(--fiscal-ink));
 }

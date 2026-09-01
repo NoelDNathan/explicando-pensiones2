@@ -201,6 +201,11 @@
   background: linear-gradient(110deg, rgba(12, 57, 61, 0.72), rgba(4, 24, 54, 0.7));
 }
 
+.wprc-question-intro--no-num,
+.wprc-question-intro--no-num.wprc-question-intro {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .wprc-question-intro > span {
   display: grid;
   width: 40px;
@@ -1624,6 +1629,8 @@
 
 .wprc-explained--sticky .wprc-chain__flow {
   flex: 1 1 auto;
+  flex-wrap: wrap;
+  row-gap: 8px;
   min-width: 0;
 }
 
@@ -1663,6 +1670,15 @@
   content: "=";
   color: #58f171;
   font-size: 17px;
+}
+
+/*
+ * El rendimiento neto es un resultado intermedio: cierra la resta de gastos,
+ * pero el numero protagonista sigue siendo la base liquidable.
+ */
+.wprc-explained--sticky .wprc-chain__step.is-subresult[data-op="equals"]::before {
+  color: #8ea3c6;
+  font-size: 15px;
 }
 
 .wprc-explained--sticky .wprc-chain__step dt {
@@ -1855,6 +1871,31 @@
   text-shadow: 0 0 14px rgba(156, 106, 255, 0.36);
 }
 
+/*
+ * Entre 1061 y 1440 los seis eslabones no caben con el hueco holgado: se aprieta
+ * la barra antes que partirla en dos filas y dejar la base liquidable sola abajo.
+ */
+@media (max-width: 1440px) {
+  .wprc-explained--sticky .wprc-chain {
+    --wprc-chain-gap: 12px;
+  }
+
+  .wprc-explained--sticky .wprc-chain__step {
+    padding-inline: 9px;
+  }
+}
+
+/*
+ * Banda estrecha donde la ecuacion aun se lee con signos: antes que partirla en
+ * dos filas se retira el minimo personal y familiar, que es contexto y ademas
+ * esta explicado en el apartado 4 de la pagina.
+ */
+@media (min-width: 1061px) and (max-width: 1279px) {
+  .wprc-explained--sticky .wprc-chain__aside {
+    display: none;
+  }
+}
+
 @media (max-width: 1060px) {
   .wprc-hero,
   .wprc-benefits,
@@ -1883,6 +1924,15 @@
 
   .wprc-explained--sticky .wprc-chain__step[data-op]::before {
     content: none;
+  }
+
+  /*
+   * Sin los signos "-" y "=" la resta ya no se lee como ecuacion: los eslabones
+   * que solo dan contexto se retiran y la cadena vuelve a arrancar en el neto.
+   * El desglose sigue entero en el apartado 1 de la pagina.
+   */
+  .wprc-explained--sticky .wprc-chain__step.is-context {
+    display: none;
   }
 
   .wprc-top-field + .wprc-top-field {
