@@ -667,7 +667,7 @@ export function WorkerIrpfTranchesCard({
               </output>
               {totalQuotaDeduction > 0 ? (
                 <output className="witc-result witc-result--deduction">
-                  <span>Deduccion trabajo 2025</span>
+                  <span>Deducción por rentas del trabajo bajas</span>
                   <strong>- {formatEuro(totalQuotaDeduction, 2)}</strong>
                 </output>
               ) : null}

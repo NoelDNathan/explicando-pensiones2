@@ -6,12 +6,14 @@
  * (`calculateIrpf2025Core`) para el perfil base de la comparativa por CCAA:
  * trabajador por cuenta ajena, Madrid, grupo 7, soltero, 40 anos, sin hijos.
  */
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle,
   Calculator,
   ChevronsDownUp,
   CircleSlash,
+  Eye,
+  EyeOff,
   Info,
   Layers,
   Percent,
@@ -20,7 +22,13 @@ import {
   TriangleAlert,
 } from 'lucide-react'
 import { SalarySlider } from '../ui/SalarySlider'
-import { applyIrpfScale } from './irpf2025Calc'
+import { SMI_ANNUAL } from '../ui/salaryReferences'
+import {
+  LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR,
+  LOW_WORK_INCOME_DEDUCTION_MAX_EUR,
+  LOW_WORK_INCOME_GROSS_LIMIT_EUR,
+  applyIrpfScale,
+} from './irpf2025Calc'
 import { createEmptyIrpf2025Adjustments } from './irpf2025Adjustments'
 import { computeBaseProfileIrpf2025Detail } from './irpfRegionCalc'
 import type { BaseProfileOptions } from './irpfRegionCalc'
@@ -115,6 +123,78 @@ function buildCurve(profile: BaseProfileOptions): CurvePoint[] {
     })
   }
   return points
+}
+
+/**
+ * Rampa verde -> rojo para el tipo marginal de IRPF. Los anclajes son fijos
+ * (no relativos al maximo de la curva) para que el mismo color signifique
+ * siempre el mismo tipo, se mueva el usuario donde se mueva.
+ */
+const MARGINAL_RAMP: Array<{ rate: number; rgb: [number, number, number] }> = [
+  { rate: 0, rgb: [34, 150, 104] },
+  { rate: 18, rgb: [138, 172, 52] },
+  { rate: 32, rgb: [218, 165, 36] },
+  // 45 % es el tipo maximo de la escala: a partir de aqui el color ya "quema".
+  { rate: 45, rgb: [224, 116, 38] },
+  { rate: 58, rgb: [203, 51, 62] },
+  { rate: 70, rgb: [140, 22, 66] },
+]
+
+/** Interpola la rampa; fuera de rango devuelve el color del extremo. */
+function marginalColor(rate: number) {
+  const first = MARGINAL_RAMP[0]
+  const last = MARGINAL_RAMP[MARGINAL_RAMP.length - 1]
+  if (!(rate > first.rate)) return `rgb(${first.rgb.join(' ')})`
+  for (let i = 1; i < MARGINAL_RAMP.length; i += 1) {
+    const to = MARGINAL_RAMP[i]
+    if (rate <= to.rate) {
+      const from = MARGINAL_RAMP[i - 1]
+      const t = (rate - from.rate) / (to.rate - from.rate)
+      const mix = from.rgb.map((c, k) => Math.round(c + (to.rgb[k] - c) * t))
+      return `rgb(${mix.join(' ')})`
+    }
+  }
+  return `rgb(${last.rgb.join(' ')})`
+}
+
+/** Muestra de la rampa para la leyenda, de 0 % al tipo maximo que dibuja. */
+const RAMP_LEGEND_TOP = MARGINAL_RAMP[MARGINAL_RAMP.length - 1].rate
+const rampLegendGradient = `linear-gradient(90deg, ${MARGINAL_RAMP.map(
+  (stop) => `${marginalColor(stop.rate)} ${((stop.rate / RAMP_LEGEND_TOP) * 100).toFixed(1)}%`,
+).join(', ')})`
+
+/** Separacion del panel pegajoso respecto al borde superior de la ventana. */
+const STICKY_TOP = 10
+
+/**
+ * Avisa de si el panel del simulador esta ya enganchado arriba. Mide un
+ * centinela de 1px colocado al principio del rango pegajoso: en cuanto pasa por
+ * encima de la linea de enganche el panel esta fijo y conviene compactarlo,
+ * porque a tamano completo taparia media ventana.
+ *
+ * Se lee en el scroll y no con IntersectionObserver a proposito: el observer no
+ * entrega nada mientras la pestana esta oculta, y aqui basta con comparar una
+ * coordenada. React descarta el re-render cuando el booleano no cambia.
+ */
+function useStuckSentinel() {
+  const sentinelRef = useRef<HTMLSpanElement | null>(null)
+  const [stuck, setStuck] = useState(false)
+
+  useEffect(() => {
+    const read = () => {
+      const node = sentinelRef.current
+      if (node) setStuck(node.getBoundingClientRect().top < STICKY_TOP)
+    }
+    read()
+    window.addEventListener('scroll', read, { passive: true })
+    window.addEventListener('resize', read)
+    return () => {
+      window.removeEventListener('scroll', read)
+      window.removeEventListener('resize', read)
+    }
+  }, [])
+
+  return { sentinelRef, stuck }
 }
 
 const DEFAULT_SIMULATED_GROSS = 18_000
@@ -245,6 +325,106 @@ function ChartFrame({
       {/* yMax se usa para que el marco reciba el dominio completo */}
       <title>{`${label} (eje Y hasta ${formatY(yMax)})`}</title>
     </svg>
+  )
+}
+
+type TierBand = {
+  id: number
+  tone: 'green' | 'yellow' | 'orange'
+  label: string
+  from: number
+  to: number
+}
+
+/**
+ * Cinta suave en la cabecera del grafico que marca los tres tramos de la
+ * formula traducidos a salario bruto, con una linea fina en cada corte. Es
+ * contexto: se dibuja antes que las curvas para que nunca las tape.
+ */
+function TierBands({ scale, bands }: { scale: ChartScale; bands: TierBand[] }) {
+  const top = PAD_TOP
+  const height = 15
+  const bottom = CHART_HEIGHT - PAD_BOTTOM
+  // Cada frontera interior sale dos veces (fin de un tramo, inicio del siguiente):
+  // sin deduplicar la linea se pinta doble y deja de ser sutil.
+  const edges = [...new Set(bands.flatMap((band) => [band.from, band.to]))]
+
+  return (
+    <g aria-hidden="true">
+      {bands.map((band) => {
+        const x = scale.x(band.from)
+        const width = scale.x(band.to) - x
+        if (width <= 1) return null
+        return (
+          <g key={band.id}>
+            <rect
+              className={`wir-chart__tier-strip wir-chart__tier-strip--${band.tone}`}
+              x={x}
+              y={top}
+              width={width}
+              height={height}
+            />
+            {/* Con menos de ~40px la etiqueta se solapa consigo misma: mejor solo color. */}
+            {width >= 42 ? (
+              <text
+                className="wir-chart__tier-label"
+                x={x + width / 2}
+                y={top + 10.5}
+                textAnchor="middle"
+              >
+                {band.label}
+              </text>
+            ) : null}
+          </g>
+        )
+      })}
+      {edges.map((value, index) =>
+        // El primer corte cae sobre el eje Y, que ya hace de linea.
+        index === 0 ? null : (
+          <line
+            key={`${value}-${index}`}
+            className="wir-chart__tier-edge"
+            x1={scale.x(value)}
+            x2={scale.x(value)}
+            y1={top + height}
+            y2={bottom}
+          />
+        ),
+      )}
+    </g>
+  )
+}
+
+/**
+ * Guia vertical para un salario de referencia fijo (el SMI). Usa los mismos
+ * tokens que la linea del 45 % para que las dos referencias del grafico se
+ * lean como el mismo lenguaje y no compitan con la curva ni con el marcador
+ * del sueldo elegido.
+ */
+function GrossReference({
+  scale,
+  gross,
+  label,
+  y,
+}: {
+  scale: ChartScale
+  gross: number
+  label: string
+  y: number
+}) {
+  if (gross < MIN_GROSS || gross > MAX_GROSS) return null
+  const x = scale.x(gross)
+  // La etiqueta va a la izquierda: a la derecha del SMI empieza la joroba.
+  return (
+    <g className="wir-chart__gross-reference" aria-hidden="true">
+      <line x1={x} x2={x} y1={PAD_TOP} y2={CHART_HEIGHT - PAD_BOTTOM} />
+      <text x={x - 6} y={y} textAnchor="end">
+        {label}
+      </text>
+      <text x={x - 6} y={y + 13} textAnchor="end">
+        {euro(gross)}
+      </text>
+    </g>
   )
 }
 
@@ -419,6 +599,9 @@ export function WorkIncomeReductionExplainer({
   const anchorGross = realGrossInSliderRange ? clampGross(realGross) : DEFAULT_SIMULATED_GROSS
   const [gross, setGross] = useState(anchorGross)
   const [hoveredMarginal, setHoveredMarginal] = useState<CurvePoint | null>(null)
+  const [showKpis, setShowKpis] = useState(true)
+  const [showSim, setShowSim] = useState(true)
+  const { sentinelRef, stuck } = useStuckSentinel()
 
   const profile = useMemo<BaseProfileOptions>(() => {
     const adjustments = createEmptyIrpf2025Adjustments()
@@ -430,6 +613,24 @@ export function WorkIncomeReductionExplainer({
   const curve = useMemo(() => buildCurve(profile), [profile])
   const detail = useMemo(() => computeBaseProfileIrpf2025Detail(gross, profile), [gross, profile])
   const core = detail.core
+
+  const simCollapsed = stuck && !showSim
+
+  /*
+   * Al pasar de normal a compacto (y al reves) los KPI saltan de celda en la
+   * rejilla. Marcar el cambio deja que un atenuado corto tape ese salto
+   * mientras el CSS interpola tamanos y tipografia (--wir-morph).
+   */
+  const [morphing, setMorphing] = useState(false)
+  const previousStuck = useRef(stuck)
+  useEffect(() => {
+    // Solo al cambiar de estado: en el primer render no hay nada que fundir.
+    if (previousStuck.current === stuck) return
+    previousStuck.current = stuck
+    setMorphing(true)
+    const timer = window.setTimeout(() => setMorphing(false), 240)
+    return () => window.clearTimeout(timer)
+  }, [stuck])
 
   const irpfWithout = useMemo(() => irpfWithoutWorkReduction(detail), [detail])
   const savings = Math.max(0, irpfWithout - core.irpf)
@@ -488,10 +689,35 @@ export function WorkIncomeReductionExplainer({
 
   const humpStart = grossWhereBasisReaches(curve, TIER_1_TOP)
   const humpEnd = grossWhereBasisReaches(curve, REDUCTION_LIMIT)
+  // Los tramos se definen sobre el RNT; el grafico va en bruto, asi que hay que
+  // traducir cada frontera al primer bruto que la cruza.
+  const tier2To3 = grossWhereBasisReaches(curve, TIER_2_TOP)
+  const chartTierBands: TierBand[] = [
+    { id: 1, tone: 'green', label: 'Tramo 1', from: MIN_GROSS, to: humpStart },
+    { id: 2, tone: 'yellow', label: 'Tramo 2', from: humpStart, to: tier2To3 },
+    { id: 3, tone: 'orange', label: 'Tramo 3', from: tier2To3, to: humpEnd },
+  ]
   const capCrossover =
     curve.filter((point) => point.applied < point.theoretical - 0.5).at(-1)?.gross ?? MIN_GROSS
   const peak = curve.reduce((best, point) => (point.marginalIrpf > best.marginalIrpf ? point : best), curve[0])
   const scaleTopRate = 45
+
+  /*
+   * Paradas de color de la barra: la curva tiene un punto cada 50 €, mas de los
+   * que necesita un degradado, asi que se submuestrea a ~55 paradas. La ultima
+   * se fuerza para que la rampa llegue al final de la barra.
+   */
+  const trackStops = useMemo(() => {
+    const stride = Math.max(1, Math.round(curve.length / 55))
+    const stops = curve
+      .filter((_, index) => index % stride === 0)
+      .map((point) => ({ value: point.gross, color: marginalColor(point.marginalIrpf) }))
+    const last = curve[curve.length - 1]
+    if (stops[stops.length - 1]?.value !== last.gross) {
+      stops.push({ value: last.gross, color: marginalColor(last.marginalIrpf) })
+    }
+    return stops
+  }, [curve])
 
   const reductionScale = useMemo(() => makeScale(MIN_GROSS, MAX_GROSS, 8_000), [])
   const marginalScale = useMemo(() => makeScale(MIN_GROSS, MAX_GROSS, 80), [])
@@ -544,16 +770,25 @@ export function WorkIncomeReductionExplainer({
       <div className="wir-shell">
         <header className="wir-header">
           <div>
-            <span className="wir-eyebrow">IRPF 2025 · artículo 20 LIRPF</span>
+            <span className="wir-eyebrow">Reducción por rendimientos del trabajo</span>
             {embedded ? (
               <h2 id="wir-title">Cómo funciona tu reducción por rendimientos del trabajo</h2>
             ) : (
               <h1 id="wir-title">La reducción por rendimientos del trabajo, y la joroba que crea</h1>
             )}
             <p>
-              Es la mayor rebaja del IRPF para sueldos bajos: hasta {euro(MAX_REDUCTION)} que se
-              restan del rendimiento del trabajo. Pero se retira tan deprisa que, mientras
-              desaparece, cada euro extra de sueldo tributa por encima del tipo máximo de la escala.
+            Es la mayor rebaja del IRPF para los sueldos más bajos: hasta 7.302 € de reducción. Pero va desapareciendo a medida que ganas más.
+            </p>
+            {/*
+              * "RNT" aparece en toda la explicacion (tramos, formulas, graficos); se
+              * define una sola vez aqui para no repetir la aclaracion en cada panel.
+              */}
+            <p className="wir-acronym">
+              <strong>RNT = rendimiento neto del trabajo</strong>
+              {embedded ? ', el que calculamos en el punto 1' : ''}: tu salario bruto menos tu parte
+              de la Seguridad Social. Un matiz: para elegir tramo se mide{' '}
+              <em>antes</em> de restar los {euro(2_000)} de gastos deducibles, así que aquí sale{' '}
+              {euro(2_000)} más alto.
             </p>
           </div>
           {/* Empotrado el perfil es el del propio usuario, asi que no hay nada que aclarar. */}
@@ -572,14 +807,16 @@ export function WorkIncomeReductionExplainer({
           <aside className="wir-callout wir-callout--blocked">
             <TriangleAlert size={20} aria-hidden="true" />
             <div>
-              <h3>En tu caso no se aplica: te la bloquean las otras rentas</h3>
+              <h3>En tu caso, cobras por encima del límite y no se aplica: te la bloquean las otras rentas</h3>
               <p>
                 {otherIncomeKnown ? (
                   <>
                     Has declarado {euro(otherNonExemptNonWorkIncome)} de otras rentas, por encima
                     del umbral de {euro(OTHER_INCOME_LIMIT)}, así que la reducción cae a cero
                     entera: no se reduce poco a poco, desaparece. Con {euro(realGross)} de bruto te
-                    habrían correspondido {euro(reductionWithoutOtherIncome)}.
+                    habrían correspondido {euro(reductionWithoutOtherIncome)}. El mismo umbral te
+                    deja sin la deducción por rentas del trabajo bajas, que se explica arriba y
+                    resta de la cuota.
                   </>
                 ) : (
                   <>
@@ -595,23 +832,15 @@ export function WorkIncomeReductionExplainer({
           <aside className={`wir-callout${embedded ? ' wir-callout--out-of-range' : ''}`}>
             <CircleSlash size={20} aria-hidden="true" />
             <div>
-              <h3>En tu caso no aplica, pero merece la pena entenderla</h3>
+              <h3>En tu caso no aplica (cobras por encima del límite), pero merece la pena entenderla</h3>
               {embedded ? (
                 <>
                   <p>
-                    Con {euro(realGross)} de bruto tu RNT es de {euro(realBasis)} y supera el límite de{' '}
-                    {euro(REDUCTION_LIMIT, 2)}: esta reducción no te resta nada. No hace falta indicar si
-                    tienes otros ingresos; con este salario no cambiaría nada.
+                    Con {euro(realGross)} brutos, tu RNT es  {euro(realBasis)}, por encima del límite de{' '}
+                    {euro(REDUCTION_LIMIT, 2)}. Por tanto, esta reducción no te resta nada.  
+                    Aun así, conviene entender cómo funciona. Explica por qué los sueldos bajos apenas pagan IRPF y, sobre todo, por qué entre 15.950 € y 21.150 € brutos cada euro extra tributa más que los salarios más altos.
                   </p>
-                  <p>
-                    Aun así conviene saber cómo funciona: explica por qué los sueldos bajos apenas pagan
-                    IRPF y, sobre todo, por qué entre {euro(humpStart)} y {euro(humpEnd)} de bruto cada euro
-                    extra tributa más que en el tramo más alto de la escala.{' '}
-                    <strong>Todo lo que hay debajo es un simulador</strong>
-                    {realGrossInSliderRange
-                      ? ' para explorarlo.'
-                      : `, que arranca en ${euro(DEFAULT_SIMULATED_GROSS)} porque tu sueldo se sale de la franja donde ocurre algo.`}
-                  </p>
+                 
                 </>
               ) : (
                 <p>
@@ -629,12 +858,60 @@ export function WorkIncomeReductionExplainer({
           </aside>
         ) : null}
 
+        {/*
+          * El simulador acompana al scroll mientras se leen la cadena, los
+          * tramos y los dos graficos: son justo las piezas que cambian al mover
+          * el salario. Se despega al llegar a los avisos, que ya no dependen de el.
+          */}
+        <div className="wir-sticky-range">
+          <span className="wir-sticky-sentinel" ref={sentinelRef} aria-hidden="true" />
+
         {/* ── Simulador ── */}
-        <section className="wir-panel wir-sim" aria-labelledby="wir-sim-title">
+        <section
+          className={`wir-panel wir-sim${stuck ? ' is-stuck' : ''}${simCollapsed ? ' is-collapsed' : ''}${morphing ? ' is-morphing' : ''}`}
+          aria-labelledby="wir-sim-title"
+        >
           <div className="wir-panel__title">
             <Calculator size={20} aria-hidden="true" />
             <h3 id="wir-sim-title">{embedded ? 'Prueba con otro salario' : 'Juega con el salario'}</h3>
-            {movedFromRealSalary ? (
+            {simCollapsed ? null : (
+              <span className="wir-ramp-legend__scale" aria-hidden="true">
+                <i style={{ background: rampLegendGradient }} />
+                <span>
+                  <em>0 %</em>
+                  <em>{Math.round(RAMP_LEGEND_TOP / 2)} %</em>
+                  <em>{RAMP_LEGEND_TOP} %</em>
+                </span>
+              </span>
+            )}
+            {stuck && !simCollapsed ? (
+              <button
+                type="button"
+                className="wir-toggle"
+                aria-expanded={showKpis}
+                aria-controls="wir-kpis"
+                onClick={() => setShowKpis((prev) => !prev)}
+              >
+                {showKpis ? <EyeOff size={14} aria-hidden="true" /> : <Eye size={14} aria-hidden="true" />}
+                {showKpis ? 'Ocultar cifras' : 'Ver cifras'}
+              </button>
+            ) : null}
+            {stuck ? (
+              <button
+                type="button"
+                className="wir-toggle"
+                aria-expanded={showSim}
+                onClick={() => setShowSim((prev) => !prev)}
+              >
+                {showSim ? (
+                  <ChevronsDownUp size={14} aria-hidden="true" />
+                ) : (
+                  <Calculator size={14} aria-hidden="true" />
+                )}
+                {showSim ? 'Ocultar simulador' : `Ver simulador (${euro(gross)})`}
+              </button>
+            ) : null}
+            {movedFromRealSalary && !simCollapsed ? (
               <button type="button" className="wir-reset" onClick={() => setGross(anchorGross)}>
                 <RotateCcw size={14} aria-hidden="true" />
                 Volver a tu salario ({euro(anchorGross)})
@@ -642,23 +919,33 @@ export function WorkIncomeReductionExplainer({
             ) : null}
           </div>
 
-          <SalarySlider
-            value={gross}
-            onChange={setGross}
-            min={MIN_GROSS}
-            max={MAX_GROSS}
-            step={100}
-            markers={[10_000, 14_000, 18_000, 24_000, MAX_GROSS]}
-            unitLabel="brutos al año"
-            id="wir-salary"
-            ariaLabel="Salario bruto anual para el simulador de la reducción"
-          />
+          {simCollapsed ? null : (
+            <SalarySlider
+              value={gross}
+              onChange={setGross}
+              min={MIN_GROSS}
+              max={MAX_GROSS}
+              step={100}
+              markers={[10_000, 14_000, 18_000, 24_000, MAX_GROSS]}
+              trackStops={trackStops}
+              unitLabel="brutos al año"
+              id="wir-salary"
+              ariaLabel="Salario bruto anual para el simulador de la reducción"
+            />
+          )}
 
-          <div className="wir-kpis">
+          <div className="wir-ramp-legend" hidden={simCollapsed}>
+            <span className="wir-ramp-legend__text">
+              El color de la barra es el <strong>tipo marginal de IRPF</strong> de cada sueldo: la
+              zona caliente es la joroba. Más adelante se entenderá mejor.
+            </span>
+          </div>
+
+          <div className="wir-kpis" id="wir-kpis" hidden={simCollapsed || (stuck && !showKpis)}>
             <article className="wir-kpi wir-kpi--blue">
-              <span>RNT (base del artículo 20)</span>
+              <span>Rendimiento neto del trabajo (RNT)</span>
               <strong>{euro(basis)}</strong>
-              <small>Bruto − cotizaciones, sin restar los {euro(2_000)}</small>
+              <small>Bruto − Seguridad Social, sin restar los {euro(2_000)} de gastos</small>
             </article>
             <article className={`wir-kpi wir-kpi--${hasReduction ? 'green' : 'muted'}`}>
               <span>Reducción aplicada</span>
@@ -697,23 +984,23 @@ export function WorkIncomeReductionExplainer({
               <strong>{euro(gross)}</strong>
             </li>
             <li className="is-minus">
-              <span>− Cotizaciones y gastos del art. 19.2 a)–e)</span>
+              <span>− Seguridad Social (tu parte) y cuotas de sindicato o colegio</span>
               <strong>−{euro(detail.employeeSocialSecurity)}</strong>
             </li>
             <li className="is-key">
-              <span>= RNT que elige el tramo</span>
+              <span>= Rendimiento neto del trabajo (RNT): el que elige el tramo</span>
               <strong>{euro(basis)}</strong>
             </li>
             <li className="is-minus">
-              <span>− «Otros gastos» del art. 19.2 f)</span>
+              <span>− Gastos deducibles (los {euro(2_000)} del punto 1)</span>
               <strong>−{euro(core.article19OtherExpensesApplied)}</strong>
             </li>
             <li>
-              <span>= Rendimiento neto del trabajo</span>
+              <span>= Rendimiento neto del trabajo del punto 1</span>
               <strong>{euro(core.netWorkIncome)}</strong>
             </li>
             <li className="is-minus">
-              <span>− Reducción del artículo 20</span>
+              <span>− Reducción por rendimientos del trabajo</span>
               <strong>−{euro(core.workReductionApplied)}</strong>
             </li>
             <li className="is-total">
@@ -727,7 +1014,7 @@ export function WorkIncomeReductionExplainer({
               <Info size={18} aria-hidden="true" />
               <p>
                 Con este sueldo la reducción teórica sería {euro(core.workReductionTheoretical)},
-                pero la ley prohíbe que el saldo quede negativo: se aplica solo{' '}
+                pero no puede dejar el saldo en negativo: se aplica solo{' '}
                 {euro(core.workReductionApplied)}, justo hasta dejar el rendimiento en cero.
               </p>
             </aside>
@@ -787,12 +1074,26 @@ export function WorkIncomeReductionExplainer({
             })}
           </div>
 
-          <p className="wir-footnote">
-            Los tres tramos encajan sin saltos: en {euro(TIER_1_TOP)} valen {euro(MAX_REDUCTION)},
-            en {euro(TIER_2_TOP, 2)} valen {euro(TIER_3_START_AMOUNT, 2)} y en{' '}
-            {euro(REDUCTION_LIMIT, 2)} valen exactamente cero. La pendiente sí cambia: primero se
-            retira {TIER_2_SLOPE} € por cada euro y luego {TIER_3_SLOPE} €.
-          </p>
+          <div className="wir-footnote">
+            <p>La reducción depende de tu RNT y se retira por fases:</p>
+            <ul className="wir-footnote__list">
+              <li>Hasta {euro(TIER_1_TOP)}: recibes los {euro(MAX_REDUCTION)} completos.</li>
+              <li>
+                De {euro(TIER_1_TOP)} a {euro(TIER_2_TOP, 2)}: empieza a reducirse rápidamente. Por
+                cada euro adicional de RNT, pierdes {euro(TIER_2_SLOPE, 2)} de reducción.
+              </li>
+              <li>
+                De {euro(TIER_2_TOP, 2)} a {euro(REDUCTION_LIMIT, 2)}: la reducción sigue bajando,
+                pero más despacio: pierdes {euro(TIER_3_SLOPE, 2)} por cada euro adicional.
+              </li>
+              <li>Desde {euro(REDUCTION_LIMIT, 2)}: la reducción desaparece por completo.</li>
+            </ul>
+            <p>
+              Los tramos encajan sin saltos: la reducción pasa de {euro(MAX_REDUCTION)} a{' '}
+              {euro(TIER_3_START_AMOUNT, 2)} y finalmente a {euro(0)}. Lo que cambia es la velocidad
+              a la que se retira.
+            </p>
+          </div>
         </section>
 
         {/* ── Grafico 1: la reduccion ── */}
@@ -823,6 +1124,7 @@ export function WorkIncomeReductionExplainer({
               y={PAD_TOP}
               height={CHART_HEIGHT - PAD_TOP - PAD_BOTTOM}
             />
+            <TierBands scale={reductionScale} bands={chartTierBands} />
             <path
               className="wir-chart__area wir-chart__area--green"
               d={areaPath(visibleCurve, reductionScale, (point) => point.applied)}
@@ -845,16 +1147,17 @@ export function WorkIncomeReductionExplainer({
               scale={reductionScale}
               gross={Math.min(Math.max(gross, MIN_GROSS), MAX_GROSS)}
               caption={`${euro(gross)} → ${euro(core.workReductionApplied)}`}
+              yTop={PAD_TOP + 21}
             />
           </ChartFrame>
 
           <p className="wir-footnote">
-            La banda sombreada es la zona de retirada: entre {euro(humpStart)} y {euro(humpEnd)} de
+            La cinta de arriba traduce a bruto los tres tramos de la fórmula. La banda sombreada
+            es la zona de retirada: entre {euro(humpStart)} y {euro(humpEnd)} de
             bruto, la reducción cae desde {euro(MAX_REDUCTION)} hasta cero. A la izquierda, por
             debajo de {euro(capCrossover)}, la línea verde se despega de la discontinua: la
             reducción teórica sigue siendo {euro(MAX_REDUCTION)} pero solo se aplica hasta dejar el
-            rendimiento en cero. La deducción de 340 € de 2025 no aparece aquí porque se resta de
-            la cuota, no de la base.
+            rendimiento en cero.
           </p>
         </section>
 
@@ -873,15 +1176,19 @@ export function WorkIncomeReductionExplainer({
               marginal se multiplica.
             </p>
             <p>
-              Y hasta {euro(18_276)} de bruto se suma un segundo efecto: la deducción de 340 € de
-              2025 también se retira, a razón de 0,20 € por euro. Los dos desmontajes coinciden y
-              producen el pico.
+              Y se suma un segundo efecto: la deducción de{' '}
+              {euro(LOW_WORK_INCOME_DEDUCTION_MAX_EUR)} por rentas del trabajo bajas también se
+              retira, aunque en una franja más corta. Entera hasta{' '}
+              {euro(LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR)} de bruto, desde ahí pierde 0,20 € por
+              cada euro de más y a {euro(LOW_WORK_INCOME_GROSS_LIMIT_EUR)} ya no queda nada. Los dos
+              desmontajes coinciden y producen el pico.
             </p>
             <p className="wir-hump-punch">
-              Resultado: un sueldo de {euro(peak.gross)} soporta un tipo marginal de{' '}
-              <strong>{percent(peak.marginalIrpf)}</strong> solo de IRPF — más que el{' '}
-              {percent(scaleTopRate, 0)} que paga el tramo más alto de la escala. Y en cuanto la
-              reducción se agota, el marginal se <em>desploma</em>.
+            Resultado: un sueldo de {euro(peak.gross)} soporta un tipo marginal efectivo del{' '}
+            <strong>{percent(peak.marginalIrpf)}</strong> solo de IRPF, frente al{' '}
+            {percent(scaleTopRate, 0)} del tramo más alto de la escala. No porque exista un tramo del{' '}
+            <strong>{percent(peak.marginalIrpf)}</strong>, sino porque al ganar más también se pierde parte de la
+            reducción. Cuando esta se agota, el marginal se desploma.
             </p>
           </div>
 
@@ -922,6 +1229,12 @@ export function WorkIncomeReductionExplainer({
             >
               45 % · tipo máximo de la escala estatal + autonómica
             </text>
+            <GrossReference
+              scale={marginalScale}
+              gross={SMI_ANNUAL}
+              label="SMI 2025"
+              y={marginalScale.y(62)}
+            />
             <path
               className="wir-chart__area wir-chart__area--red"
               d={areaPath(visibleCurve, marginalScale, (point) => point.marginalTotal)}
@@ -968,13 +1281,14 @@ export function WorkIncomeReductionExplainer({
             />
           </ChartFrame>
 
-          <p className="wir-footnote">
+          <p className="wir-footnote wir-footnote--key">
             Fíjate en la línea azul: el tipo <em>medio</em> nunca deja de ser bajo. La joroba es un
-            fenómeno del tipo <em>marginal</em>, es decir, de lo que te cuesta el siguiente euro —
+            fenómeno del tipo <em>marginal</em>, es decir, de lo que te cuesta el siguiente euro, 
             no de lo que pagas sobre el total. Por eso subir de sueldo siempre compensa en neto,
             aunque en esta franja compense mucho menos de lo que parece.
           </p>
         </section>
+        </div>
 
         {/* ── Avisos ── */}
         <section className="wir-panel" aria-labelledby="wir-traps-title">
@@ -987,14 +1301,12 @@ export function WorkIncomeReductionExplainer({
             <article className="wir-trap wir-trap--red">
               <h4>El escalón de los 6.500 €</h4>
               <p>
-                Si tus rentas no exentas distintas del trabajo superan {euro(OTHER_INCOME_LIMIT)},
-                la reducción no cae poco a poco: <strong>desaparece entera</strong>.{' '}
+              Si tus rentas no exentas distintas del trabajo, por ejemplo, los ingresos por alquilar un piso, superan {euro(OTHER_INCOME_LIMIT)}, la reducción desaparece por completo. Y con ella, la ventaja fiscal para los sueldos bajos.
                 {hasReduction ? (
                   <>
                     Con tu sueldo actual, pasar de {euro(OTHER_INCOME_LIMIT)} a{' '}
                     {euro(OTHER_INCOME_LIMIT + 1)} de otras rentas te costaría{' '}
-                    <strong>{euro(savings)}</strong> más de IRPF. Es un auténtico error de salto:
-                    ganar 1 € puede dejarte con menos dinero.
+                    <strong>{euro(savings)}</strong> más de IRPF. 
                   </>
                 ) : reductionBlocked ? (
                   <>
@@ -1016,28 +1328,13 @@ export function WorkIncomeReductionExplainer({
               <p>
                 Las cuotas a sindicatos y colegios obligatorios (máximo {euro(500)}) y la defensa
                 jurídica (máximo {euro(300)}) se restan <em>antes</em> de elegir tramo, así que
-                bajan el RNT y pueden aumentar la reducción. Los {euro(2_000)} de «otros gastos»,
+                bajan el RNT y pueden aumentar la reducción. Los {euro(2_000)} de gastos deducibles,
                 la movilidad geográfica y el incremento por discapacidad, no.
               </p>
             </article>
             <article className="wir-trap wir-trap--blue">
               <h4>La reducción no es una devolución</h4>
-              <p>
-                {hasReduction ? (
-                  <>
-                    Resta {euro(core.workReductionApplied)} de la <em>base</em>, no de la cuota. Lo
-                    que te ahorra de verdad son <strong>{euro(savings)}</strong>: la reducción
-                    multiplicada por el tipo marginal que te habría tocado.
-                  </>
-                ) : (
-                  <>
-                    Se resta de la <em>base</em>, no de la cuota. Por eso el ahorro real nunca es la
-                    reducción entera, sino la reducción multiplicada por el tipo marginal que te
-                    habría tocado.
-                  </>
-                )}{' '}
-                La deducción de 340 € de 2025, en cambio, sí se resta directamente de la cuota.
-              </p>
+              <p> {hasReduction ? ( <> Por tu salario, se aplica una reducción de {euro(core.workReductionApplied)} sobre la <em> base</em> sobre la que se calcula tu IRPF. Eso no significa que pagues {euro(core.workReductionApplied)} menos de impuestos: significa que el impuesto se calcula sobre una cantidad menor. En tu caso, el ahorro real es de <strong> {euro(savings)}</strong>. </> ) : ( <> Esta reducción se resta de la <em>base</em>, no de la cuota. Por eso el ahorro real no equivale a la reducción: depende del tipo marginal que se aplique. </> )} {' '} La deducción por rentas del trabajo bajas, en cambio, sí resta directamente de la cuota: cada euro de deducción supone un euro menos de IRPF. </p>
             </article>
           </div>
         </section>

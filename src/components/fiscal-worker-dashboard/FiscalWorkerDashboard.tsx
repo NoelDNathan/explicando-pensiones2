@@ -20,6 +20,7 @@ import {
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
   WorkerSocialContributionsCard,
+  WorkerWealthTaxesCard,
   DEFAULT_AT_EP_2025_CATEGORY_ID,
   calculateSocialContributions,
   getOccupationalAccidentsRate,
@@ -32,6 +33,8 @@ import type {
   ConsumptionTaxesResult,
   PersonalReductionResult,
   SocialContributionRates,
+  WealthTaxesDraft,
+  WealthTaxesResult,
   WorkerContractType,
 } from '../worker-salary-dashboard'
 import type { DisabilityMode } from './types'
@@ -402,8 +405,12 @@ export function FiscalWorkerDashboard() {
   const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
   const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
   const [consumptionTaxesDraft, setConsumptionTaxesDraft] = useState<ConsumptionTaxesDraft | null>(null)
+  const [wealthTaxes, setWealthTaxes] = useState<WealthTaxesResult | null>(null)
+  const [wealthTaxesDraft, setWealthTaxesDraft] = useState<WealthTaxesDraft | null>(null)
   const [activeWorkerStepId, setActiveWorkerStepId] = useState(0)
   const hasAssignedConsumption = (consumptionTaxes?.assignedSpendAnnual ?? 0) > 0
+  /** IBI + IVTM del paso 9: recurrentes, por eso entran en el resumen mensual. */
+  const wealthRecurringTaxAnnual = wealthTaxes?.recurringTaxAnnual ?? 0
 
   const contributionGroups = useMemo(() => {
     const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
@@ -448,15 +455,19 @@ export function FiscalWorkerDashboard() {
   }, [taxYear])
 
   const handleConsumptionTaxesChange = useCallback((nextResult: ConsumptionTaxesResult) => {
-    setConsumptionTaxes(
-      nextResult.assignedSpendAnnual > 0 || nextResult.propertyTaxAnnual > 0 || nextResult.vehicleTaxAnnual > 0
-        ? nextResult
-        : null,
-    )
+    setConsumptionTaxes(nextResult.assignedSpendAnnual > 0 ? nextResult : null)
   }, [])
 
   const handleConsumptionDraftChange = useCallback((draft: ConsumptionTaxesDraft) => {
     setConsumptionTaxesDraft(draft)
+  }, [])
+
+  const handleWealthTaxesChange = useCallback((nextResult: WealthTaxesResult) => {
+    setWealthTaxes(nextResult.recurringTaxAnnual > 0 ? nextResult : null)
+  }, [])
+
+  const handleWealthDraftChange = useCallback((draft: WealthTaxesDraft) => {
+    setWealthTaxesDraft(draft)
   }, [])
 
   const result = useMemo(() => {
@@ -492,9 +503,9 @@ export function FiscalWorkerDashboard() {
       const annualConsumption = hasAssignedConsumption ? consumptionTaxes!.totalBudgetAnnual : epfVatEstimate.annualConsumption
       const vatRate = hasAssignedConsumption ? consumptionTaxes!.effectiveRate : epfVatEstimate.vatRate
       const vat = hasAssignedConsumption ? consumptionTaxes!.vatAnnual : epfVatEstimate.vatAnnual
-      const contextualOtherTaxes = otherTaxes + (consumptionTaxes
-        ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual
-        : 0)
+      const contextualOtherTaxes = otherTaxes
+        + (consumptionTaxes?.specialTaxesAnnual ?? 0)
+        + wealthRecurringTaxAnnual
       const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
       return {
@@ -626,7 +637,7 @@ export function FiscalWorkerDashboard() {
       adjustments: personalAdjustments?.adjustments,
     })
     const { taxableBase, stateTax, regionalTax, irpf } = coreIrpf
-    // Reparto de los gastos del art. 19 para explicar la ecuacion del paso 4:
+    // Reparto de los gastos del art. 19 para explicar la ecuacion del paso 5:
     // bruto - Seguridad Social - gastos deducibles = rendimiento neto del trabajo.
     const socialSecurityWorkExpense = Math.min(employeeSocialSecurity, coreIrpf.article19ExpensesBeforeOtherExpenses)
     const otherDeductibleWorkExpenses =
@@ -637,9 +648,9 @@ export function FiscalWorkerDashboard() {
     const annualConsumption = hasAssignedConsumption ? consumptionTaxes!.totalBudgetAnnual : epfVatEstimate.annualConsumption
     const vatRate = hasAssignedConsumption ? consumptionTaxes!.effectiveRate : epfVatEstimate.vatRate
     const vat = hasAssignedConsumption ? consumptionTaxes!.vatAnnual : epfVatEstimate.vatAnnual
-    const contextualOtherTaxes = otherTaxes + (consumptionTaxes
-      ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual
-      : 0)
+    const contextualOtherTaxes = otherTaxes
+      + (consumptionTaxes?.specialTaxesAnnual ?? 0)
+      + wealthRecurringTaxAnnual
     const totalContextTax = employeeSocialSecurity + irpf + vat + contextualOtherTaxes
 
     return {
@@ -701,7 +712,7 @@ export function FiscalWorkerDashboard() {
       deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
-  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, hasAssignedConsumption, inKindSalary, manualAutonomicDeduction, mobility, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear])
+  }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, hasAssignedConsumption, inKindSalary, manualAutonomicDeduction, mobility, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear, wealthRecurringTaxAnnual])
 
   const baseContributionRates = useMemo(() => getContributionRatesForYear(taxYear), [taxYear])
   const contributionRates = useMemo<SocialContributionRates>(() => ({
@@ -879,13 +890,14 @@ export function FiscalWorkerDashboard() {
     grossSalaryAnnual: result.grossSalaryAnnual,
     salaryAnnual: salary,
     salaryComplementsAnnual: salaryComplements,
+    inKindSalaryAnnual: inKindSalary,
     contributionBaseMonthly: result.contributionBase,
     socialContributions,
     irpfAnnual: result.irpf,
     netSalaryAnnual: result.netSalary,
     rates: contributionRates,
     contractType,
-  }), [contractType, contributionRates, result.contributionBase, result.grossSalaryAnnual, result.irpf, result.netSalary, salary, salaryComplements, socialContributions])
+  }), [contractType, contributionRates, inKindSalary, result.contributionBase, result.grossSalaryAnnual, result.irpf, result.netSalary, salary, salaryComplements, socialContributions])
 
   const fiscalKpiItems: FiscalKpiItem[] = [
     {
@@ -933,10 +945,10 @@ export function FiscalWorkerDashboard() {
       icon: 'document',
       title: 'Otros impuestos',
       left: {
-        label: consumptionTaxes ? 'Especiales + IBI' : 'Declarado',
-        value: formatEuro(consumptionTaxes
-          ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual + otherTaxes
-          : otherTaxes),
+        label: consumptionTaxes || wealthTaxes ? 'Especiales + IBI e IVTM' : 'Declarado',
+        value: formatEuro(
+          otherTaxes + (consumptionTaxes?.specialTaxesAnnual ?? 0) + wealthRecurringTaxAnnual,
+        ),
       },
       right: { label: 'Modulo', value: 'separado' },
       badge: 'No altera el neto laboral',
@@ -999,11 +1011,18 @@ export function FiscalWorkerDashboard() {
         )
       case 4:
       case 5:
+      case 7:
         return (
           <WorkerPersonalReductionsCard
-            focus={activeWorkerStepId === 4 ? 'reductions' : 'deductions-benefits'}
+            focus={
+              activeWorkerStepId === 4
+                ? 'in-kind'
+                : activeWorkerStepId === 5
+                  ? 'reductions'
+                  : 'deductions-benefits'
+            }
             stepNumber={activeWorkerStepId}
-            totalSteps={10}
+            totalSteps={12}
             initialChildren={selectedChildren}
             initialAscendants={selectedAscendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
@@ -1075,7 +1094,7 @@ export function FiscalWorkerDashboard() {
           </div>
         )
       }
-      case 7:
+      case 8:
         return (
           <WorkerConsumptionTaxesCard
             initialBudgetAnnual={consumptionTaxesDraft?.budgetAnnual ?? result.annualConsumption}
@@ -1084,7 +1103,15 @@ export function FiscalWorkerDashboard() {
             onResultChange={handleConsumptionTaxesChange}
           />
         )
-      case 8:
+      case 9:
+        return (
+          <WorkerWealthTaxesCard
+            initialDraft={wealthTaxesDraft}
+            onDraftChange={handleWealthDraftChange}
+            onResultChange={handleWealthTaxesChange}
+          />
+        )
+      case 10:
         return (
           <section className="fwd-net-step" aria-labelledby="fwd-net-step-title">
             <WorkerFiscalSummaryCard
@@ -1095,12 +1122,10 @@ export function FiscalWorkerDashboard() {
               irpfAnnual={result.irpf}
               vatAnnual={result.vat}
               otherTaxesAnnual={
-                consumptionTaxes
-                  ? consumptionTaxes.specialTaxesAnnual + consumptionTaxes.propertyTaxAnnual + consumptionTaxes.vehicleTaxAnnual + otherTaxes
-                  : otherTaxes
+                otherTaxes + (consumptionTaxes?.specialTaxesAnnual ?? 0) + wealthRecurringTaxAnnual
               }
               onSalaryChange={setSalary}
-              onContinue={() => setActiveWorkerStepId(9)}
+              onContinue={() => setActiveWorkerStepId(11)}
             />
             <div className="fwd-net-step__detail">
               <h3 id="fwd-net-step-title">Desglose de todas las piezas</h3>
@@ -1109,7 +1134,7 @@ export function FiscalWorkerDashboard() {
             </div>
           </section>
         )
-      case 9:
+      case 11:
         return (
           <section className="fwd-faq-step" aria-labelledby="fwd-faq-step-title">
             <header className="fwd-faq-step__header">
@@ -1127,7 +1152,7 @@ export function FiscalWorkerDashboard() {
             </div>
           </section>
         )
-      case 10:
+      case 12:
         return <WorkerCalculationSourcesCard year={Number(taxYear)} items={calculationSources} />
       default:
         return <WorkerSalaryBaseCard initialSalary={salary} initialPayPeriod="annual" initialPayCount="12" />

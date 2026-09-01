@@ -1,22 +1,19 @@
 import {
   Calculator,
-  Car,
-  ExternalLink,
-  Home,
   Info,
   Lightbulb,
   PenLine,
   Percent,
-  Plus,
   Receipt,
   RotateCcw,
-  Trash2,
   WalletCards,
 } from 'lucide-react'
-import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts'
 import { InfoButton } from '../ui/InfoButton'
+import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
+import './WorkerTaxStepShell.css'
 import './WorkerConsumptionTaxesCard.css'
 
 type ConsumptionTaxTone = 'green' | 'blue' | 'cyan' | 'orange' | 'purple' | 'red' | 'neutral'
@@ -48,17 +45,19 @@ export type ConsumptionTaxesResult = {
   totalSharePercent: number
   vatAnnual: number
   specialTaxesAnnual: number
-  propertyTaxAnnual: number
-  vehicleTaxAnnual: number
+  /** IVA + impuestos especiales del gasto. El IBI y el IVTM viven en el paso siguiente. */
   totalTaxAnnual: number
   effectiveRate: number
+}
+
+export interface ConsumptionTaxesDraft {
+  budgetAnnual: number
+  sharePercents: Record<string, number>
 }
 
 type WorkerConsumptionTaxesCardProps = {
   categories?: ConsumptionTaxCategory[]
   initialBudgetAnnual?: number
-  initialCadastralValue?: number
-  initialHasOwnedHome?: boolean
   initialDraft?: ConsumptionTaxesDraft | null
   /** `once` muestra el dialogo de valores medios solo la primera vez. */
   introChoiceMode?: 'once' | 'off'
@@ -184,469 +183,6 @@ export function ConsumptionTaxesIntroDialog({
 
 const DEFAULT_BUDGET_ANNUAL = 28145.92
 
-const CATASTRO_URL = 'https://www.sedecatastro.gob.es/'
-
-const IBI_HELP =
-  'El IBI (Impuesto sobre Bienes Inmuebles) lo cobra tu ayuntamiento cada año por la vivienda en propiedad. Este bloque es opcional y no forma parte del reparto del 100 % de gasto. La calculadora estima una cuota anual aproximada como valor catastral × tipo IBI; el tipo real lo fija cada municipio y suele estar entre 0,4 % y 1,1 %. No es IVA, ITP ni un impuesto de consumo.'
-
-type OwnershipAnswer = 'unanswered' | 'yes' | 'no'
-
-type ResidenceRole = 'habitual' | 'additional'
-
-type PropertyIbi = {
-  id: string
-  cadastralValue: number
-  ibiRatePercent: number
-}
-
-type OwnedHome = PropertyIbi & {
-  purchasePrice: number
-  region: string
-  propertyType: 'new' | 'used'
-  residenceRole: ResidenceRole
-  priceIncludesVat: boolean
-}
-
-const PURCHASE_TAX_HELP =
-  'Al comprar una vivienda nueva se paga IVA (10 % en peninsula y Baleares; IGIC en Canarias) mas AJD, que varia por comunidad autonoma. En segunda mano se paga ITP: la primera vivienda habitual suele tener tipos reducidos, pero la segunda o mas tributa al tipo general, mas alto en muchas CCAA. Son pagos unicos de entonces, no mensuales como el IBI, y no se suman al impacto de este mes. Pais Vasco y Navarra tienen regimen foral propio y aqui no se estiman. Los tipos son orientativos y no incluyen bonificaciones por edad, ingresos o VPO.'
-
-const CAR_PURCHASE_TAX_HELP =
-  'Al comprar un coche nuevo se paga IVA (21 % en peninsula y Baleares; IGIC en Canarias) incluido en el precio, mas el impuesto de matriculacion segun las emisiones de CO2. En segunda mano a un particular no hay IVA, pero suele pagarse ITP al transferir la titularidad; a un concesionario el precio suele llevar IVA. Son pagos unicos en la compra; no son el IVTM anual ni el gasto mensual de gasolina. Los tipos aqui son orientativos y no incluyen bonificaciones ni regimenes especiales.'
-
-const IVTM_HELP =
-  'El IVTM (impuesto sobre vehiculos de traccion mecanica), tambien llamado impuesto de circulacion, lo cobra tu ayuntamiento por tener un vehiculo matriculado. Este bloque es opcional y no forma parte del reparto del 100 % de gasto. La calculadora estima una cuota anual aproximada como potencia fiscal x tipo IVTM; el tipo real lo fija cada municipio segun CV, combustible y antiguedad. No es IVA ni impuesto de compra.'
-
-type PropertyPurchase = {
-  id: string
-  purchasePrice: number
-  region: string
-  propertyType: 'new' | 'used'
-  residenceRole: ResidenceRole
-  priceIncludesVat?: boolean
-}
-
-const DEFAULT_IBI_RATE_PERCENT = 0.6
-
-const REGION_OPTIONS = [
-  { value: 'madrid', label: 'Madrid' },
-  { value: 'andalucia', label: 'Andalucia' },
-  { value: 'aragon', label: 'Aragon' },
-  { value: 'asturias', label: 'Asturias' },
-  { value: 'illes_balears', label: 'Illes Balears' },
-  { value: 'canarias', label: 'Canarias' },
-  { value: 'cantabria', label: 'Cantabria' },
-  { value: 'castilla_la_mancha', label: 'Castilla-La Mancha' },
-  { value: 'castilla_y_leon', label: 'Castilla y Leon' },
-  { value: 'cataluna', label: 'Cataluna' },
-  { value: 'extremadura', label: 'Extremadura' },
-  { value: 'galicia', label: 'Galicia' },
-  { value: 'murcia', label: 'Region de Murcia' },
-  { value: 'la_rioja', label: 'La Rioja' },
-  { value: 'comunitat_valenciana', label: 'Comunitat Valenciana' },
-  { value: 'pais_vasco', label: 'Pais Vasco' },
-  { value: 'navarra', label: 'Navarra' },
-] as const
-
-const FORAL_REGIONS = new Set(['pais_vasco', 'navarra'])
-
-function isForalRegion(region: string) {
-  return FORAL_REGIONS.has(region)
-}
-
-/** Tipos ITP orientativos para primera vivienda habitual (sin bonificaciones extra de edad o ingresos). */
-const ITP_HABITUAL_RATES_PERCENT: Record<string, number> = {
-  andalucia: 7,
-  aragon: 8,
-  asturias: 8,
-  illes_balears: 8,
-  canarias: 6.5,
-  cantabria: 9,
-  castilla_la_mancha: 9,
-  castilla_y_leon: 8,
-  cataluna: 10,
-  extremadura: 8,
-  galicia: 8,
-  madrid: 6,
-  murcia: 8,
-  la_rioja: 7,
-  comunitat_valenciana: 10,
-}
-
-/** Tipos ITP orientativos para segunda vivienda o mas (tipo general sin bonificaciones). */
-const ITP_ADDITIONAL_RATES_PERCENT: Record<string, number> = {
-  andalucia: 7,
-  aragon: 8,
-  asturias: 8,
-  illes_balears: 11,
-  canarias: 6.5,
-  cantabria: 10,
-  castilla_la_mancha: 9,
-  castilla_y_leon: 10,
-  cataluna: 10,
-  extremadura: 11,
-  galicia: 10,
-  madrid: 6,
-  murcia: 8,
-  la_rioja: 7,
-  comunitat_valenciana: 10,
-}
-
-const NEW_HOUSING_VAT_RATE_PERCENT = 10
-const CANARIAS_IGIC_RATE_PERCENT = 6.5
-
-/** AJD orientativo en compra de obra nueva; varia por CCAA. */
-const AJD_RATES_PERCENT: Record<string, number> = {
-  andalucia: 1.2,
-  aragon: 1.5,
-  asturias: 1.2,
-  illes_balears: 1.2,
-  canarias: 0.75,
-  cantabria: 1.5,
-  castilla_la_mancha: 1.5,
-  castilla_y_leon: 1.5,
-  cataluna: 1.5,
-  extremadura: 1.5,
-  galicia: 1.5,
-  madrid: 0.75,
-  murcia: 1.5,
-  la_rioja: 1,
-  comunitat_valenciana: 1.5,
-}
-
-function getItpRate(region: string, residenceRole: ResidenceRole) {
-  if (isForalRegion(region)) return null
-  const table = residenceRole === 'habitual' ? ITP_HABITUAL_RATES_PERCENT : ITP_ADDITIONAL_RATES_PERCENT
-  return table[region] ?? (residenceRole === 'habitual' ? 7 : 9)
-}
-
-function residenceRoleAffectsItp(region: string) {
-  const habitual = getItpRate(region, 'habitual')
-  const additional = getItpRate(region, 'additional')
-  return habitual !== null && additional !== null && habitual !== additional
-}
-
-function getIncludedPurchaseTaxRate(region: string) {
-  return region === 'canarias' ? CANARIAS_IGIC_RATE_PERCENT : NEW_HOUSING_VAT_RATE_PERCENT
-}
-
-function getIncludedPurchaseTaxLabel(region: string) {
-  return region === 'canarias' ? 'IGIC' : 'IVA'
-}
-
-function createPropertyIbiId() {
-  return `ibi-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
-}
-
-function createEmptyOwnedHome(residenceRole: ResidenceRole = 'habitual'): OwnedHome {
-  return {
-    id: createPropertyIbiId(),
-    cadastralValue: 0,
-    ibiRatePercent: DEFAULT_IBI_RATE_PERCENT,
-    purchasePrice: 0,
-    region: 'madrid',
-    propertyType: 'used',
-    residenceRole,
-    priceIncludesVat: true,
-  }
-}
-
-function toPropertyIbi(home: OwnedHome): PropertyIbi {
-  return {
-    id: home.id,
-    cadastralValue: home.cadastralValue,
-    ibiRatePercent: home.ibiRatePercent,
-  }
-}
-
-function toPropertyPurchase(home: OwnedHome): PropertyPurchase {
-  return {
-    id: home.id,
-    purchasePrice: home.purchasePrice,
-    region: home.region,
-    propertyType: home.propertyType,
-    residenceRole: home.residenceRole,
-    priceIncludesVat: home.priceIncludesVat,
-  }
-}
-
-function ownedHomesFromLists(
-  ibis: PropertyIbi[],
-  purchases: PropertyPurchase[],
-  initialCadastralValue: number,
-): OwnedHome[] {
-  if (!ibis.length && !purchases.length) {
-    return [{
-      ...createEmptyOwnedHome(),
-      cadastralValue: initialCadastralValue,
-    }]
-  }
-
-  const count = Math.max(ibis.length, purchases.length)
-  return Array.from({ length: count }, (_, index) => {
-    const ibi = ibis[index]
-    const purchase = purchases[index]
-    const fallback = createEmptyOwnedHome(index === 0 ? 'habitual' : 'additional')
-
-    return {
-      id: ibi?.id ?? purchase?.id ?? fallback.id,
-      cadastralValue: ibi?.cadastralValue ?? fallback.cadastralValue,
-      ibiRatePercent: ibi?.ibiRatePercent ?? fallback.ibiRatePercent,
-      purchasePrice: purchase?.purchasePrice ?? fallback.purchasePrice,
-      region: purchase?.region ?? fallback.region,
-      propertyType: purchase?.propertyType ?? fallback.propertyType,
-      residenceRole: purchase?.residenceRole ?? fallback.residenceRole,
-      priceIncludesVat: purchase?.priceIncludesVat ?? fallback.priceIncludesVat,
-    }
-  })
-}
-
-function calculatePropertyIbiAnnual(property: Pick<PropertyIbi, 'cadastralValue' | 'ibiRatePercent'>) {
-  if (property.cadastralValue <= 0) return 0
-  return property.cadastralValue * (property.ibiRatePercent / 100)
-}
-
-function OwnershipGate({
-  question,
-  description,
-  answer,
-  onYes,
-  onNo,
-  children,
-}: {
-  question: string
-  description: string
-  answer: OwnershipAnswer
-  onYes: () => void
-  onNo: () => void
-  children?: ReactNode
-}) {
-  return (
-    <section className={`wctc-ownership-gate is-${answer}`} aria-label={question}>
-      <div className="wctc-ownership-gate__top">
-        <div className="wctc-ownership-gate__prompt">
-          <span aria-hidden="true">?</span>
-          <div>
-            <h4>{question}</h4>
-            <p>{description}</p>
-          </div>
-        </div>
-        <div className="wctc-ownership-gate__choices" role="group" aria-label={`Respuesta: ${question}`}>
-          <button
-            type="button"
-            className={answer === 'yes' ? 'is-selected' : ''}
-            onClick={onYes}
-          >
-            Sí
-          </button>
-          <button
-            type="button"
-            className={answer === 'no' ? 'is-selected' : ''}
-            onClick={onNo}
-          >
-            No
-          </button>
-        </div>
-      </div>
-      {answer === 'yes' && children ? (
-        <div className="wctc-ownership-gate__body">{children}</div>
-      ) : null}
-      {answer === 'no' ? (
-        <p className="wctc-ownership-gate__skip">
-          De acuerdo, no estimaremos impuestos de este apartado. Puedes cambiar la respuesta cuando quieras.
-        </p>
-      ) : null}
-    </section>
-  )
-}
-
-type VehicleCondition = 'new' | 'used_dealer' | 'used_private'
-type RegistrationCo2Tier = 'exempt' | 'low' | 'medium' | 'high'
-
-type VehiclePurchase = {
-  id: string
-  purchasePrice: number
-  region: string
-  condition: VehicleCondition
-  co2Tier: RegistrationCo2Tier
-}
-
-const NEW_CAR_VAT_RATE_PERCENT = 21
-const CAR_IGIC_RATE_PERCENT = 7
-
-const REGISTRATION_TAX_RATES_PERCENT: Record<RegistrationCo2Tier, number> = {
-  exempt: 0,
-  low: 4.75,
-  medium: 9.75,
-  high: 14.75,
-}
-
-/** ITP orientativo en compraventa entre particulares; varia por CCAA. */
-const VEHICLE_ITP_RATES_PERCENT: Record<string, number> = {
-  andalucia: 4.5,
-  aragon: 4,
-  asturias: 4,
-  illes_balears: 4,
-  canarias: 5.5,
-  cantabria: 5,
-  castilla_la_mancha: 6,
-  castilla_y_leon: 5,
-  cataluna: 5,
-  extremadura: 4,
-  galicia: 5,
-  madrid: 4,
-  murcia: 4,
-  la_rioja: 4,
-  comunitat_valenciana: 6,
-}
-
-function createVehicleId() {
-  return `vehicle-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
-}
-
-function createEmptyVehiclePurchase(): VehiclePurchase {
-  return {
-    id: createVehicleId(),
-    purchasePrice: 0,
-    region: 'madrid',
-    condition: 'used_private',
-    co2Tier: 'medium',
-  }
-}
-
-type VehicleIvtm = {
-  id: string
-  fiscalPowerCv: number
-  ivtmRatePerCv: number
-}
-
-const DEFAULT_IVTM_RATE_PER_CV = 9.5
-
-function createVehicleIvtmId() {
-  return `ivtm-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
-}
-
-function createEmptyVehicleIvtm(): VehicleIvtm {
-  return {
-    id: createVehicleIvtmId(),
-    fiscalPowerCv: 0,
-    ivtmRatePerCv: DEFAULT_IVTM_RATE_PER_CV,
-  }
-}
-
-function calculateVehicleIvtmAnnual(vehicle: VehicleIvtm) {
-  return vehicle.fiscalPowerCv * vehicle.ivtmRatePerCv
-}
-
-export interface ConsumptionTaxesDraft {
-  budgetAnnual: number
-  sharePercents: Record<string, number>
-  hasOwnedHome: OwnershipAnswer
-  ownsVehicle: OwnershipAnswer
-  propertyIbis: PropertyIbi[]
-  propertyPurchases: PropertyPurchase[]
-  vehiclePurchases: VehiclePurchase[]
-  vehicleIvtms: VehicleIvtm[]
-}
-
-function getVehicleIncludedTaxRate(region: string) {
-  return region === 'canarias' ? CAR_IGIC_RATE_PERCENT : NEW_CAR_VAT_RATE_PERCENT
-}
-
-function getVehicleIncludedTaxLabel(region: string) {
-  return region === 'canarias' ? 'IGIC' : 'IVA'
-}
-
-type PurchaseTaxBreakdown = {
-  status: 'empty' | 'foral' | 'ok'
-  total: number
-  headline: string
-  lines: Array<{ label: string; amount: number }>
-}
-
-function calculatePurchaseTaxBreakdown(
-  purchase: Pick<OwnedHome, 'purchasePrice' | 'region' | 'propertyType' | 'residenceRole' | 'priceIncludesVat'>,
-): PurchaseTaxBreakdown {
-  if (purchase.purchasePrice <= 0) {
-    return { status: 'empty', total: 0, headline: '', lines: [] }
-  }
-
-  if (isForalRegion(purchase.region)) {
-    return {
-      status: 'foral',
-      total: 0,
-      headline: 'No estimado (regimen foral)',
-      lines: [],
-    }
-  }
-
-  if (purchase.propertyType === 'new') {
-    const includedLabel = getIncludedPurchaseTaxLabel(purchase.region)
-    const includedRate = getIncludedPurchaseTaxRate(purchase.region)
-    const ajdRate = AJD_RATES_PERCENT[purchase.region] ?? 1.2
-    const priceIncludesVat = purchase.priceIncludesVat !== false
-    const includedTax = priceIncludesVat
-      ? purchase.purchasePrice * (includedRate / (100 + includedRate))
-      : purchase.purchasePrice * (includedRate / 100)
-    const ajdTax = purchase.purchasePrice * (ajdRate / 100)
-    const vatLine = priceIncludesVat
-      ? `${includedLabel} ${formatNumber(includedRate)} % incluido en el precio`
-      : `${includedLabel} ${formatNumber(includedRate)} % sobre el precio`
-
-    return {
-      status: 'ok',
-      total: includedTax + ajdTax,
-      headline: `${includedLabel} + AJD`,
-      lines: [
-        { label: vatLine, amount: includedTax },
-        { label: `AJD ${formatNumber(ajdRate)} %`, amount: ajdTax },
-      ],
-    }
-  }
-
-  const itpRate = getItpRate(purchase.region, purchase.residenceRole) ?? 0
-  const amount = purchase.purchasePrice * (itpRate / 100)
-  const roleLabel = purchase.residenceRole === 'habitual' ? 'habitual' : '2ª o mas'
-
-  return {
-    status: 'ok',
-    total: amount,
-    headline: `ITP ${formatNumber(itpRate)} % (${roleLabel})`,
-    lines: [
-      {
-        label: `ITP ${formatNumber(itpRate)} % sobre ${formatEuro(purchase.purchasePrice, 0)}`,
-        amount,
-      },
-    ],
-  }
-}
-
-function calculatePurchaseTax(
-  purchase: Pick<OwnedHome, 'purchasePrice' | 'region' | 'propertyType' | 'residenceRole' | 'priceIncludesVat'>,
-) {
-  return calculatePurchaseTaxBreakdown(purchase).total
-}
-
-function calculateVehiclePurchaseTax(purchase: VehiclePurchase) {
-  if (purchase.purchasePrice <= 0) return 0
-
-  const includedRate = getVehicleIncludedTaxRate(purchase.region)
-
-  if (purchase.condition === 'new') {
-    const includedTax = purchase.purchasePrice * (includedRate / (100 + includedRate))
-    const baseBeforeIncludedTax = purchase.purchasePrice - includedTax
-    const registrationRate = REGISTRATION_TAX_RATES_PERCENT[purchase.co2Tier]
-    const registrationTax = baseBeforeIncludedTax * (registrationRate / 100)
-    return includedTax + registrationTax
-  }
-
-  if (purchase.condition === 'used_dealer') {
-    return purchase.purchasePrice * (includedRate / (100 + includedRate))
-  }
-
-  const itpRate = VEHICLE_ITP_RATES_PERCENT[purchase.region] ?? 5
-  return purchase.purchasePrice * (itpRate / 100)
-}
-
 const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
   {
     id: 'saving',
@@ -664,8 +200,8 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     vatRate: 0,
     statutoryLabel: '0% en la cuota',
     tone: 'neutral',
-    note: 'Mas abajo puedes estimar el IVA o ITP pagado al comprar.',
-    help: 'No lo sumamos aquí. Esta calculadora estima el IVA que pagas ahora, cada mes. La cuota de hipoteca o préstamo no lleva IVA: estás devolviendo dinero, no comprando otra vez. El IVA o el ITP ya se pagó al adquirir (IVA si era nuevo; ITP si era de segunda mano) y no se reparte entre las cuotas, porque fue un pago único de entonces. El alquiler de vivienda habitual tampoco lleva IVA. El impuesto recurrente de la vivienda en propiedad es el IBI, más abajo.',
+    note: 'En el paso 9 puedes estimar el IVA o ITP pagado al comprar.',
+    help: 'No lo sumamos aquí. Esta calculadora estima el IVA que pagas ahora, cada mes. La cuota de hipoteca o préstamo no lleva IVA: estás devolviendo dinero, no comprando otra vez. El IVA o el ITP ya se pagó al adquirir (IVA si era nuevo; ITP si era de segunda mano) y no se reparte entre las cuotas, porque fue un pago único de entonces. El alquiler de vivienda habitual tampoco lleva IVA. El impuesto recurrente de la vivienda en propiedad es el IBI, que estimamos en el paso 8.',
   },
   {
     id: 'basic-food',
@@ -722,7 +258,7 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     specialRate: 20,
     statutoryLabel: '21% + 20%',
     tone: 'orange',
-    note: 'Mas abajo puedes estimar el IVA o ITP de la compra y el IVTM anual.',
+    note: 'En el paso 9 puedes estimar el IVTM anual y el impuesto de la compra.',
     help: 'El tipo 21 % + 20 % mezcla IVA e impuesto especial sobre hidrocarburos. El segundo no es IVA: es un tributo distinto que se suma al precio en surtidor.',
   },
   {
@@ -782,22 +318,6 @@ const AVERAGE_SPAIN_SHARE_PRESETS: Record<string, number> = {
   health: 3,
   tobacco: 0.5,
   alcohol: 1.5,
-}
-
-function formatEuro(value: number, decimals = 2) {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(value)
-}
-
-function formatNumber(value: number, decimals = 2) {
-  return new Intl.NumberFormat('es-ES', {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(value)
 }
 
 type SpendChartSlice = {
@@ -931,41 +451,9 @@ function getAverageConsumptionTaxRate(
   ) / totalSharePercent
 }
 
-function clampNumber(value: number, min = 0, max = Number.POSITIVE_INFINITY) {
-  if (!Number.isFinite(value)) return min
-  return Math.min(max, Math.max(min, value))
-}
-
-function formatEuroOrDash(value: number, decimals = 2) {
-  return value > 0 ? formatEuro(value, decimals) : '—'
-}
-
-function emptyableNumberValue(value: number) {
-  return value > 0 ? value : ''
-}
-
-function getVehiclePurchaseTaxLabel(purchase: VehiclePurchase) {
-  const includedLabel = getVehicleIncludedTaxLabel(purchase.region)
-  const includedRate = getVehicleIncludedTaxRate(purchase.region)
-
-  if (purchase.condition === 'new') {
-    const registrationRate = REGISTRATION_TAX_RATES_PERCENT[purchase.co2Tier]
-    return `${includedLabel} ${formatNumber(includedRate)} % + matriculacion ${formatNumber(registrationRate)} %`
-  }
-
-  if (purchase.condition === 'used_dealer') {
-    return `${includedLabel} ${formatNumber(includedRate)} %`
-  }
-
-  const itpRate = VEHICLE_ITP_RATES_PERCENT[purchase.region] ?? 5
-  return `ITP ${formatNumber(itpRate)} % (particular)`
-}
-
 export function WorkerConsumptionTaxesCard({
   categories = DEFAULT_CATEGORIES,
   initialBudgetAnnual = DEFAULT_BUDGET_ANNUAL,
-  initialCadastralValue = 0,
-  initialHasOwnedHome = false,
   initialDraft = null,
   introChoiceMode = 'once',
   onResultChange,
@@ -984,30 +472,6 @@ export function WorkerConsumptionTaxesCard({
           : category.initialSharePercent),
     })),
   )
-  const [hasOwnedHome, setHasOwnedHome] = useState<OwnershipAnswer>(() => (
-    initialDraft?.hasOwnedHome
-    ?? (initialHasOwnedHome || initialCadastralValue > 0 ? 'yes' : 'unanswered')
-  ))
-  const [ownsVehicle, setOwnsVehicle] = useState<OwnershipAnswer>(
-    () => initialDraft?.ownsVehicle ?? 'unanswered',
-  )
-  const [ownedHomes, setOwnedHomes] = useState<OwnedHome[]>(() => (
-    ownedHomesFromLists(
-      initialDraft?.propertyIbis ?? [],
-      initialDraft?.propertyPurchases ?? [],
-      initialCadastralValue,
-    )
-  ))
-  const [vehiclePurchases, setVehiclePurchases] = useState<VehiclePurchase[]>(() => (
-    initialDraft?.vehiclePurchases.length
-      ? initialDraft.vehiclePurchases.map((purchase) => ({ ...purchase }))
-      : [createEmptyVehiclePurchase()]
-  ))
-  const [vehicleIvtms, setVehicleIvtms] = useState<VehicleIvtm[]>(() => (
-    initialDraft?.vehicleIvtms.length
-      ? initialDraft.vehicleIvtms.map((vehicle) => ({ ...vehicle }))
-      : [createEmptyVehicleIvtm()]
-  ))
   const [introOpen, setIntroOpen] = useState(() => (
     introChoiceMode === 'once' && storedIntroChoice === null && initialDraft === null
   ))
@@ -1016,22 +480,6 @@ export function WorkerConsumptionTaxesCard({
     if (initialDraft) return
     setBudgetAnnual(initialBudgetAnnual)
   }, [initialBudgetAnnual, initialDraft])
-
-  const propertyTaxAnnual = hasOwnedHome === 'yes'
-    ? ownedHomes.reduce((total, home) => total + calculatePropertyIbiAnnual(home), 0)
-    : 0
-  const vehicleTaxAnnual = ownsVehicle === 'yes'
-    ? vehicleIvtms.reduce((total, vehicle) => total + calculateVehicleIvtmAnnual(vehicle), 0)
-    : 0
-  const purchaseTaxTotal = hasOwnedHome === 'yes'
-    ? ownedHomes.reduce((total, home) => total + calculatePurchaseTax(home), 0)
-    : 0
-  const hasForalPurchase = hasOwnedHome === 'yes'
-    && ownedHomes.some((home) => home.purchasePrice > 0 && isForalRegion(home.region))
-  const vehiclePurchaseTaxTotal = vehiclePurchases.reduce(
-    (total, purchase) => total + calculateVehiclePurchaseTax(purchase),
-    0,
-  )
 
   const result = useMemo<ConsumptionTaxesResult>(() => {
     const lines = shares.map((row) => {
@@ -1051,7 +499,7 @@ export function WorkerConsumptionTaxesCard({
     const totalSharePercent = lines.reduce((total, line) => total + line.sharePercent, 0)
     const vatAnnual = lines.reduce((total, line) => total + line.vatAnnual, 0)
     const specialTaxesAnnual = lines.reduce((total, line) => total + line.specialAnnual, 0)
-    const totalTaxAnnual = vatAnnual + specialTaxesAnnual + propertyTaxAnnual + vehicleTaxAnnual
+    const totalTaxAnnual = vatAnnual + specialTaxesAnnual
 
     return {
       lines,
@@ -1060,12 +508,10 @@ export function WorkerConsumptionTaxesCard({
       totalSharePercent,
       vatAnnual,
       specialTaxesAnnual,
-      propertyTaxAnnual,
-      vehicleTaxAnnual,
       totalTaxAnnual,
       effectiveRate: assignedSpendAnnual > 0 ? (totalTaxAnnual / assignedSpendAnnual) * 100 : 0,
     }
-  }, [budgetAnnual, propertyTaxAnnual, shares, vehicleTaxAnnual])
+  }, [budgetAnnual, shares])
 
   useEffect(() => {
     onResultChange?.(result)
@@ -1075,23 +521,8 @@ export function WorkerConsumptionTaxesCard({
     onDraftChange?.({
       budgetAnnual,
       sharePercents: Object.fromEntries(shares.map((row) => [row.id, row.sharePercent])),
-      hasOwnedHome,
-      ownsVehicle,
-      propertyIbis: ownedHomes.map(toPropertyIbi),
-      propertyPurchases: ownedHomes.map(toPropertyPurchase),
-      vehiclePurchases,
-      vehicleIvtms,
     })
-  }, [
-    budgetAnnual,
-    hasOwnedHome,
-    onDraftChange,
-    ownsVehicle,
-    ownedHomes,
-    shares,
-    vehicleIvtms,
-    vehiclePurchases,
-  ])
+  }, [budgetAnnual, onDraftChange, shares])
 
   function updateShare(id: string, nextSharePercent: number) {
     setShares((current) =>
@@ -1140,65 +571,6 @@ export function WorkerConsumptionTaxesCard({
     setIntroOpen(false)
   }, [introChoiceMode])
 
-  function updateOwnedHome(id: string, patch: Partial<Omit<OwnedHome, 'id'>>) {
-    setOwnedHomes((current) =>
-      current.map((home) => (home.id === id ? { ...home, ...patch } : home)),
-    )
-  }
-
-  function addOwnedHome() {
-    setOwnedHomes((current) => [...current, createEmptyOwnedHome('additional')])
-  }
-
-  function removeOwnedHome(id: string) {
-    setOwnedHomes((current) => (
-      current.length <= 1 ? current : current.filter((home) => home.id !== id)
-    ))
-  }
-
-  function handleOwnedHomeNo() {
-    setHasOwnedHome('no')
-    setOwnedHomes([createEmptyOwnedHome()])
-  }
-
-  function updateVehiclePurchase(id: string, patch: Partial<Omit<VehiclePurchase, 'id'>>) {
-    setVehiclePurchases((current) =>
-      current.map((purchase) => (purchase.id === id ? { ...purchase, ...patch } : purchase)),
-    )
-  }
-
-  function addVehiclePurchase() {
-    setVehiclePurchases((current) => [...current, createEmptyVehiclePurchase()])
-  }
-
-  function removeVehiclePurchase(id: string) {
-    setVehiclePurchases((current) => (
-      current.length <= 1 ? current : current.filter((purchase) => purchase.id !== id)
-    ))
-  }
-
-  function updateVehicleIvtm(id: string, patch: Partial<Omit<VehicleIvtm, 'id'>>) {
-    setVehicleIvtms((current) =>
-      current.map((vehicle) => (vehicle.id === id ? { ...vehicle, ...patch } : vehicle)),
-    )
-  }
-
-  function addVehicleIvtm() {
-    setVehicleIvtms((current) => [...current, createEmptyVehicleIvtm()])
-  }
-
-  function removeVehicleIvtm(id: string) {
-    setVehicleIvtms((current) => (
-      current.length <= 1 ? current : current.filter((vehicle) => vehicle.id !== id)
-    ))
-  }
-
-  function handleOwnsVehicleNo() {
-    setOwnsVehicle('no')
-    setVehiclePurchases([createEmptyVehiclePurchase()])
-    setVehicleIvtms([createEmptyVehicleIvtm()])
-  }
-
   const maxLineAmount = Math.max(...result.lines.map((line) => line.spendAnnual), 1)
   const toMonthly = (value: number) => value / 12
   const totalStatus = Math.abs(result.totalSharePercent - 100) <= 0.05 ? 'ok' : 'warn'
@@ -1222,8 +594,8 @@ export function WorkerConsumptionTaxesCard({
     <section className="wctc" aria-labelledby="wctc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
-          <span className="wctc-step"><span aria-hidden="true" />Paso 7 de 10</span>
-          <h2 id="wctc-title">7. IVA y otros impuestos</h2>
+          <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 12</span>
+          <h2 id="wctc-title">8. IVA y consumo diario</h2>
           <p>Distribuye tu gasto y calcula cuanto pagas al mes en IVA e impuestos especiales.</p>
         </div>
 
@@ -1257,22 +629,22 @@ export function WorkerConsumptionTaxesCard({
             <div className="wctc-grid-head" aria-hidden="true">
               <span>Categoria de gasto</span>
               <span>Tipo impositivo / regla</span>
-              <span>Importe mensual (€)</span>
+              <span>Importe al mes</span>
               <span>% del gasto</span>
               <span />
             </div>
 
             <div className="wctc-rows">
             {result.lines.map((line, index) => (
-              <article key={line.id} className={`wctc-row wctc-row--${line.tone}`}>
+              <article
+                key={line.id}
+                className={`wctc-row wctc-row--${line.tone}${line.note ? ' wctc-row--noted' : ''}`}
+              >
                 <div className="wctc-category">
                   <span className="wctc-index">{index + 1}</span>
                   <span className="wctc-category-dot" aria-hidden="true" />
                   <span className="wctc-category-label">
-                    <span className="wctc-category-copy">
-                      <strong>{line.label}</strong>
-                      {line.note && <small className="wctc-row-note">{line.note}</small>}
-                    </span>
+                    <strong>{line.label}</strong>
                     {line.help && (
                       <InfoButton
                         label={`Que incluye ${line.label.replace(/\s*\*$/, '')}`}
@@ -1313,9 +685,11 @@ export function WorkerConsumptionTaxesCard({
                   <b>%</b>
                 </label>
 
-                <div className="wctc-mini">
+                <div className="wctc-mini" aria-hidden="true">
                   <span style={{ width: `${Math.max(5, (line.spendAnnual / maxLineAmount) * 100)}%` }} />
                 </div>
+
+                {line.note && <p className="wctc-row-note">{line.note}</p>}
               </article>
             ))}
 
@@ -1348,465 +722,6 @@ export function WorkerConsumptionTaxesCard({
             </article>
           </div>
           </div>
-
-          <section className="wctc-home-strip" aria-labelledby="wctc-home-title">
-            <div className="wctc-home-strip__title">
-              <Home size={22} aria-hidden="true" />
-              <h3 id="wctc-home-title">Vivienda en propiedad <span>(opcional)</span></h3>
-            </div>
-
-            <OwnershipGate
-              question="¿Tienes vivienda en propiedad?"
-              description="Cuenta aunque aun pagues hipoteca: si eres dueno o duena, responde Si."
-              answer={hasOwnedHome}
-              onYes={() => setHasOwnedHome('yes')}
-              onNo={handleOwnedHomeNo}
-            >
-              <div className="wctc-homes">
-                <div className="wctc-homes__list">
-                  {ownedHomes.map((home, index) => {
-                    const ibiAnnual = calculatePropertyIbiAnnual(home)
-                    const purchaseBreakdown = calculatePurchaseTaxBreakdown(home)
-                    const showResidenceRole = !isForalRegion(home.region)
-                      && home.propertyType === 'used'
-                      && residenceRoleAffectsItp(home.region)
-                    const showVatToggle = !isForalRegion(home.region) && home.propertyType === 'new'
-
-                    return (
-                      <article key={home.id} className="wctc-home-card">
-                        <div className="wctc-home-card__header">
-                          <span className="wctc-ibi-index">{index + 1}</span>
-                          <strong>Vivienda {index + 1}</strong>
-                          <button
-                            type="button"
-                            className="wctc-purchase-remove"
-                            onClick={() => removeOwnedHome(home.id)}
-                            disabled={ownedHomes.length <= 1}
-                            aria-label={`Quitar vivienda ${index + 1}`}
-                          >
-                            <Trash2 size={16} aria-hidden="true" />
-                          </button>
-                        </div>
-
-                        <section className="wctc-home-card__now" aria-label={`IBI de este año, vivienda ${index + 1}`}>
-                          <div className="wctc-ibi-head">
-                            <strong>IBI de este año</strong>
-                            <InfoButton label="Qué es el IBI estimado" size="sm" placement="end" className="wctc-help">
-                              <p>{IBI_HELP}</p>
-                            </InfoButton>
-                            <small>Estimación · no entra en el 100 % de gasto</small>
-                          </div>
-                          <p className="wctc-home-card__hint">
-                            El ayuntamiento fija el tipo; suele estar entre 0,4 % y 1,1 %.
-                            El 0,6 % es una media orientativa. El valor catastral está en el recibo del IBI
-                            o en la Sede Electrónica del Catastro.
-                          </p>
-
-                          <div className="wctc-ibi-row__fields">
-                            <label className="wctc-ibi-field">
-                              <span className="wctc-ibi-field-label">Valor catastral (€)</span>
-                              <a
-                                className="wctc-ibi-link"
-                                href={CATASTRO_URL}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Consultar en el Catastro
-                                <ExternalLink size={12} aria-hidden="true" />
-                              </a>
-                              <input
-                                type="number"
-                                min={0}
-                                step={1000}
-                                placeholder="p. ej. 85.000"
-                                value={emptyableNumberValue(home.cadastralValue)}
-                                onChange={(event) => updateOwnedHome(home.id, {
-                                  cadastralValue: event.target.value === ''
-                                    ? 0
-                                    : clampNumber(Number(event.target.value), 0, 10000000),
-                                })}
-                              />
-                            </label>
-
-                            <label className="wctc-ibi-field wctc-ibi-field--rate">
-                              <span>Tipo del ayuntamiento (%)</span>
-                              <input
-                                type="number"
-                                min={0}
-                                max={5}
-                                step={0.01}
-                                value={Number(home.ibiRatePercent.toFixed(2))}
-                                onChange={(event) => updateOwnedHome(home.id, {
-                                  ibiRatePercent: clampNumber(Number(event.target.value), 0, 5),
-                                })}
-                              />
-                            </label>
-                          </div>
-
-                          <output className="wctc-ibi-amounts" aria-label={`Cuota IBI estimada vivienda ${index + 1}`}>
-                            <span className="wctc-ibi-amount">
-                              <small>Al año</small>
-                              <strong>{formatEuroOrDash(ibiAnnual)}</strong>
-                            </span>
-                            <span className="wctc-ibi-amount">
-                              <small>Al mes</small>
-                              <strong>{formatEuroOrDash(ibiAnnual > 0 ? ibiAnnual / 12 : 0)}</strong>
-                            </span>
-                          </output>
-                        </section>
-
-                        <section className="wctc-home-card__then" aria-label={`Impuesto al comprar, vivienda ${index + 1}`}>
-                          <div className="wctc-purchase-head">
-                            <div className="wctc-purchase-title">
-                              <span className="wctc-home-card__badge">Pago único</span>
-                              <strong>Lo que pagaste al comprar</strong>
-                              <InfoButton label="Qué es el impuesto en la compra" size="sm" placement="end" className="wctc-help">
-                                <p>{PURCHASE_TAX_HELP}</p>
-                              </InfoButton>
-                            </div>
-                            <small>No es IBI ni cuota mensual. No se suma al impacto de este mes.</small>
-                          </div>
-
-                          <div className="wctc-home-card__fields">
-                            <label className="wctc-purchase-field">
-                              <span>Precio de compra (€)</span>
-                              <input
-                                type="number"
-                                min={0}
-                                step={1000}
-                                placeholder="p. ej. 180.000"
-                                value={emptyableNumberValue(home.purchasePrice)}
-                                onChange={(event) => updateOwnedHome(home.id, {
-                                  purchasePrice: event.target.value === ''
-                                    ? 0
-                                    : clampNumber(Number(event.target.value), 0, 50000000),
-                                })}
-                              />
-                            </label>
-
-                            <label className="wctc-purchase-field">
-                              <span>Nueva o de segunda mano</span>
-                              <select
-                                value={home.propertyType}
-                                onChange={(event) => updateOwnedHome(home.id, {
-                                  propertyType: event.target.value as OwnedHome['propertyType'],
-                                })}
-                              >
-                                <option value="used">Segunda mano (ITP)</option>
-                                <option value="new">Obra nueva (IVA o IGIC)</option>
-                              </select>
-                            </label>
-
-                            <label className="wctc-purchase-field">
-                              <span>Comunidad autónoma</span>
-                              <select
-                                value={home.region}
-                                onChange={(event) => updateOwnedHome(home.id, { region: event.target.value })}
-                              >
-                                {REGION_OPTIONS.map((region) => (
-                                  <option key={region.value} value={region.value}>{region.label}</option>
-                                ))}
-                              </select>
-                            </label>
-
-                            {showResidenceRole ? (
-                              <label className="wctc-purchase-field">
-                                <span>¿Era tu vivienda habitual?</span>
-                                <select
-                                  value={home.residenceRole}
-                                  onChange={(event) => updateOwnedHome(home.id, {
-                                    residenceRole: event.target.value as ResidenceRole,
-                                  })}
-                                >
-                                  <option value="habitual">Sí, la habitual</option>
-                                  <option value="additional">No, segunda o más</option>
-                                </select>
-                              </label>
-                            ) : null}
-
-                            {showVatToggle ? (
-                              <label className="wctc-home-card__check">
-                                <input
-                                  type="checkbox"
-                                  checked={home.priceIncludesVat}
-                                  onChange={(event) => updateOwnedHome(home.id, {
-                                    priceIncludesVat: event.target.checked,
-                                  })}
-                                />
-                                <span>El precio ya incluye IVA o IGIC</span>
-                              </label>
-                            ) : null}
-                          </div>
-
-                          <output
-                            className="wctc-home-card__tax"
-                            aria-label={`Impuesto estimado al comprar vivienda ${index + 1}`}
-                          >
-                            {purchaseBreakdown.status === 'empty' ? (
-                              <>
-                                <small>Introduce el precio para estimar</small>
-                                <strong>—</strong>
-                              </>
-                            ) : purchaseBreakdown.status === 'foral' ? (
-                              <>
-                                <small>
-                                  En País Vasco y Navarra el impuesto de transmisiones tiene régimen foral propio;
-                                  aquí no lo estimamos.
-                                </small>
-                                <strong>No estimado</strong>
-                              </>
-                            ) : (
-                              <>
-                                <small>{purchaseBreakdown.headline}</small>
-                                <strong>{formatEuro(purchaseBreakdown.total)}</strong>
-                                <ul className="wctc-home-card__tax-lines">
-                                  {purchaseBreakdown.lines.map((line) => (
-                                    <li key={line.label}>
-                                      <span>{line.label}</span>
-                                      <span>{formatEuro(line.amount)}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </>
-                            )}
-                          </output>
-                        </section>
-                      </article>
-                    )
-                  })}
-                </div>
-
-                <div className="wctc-homes__footer">
-                  <button type="button" className="wctc-purchase-add" onClick={addOwnedHome}>
-                    <Plus size={16} aria-hidden="true" />
-                    <span>Añadir otra vivienda</span>
-                  </button>
-                  {propertyTaxAnnual > 0 ? (
-                    <output className="wctc-purchase-total" aria-label="Total IBI estimado">
-                      <small>Total IBI / año</small>
-                      <strong>
-                        {formatEuro(propertyTaxAnnual)}
-                        <small>≈ {formatEuro(propertyTaxAnnual / 12)} / mes</small>
-                      </strong>
-                    </output>
-                  ) : null}
-                  {purchaseTaxTotal > 0 || hasForalPurchase ? (
-                    <output className="wctc-purchase-total" aria-label="Total impuesto en compras de vivienda">
-                      <small>Total de entonces (no mensual)</small>
-                      <strong>
-                        {purchaseTaxTotal > 0 ? formatEuro(purchaseTaxTotal) : 'No estimado'}
-                        {hasForalPurchase && purchaseTaxTotal > 0 ? (
-                          <small>Sin régimen foral</small>
-                        ) : null}
-                      </strong>
-                    </output>
-                  ) : null}
-                </div>
-              </div>
-            </OwnershipGate>
-          </section>
-
-          <section className="wctc-home-strip wctc-vehicle-strip" aria-labelledby="wctc-vehicle-title">
-            <div className="wctc-home-strip__title">
-              <Car size={22} aria-hidden="true" />
-              <h3 id="wctc-vehicle-title">Coche en propiedad <span>(opcional)</span></h3>
-            </div>
-
-            <OwnershipGate
-              question="¿Tienes coche en propiedad?"
-              description="Si tienes un vehiculo a tu nombre, responde Si para estimar el IVTM anual y el impuesto de la compra."
-              answer={ownsVehicle}
-              onYes={() => setOwnsVehicle('yes')}
-              onNo={handleOwnsVehicleNo}
-            >
-              <div className="wctc-ibi-block">
-                <div className="wctc-ibi-head">
-                  <strong>IVTM (circulacion)</strong>
-                  <InfoButton label="Que es el IVTM estimado" size="sm" placement="end" className="wctc-help">
-                    <p>{IVTM_HELP}</p>
-                  </InfoButton>
-                  <small>* Simplificacion orientativa</small>
-                </div>
-
-                <div className="wctc-ibi-list">
-                  {vehicleIvtms.map((vehicle, index) => {
-                    const ivtmAnnual = calculateVehicleIvtmAnnual(vehicle)
-
-                    return (
-                      <article key={vehicle.id} className="wctc-ibi-row">
-                        <div className="wctc-ibi-row__header">
-                          <span className="wctc-ibi-index">{index + 1}</span>
-                          <button
-                            type="button"
-                            className="wctc-purchase-remove"
-                            onClick={() => removeVehicleIvtm(vehicle.id)}
-                            disabled={vehicleIvtms.length <= 1}
-                            aria-label={`Quitar coche ${index + 1}`}
-                          >
-                            <Trash2 size={16} aria-hidden="true" />
-                          </button>
-                        </div>
-
-                        <div className="wctc-ibi-row__fields">
-                          <label className="wctc-ibi-field">
-                            <span className="wctc-ibi-field-label">Potencia fiscal (CV)</span>
-                            <small>Aparece en el permiso de circulacion</small>
-                            <input
-                              type="number"
-                              min={0}
-                              max={50}
-                              step={1}
-                              value={Number(vehicle.fiscalPowerCv.toFixed(0))}
-                              onChange={(event) => updateVehicleIvtm(vehicle.id, {
-                                fiscalPowerCv: clampNumber(Number(event.target.value), 0, 50),
-                              })}
-                            />
-                          </label>
-
-                          <label className="wctc-ibi-field wctc-ibi-field--rate">
-                            <span>Tipo IVTM estimado (€/CV)</span>
-                            <input
-                              type="number"
-                              min={0}
-                              max={30}
-                              step={0.1}
-                              value={Number(vehicle.ivtmRatePerCv.toFixed(2))}
-                              onChange={(event) => updateVehicleIvtm(vehicle.id, {
-                                ivtmRatePerCv: clampNumber(Number(event.target.value), 0, 30),
-                              })}
-                            />
-                          </label>
-                        </div>
-
-                        <output className="wctc-ibi-amounts" aria-label={`Cuota IVTM estimada coche ${index + 1}`}>
-                          <span className="wctc-ibi-amount">
-                            <small>Anual</small>
-                            <strong>{formatEuro(ivtmAnnual)}</strong>
-                          </span>
-                          <span className="wctc-ibi-amount">
-                            <small>Mensual</small>
-                            <strong>{formatEuro(ivtmAnnual / 12)}</strong>
-                          </span>
-                        </output>
-                      </article>
-                    )
-                  })}
-                </div>
-
-                <div className="wctc-ibi-footer">
-                  <button type="button" className="wctc-purchase-add" onClick={addVehicleIvtm}>
-                    <Plus size={16} aria-hidden="true" />
-                    <span>Anadir otro coche</span>
-                  </button>
-                  <output className="wctc-purchase-total" aria-label="Total IVTM estimado">
-                    <small>Total IVTM estimado</small>
-                    <strong>{formatEuro(vehicleTaxAnnual)}</strong>
-                  </output>
-                </div>
-              </div>
-
-              <div className="wctc-purchase-block wctc-purchase-block--vehicle">
-                <div className="wctc-purchase-head">
-                  <div className="wctc-purchase-title">
-                    <strong>Impuesto en la compra (IVA, IGIC o ITP)</strong>
-                    <InfoButton label="Que es el impuesto en la compra del coche" size="sm" placement="end" className="wctc-help">
-                      <p>{CAR_PURCHASE_TAX_HELP}</p>
-                    </InfoButton>
-                  </div>
-                  <small>Pago unico al adquirir el vehiculo; no es IVTM ni gasto mensual de combustible.</small>
-                </div>
-
-                <div className="wctc-purchase-list">
-                  {vehiclePurchases.map((purchase, index) => (
-                    <article key={purchase.id} className="wctc-purchase-row wctc-purchase-row--vehicle">
-                      <span className="wctc-purchase-index">{index + 1}</span>
-
-                      <label className="wctc-purchase-field">
-                        <span>Precio de compra (€)</span>
-                        <input
-                          type="number"
-                          min={0}
-                          step={500}
-                          value={Number(purchase.purchasePrice.toFixed(2))}
-                          onChange={(event) => updateVehiclePurchase(purchase.id, {
-                            purchasePrice: clampNumber(Number(event.target.value), 0, 5000000),
-                          })}
-                        />
-                      </label>
-
-                      <label className="wctc-purchase-field">
-                        <span>Comunidad autonoma</span>
-                        <select
-                          value={purchase.region}
-                          onChange={(event) => updateVehiclePurchase(purchase.id, { region: event.target.value })}
-                        >
-                          {REGION_OPTIONS.map((region) => (
-                            <option key={region.value} value={region.value}>{region.label}</option>
-                          ))}
-                        </select>
-                      </label>
-
-                      <label className="wctc-purchase-field">
-                        <span>Tipo de compra</span>
-                        <select
-                          value={purchase.condition}
-                          onChange={(event) => updateVehiclePurchase(purchase.id, {
-                            condition: event.target.value as VehiclePurchase['condition'],
-                          })}
-                        >
-                          <option value="new">Nuevo (IVA o IGIC)</option>
-                          <option value="used_dealer">Segunda mano en concesionario</option>
-                          <option value="used_private">Segunda mano entre particulares</option>
-                        </select>
-                      </label>
-
-                      <label className="wctc-purchase-field">
-                        <span>Emisiones CO2 (matriculacion)</span>
-                        <select
-                          value={purchase.co2Tier}
-                          disabled={purchase.condition !== 'new'}
-                          onChange={(event) => updateVehiclePurchase(purchase.id, {
-                            co2Tier: event.target.value as VehiclePurchase['co2Tier'],
-                          })}
-                        >
-                          <option value="exempt">0 % (0 g/km)</option>
-                          <option value="low">4,75 % (hasta 120 g/km)</option>
-                          <option value="medium">9,75 % (121-160 g/km)</option>
-                          <option value="high">14,75 % (mas de 160 g/km)</option>
-                        </select>
-                      </label>
-
-                      <output className="wctc-purchase-tax" aria-label={`Impuesto estimado coche ${index + 1}`}>
-                        <small>{getVehiclePurchaseTaxLabel(purchase)}</small>
-                        <strong>{formatEuro(calculateVehiclePurchaseTax(purchase))}</strong>
-                      </output>
-
-                      <button
-                        type="button"
-                        className="wctc-purchase-remove"
-                        onClick={() => removeVehiclePurchase(purchase.id)}
-                        disabled={vehiclePurchases.length <= 1}
-                        aria-label={`Quitar coche ${index + 1}`}
-                      >
-                        <Trash2 size={16} aria-hidden="true" />
-                      </button>
-                    </article>
-                  ))}
-                </div>
-
-                <div className="wctc-purchase-footer">
-                  <button type="button" className="wctc-purchase-add" onClick={addVehiclePurchase}>
-                    <Plus size={16} aria-hidden="true" />
-                    <span>Anadir otro coche</span>
-                  </button>
-                  <output className="wctc-purchase-total" aria-label="Total impuesto en compras de coches">
-                    <small>Total estimado en compras</small>
-                    <strong>{formatEuro(vehiclePurchaseTaxTotal)}</strong>
-                  </output>
-                </div>
-              </div>
-            </OwnershipGate>
-          </section>
         </section>
 
         <aside className="wctc-summary" aria-label="Resumen de impacto fiscal">
@@ -1833,23 +748,16 @@ export function WorkerConsumptionTaxesCard({
             <strong>{formatEuro(toMonthly(result.specialTaxesAnnual))}<small>{formatShareOfSpend(result.specialTaxesAnnual)}</small></strong>
           </output>
 
-          <output className="wctc-summary-card wctc-summary-card--purple">
-            <Home size={34} aria-hidden="true" />
-            <span><b>IBI de este año</b><small>Aprox. al mes</small></span>
-            <strong>{formatEuro(toMonthly(result.propertyTaxAnnual))}<small>{formatShareOfSpend(result.propertyTaxAnnual)}</small></strong>
-          </output>
-
-          <output className="wctc-summary-card wctc-summary-card--purple">
-            <Car size={34} aria-hidden="true" />
-            <span><b>IVTM estimado</b><small>Aprox. al mes</small></span>
-            <strong>{formatEuro(toMonthly(result.vehicleTaxAnnual))}<small>{formatShareOfSpend(result.vehicleTaxAnnual)}</small></strong>
-          </output>
-
           <output className="wctc-summary-card wctc-summary-card--cyan wctc-summary-card--total">
             <Calculator size={34} aria-hidden="true" />
-            <span><b>Impacto total aprox.</b><small>Suma al mes</small></span>
+            <span><b>Impuestos al consumir</b><small>Suma al mes</small></span>
             <strong>{formatEuro(toMonthly(result.totalTaxAnnual))}<small>{formatShareOfSpend(result.totalTaxAnnual)}</small></strong>
           </output>
+
+          <p className="wctc-summary-note">
+            El IBI de tu vivienda y el IVTM de tu coche no dependen de como gastas: se estiman en
+            el paso 9.
+          </p>
         </aside>
       </div>
     </section>

@@ -14,7 +14,7 @@ import { SalaryNationalityDashboard } from './components/salary-nationality/Sala
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer, WorkIncomeReductionExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
-import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard } from './components/worker-salary-dashboard'
+import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
@@ -763,16 +763,20 @@ function ComponentLab() {
           <h2 id="worker-personal-reductions-title">Reducciones y situacion personal</h2>
           <p>
             Paso visual para recoger hijos, discapacidad, estado civil,
-            ascendientes a cargo, reducciones de base y, en el paso 5, deducciones
-            de cuota en forma de preguntas Sí/No.
+            ascendientes a cargo y reducciones de base (paso 5). El mismo componente
+            cubre el paso 4, retribución en especie, y el paso 7, deducciones de cuota,
+            en forma de preguntas Sí/No.
           </p>
         </div>
 
         <div className="component-preview component-preview--dark component-preview--worker-personal">
+          <WorkerPersonalReductionsCard focus="in-kind" stepNumber={4} />
+        </div>
+        <div className="component-preview component-preview--dark component-preview--worker-personal">
           <WorkerPersonalReductionsCard />
         </div>
         <div className="component-preview component-preview--dark component-preview--worker-personal">
-          <WorkerPersonalReductionsCard focus="deductions-benefits" stepNumber={5} />
+          <WorkerPersonalReductionsCard focus="deductions-benefits" stepNumber={7} />
         </div>
       </section>
 
@@ -794,14 +798,13 @@ function ComponentLab() {
       <section className="component-section component-section--wide" aria-labelledby="worker-consumption-taxes-title">
         <div className="component-section__intro">
           <p className="eyebrow">Componente 20</p>
-          <h2 id="worker-consumption-taxes-title">IVA y otros impuestos</h2>
+          <h2 id="worker-consumption-taxes-title">IVA y consumo diario</h2>
           <p>
             Paso editable para estimar impuestos indirectos por categoria:
             cada fila sincroniza porcentaje e importe anual en euros.
-            La vivienda en propiedad agrupa IBI anual e impuesto de compra
-            (IVA, IGIC o ITP) en una sola ficha por inmueble.
-            Al entrar en el paso 7 de la calculadora, un dialogo pregunta una sola
-            vez si se usan valores medios o se rellena a mano.
+            Al entrar en el paso 8 de la calculadora, un dialogo pregunta una sola
+            vez si se usan valores medios o se rellena a mano. Los impuestos por
+            tener vivienda o coche viven en el componente siguiente.
           </p>
         </div>
 
@@ -817,14 +820,31 @@ function ComponentLab() {
         </div>
       </section>
 
-      <section className="component-section component-section--wide" aria-labelledby="worker-fiscal-steps-title">
+      <section className="component-section component-section--wide" aria-labelledby="worker-wealth-taxes-title">
         <div className="component-section__intro">
           <p className="eyebrow">Componente 21</p>
+          <h2 id="worker-wealth-taxes-title">Vivienda y coche</h2>
+          <p>
+            Paso 9 de la calculadora: impuestos que dependen de lo que posees, no
+            de lo que gastas. Dos preguntas de propiedad abren las fichas de
+            vivienda (IBI anual e impuesto de compra) y de coche (IVTM anual e
+            impuesto de compra). Solo el IBI y el IVTM se reparten al mes.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dark component-preview--worker-consumption">
+          <WorkerWealthTaxesCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-fiscal-steps-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 22</p>
           <h2 id="worker-fiscal-steps-title">Navegacion fiscal del trabajador</h2>
           <p>
-            Cabecera guiada de siete pasos para recorrer base real, limites,
-            cotizaciones, reducciones, IRPF, salario neto e impuestos sobre el
-            consumo.
+            Cabecera guiada de doce pasos para recorrer base real, limites,
+            cotizaciones, retribucion en especie, reducciones, IRPF, deducciones,
+            consumo, vivienda y coche, y salario neto.
           </p>
         </div>
 
@@ -835,7 +855,7 @@ function ComponentLab() {
 
       <section className="component-section component-section--wide" aria-labelledby="worker-calculation-sources-title">
         <div className="component-section__intro">
-          <p className="eyebrow">Componente 22</p>
+          <p className="eyebrow">Componente 23</p>
           <h2 id="worker-calculation-sources-title">Fuentes del calculo</h2>
           <p>
             Pantalla final de trazabilidad con el nombre de cada parametro, el organismo oficial,

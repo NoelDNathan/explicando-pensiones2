@@ -5,6 +5,17 @@ import "./SalarySlider.css";
 
 export type SalarySliderScale = "linear" | "log";
 
+/**
+ * Parada de color para pintar la barra segun una magnitud (p.ej. el tipo
+ * marginal de cada salario) en vez de segun el progreso del slider.
+ */
+export type SalarySliderTrackStop = {
+  /** Importe en euros, en la misma unidad que el slider. */
+  value: number;
+  /** Color CSS de esa parada. */
+  color: string;
+};
+
 /** Punto de referencia dibujado sobre la barra (p.ej. SMI o salario medio). */
 export type SalarySliderReference = {
   /** Importe en euros, en la misma unidad que el slider. */
@@ -28,6 +39,12 @@ type SalarySliderProps = {
   markers?: number[];
   /** Puntos de referencia (SMI, salario medio...) marcados sobre la barra. */
   references?: SalarySliderReference[];
+  /**
+   * Pinta la barra con una rampa de color en lugar de con el relleno plano de
+   * progreso. Las paradas se colocan por su importe, asi que la escala (lineal
+   * o logaritmica) las reposiciona sola. Hacen falta al menos dos.
+   */
+  trackStops?: SalarySliderTrackStop[];
   /** Texto auxiliar a la derecha del valor (p.ej. "brutos al año"). */
   unitLabel?: string;
   /**
@@ -77,6 +94,7 @@ export function SalarySlider({
   step = 500,
   markers,
   references,
+  trackStops,
   unitLabel,
   scale = "linear",
   id = "salary-slider",
@@ -103,6 +121,23 @@ export function SalarySlider({
     .map((reference) => ({ ...reference, percent: valueToPercent(reference.value) }))
     .sort((a, b) => a.percent - b.percent);
 
+  /*
+   * El centro del pulgar recorre de THUMB_WIDTH/2 a (100% - THUMB_WIDTH/2), no
+   * de 0 a 100%: la rampa usa ese mismo margen para que el color bajo el pulgar
+   * sea exactamente el del salario seleccionado.
+   */
+  const trackGradient =
+    trackStops && trackStops.length > 1
+      ? `linear-gradient(90deg, ${trackStops
+          .map(
+            (stop) =>
+              `${stop.color} calc(${THUMB_WIDTH / 2}px + (100% - ${THUMB_WIDTH}px) * ${(
+                valueToPercent(stop.value) / 100
+              ).toFixed(4)})`,
+          )
+          .join(", ")})`
+      : undefined;
+
   const refsRef = useRef<HTMLDivElement | null>(null);
   const refsLayoutKey = visibleReferences.map((r) => `${r.label}:${r.percent.toFixed(2)}`).join("|");
 
@@ -125,7 +160,15 @@ export function SalarySlider({
   useSpreadLabels(refsRef, refsLayoutKey, { edgeInset: THUMB_WIDTH / 2 });
 
   return (
-    <div className="salary-slider" style={{ "--salary-slider-value": `${fillPercent}%` } as CSSProperties}>
+    <div
+      className={`salary-slider${trackGradient ? " salary-slider--ramp" : ""}`}
+      style={
+        {
+          "--salary-slider-value": `${fillPercent}%`,
+          ...(trackGradient ? { "--salary-slider-track": trackGradient } : {}),
+        } as CSSProperties
+      }
+    >
       <div className="salary-slider__top">
         <div className="salary-slider__value-shell">
           <input

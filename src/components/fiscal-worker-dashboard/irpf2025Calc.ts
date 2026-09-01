@@ -83,6 +83,12 @@ export type Irpf2025CoreResult = {
 export const WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR = 6_500
 export const WORK_REDUCTION_BASIS_LIMIT_EUR = 19_747.5
 export const LOW_WORK_INCOME_GROSS_LIMIT_EUR = 18_276
+/** Importe maximo de la deduccion por rentas del trabajo bajas de 2025. */
+export const LOW_WORK_INCOME_DEDUCTION_MAX_EUR = 340
+/** Hasta este bruto la deduccion es entera; a partir de aqui se retira. */
+export const LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR = 16_576
+/** Euros de deduccion que se pierden por cada euro de bruto en la retirada. */
+export const LOW_WORK_INCOME_DEDUCTION_WITHDRAWAL_RATE = 0.2
 
 const WORK_REDUCTION_OTHER_INCOME_LIMIT = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
 const LOW_WORK_INCOME_DEDUCTION_OTHER_INCOME_LIMIT = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
@@ -134,6 +140,24 @@ export function calculateWorkReduction2025(
   }
 }
 
+/**
+ * Importe teorico de la deduccion por rentas del trabajo bajas, solo en funcion
+ * del bruto: entera hasta LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR y retirada
+ * linealmente hasta agotarse en LOW_WORK_INCOME_GROSS_LIMIT_EUR. No aplica el
+ * tope de cuota ni el umbral de otras rentas; para eso esta
+ * calculateLowWorkIncomeDeduction2025.
+ */
+export function lowWorkIncomeDeductionTheoretical2025(qualifyingGrossWorkIncome: number) {
+  const gross = nonNegative(qualifyingGrossWorkIncome)
+  if (gross >= LOW_WORK_INCOME_GROSS_LIMIT_EUR) return 0
+  if (gross <= LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR) return LOW_WORK_INCOME_DEDUCTION_MAX_EUR
+  return Math.max(
+    0,
+    LOW_WORK_INCOME_DEDUCTION_MAX_EUR
+      - LOW_WORK_INCOME_DEDUCTION_WITHDRAWAL_RATE * (gross - LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR),
+  )
+}
+
 export function calculateLowWorkIncomeDeduction2025(
   qualifyingGrossWorkIncome: number,
   attributableIntegralQuota: number,
@@ -149,9 +173,7 @@ export function calculateLowWorkIncomeDeduction2025(
     return { theoretical: 0, limit: attributableQuota, applied: 0 }
   }
 
-  const theoretical = gross <= 16_576
-    ? 340
-    : Math.max(0, 340 - 0.2 * (gross - 16_576))
+  const theoretical = lowWorkIncomeDeductionTheoretical2025(gross)
   const limit = Math.min(attributableQuota, availableQuota)
 
   return {

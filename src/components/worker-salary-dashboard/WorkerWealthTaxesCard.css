@@ -1,0 +1,752 @@
+/* Paso 8: preguntas de propiedad y una ficha por vivienda o coche, con el impuesto
+   recurrente (IBI o IVTM) arriba y el pago unico de la compra plegado debajo.
+   El chasis vive en WorkerTaxStepShell.css. */
+
+.wctc-home-strip {
+  margin-top: 12px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--wctc-line);
+  border-radius: 10px;
+  background: var(--wctc-panel);
+}
+
+.wctc-vehicle-strip {
+  margin-top: 10px;
+}
+
+.wctc-home-strip__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 9px;
+  color: var(--wctc-text);
+}
+
+.wctc-home-strip h3 {
+  color: var(--wctc-text);
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 830;
+}
+
+.wctc-home-strip h3 span {
+  font-weight: 690;
+}
+
+/* Estado de la pregunta de propiedad, visible sin desplegar la seccion. */
+.wctc-strip-state {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  padding: 3px 10px;
+  border: 1px solid var(--wctc-line);
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 780;
+}
+
+.wctc-strip-state.is-pending {
+  color: var(--wctc-muted);
+  border-color: color-mix(in srgb, var(--wctc-neutral) 45%, var(--wctc-line));
+  background: color-mix(in srgb, var(--wctc-neutral) 12%, transparent);
+}
+
+.wctc-strip-state.is-yes {
+  color: var(--wctc-text);
+  border-color: color-mix(in srgb, var(--wctc-green) 52%, var(--wctc-line));
+  background: color-mix(in srgb, var(--wctc-green) 16%, transparent);
+}
+
+.wctc-strip-state.is-no {
+  color: var(--wctc-muted);
+  border-color: color-mix(in srgb, var(--wctc-neutral) 50%, var(--wctc-line));
+  background: color-mix(in srgb, var(--wctc-neutral) 12%, transparent);
+}
+
+.wctc-ownership-gate {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  max-width: 100%;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--wctc-strong-line) 34%, var(--wctc-line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--wctc-panel) 96%, transparent);
+}
+
+.wctc-ownership-gate__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 18px;
+  align-items: start;
+}
+
+.wctc-ownership-gate__prompt {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  min-width: 0;
+}
+
+.wctc-ownership-gate__prompt > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--wctc-cyan) 40%, var(--wctc-line));
+  border-radius: 50%;
+  color: var(--wctc-cyan);
+  background: color-mix(in srgb, var(--wctc-cyan) 10%, transparent);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.wctc-ownership-gate h4,
+.wctc-ownership-gate p {
+  margin: 0;
+}
+
+.wctc-ownership-gate h4 {
+  color: var(--wctc-text);
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 830;
+}
+
+.wctc-ownership-gate__prompt p,
+.wctc-ownership-gate__skip {
+  margin-top: 5px;
+  color: var(--wctc-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 680;
+}
+
+.wctc-ownership-gate__choices {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-self: center;
+  justify-self: end;
+}
+
+.wctc-ownership-gate__choices button {
+  min-width: 72px;
+  min-height: 36px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--wctc-blue) 36%, var(--wctc-line));
+  border-radius: 999px;
+  color: var(--wctc-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 760;
+  background: color-mix(in srgb, var(--wctc-panel) 90%, transparent);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.wctc-ownership-gate__choices button:hover,
+.wctc-ownership-gate__choices button:focus-visible {
+  border-color: color-mix(in srgb, var(--wctc-cyan) 50%, var(--wctc-line));
+}
+
+.wctc-ownership-gate__choices button.is-selected:first-child {
+  color: var(--wctc-text);
+  border-color: color-mix(in srgb, var(--wctc-green) 58%, var(--wctc-line));
+  background: color-mix(in srgb, var(--wctc-green) 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--wctc-green) 24%, transparent);
+}
+
+.wctc-ownership-gate__choices button.is-selected:last-child {
+  color: var(--wctc-muted);
+  border-color: color-mix(in srgb, var(--wctc-neutral) 55%, var(--wctc-line));
+  background: color-mix(in srgb, var(--wctc-neutral) 14%, transparent);
+}
+
+.wctc-ownership-gate__body {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--wctc-line) 80%, transparent);
+}
+
+.wctc-ownership-gate__body > .wctc-homes {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.wctc-ownership-gate__skip {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 72%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--wctc-panel) 90%, transparent);
+}
+
+.wctc-ibi-index {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border: 1px solid color-mix(in srgb, var(--wctc-blue) 40%, var(--wctc-line));
+  border-radius: 50%;
+  color: var(--wctc-blue);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 870;
+}
+
+.wctc-ibi-row__fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(140px, 0.72fr);
+  gap: 10px;
+  min-width: 0;
+  align-items: start;
+}
+
+.wctc-ibi-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+
+.wctc-ibi-head strong {
+  color: var(--wctc-text);
+  font-size: 14px;
+  line-height: 1.1;
+  font-weight: 850;
+}
+
+.wctc-ibi-head small {
+  flex-basis: 100%;
+  margin-top: -2px;
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 690;
+}
+
+.wctc-ibi-field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.wctc-ibi-field-label,
+.wctc-ibi-field > span {
+  display: block;
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.25;
+  font-weight: 690;
+}
+
+.wctc-ibi-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  margin-top: -1px;
+  color: var(--wctc-cyan);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+.wctc-ibi-link:hover,
+.wctc-ibi-link:focus-visible {
+  color: var(--wctc-blue);
+  text-decoration: underline;
+}
+
+.wctc-home-card input[type="number"],
+.wctc-home-card select {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 88%, transparent);
+  border-radius: 8px;
+  color: var(--wctc-text);
+  background: color-mix(in srgb, var(--wctc-panel) 70%, transparent);
+  font: 760 14px/1 var(--sans);
+  text-align: left;
+  padding: 0 10px;
+}
+
+.wctc-home-card select {
+  text-align: left;
+  cursor: pointer;
+}
+
+.wctc-home-card input:disabled,
+.wctc-home-card select:disabled {
+  opacity: 0.54;
+}
+
+/* Atajos para quien no tiene el dato delante: catastral estimado o CV tipicos. */
+.wctc-guess {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 6px;
+}
+
+.wctc-guess__label {
+  color: var(--wctc-muted);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 690;
+}
+
+.wctc-guess-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  min-height: 26px;
+  padding: 0 10px;
+  border: 1px dashed color-mix(in srgb, var(--wctc-cyan) 45%, var(--wctc-line));
+  border-radius: 999px;
+  color: var(--wctc-cyan);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 760;
+  text-align: left;
+  background: color-mix(in srgb, var(--wctc-cyan) 8%, transparent);
+  cursor: pointer;
+}
+
+.wctc-guess-chip:hover,
+.wctc-guess-chip:focus-visible {
+  border-style: solid;
+  color: var(--wctc-text);
+  background: color-mix(in srgb, var(--wctc-cyan) 18%, transparent);
+}
+
+.wctc-guess-hint {
+  display: block;
+  color: var(--wctc-muted);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+/* Escala con el rango habitual del tipo: el numero solo no dice si es mucho o poco. */
+.wctc-scale {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  margin-top: 1px;
+}
+
+.wctc-scale__range {
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--wctc-cyan);
+  cursor: pointer;
+}
+
+.wctc-scale__marks {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  color: var(--wctc-muted);
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 690;
+}
+
+.wctc-scale__marks span:nth-child(2) {
+  text-align: center;
+}
+
+.wctc-scale__marks span:last-child {
+  text-align: right;
+}
+
+/* Impuesto de la compra: contexto plegado, porque no entra en el resumen mensual. */
+.wctc-oneoff {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 80%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--wctc-blue) 8%, var(--wctc-panel));
+}
+
+.wctc-oneoff__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.wctc-oneoff__summary::-webkit-details-marker {
+  display: none;
+}
+
+.wctc-oneoff__summary:hover,
+.wctc-oneoff__summary:focus-visible {
+  background: color-mix(in srgb, var(--wctc-blue) 10%, transparent);
+}
+
+.wctc-oneoff__chevron {
+  flex: 0 0 auto;
+  color: var(--wctc-muted);
+  transition: transform 160ms ease;
+}
+
+.wctc-oneoff[open] .wctc-oneoff__chevron {
+  transform: rotate(180deg);
+}
+
+.wctc-oneoff__label {
+  flex: 1;
+  min-width: 0;
+  color: var(--wctc-text);
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.wctc-oneoff__value {
+  color: var(--wctc-muted);
+  font-size: 13px;
+  line-height: 1.1;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.wctc-oneoff__body {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 10px 10px;
+  border-top: 1px solid color-mix(in srgb, var(--wctc-line) 60%, transparent);
+  padding-top: 10px;
+}
+
+.wctc-purchase-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wctc-purchase-field span {
+  color: var(--wctc-muted);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 690;
+}
+
+.wctc-purchase-remove {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--wctc-line);
+  border-radius: 8px;
+  color: var(--wctc-muted);
+  background: color-mix(in srgb, var(--wctc-panel) 90%, transparent);
+  cursor: pointer;
+}
+
+.wctc-purchase-remove:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.wctc-purchase-remove:not(:disabled):hover,
+.wctc-purchase-remove:not(:disabled):focus-visible {
+  border-color: rgba(255, 120, 120, 0.55);
+  color: #ffb0b0;
+}
+
+.wctc-purchase-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--wctc-line);
+  border-radius: 8px;
+  color: var(--wctc-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 760;
+  background: color-mix(in srgb, var(--wctc-panel) 90%, transparent);
+  cursor: pointer;
+}
+
+.wctc-purchase-add:hover,
+.wctc-purchase-add:focus-visible {
+  border-color: var(--wctc-strong-line);
+  color: var(--wctc-cyan);
+}
+
+.wctc-purchase-total {
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+  margin-left: auto;
+  text-align: right;
+}
+
+.wctc-purchase-total small {
+  color: var(--wctc-muted);
+  font-size: 11px;
+  line-height: 1.1;
+  font-weight: 690;
+}
+
+.wctc-purchase-total strong {
+  color: var(--wctc-text);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.wctc-ibi-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: end;
+}
+
+.wctc-ibi-amount {
+  display: grid;
+  gap: 3px;
+  justify-items: start;
+  text-align: left;
+}
+
+.wctc-ibi-amount small {
+  color: var(--wctc-muted);
+  font-size: 11px;
+  line-height: 1.1;
+  font-weight: 690;
+}
+
+.wctc-ibi-amount strong {
+  color: var(--wctc-text);
+  font-size: 15px;
+  line-height: 1.1;
+  font-weight: 880;
+  font-variant-numeric: tabular-nums;
+}
+
+.wctc-homes,
+.wctc-homes__list {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.wctc-home-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 88%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--wctc-panel) 82%, transparent);
+}
+
+.wctc-home-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.wctc-home-card__header h4 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--wctc-text);
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+.wctc-home-card__now {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--wctc-line) 80%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--wctc-panel) 92%, transparent);
+}
+
+.wctc-home-card__hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 650;
+}
+
+.wctc-home-card__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.wctc-home-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border: 1px solid color-mix(in srgb, var(--wctc-blue) 35%, var(--wctc-line));
+  border-radius: 999px;
+  color: var(--wctc-blue);
+  background: color-mix(in srgb, var(--wctc-blue) 12%, transparent);
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 780;
+}
+
+.wctc-home-card__check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+  min-width: 0;
+  color: var(--wctc-text);
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 680;
+}
+
+.wctc-home-card__check input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  accent-color: var(--wctc-blue);
+}
+
+.wctc-home-card__tax {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.wctc-home-card__tax small {
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 680;
+}
+
+.wctc-home-card__tax > strong {
+  color: var(--wctc-text);
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.wctc-home-card__tax-lines {
+  display: grid;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wctc-home-card__tax-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--wctc-muted);
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 650;
+}
+
+.wctc-home-card__tax-lines li span:last-child {
+  color: var(--wctc-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+}
+
+.wctc-homes__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wctc-homes__footer .wctc-purchase-total strong {
+  display: grid;
+  gap: 4px;
+}
+
+.wctc-homes__footer .wctc-purchase-total strong small {
+  font-size: 12px;
+  font-weight: 680;
+  color: var(--wctc-muted);
+}
+
+@container wctc-left (max-width: 520px) {
+  .wctc-ibi-row__fields,
+  .wctc-home-card__fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container (max-width: 900px) {
+  .wctc-ownership-gate__top {
+    grid-template-columns: 1fr;
+  }
+
+  .wctc-ownership-gate__choices {
+    justify-self: start;
+    align-self: start;
+  }
+
+  .wctc-purchase-total {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .wctc-purchase-remove {
+    justify-self: start;
+  }
+
+  .wctc-ibi-amounts {
+    justify-content: flex-start;
+  }
+}

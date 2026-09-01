@@ -1,4 +1,4 @@
-import { FileText, Percent } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   createDependentProfiles,
@@ -13,16 +13,23 @@ import {
   createEmptyIrpf2025Adjustments,
   calculateBaseReductions2025,
   calculateGeneralDeductions2025,
+  calculateInKindBenefits2025,
   calculateRefundableDeductions2025,
 } from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import type { Irpf2025AdjustmentInput } from "../fiscal-worker-dashboard/irpf2025Adjustments";
 import { Irpf2025StructuredAdjustmentsForm, MaritalReductionsGroup, WorkIncomeBenefitsSection } from "./Irpf2025StructuredAdjustmentsForm";
 import { WorkIncomeReductionExplainer } from "../fiscal-worker-dashboard/WorkIncomeReductionExplainer";
 import {
+  LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR,
+  LOW_WORK_INCOME_DEDUCTION_MAX_EUR,
+  LOW_WORK_INCOME_DEDUCTION_WITHDRAWAL_RATE,
+  LOW_WORK_INCOME_GROSS_LIMIT_EUR,
   WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR,
+  lowWorkIncomeDeductionTheoretical2025,
   workBenefitsCouldApply,
 } from "../fiscal-worker-dashboard/irpf2025Calc";
 import { InfoButton } from "../ui/InfoButton";
+import { getRegionDeductionLink } from "./regionDeductionLinks";
 import "./Irpf2025StructuredAdjustmentsForm.css";
 import "./WorkerPersonalReductionsCard.css";
 
@@ -76,7 +83,7 @@ export type PersonalReductionResult = {
 };
 
 type WorkerPersonalReductionsCardProps = {
-  focus?: "reductions" | "deductions-benefits";
+  focus?: "reductions" | "deductions-benefits" | "in-kind";
   stepNumber?: number;
   totalSteps?: number;
   initialChildren?: number;
@@ -201,11 +208,14 @@ function QuestionEffect({
       : amount > 0
         ? `Suma ${formatted} EUR al mínimo personal y familiar`
         : `Resta ${formatted} EUR del mínimo personal y familiar`;
+  const visible =
+    kind === "reduction"
+      ? `−${formatted} € reducción`
+      : `${sign}${formatted} € mínimo`;
 
   return (
     <em className={`irpf-question-effect irpf-question-effect--${kind}`} aria-label={label}>
-      {sign}
-      {formatted} EUR
+      {visible}
     </em>
   );
 }
@@ -759,6 +769,193 @@ function DependentEditor({
   );
 }
 
+/**
+ * La deduccion por rentas del trabajo bajas es la unica ventaja del paso 5 que
+ * resta de la cuota y no de la base, asi que se explica aparte: importe segun
+ * el bruto, tope de cuota y los dos motivos por los que se pierde.
+ */
+function LowWorkIncomeDeductionPanel({
+  grossWorkIncome,
+  quotaAvailable,
+  otherIncomeKnown,
+  otherIncome,
+}: {
+  grossWorkIncome: number;
+  quotaAvailable: number;
+  otherIncomeKnown: boolean;
+  otherIncome: number;
+}) {
+  const gross = Math.max(0, grossWorkIncome);
+  const theoretical = lowWorkIncomeDeductionTheoretical2025(gross);
+  const limit = Math.max(0, quotaAvailable);
+  const applied = Math.min(theoretical, limit);
+  const overThreshold = otherIncomeKnown && otherIncome > WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR;
+  const inWithdrawal = gross > LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR;
+  const withdrawalRate = LOW_WORK_INCOME_DEDUCTION_WITHDRAWAL_RATE.toLocaleString("es-ES", {
+    minimumFractionDigits: 2,
+  });
+  const status = theoretical <= 0
+    ? "out-of-range"
+    : overThreshold
+      ? "blocked"
+      : !otherIncomeKnown
+        ? "pending"
+        : limit <= 0
+          ? "no-quota"
+          : "applied";
+
+  const pill =
+    status === "applied"
+      ? "Se resta de la cuota"
+      : status === "pending"
+        ? "Pendiente"
+        : "No aplica";
+
+  return (
+    <section
+      className="wprc-net-income wprc-net-income--deduction"
+      aria-labelledby="wprc-low-income-deduction-title"
+    >
+      <header className="wprc-net-income__head wprc-net-income__head--no-num">
+        <div>
+          <h3 id="wprc-low-income-deduction-title">Deducción por rentas del trabajo bajas</h3>
+          <p>
+            Si cobras poco del trabajo, Hacienda te descuenta hasta{" "}
+            <strong>{formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_MAX_EUR)}</strong> de lo que sale a
+            pagar. Es la excepción de este paso: todo lo demás que hay aquí resta de la{" "}
+            <em>base</em>, y esta resta directamente de la <em>cuota</em>.
+          </p>
+        </div>
+        <span
+          className={`wprc-net-income__pill${status === "applied" ? "" : " wprc-net-income__pill--muted"}`}
+        >
+          {pill}
+        </span>
+      </header>
+
+      {status === "out-of-range" ? (
+        <p className="wprc-net-income__note">
+          Con {formatEuroRounded(gross)} de bruto no te corresponde: se agota a partir de{" "}
+          {formatEuroRounded(LOW_WORK_INCOME_GROSS_LIMIT_EUR)}, así que no aparecerá en el paso 6. La
+          contamos aquí porque su retirada, justo por debajo de ese límite, es la otra mitad de la
+          joroba del IRPF que explica el panel de abajo.
+        </p>
+      ) : status === "blocked" ? (
+        <p className="wprc-net-income__note">
+          Has declarado {formatEuro(otherIncome)} de otras rentas, por encima de los{" "}
+          {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}: la pierdes entera, igual que la
+          reducción por rendimientos del trabajo. Con tu bruto te habrían correspondido{" "}
+          <strong>{formatEuro(theoretical)}</strong> menos de IRPF.
+        </p>
+      ) : status === "pending" ? (
+        <p className="wprc-net-income__note">
+          Con {formatEuroRounded(gross)} de bruto te corresponderían{" "}
+          <strong>{formatEuro(theoretical)}</strong>, pero hasta que confirmes arriba si tienes otras
+          rentas no la aplicamos: por encima de{" "}
+          {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)} desaparece entera.
+        </p>
+      ) : (
+        <dl className="wprc-net-income__equation">
+          <div className="wprc-net-income__term">
+            <dt>
+              Salario bruto anual
+              <small>
+                {inWithdrawal
+                  ? `en la franja de retirada: de ${formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR)} a ${formatEuroRounded(LOW_WORK_INCOME_GROSS_LIMIT_EUR)}`
+                  : `por debajo de ${formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR)}: deducción entera`}
+              </small>
+            </dt>
+            <dd>{formatEuro(gross)}</dd>
+          </div>
+          <div className="wprc-net-income__term">
+            <dt>
+              Deducción que te corresponde
+              <small>
+                {inWithdrawal
+                  ? `${formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_MAX_EUR)} menos ${withdrawalRate} € por cada euro que pasas de ${formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR)}`
+                  : "el importe máximo, sin recortes"}
+              </small>
+            </dt>
+            <dd>{formatEuro(theoretical)}</dd>
+          </div>
+          <div className="wprc-net-income__term">
+            <dt>
+              Tope: la cuota que te queda
+              <small>
+                {limit <= 0
+                  ? "tu cuota ya está en cero: no hay nada de lo que restar"
+                  : "no puede dejar el IRPF en negativo ni te la devuelven"}
+              </small>
+            </dt>
+            <dd>{formatEuro(limit)}</dd>
+          </div>
+          <div className="wprc-net-income__term is-result" data-op="equals">
+            <dt>Menos de IRPF en el paso 6</dt>
+            <dd>{formatEuro(applied)}</dd>
+          </div>
+        </dl>
+      )}
+
+      {status === "applied" || status === "no-quota" ? (
+        <p className="wprc-net-income__note">
+          {applied > 0 ? (
+            <>
+              Son <strong>{formatEuro(applied)}</strong> menos a pagar, euro por euro. La misma
+              cantidad como reducción solo te habría ahorrado tu tipo marginal, unos céntimos por
+              euro. La verás con este mismo nombre en el paso 6, «IRPF por tramos».
+            </>
+          ) : (
+            <>
+              Te corresponden {formatEuro(theoretical)}, pero tu cuota ya está en cero, así que no
+              hay nada que descontar: no es una deducción reembolsable y el resto no se devuelve.
+            </>
+          )}
+        </p>
+      ) : null}
+
+      <details className="wprc-net-income__more">
+        <summary>¿Cuándo se pierde?</summary>
+        <ul>
+          <li>
+            Hasta {formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR)} de bruto son los{" "}
+            {formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_MAX_EUR)} completos. A partir de ahí se
+            retira {withdrawalRate} € por cada euro de más, y a{" "}
+            {formatEuroRounded(LOW_WORK_INCOME_GROSS_LIMIT_EUR)} desaparece.
+            {theoretical > 0 ? (
+              inWithdrawal ? (
+                <>
+                  {" "}
+                  Tú ya has perdido{" "}
+                  <strong>{formatEuro(LOW_WORK_INCOME_DEDUCTION_MAX_EUR - theoretical)}</strong> por
+                  ese motivo.
+                </>
+              ) : (
+                <>
+                  {" "}
+                  Te quedan{" "}
+                  <strong>
+                    {formatEuroRounded(LOW_WORK_INCOME_DEDUCTION_FULL_GROSS_EUR - gross)}
+                  </strong>{" "}
+                  de margen antes de empezar a perderla.
+                </>
+              )
+            ) : null}
+          </li>
+          <li>
+            Si tus rentas no exentas distintas del trabajo pasan de{" "}
+            {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}, no se recorta: se pierde{" "}
+            <strong>entera</strong>, igual que la reducción por rendimientos del trabajo.
+          </li>
+          <li>
+            Solo puede bajar la cuota hasta cero. Si no te sale a pagar, el resto no se devuelve:
+            esta deducción no es reembolsable.
+          </li>
+        </ul>
+      </details>
+    </section>
+  );
+}
+
 function formatEuro(value: number) {
   return `${value.toLocaleString("es-ES", {
     minimumFractionDigits: 2,
@@ -790,6 +987,32 @@ function useChangeFlash(value: number) {
   }, [value]);
 
   return flashing;
+}
+
+/**
+ * Tirador para plegar la barra fija. Sobresale por encima de ella, asi que sigue
+ * a mano cuando la barra esta escondida y no roba alto cuando esta abierta.
+ */
+function ChainBarToggle({
+  open,
+  label,
+  onToggle,
+}: {
+  open: boolean;
+  label: string;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="wprc-explained__toggle"
+      onClick={onToggle}
+      aria-expanded={open}
+    >
+      {open ? <ChevronDown size={14} aria-hidden="true" /> : <ChevronUp size={14} aria-hidden="true" />}
+      <span>{open ? "Ocultar" : label}</span>
+    </button>
+  );
 }
 
 /**
@@ -829,8 +1052,8 @@ function useStickyBarHeight(enabled: boolean) {
 
 export function WorkerPersonalReductionsCard({
   focus = "reductions",
-  stepNumber = 4,
-  totalSteps = 9,
+  stepNumber = 5,
+  totalSteps = 12,
   initialChildren = 1,
   initialDisabilityPercent = 0,
   initialMaritalStatus = "married",
@@ -864,6 +1087,8 @@ export function WorkerPersonalReductionsCard({
   onResultChange,
 }: WorkerPersonalReductionsCardProps) {
   const showReductionsSection = focus === "reductions";
+  const showInKindSection = focus === "in-kind";
+  const showDeductionsSection = focus === "deductions-benefits";
   const [children, setChildren] = useState(() =>
     String(initialResult?.children ?? initialChildren),
   );
@@ -1148,6 +1373,7 @@ export function WorkerPersonalReductionsCard({
   const appliedRegionalFamilyMinimum = Math.max(0, regionalPersonalFamilyMinimum);
   const grossQuota = Math.max(0, stateGrossQuota + regionalGrossQuota);
   const familyMinimumQuota = Math.max(0, stateMinimumQuotaAmount + regionalMinimumQuotaAmount);
+  const regionDeductionLink = useMemo(() => getRegionDeductionLink(region), [region]);
 
   const workReductionStatus = workReductionBlocked
     ? "pending"
@@ -1185,6 +1411,12 @@ export function WorkerPersonalReductionsCard({
       stateIntegralQuota,
     ],
   );
+  // Tope de la deduccion por rentas del trabajo bajas: la cuota integra que
+  // sigue viva despues de las deducciones generales, como en el motor.
+  const lowWorkIncomeQuotaAvailable = Math.max(
+    0,
+    explainedQuotaBefore - liveGeneralDeductions.totalApplied,
+  );
   const ordinaryQuotaDeductions = showReductionsSection
     ? appliedQuotaDeductions
     : liveGeneralDeductions.totalApplied + lowWorkIncomeDeductionApplied;
@@ -1193,9 +1425,6 @@ export function WorkerPersonalReductionsCard({
     () => calculateRefundableDeductions2025(adjustments, quotaAfterOrdinary),
     [adjustments, quotaAfterOrdinary],
   );
-  const liveRefundableGenerated = showReductionsSection
-    ? refundableDeductionsGenerated
-    : liveRefundable.generatedTotal;
   const liveRefundableNet = showReductionsSection
     ? refundableDeductionsGenerated
     : liveRefundable.netRefundable;
@@ -1207,9 +1436,9 @@ export function WorkerPersonalReductionsCard({
   const refundableFlash = useChangeFlash(liveRefundableNet);
   const withholdingsFlash = useChangeFlash(liveWithholdings);
   const declarationFlash = useChangeFlash(liveDeclarationResult);
-  const stickyBarRef = useStickyBarHeight(
-    (showReductionsSection && showChainSteps) || !showReductionsSection,
-  );
+  const stickyBarRef = useStickyBarHeight(true);
+  // La barra fija tapa parte de la pagina; el usuario puede plegarla a un tirador.
+  const [chainBarOpen, setChainBarOpen] = useState(true);
   // Ecuacion de apertura: bruto - Seguridad Social - gastos deducibles = rendimiento neto.
   const showNetIncomeEquation = taxableWorkIncome > 0;
   const equationNetWorkIncome = Math.max(
@@ -1218,6 +1447,16 @@ export function WorkerPersonalReductionsCard({
   );
   const extraDeductibleExpenses = Math.max(0, otherDeductibleWorkExpenses - generalOtherExpenses);
   const deductibleExpensesCapped = otherDeductibleWorkExpenses < generalOtherExpenses;
+  // Paso 4: la exencion de la especie no resta despues, baja el bruto del que
+  // arrancan los pasos siguientes. Se calcula en vivo para que la cadena
+  // responda mientras el usuario rellena los importes.
+  const inKindLive = useMemo(() => calculateInKindBenefits2025(adjustments), [adjustments]);
+  const inKindExemptApplied = Math.min(declaredInKindSalary, inKindLive.exemptAmount);
+  const inKindTaxableGross = Math.max(
+    0,
+    declaredGrossWorkIncome - inKindExemptApplied + inKindLive.paymentOnAccountAdded,
+  );
+  const inKindMismatch = inKindLive.declaredBenefitsTotal > declaredInKindSalary;
 
   return (
     <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
@@ -1233,12 +1472,16 @@ export function WorkerPersonalReductionsCard({
             <h2 id="wprc-title">
               {showReductionsSection
                 ? "Responde unas preguntas y ajustamos tu IRPF"
-                : "Responde y restamos de tu cuota"}
+                : showInKindSection
+                  ? "¿Tu empresa te paga algo que no es dinero?"
+                  : "Responde y restamos de tu cuota"}
             </h2>
             <p>
               {showReductionsSection
                 ? "No necesitas saber de impuestos: responde solo a lo que se parezca a tu situación. Si algo no te aplica, elige No o déjalo cerrado."
-                : "No hace falta el BOE: responde solo a lo que se parezca a tu situación. Mira los importes en tu nómina o certificado de retenciones. Si algo no te aplica, elige No."}
+                : showInKindSection
+                  ? "Una sola pregunta. Si no tienes ticket restaurante, transporte, seguro médico ni guardería de empresa, responde No y continúa."
+                  : "No hace falta el BOE: responde solo a lo que se parezca a tu situación. Mira los importes en tu nómina o certificado de retenciones. Si algo no te aplica, elige No."}
             </p>
           </div>
         </header>
@@ -1345,6 +1588,14 @@ export function WorkerPersonalReductionsCard({
             netWorkIncome={explainedNetWorkIncome}
             grossWorkIncome={declaredGrossWorkIncome}
           />
+          {workBenefitsRelevant ? (
+            <LowWorkIncomeDeductionPanel
+              grossWorkIncome={declaredGrossWorkIncome}
+              quotaAvailable={lowWorkIncomeQuotaAvailable}
+              otherIncomeKnown={adjustments.otherIncomeKnown}
+              otherIncome={adjustments.otherNonExemptNonWorkIncome}
+            />
+          ) : null}
           {/*
             * Se muestra siempre: cuando el sueldo deja la reduccion fuera de
             * rango el propio panel lo dice en cabecera, y sigue explicando como
@@ -1360,87 +1611,104 @@ export function WorkerPersonalReductionsCard({
             otherNonExemptNonWorkIncome={adjustments.otherNonExemptNonWorkIncome}
             otherIncomeKnown={adjustments.otherIncomeKnown}
           />
-          {showChainSteps ? (
-            <section
-              ref={stickyBarRef}
-              className="wprc-explained wprc-explained--sticky"
-              aria-label="Cómo cambian la base y el IRPF"
-            >
-              <div className="wprc-chain">
-                <dl className="wprc-chain__flow">
-                  <div className="wprc-chain__step">
-                    <dt>Rendimiento neto del trabajo</dt>
-                    <dd>{formatEuro(explainedNetWorkIncome)}</dd>
-                  </div>
-                  {showWorkReductionStep ? (
-                    <div
-                      className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
-                      data-op="minus"
-                    >
-                      <dt>Reducción por rendimientos del trabajo</dt>
-                      <dd>
-                        {workReductionStatus === "applied" ? (
-                          `− ${formatEuro(workReductionApplied)}`
-                        ) : workReductionStatus === "pending" ? (
-                          <span className="wprc-explained__status wprc-explained__status--pending">
-                            Pendiente
-                            <small>confirma otras rentas</small>
-                          </span>
-                        ) : (
-                          <span className="wprc-explained__status wprc-explained__status--muted">
-                            No aplica
-                            <small>
-                              otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
-                            </small>
-                          </span>
-                        )}
-                      </dd>
-                    </div>
-                  ) : null}
-                  {showBaseReductionStep ? (
-                    <div
-                      className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
-                      data-op="minus"
-                    >
-                      <dt>Reducciones de base</dt>
-                      <dd>{formatEuro(displayedBaseReductions)}</dd>
-                    </div>
-                  ) : null}
+          <section
+            ref={stickyBarRef}
+            className={`wprc-explained wprc-explained--sticky${chainBarOpen ? "" : " is-collapsed"}`}
+            aria-label="Cómo cambian la base y el IRPF"
+          >
+            <ChainBarToggle
+              open={chainBarOpen}
+              label="Ver la base y el IRPF"
+              onToggle={() => setChainBarOpen((value) => !value)}
+            />
+            <div className="wprc-chain">
+              <dl className="wprc-chain__flow">
+                <div className="wprc-chain__step">
+                  <dt>Rendimiento neto del trabajo</dt>
+                  <dd>{formatEuro(explainedNetWorkIncome)}</dd>
+                </div>
+                {showWorkReductionStep ? (
                   <div
-                    className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
-                    data-op="equals"
-                    aria-live="polite"
-                    aria-atomic="true"
+                    className={`wprc-chain__step is-minus${workReductionStatus === "applied" ? " is-applied" : ""}`}
+                    data-op="minus"
                   >
-                    <dt>Base liquidable</dt>
-                    <dd>{formatEuro(explainedTaxableBase)}</dd>
-                  </div>
-                </dl>
-                <dl className="wprc-chain__aside">
-                  {lowWorkIncomeDeductionApplied > 0 ? (
-                    <div className="wprc-chain__step is-hint">
-                      <dt>Deducción por rentas bajas</dt>
-                      <dd>
-                        − {formatEuro(lowWorkIncomeDeductionApplied)}
-                        <small>en la cuota (paso 6)</small>
-                      </dd>
-                    </div>
-                  ) : null}
-                  <div className="wprc-chain__step is-minimum">
-                    <dt>Mínimo personal y familiar</dt>
+                    <dt>Reducción por rendimientos del trabajo</dt>
                     <dd>
-                      {formatEuro(appliedFamilyMinimum)}
-                      <small>
-                        {appliedRegionalFamilyMinimum > 0
-                          ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
-                          : "no resta base · se aplica en la cuota"}
-                      </small>
+                      {workReductionStatus === "applied" ? (
+                        `− ${formatEuro(workReductionApplied)}`
+                      ) : workReductionStatus === "pending" ? (
+                        <span className="wprc-explained__status wprc-explained__status--pending">
+                          Pendiente
+                          <small>confirma otras rentas</small>
+                        </span>
+                      ) : (
+                        <span className="wprc-explained__status wprc-explained__status--muted">
+                          No aplica
+                          <small>
+                            otras rentas &gt; {formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}
+                          </small>
+                        </span>
+                      )}
                     </dd>
                   </div>
-                </dl>
-              </div>
-            </section>
-          ) : null}
+                ) : null}
+                {showBaseReductionStep ? (
+                  <div
+                    className={`wprc-chain__step is-minus is-applied${baseReductionsFlash ? " is-changed" : ""}`}
+                    data-op="minus"
+                  >
+                    <dt>Reducciones de base</dt>
+                    <dd>{formatEuro(displayedBaseReductions)}</dd>
+                  </div>
+                ) : null}
+                {!showChainSteps ? (
+                  <div className="wprc-chain__step is-empty" data-op="minus">
+                    <dt>Reducciones de base</dt>
+                    <dd>
+                      {formatEuro(0)}
+                      <small>no tienes ninguna</small>
+                    </dd>
+                  </div>
+                ) : null}
+                <div
+                  className={`wprc-chain__step is-result${taxableBaseFlash ? " is-changed" : ""}`}
+                  data-op="equals"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <dt>Base liquidable</dt>
+                  <dd>
+                    {formatEuro(explainedTaxableBase)}
+                    {!showChainSteps ? (
+                      <small>sin reducciones: es tu rendimiento neto del trabajo</small>
+                    ) : null}
+                  </dd>
+                </div>
+              </dl>
+              <dl className="wprc-chain__aside">
+                {lowWorkIncomeDeductionApplied > 0 ? (
+                  <div className="wprc-chain__step is-hint">
+                    <dt>Deducción por rentas del trabajo bajas</dt>
+                    <dd>
+                      − {formatEuro(lowWorkIncomeDeductionApplied)}
+                      <small>en la cuota (paso 6)</small>
+                    </dd>
+                  </div>
+                ) : null}
+                <div className="wprc-chain__step is-minimum">
+                  <dt>Mínimo personal y familiar</dt>
+                  <dd>
+                    {formatEuro(appliedFamilyMinimum)}
+                    <small>
+                      {appliedRegionalFamilyMinimum > 0
+                        ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
+                        : "no resta base · se aplica en la cuota"}
+                    </small>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </section>
           <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
             <span aria-hidden="true">3</span>
             <div>
@@ -1464,10 +1732,10 @@ export function WorkerPersonalReductionsCard({
           <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
             <span aria-hidden="true">4</span>
             <div>
-              <h3 id="wprc-family-questions">Calculemost tu mínimo personal y familiar</h3>
+              <h3 id="wprc-family-questions">Cómo tu situación familiar afecta a tu IRPF</h3>
               <p>
-                Estas respuestas sirven para calcular el mínimo personal y familiar. No reducen la
-                base directamente, pero sí pueden bajar el IRPF final.
+                Estas respuestas sirven para calcular algunas reducciones de base y el mínimo personal y familiar. El mínimo personal y familiar no reduce la
+                base directamente, pero sí pueden bajar el IRPF final (en el paso 6 se aplicará).
               </p>
             </div>
           </section>
@@ -1622,6 +1890,125 @@ export function WorkerPersonalReductionsCard({
             ) : null}
           </div>
         </>
+      ) : showInKindSection ? (
+        <>
+          <section className="wprc-net-income" aria-labelledby="wprc-in-kind-equation-title">
+            <header className="wprc-net-income__head wprc-net-income__head--no-num">
+              <div>
+                <h3 id="wprc-in-kind-equation-title">Cotiza entero, tributa solo en parte</h3>
+                <p>
+                  Dentro del bruto que declaraste en el paso 1 va lo que la empresa te paga sin darte
+                  dinero. Para la Seguridad Social ese importe cuenta entero: ya cotizaste por él en el
+                  paso 3. Para el IRPF, una parte puede quedar <strong>exenta</strong> y no llega a
+                  contarse como ingreso.
+                </p>
+              </div>
+              <span className="wprc-net-income__pill">Antes de la base</span>
+            </header>
+            {declaredGrossWorkIncome > 0 ? (
+              <dl className="wprc-net-income__equation">
+                <div className="wprc-net-income__term">
+                  <dt>
+                    Salario bruto anual
+                    <small>lo que declaraste en el paso 1, especie incluida</small>
+                  </dt>
+                  <dd>{formatEuro(declaredGrossWorkIncome)}</dd>
+                </div>
+                <div className="wprc-net-income__term" data-op="minus">
+                  <dt>
+                    Especie exenta
+                    <small>
+                      {declaredInKindSalary > 0
+                        ? `dentro de los ${formatEuro(declaredInKindSalary)} de especie del paso 1`
+                        : "no declaraste especie en el paso 1"}
+                    </small>
+                  </dt>
+                  <dd>{formatEuro(inKindExemptApplied)}</dd>
+                </div>
+                {inKindLive.paymentOnAccountAdded > 0 ? (
+                  <div className="wprc-net-income__term" data-op="plus">
+                    <dt>
+                      Ingreso a cuenta no repercutido
+                      <small>lo asume la empresa y no te lo cobra, así que suma</small>
+                    </dt>
+                    <dd>{formatEuro(inKindLive.paymentOnAccountAdded)}</dd>
+                  </div>
+                ) : null}
+                <div className="wprc-net-income__term is-result" data-op="equals">
+                  <dt>Bruto que tributa en IRPF</dt>
+                  <dd>{formatEuro(inKindTaxableGross)}</dd>
+                </div>
+              </dl>
+            ) : null}
+            <p className="wprc-net-income__note">
+              Esta última cifra es la que abre el paso 5: de ella se restan tu Seguridad Social y los
+              gastos deducibles para llegar al rendimiento neto del trabajo.
+            </p>
+            <details className="wprc-net-income__more">
+              <summary>¿Hasta dónde llega la exención?</summary>
+              <ul>
+                <li>
+                  <strong>Ticket restaurante:</strong> 11 € por día efectivamente trabajado. Lo que pase
+                  de ahí tributa como salario normal.
+                </li>
+                <li>
+                  <strong>Abono de transporte:</strong> 136,36 € al mes, con un tope de 1.500 € al año.
+                </li>
+                <li>
+                  <strong>Seguro médico:</strong> 500 € por persona asegurada (tú, tu cónyuge y tus
+                  hijos), o 1.500 € por cada persona con discapacidad.
+                </li>
+                <li>
+                  <strong>Guardería de empresa:</strong> sin tope, si cumple los requisitos del artículo
+                  42.3.b de la ley del IRPF.
+                </li>
+                <li>
+                  Lo que supere estos límites no desaparece: tributa como una parte más de tu salario.
+                </li>
+              </ul>
+            </details>
+          </section>
+
+          <section className="wprc-question-intro" aria-labelledby="wprc-in-kind">
+            <span aria-hidden="true">1</span>
+            <div>
+              <h3 id="wprc-in-kind">Retribuciones en especie</h3>
+              <p>
+                Ticket restaurante, ticket transporte, seguro médico o guardería que paga la empresa. Pon
+                lo que cobras al año de cada uno; lo que no tengas, déjalo en 0 €. Míralo en la nómina.
+              </p>
+            </div>
+          </section>
+          <Irpf2025StructuredAdjustmentsForm
+            focus={focus}
+            deductionsGroup="in-kind"
+            value={adjustments}
+            declaredInKindSalary={declaredInKindSalary}
+            declaredGrossWorkIncome={declaredGrossWorkIncome}
+            netWorkIncome={explainedNetWorkIncome}
+            previewBaseAvailable={explainedTaxableBase}
+            previewTaxableIncome={explainedBaseInitial}
+            stateIntegralQuota={stateIntegralQuota}
+            regionalIntegralQuota={regionalIntegralQuota}
+            onChange={setAdjustments}
+          />
+
+          {inKindMismatch ? (
+            <aside className="wprc-calculation-warnings" aria-label="Especie declarada y detallada no cuadran">
+              <strong>Lo detallado aquí supera la especie del paso 1</strong>
+              <ul>
+                <li>
+                  En el paso 1 declaraste {formatEuro(declaredInKindSalary)} de salario en especie y aquí
+                  has detallado {formatEuro(inKindLive.declaredBenefitsTotal)}.
+                </li>
+                <li>
+                  La exención se limita al importe del paso 1. Vuelve allí y sube la especie, o ajusta los
+                  importes de abajo, para que las dos cifras cuadren.
+                </li>
+              </ul>
+            </aside>
+          ) : null}
+        </>
       ) : (
         <>
           <section className="wprc-net-income" aria-labelledby="wprc-quota-equation-title">
@@ -1629,9 +2016,9 @@ export function WorkerPersonalReductionsCard({
               <div>
                 <h3 id="wprc-quota-equation-title">De la cuota íntegra a lo que resta pagar</h3>
                 <p>
-                  En el paso 4 calculamos la base liquidable. Sobre esa base salen los tramos (paso 6) y una{" "}
-                  <strong>cuota íntegra</strong>. El mínimo personal y familiar ya ha bajado esa cuota: aquí
-                  partimos de lo que queda. Lo que respondas abajo resta euro a euro.
+                  En el paso 5 calculamos la base liquidable y en el paso 6 esa base recorrió los tramos y
+                  dio una <strong>cuota íntegra</strong>. El mínimo personal y familiar ya bajó esa cuota:
+                  aquí partimos de lo que queda. Lo que respondas abajo resta euro a euro.
                 </p>
               </div>
               <span className="wprc-net-income__pill">Ya aplicado</span>
@@ -1680,9 +2067,14 @@ export function WorkerPersonalReductionsCard({
 
           <section
             ref={stickyBarRef}
-            className="wprc-explained wprc-explained--sticky"
+            className={`wprc-explained wprc-explained--sticky${chainBarOpen ? "" : " is-collapsed"}`}
             aria-label="Cómo cambian la cuota y el resultado"
           >
+            <ChainBarToggle
+              open={chainBarOpen}
+              label="Ver la cuota y el resultado"
+              onToggle={() => setChainBarOpen((value) => !value)}
+            />
             <div className="wprc-chain">
               <dl className="wprc-chain__flow">
                 <div className="wprc-chain__step">
@@ -1723,7 +2115,7 @@ export function WorkerPersonalReductionsCard({
               {lowWorkIncomeDeductionApplied > 0 ? (
                 <dl className="wprc-chain__aside">
                   <div className="wprc-chain__step is-hint">
-                    <dt>Deducción por rentas bajas</dt>
+                    <dt>Deducción por rentas del trabajo bajas</dt>
                     <dd>
                       − {formatEuro(lowWorkIncomeDeductionApplied)}
                       <small>incluida en las ordinarias</small>
@@ -1734,32 +2126,8 @@ export function WorkerPersonalReductionsCard({
             </div>
           </section>
 
-          <section className="wprc-question-intro" aria-labelledby="wprc-in-kind">
-            <span aria-hidden="true">1</span>
-            <div>
-              <h3 id="wprc-in-kind">Retribuciones en especie</h3>
-              <p>
-                Comida, transporte, seguro o guardería que paga la empresa. Separa la parte exenta de la que
-                tributa. Míralo en la nómina.
-              </p>
-            </div>
-          </section>
-          <Irpf2025StructuredAdjustmentsForm
-            focus={focus}
-            deductionsGroup="in-kind"
-            value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
-            declaredGrossWorkIncome={declaredGrossWorkIncome}
-            netWorkIncome={explainedNetWorkIncome}
-            previewBaseAvailable={explainedTaxableBase}
-            previewTaxableIncome={explainedBaseInitial}
-            stateIntegralQuota={stateIntegralQuota}
-            regionalIntegralQuota={regionalIntegralQuota}
-            onChange={setAdjustments}
-          />
-
           <section className="wprc-question-intro" aria-labelledby="wprc-quota-deductions">
-            <span aria-hidden="true">2</span>
+            <span aria-hidden="true">1</span>
             <div>
               <h3 id="wprc-quota-deductions">Deducciones de cuota</h3>
               <p>
@@ -1783,7 +2151,7 @@ export function WorkerPersonalReductionsCard({
           />
 
           <section className="wprc-question-intro" aria-labelledby="wprc-refundable">
-            <span aria-hidden="true">3</span>
+            <span aria-hidden="true">2</span>
             <div>
               <h3 id="wprc-refundable">Reembolsables</h3>
               <p>
@@ -1806,29 +2174,6 @@ export function WorkerPersonalReductionsCard({
             onChange={setAdjustments}
           />
 
-          <section className="wprc-question-intro" aria-labelledby="wprc-withholdings">
-            <span aria-hidden="true">4</span>
-            <div>
-              <h3 id="wprc-withholdings">Retenciones y resultado</h3>
-              <p>
-                Lo que ya te han retenido este año. Compáralo con la cuota: si has pagado de más, sale a
-                devolver.
-              </p>
-            </div>
-          </section>
-          <Irpf2025StructuredAdjustmentsForm
-            focus={focus}
-            deductionsGroup="withholdings"
-            value={adjustments}
-            declaredInKindSalary={declaredInKindSalary}
-            declaredGrossWorkIncome={declaredGrossWorkIncome}
-            netWorkIncome={explainedNetWorkIncome}
-            previewBaseAvailable={explainedTaxableBase}
-            previewTaxableIncome={explainedBaseInitial}
-            stateIntegralQuota={stateIntegralQuota}
-            regionalIntegralQuota={regionalIntegralQuota}
-            onChange={setAdjustments}
-          />
         </>
       )}
 
@@ -1843,7 +2188,7 @@ export function WorkerPersonalReductionsCard({
         </aside>
       ) : null}
 
-      {!showReductionsSection ? (
+      {showDeductionsSection ? (
         <aside className="wprc-calculation-warnings" aria-label="Deducciones autonómicas no incluidas">
           <strong>Deducciones autonómicas propias: no están en este cálculo</strong>
           <ul>
@@ -1855,32 +2200,22 @@ export function WorkerPersonalReductionsCard({
               Casi todas las comunidades tienen además deducciones propias (nacimiento, alquiler, discapacidad,
               etc.). Este motor no las calcula: no van a aparecer aunque existan en tu comunidad.
             </li>
+            <li>
+              Consulta las tuyas:{" "}
+              <a
+                className="wprc-warning-link"
+                href={regionDeductionLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                deducciones autonómicas de {regionDeductionLink.label}
+              </a>
+              .
+            </li>
           </ul>
         </aside>
       ) : null}
 
-      {!showReductionsSection ? (
-        <footer className="wprc-summary">
-          <span className="wprc-summary-icon" aria-hidden="true">
-            <FileText />
-          </span>
-          <div className="wprc-summary-copy">
-            <p>Cálculo 2025 con datos declarados.</p>
-            <span>
-              Los requisitos no confirmados quedan como no estimados y no reducen el IRPF.
-            </span>
-          </div>
-          <output
-            className="wprc-total wprc-total--deductions"
-          >
-            <Percent />
-            <span>Deducciones aplicadas</span>
-            <strong>
-              {formatEuro(ordinaryQuotaDeductions + liveRefundableGenerated)}
-            </strong>
-          </output>
-        </footer>
-      ) : null}
     </section>
   );
 }

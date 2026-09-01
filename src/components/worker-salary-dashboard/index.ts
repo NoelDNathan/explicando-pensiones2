@@ -7,6 +7,7 @@ export { WorkerIrpfTranchesCard } from './WorkerIrpfTranchesCard'
 export { WorkerFamilyMinimumExplainer } from './WorkerFamilyMinimumExplainer'
 export { WorkerIrpfRegionComparison } from './WorkerIrpfRegionComparison'
 export { WorkerConsumptionTaxesCard } from './WorkerConsumptionTaxesCard'
+export { WorkerWealthTaxesCard } from './WorkerWealthTaxesCard'
 export { WorkerFiscalStepsCard } from './WorkerFiscalStepsCard'
 export { WorkerFiscalSummaryCard } from './WorkerFiscalSummaryCard'
 export { WorkerCalculationSourcesCard } from './WorkerCalculationSourcesCard'
@@ -55,4 +56,13 @@ export type {
   ConsumptionTaxesResult,
 } from './WorkerConsumptionTaxesCard'
 export { ConsumptionTaxesIntroDialog } from './WorkerConsumptionTaxesCard'
+export type {
+  OwnershipAnswer,
+  PropertyIbi,
+  PropertyPurchase,
+  VehicleIvtm,
+  VehiclePurchase,
+  WealthTaxesDraft,
+  WealthTaxesResult,
+} from './WorkerWealthTaxesCard'
 export type { CalculationSourceItem } from './WorkerCalculationSourcesCard'

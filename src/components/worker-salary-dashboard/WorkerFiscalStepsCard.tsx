@@ -1,4 +1,5 @@
 import {
+  BadgePercent,
   BarChart3,
   BookOpenCheck,
   Calculator,
@@ -7,6 +8,7 @@ import {
   ChevronRight,
   CircleHelp,
   Gift,
+  Home,
   Scale,
   Shield,
   ShoppingCart,
@@ -79,6 +81,8 @@ export type PayrollLiveData = {
   grossSalaryAnnual: number
   salaryAnnual: number
   salaryComplementsAnnual: number
+  /** Retribucion en especie declarada en el paso 1: alimenta la linea BASE IRPF ESPECIE. */
+  inKindSalaryAnnual: number
   contributionBaseMonthly: number
   socialContributions: SocialContributionResult
   irpfAnnual: number
@@ -139,6 +143,7 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
   }
 
   const grossMonthly = live.grossSalaryAnnual / 12
+  const inKindMonthly = live.inKindSalaryAnnual / 12
   const contributionBaseMonthly = live.contributionBaseMonthly
   const { breakdown } = live.socialContributions
   const workerCommonMonthly = (breakdown.worker.commonContingencies + breakdown.worker.mei) / 12
@@ -206,7 +211,7 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
 
   const totals = [
     { id: 'gross-total', label: 'REM.TOTALES', value: formatPayrollNumber(grossMonthly) },
-    { id: 'in-kind', label: 'BASE IRPF ESPECIE', value: '' },
+    { id: 'in-kind', label: 'BASE IRPF ESPECIE', value: formatPayrollNumber(inKindMonthly) },
     { id: 'irpf-base', label: 'BASE IRPF', value: formatPayrollNumber(grossMonthly) },
     { id: 'common-base', label: 'BASE CC.CC.', value: formatPayrollNumber(contributionBaseMonthly) },
     { id: 'professional-base', label: 'BASE CC.PP.', value: formatPayrollNumber(contributionBaseMonthly) },
@@ -251,12 +256,13 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
     1: formatPayrollNumber(grossMonthly),
     2: formatPayrollNumber(contributionBaseMonthly),
     3: formatPayrollNumber(workerContributionsMonthly),
-    4: formatPayrollNumber(grossMonthly),
-    5: '',
+    4: formatPayrollNumber(inKindMonthly),
+    5: formatPayrollNumber(grossMonthly),
     6: formatPayrollNumber(irpfMonthly),
-    7: `${formatPayrollNumber(netMonthly)}#`,
-    8: formatPayrollNumber(netMonthly),
-    9: `${formatPayrollNumber(netMonthly)}#`,
+    7: '',
+    8: `${formatPayrollNumber(netMonthly)}#`,
+    9: formatPayrollNumber(netMonthly),
+    10: `${formatPayrollNumber(netMonthly)}#`,
   }
 
   return {
@@ -273,7 +279,7 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 0,
     title: 'Resumen rápido',
     subtitle: 'Las cifras esenciales antes de entrar en detalle',
-    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los nueve pasos del recorrido.',
+    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los doce pasos del recorrido.',
     checklist: [],
     helpTitle: 'Una primera aproximación',
     helpBody: 'El resumen reúne los resultados principales. Los pasos siguientes explican las bases, límites, cuotas y ajustes que hay detrás.',
@@ -339,9 +345,52 @@ Aquí puedes comparar ambas aportaciones y ver qué financia cada concepto.`,
   },
   {
     id: 4,
+    title: 'Retribución en especie',
+    subtitle: 'Lo que la empresa te paga sin darte dinero',
+    description: `Algunas empresas pagan una parte de lo que ganas sin que sea dinero: ticket restaurante, abono de transporte, seguro médico o guardería. Si no tienes ninguno de estos beneficios, responde «No» y continúa: es un paso de una sola pregunta.
+
+Este es el punto donde la Seguridad Social y el IRPF dejan de ir juntos. Para cotizar, la especie cuenta entera y ya está dentro de la base del paso 2. Para el IRPF, una parte puede quedar exenta hasta ciertos límites y no tributa.
+
+Por eso viene antes de la base liquidable: lo que quede exento se resta de tu bruto y el paso 5 empieza a contar desde esa cifra.`,
+    concepts: [
+      {
+        id: 'exemption',
+        title: '¿Exención, reducción o deducción?',
+        body: (
+          <>
+            <p>
+              Son tres formas distintas de pagar menos y actúan en tres momentos distintos del cálculo.
+              La <strong>exención</strong> es la primera: esa renta ni siquiera llega a contarse como
+              ingreso.
+            </p>
+            <p className="wfsc-concept__formula">exención → no entra en el bruto (este paso)</p>
+            <p className="wfsc-concept__formula">reducción → resta de la base (paso 5)</p>
+            <p className="wfsc-concept__formula">deducción → resta de la cuota (paso 7)</p>
+            <p>
+              Por eso los tickets exentos no aparecen luego como una resta: simplemente el bruto sobre el
+              que se calcula todo lo demás ya sale más bajo.
+            </p>
+          </>
+        ),
+      },
+    ],
+    checklist: [],
+    helpTitle: 'Exento para Hacienda, no para la Seguridad Social',
+    helpBody: 'Desde 2013 casi toda la retribución en especie cotiza a la Seguridad Social por su valor completo. La exención del IRPF no cambia lo que cotizaste en el paso 3: solo baja el bruto que tributa.',
+    details: [
+      'El ticket restaurante queda exento hasta 11 EUR por dia efectivamente trabajado; lo que pase de ahi tributa.',
+      'El abono de transporte queda exento hasta 136,36 EUR al mes y 1.500 EUR al ano.',
+      'El seguro medico queda exento hasta 500 EUR por persona asegurada, o 1.500 EUR si tiene discapacidad; la guarderia de empresa no tiene tope si cumple los requisitos.',
+      'Si la empresa asume el ingreso a cuenta y no te lo repercute, ese importe suma a la valoracion en lugar de restar.',
+    ],
+    important: 'La parte exenta no es una resta que veas despues: baja el bruto desde el que arrancan todos los pasos siguientes.',
+    Icon: Gift,
+  },
+  {
+    id: 5,
     title: 'Base liquidable',
     subtitle: 'Calculando las reducciones y el mínimo personal y familiar',
-    description: `En el paso anterior hemos calculado el importe que pagas a la Seguridad Social como trabajador.
+    description: `Ya tenemos tu bruto del paso 1, lo que pagas a la Seguridad Social del paso 3 y la parte de especie que queda exenta del paso 4.
 
 Ahora vamos a calcular tu base liquidable, que es la cantidad que se utiliza para calcular cuánto IRPF tienes que pagar.
 
@@ -401,12 +450,30 @@ Completa únicamente los apartados que correspondan a tu situación.`,
     Icon: UserRound,
   },
   {
-    id: 5,
-    title: 'Deducciones y salario en especie',
-    subtitle: 'Lo que restas de la cuota, no de la base',
-    description: `En el paso 4 calculamos la base liquidable; en el 6 saldrá la cuota por tramos. Lo que respondas aquí resta de esa cuota, euro a euro.
+    id: 6,
+    title: 'IRPF por tramos',
+    subtitle: 'El IRPF no aplica un unico porcentaje',
+    description: `El IRPF reparte la base liquidable entre una escala estatal y otra autonómica. Cada porcentaje se aplica solo a la parte de renta que cae en ese tramo.
 
-También puedes detallar el salario en especie (comida, transporte, seguro o guardería) para separar la parte exenta.
+El tipo marginal afecta al siguiente euro; el tipo efectivo resume lo pagado sobre el conjunto.`,
+    checklist: [],
+    helpTitle: 'Tipo marginal y tipo efectivo',
+    helpBody: 'El tipo marginal afecta solo al siguiente euro que entra en ese tramo. El tipo efectivo es la media real que pagas sobre toda la base.',
+    details: [
+      'La base liquidable se reparte por escalones: cada tramo calcula impuesto solo sobre la parte que cae dentro de el.',
+      'El tramo estatal y el autonomico se suman para aproximar la cuota total de IRPF.',
+      'El tipo efectivo ayuda a leer el resultado real: cuota total dividida entre la base considerada.',
+    ],
+    important: 'Subir de tramo no hace que todo tu salario tribute al porcentaje mas alto.',
+    Icon: BarChart3,
+  },
+  {
+    id: 7,
+    title: 'Deducciones de cuota',
+    subtitle: 'Lo que restas de la cuota, no de la base',
+    description: `En el paso 5 calculamos la base liquidable y en el 6 has visto salir la cuota por tramos. Lo que respondas aquí resta de esa cuota, euro a euro.
+
+Es el último ajuste del IRPF: donativos, alquiler, inversión en empresa nueva, las deducciones reembolsables y lo que ya te han retenido en la nómina.
 
 Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o certificado de retenciones.`,
     concepts: [
@@ -423,8 +490,8 @@ Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o 
             <p className="wfsc-concept__formula">1 € de deducción = 1 € menos a pagar</p>
             <p className="wfsc-concept__formula">1 € de reducción ≈ tu tipo marginal (por ejemplo, 0,30 €)</p>
             <p className="wfsc-concept__later">
-              La cuota de la que restamos aquí se calcula en el paso 6, «IRPF por tramos». Por eso este
-              paso y aquel se miran juntos: aquí dices los hechos; allí ves cómo sale la cuota.
+              La cuota de la que restamos aquí es la que acaba de salir en el paso 6, «IRPF por tramos».
+              Allí has visto cómo se forma; aquí la bajamos con lo que puedas acreditar.
             </p>
           </>
         ),
@@ -449,38 +516,20 @@ Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o 
       },
     ],
     checklist: [],
-    helpTitle: '¿Deducción o beneficio exento?',
-    helpBody: 'Las deducciones restan de la cuota final del impuesto. El salario en especie puede quedar exento si cumple requisitos y límites legales.',
+    helpTitle: '¿Por qué van después de los tramos?',
+    helpBody: 'Una deducción necesita una cuota de la que restar. Hasta que el paso 6 no calcula esa cuota, no hay nada que descontar: por eso este paso cierra el IRPF y no lo abre.',
     details: [
       'Las deducciones se revisan al final y dependen de requisitos, ejercicio fiscal y comunidad autónoma.',
-      'El salario en especie no siempre reduce la base: cada beneficio se trata por separado según su régimen.',
-      'Los límites exentos impiden usar retribuciones en especie como sustituto total del salario en efectivo.',
+      'La mayoría solo puede bajar la cuota hasta cero; las reembolsables se abonan aunque la cuota sea 0 €.',
+      'Las retenciones que ya te ha practicado la empresa se restan aquí: por eso el resultado puede salir a devolver.',
     ],
     important: 'Estas partidas se aplican en el cálculo del IRPF, no como línea de deducciones de la nómina mensual.',
-    Icon: Gift,
+    Icon: BadgePercent,
   },
   {
-    id: 6,
-    title: 'IRPF por tramos',
-    subtitle: 'El IRPF no aplica un unico porcentaje',
-    description: `El IRPF reparte la base liquidable entre una escala estatal y otra autonómica. Cada porcentaje se aplica solo a la parte de renta que cae en ese tramo.
-
-El tipo marginal afecta al siguiente euro; el tipo efectivo resume lo pagado sobre el conjunto.`,
-    checklist: [],
-    helpTitle: 'Tipo marginal y tipo efectivo',
-    helpBody: 'El tipo marginal afecta solo al siguiente euro que entra en ese tramo. El tipo efectivo es la media real que pagas sobre toda la base.',
-    details: [
-      'La base liquidable se reparte por escalones: cada tramo calcula impuesto solo sobre la parte que cae dentro de el.',
-      'El tramo estatal y el autonomico se suman para aproximar la cuota total de IRPF.',
-      'El tipo efectivo ayuda a leer el resultado real: cuota total dividida entre la base considerada.',
-    ],
-    important: 'Subir de tramo no hace que todo tu salario tribute al porcentaje mas alto.',
-    Icon: BarChart3,
-  },
-  {
-    id: 7,
-    title: 'IVA y otros impuestos',
-    subtitle: 'Impuestos que dependen de tu gasto',
+    id: 8,
+    title: 'IVA y consumo diario',
+    subtitle: 'Impuestos que dependen de como gastas',
     description: `El IVA y los impuestos especiales dependen de cómo gastas, no solo de lo que cobras. Distribuye tu gasto mensual para obtener una estimación por categorías.
 
 Si no completas el reparto, el resumen mantendrá una aproximación general claramente identificada.`,
@@ -490,13 +539,33 @@ Si no completas el reparto, el resumen mantendrá una aproximación general clar
     details: [
       'El IVA se paga al comprar bienes o servicios y no sale directamente de la nomina.',
       'Los impuestos especiales afectan a consumos concretos, como carburantes, alcohol, tabaco o energia, segun el caso.',
-      'El IBI y otros tributos dependen de patrimonio, municipio o uso de servicios, por eso se muestran como contexto separado.',
+      'Este paso solo mide el consumo corriente: lo que pagas por tener vivienda o coche va en el paso siguiente.',
     ],
     important: 'Dos personas con el mismo neto pueden pagar impuestos indirectos muy distintos si consumen de forma diferente.',
     Icon: ShoppingCart,
   },
   {
-    id: 8,
+    id: 9,
+    title: 'Vivienda y coche',
+    subtitle: 'Impuestos por tener, no por gastar',
+    description: `Hay impuestos que no dependen de tu consumo, sino de lo que posees. El IBI (Impuesto sobre Bienes Inmuebles) de tu vivienda y el IVTM (Impuesto sobre Vehículos de Tracción Mecánica, el llamado «impuesto de circulación») de tu coche se cobran cada año, así que se reparten al mes y entran en el resumen.
+
+Aquí también puedes recuperar lo que pagaste al comprar (IVA, ITP, AJD o matriculación). Fue un pago único de entonces y por eso se muestra aparte, sin sumarse a tu mes.
+
+Si no tienes vivienda ni coche en propiedad, responde «No» a las dos preguntas y continúa.`,
+    checklist: [],
+    helpTitle: 'Por que no va con el IVA?',
+    helpBody: 'El IVA lo pagas cada vez que compras algo. El IBI y el IVTM los pagas por ser propietario, aunque ese año no gastes nada. Son dos hechos distintos y por eso ocupan pasos distintos.',
+    details: [
+      'El IBI lo fija tu ayuntamiento sobre el valor catastral; el IVTM, sobre la potencia fiscal del vehiculo. Ambos son anuales y recurrentes.',
+      'El impuesto de la compra (IVA o ITP en vivienda; IVA, ITP o matriculacion en coche) fue un pago unico y no se reparte entre las cuotas de la hipoteca o del prestamo.',
+      'Pais Vasco y Navarra tienen regimen foral propio en transmisiones y aqui no se estiman.',
+    ],
+    important: 'Solo el IBI y el IVTM se suman a tu impacto mensual. Los impuestos de la compra son contexto historico.',
+    Icon: Home,
+  },
+  {
+    id: 10,
     title: 'Resumen del cálculo',
     subtitle: 'Todas las cifras del recorrido en un solo vistazo',
     description: 'Este paso reúne el resultado completo: coste de empresa, cotizaciones, IRPF, IVA y lo que te queda después de la nómina y del consumo estimado. Sirve para comprobar que las piezas de los pasos anteriores encajan.',
@@ -512,7 +581,7 @@ Si no completas el reparto, el resumen mantendrá una aproximación general clar
     Icon: WalletCards,
   },
   {
-    id: 9,
+    id: 11,
     title: 'Preguntas frecuentes',
     subtitle: 'Resuelve dudas despues del resumen',
     description: 'Cierra el recorrido con respuestas rapidas a las dudas mas habituales: que se descuenta de la nomina, que paga la empresa y que queda fuera del salario neto.',
@@ -528,7 +597,7 @@ Si no completas el reparto, el resumen mantendrá una aproximación general clar
     Icon: CircleHelp,
   },
   {
-    id: 10,
+    id: 12,
     title: 'Fuentes del calculo',
     subtitle: 'Origen y valor de cada parametro',
     description: 'Consulta en una sola pantalla las fuentes oficiales utilizadas, el enlace al documento original y el valor concreto aplicado a tu calculo.',
@@ -588,6 +657,11 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
     highlightCompanyRows: ['common-base-detail', 'unemployment-base', 'training-base'],
   },
   4: {
+    resultLabel: 'BASE IRPF ESPECIE',
+    resultValue: '0,00',
+    highlightRows: ['in-kind', 'gross-total'],
+  },
+  5: {
     resultLabel: 'BASE IRPF',
     resultValue: '1.750,00',
     highlightRows: ['irpf-base', 'irpf'],
@@ -597,17 +671,22 @@ const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
     resultValue: '210,00',
     highlightRows: ['irpf', 'irpf-withholding'],
   },
-  7: {
+  8: {
     resultLabel: 'IMPORTE',
     resultValue: '1.426,24#',
     highlightRows: ['net-pay'],
   },
-  8: {
+  9: {
+    resultLabel: 'IMPORTE',
+    resultValue: '1.426,24#',
+    highlightRows: ['net-pay'],
+  },
+  10: {
     resultLabel: 'LIQUIDO TOTAL',
     resultValue: '1.426,24',
     highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'deductions-total', 'net-pay'],
   },
-  9: {
+  11: {
     resultLabel: 'IMPORTE',
     resultValue: '1.426,24#',
     highlightRows: ['gross-total', 'worker-ss', 'irpf-withholding', 'net-pay'],
@@ -775,10 +854,10 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 5 && activeStep.id !== 9 && activeStep.id !== 10
-  const showConceptHelp = activeStep.id === 5
+  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 7 && activeStep.id !== 11 && activeStep.id !== 12
+  const showConceptHelp = activeStep.id === 7
   const isSummaryStep = activeStep.id === 0
-  const isCompactStep = activeStep.id === 9 || activeStep.id === 10
+  const isCompactStep = activeStep.id === 11 || activeStep.id === 12
   const heroIsSingle = !showPayrollHelp && !showConceptHelp
   const statusLabel = activeStep.id === 0
     ? 'Resumen rápido'

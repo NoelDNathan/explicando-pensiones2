@@ -442,11 +442,11 @@
   visibility: hidden;
 }
 
-.fwd--soft .wfsc-stage--step-7 .wfsc-hero {
+.fwd--soft :is(.wfsc-stage--step-7, .wfsc-stage--step-8) .wfsc-hero {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.fwd--soft .wfsc-stage--step-7 .wfsc-help {
+.fwd--soft :is(.wfsc-stage--step-7, .wfsc-stage--step-8) .wfsc-help {
   display: none;
 }
 
@@ -1244,6 +1244,14 @@
   box-shadow: 0 -8px 22px rgba(35, 54, 78, 0.1);
 }
 
+/* Tirador de plegado con la paleta clara, no con la oscura por defecto. */
+.fwd--soft .wprc-explained--sticky {
+  --wprc-toggle-line: var(--fiscal-line);
+  --wprc-toggle-ink: var(--fiscal-copy);
+  --wprc-toggle-bg: color-mix(in srgb, var(--fiscal-surface) 96%, var(--fiscal-primary-soft));
+  --wprc-toggle-accent: var(--fiscal-primary-strong);
+}
+
 .fwd--soft .wprc-explained--sticky .wprc-chain__aside {
   border-left-color: var(--fiscal-line);
 }
@@ -1254,6 +1262,10 @@
 
 .fwd--soft .wprc-explained--sticky .wprc-chain__step[data-op="equals"]::before {
   color: var(--fiscal-green);
+}
+
+.fwd--soft .wprc-explained--sticky .wprc-chain__step.is-empty dd {
+  color: var(--fiscal-muted);
 }
 
 .fwd--soft .wprc-explained--sticky .is-result dd {
@@ -1301,6 +1313,15 @@
 
 .fwd--soft .wprc-calculation-warnings ul {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .wprc-warning-link {
+  color: #8a4d12;
+}
+
+.fwd--soft .wprc-warning-link:hover,
+.fwd--soft .wprc-warning-link:focus-visible {
+  color: #5f330a;
 }
 
 .fwd--soft .wprc-summary-icon {
@@ -1382,16 +1403,32 @@
   color: var(--fiscal-ink);
 }
 
-.fwd--soft .irpf-question-effect--minimum {
-  color: var(--fiscal-primary-strong);
-  border-color: #b8ded7;
-  background: var(--fiscal-primary-soft);
+.fwd--soft .irpf-question-effect {
+  max-width: 100%;
+  padding-block: 3px;
+  line-height: 1.25;
+  text-align: center;
 }
 
-.fwd--soft .irpf-question-effect--reduction {
+/* El minimo personal y familiar va en violeta, como su linea del panel sticky:
+   asi no se confunde con el azul de lo que resta de la base o de la cuota. */
+.fwd--soft .irpf-question-effect--minimum {
+  color: #6044ad;
+  border-color: #d7ccef;
+  background: var(--fiscal-violet-soft);
+}
+
+.fwd--soft .irpf-question-effect--reduction,
+.fwd--soft .irpf-question-effect--deduction {
   color: #1f4f7a;
   border-color: #bfd7ef;
   background: #eaf4fc;
+}
+
+.fwd--soft .irpf-question-effect--exempt {
+  color: #8a4b12;
+  border-color: #efd0a8;
+  background: #fff3e4;
 }
 
 .fwd--soft .irpf-question-effect--minimum[aria-label^="Resta"] {
@@ -1520,13 +1557,26 @@
   color: var(--fiscal-copy);
 }
 
+.fwd--soft .wir.wir .wir-footnote--key {
+  border-color: #b8d4f5;
+  border-left-color: var(--fiscal-blue);
+  background: var(--fiscal-blue-soft);
+  color: var(--fiscal-copy);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.fwd--soft .wir.wir .wir-footnote--key em {
+  color: var(--fiscal-blue);
+}
+
 .fwd--soft .wprc-net-income {
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface);
   box-shadow: var(--fiscal-shadow-control);
 }
 
-.fwd--soft .irpf-pension-limit summary {
+.fwd--soft .irpf-pension-limit summary,
+.fwd--soft .irpf-inkind-detail summary {
   color: var(--fiscal-primary-strong);
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
@@ -1600,6 +1650,40 @@
   color: var(--fiscal-primary-strong);
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-net-income--deduction {
+  border-color: color-mix(in srgb, var(--fiscal-blue) 28%, var(--fiscal-line));
+}
+
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__pill {
+  color: var(--fiscal-blue);
+  border-color: color-mix(in srgb, var(--fiscal-blue) 32%, var(--fiscal-line));
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__pill--muted {
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__term.is-result {
+  border-color: color-mix(in srgb, var(--fiscal-blue) 32%, var(--fiscal-line));
+  background: var(--fiscal-blue-soft);
+}
+
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__term.is-result::before {
+  color: var(--fiscal-blue);
+}
+
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__term.is-result dd {
+  color: var(--fiscal-blue);
+}
+
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__head em,
+.fwd--soft .wprc-net-income--deduction .wprc-net-income__note strong {
+  color: var(--fiscal-ink);
 }
 
 .fwd--soft .irpf-rule-group summary {
@@ -2141,6 +2225,11 @@
 .fwd--soft .wctc-rule,
 .fwd--soft .wctc-row small {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .wctc-row-note {
+  color: var(--fiscal-copy);
+  border-top-color: color-mix(in srgb, var(--fiscal-line) 70%, transparent);
 }
 
 .fwd--soft .wctc-row--total.is-warn .wctc-rule--total {

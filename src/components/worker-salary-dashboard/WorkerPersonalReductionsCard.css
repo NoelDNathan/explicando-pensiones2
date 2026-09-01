@@ -10,7 +10,12 @@
   --wprc-panel: rgba(2, 16, 38, 0.78);
 
   position: relative;
-  overflow: hidden;
+  /*
+   * `clip` y no `hidden`: recorta igual contra las esquinas redondeadas, pero
+   * no crea un contenedor de scroll, asi que los `position: sticky` de dentro
+   * (el simulador del explicador de la reduccion) siguen pegandose a la ventana.
+   */
+  overflow: clip;
   container-type: inline-size;
   width: min(100%, 1360px);
   padding: clamp(18px, 2.6vw, 32px);
@@ -316,6 +321,10 @@
   content: "−";
 }
 
+.wprc-net-income__term[data-op="plus"]::before {
+  content: "+";
+}
+
 .wprc-net-income__term[data-op="equals"]::before {
   content: "=";
   color: #58f171;
@@ -392,6 +401,47 @@
 }
 
 .wprc-net-income__more strong {
+  color: #eaf3ff;
+  font-weight: 800;
+}
+
+/*
+ * La deduccion por rentas del trabajo bajas resta de la cuota, no de la base:
+ * va en azul para no confundirla con los bloques verdes del mismo paso.
+ */
+.wprc-net-income--deduction {
+  border-color: rgba(96, 165, 250, 0.42);
+}
+
+.wprc-net-income--deduction .wprc-net-income__pill {
+  color: #93c5fd;
+  border-color: rgba(96, 165, 250, 0.5);
+  background: rgba(12, 40, 80, 0.6);
+}
+
+.wprc-net-income--deduction .wprc-net-income__pill--muted {
+  color: #93a6cf;
+  border-color: rgba(99, 147, 205, 0.34);
+  background: rgba(3, 18, 40, 0.6);
+}
+
+.wprc-net-income--deduction .wprc-net-income__term.is-result {
+  border-color: rgba(96, 165, 250, 0.45);
+  background: rgba(9, 32, 62, 0.5);
+}
+
+.wprc-net-income--deduction .wprc-net-income__term.is-result::before,
+.wprc-net-income--deduction .wprc-net-income__term.is-result dd {
+  color: #93c5fd;
+}
+
+.wprc-net-income--deduction .wprc-net-income__head em {
+  color: #eaf3ff;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.wprc-net-income--deduction .wprc-net-income__note strong {
   color: #eaf3ff;
   font-weight: 800;
 }
@@ -1307,6 +1357,18 @@
   line-height: 1.45;
 }
 
+.wprc-warning-link {
+  color: #ffd7a6;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.wprc-warning-link:hover,
+.wprc-warning-link:focus-visible {
+  color: #fff2df;
+}
+
 .wprc-explained dl {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1435,6 +1497,83 @@
   border-right: 0;
   border-bottom: 0;
   box-shadow: 0 -10px 28px rgba(0, 6, 20, 0.16);
+  transition:
+    padding 220ms ease-out,
+    background-color 220ms ease-out,
+    border-color 220ms ease-out,
+    box-shadow 220ms ease-out;
+}
+
+/*
+ * Plegar encoge la barra en su sitio; no se puede desplazar hacia abajo porque
+ * justo debajo esta la navegacion del recorrido (.wfsc-chrome) y la taparia.
+ */
+.wprc-explained--sticky .wprc-chain {
+  overflow: hidden;
+  max-height: 40vh;
+  transition:
+    max-height 220ms ease-out,
+    opacity 150ms ease-out;
+}
+
+.wprc-explained--sticky.is-collapsed .wprc-chain {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Plegada no queda barra: solo el tirador flotando sobre la navegacion. */
+.wprc-explained--sticky.is-collapsed {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+/*
+ * El tirador vive fuera de la caja de la barra, asomando por arriba: asi no
+ * suma alto cuando esta abierta y sigue en pantalla cuando esta plegada.
+ */
+/*
+ * El tirador asoma por encima de la barra: no suma alto cuando esta abierta y
+ * sigue en pantalla cuando esta plegada. Los colores salen de tokens para que
+ * cada tema (oscuro por defecto, claro en .fwd--soft) lo repinte sin duplicar.
+ */
+.wprc-explained__toggle {
+  position: absolute;
+  right: clamp(14px, 3vw, 28px);
+  top: -25px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 11px;
+  border: 1px solid var(--wprc-toggle-line, var(--wprc-line));
+  border-bottom: 0;
+  border-radius: 9px 9px 0 0;
+  color: var(--wprc-toggle-ink, var(--wprc-muted));
+  background: var(--wprc-toggle-bg, rgba(4, 25, 58, 0.96));
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.wprc-explained__toggle:hover {
+  border-color: var(--wprc-toggle-accent, var(--wprc-cyan));
+  color: var(--wprc-toggle-accent, var(--wprc-cyan));
+}
+
+.wprc-explained__toggle:focus-visible {
+  outline: 2px solid var(--wprc-toggle-accent, var(--wprc-cyan));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wprc-explained--sticky,
+  .wprc-explained--sticky .wprc-chain {
+    transition: none;
+  }
 }
 
 .wprc-explained--sticky dl {
@@ -1547,6 +1686,12 @@
   white-space: nowrap;
 }
 
+/* Sin reducciones el eslabon queda apagado: solo confirma que no resta nada. */
+.wprc-explained--sticky .wprc-chain__step.is-empty dd {
+  color: #8ea3c6;
+  font-weight: 700;
+}
+
 /* Un unico numero protagonista: la base liquidable. */
 .wprc-explained--sticky .is-result {
   padding-inline: 16px;
@@ -1591,6 +1736,7 @@
 .wprc--reductions:has(.wprc-explained--sticky) {
   padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
 }
+
 
 .wprc-summary {
   display: grid;
@@ -1941,6 +2087,11 @@
   .wprc-explained--sticky .wprc-chain__flow > .wprc-chain__step:not(.is-result),
   .wprc-explained--sticky .wprc-chain__aside > .wprc-chain__step:not(.is-minimum) {
     display: none;
+  }
+
+  /* La nota de "sin reducciones" no cabe en una linea con la columna estrecha. */
+  .wprc-explained--sticky .is-result small {
+    white-space: normal;
   }
 
   .wprc-explained--sticky .wprc-chain {

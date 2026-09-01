@@ -215,7 +215,7 @@ export function WorkerFiscalSummaryCard({
       <header className="wfsc-summary__header">
         <div>
           <p className="wfsc-summary__eyebrow">
-            {isFinal ? 'Paso 8 · Resultado de todo el recorrido' : 'Cuanto pagas, cuanto paga tu empresa y con cuanto dinero te quedas'}
+            {isFinal ? 'Paso 10 · Resultado de todo el recorrido' : 'Cuanto pagas, cuanto paga tu empresa y con cuanto dinero te quedas'}
           </p>
           <h2 id="wfsc-summary-title">
             {isFinal ? 'Resumen del cálculo' : 'Entiende tu nómina'}

@@ -1,6 +1,8 @@
 .salary-slider {
   --salary-slider-value: 0%;
   --salary-slider-green: #43d84a;
+  /* Velo sobre el tramo aun no alcanzado cuando la barra lleva rampa de color. */
+  --salary-slider-track-veil: rgba(4, 18, 34, 0.72);
   display: grid;
   gap: 8px;
   min-height: 74px;
@@ -191,6 +193,54 @@
   box-shadow:
     0 0 0 5px rgba(40, 184, 255, 0.14),
     0 0 18px rgba(61, 224, 107, 0.4);
+}
+
+/*
+ * Barra pintada por una magnitud (no por el progreso): la rampa completa queda
+ * a la vista y un velo apaga el tramo que todavia no has alcanzado, de forma
+ * que se ve a la vez donde estas y que terreno tienes delante.
+ *
+ * La clase va repetida a proposito. Los temas repintan la barra con selectores
+ * de la misma especificidad que `.salary-slider .. ::track` (por ejemplo
+ * `:is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]`),
+ * y al cargarse despues ganaban el empate. Repetir la clase deja la rampa por
+ * encima de cualquiera de ellos sin recurrir a !important.
+ */
+.salary-slider.salary-slider--ramp.salary-slider--ramp input[type="range"]::-webkit-slider-runnable-track {
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 var(--salary-slider-value),
+      var(--salary-slider-track-veil) var(--salary-slider-value) 100%
+    ),
+    var(--salary-slider-track);
+}
+
+.salary-slider.salary-slider--ramp.salary-slider--ramp input[type="range"]::-moz-range-track {
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 var(--salary-slider-value),
+      var(--salary-slider-track-veil) var(--salary-slider-value) 100%
+    ),
+    var(--salary-slider-track);
+}
+
+/* Con rampa el pulgar no compite con el color de la barra: oscuro y con aro. */
+.salary-slider.salary-slider--ramp.salary-slider--ramp input[type="range"]::-webkit-slider-thumb {
+  border-color: #ffffff;
+  background: #101a2c;
+  box-shadow:
+    0 0 0 3px rgba(16, 26, 44, 0.22),
+    0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+.salary-slider.salary-slider--ramp.salary-slider--ramp input[type="range"]::-moz-range-thumb {
+  border-color: #ffffff;
+  background: #101a2c;
+  box-shadow:
+    0 0 0 3px rgba(16, 26, 44, 0.22),
+    0 1px 5px rgba(0, 0, 0, 0.4);
 }
 
 .salary-slider input[type="range"]:focus-visible {

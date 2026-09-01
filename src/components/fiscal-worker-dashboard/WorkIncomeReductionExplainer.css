@@ -4,6 +4,10 @@
  * el tema claro de la calculadora, sin duplicar ni una regla de layout.
  */
 .wir {
+  --wir-gap: clamp(14px, 1.4vw, 20px);
+  --wir-sticky-top: 10px;
+  --wir-morph: 190ms;
+  --wir-sticky-shadow: rgba(0, 0, 0, 0.45);
   --wir-page-bg:
     radial-gradient(circle at 12% 6%, rgba(23, 184, 255, 0.15), transparent 32%),
     radial-gradient(circle at 78% 12%, rgba(255, 79, 88, 0.1), transparent 28%),
@@ -64,6 +68,11 @@
   --wir-chart-tip-line: rgba(123, 157, 196, 0.35);
   --wir-chart-tip-text: #f6f9ff;
   --wir-chart-tip-muted: rgba(246, 249, 255, 0.7);
+  --wir-chart-tier-green: rgba(108, 241, 70, 0.22);
+  --wir-chart-tier-yellow: rgba(255, 198, 53, 0.22);
+  --wir-chart-tier-orange: rgba(255, 173, 24, 0.24);
+  --wir-chart-tier-edge: rgba(123, 157, 196, 0.28);
+  --wir-chart-tier-text: rgba(246, 249, 255, 0.62);
 
   min-height: 100svh;
   padding: clamp(12px, 1.6vw, 26px);
@@ -93,9 +102,30 @@
 
 .wir-shell {
   display: grid;
-  gap: clamp(14px, 1.4vw, 20px);
+  gap: var(--wir-gap);
   max-width: 1180px;
   margin: 0 auto;
+}
+
+/*
+ * El simulador se pega arriba mientras se recorre este bloque (cadena, tramos y
+ * los dos graficos) y se suelta al acabar, antes de los avisos. El sticky se
+ * limita solo al alto de este contenedor, no hace falta JS para el rango.
+ */
+.wir-sticky-range {
+  position: relative;
+  display: grid;
+  gap: var(--wir-gap);
+}
+
+/* Centinela de 1px: fuera del flujo para no abrir un hueco en la rejilla. */
+.wir-sticky-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 /* ── Cabecera ── */
@@ -133,6 +163,20 @@
   line-height: 1.55;
 }
 
+/* Definicion de "RNT": destaca sobre el parrafo de cabecera sin ser un aviso. */
+.wir.wir .wir-acronym {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--wir-blue-line);
+  border-radius: 11px;
+  background: var(--wir-blue-tint);
+  color: var(--wir-info-text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.wir-acronym strong { color: var(--wir-blue); }
+
 .wir-profile {
   display: flex;
   gap: 10px;
@@ -162,14 +206,16 @@
 
 .wir-panel__title {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
+  justify-content: flex-end;
   margin-bottom: 16px;
   color: var(--wir-blue);
 }
 
 .wir.wir .wir-panel__title h3 {
-  margin: 0;
+  margin: 0 auto 0 0;
   color: var(--wir-text);
   font-size: 1.18rem;
 }
@@ -178,7 +224,6 @@
   display: inline-flex;
   gap: 6px;
   align-items: center;
-  margin-left: auto;
   padding: 4px 10px;
   border: 1px solid var(--wir-border-soft);
   border-radius: 999px;
@@ -190,15 +235,285 @@
   cursor: pointer;
 }
 
-.wir-reset:hover {
+.wir-reset:hover,
+.wir-toggle:hover {
   border-color: var(--wir-blue);
   color: var(--wir-blue);
+}
+
+.wir-toggle {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--wir-border-soft);
+  border-radius: 999px;
+  background: var(--wir-surface);
+  color: var(--wir-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 /* ── Simulador ── */
 
 .wir-sim {
+  position: sticky;
+  top: var(--wir-sticky-top);
+  z-index: 20;
   border-color: var(--wir-blue-line);
+  transition:
+    padding var(--wir-morph) ease-out,
+    border-color var(--wir-morph) ease-out,
+    box-shadow var(--wir-morph) ease-out;
+}
+
+/*
+ * Lo que se encoge al compactar se anima. `display: none` no se interpola, asi
+ * que lo que desaparece lo hace por max-height (tope holgado, no el alto real)
+ * mas opacidad. Es una animacion de layout, pero de un solo panel y de 190ms.
+ */
+.wir-sim > .salary-slider,
+.wir-sim .wir-kpi {
+  transition:
+    padding var(--wir-morph) ease-out,
+    gap var(--wir-morph) ease-out;
+}
+
+.wir-sim .wir-kpi span,
+.wir-sim .wir-kpi strong,
+.wir-sim .salary-slider__value-input,
+.wir-sim .salary-slider__value-shell > span {
+  transition: font-size var(--wir-morph) ease-out;
+}
+
+.wir-sim .wir-kpi small {
+  overflow: hidden;
+  max-height: 40px;
+  transition:
+    max-height var(--wir-morph) ease-out,
+    opacity calc(var(--wir-morph) * 0.7) ease-out;
+}
+
+/*
+ * Enganchado arriba se compacta: sin titulo, sin leyenda de color y con los KPI
+ * en una tira de una linea. A tamano completo taparia media ventana.
+ */
+.wir-sim.is-stuck {
+  padding: 11px clamp(14px, 1.6vw, 20px) 13px;
+  border-color: var(--wir-blue);
+  box-shadow: 0 12px 26px var(--wir-sticky-shadow);
+}
+
+.wir-sim.is-stuck .wir-panel__title {
+  margin-bottom: 8px;
+}
+
+/*
+ * Tamanos y tipografia ya van con transicion, pero los KPI cambian de celda de
+ * la rejilla y eso salta de golpe. Un atenuado corto (solo opacidad, sin
+ * reflow) tapa ese salto mientras el resto se interpola.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .wir-sim.is-morphing > * {
+    animation: wir-sim-morph var(--wir-morph) ease-out;
+  }
+}
+
+@keyframes wir-sim-morph {
+  from {
+    opacity: 0.25;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* La leyenda de color ya se ha leido antes de engancharse; el titulo, tambien. */
+.wir-sim.is-stuck .wir-panel__title > svg,
+.wir-sim.is-stuck .wir-panel__title h3,
+.wir-sim.is-stuck .wir-ramp-legend {
+  display: none;
+}
+
+.wir-sim.is-stuck .wir-kpis {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.wir-sim.is-stuck .wir-kpi {
+  gap: 1px;
+  padding: 6px 10px;
+}
+
+.wir-sim.is-stuck .wir-kpi span {
+  font-size: 0.66rem;
+  letter-spacing: 0;
+}
+
+.wir-sim.is-stuck .wir-kpi strong {
+  font-size: 1.1rem;
+}
+
+.wir-sim.is-stuck .wir-kpi small {
+  max-height: 0;
+  opacity: 0;
+}
+
+.wir-sim.is-stuck.is-collapsed {
+  display: block;
+  padding-block: 8px;
+}
+
+.wir-sim.is-stuck.is-collapsed .wir-panel__title {
+  margin-bottom: 0;
+}
+
+.wir-sim.is-stuck.is-collapsed .wir-panel__title > svg {
+  display: block;
+}
+
+.wir.wir .wir-sim.is-stuck.is-collapsed .wir-panel__title h3 {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.wir-ramp-legend[hidden] {
+  display: none;
+}
+
+.wir-sim.is-stuck > .salary-slider {
+  gap: 5px;
+  min-height: 0;
+  padding: 7px 11px 6px;
+}
+
+.wir-sim.is-stuck .salary-slider__value-input {
+  padding: 2px 8px;
+  font-size: clamp(16px, 1.7vw, 19px);
+}
+
+.wir-sim.is-stuck .salary-slider__value-shell > span {
+  font-size: 15px;
+}
+
+.wir-sim.is-stuck .wir-toggle,
+.wir-sim.is-stuck .wir-reset {
+  padding: 3px 9px;
+  font-size: 0.72rem;
+}
+
+/*
+ * Con sitio de sobra a lo ancho, enganchado el panel pone barra y KPI en la
+ * misma linea: baja de ~425px sueltos a ~145px, que es lo que hace tolerable
+ * tenerlo fijo mientras se leen los graficos. Va despues de las reglas de
+ * arriba porque anula alguna de ellas a igual especificidad.
+ */
+@media (min-width: 1000px) {
+  .wir-sim.is-stuck {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.3fr);
+    gap: 8px 16px;
+    align-items: center;
+  }
+
+  /* La barra ocupa la columna izquierda entera; controles y cifras se apilan a su derecha. */
+  .wir-sim.is-stuck > .salary-slider {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .wir-sim.is-stuck .wir-panel__title {
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 0;
+    justify-content: flex-end;
+  }
+
+  .wir-sim.is-stuck .wir-kpis {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 0;
+  }
+
+  /* Sin cifras la columna derecha solo lleva los controles: la barra se queda el resto. */
+  .wir-sim.is-stuck:has(.wir-kpis[hidden]) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/*
+ * En ventanas bajas o estrechas el panel comeria demasiada pantalla incluso
+ * compacto: alli se queda quieto y se navega con scroll normal.
+ */
+@media (max-width: 640px), (max-height: 620px) {
+  .wir-sim {
+    position: static;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wir-sim,
+  .wir-sim * {
+    transition: none;
+  }
+}
+
+
+/*
+ * La barra del slider va pintada por tipo marginal: el velo del tramo aun no
+ * alcanzado tiene que ser del color del fondo de cada variante.
+ */
+.wir .salary-slider { --salary-slider-track-veil: rgba(2, 10, 22, 0.42); }
+.wir--embedded .salary-slider { --salary-slider-track-veil: rgba(248, 250, 252, 0.4); }
+
+.wir-ramp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.wir.wir .wir-ramp-legend__text {
+  color: var(--wir-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.wir-ramp-legend__text strong { color: var(--wir-text); }
+
+.wir-ramp-legend__scale {
+  display: grid;
+  gap: 3px;
+  flex-shrink: 0;
+  width: 148px;
+}
+
+.wir-ramp-legend__scale i {
+  height: 8px;
+  border-radius: 999px;
+}
+
+.wir-ramp-legend__scale > span {
+  display: flex;
+  justify-content: space-between;
+  color: var(--wir-faint);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.wir-ramp-legend__scale em { font-style: normal; }
+
+.wir-kpis[hidden] {
+  display: none;
 }
 
 .wir-kpis {
@@ -603,6 +918,27 @@
 
 .wir-chart__band--warn { fill: var(--wir-chart-band); }
 
+/*
+ * Cinta superior con los tres tramos de la formula: da contexto sin competir
+ * con las curvas, asi que va en tinta suave y con las lineas de corte finas.
+ */
+.wir-chart__tier-strip--green { fill: var(--wir-chart-tier-green); }
+.wir-chart__tier-strip--yellow { fill: var(--wir-chart-tier-yellow); }
+.wir-chart__tier-strip--orange { fill: var(--wir-chart-tier-orange); }
+
+.wir-chart__tier-edge {
+  stroke: var(--wir-chart-tier-edge);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+}
+
+.wir-chart__tier-label {
+  fill: var(--wir-chart-tier-text);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
 .wir-chart__line {
   fill: none;
   stroke-width: 2.4;
@@ -633,6 +969,19 @@
 .wir-chart__reference-label {
   fill: var(--wir-chart-reference-text);
   font-size: 10.5px;
+}
+
+/* Referencia vertical (SMI): mismo trazo que la del 45 %, girado. */
+.wir-chart__gross-reference line {
+  stroke: var(--wir-chart-reference);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.wir-chart__gross-reference text {
+  fill: var(--wir-chart-reference-text);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
 }
 
 .wir-chart__point {
@@ -718,6 +1067,44 @@
   line-height: 1.55;
 }
 
+.wir.wir .wir-footnote p {
+  margin: 0;
+}
+
+.wir.wir .wir-footnote > * + p {
+  margin-top: 10px;
+}
+
+.wir.wir .wir-footnote__list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 5px;
+  list-style: disc outside;
+}
+
+.wir.wir .wir-footnote__list li {
+  display: list-item;
+}
+
+.wir.wir .wir-footnote--key {
+  margin-top: 16px;
+  padding: 13px 15px;
+  border: 1px solid var(--wir-blue-line);
+  border-left: 4px solid var(--wir-blue);
+  border-radius: 11px;
+  background: var(--wir-blue-tint);
+  color: var(--wir-info-text);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.wir.wir .wir-footnote--key em {
+  color: #dff4ff;
+  font-style: normal;
+  font-weight: 600;
+}
+
 /* ── Joroba ── */
 
 .wir-panel--hump { border-color: var(--wir-red-line); }
@@ -727,6 +1114,15 @@
   gap: 10px;
   max-width: 88ch;
   margin-bottom: 18px;
+}
+
+.wir-panel--hump .wir-hump-copy {
+  margin-bottom: 28px;
+}
+
+.wir-panel--hump > .wir-legend {
+  margin-top: 10px;
+  margin-bottom: 14px;
 }
 
 .wir.wir .wir-hump-copy,
@@ -757,17 +1153,40 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+/*
+ * Cada trampa lleva su tono completo: fondo teñido, filete grueso, titulo y
+ * cifras destacadas. Los tres tokens salen de --wir-trap-* para que anadir un
+ * tono nuevo sea una sola regla.
+ */
 .wir-trap {
+  --wir-trap-accent: var(--wir-faint);
+  --wir-trap-tint: var(--wir-surface);
+  --wir-trap-line: var(--wir-border-soft);
+
   padding: 15px 17px;
-  border: 1px solid var(--wir-border-soft);
-  border-top: 3px solid var(--wir-faint);
+  border: 1px solid var(--wir-trap-line);
+  border-top: 5px solid var(--wir-trap-accent);
   border-radius: 12px;
-  background: var(--wir-surface);
+  background: var(--wir-trap-tint);
 }
 
 .wir.wir .wir-trap h4 {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
   margin: 0 0 8px;
+  color: var(--wir-trap-accent);
   font-size: 1rem;
+}
+
+/* Punto del tono delante del titulo: da color aun sin leer el texto. */
+.wir.wir .wir-trap h4::before {
+  content: "";
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--wir-trap-accent);
 }
 
 .wir.wir .wir-trap p {
@@ -777,12 +1196,25 @@
   line-height: 1.55;
 }
 
-.wir-trap--red { border-top-color: var(--wir-red); }
-.wir.wir .wir-trap--red h4 { color: var(--wir-red); }
-.wir-trap--yellow { border-top-color: var(--wir-yellow); }
-.wir.wir .wir-trap--yellow h4 { color: var(--wir-yellow); }
-.wir-trap--blue { border-top-color: var(--wir-blue); }
-.wir.wir .wir-trap--blue h4 { color: var(--wir-blue); }
+.wir.wir .wir-trap p strong { color: var(--wir-trap-accent); }
+
+.wir-trap--red {
+  --wir-trap-accent: var(--wir-red);
+  --wir-trap-tint: var(--wir-red-tint);
+  --wir-trap-line: var(--wir-red-line);
+}
+
+.wir-trap--yellow {
+  --wir-trap-accent: var(--wir-yellow);
+  --wir-trap-tint: var(--wir-yellow-tint);
+  --wir-trap-line: var(--wir-yellow-line);
+}
+
+.wir-trap--blue {
+  --wir-trap-accent: var(--wir-blue);
+  --wir-trap-tint: var(--wir-blue-tint);
+  --wir-trap-line: var(--wir-blue-line);
+}
 
 @media (max-width: 640px) {
   .wir-chain li {
@@ -797,6 +1229,7 @@
  * ──────────────────────────────────────────────────────────────────────────── */
 
 .wir--embedded {
+  --wir-sticky-shadow: rgba(35, 54, 78, 0.16);
   --wir-page-bg: none;
   --wir-header-bg: linear-gradient(140deg, #e9f1fd, #ffffff 62%);
   --wir-panel: #ffffff;
@@ -853,6 +1286,11 @@
   --wir-chart-tip-line: rgba(35, 54, 78, 0.22);
   --wir-chart-tip-text: #172033;
   --wir-chart-tip-muted: #4f5f70;
+  --wir-chart-tier-green: rgba(24, 134, 91, 0.2);
+  --wir-chart-tier-yellow: rgba(176, 132, 24, 0.24);
+  --wir-chart-tier-orange: rgba(185, 107, 24, 0.22);
+  --wir-chart-tier-edge: rgba(35, 54, 78, 0.2);
+  --wir-chart-tier-text: rgba(23, 32, 51, 0.6);
 
   min-height: 0;
   padding: 0;
