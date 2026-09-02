@@ -603,14 +603,17 @@ Debajo verás la otra cara de esas mismas figuras: cuánto recauda el conjunto d
 
 Si le dedicas 10 o 15 minutos, para nosotros es muy importante. Cada pregunta está atada a un paso concreto, así que cuando muchas personas fallan en el mismo sitio sabemos que ese apartado no está bien explicado y lo reescribimos.
 
-No hay que escribir nada: se responde eligiendo, ordenando, emparejando, clasificando o moviendo un deslizador. Se corrige apartado a apartado, con la explicación al momento.`,
+No hay que escribir nada: se responde eligiendo, ordenando, emparejando, clasificando o moviendo un deslizador. Se corrige apartado a apartado, con la explicación al momento.
+
+Tus respuestas se envían de forma anónima, solo para saber qué apartados explicamos mal. No se envía tu información personal ni ninguna cifra de la calculadora.`,
     checklist: [],
     helpTitle: 'Para que sirve el repaso?',
     helpBody: 'No es un examen ni guarda nota en ningun sitio. Sirve para localizar los apartados que no se entienden y reescribirlos.',
     details: [
       'Diez apartados, uno por cada bloque del recorrido, con preguntas de varios tipos.',
       'Cada pregunta se puede marcar como «esto no estaba bien explicado», aunque la aciertes.',
-      'Las respuestas se guardan en tu navegador: puedes salir, seguir con el recorrido y volver donde lo dejaste.',
+      'El progreso se guarda en tu navegador: puedes salir, seguir con el recorrido y volver donde lo dejaste.',
+      'Solo viaja el resultado del cuestionario, y de forma anonima: nunca tu salario, tu comunidad ni tu situacion familiar.',
     ],
     important: 'Es un paso opcional, pero es la mejor forma de decirnos donde nos hemos explicado mal.',
     Icon: GraduationCap,

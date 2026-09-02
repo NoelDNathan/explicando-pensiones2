@@ -14,7 +14,7 @@ import { SalaryNationalityDashboard } from './components/salary-nationality/Sala
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer, WorkIncomeReductionExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
-import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
+import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerPrivacyNotice, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
@@ -912,6 +912,23 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--dashboard">
           <WorkerKnowledgeCheckCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="worker-privacy-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Componente 27</p>
+          <h2 id="worker-privacy-title">Privacidad y permiso de estadisticas</h2>
+          <p>
+            Aviso de cabecera de la calculadora (que se guarda en el navegador, que
+            hara la cuenta y por que no veremos los datos) y la peticion opcional del
+            paso 10 para usar las cifras en estadisticas anonimas.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--dashboard component-preview--stack">
+          <WorkerPrivacyNotice />
+          <WorkerStatsConsent />
         </div>
       </section>
 

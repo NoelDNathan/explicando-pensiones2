@@ -16,6 +16,8 @@ import {
   WorkerFiscalSummaryCard,
   WorkerIrpfRegionComparison,
   WorkerKnowledgeCheckCard,
+  WorkerPrivacyNotice,
+  WorkerStatsConsent,
   WorkerIrpfTranchesCard,
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
@@ -1103,6 +1105,13 @@ export function FiscalWorkerDashboard() {
             <button type="button" aria-label="Informacion"><Info size={18} /></button>
           </div>
         </header>
+
+        {activeWorkerStepId === 0 ? (
+          <>
+            <WorkerPrivacyNotice />
+            <WorkerStatsConsent />
+          </>
+        ) : null}
 
         {activeWorkerStepId !== 0 ? (
           <WorkerFiscalStepsCard

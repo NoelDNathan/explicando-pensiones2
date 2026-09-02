@@ -413,6 +413,13 @@
   border: none;
 }
 
+/* Varias piezas sueltas en la misma vista previa */
+.component-preview--stack {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
 .component-preview--fiscal-card {
   justify-content: center;
   padding: clamp(18px, 4vw, 42px) !important;

@@ -1,0 +1,17 @@
+# Los archivos de data/ son evidencia: su SHA-256 esta registrado en
+# data/checksums.sha256 y tiene que seguir siendo el mismo en cualquier clon.
+#
+# Sin estas reglas, core.autocrlf=true reescribe los finales de linea al hacer
+# checkout en Windows y el hash del archivo en disco deja de coincidir con el
+# registrado, aunque el contenido no haya cambiado.
+#
+# Convencion: los archivos de datos se guardan y se hashean con finales de
+# linea LF, tal y como los escriben los scripts de `scripts/`.
+data/raw/** -text
+data/processed/** -text
+
+# El registro de hashes y las fichas de trazabilidad se quedan en LF, pero
+# siguen siendo texto para que sus diffs se lean con normalidad.
+data/checksums.sha256 text eol=lf
+data/**/*.md text eol=lf
+data/*.md text eol=lf

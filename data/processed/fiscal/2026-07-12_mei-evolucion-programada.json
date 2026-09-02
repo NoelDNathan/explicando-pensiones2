@@ -1,7 +1,7 @@
 {
   "dataset_id": "mei-evolucion-programada",
   "created_at": "2026-07-12",
-  "estado_dato": "observado",
+  "estado_dato": "observado / proyectado",
   "scope": {
     "country": "Espana",
     "worker_profile": "trabajador por cuenta ajena del Regimen General",

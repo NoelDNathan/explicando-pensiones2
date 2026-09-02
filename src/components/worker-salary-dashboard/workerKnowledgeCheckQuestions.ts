@@ -3,7 +3,8 @@
  *
  * Reglas del cuestionario:
  * - Ninguna pregunta se responde escribiendo: todo es clic, seleccion, orden,
- *   emparejado, clasificacion o deslizador.
+ *   emparejado, clasificacion o deslizador. Ordenar y emparejar se resuelven
+ *   arrastrando (con alternativa de flechas y de clic para teclado y raton).
  * - Cada apartado apunta al paso del recorrido que lo explica (`stepId`), para
  *   poder volver a repasarlo desde la correccion.
  * - Los datos numericos salen de los mismos parametros que usa el motor 2025
@@ -207,15 +208,15 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
       },
       {
         id: 'cotiz-porcentaje-empresa',
-        kind: 'single',
-        prompt: 'Sobre esa misma base, ¿cuánto aporta la empresa (sin contar accidentes de trabajo)?',
-        choices: [
-          { id: 'a', label: 'Alrededor del 6 %, lo mismo que tú' },
-          { id: 'b', label: 'Alrededor del 15 %' },
-          { id: 'c', label: 'Alrededor del 30 %' },
-          { id: 'd', label: 'Alrededor del 45 %' },
-        ],
-        correctId: 'c',
+        kind: 'slider',
+        prompt: 'Sobre esa misma base, ¿qué porcentaje aporta la empresa (sin contar accidentes de trabajo)?',
+        hint: 'Mueve el deslizador hasta la cifra que creas.',
+        min: 0,
+        max: 45,
+        step: 0.1,
+        unit: '%',
+        correct: 30.57,
+        tolerance: 3,
         explanation:
           '23,60 % + 0,67 % de MEI + 5,50 % de desempleo + 0,20 % de FOGASA + 0,60 % de formación = 30,57 %, más el tipo de accidentes según la actividad. La empresa aporta casi cinco veces lo que tú.',
       },
@@ -257,7 +258,7 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
         id: 'especie-limites',
         kind: 'match',
         prompt: 'Empareja cada beneficio con su límite exento en 2025.',
-        hint: 'Elige un beneficio y después su límite.',
+        hint: 'Arrastra cada límite hasta su beneficio.',
         pairs: [
           { id: 'p1', left: 'Ticket restaurante', right: '11 € por día trabajado' },
           { id: 'p2', left: 'Abono de transporte', right: '136,36 € al mes, hasta 1.500 € al año' },
@@ -306,7 +307,7 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
         id: 'base-orden',
         kind: 'order',
         prompt: 'Ordena la cadena que lleva de tu bruto a la base liquidable.',
-        hint: 'Usa las flechas para mover cada pieza.',
+        hint: 'Arrastra cada pieza por el asa, o usa las flechas.',
         topLabel: 'Primero',
         bottomLabel: 'Último',
         items: [
@@ -382,6 +383,37 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
         ],
         explanation:
           'Lo que baja la base te ahorra tu tipo marginal. Lo que baja la cuota te ahorra el importe entero. Por eso la misma cifra vale más como deducción que como reducción.',
+      },
+      {
+        id: 'base-joroba-por-que',
+        kind: 'single',
+        prompt: 'En la «joroba del IRPF», entre unos 15.000 y 20.000 € de bruto, el tipo marginal se dispara muy por encima del 45 % de la escala. ¿Por qué?',
+        choices: [
+          { id: 'a', label: 'Porque en esa franja la escala tiene un tramo con un tipo altísimo' },
+          {
+            id: 'b',
+            label:
+              'Porque al ganar más se pierde parte de la reducción por rendimientos del trabajo, así que la base sube más deprisa que el sueldo',
+          },
+          { id: 'c', label: 'Porque las cotizaciones sociales suben de golpe al superar la base mínima' },
+          { id: 'd', label: 'Porque a partir de ahí se paga escala estatal y autonómica a la vez' },
+        ],
+        correctId: 'b',
+        explanation:
+          'En el tramo 2 de la reducción se pierden 1,75 € por cada euro de rendimiento neto del trabajo, así que la base imponible sube unos 2,75 € por cada euro ganado. Encima, en esa misma franja se retira la deducción de 340 € por rentas del trabajo bajas. Los dos desmontajes coinciden y producen el pico: cuando la reducción se agota (19.747,50 € de rendimiento neto), el marginal vuelve a la escala normal.',
+      },
+      {
+        id: 'base-joroba-verdadero-falso',
+        kind: 'truefalse',
+        prompt: 'Verdadero o falso sobre la joroba',
+        statements: [
+          { id: 's1', text: 'La joroba afecta al tipo marginal, no al tipo medio.', isTrue: true },
+          { id: 's2', text: 'Dentro de la joroba, ganar más bruto puede dejarte con menos neto que antes.', isTrue: false },
+          { id: 's3', text: 'Además de la reducción, en esa franja también se retira la deducción de 340 € por rentas del trabajo bajas.', isTrue: true },
+          { id: 's4', text: 'La joroba desaparece cuando la reducción por rendimientos del trabajo se agota.', isTrue: true },
+        ],
+        explanation:
+          'El tipo medio (IRPF ÷ bruto) sigue siendo bajo en toda esa banda: lo que se dispara es lo que cuesta el siguiente euro. Por eso subir de sueldo siempre compensa en neto, aunque ahí compense mucho menos de lo que parece. Y el pico se acaba en cuanto la reducción llega a cero.',
       },
     ],
   },
@@ -506,7 +538,7 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
         id: 'iva-tipos',
         kind: 'match',
         prompt: 'Empareja cada gasto con su tipo de IVA.',
-        hint: 'Elige un gasto y después su tipo.',
+        hint: 'Arrastra cada tipo de IVA hasta su gasto.',
         pairs: [
           { id: 'p1', left: 'Pan, leche, fruta y verdura', right: '4 % (superreducido)' },
           { id: 'p2', left: 'Restaurante o comida a domicilio', right: '10 % (reducido)' },
@@ -608,7 +640,7 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
         id: 'conjunto-orden',
         kind: 'order',
         prompt: 'Ordena estas cuatro cifras de mayor a menor.',
-        hint: 'Usa las flechas para mover cada pieza.',
+        hint: 'Arrastra cada pieza por el asa, o usa las flechas.',
         topLabel: 'La mayor',
         bottomLabel: 'La menor',
         items: [
@@ -654,6 +686,9 @@ export const KNOWLEDGE_CHECK_SECTIONS: KnowledgeSection[] = [
     ],
   },
 ]
+
+/** Sube al cambiar las preguntas: agrupa los envios por tanda. */
+export const KNOWLEDGE_CHECK_VERSION = '2025-2'
 
 export const KNOWLEDGE_CHECK_TOTAL_QUESTIONS = KNOWLEDGE_CHECK_SECTIONS.reduce(
   (total, section) => total + section.questions.length,

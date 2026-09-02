@@ -1,5 +1,20 @@
 # Fuentes registradas
 
+## BOE - Mecanismo de Equidad Intergeneracional (MEI)
+
+- nombre de la fuente normativa: Mecanismo de Equidad Intergeneracional, tipo de cotizacion finalista y su reparto entre empresa y trabajador
+- institucion: Agencia Estatal Boletin Oficial del Estado
+- URL Real Decreto-ley 21/2021, articulo 11: https://www.boe.es/buscar/act.php?id=BOE-A-2021-17076
+- URL Orden PJC/178/2025 (tipos de cotizacion 2025): https://www.boe.es/buscar/act.php?id=BOE-A-2025-3780
+- fecha de revision: 2026-07-12
+- periodo normativo usado: 2023-2050
+- ambito: Espana, trabajador por cuenta ajena del Regimen General
+- formato consultado: HTML BOE consolidado
+- archivo procesado: `data/processed/fiscal/2026-07-12_mei-evolucion-programada.json`
+- licencia o condiciones de uso: reutilizacion segun condiciones del BOE
+- descripcion breve: tipo total del MEI y su reparto entre empresa y trabajador, ano a ano de 2023 a 2029 y como tramo unico 2030-2050. Alimenta la tabla de evolucion del MEI del paso de cotizaciones sociales de la calculadora fiscal.
+- nota metodologica: transcripcion manual, sin archivo bruto descargado. Solo 2023-2025 son tipos efectivamente publicados en las ordenes anuales de cotizacion y verificados contra los paquetes normativos del proyecto; 2026-2050 es el calendario programado por el Real Decreto-ley 21/2021 y puede cambiar por norma posterior. Cada fila lleva su propio `estado_dato`; el del encabezado del JSON es el agregado `observado / proyectado` y no debe usarse para etiquetar un ano concreto.
+
 ## BOE - Tarifa AT/EP 2025
 
 - nombre de la fuente normativa: tarifa de primas para la cotizacion por accidentes de trabajo y enfermedades profesionales aplicable en 2025

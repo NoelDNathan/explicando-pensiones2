@@ -3,35 +3,51 @@
  *
  * - Ninguna respuesta se escribe: opcion unica, opcion multiple, verdadero o
  *   falso, ordenar, emparejar, clasificar y deslizador.
+ * - Ordenar y emparejar se arrastran con eventos de puntero (raton y dedo).
+ *   Las flechas de «ordenar» y el clic de «emparejar» siguen ahi como
+ *   alternativa accesible con teclado.
  * - Se corrige apartado a apartado y cada pregunta lleva un boton «No me quedo
  *   claro» para senalar que la explicacion del paso no funciona.
- * - Todo se guarda en el navegador (localStorage). Nada sale del dispositivo.
+ * - El progreso se guarda en el navegador (localStorage). Al terminar, el
+ *   resultado se envia solo y de forma anonima (ver `knowledgeCheckReporting`):
+ *   aciertos por apartado y preguntas marcadas, nada de la calculadora ni de la
+ *   persona.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { PointerEvent as ReactPointerEvent } from 'react'
 import {
   ArrowRight,
   Check,
   ChevronDown,
   ChevronUp,
   Clock,
-  Copy,
   Flag,
   GraduationCap,
+  GripVertical,
   Lightbulb,
   ListChecks,
   RotateCcw,
+  ShieldCheck,
   Sparkles,
   X,
 } from 'lucide-react'
 import {
   KNOWLEDGE_CHECK_SECTIONS,
   KNOWLEDGE_CHECK_TOTAL_QUESTIONS,
+  KNOWLEDGE_CHECK_VERSION,
 } from './workerKnowledgeCheckQuestions'
-import type { KnowledgeQuestion, KnowledgeSection } from './workerKnowledgeCheckQuestions'
+import type {
+  KnowledgeMatchPair,
+  KnowledgeOrderItem,
+  KnowledgeQuestion,
+  KnowledgeSection,
+} from './workerKnowledgeCheckQuestions'
+import { sendKnowledgeCheckReport } from './knowledgeCheckReporting'
+import type { KnowledgeCheckReport, ReportStatus } from './knowledgeCheckReporting'
 import './WorkerKnowledgeCheckCard.css'
 
-const STORAGE_KEY = 'fwd-knowledge-check-2025-v1'
+const STORAGE_KEY = 'fwd-knowledge-check-2025-v2'
 
 type AnswerValue =
   | { kind: 'single'; choiceId: string }
@@ -43,6 +59,24 @@ type AnswerValue =
   | { kind: 'slider'; value: number }
 
 type AnswerMap = Record<string, AnswerValue>
+
+/*
+ * Arrastre de «ordenar» y «emparejar». Se hace con eventos de puntero (no con
+ * la API HTML5 de drag & drop) para que funcione igual con raton y con dedo, y
+ * porque el elemento que sigue al cursor se dibuja aparte (`wkcc-drag-ghost`).
+ */
+type DragState =
+  | { kind: 'order'; questionId: string; itemId: string; label: string; x: number; y: number }
+  | {
+      kind: 'match'
+      questionId: string
+      pairId: string
+      label: string
+      x: number
+      y: number
+      /** Tarjeta de la izquierda sobre la que se esta soltando, si hay alguna. */
+      over: string | null
+    }
 
 type StoredState = {
   phase: Phase
@@ -118,6 +152,28 @@ function isCorrect(question: KnowledgeQuestion, answer: AnswerValue | undefined)
   }
 }
 
+/*
+ * Capturar el puntero mantiene el arrastre atado al asa aunque el dedo se salga
+ * del elemento. Algunos navegadores lanzan si el puntero ya no esta activo.
+ */
+function capturePointer(event: ReactPointerEvent<HTMLElement>) {
+  try {
+    event.currentTarget.setPointerCapture(event.pointerId)
+  } catch {
+    /* sin captura el arrastre sigue funcionando mientras no se salga del asa */
+  }
+}
+
+function releasePointer(event: ReactPointerEvent<HTMLElement>) {
+  try {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+  } catch {
+    /* ya liberado */
+  }
+}
+
 function defaultOrder(question: Extract<KnowledgeQuestion, { kind: 'order' }>) {
   return question.items.map((item) => item.id)
 }
@@ -150,7 +206,10 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
   const [unclear, setUnclear] = useState<Record<string, boolean>>(stored?.unclear ?? {})
   const [missingWarning, setMissingWarning] = useState(false)
   const [activeMatchLeft, setActiveMatchLeft] = useState<Record<string, string | null>>({})
-  const [copied, setCopied] = useState(false)
+  const [drag, setDrag] = useState<DragState | null>(null)
+  /** Tras soltar una ficha, el navegador aun dispara el `click`: hay que ignorarlo. */
+  const skipNextMatchClick = useRef(false)
+  const [reportStatus, setReportStatus] = useState<ReportStatus>(stored?.phase === 'results' ? 'queued' : 'idle')
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -202,9 +261,30 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
     setCheckedSections((current) => ({ ...current, [section.id]: true }))
   }
 
+  const buildReport = (): KnowledgeCheckReport => ({
+    quizVersion: KNOWLEDGE_CHECK_VERSION,
+    completedAt: new Date().toISOString(),
+    score: totalScore,
+    total: KNOWLEDGE_CHECK_TOTAL_QUESTIONS,
+    sections: KNOWLEDGE_CHECK_SECTIONS.map((item) => ({
+      sectionId: item.id,
+      stepId: item.stepId,
+      score: scoreOf(item),
+      total: item.questions.length,
+      unclearQuestionIds: item.questions.filter((question) => unclear[question.id]).map((question) => question.id),
+    })),
+  })
+
+  /** Cerrar el repaso envia el resultado solo, una vez y de forma anonima. */
+  const finishQuiz = () => {
+    setPhase('results')
+    setReportStatus('sending')
+    sendKnowledgeCheckReport(buildReport()).then(setReportStatus)
+  }
+
   const handleNextSection = () => {
     if (sectionIndex >= KNOWLEDGE_CHECK_SECTIONS.length - 1) {
-      setPhase('results')
+      finishQuiz()
       return
     }
     setSectionIndex(sectionIndex + 1)
@@ -217,40 +297,12 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
     setUnclear({})
     setSectionIndex(0)
     setMissingWarning(false)
+    setReportStatus('idle')
     setPhase('quiz')
   }
 
   const toggleUnclear = (questionId: string) => {
     setUnclear((current) => ({ ...current, [questionId]: !current[questionId] }))
-  }
-
-  const feedbackSummary = useMemo(() => {
-    const lines = [
-      `Repaso de la calculadora fiscal · ${totalScore} de ${KNOWLEDGE_CHECK_TOTAL_QUESTIONS} aciertos`,
-      '',
-    ]
-    KNOWLEDGE_CHECK_SECTIONS.forEach((item) => {
-      const score = scoreOf(item)
-      const flagged = item.questions.filter((question) => unclear[question.id]).length
-      lines.push(
-        `Paso ${item.stepId} · ${item.title}: ${score}/${item.questions.length}${
-          flagged > 0
-            ? ` · ${flagged} ${flagged === 1 ? 'pregunta marcada como poco clara' : 'preguntas marcadas como poco claras'}`
-            : ''
-        }`,
-      )
-    })
-    return lines.join('\n')
-  }, [scoreOf, totalScore, unclear])
-
-  const handleCopySummary = async () => {
-    try {
-      await navigator.clipboard.writeText(feedbackSummary)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 2400)
-    } catch {
-      setCopied(false)
-    }
   }
 
   const renderQuestion = (question: KnowledgeQuestion, index: number) => {
@@ -405,13 +457,48 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
 
       case 'order': {
         const order = answer?.kind === 'order' ? answer.order : defaultOrder(question)
+        const dragging = drag?.kind === 'order' && drag.questionId === question.id ? drag : null
+
         const move = (from: number, to: number) => {
-          if (to < 0 || to >= order.length) return
+          if (to < 0 || to >= order.length || from === to) return
           const next = [...order]
           const [moved] = next.splice(from, 1)
           next.splice(to, 0, moved)
           setAnswer(question.id, { kind: 'order', order: next })
         }
+
+        const startDrag = (event: ReactPointerEvent<HTMLButtonElement>, item: KnowledgeOrderItem) => {
+          if (showFeedback) return
+          if (event.pointerType === 'mouse' && event.button !== 0) return
+          capturePointer(event)
+          setDrag({
+            kind: 'order',
+            questionId: question.id,
+            itemId: item.id,
+            label: item.label,
+            x: event.clientX,
+            y: event.clientY,
+          })
+        }
+
+        /* Reordena en vivo: la pieza arrastrada ocupa la fila que hay bajo el dedo. */
+        const moveDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+          if (!dragging) return
+          setDrag({ ...dragging, x: event.clientX, y: event.clientY })
+          const under = document.elementFromPoint(event.clientX, event.clientY)
+          const slot = under?.closest('[data-order-slot]')
+          if (!(slot instanceof HTMLElement) || slot.dataset.orderQuestion !== question.id) return
+          const target = Number(slot.dataset.orderSlot)
+          const from = order.indexOf(dragging.itemId)
+          if (from < 0 || Number.isNaN(target)) return
+          move(from, target)
+        }
+
+        const endDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+          releasePointer(event)
+          setDrag(null)
+        }
+
         return (
           <div className="wkcc-order">
             <p className="wkcc-order__edge">{question.topLabel}</p>
@@ -421,8 +508,26 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                 if (!item) return null
                 const isRight = question.correctOrder[position] === itemId
                 const tone = !showFeedback ? '' : isRight ? ' is-right' : ' is-wrong'
+                const isDragged = dragging?.itemId === itemId
                 return (
-                  <li className={`wkcc-order__item${tone}`} key={itemId}>
+                  <li
+                    className={`wkcc-order__item${tone}${isDragged ? ' is-dragging' : ''}`}
+                    key={itemId}
+                    data-order-slot={position}
+                    data-order-question={question.id}
+                  >
+                    <button
+                      type="button"
+                      className="wkcc-order__grip"
+                      onPointerDown={(event) => startDrag(event, item)}
+                      onPointerMove={moveDrag}
+                      onPointerUp={endDrag}
+                      onPointerCancel={endDrag}
+                      disabled={showFeedback}
+                      aria-label={`Arrastrar «${item.label}»`}
+                    >
+                      <GripVertical size={16} aria-hidden="true" />
+                    </button>
                     <span className="wkcc-order__position" aria-hidden="true">
                       {position + 1}
                     </span>
@@ -461,16 +566,52 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
           .map((pairId) => question.pairs.find((pair) => pair.id === pairId))
           .filter((pair): pair is NonNullable<typeof pair> => Boolean(pair))
         const usedRights = new Set(Object.values(links))
+        const dragging = drag?.kind === 'match' && drag.questionId === question.id ? drag : null
 
-        const assign = (rightPairId: string) => {
-          if (!activeLeft) return
+        /* Una ficha de la derecha solo puede estar en una tarjeta: se libera la anterior. */
+        const link = (leftPairId: string, rightPairId: string) => {
           const nextLinks: Record<string, string> = {}
           Object.entries(links).forEach(([leftId, value]) => {
             if (value !== rightPairId) nextLinks[leftId] = value
           })
-          nextLinks[activeLeft] = rightPairId
+          nextLinks[leftPairId] = rightPairId
           setAnswer(question.id, { kind: 'match', links: nextLinks })
           setActiveMatchLeft((current) => ({ ...current, [question.id]: null }))
+        }
+
+        const startDrag = (event: ReactPointerEvent<HTMLButtonElement>, pair: KnowledgeMatchPair) => {
+          if (showFeedback) return
+          if (event.pointerType === 'mouse' && event.button !== 0) return
+          capturePointer(event)
+          setDrag({
+            kind: 'match',
+            questionId: question.id,
+            pairId: pair.id,
+            label: pair.right,
+            x: event.clientX,
+            y: event.clientY,
+            over: null,
+          })
+        }
+
+        const moveDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+          if (!dragging) return
+          const under = document.elementFromPoint(event.clientX, event.clientY)
+          const slot = under?.closest('[data-match-drop]')
+          const over =
+            slot instanceof HTMLElement && slot.dataset.matchQuestion === question.id
+              ? slot.dataset.matchDrop ?? null
+              : null
+          setDrag({ ...dragging, x: event.clientX, y: event.clientY, over })
+        }
+
+        const endDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+          releasePointer(event)
+          if (dragging?.over) {
+            link(dragging.over, dragging.pairId)
+            skipNextMatchClick.current = true
+          }
+          setDrag(null)
         }
 
         return (
@@ -480,11 +621,12 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                 const linked = links[pair.id]
                 const linkedPair = linked ? question.pairs.find((candidate) => candidate.id === linked) : undefined
                 const tone = !showFeedback ? '' : linked === pair.id ? ' is-right' : ' is-wrong'
+                const isDropTarget = dragging?.over === pair.id
                 return (
-                  <li key={pair.id}>
+                  <li key={pair.id} data-match-drop={pair.id} data-match-question={question.id}>
                     <button
                       type="button"
-                      className={`wkcc-match__left${activeLeft === pair.id ? ' is-active' : ''}${linked ? ' is-linked' : ''}${tone}`}
+                      className={`wkcc-match__left${activeLeft === pair.id ? ' is-active' : ''}${linked ? ' is-linked' : ''}${isDropTarget ? ' is-drop' : ''}${tone}`}
                       onClick={() => {
                         if (showFeedback) return
                         if (linked) {
@@ -512,15 +654,31 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
             <ul className="wkcc-match__column wkcc-match__column--right">
               {rights.map((pair) => {
                 const used = usedRights.has(pair.id)
+                const isDragged = dragging?.pairId === pair.id
                 return (
                   <li key={pair.id}>
                     <button
                       type="button"
-                      className={`wkcc-match__right${used ? ' is-used' : ''}`}
-                      onClick={() => assign(pair.id)}
-                      disabled={showFeedback || !activeLeft}
+                      className={`wkcc-match__right${used ? ' is-used' : ''}${isDragged ? ' is-dragging' : ''}`}
+                      onPointerDown={(event) => startDrag(event, pair)}
+                      onPointerMove={moveDrag}
+                      onPointerUp={endDrag}
+                      onPointerCancel={endDrag}
+                      onClick={() => {
+                        if (skipNextMatchClick.current) {
+                          skipNextMatchClick.current = false
+                          return
+                        }
+                        if (!activeLeft) return
+                        link(activeLeft, pair.id)
+                      }}
+                      disabled={showFeedback}
+                      aria-label={`${pair.right}. Arrastralo hasta su pareja de la izquierda`}
                     >
-                      {pair.right}
+                      <span className="wkcc-match__grip" aria-hidden="true">
+                        <GripVertical size={15} />
+                      </span>
+                      <span>{pair.right}</span>
                     </button>
                   </li>
                 )
@@ -528,9 +686,11 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
             </ul>
             {!showFeedback ? (
               <p className="wkcc-match__note">
-                {activeLeft
-                  ? 'Ahora elige su pareja en la columna de la derecha.'
-                  : 'Elige un elemento de la izquierda para emparejarlo.'}
+                {dragging
+                  ? 'Suelta la ficha sobre la tarjeta de la izquierda que le corresponda.'
+                  : activeLeft
+                    ? 'Ahora elige su pareja en la columna de la derecha.'
+                    : 'Arrastra cada ficha de la derecha hasta su tarjeta de la izquierda. También puedes tocar primero una tarjeta y después su ficha.'}
               </p>
             ) : null}
           </div>
@@ -614,7 +774,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
   const progressPercent = Math.round((answeredCount / KNOWLEDGE_CHECK_TOTAL_QUESTIONS) * 100)
 
   return (
-    <section className="wkcc" aria-labelledby="wkcc-title">
+    <section className={`wkcc${drag ? ' is-dragging' : ''}`} aria-labelledby="wkcc-title">
       <header className="wkcc-header">
         <div className="wkcc-heading">
           <span className="wkcc-step">
@@ -657,14 +817,30 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
               explicado mal.
             </p>
 
+            <div className="wkcc-intro__privacy" role="note">
+              <ShieldCheck size={20} aria-hidden="true" />
+              <div>
+                <p>
+                  <strong>Qué se envía.</strong> Al terminar, tus respuestas viajan a nuestra base de datos{' '}
+                  <strong>de forma anónima</strong>, solo para entender cómo mejorar el contenido: cuántas acertaste en
+                  cada apartado y cuáles marcaste como mal explicadas.
+                </p>
+                <p>
+                  <strong>Qué no se envía.</strong> Nada de tu información personal ni ninguna de las cifras que hayas
+                  puesto en la calculadora: ni salario, ni comunidad, ni situación familiar. Y si prefieres no hacerlo,
+                  el cuestionario es opcional.
+                </p>
+              </div>
+            </div>
+
             <ul className="wkcc-intro__facts">
               <li>
                 <strong>{KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas</strong> repartidas en{' '}
                 {KNOWLEDGE_CHECK_SECTIONS.length} apartados, uno por cada bloque del recorrido.
               </li>
               <li>
-                <strong>No hay que escribir nada</strong>: se responde eligiendo, ordenando, emparejando, clasificando o
-                moviendo un deslizador.
+                <strong>No hay que escribir nada</strong>: se responde eligiendo, arrastrando piezas para ordenarlas
+                o emparejarlas, clasificando o moviendo un deslizador.
               </li>
               <li>
                 <strong>Se corrige apartado a apartado</strong>, con la explicación al momento y un enlace para volver
@@ -790,7 +966,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                 </>
               )}
               <button type="button" className="wkcc-ghost wkcc-ghost--small" onClick={() => onGoToStep?.(nextStepId)}>
-                Salir y seguir con el recorrido
+                Salir del cuestionario
               </button>
             </footer>
           </div>
@@ -850,17 +1026,22 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
             })}
           </ul>
 
-          <aside className="wkcc-results__feedback">
-            <h3>¿Nos lo cuentas?</h3>
+          <aside className="wkcc-results__feedback" aria-live="polite">
+            <h3>
+              <ShieldCheck size={18} aria-hidden="true" />
+              {reportStatus === 'sending'
+                ? 'Enviando tus respuestas…'
+                : reportStatus === 'sent'
+                  ? 'Respuestas enviadas de forma anónima'
+                  : 'Respuestas listas para enviarse'}
+            </h3>
             <p>
-              El resultado se queda en tu navegador: no se envía a ningún sitio. Si quieres ayudarnos a arreglar los
-              apartados que fallan, copia este resumen y mándanoslo.
+              {reportStatus === 'sent'
+                ? 'Ya nos han llegado tus aciertos por apartado y las preguntas que marcaste como mal explicadas. Con eso sabemos qué reescribir.'
+                : 'Tus aciertos por apartado y las preguntas que marcaste como mal explicadas se envían solos, de forma anónima, en cuanto haya conexión con nuestra base de datos.'}{' '}
+              No se envía nada que te identifique ni ninguna cifra de la calculadora: tu salario, tu comunidad y tu
+              situación familiar se quedan en tu navegador.
             </p>
-            <pre className="wkcc-results__summary">{feedbackSummary}</pre>
-            <button type="button" className="wkcc-ghost" onClick={handleCopySummary}>
-              <Copy size={16} aria-hidden="true" />
-              {copied ? 'Resumen copiado' : 'Copiar resumen'}
-            </button>
           </aside>
 
           <div className="wkcc-results__actions">
@@ -873,6 +1054,13 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
               <ArrowRight size={18} aria-hidden="true" />
             </button>
           </div>
+        </div>
+      ) : null}
+
+      {/* Ficha que sigue al dedo mientras se arrastra; no intercepta el puntero. */}
+      {drag ? (
+        <div className="wkcc-drag-ghost" style={{ left: drag.x, top: drag.y }} aria-hidden="true">
+          {drag.label}
         </div>
       ) : null}
     </section>

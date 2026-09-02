@@ -194,6 +194,34 @@
   color: var(--wkcc-copy);
 }
 
+.wkcc-intro__privacy {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  margin-top: 16px;
+  padding: 13px 15px;
+  border: 1px solid color-mix(in srgb, var(--wkcc-primary) 26%, var(--wkcc-line));
+  border-radius: var(--wkcc-radius-control);
+  background: var(--wkcc-primary-soft);
+}
+
+.wkcc-intro__privacy svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--wkcc-primary-strong);
+}
+
+.wkcc-intro__privacy p {
+  max-width: 72ch;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--wkcc-copy);
+}
+
+.wkcc-intro__privacy p + p {
+  margin-top: 7px;
+}
+
 .wkcc-intro__facts {
   display: grid;
   gap: 9px;
@@ -751,6 +779,43 @@
   background: var(--wkcc-red-soft);
 }
 
+.wkcc-order__item.is-dragging {
+  border-color: var(--wkcc-primary);
+  background: var(--wkcc-primary-soft);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--wkcc-primary) 22%, transparent);
+}
+
+/* Asa de arrastre: `touch-action: none` para que el dedo mueva la fila y no la pagina. */
+.wkcc-order__grip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 30px;
+  padding: 0;
+  color: var(--wkcc-muted);
+  cursor: grab;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  touch-action: none;
+}
+
+.wkcc-order__grip:hover:not(:disabled) {
+  color: var(--wkcc-primary-strong);
+  background: var(--wkcc-primary-soft);
+}
+
+.wkcc-order__grip:active:not(:disabled) {
+  cursor: grabbing;
+}
+
+.wkcc-order__grip:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .wkcc-order__position {
   display: inline-flex;
   align-items: center;
@@ -868,8 +933,46 @@
   background: var(--wkcc-red-soft);
 }
 
+.wkcc-match__left.is-drop {
+  border-color: var(--wkcc-primary);
+  border-style: dashed;
+  background: var(--wkcc-primary-soft);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--wkcc-primary) 26%, transparent);
+}
+
 .wkcc-match__right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   font-size: 0.9rem;
+  cursor: grab;
+}
+
+/*
+ * Solo el asa bloquea el gesto tactil: asi se puede arrastrar la ficha desde
+ * ahi y seguir desplazando la pagina con el dedo sobre el resto del boton.
+ */
+.wkcc-match__grip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 20px;
+  height: 26px;
+  margin: -4px 0;
+  color: var(--wkcc-muted);
+  touch-action: none;
+}
+
+.wkcc-match__right:active:not(:disabled) {
+  cursor: grabbing;
+}
+
+.wkcc-match__right.is-dragging {
+  color: var(--wkcc-muted);
+  border-color: var(--wkcc-primary);
+  border-style: dashed;
+  background: var(--wkcc-surface);
 }
 
 .wkcc-match__right:hover:not(:disabled) {
@@ -1165,7 +1268,15 @@
 }
 
 .wkcc-results__feedback h3 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   font-size: 1.02rem;
+}
+
+.wkcc-results__feedback h3 svg {
+  flex: none;
+  color: var(--wkcc-green);
 }
 
 .wkcc-results__feedback p {
@@ -1174,21 +1285,6 @@
   font-size: 0.9rem;
   line-height: 1.5;
   color: var(--wkcc-copy);
-}
-
-.wkcc-results__summary {
-  max-height: 220px;
-  margin: 12px 0;
-  padding: 12px 14px;
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.82rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  color: var(--wkcc-copy);
-  border: 1px solid var(--wkcc-line);
-  border-radius: var(--wkcc-radius-control);
-  background: var(--wkcc-surface);
 }
 
 .wkcc-results__actions {
@@ -1209,6 +1305,21 @@
 @media (max-width: 720px) {
   .wkcc-match {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* En movil el texto ocupa toda la fila y los controles quedan encima. */
+  .wkcc-order__item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .wkcc-order__moves {
+    margin-left: auto;
+  }
+
+  .wkcc-order__label {
+    flex: 1 1 100%;
+    order: 4;
   }
 
   .wkcc-statement,
@@ -1238,4 +1349,27 @@
   .wkcc-ghost {
     justify-content: center;
   }
+}
+
+/* Arrastre (ordenar y emparejar) */
+
+.wkcc.is-dragging {
+  user-select: none;
+}
+
+.wkcc-drag-ghost {
+  position: fixed;
+  z-index: 60;
+  max-width: 260px;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--wkcc-ink);
+  pointer-events: none;
+  border: 1px solid var(--wkcc-primary);
+  border-radius: var(--wkcc-radius-control);
+  background: var(--wkcc-surface);
+  box-shadow: 0 12px 26px rgb(15 23 42 / 18%);
+  transform: translate(-50%, -140%);
 }
