@@ -35,6 +35,9 @@ const totalHouseholdBracket = (vatProxyJson.income_brackets as EpFIncomeBracket[
 export const DEFAULT_VAT_RATE_ON_NET_SALARY_PERCENT =
   totalHouseholdBracket?.estimated_effective_vat_percent_on_spending ?? 9.64
 
+/** Fuente declarada por el dataset, para citarla en el paso de fuentes del calculo. */
+export const VAT_PROXY_SOURCE = vatProxyJson.source as { institution: string; table: string; url: string }
+
 function resolveBracketIndex(monthlyNetIncomeEur: number) {
   const monthlyNet = Math.max(0, monthlyNetIncomeEur)
   const index = MONTHLY_NET_BRACKET_BOUNDS.findIndex(

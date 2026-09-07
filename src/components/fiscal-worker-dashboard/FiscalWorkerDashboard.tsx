@@ -7,6 +7,7 @@ import {
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
 import fiscalParams2005Json from '../../../data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json'
 import autonomicCoverageJson from '../../../data/processed/fiscal/2026-06-01_aeat-irpf-2025-ccaa-regimen-comun-cobertura.json'
+import atEpParamsJson from '../../../data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json'
 import {
   WorkerConsumptionTaxesCard,
   WorkerCalculationSourcesCard,
@@ -43,7 +44,8 @@ import type { DisabilityMode } from './types'
 import { calculateFamilyMinimum2025 } from './familyMinimum2025'
 import { calculateIrpf2025Core } from './irpf2025Calc'
 import { calculateGeographicMobilityIncrement2025, calculateInKindBenefits2025 } from './irpf2025Adjustments'
-import { estimateVatFromNetSalary } from './vatEpFProxy'
+import { VAT_PROXY_SOURCE, estimateVatFromNetSalary } from './vatEpFProxy'
+import { describeSource, resolveAtEpSourceRef, resolveFiscalSourceRefs } from './fiscalSourceRefs'
 import './FiscalWorkerDashboard.css'
 import './FiscalSoftTheme.css'
 
@@ -147,7 +149,7 @@ type LegacyFiscalParams2005 = {
 }
 
 type AutonomicCoverage = {
-  scope: { included_territories: string[] }
+  scope: { year: number; included_territories: string[] }
   autonomic_general_scales: Record<string, { source_url: string; brackets: ScaleBracket[] }>
   autonomic_personal_family_minimums: {
     override_by_territory: Record<string, Minimums>
@@ -727,69 +729,93 @@ export function FiscalWorkerDashboard() {
     const percent = (value: number) => `${(value * 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`
     const regionLabel = REGION_LABELS[result.effectiveRegion] ?? result.effectiveRegion
     const atEpCategory = getOccupationalAccidentsCategory(occupationalAccidentsCategoryId)
+    const isLegacyYear = taxYear === '2005'
 
-    if (taxYear === '2005') {
-      return [
-        {
-          id: 'social-security-2005',
-          name: 'Bases y tipos de cotizacion del Regimen General',
-          officialSource: 'Boletin Oficial del Estado (BOE)',
-          sourceDetail: 'Orden TAS/77/2005, de 18 de enero',
-          url: 'https://www.boe.es/eli/es/o/2005/01/18/tas77',
-          urlLabel: 'boe.es · Orden TAS/77/2005',
-          values: [
+    // Las fuentes salen del paquete de parametros del ano activo, no de constantes:
+    // cada JSON de `data/processed/fiscal` declara su norma, su URL y, si la hay, la
+    // correccion de erratas que la acompana.
+    // La cobertura por CCAA es un dataset de un ano concreto: solo puede aportar la URL de
+    // la comunidad si ese ano es el que se esta calculando. Si no, se usa el manual del
+    // propio paquete anual.
+    const coverageMatchesYear = autonomicCoverage.scope.year === Number(taxYear)
+    const sourceRefs = resolveFiscalSourceRefs(isLegacyYear ? fiscalParams2005Json : fiscalParams2025Json, {
+      regionLabel,
+      regionSourceUrl: coverageMatchesYear
+        ? autonomicCoverage.autonomic_general_scales[result.effectiveRegion]?.source_url
+        : undefined,
+    })
+
+    const socialSecurityItem: CalculationSourceItem = {
+      id: `social-security-${taxYear}`,
+      name: 'Bases y tipos de cotizacion del Regimen General',
+      ...sourceRefs.socialSecurity,
+      values: isLegacyYear
+        ? [
             { name: 'Grupo seleccionado', value: `Grupo ${result.contributionGroupId} · ${result.contributionGroupLabel}` },
             { name: 'Base aplicada', value: `${formatEuro(result.contributionBase)}/mes` },
             { name: 'Cuota trabajador', value: formatEuro(socialContributions.workerContributionsAnnual) },
             { name: 'Aportacion empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
+          ]
+        : [
+            { name: 'Grupo seleccionado', value: `Grupo ${result.contributionGroupId} · ${result.contributionGroupLabel}` },
+            { name: 'Base aplicada', value: `${formatEuro(result.contributionBase)}/mes` },
+            { name: 'Tipo trabajador', value: percent(socialContributions.workerContributionRate) },
+            { name: 'Cuota trabajador', value: formatEuro(socialContributions.workerContributionsAnnual) },
+            { name: 'Tipo empresa', value: percent(socialContributions.companyContributionRate) },
+            { name: 'Aportacion empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
           ],
-        },
-        {
-          id: 'irpf-state-2005',
-          name: 'Escala estatal del IRPF',
-          officialSource: 'Boletin Oficial del Estado (BOE)',
-          sourceDetail: 'Real Decreto Legislativo 3/2004, texto vigente en 2005',
-          url: 'https://www.boe.es/buscar/act.php?id=BOE-A-2004-4347&p=20051231&tn=1',
-          urlLabel: 'boe.es · Ley del IRPF vigente en 2005',
-          values: [
-            { name: 'Base liquidable', value: formatEuro(result.taxableBase) },
-            { name: 'Cuota estatal', value: formatEuro(result.stateTax) },
-          ],
-        },
-        {
-          id: 'irpf-madrid-2005',
-          name: 'Escala complementaria de Madrid',
-          officialSource: 'Comunidad de Madrid / BOE',
-          sourceDetail: 'Ley 5/2004, de Medidas Fiscales y Administrativas',
-          url: 'https://www.boe.es/eli/es-m/l/2004/12/27/5',
-          urlLabel: 'boe.es · Ley 5/2004 de Madrid',
-          values: [{ name: 'Cuota complementaria', value: formatEuro(result.regionalTax) }],
-        },
-        {
-          id: 'vat-proxy-2005',
-          name: 'Proxy de IVA sobre el salario neto',
-          officialSource: 'Instituto Nacional de Estadistica (INE)',
-          sourceDetail: 'Encuesta de Presupuestos Familiares 2024, tabla 73809',
-          url: 'https://ine.es/jaxiT3/Tabla.htm?L=0&t=73809',
-          urlLabel: 'ine.es · EPF 2024 · tabla 73809',
-          status: 'estimated',
-          values: [
-            { name: 'Tipo efectivo proxy', value: `${result.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 2 })} %` },
-            { name: 'IVA estimado', value: formatEuro(result.vat) },
-          ],
-          note: 'Proxy contemporaneo para contexto: no representa el IVA historico observado en 2005.',
-        },
-      ]
     }
 
+    const atEpItem: CalculationSourceItem = {
+      id: `at-ep-${taxYear}`,
+      name: 'Tarifa de accidentes de trabajo y enfermedades profesionales',
+      ...resolveAtEpSourceRef(atEpParamsJson.sources),
+      values: [
+        { name: 'Actividad u ocupacion', value: `${atEpCategory.code} · ${atEpCategory.label}` },
+        { name: 'IT', value: `${atEpCategory.it_percent.toLocaleString('es-ES')} %` },
+        { name: 'IMS', value: `${atEpCategory.ims_percent.toLocaleString('es-ES')} %` },
+        { name: 'Total aplicado', value: `${(atEpCategory.it_percent + atEpCategory.ims_percent).toLocaleString('es-ES')} %` },
+      ],
+    }
+
+    const irpfStateItem: CalculationSourceItem = {
+      id: `irpf-state-${taxYear}`,
+      name: isLegacyYear ? 'Escala estatal del IRPF' : 'Escala estatal, minimos y reducciones del IRPF',
+      ...sourceRefs.irpfState,
+      values: isLegacyYear
+        ? [
+            { name: 'Base liquidable', value: formatEuro(result.taxableBase) },
+            { name: 'Cuota estatal', value: formatEuro(result.stateTax) },
+          ]
+        : [
+            { name: 'Base liquidable', value: formatEuro(result.taxableBase) },
+            { name: 'Minimo estatal', value: formatEuro(result.stateMinimum) },
+            { name: 'Reducciones aplicadas', value: formatEuro(result.baseReductionsApplied) },
+            { name: 'Cuota estatal', value: formatEuro(result.stateTax) },
+          ],
+    }
+
+    const irpfRegionalItem: CalculationSourceItem = {
+      id: `irpf-region-${result.effectiveRegion}-${taxYear}`,
+      name: isLegacyYear ? 'Escala complementaria de Madrid' : `Escala autonomica del IRPF · ${regionLabel}`,
+      ...sourceRefs.irpfRegional,
+      values: isLegacyYear
+        ? [{ name: 'Cuota complementaria', value: formatEuro(result.regionalTax) }]
+        : [
+            { name: 'Minimo autonomico', value: formatEuro(result.regionalMinimum) },
+            { name: 'Cuota autonomica', value: formatEuro(result.regionalTax) },
+            { name: 'Deducciones de cuota', value: formatEuro(result.quotaDeductionsApplied) },
+            { name: 'IRPF final', value: formatEuro(result.irpf) },
+          ],
+    }
+
+    // Con consumo declarado se aplican los tipos oficiales de IVA; sin el, la referencia
+    // es el proxy de la EPF, que es otro dataset y por tanto otra fuente.
     const vatItem: CalculationSourceItem = hasAssignedConsumption
       ? {
           id: 'vat-declared-consumption',
           name: 'Tipos de IVA aplicados al consumo declarado',
-          officialSource: 'Agencia Estatal de Administracion Tributaria (AEAT)',
-          sourceDetail: 'Tipos impositivos de IVA',
-          url: 'https://sede.agenciatributaria.gob.es/Sede/iva/calculo-iva-repercutido-clientes/tipos-impositivos-iva.html',
-          urlLabel: 'sede.agenciatributaria.gob.es · Tipos de IVA',
+          ...sourceRefs.vat,
           status: 'estimated',
           values: [
             { name: 'Gasto declarado', value: formatEuro(result.annualConsumption) },
@@ -801,80 +827,21 @@ export function FiscalWorkerDashboard() {
       : {
           id: 'vat-epf-proxy',
           name: 'Proxy de IVA medio por nivel de ingresos',
-          officialSource: 'Instituto Nacional de Estadistica (INE)',
-          sourceDetail: 'Encuesta de Presupuestos Familiares 2024, tabla 73809',
-          url: 'https://ine.es/jaxiT3/Tabla.htm?L=0&t=73809',
-          urlLabel: 'ine.es · EPF 2024 · tabla 73809',
+          ...describeSource(VAT_PROXY_SOURCE),
           status: 'estimated',
           values: [
             { name: 'Neto usado como aproximacion', value: formatEuro(result.annualConsumption) },
             { name: 'Tipo efectivo proxy', value: `${result.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 2 })} %` },
             { name: 'IVA estimado', value: formatEuro(result.vat) },
           ],
-          note: 'La EPF mide hogares, no salarios individuales; el valor es orientativo y no una liquidacion.',
+          note: isLegacyYear
+            ? 'Proxy contemporaneo para contexto: no representa el IVA historico observado en 2005.'
+            : 'La EPF mide hogares, no salarios individuales; el valor es orientativo y no una liquidacion.',
         }
 
-    return [
-      {
-        id: 'social-security-2025',
-        name: 'Bases y tipos de cotizacion del Regimen General',
-        officialSource: 'Boletin Oficial del Estado (BOE)',
-        sourceDetail: 'Orden PJC/178/2025, de 25 de febrero',
-        url: 'https://www.boe.es/buscar/act.php?id=BOE-A-2025-3780',
-        urlLabel: 'boe.es · Orden PJC/178/2025',
-        values: [
-          { name: 'Grupo seleccionado', value: `Grupo ${result.contributionGroupId} · ${result.contributionGroupLabel}` },
-          { name: 'Base aplicada', value: `${formatEuro(result.contributionBase)}/mes` },
-          { name: 'Tipo trabajador', value: percent(socialContributions.workerContributionRate) },
-          { name: 'Cuota trabajador', value: formatEuro(socialContributions.workerContributionsAnnual) },
-          { name: 'Tipo empresa', value: percent(socialContributions.companyContributionRate) },
-          { name: 'Aportacion empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
-        ],
-      },
-      {
-        id: 'at-ep-2025',
-        name: 'Tarifa de accidentes de trabajo y enfermedades profesionales',
-        officialSource: 'Boletin Oficial del Estado (BOE)',
-        sourceDetail: 'Ley 42/2006, disposicion adicional cuarta',
-        url: 'https://www.boe.es/buscar/act.php?id=BOE-A-2006-22865&p=20181229&tn=0',
-        urlLabel: 'boe.es · Tarifa oficial AT/EP',
-        values: [
-          { name: 'Actividad u ocupacion', value: `${atEpCategory.code} · ${atEpCategory.label}` },
-          { name: 'IT', value: `${atEpCategory.it_percent.toLocaleString('es-ES')} %` },
-          { name: 'IMS', value: `${atEpCategory.ims_percent.toLocaleString('es-ES')} %` },
-          { name: 'Total aplicado', value: `${(atEpCategory.it_percent + atEpCategory.ims_percent).toLocaleString('es-ES')} %` },
-        ],
-      },
-      {
-        id: 'irpf-state-2025',
-        name: 'Escala estatal, minimos y reducciones del IRPF',
-        officialSource: 'Agencia Estatal de Administracion Tributaria (AEAT)',
-        sourceDetail: 'Manual practico Renta 2025',
-        url: 'https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c15-calculo-impuesto-determinacion-cuotas-integras/gravamen-base-liquidable-general/gravamen-estatal.html',
-        urlLabel: 'sede.agenciatributaria.gob.es · Gravamen estatal 2025',
-        values: [
-          { name: 'Base liquidable', value: formatEuro(result.taxableBase) },
-          { name: 'Minimo estatal', value: formatEuro(result.stateMinimum) },
-          { name: 'Reducciones aplicadas', value: formatEuro(result.baseReductionsApplied) },
-          { name: 'Cuota estatal', value: formatEuro(result.stateTax) },
-        ],
-      },
-      {
-        id: `irpf-region-${result.effectiveRegion}`,
-        name: `Escala autonomica del IRPF · ${regionLabel}`,
-        officialSource: 'Agencia Estatal de Administracion Tributaria (AEAT)',
-        sourceDetail: `Manual practico Renta 2025 · ${regionLabel}`,
-        url: autonomicCoverage.autonomic_general_scales[result.effectiveRegion]?.source_url ?? autonomicCoverage.autonomic_general_scales.madrid.source_url,
-        urlLabel: `sede.agenciatributaria.gob.es · Escala de ${regionLabel}`,
-        values: [
-          { name: 'Minimo autonomico', value: formatEuro(result.regionalMinimum) },
-          { name: 'Cuota autonomica', value: formatEuro(result.regionalTax) },
-          { name: 'Deducciones de cuota', value: formatEuro(result.quotaDeductionsApplied) },
-          { name: 'IRPF final', value: formatEuro(result.irpf) },
-        ],
-      },
-      vatItem,
-    ]
+    return isLegacyYear
+      ? [socialSecurityItem, irpfStateItem, irpfRegionalItem, vatItem]
+      : [socialSecurityItem, atEpItem, irpfStateItem, irpfRegionalItem, vatItem]
   }, [hasAssignedConsumption, occupationalAccidentsCategoryId, result, socialContributions, taxYear])
 
   const payrollLiveData = useMemo(() => ({

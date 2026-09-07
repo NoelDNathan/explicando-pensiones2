@@ -8,6 +8,8 @@ export type CalculationSourceItem = {
   sourceDetail: string
   url: string
   urlLabel: string
+  /** Norma complementaria, como una correccion de erratas, cuando el dataset la declara. */
+  supportingUrl?: string
   values: Array<{ name: string; value: string }>
   status?: 'official' | 'estimated'
   note?: string
@@ -88,10 +90,20 @@ export function WorkerCalculationSourcesCard({ year = 2025, items = DEMO_ITEMS }
               </dl>
 
               <div className="wcsc-source-footer">
-                <a href={item.url} target="_blank" rel="noreferrer">
-                  <span>{item.urlLabel}</span>
-                  <ExternalLink size={16} aria-hidden="true" />
-                </a>
+                {item.url ? (
+                  <a href={item.url} target="_blank" rel="noreferrer">
+                    <span>{item.urlLabel}</span>
+                    <ExternalLink size={16} aria-hidden="true" />
+                  </a>
+                ) : (
+                  <p className="wcsc-source-nolink">Sin enlace registrado para este parametro.</p>
+                )}
+                {item.supportingUrl ? (
+                  <a href={item.supportingUrl} target="_blank" rel="noreferrer">
+                    <span>Norma complementaria</span>
+                    <ExternalLink size={16} aria-hidden="true" />
+                  </a>
+                ) : null}
                 {item.note ? <p>{item.note}</p> : null}
               </div>
             </div>

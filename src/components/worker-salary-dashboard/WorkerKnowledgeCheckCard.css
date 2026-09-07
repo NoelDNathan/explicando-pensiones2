@@ -779,13 +779,34 @@
   background: var(--wkcc-red-soft);
 }
 
+/* La fila entera es el asa con raton: se arrastra desde cualquier punto. */
+.wkcc-order__item.is-draggable {
+  cursor: grab;
+}
+
+.wkcc-order__item.is-draggable .wkcc-order__label {
+  user-select: none;
+}
+
+.wkcc-order__item.is-draggable:hover {
+  border-color: var(--wkcc-line-strong);
+}
+
+.wkcc-order__item.is-draggable:hover .wkcc-order__grip {
+  color: var(--wkcc-primary-strong);
+}
+
 .wkcc-order__item.is-dragging {
+  cursor: grabbing;
   border-color: var(--wkcc-primary);
   background: var(--wkcc-primary-soft);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--wkcc-primary) 22%, transparent);
 }
 
-/* Asa de arrastre: `touch-action: none` para que el dedo mueva la fila y no la pagina. */
+/*
+ * Con el dedo solo se arrastra desde el asa (`touch-action: none`): asi el resto
+ * de la fila sigue sirviendo para desplazar la pagina.
+ */
 .wkcc-order__grip {
   display: inline-flex;
   align-items: center;
@@ -793,28 +814,15 @@
   flex: none;
   width: 26px;
   height: 30px;
-  padding: 0;
   color: var(--wkcc-muted);
-  cursor: grab;
-  border: 0;
   border-radius: 8px;
-  background: transparent;
   touch-action: none;
 }
 
-.wkcc-order__grip:hover:not(:disabled) {
-  color: var(--wkcc-primary-strong);
-  background: var(--wkcc-primary-soft);
-}
-
-.wkcc-order__grip:active:not(:disabled) {
-  cursor: grabbing;
-}
-
-.wkcc-order__grip:disabled {
+.wkcc-order__item:not(.is-draggable) .wkcc-order__grip {
   opacity: 0.4;
-  cursor: default;
 }
+
 
 .wkcc-order__position {
   display: inline-flex;

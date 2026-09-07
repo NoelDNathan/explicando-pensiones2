@@ -2734,6 +2734,10 @@
   color: var(--fiscal-blue);
 }
 
+.fwd--soft .wcsc-source-footer p.wcsc-source-nolink {
+  color: var(--fiscal-orange);
+}
+
 @media (max-width: 1100px) {
   .fwd--soft .wscc-toolbar {
     grid-template-columns: minmax(0, 1fr);

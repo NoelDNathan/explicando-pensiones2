@@ -48,6 +48,8 @@ import type { KnowledgeCheckReport, ReportStatus } from './knowledgeCheckReporti
 import './WorkerKnowledgeCheckCard.css'
 
 const STORAGE_KEY = 'fwd-knowledge-check-2025-v2'
+/** Pixeles que hay que recorrer antes de tratar un clic como arrastre. */
+const ORDER_DRAG_THRESHOLD = 4
 
 type AnswerValue =
   | { kind: 'single'; choiceId: string }
@@ -209,6 +211,15 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
   const [drag, setDrag] = useState<DragState | null>(null)
   /** Tras soltar una ficha, el navegador aun dispara el `click`: hay que ignorarlo. */
   const skipNextMatchClick = useRef(false)
+  /** Fila de «ordenar» pulsada, a la espera de moverse lo bastante para arrastrar. */
+  const orderPress = useRef<{
+    questionId: string
+    itemId: string
+    label: string
+    pointerId: number
+    x: number
+    y: number
+  } | null>(null)
   const [reportStatus, setReportStatus] = useState<ReportStatus>(stored?.phase === 'results' ? 'queued' : 'idle')
 
   useEffect(() => {
@@ -467,23 +478,48 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
           setAnswer(question.id, { kind: 'order', order: next })
         }
 
-        const startDrag = (event: ReactPointerEvent<HTMLButtonElement>, item: KnowledgeOrderItem) => {
+        /*
+         * Se agarra desde cualquier punto de la fila. Con raton el arrastre
+         * empieza en cuanto el puntero se mueve un poco (asi un clic suelto no
+         * lo dispara); con el dedo solo desde el asa, para que el resto de la
+         * fila siga sirviendo para desplazar la pagina.
+         */
+        const pressRow = (event: ReactPointerEvent<HTMLLIElement>, item: KnowledgeOrderItem) => {
           if (showFeedback) return
           if (event.pointerType === 'mouse' && event.button !== 0) return
-          capturePointer(event)
-          setDrag({
-            kind: 'order',
+          const target = event.target instanceof Element ? event.target : null
+          if (target?.closest('.wkcc-order__moves')) return
+          if (event.pointerType !== 'mouse' && !target?.closest('.wkcc-order__grip')) return
+          if (event.pointerType === 'mouse') event.preventDefault()
+          orderPress.current = {
             questionId: question.id,
             itemId: item.id,
             label: item.label,
+            pointerId: event.pointerId,
             x: event.clientX,
             y: event.clientY,
-          })
+          }
+          capturePointer(event)
         }
 
-        /* Reordena en vivo: la pieza arrastrada ocupa la fila que hay bajo el dedo. */
-        const moveDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
-          if (!dragging) return
+        /* Reordena en vivo: la pieza arrastrada ocupa la fila que hay bajo el cursor. */
+        const moveRow = (event: ReactPointerEvent<HTMLLIElement>) => {
+          if (!dragging) {
+            const press = orderPress.current
+            if (!press || press.questionId !== question.id || press.pointerId !== event.pointerId) return
+            const travelled = Math.abs(event.clientX - press.x) + Math.abs(event.clientY - press.y)
+            if (travelled < ORDER_DRAG_THRESHOLD) return
+            setDrag({
+              kind: 'order',
+              questionId: question.id,
+              itemId: press.itemId,
+              label: press.label,
+              x: event.clientX,
+              y: event.clientY,
+            })
+            return
+          }
+
           setDrag({ ...dragging, x: event.clientX, y: event.clientY })
           const under = document.elementFromPoint(event.clientX, event.clientY)
           const slot = under?.closest('[data-order-slot]')
@@ -494,8 +530,9 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
           move(from, target)
         }
 
-        const endDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+        const releaseRow = (event: ReactPointerEvent<HTMLLIElement>) => {
           releasePointer(event)
+          orderPress.current = null
           setDrag(null)
         }
 
@@ -511,23 +548,18 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                 const isDragged = dragging?.itemId === itemId
                 return (
                   <li
-                    className={`wkcc-order__item${tone}${isDragged ? ' is-dragging' : ''}`}
+                    className={`wkcc-order__item${tone}${isDragged ? ' is-dragging' : ''}${showFeedback ? '' : ' is-draggable'}`}
                     key={itemId}
                     data-order-slot={position}
                     data-order-question={question.id}
+                    onPointerDown={(event) => pressRow(event, item)}
+                    onPointerMove={moveRow}
+                    onPointerUp={releaseRow}
+                    onPointerCancel={releaseRow}
                   >
-                    <button
-                      type="button"
-                      className="wkcc-order__grip"
-                      onPointerDown={(event) => startDrag(event, item)}
-                      onPointerMove={moveDrag}
-                      onPointerUp={endDrag}
-                      onPointerCancel={endDrag}
-                      disabled={showFeedback}
-                      aria-label={`Arrastrar «${item.label}»`}
-                    >
-                      <GripVertical size={16} aria-hidden="true" />
-                    </button>
+                    <span className="wkcc-order__grip" aria-hidden="true">
+                      <GripVertical size={16} />
+                    </span>
                     <span className="wkcc-order__position" aria-hidden="true">
                       {position + 1}
                     </span>

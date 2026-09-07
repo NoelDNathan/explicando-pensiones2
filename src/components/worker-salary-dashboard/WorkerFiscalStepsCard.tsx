@@ -310,9 +310,11 @@ La calculadora lo convierte en una referencia mensual dividiendo el total anual 
     id: 2,
     title: 'Limites de cotizacion',
     subtitle: 'Del bruto a la base de cotizacion',
-    description: ` Para calcular cuánto pagas a la Seguridad Social, se toma como referencia tu salario. Sin embargo, cada grupo de cotización establece una base mínima y una máxima.
+    description: ` Para calcular cuánto pagas a la Seguridad Social, se toma como referencia tu salario. 
                    
-    Si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pension). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.
+    Sin embargo, si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pension). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.
+    
+    Hay diferentes grupos de cotización dependiendo de tu tipo de trabajo, cada grupo tiene un mínimo y un máximo de cotización distinto.
     
     En este paso, calculamos tu base de cotización y en el siguiente veremos cuanto pagas en consecuencia de esta base.`,
     checklist: [],
