@@ -20,7 +20,7 @@
 
   display: grid;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-top: 12px;
   padding: clamp(12px, 1.3vw, 18px);
   border: 1px solid var(--wfme-line);
   border-radius: 10px;

@@ -275,6 +275,7 @@
  * mas opacidad. Es una animacion de layout, pero de un solo panel y de 190ms.
  */
 .wir-sim > .salary-slider,
+.wir-sim .wir-split,
 .wir-sim .wir-kpi {
   transition:
     padding var(--wir-morph) ease-out,
@@ -521,6 +522,97 @@
   gap: 12px;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   margin-top: 20px;
+}
+
+.wir-split {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+  margin: 0 0 12px;
+}
+
+.wir-split__term {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--wir-border-soft);
+  border-radius: 12px;
+  background: var(--wir-surface);
+}
+
+.wir-split__term[data-op]::before {
+  grid-column: 1 / -1;
+}
+
+.wir-split__term dt {
+  color: var(--wir-faint);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.wir-split__term dd {
+  margin: 0;
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.wir-split__term[data-op] {
+  position: relative;
+}
+
+.wir-split__term.is-result {
+  border-color: var(--wir-green-line);
+  background: var(--wir-green-tint);
+}
+
+.wir-split__term.is-result dd {
+  color: var(--wir-green);
+}
+
+.wir-split__term[data-op="minus"]::after,
+.wir-split__term[data-op="equals"]::after {
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--wir-muted);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.wir-split__term[data-op="minus"]::after {
+  content: "−";
+}
+
+.wir-split__term[data-op="equals"]::after {
+  content: "=";
+  color: var(--wir-green);
+}
+
+.wir-sim.is-stuck .wir-split {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .wir-split {
+    grid-template-columns: 1fr;
+  }
+
+  .wir-split__term[data-op="minus"]::after,
+  .wir-split__term[data-op="equals"]::after {
+    left: 12px;
+    top: -2px;
+    transform: none;
+  }
+
+  .wir-split__term[data-op] {
+    padding-left: 28px;
+  }
 }
 
 .wir-kpi {

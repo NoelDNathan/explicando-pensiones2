@@ -1508,8 +1508,40 @@ export function WorkerPersonalReductionsCard({
             </header>
             {showNetIncomeEquation ? (
               <dl className="wprc-net-income__equation">
-                <div className="wprc-net-income__term">
-                  <dt>Salario bruto anual</dt>
+                {inKindExemptApplied > 0.5 ? (
+                  <>
+                    <div className="wprc-net-income__term">
+                      <dt>
+                        Salario bruto anual
+                        <small>el del paso 1, especie incluida</small>
+                      </dt>
+                      <dd>{formatEuro(declaredGrossWorkIncome)}</dd>
+                    </div>
+                    <div className="wprc-net-income__term" data-op="minus">
+                      <dt>
+                        Salario en especie
+                        <small>parte exenta del paso 4</small>
+                      </dt>
+                      <dd>{formatEuro(inKindExemptApplied)}</dd>
+                    </div>
+                    {inKindLive.paymentOnAccountAdded > 0 ? (
+                      <div className="wprc-net-income__term" data-op="plus">
+                        <dt>
+                          Ingreso a cuenta no repercutido
+                          <small>lo asume la empresa y suma</small>
+                        </dt>
+                        <dd>{formatEuro(inKindLive.paymentOnAccountAdded)}</dd>
+                      </div>
+                    ) : null}
+                  </>
+                ) : null}
+                <div
+                  className="wprc-net-income__term"
+                  data-op={inKindExemptApplied > 0.5 ? "equals" : undefined}
+                >
+                  <dt>
+                    {inKindExemptApplied > 0.5 ? "Bruto que tributa en IRPF" : "Salario bruto anual"}
+                  </dt>
                   <dd>{formatEuro(taxableWorkIncome)}</dd>
                 </div>
                 <div className="wprc-net-income__term" data-op="minus">
@@ -1602,6 +1634,7 @@ export function WorkerPersonalReductionsCard({
           <WorkIncomeReductionExplainer
             variant="embedded"
             initialGrossSalaryAnnual={declaredGrossWorkIncome}
+            inKindExemptAnnual={Math.max(0, inKindExemptApplied - inKindLive.paymentOnAccountAdded)}
             region={region}
             contributionGroup={contributionGroup}
             stateMinimum={statePersonalFamilyMinimum || undefined}
@@ -1630,8 +1663,23 @@ export function WorkerPersonalReductionsCard({
                   <>
                     <div className="wprc-chain__step is-context">
                       <dt>Salario bruto anual</dt>
-                      <dd>{formatEuro(taxableWorkIncome)}</dd>
+                      <dd>{formatEuro(declaredGrossWorkIncome)}</dd>
                     </div>
+                    {inKindExemptApplied > 0.5 ? (
+                      <div className="wprc-chain__step is-minus is-applied is-context" data-op="minus">
+                        <dt>Salario en especie</dt>
+                        <dd>
+                          {formatEuro(inKindExemptApplied)}
+                          <small>exenta, paso 4</small>
+                        </dd>
+                      </div>
+                    ) : null}
+                    {inKindExemptApplied > 0.5 ? (
+                      <div className="wprc-chain__step is-subresult is-context" data-op="equals">
+                        <dt>Bruto que tributa</dt>
+                        <dd>{formatEuro(taxableWorkIncome)}</dd>
+                      </div>
+                    ) : null}
                     <div className="wprc-chain__step is-minus is-applied is-context" data-op="minus">
                       <dt>Seguridad Social</dt>
                       <dd>

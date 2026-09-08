@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-02
+Fecha: 2026-09-07
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -34,6 +34,16 @@ fuentes del calculo.
   automaticas.
 - Todo se calcula en el navegador y se guarda en `localStorage`; no hay backend.
 - El paso 13 lee las fuentes de los propios datasets (`fiscalSourceRefs.ts`), no de constantes.
+- El simulador de la reduccion del paso 5 muestra una cajita *bruto − especie =
+  lo que tributa*. El slider sigue siendo el salario de nomina; la Seguridad Social
+  cotiza sobre ese bruto y el IRPF usa el resto.
+- El paso 6 define el IRPF (Impuesto sobre la Renta de las Personas Físicas) antes de
+  explicar escalas y tramos. Tipo marginal y tipo efectivo van como definiciones, no
+  como un parrafo suelto.
+- El paso 7 explica la deduccion como resta de la cuota (con ejemplo 3.000 € − 200 €), no
+  como lista de partidas. Ya no hay recuadro lateral «No aparece en la nómina».
+- El paso 8 define el IVA (Impuesto sobre el Valor Añadido) y los impuestos especiales
+  antes de pedir el reparto del gasto; el subtítulo es «El impuesto sobre lo que compras».
 
 ### Datos
 

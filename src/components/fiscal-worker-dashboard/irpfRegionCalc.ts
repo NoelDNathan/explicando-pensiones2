@@ -140,6 +140,12 @@ export type BaseProfileOptions = {
   regionalMinimum?: number
   /** Ajustes del contribuyente; sin ellos se asume el perfil base sin extras. */
   adjustments?: Irpf2025AdjustmentInput
+  /**
+   * Especie exenta neta (exencion menos ingreso a cuenta no repercutido).
+   * El salario que se pasa es el bruto de nomina: cotiza entero; el IRPF usa
+   * ese bruto menos esta cantidad.
+   */
+  inKindExemptAnnual?: number
 }
 
 /**
@@ -152,8 +158,10 @@ export function computeBaseProfileIrpf2025Detail(
   options: BaseProfileOptions = {},
 ): BaseProfileIrpfDetail {
   const region = options.region ?? 'madrid'
-  const gross = Math.max(0, grossSalaryAnnual)
-  const monthlySalary = gross / 12
+  const payrollGross = Math.max(0, grossSalaryAnnual)
+  const inKindExempt = Math.max(0, options.inKindExemptAnnual ?? 0)
+  const irpfGross = Math.max(0, payrollGross - inKindExempt)
+  const monthlySalary = payrollGross / 12
 
   const group = params.social_security.base_limits_monthly_eur.min_by_group.find(
     (item) => item.group === (options.contributionGroup ?? CONTRIBUTION_GROUP),
@@ -180,7 +188,7 @@ export function computeBaseProfileIrpf2025Detail(
     coverage.autonomic_general_scales.madrid.brackets
   const regionalMinimum = options.regionalMinimum ?? baseMinimum(getMinimums(region))
   const coreIrpf = calculateIrpf2025Core({
-    grossWorkIncome: gross,
+    grossWorkIncome: irpfGross,
     article19ExpensesBeforeOtherExpenses: employeeSocialSecurity,
     article19OtherExpenses: params.irpf.work_income_deductible_expenses_eur.general_other_expenses,
     stateMinimum,
@@ -192,7 +200,7 @@ export function computeBaseProfileIrpf2025Detail(
 
   return {
     region,
-    grossSalaryAnnual: gross,
+    grossSalaryAnnual: payrollGross,
     employeeSocialSecurity,
     core: coreIrpf,
     context: { stateMinimum, regionalMinimum, stateScale, regionalScale },

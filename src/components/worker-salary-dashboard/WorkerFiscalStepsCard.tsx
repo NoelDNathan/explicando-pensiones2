@@ -32,11 +32,17 @@ type WorkerFiscalStepConcept = {
   body: ReactNode
 }
 
+type WorkerFiscalStepDefinition = {
+  term: string
+  meaning: string
+}
+
 type WorkerFiscalStep = {
   id: number
   title: string
   subtitle: string
   description: string
+  definitions?: WorkerFiscalStepDefinition[]
   concepts?: WorkerFiscalStepConcept[]
   checklist: string[]
   helpTitle: string
@@ -467,10 +473,20 @@ Completa únicamente los apartados que correspondan a tu situación.`,
   {
     id: 6,
     title: 'IRPF por tramos',
-    subtitle: 'El IRPF no aplica un unico porcentaje',
-    description: `El IRPF reparte la base liquidable entre una escala estatal y otra autonómica. Cada porcentaje se aplica solo a la parte de renta que cae en ese tramo.
+    subtitle: 'El impuesto sobre lo que ganas',
+    description: `El IRPF es el Impuesto sobre la Renta de las Personas Físicas: el impuesto personal que pagas a Hacienda sobre lo que ganas en el año. En el paso 5 calculamos la base liquidable, que es la cantidad sobre la que se aplica.
 
-El tipo marginal afecta al siguiente euro; el tipo efectivo resume lo pagado sobre el conjunto.`,
+No cobra un único porcentaje sobre toda tu renta. Reparte esa base entre una escala estatal y otra autonómica, y cada porcentaje se aplica solo a la parte que cae en ese tramo.`,
+    definitions: [
+      {
+        term: 'Tipo marginal',
+        meaning: 'Afecta al siguiente euro.',
+      },
+      {
+        term: 'Tipo efectivo',
+        meaning: 'Resume lo pagado sobre el conjunto.',
+      },
+    ],
     checklist: [],
     helpTitle: 'Tipo marginal y tipo efectivo',
     helpBody: 'El tipo marginal afecta solo al siguiente euro que entra en ese tramo. El tipo efectivo es la media real que pagas sobre toda la base.',
@@ -485,12 +501,12 @@ El tipo marginal afecta al siguiente euro; el tipo efectivo resume lo pagado sob
   {
     id: 7,
     title: 'Deducciones de cuota',
-    subtitle: 'Lo que restas de la cuota, no de la base',
-    description: `En el paso 5 calculamos la base liquidable y en el 6 has visto salir la cuota por tramos. Lo que respondas aquí resta de esa cuota, euro a euro.
+    subtitle: 'Bajan el impuesto, no lo que ganas',
+    description: `En el paso 6 hemos calculado la cuota: lo que te sale a pagar de IRPF según los tramos.
 
-Es el último ajuste del IRPF: donativos, alquiler, inversión en empresa nueva, las deducciones reembolsables y lo que ya te han retenido en la nómina.
+Una deducción es una cantidad que, si cumples los requisitos, puedes restar de esa cuota. No reduce tu salario ni tu base: reduce el impuesto. Si te salían 3.000 € a pagar y tienes 200 € de deducción, pagas 2.800 €.
 
-Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o certificado de retenciones.`,
+Completa únicamente lo que puedas acreditar.`,
     concepts: [
       {
         id: 'reduction-vs-deduction',
@@ -498,16 +514,11 @@ Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o 
         body: (
           <>
             <p>
-              No es lo mismo restar de la base que restar de la cuota. Una reducción baja la cantidad sobre
-              la que se calculan los tramos: ahorras tu tipo marginal. Una deducción resta al final, de lo
-              que ya salía a pagar: 1 € de deducción te ahorra 1 €.
+              En el paso 5 las reducciones bajaban la base, y por eso ahorrabas solo una parte: tu tipo
+              marginal. Aquí la resta es del impuesto ya calculado: cada euro de deducción te ahorra un euro.
             </p>
             <p className="wfsc-concept__formula">1 € de deducción = 1 € menos a pagar</p>
             <p className="wfsc-concept__formula">1 € de reducción ≈ tu tipo marginal (por ejemplo, 0,30 €)</p>
-            <p className="wfsc-concept__later">
-              La cuota de la que restamos aquí es la que acaba de salir en el paso 6, «IRPF por tramos».
-              Allí has visto cómo se forma; aquí la bajamos con lo que puedas acreditar.
-            </p>
           </>
         ),
       },
@@ -544,8 +555,10 @@ Completa únicamente lo que puedas acreditar. Mira los importes en tu nómina o 
   {
     id: 8,
     title: 'IVA y consumo diario',
-    subtitle: 'Impuestos que dependen de como gastas',
-    description: `El IVA y los impuestos especiales dependen de cómo gastas, no solo de lo que cobras. Distribuye tu gasto mensual para obtener una estimación por categorías.
+    subtitle: 'El impuesto sobre lo que compras',
+    description: `El IVA es el Impuesto sobre el Valor Añadido: el impuesto que pagas al comprar bienes o servicios. Va incluido en el precio; no se descuenta de la nómina como el IRPF. Los impuestos especiales se suman en consumos concretos, como carburantes, alcohol, tabaco o energía.
+
+Por eso estos impuestos dependen de cómo gastas, no solo de lo que cobras. Distribuye tu gasto mensual para obtener una estimación por categorías.
 
 Si no completas el reparto, el resumen mantendrá una aproximación general claramente identificada.`,
     checklist: [],
@@ -894,11 +907,10 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 7 && activeStep.id < 11
-  const showConceptHelp = activeStep.id === 7
+  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 7 && activeStep.id < 10
   const isSummaryStep = activeStep.id === 0
-  const isCompactStep = activeStep.id >= 11
-  const heroIsSingle = !showPayrollHelp && !showConceptHelp
+  const isCompactStep = activeStep.id >= 10
+  const heroIsSingle = !showPayrollHelp
   const statusLabel = activeStep.id === 0
     ? 'Resumen rápido'
     : `Paso ${activeStep.id} de ${detailStepCount} · ${activeStep.title}`
@@ -934,8 +946,8 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
       aria-label={isCompactStep ? 'Navegacion del recorrido fiscal' : undefined}
     >
       {!isCompactStep ? (
-        <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isSummaryStep ? ' wfsc-stage--summary' : ''}${showConceptHelp ? ' wfsc-stage--concept' : ''}`}>
-          <div className={`wfsc-hero${heroIsSingle ? ' wfsc-hero--single' : ''}${showConceptHelp ? ' wfsc-hero--concept' : ''}`}>
+        <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isSummaryStep ? ' wfsc-stage--summary' : ''}`}>
+          <div className={`wfsc-hero${heroIsSingle ? ' wfsc-hero--single' : ''}`}>
             <div className="wfsc-hero-main">
               <span className="wfsc-step-orb" aria-hidden="true">
                 <ActiveIcon size={34} strokeWidth={2.35} />
@@ -949,6 +961,16 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
                   {descriptionParagraphs.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
+                  {activeStep.definitions && activeStep.definitions.length > 0 ? (
+                    <dl className="wfsc-defs">
+                      {activeStep.definitions.map((item) => (
+                        <div key={item.term} className="wfsc-defs__item">
+                          <dt>{item.term}</dt>
+                          <dd>{item.meaning}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -956,15 +978,6 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
             {showPayrollHelp ? (
               <aside className="wfsc-help" aria-label="Ayuda del paso activo">
                 <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
-              </aside>
-            ) : null}
-
-            {showConceptHelp ? (
-              <aside className="wfsc-help wfsc-help--concept" aria-label="Aclaración del paso activo">
-                <p className="wfsc-help__eyebrow">No aparece en la nómina</p>
-                <h3>{activeStep.helpTitle}</h3>
-                <p>{activeStep.helpBody}</p>
-                <p className="wfsc-help__note">{activeStep.important}</p>
               </aside>
             ) : null}
           </div>

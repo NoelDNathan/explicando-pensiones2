@@ -382,8 +382,18 @@
 }
 
 .fwd--soft .wfsc-description p,
-.fwd--soft .wfsc-payroll figcaption {
+.fwd--soft .wfsc-payroll figcaption,
+.fwd--soft .wfsc-defs dd {
   color: var(--fiscal-copy);
+}
+
+.fwd--soft .wfsc-defs dt {
+  color: var(--fiscal-ink);
+}
+
+.fwd--soft .wfsc-defs__item {
+  border-left-color: var(--fiscal-blue);
+  background: var(--fiscal-blue-soft);
 }
 
 .fwd--soft .wfsc-copy__subtitle {
@@ -448,29 +458,6 @@
 
 .fwd--soft :is(.wfsc-stage--step-8, .wfsc-stage--step-9) .wfsc-help {
   display: none;
-}
-
-.fwd--soft .wfsc-help--concept {
-  border-color: var(--fiscal-line);
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 8px 20px rgba(35, 54, 78, 0.06);
-}
-
-.fwd--soft .wfsc-help--concept .wfsc-help__eyebrow {
-  color: var(--fiscal-primary);
-}
-
-.fwd--soft .wfsc-help--concept h3 {
-  color: var(--fiscal-ink);
-}
-
-.fwd--soft .wfsc-help--concept > p:not(.wfsc-help__eyebrow):not(.wfsc-help__note) {
-  color: var(--fiscal-copy);
-}
-
-.fwd--soft .wfsc-help--concept .wfsc-help__note {
-  border-top-color: color-mix(in srgb, var(--fiscal-primary) 28%, var(--fiscal-line));
-  color: var(--fiscal-ink);
 }
 
 .fwd--soft .wfsc-nav--previous {

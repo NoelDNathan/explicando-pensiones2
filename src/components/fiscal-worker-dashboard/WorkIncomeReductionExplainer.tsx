@@ -572,6 +572,11 @@ export type WorkIncomeReductionExplainerProps = {
   variant?: 'page' | 'embedded'
   /** Salario real del usuario: el simulador arranca ahi. */
   initialGrossSalaryAnnual?: number
+  /**
+   * Especie exenta neta del paso 4. El slider es el bruto de nomina;
+   * el IRPF resta esta cantidad y la Seguridad Social cotiza sobre el bruto entero.
+   */
+  inKindExemptAnnual?: number
   region?: string
   contributionGroup?: number
   stateMinimum?: number
@@ -584,6 +589,7 @@ export type WorkIncomeReductionExplainerProps = {
 export function WorkIncomeReductionExplainer({
   variant = 'page',
   initialGrossSalaryAnnual,
+  inKindExemptAnnual = 0,
   region,
   contributionGroup,
   stateMinimum,
@@ -592,23 +598,47 @@ export function WorkIncomeReductionExplainer({
   otherIncomeKnown = true,
 }: WorkIncomeReductionExplainerProps = {}) {
   const embedded = variant === 'embedded'
+  const inKindExempt = Math.max(0, inKindExemptAnnual)
   // "Tu caso" se calcula siempre con el salario real, aunque quede fuera del
   // rango del simulador; el slider solo controla el escenario que se explora.
   const realGross = Math.max(0, initialGrossSalaryAnnual ?? 18_000)
   const realGrossInSliderRange = realGross >= MIN_GROSS && realGross <= MAX_GROSS
   const anchorGross = realGrossInSliderRange ? clampGross(realGross) : DEFAULT_SIMULATED_GROSS
   const [gross, setGross] = useState(anchorGross)
+  const lastAnchorRef = useRef(anchorGross)
   const [hoveredMarginal, setHoveredMarginal] = useState<CurvePoint | null>(null)
   const [showKpis, setShowKpis] = useState(true)
   const [showSim, setShowSim] = useState(true)
   const { sentinelRef, stuck } = useStuckSentinel()
 
+  useEffect(() => {
+    setGross((current) =>
+      Math.abs(current - lastAnchorRef.current) <= 1 ? anchorGross : current,
+    )
+    lastAnchorRef.current = anchorGross
+  }, [anchorGross])
+
   const profile = useMemo<BaseProfileOptions>(() => {
     const adjustments = createEmptyIrpf2025Adjustments()
     adjustments.otherIncomeKnown = otherIncomeKnown
     adjustments.otherNonExemptNonWorkIncome = Math.max(0, otherNonExemptNonWorkIncome)
-    return { region, contributionGroup, stateMinimum, regionalMinimum, adjustments }
-  }, [contributionGroup, otherIncomeKnown, otherNonExemptNonWorkIncome, region, regionalMinimum, stateMinimum])
+    return {
+      region,
+      contributionGroup,
+      stateMinimum,
+      regionalMinimum,
+      adjustments,
+      inKindExemptAnnual: inKindExempt,
+    }
+  }, [
+    contributionGroup,
+    inKindExempt,
+    otherIncomeKnown,
+    otherNonExemptNonWorkIncome,
+    region,
+    regionalMinimum,
+    stateMinimum,
+  ])
 
   const curve = useMemo(() => buildCurve(profile), [profile])
   const detail = useMemo(() => computeBaseProfileIrpf2025Detail(gross, profile), [gross, profile])
@@ -785,8 +815,9 @@ export function WorkIncomeReductionExplainer({
               */}
             <p className="wir-acronym">
               <strong>RNT = rendimiento neto del trabajo</strong>
-              {embedded ? ', el que calculamos en el punto 1' : ''}: tu salario bruto menos tu parte
-              de la Seguridad Social. Un matiz: para elegir tramo se mide{' '}
+              {embedded ? ', el que calculamos en el punto 1' : ''}: tu salario bruto
+              {inKindExempt > 0.5 ? ', menos la especie exenta' : ''} menos tu parte de la
+              Seguridad Social. Un matiz: para elegir tramo se mide{' '}
               <em>antes</em> de restar los {euro(2_000)} de gastos deducibles, así que aquí sale{' '}
               {euro(2_000)} más alto.
             </p>
@@ -920,18 +951,36 @@ export function WorkIncomeReductionExplainer({
           </div>
 
           {simCollapsed ? null : (
-            <SalarySlider
-              value={gross}
-              onChange={setGross}
-              min={MIN_GROSS}
-              max={MAX_GROSS}
-              step={100}
-              markers={[10_000, 14_000, 18_000, 24_000, MAX_GROSS]}
-              trackStops={trackStops}
-              unitLabel="brutos al año"
-              id="wir-salary"
-              ariaLabel="Salario bruto anual para el simulador de la reducción"
-            />
+            <>
+              {inKindExempt > 0.5 ? (
+                <dl className="wir-split" aria-label="Salario bruto menos especie exenta">
+                  <div className="wir-split__term">
+                    <dt>Salario bruto</dt>
+                    <dd>{euro(gross)}</dd>
+                  </div>
+                  <div className="wir-split__term" data-op="minus">
+                    <dt>Salario en especie</dt>
+                    <dd>{euro(inKindExempt)}</dd>
+                  </div>
+                  <div className="wir-split__term is-result" data-op="equals">
+                    <dt>Bruto que tributa</dt>
+                    <dd>{euro(Math.max(0, gross - inKindExempt))}</dd>
+                  </div>
+                </dl>
+              ) : null}
+              <SalarySlider
+                value={gross}
+                onChange={setGross}
+                min={MIN_GROSS}
+                max={MAX_GROSS}
+                step={100}
+                markers={[10_000, 14_000, 18_000, 24_000, MAX_GROSS]}
+                trackStops={trackStops}
+                unitLabel="brutos al año"
+                id="wir-salary"
+                ariaLabel="Salario bruto anual para el simulador de la reducción"
+              />
+            </>
           )}
 
           <div className="wir-ramp-legend" hidden={simCollapsed}>
@@ -945,7 +994,10 @@ export function WorkIncomeReductionExplainer({
             <article className="wir-kpi wir-kpi--blue">
               <span>Rendimiento neto del trabajo (RNT)</span>
               <strong>{euro(basis)}</strong>
-              <small>Bruto − Seguridad Social, sin restar los {euro(2_000)} de gastos</small>
+              <small>
+                {inKindExempt > 0.5 ? 'Bruto que tributa' : 'Bruto'} − Seguridad Social, sin restar
+                los {euro(2_000)} de gastos
+              </small>
             </article>
             <article className={`wir-kpi wir-kpi--${hasReduction ? 'green' : 'muted'}`}>
               <span>Reducción aplicada</span>

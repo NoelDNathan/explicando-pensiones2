@@ -523,23 +523,6 @@ export function WorkerIrpfTranchesCard({
         </div>
       )}
 
-      {showMinimumExplainer ? (
-        <WorkerFamilyMinimumExplainer
-          taxableBase={result.taxableBase}
-          grossQuota={stateGross + regionalGross}
-          integralQuota={Math.max(0, stateGross + regionalGross - stateReduction - regionalReduction)}
-          stateMinimum={stateMinimum ?? 0}
-          regionalMinimum={regionalMinimum ?? 0}
-          stateMinimumApplied={appliedStateMinimum}
-          regionalMinimumApplied={appliedRegionalMinimum}
-          stateMinimumQuota={stateReduction}
-          regionalMinimumQuota={regionalReduction}
-          stateMinimumLines={stateMinimumLines}
-          regionalMinimumLines={regionalMinimumLines}
-          regionLabel={regionLabel}
-        />
-      ) : null}
-
       <div className="witc-lower">
         <aside className="witc-base-card" aria-label="Base liquidable">
           <span className="witc-base-card__hint" aria-hidden="true" />
@@ -694,6 +677,23 @@ export function WorkerIrpfTranchesCard({
           </output>
         </aside>
       </div>
+
+      {showMinimumExplainer ? (
+        <WorkerFamilyMinimumExplainer
+          taxableBase={result.taxableBase}
+          grossQuota={stateGross + regionalGross}
+          integralQuota={Math.max(0, stateGross + regionalGross - stateReduction - regionalReduction)}
+          stateMinimum={stateMinimum ?? 0}
+          regionalMinimum={regionalMinimum ?? 0}
+          stateMinimumApplied={appliedStateMinimum}
+          regionalMinimumApplied={appliedRegionalMinimum}
+          stateMinimumQuota={stateReduction}
+          regionalMinimumQuota={regionalReduction}
+          stateMinimumLines={stateMinimumLines}
+          regionalMinimumLines={regionalMinimumLines}
+          regionLabel={regionLabel}
+        />
+      ) : null}
     </section>
   );
 }
