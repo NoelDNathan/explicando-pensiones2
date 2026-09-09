@@ -166,33 +166,6 @@ const fiscalParams2025 = fiscalParams2025Json as FiscalParams
 const fiscalParams2005 = fiscalParams2005Json as LegacyFiscalParams2005
 const autonomicCoverage = autonomicCoverageJson as AutonomicCoverage
 
-const WORKER_FAQ_ITEMS = [
-  {
-    question: 'Por que mi base real no coincide siempre con la base de cotizacion?',
-    answer: 'Porque la Seguridad Social aplica limites por grupo de cotizacion. Si tu base real queda por debajo del minimo se usa el minimo, y si supera el maximo se usa el tope para las cuotas ordinarias.',
-  },
-  {
-    question: 'Que diferencia hay entre salario bruto, coste de empresa y salario neto?',
-    answer: 'El bruto es la remuneracion antes de descuentos. El coste de empresa suma al bruto las cotizaciones que paga la empresa. El neto es lo que recibes despues de restar cotizaciones del trabajador e IRPF.',
-  },
-  {
-    question: 'La aportacion de la empresa se resta de mi nomina?',
-    answer: 'No. La parte de empresa forma parte del coste laboral, pero no se descuenta de tu salario bruto. Lo que reduce tu nomina es la cuota del trabajador y la retencion de IRPF.',
-  },
-  {
-    question: 'Subir de tramo de IRPF hace que todo mi salario tribute mas?',
-    answer: 'No. El IRPF es progresivo: cada porcentaje se aplica solo a la parte de base que cae dentro de ese tramo. Por eso el tipo efectivo suele ser menor que el ultimo tipo marginal.',
-  },
-  {
-    question: 'Por que el IVA y otros impuestos van separados del neto?',
-    answer: 'Porque dependen de como gastas el dinero, no de la nomina. Dos personas con el mismo neto pueden pagar impuestos indirectos distintos si consumen de forma diferente.',
-  },
-  {
-    question: 'Este resultado sustituye mi nomina o mi declaracion?',
-    answer: 'No. Es una herramienta didactica para entender ordenes de magnitud y conceptos. Una nomina real puede incluir ajustes, atrasos, beneficios, situaciones personales o reglas no modeladas aqui.',
-  },
-]
-
 const REGION_LABELS: Record<string, string> = {
   andalucia: 'Andalucia',
   aragon: 'Aragon',
@@ -925,7 +898,7 @@ export function FiscalWorkerDashboard() {
                   : 'deductions-benefits'
             }
             stepNumber={activeWorkerStepId}
-            totalSteps={13}
+            totalSteps={12}
             initialChildren={selectedChildren}
             initialAscendants={selectedAscendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
@@ -1034,24 +1007,6 @@ export function FiscalWorkerDashboard() {
       case 11:
         return <WorkerKnowledgeCheckCard onGoToStep={setActiveWorkerStepId} nextStepId={12} />
       case 12:
-        return (
-          <section className="fwd-faq-step" aria-labelledby="fwd-faq-step-title">
-            <header className="fwd-faq-step__header">
-              <h2 id="fwd-faq-step-title">Preguntas frecuentes</h2>
-              <p>Respuestas rapidas para comprobar que lees bien el salario bruto, las bases, las cuotas, el IRPF y los impuestos de consumo.</p>
-            </header>
-
-            <div className="fwd-faq-grid">
-              {WORKER_FAQ_ITEMS.map((item) => (
-                <article className="fwd-faq-item" key={item.question}>
-                  <h3>{item.question}</h3>
-                  <p>{item.answer}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-        )
-      case 13:
         return <WorkerCalculationSourcesCard year={Number(taxYear)} items={calculationSources} />
       default:
         return <WorkerSalaryBaseCard initialSalary={salary} initialPayPeriod="annual" initialPayCount="12" />

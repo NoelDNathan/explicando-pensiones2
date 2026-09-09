@@ -46,8 +46,6 @@ export type Irpf2025AdjustmentInput = {
   childSupportFormalized: boolean
   childSupportMinimumExcluded: boolean
   donationAmount: number
-  donation2024: number
-  donation2023: number
   donationLaw49Eligible: boolean
   rentPaid: number
   rentContractBefore2015: boolean
@@ -56,9 +54,8 @@ export type Irpf2025AdjustmentInput = {
   rentIsMainHome: boolean
   homeInvestmentPaid: number
   homeTransitionalRight: boolean
+  homePriorDeductionRight: boolean
   homeOwnershipPercent: number
-  homeRegionalRate: 7.5 | 9
-  homeRegionalSpecialVerified: boolean
   newCompanyInvestment: number
   newCompanyRequirementsVerified: boolean
   verifiedRegionalDeduction: number
@@ -69,28 +66,14 @@ export type Irpf2025AdjustmentInput = {
   maternityEligible: boolean
   maternityEligibleChildren: number
   maternityEligibleMonths: number
-  maternityOneTime150Eligible: boolean
-  maternityOneTime150Count: number
-  maternityAdvanceReceived: number
   daycareEligible: boolean
-  daycareEligibleChildren: number
-  daycareFullMonths: number
   daycareTotalExpense: number
-  daycareSubsidies: number
-  daycareEmployerExemptAmount: number
   largeFamilyEligible: boolean
   largeFamilyCategory: 'none' | 'general' | 'special'
   largeFamilyEligibleMonths: number
-  largeFamilyExtraChildren: number
   largeFamilyEntitlementShare: number
-  largeFamilyAdvanceReceived: number
   disabilityEligiblePersonMonths: number
   disabilityEntitlementShare: number
-  disabilityAdvanceReceived: number
-  refundableContributionLimit: number
-  refundableBenefitEntitlement: boolean
-  withholdings: number
-  paymentsOnAccount: number
   mealCardEligible: boolean
   mealCardDailyAmount: number
   mealCardEligibleDays: number
@@ -153,8 +136,6 @@ export function createEmptyIrpf2025Adjustments(
     childSupportFormalized: false,
     childSupportMinimumExcluded: false,
     donationAmount: 0,
-    donation2024: 0,
-    donation2023: 0,
     donationLaw49Eligible: false,
     rentPaid: 0,
     rentContractBefore2015: false,
@@ -163,9 +144,8 @@ export function createEmptyIrpf2025Adjustments(
     rentIsMainHome: false,
     homeInvestmentPaid: 0,
     homeTransitionalRight: false,
+    homePriorDeductionRight: false,
     homeOwnershipPercent: 100,
-    homeRegionalRate: 7.5,
-    homeRegionalSpecialVerified: false,
     newCompanyInvestment: 0,
     newCompanyRequirementsVerified: false,
     verifiedRegionalDeduction: 0,
@@ -176,28 +156,14 @@ export function createEmptyIrpf2025Adjustments(
     maternityEligible: false,
     maternityEligibleChildren: 1,
     maternityEligibleMonths: 0,
-    maternityOneTime150Eligible: false,
-    maternityOneTime150Count: 0,
-    maternityAdvanceReceived: 0,
     daycareEligible: false,
-    daycareEligibleChildren: 1,
-    daycareFullMonths: 0,
     daycareTotalExpense: 0,
-    daycareSubsidies: 0,
-    daycareEmployerExemptAmount: 0,
     largeFamilyEligible: false,
     largeFamilyCategory: 'none',
     largeFamilyEligibleMonths: 0,
-    largeFamilyExtraChildren: 0,
     largeFamilyEntitlementShare: 1,
-    largeFamilyAdvanceReceived: 0,
     disabilityEligiblePersonMonths: 0,
     disabilityEntitlementShare: 1,
-    disabilityAdvanceReceived: 0,
-    refundableContributionLimit: 0,
-    refundableBenefitEntitlement: false,
-    withholdings: 0,
-    paymentsOnAccount: 0,
     mealCardEligible: false,
     mealCardDailyAmount: 0,
     mealCardEligibleDays: 0,
@@ -544,11 +510,10 @@ export function calculateGeneralDeductions2025(
   const donationBase = input.donationLaw49Eligible
     ? Math.min(positive(input.donationAmount), positive(baseLiquidableTotal) * 0.1)
     : 0
-  const donationRecurring = positive(input.donation2024) >= positive(input.donation2023)
-    && positive(input.donationAmount) >= positive(input.donation2024)
-    && positive(input.donation2023) > 0
+  // El recorrido no pregunta por los donativos de 2023 y 2024, asi que no se
+  // aplica el 45 % de recurrencia: todo lo que pasa de 250 EUR va al 40 %.
   const donationDeduction = Math.min(donationBase, 250) * 0.8
-    + Math.max(0, donationBase - 250) * (donationRecurring ? 0.45 : 0.4)
+    + Math.max(0, donationBase - 250) * 0.4
 
   let rentMaximumBase = 0
   if (input.rentContractBefore2015 && input.rentPaidBefore2015 && input.rentPriorDeductionRight && input.rentIsMainHome) {
@@ -560,12 +525,13 @@ export function calculateGeneralDeductions2025(
   }
   const rentDeduction = Math.min(positive(input.rentPaid), rentMaximumBase) * 0.1005
 
-  const homeEligibleBase = input.homeTransitionalRight
+  const homeEligibleBase = input.homeTransitionalRight && input.homePriorDeductionRight
     ? Math.min(positive(input.homeInvestmentPaid) * Math.min(100, positive(input.homeOwnershipPercent)) / 100, 9_040)
     : 0
   const homeStateDeduction = homeEligibleBase * 0.075
-  const homeRegionalRate = input.homeRegionalRate === 9 && input.homeRegionalSpecialVerified ? 0.09 : 0.075
-  const homeRegionalDeduction = homeEligibleBase * homeRegionalRate
+  // Solo el tramo autonomico general. El 9 % catalan pedia una pregunta que el
+  // usuario no puede contestar sin la norma delante.
+  const homeRegionalDeduction = homeEligibleBase * 0.075
   const newCompanyDeduction = input.newCompanyRequirementsVerified
     ? Math.min(positive(input.newCompanyInvestment), 100_000) * 0.5
     : 0
@@ -609,49 +575,46 @@ export type RefundableDeductionResult = {
   largeFamilyGenerated: number
   disabilityGenerated: number
   generatedTotal: number
-  advancesReceived: number
   netRefundable: number
   declarationBeforeRefundables: number
   finalDeclarationResult: number
 }
 
+/**
+ * Deducciones reembolsables. El recorrido no pide retenciones ni pagos a
+ * cuenta, asi que se parte de la cuota del ano ya minorada por las deducciones
+ * ordinarias: lo que queda es el IRPF anual, no el resultado de la declaracion.
+ */
 export function calculateRefundableDeductions2025(
   input: Irpf2025AdjustmentInput,
-  annualTaxBeforePayments: number,
+  annualTaxAfterOrdinaryDeductions: number,
+  annualSocialSecurityContributions = 0,
 ): RefundableDeductionResult {
   const maternityChildren = Math.max(1, Math.trunc(positive(input.maternityEligibleChildren)))
-  const maternityBonusCount = Math.min(
-    maternityChildren,
-    Math.max(
-      Math.trunc(positive(input.maternityOneTime150Count)),
-      input.maternityOneTime150Eligible ? 1 : 0,
-    ),
-  )
   const maternityGenerated = input.maternityEligible
-    ? Math.min(
-      maternityChildren * 1_200 + maternityBonusCount * 150,
-      positive(input.maternityEligibleMonths) * 100 + maternityBonusCount * 150,
-    )
+    ? Math.min(maternityChildren * 1_200, positive(input.maternityEligibleMonths) * 100)
     : 0
+  // La guarderia que ya paga la empresa esta exenta como especie en el paso 4:
+  // se descuenta aqui para no contarla dos veces, sin volver a preguntarla.
   const daycareNetExpense = Math.max(
     0,
-    positive(input.daycareTotalExpense)
-      - positive(input.daycareSubsidies)
-      - positive(input.daycareEmployerExemptAmount),
+    positive(input.daycareTotalExpense) - positive(input.companyDaycareAnnualAmount),
   )
-  const daycareChildren = Math.max(1, Math.trunc(positive(input.daycareEligibleChildren)))
   const daycareGenerated = input.daycareEligible && input.maternityEligible
-    ? Math.min(daycareChildren * 1_000, positive(input.daycareFullMonths) * (1_000 / 12), daycareNetExpense)
+    ? Math.min(
+      maternityChildren * 1_000,
+      positive(input.maternityEligibleMonths) * (1_000 / 12),
+      daycareNetExpense,
+    )
     : 0
   const familyAnnualBase = input.largeFamilyCategory === 'special' ? 2_400 : input.largeFamilyCategory === 'general' ? 1_200 : 0
-  const refundableLimit = input.refundableBenefitEntitlement
-    ? Number.POSITIVE_INFINITY
-    : positive(input.refundableContributionLimit)
+  // El tope de cotizaciones sale del paso 3, no de una pregunta: la calculadora
+  // ya sabe lo que ha cotizado el trabajador.
+  const refundableLimit = positive(annualSocialSecurityContributions)
   const largeFamilyTheoretical = input.largeFamilyEligible
-    ? (
-      familyAnnualBase / 12 * boundedMonths(input.largeFamilyEligibleMonths)
-      + positive(input.largeFamilyExtraChildren) * 50 * boundedMonths(input.largeFamilyEligibleMonths)
-    ) * Math.min(1, positive(input.largeFamilyEntitlementShare))
+    ? familyAnnualBase / 12
+      * boundedMonths(input.largeFamilyEligibleMonths)
+      * Math.min(1, positive(input.largeFamilyEntitlementShare))
     : 0
   const largeFamilyGenerated = Math.min(largeFamilyTheoretical, refundableLimit)
   const disabilityTheoretical = positive(input.disabilityEligiblePersonMonths)
@@ -659,13 +622,10 @@ export function calculateRefundableDeductions2025(
     * Math.min(1, positive(input.disabilityEntitlementShare))
   const disabilityGenerated = Math.min(disabilityTheoretical, refundableLimit)
   const generatedTotal = maternityGenerated + daycareGenerated + largeFamilyGenerated + disabilityGenerated
-  const advancesReceived = positive(input.maternityAdvanceReceived)
-    + positive(input.largeFamilyAdvanceReceived)
-    + positive(input.disabilityAdvanceReceived)
-  const netRefundable = generatedTotal - advancesReceived
-  const declarationBeforeRefundables = positive(annualTaxBeforePayments)
-    - positive(input.withholdings)
-    - positive(input.paymentsOnAccount)
+  // El recorrido tampoco pregunta por el abono anticipado, igual que no pregunta
+  // por las retenciones: la cifra es el IRPF del ano, no la liquidacion.
+  const netRefundable = generatedTotal
+  const declarationBeforeRefundables = positive(annualTaxAfterOrdinaryDeductions)
 
   return {
     maternityGenerated,
@@ -673,9 +633,8 @@ export function calculateRefundableDeductions2025(
     largeFamilyGenerated,
     disabilityGenerated,
     generatedTotal,
-    advancesReceived,
     netRefundable,
     declarationBeforeRefundables,
-    finalDeclarationResult: declarationBeforeRefundables - generatedTotal + advancesReceived,
+    finalDeclarationResult: declarationBeforeRefundables - generatedTotal,
   }
 }

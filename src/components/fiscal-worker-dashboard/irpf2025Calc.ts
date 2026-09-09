@@ -241,13 +241,6 @@ function buildWarnings(adjustments: Irpf2025AdjustmentInput) {
   )) {
     warnings.push('La deduccion autonomica manual no se aplica sin regla, fuente y requisitos verificados.')
   }
-  if (
-    (adjustments.largeFamilyEligible || adjustments.disabilityEligiblePersonMonths > 0)
-    && !adjustments.refundableBenefitEntitlement
-    && adjustments.refundableContributionLimit <= 0
-  ) {
-    warnings.push('Familia numerosa o discapacidad a cargo quedan no estimadas hasta indicar las cotizaciones que limitan el derecho o la prestacion habilitante.')
-  }
   return warnings
 }
 
@@ -315,7 +308,11 @@ export function calculateIrpf2025Core(input: Irpf2025CoreInput): Irpf2025CoreRes
     thresholdIncome,
   )
   const irpf = Math.max(0, liquidQuotaBeforeWorkDeduction - lowWorkIncomeDeduction.applied)
-  const refundableDeductions = calculateRefundableDeductions2025(adjustments, irpf)
+  const refundableDeductions = calculateRefundableDeductions2025(
+    adjustments,
+    irpf,
+    nonNegative(input.article19ExpensesBeforeOtherExpenses),
+  )
 
   return {
     grossWorkIncome,

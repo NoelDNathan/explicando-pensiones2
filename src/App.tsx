@@ -842,7 +842,7 @@ function ComponentLab() {
           <p className="eyebrow">Componente 22</p>
           <h2 id="worker-fiscal-steps-title">Navegacion fiscal del trabajador</h2>
           <p>
-            Cabecera guiada de trece pasos para recorrer base real, limites,
+            Cabecera guiada de doce pasos para recorrer base real, limites,
             cotizaciones, retribucion en especie, reducciones, IRPF, deducciones,
             consumo, vivienda y coche, y salario neto.
           </p>

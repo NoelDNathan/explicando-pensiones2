@@ -6,7 +6,6 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  CircleHelp,
   Gift,
   GraduationCap,
   Home,
@@ -286,7 +285,7 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
     id: 0,
     title: 'Resumen rápido',
     subtitle: 'Las cifras esenciales antes de entrar en detalle',
-    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los trece pasos del recorrido.',
+    description: 'Empieza con una vista condensada de cuánto cuesta tu trabajo a la empresa, cuánto pagas tú en cotizaciones e IRPF y cuánto salario neto te queda. Puedes comparar los resultados en euros o como porcentaje de tu salario bruto.\n\nCuando quieras entender de dónde sale cada cifra, continúa por los doce pasos del recorrido.',
     checklist: [],
     helpTitle: 'Una primera aproximación',
     helpBody: 'El resumen reúne los resultados principales. Los pasos siguientes explican las bases, límites, cuotas y ajustes que hay detrás.',
@@ -533,10 +532,6 @@ Completa únicamente lo que puedas acreditar.`,
               a cargo) sí: te las abonan aunque tu cuota sea 0 €.
             </p>
             <p className="wfsc-concept__formula">cuota 0 € − 1.200 € de maternidad = 1.200 € a devolver</p>
-            <p>
-              Si ya has cobrado el abono anticipado durante el año, ese importe se descuenta para no
-              pagártelo dos veces.
-            </p>
           </>
         ),
       },
@@ -547,7 +542,7 @@ Completa únicamente lo que puedas acreditar.`,
     details: [
       'Las deducciones se revisan al final y dependen de requisitos, ejercicio fiscal y comunidad autónoma.',
       'La mayoría solo puede bajar la cuota hasta cero; las reembolsables se abonan aunque la cuota sea 0 €.',
-      'Las retenciones que ya te ha practicado la empresa se restan aquí: por eso el resultado puede salir a devolver.',
+      'El resultado es el IRPF del año completo, el mismo que ya vas adelantando con la retención de cada nómina.',
     ],
     important: 'Estas partidas se aplican en el cálculo del IRPF, no como línea de deducciones de la nómina mensual.',
     Icon: BadgePercent,
@@ -635,22 +630,6 @@ Tus respuestas se envían de forma anónima, solo para saber qué apartados expl
   },
   {
     id: 12,
-    title: 'Preguntas frecuentes',
-    subtitle: 'Resuelve dudas despues del resumen',
-    description: 'Cierra el recorrido con respuestas rapidas a las dudas mas habituales: que se descuenta de la nomina, que paga la empresa y que queda fuera del salario neto.',
-    checklist: ['Bruto frente a neto', 'Bases y limites', 'IRPF y retenciones', 'Impuestos de consumo'],
-    helpTitle: 'Para que sirve esta seccion?',
-    helpBody: 'Sirve como comprobacion final. Si algun resultado parece raro, estas preguntas ayudan a identificar si la diferencia viene de bases, cotizaciones, IRPF o consumo.',
-    details: [
-      'Usala para separar tres ideas: lo que cobras, lo que cuesta tu empleo y lo que pagas despues al consumir.',
-      'Las respuestas son orientativas y explican el modelo de la calculadora; no sustituyen una nomina real ni asesoramiento fiscal.',
-      'Si cambias salario, pagas, comunidad o consumo, conviene volver a revisar las preguntas clave porque el resultado puede cambiar.',
-    ],
-    important: 'La FAQ no anade nuevos impuestos al calculo: solo explica como leer los pasos anteriores.',
-    Icon: CircleHelp,
-  },
-  {
-    id: 13,
     title: 'Fuentes del calculo',
     subtitle: 'Origen y valor de cada parametro',
     description: 'Consulta en una sola pantalla las fuentes oficiales utilizadas, el enlace al documento original y el valor concreto aplicado a tu calculo.',

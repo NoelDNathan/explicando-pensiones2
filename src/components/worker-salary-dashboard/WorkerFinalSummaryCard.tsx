@@ -529,7 +529,7 @@ export function WorkerFinalSummaryCard({
         </p>
         {onContinue ? (
           <button type="button" className="wfin-footer__cta" onClick={onContinue}>
-            Ver preguntas frecuentes
+            Ver fuentes del cálculo
             <ArrowRight size={18} aria-hidden="true" />
           </button>
         ) : null}

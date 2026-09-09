@@ -811,7 +811,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
         <div className="wkcc-heading">
           <span className="wkcc-step">
             <span aria-hidden="true" />
-            Paso 11 de 13
+            Paso 11 de 12
           </span>
           <h2 id="wkcc-title">11. Comprueba lo aprendido</h2>
           <p>

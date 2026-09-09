@@ -41,7 +41,15 @@ fuentes del calculo.
   explicar escalas y tramos. Tipo marginal y tipo efectivo van como definiciones, no
   como un parrafo suelto.
 - El paso 7 explica la deduccion como resta de la cuota (con ejemplo 3.000 € − 200 €), no
-  como lista de partidas. Ya no hay recuadro lateral «No aparece en la nómina».
+  como lista de partidas. Ya no hay recuadro lateral «No aparece en la nómina». No pide
+  retenciones ni pagos a cuenta: la cadena es «cuota − ordinarias − reembolsables = IRPF
+  del año», y solo pasa a «A devolver» si las reembolsables superan la cuota. Las preguntas
+  llevan el requisito dentro y el «Sí» lo da por cumplido, sin chips de acreditacion aparte:
+  donativos y alquiler se resuelven con pregunta e importe. El tope de las reembolsables sale
+  de lo cotizado en el paso 3, no de una pregunta, y tampoco se pregunta por el abono
+  anticipado ya cobrado. Sin las de 2023-2024 no se acredita la
+  recurrencia de donativos: todo lo que pasa de 250 € va al 40 %, y la vivienda usa solo el
+  7,5 % autonomico general.
 - El paso 8 define el IVA (Impuesto sobre el Valor Añadido) y los impuestos especiales
   antes de pedir el reparto del gasto; el subtítulo es «El impuesto sobre lo que compras».
 

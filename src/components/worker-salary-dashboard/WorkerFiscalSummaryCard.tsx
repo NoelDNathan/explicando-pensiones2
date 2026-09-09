@@ -376,7 +376,7 @@ export function WorkerFiscalSummaryCard({
         {isFinal ? (
           onContinue ? (
             <button type="button" onClick={onContinue}>
-              Ver preguntas frecuentes
+              Ver fuentes del cálculo
               <ArrowRight size={18} aria-hidden="true" />
             </button>
           ) : null

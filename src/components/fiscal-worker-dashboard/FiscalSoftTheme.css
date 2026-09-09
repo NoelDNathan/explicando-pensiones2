@@ -132,8 +132,7 @@
 .fwd--soft :is(
   .wfsc-stage,
   .wfsc-summary,
-  .fwd-net-step__detail,
-  .fwd-faq-step
+  .fwd-net-step__detail
 ) {
   border-radius: var(--fiscal-radius-card);
 }
@@ -174,7 +173,6 @@
   .wctc-homes,
   .wctc-rows,
   .wcsc-source,
-  .fwd-faq-item,
   .fkr-card,
   .wfsc-summary__salary
 ) {
@@ -2596,17 +2594,15 @@
   background: var(--fiscal-green-soft);
 }
 
-/* Resultado, FAQ y KPI */
+/* Resultado y KPI */
 .fwd--soft .wfsc-summary:not(.wfsc-summary--intro),
-.fwd--soft .fwd-net-step__detail,
-.fwd--soft .fwd-faq-step {
+.fwd--soft .fwd-net-step__detail {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
   background: var(--fiscal-surface);
   box-shadow: var(--fiscal-shadow);
 }
 
-.fwd--soft .fwd-faq-item,
 .fwd--soft .fkr-card {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
@@ -2614,11 +2610,10 @@
   box-shadow: none;
 }
 
-.fwd--soft :is(.fwd-faq-item p, .fwd-net-step__detail > p, .fkr-card small, .fkr-card dt) {
+.fwd--soft :is(.fwd-net-step__detail > p, .fkr-card small, .fkr-card dt) {
   color: var(--fiscal-copy);
 }
 
-.fwd--soft .fwd-faq-item h3,
 .fwd--soft .fkr-card h3,
 .fwd--soft .fkr-card dd {
   color: var(--fiscal-ink);

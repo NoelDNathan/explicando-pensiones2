@@ -1052,7 +1052,7 @@ function useStickyBarHeight(enabled: boolean) {
 export function WorkerPersonalReductionsCard({
   focus = "reductions",
   stepNumber = 5,
-  totalSteps = 13,
+  totalSteps = 12,
   initialChildren = 1,
   initialDisabilityPercent = 0,
   initialMaritalStatus = "married",
@@ -1422,19 +1422,17 @@ export function WorkerPersonalReductionsCard({
     : liveGeneralDeductions.totalApplied + lowWorkIncomeDeductionApplied;
   const quotaAfterOrdinary = Math.max(0, explainedQuotaBefore - ordinaryQuotaDeductions);
   const liveRefundable = useMemo(
-    () => calculateRefundableDeductions2025(adjustments, quotaAfterOrdinary),
-    [adjustments, quotaAfterOrdinary],
+    () => calculateRefundableDeductions2025(adjustments, quotaAfterOrdinary, socialSecurityWorkExpense),
+    [adjustments, quotaAfterOrdinary, socialSecurityWorkExpense],
   );
   const liveRefundableNet = showReductionsSection
     ? refundableDeductionsGenerated
     : liveRefundable.netRefundable;
-  const liveWithholdings = Math.max(0, adjustments.withholdings) + Math.max(0, adjustments.paymentsOnAccount);
   const liveDeclarationResult = showReductionsSection
     ? finalDeclarationResult
     : liveRefundable.finalDeclarationResult;
   const ordinaryDeductionsFlash = useChangeFlash(ordinaryQuotaDeductions);
   const refundableFlash = useChangeFlash(liveRefundableNet);
-  const withholdingsFlash = useChangeFlash(liveWithholdings);
   const declarationFlash = useChangeFlash(liveDeclarationResult);
   const stickyBarRef = useStickyBarHeight(true);
   // La barra fija tapa parte de la pagina; el usuario puede plegarla a un tirador.
@@ -2086,6 +2084,7 @@ export function WorkerPersonalReductionsCard({
             previewTaxableIncome={explainedBaseInitial}
             stateIntegralQuota={stateIntegralQuota}
             regionalIntegralQuota={regionalIntegralQuota}
+            socialSecurityContributions={socialSecurityWorkExpense}
             onChange={setAdjustments}
           />
 
@@ -2124,19 +2123,19 @@ export function WorkerPersonalReductionsCard({
               </dl>
             ) : null}
             <p className="wprc-net-income__note">
-              Deducciones ordinarias, reembolsables y retenciones se restan de esta cifra. El resultado puede
-              salir a pagar o a devolver.
+              Las deducciones ordinarias y las reembolsables se restan de esta cifra. Lo que queda es el IRPF
+              que te corresponde por el año entero.
             </p>
             <details className="wprc-net-income__more">
               <summary>¿Puede salir a devolver?</summary>
               <ul>
                 <li>
-                  Si te han retenido en la nómina más de lo que sale a pagar, Hacienda te devuelve la
-                  diferencia.
+                  Esta cifra es el IRPF del año completo, no lo que te queda por pagar: ya lo has ido
+                  adelantando mes a mes con la retención de la nómina.
                 </li>
                 <li>
                   Las deducciones reembolsables (maternidad, guardería, familia numerosa, discapacidad a
-                  cargo) se abonan aunque la cuota sea 0 €. El anticipo ya cobrado se descuenta.
+                  cargo) se abonan aunque la cuota sea 0 €.
                 </li>
                 <li>
                   1 € de deducción te ahorra 1 €. No es como una reducción de base, que solo ahorra tu tipo
@@ -2177,20 +2176,13 @@ export function WorkerPersonalReductionsCard({
                   <dd>− {formatEuro(liveRefundableNet)}</dd>
                 </div>
                 <div
-                  className={`wprc-chain__step is-minus${liveWithholdings > 0 ? " is-applied" : ""}${withholdingsFlash ? " is-changed" : ""}`}
-                  data-op="minus"
-                >
-                  <dt>Retenciones y pagos a cuenta</dt>
-                  <dd>− {formatEuro(liveWithholdings)}</dd>
-                </div>
-                <div
                   className={`wprc-chain__step is-result${declarationFlash ? " is-changed" : ""}`}
                   data-op="equals"
                   aria-live="polite"
                   aria-atomic="true"
                 >
-                  <dt>{liveDeclarationResult > 0 ? "A pagar" : liveDeclarationResult < 0 ? "A devolver" : "Resultado"}</dt>
-                  <dd>{formatEuro(liveDeclarationResult)}</dd>
+                  <dt>{liveDeclarationResult < 0 ? "A devolver" : "IRPF del año"}</dt>
+                  <dd>{formatEuro(Math.abs(liveDeclarationResult))}</dd>
                 </div>
               </dl>
               {lowWorkIncomeDeductionApplied > 0 ? (
@@ -2227,6 +2219,7 @@ export function WorkerPersonalReductionsCard({
             previewTaxableIncome={explainedBaseInitial}
             stateIntegralQuota={stateIntegralQuota}
             regionalIntegralQuota={regionalIntegralQuota}
+            socialSecurityContributions={socialSecurityWorkExpense}
             onChange={setAdjustments}
           />
 
@@ -2236,7 +2229,7 @@ export function WorkerPersonalReductionsCard({
               <h3 id="wprc-refundable">Reembolsables</h3>
               <p>
                 Maternidad, guardería, familia numerosa y discapacidad a cargo. Te las pagan aunque la cuota
-                sea 0 €; el anticipo ya cobrado se descuenta.
+                sea 0 €.
               </p>
             </div>
           </section>
@@ -2250,6 +2243,7 @@ export function WorkerPersonalReductionsCard({
             previewTaxableIncome={explainedBaseInitial}
             stateIntegralQuota={stateIntegralQuota}
             regionalIntegralQuota={regionalIntegralQuota}
+            socialSecurityContributions={socialSecurityWorkExpense}
             onChange={setAdjustments}
           />
 

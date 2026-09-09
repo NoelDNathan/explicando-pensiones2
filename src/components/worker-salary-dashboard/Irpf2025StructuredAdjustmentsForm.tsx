@@ -27,7 +27,7 @@ type Props = {
   // Los gastos del art. 19 y las reducciones de base se preguntan por separado:
   // no restan en el mismo momento del calculo.
   reductionsGroup?: 'all' | 'work-expenses' | 'base-reductions'
-  deductionsGroup?: 'all' | 'in-kind' | 'quota' | 'refundable' | 'withholdings'
+  deductionsGroup?: 'all' | 'in-kind' | 'quota' | 'refundable'
   value: Irpf2025AdjustmentInput
   declaredGrossWorkIncome?: number
   netWorkIncome?: number
@@ -35,6 +35,9 @@ type Props = {
   previewTaxableIncome?: number
   stateIntegralQuota?: number
   regionalIntegralQuota?: number
+  // Tope de las deducciones reembolsables: sale de lo cotizado en el paso 3, no
+  // de una pregunta al usuario.
+  socialSecurityContributions?: number
   onChange: (value: Irpf2025AdjustmentInput) => void
 }
 const OTHER_INCOME_THRESHOLD = WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR
@@ -139,8 +142,6 @@ const FIELD_HELP: Record<string, string> = {
   'Guarderia pagada por la empresa': 'Importe anual del beneficio de guarderia de empresa.',
   'Ingreso a cuenta no repercutido': 'Pago fiscal que asume la empresa y no te cobra. Puede aumentar la valoracion de la retribucion en especie.',
   'Donativo 2025': 'Importe donado durante el ejercicio. La deduccion depende de entidad, recurrencia y limites.',
-  'Donado a la misma entidad en 2024': 'Sirve para comprobar fidelidad de donativos a la misma entidad.',
-  'Donado a la misma entidad en 2023': 'Sirve junto con 2024 para aplicar, si procede, el tramo incrementado por recurrencia.',
   'Entidad incluida en la Ley 49/2002': 'Confirma que la entidad receptora permite aplicar la deduccion fiscal de donativos.',
   'Alquiler pagado en 2025': 'Importe anual de alquiler de vivienda habitual, solo relevante si se conserva regimen transitorio.',
   'Contrato anterior a 2015': 'La deduccion estatal por alquiler es transitoria. El contrato debe venir de antes de 2015.',
@@ -150,34 +151,18 @@ const FIELD_HELP: Record<string, string> = {
   'Inversion admisible en vivienda': 'Pagos por adquisicion o financiacion de vivienda habitual bajo regimen transitorio anterior a 2013.',
   'Acredita regimen transitorio anterior a 2013': 'Confirma que conservas derecho a deduccion por vivienda habitual anterior a 2013.',
   'Porcentaje de titularidad': 'Parte de la vivienda que te corresponde fiscalmente. Limita la base atribuible.',
-  'Porcentaje autonomico de vivienda': 'Tramo autonomico de la deduccion por vivienda habitual cuando aplica el regimen transitorio.',
-  'Requisitos del 9 % catalan verificados': 'Algunas situaciones en Cataluna usan un porcentaje autonomico especial. Marcado solo si esta comprobado.',
   'Inversion en empresa nueva': 'Inversion en empresas de nueva o reciente creacion con derecho potencial a deduccion.',
   'Certificacion y requisitos societarios verificados': 'Confirma que la empresa y la inversion cumplen los requisitos fiscales.',
   'Cumple los requisitos de maternidad': 'Deduccion reembolsable vinculada a hijos menores de 3 anos y situacion laboral o prestacion habilitante.',
   'Hijos que generan deduccion por maternidad': 'Numero de hijos que pueden generar derecho a la deduccion.',
   'Suma de meses-hijo con derecho': 'Cuenta meses por hijo. Dos hijos durante doce meses equivalen a veinticuatro meses-hijo.',
-  'Hijos con incremento unico de 150 EUR': 'Casos que generan el incremento unico previsto en la regla.',
-  'Abono anticipado de maternidad cobrado': 'Importe que ya te han pagado por adelantado y se resta del resultado de la declaracion.',
   'Cumple los requisitos del incremento de guarderia': 'Incremento asociado a gastos de guarderia o centros autorizados, sujeto a requisitos y limites.',
-  'Hijos que generan incremento de guarderia': 'Numero de hijos por los que se calcula el incremento de guarderia.',
-  'Suma de meses completos por hijo': 'Meses completos de guarderia por cada hijo con derecho.',
   'Gasto anual de guarderia': 'Importe pagado por guarderia antes de restar subvenciones o importes exentos.',
-  'Subvenciones de guarderia': 'Ayudas recibidas que reducen el gasto computable para el incremento.',
-  'Guarderia exenta pagada por la empresa': 'Importe de guarderia tratado como retribucion en especie exenta; no debe duplicarse como gasto deducible.',
   'Titulo de familia numerosa vigente': 'La deduccion exige titulo oficial vigente durante los meses declarados.',
   'Categoria de familia numerosa': 'General o especial. La categoria cambia el importe mensual base de la deduccion.',
-  'Meses con derecho a familia numerosa': 'Meses del ejercicio en los que el titulo y requisitos estaban vigentes.',
-  'Hijos que exceden el minimo de categoria': 'Hijos por encima del minimo necesario para la categoria, que pueden aumentar la deduccion.',
   'Parte del derecho que corresponde': 'Porcentaje que te corresponde cuando el derecho se reparte entre contribuyentes.',
-  'Abono anticipado de familia numerosa': 'Importe ya cobrado por adelantado, que se descuenta al calcular el resultado.',
   'Suma de meses-persona con discapacidad a cargo': 'Cuenta meses por persona con discapacidad a cargo. Dos personas durante doce meses equivalen a veinticuatro.',
   'Parte del derecho por discapacidad': 'Porcentaje que te corresponde si varios contribuyentes comparten el derecho.',
-  'Abonos anticipados por discapacidad': 'Importes ya cobrados por adelantado por esta deduccion.',
-  'Cotizaciones que limitan estas deducciones': 'Algunas deducciones reembolsables quedan limitadas por cotizaciones cuando el derecho nace por alta laboral.',
-  'El derecho nace por prestacion habilitante sin limite de cotizaciones': 'Marca si el derecho procede de una prestacion que elimina el limite de cotizaciones.',
-  'Retenciones de IRPF practicadas': 'IRPF que ya te ha retenido la empresa en nomina durante el ano.',
-  'Otros ingresos o pagos a cuenta': 'Otros pagos ya realizados a Hacienda, distintos de las retenciones de nomina.',
 }
 
 function HelpLabel({ label, help }: { label: string; help?: string }) {
@@ -1262,14 +1247,19 @@ function sliceQuotaDeduction(
 function sliceRefundable(
   value: Irpf2025AdjustmentInput,
   keys: Array<keyof Irpf2025AdjustmentInput>,
-  annualTaxBeforePayments: number,
+  annualTaxAfterOrdinaryDeductions: number,
+  socialSecurityContributions: number,
 ) {
   const empty = createEmptyIrpf2025Adjustments()
   const slice = { ...empty } as Irpf2025AdjustmentInput
   for (const key of keys) {
     ;(slice as Record<string, unknown>)[key] = value[key]
   }
-  return calculateRefundableDeductions2025(slice, annualTaxBeforePayments)
+  return calculateRefundableDeductions2025(
+    slice,
+    annualTaxAfterOrdinaryDeductions,
+    socialSecurityContributions,
+  )
 }
 
 function clearInKindFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
@@ -1296,8 +1286,6 @@ function clearDonationFields(value: Irpf2025AdjustmentInput): Irpf2025Adjustment
   return {
     ...value,
     donationAmount: 0,
-    donation2024: 0,
-    donation2023: 0,
     donationLaw49Eligible: false,
   }
 }
@@ -1318,9 +1306,8 @@ function clearHomeFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInpu
     ...value,
     homeInvestmentPaid: 0,
     homeTransitionalRight: false,
+    homePriorDeductionRight: false,
     homeOwnershipPercent: 100,
-    homeRegionalRate: 7.5,
-    homeRegionalSpecialVerified: false,
   }
 }
 
@@ -1338,15 +1325,8 @@ function clearMaternityFields(value: Irpf2025AdjustmentInput): Irpf2025Adjustmen
     maternityEligible: false,
     maternityEligibleChildren: 1,
     maternityEligibleMonths: 0,
-    maternityOneTime150Eligible: false,
-    maternityOneTime150Count: 0,
-    maternityAdvanceReceived: 0,
     daycareEligible: false,
-    daycareEligibleChildren: 1,
-    daycareFullMonths: 0,
     daycareTotalExpense: 0,
-    daycareSubsidies: 0,
-    daycareEmployerExemptAmount: 0,
   }
 }
 
@@ -1356,22 +1336,9 @@ function clearLargeFamilyFields(value: Irpf2025AdjustmentInput): Irpf2025Adjustm
     largeFamilyEligible: false,
     largeFamilyCategory: 'none',
     largeFamilyEligibleMonths: 0,
-    largeFamilyExtraChildren: 0,
     largeFamilyEntitlementShare: 1,
-    largeFamilyAdvanceReceived: 0,
     disabilityEligiblePersonMonths: 0,
     disabilityEntitlementShare: 1,
-    disabilityAdvanceReceived: 0,
-    refundableContributionLimit: 0,
-    refundableBenefitEntitlement: false,
-  }
-}
-
-function clearWithholdingFields(value: Irpf2025AdjustmentInput): Irpf2025AdjustmentInput {
-  return {
-    ...value,
-    withholdings: 0,
-    paymentsOnAccount: 0,
   }
 }
 
@@ -1711,38 +1678,11 @@ function DonationQuestions({
   return (
     <div className="irpf-marital-subflow">
       <NumberField
-        label="¿Cuánto has donado en 2025?"
+        label="¿Cuánto has donado?"
         value={value.donationAmount}
-        onChange={(amount) => onChange({ ...value, donationAmount: amount })}
-        help="Suma de donativos del año. Los primeros 250 € deducen el 80 %; el resto, el 40 % o el 45 % si es recurrente."
+        onChange={(amount) => onChange({ ...value, donationAmount: amount, donationLaw49Eligible: true })}
+        help="Suma de todo lo que hayas donado durante el año. Los primeros 250 € deducen el 80 %; el resto, el 40 %."
       />
-      <div className="irpf-marital-subask">
-        <p>¿La entidad está acogida a la Ley 49/2002?</p>
-        <small>ONG, fundaciones y entidades de utilidad pública. Si no lo sabes, mira el certificado de donación.</small>
-        <YesNoChips
-          label="Entidad incluida en la Ley 49/2002"
-          value={value.donationLaw49Eligible ? 'yes' : value.donationAmount > 0 ? 'no' : ''}
-          onChange={(next) => onChange({ ...value, donationLaw49Eligible: next === 'yes' })}
-        />
-      </div>
-      {value.donationAmount > 0 ? (
-        <>
-          <NumberField
-            label="¿Donaste a la misma entidad en 2024?"
-            value={value.donation2024}
-            onChange={(amount) => onChange({ ...value, donation2024: amount })}
-            help="Sirve para el tramo incrementado por donar varios años seguidos a la misma entidad."
-            hint="Si no donaste, déjalo en 0 €."
-          />
-          <NumberField
-            label="¿Y en 2023, a esa misma entidad?"
-            value={value.donation2023}
-            onChange={(amount) => onChange({ ...value, donation2023: amount })}
-            help="Junto con 2024, permite aplicar el 45 % sobre lo que pase de 250 €."
-            hint="Si no donaste, déjalo en 0 €."
-          />
-        </>
-      ) : null}
     </div>
   )
 }
@@ -1756,48 +1696,12 @@ function RentQuestions({
 }) {
   return (
     <div className="irpf-marital-subflow">
-      <p className="irpf-marital-note">
-        La deducción estatal por alquiler es un régimen transitorio: solo queda si el contrato es de antes
-        de 2015 y ya tenías derecho entonces. Si alquilaste después, elige No en las preguntas de abajo.
-      </p>
       <NumberField
-        label="¿Cuánto has pagado de alquiler en 2025?"
+        label="¿Cuánto has pagado de alquiler?"
         value={value.rentPaid}
-        onChange={(amount) => onChange({ ...value, rentPaid: amount, rentIsMainHome: true })}
-        help="Importe anual de la vivienda habitual. Está en el contrato o en los recibos."
+        onChange={(amount) => onChange({ ...value, rentPaid: amount })}
+        help="Lo que hayas pagado en todo el año por tu vivienda habitual."
       />
-      <div className="irpf-marital-subask">
-        <p>¿El contrato es de antes de 2015?</p>
-        <YesNoChips
-          label="Contrato anterior a 2015"
-          value={value.rentContractBefore2015 ? 'yes' : value.rentPaid > 0 ? 'no' : ''}
-          onChange={(next) => onChange({
-            ...value,
-            rentContractBefore2015: next === 'yes',
-            rentIsMainHome: true,
-          })}
-        />
-      </div>
-      {value.rentContractBefore2015 ? (
-        <>
-          <div className="irpf-marital-subask">
-            <p>¿Pagaste cantidades de ese alquiler ya antes de 2015?</p>
-            <YesNoChips
-              label="Se pagaron cantidades antes de 2015"
-              value={value.rentPaidBefore2015 ? 'yes' : 'no'}
-              onChange={(next) => onChange({ ...value, rentPaidBefore2015: next === 'yes' })}
-            />
-          </div>
-          <div className="irpf-marital-subask">
-            <p>¿Ya tenías derecho a la deducción antes de 2015?</p>
-            <YesNoChips
-              label="Hubo derecho a deducción antes de 2015"
-              value={value.rentPriorDeductionRight ? 'yes' : 'no'}
-              onChange={(next) => onChange({ ...value, rentPriorDeductionRight: next === 'yes' })}
-            />
-          </div>
-        </>
-      ) : null}
     </div>
   )
 }
@@ -1811,48 +1715,20 @@ function HomeQuestions({
 }) {
   return (
     <div className="irpf-marital-subflow">
-      <p className="irpf-marital-note">
-        Solo si compraste (o empezaste a pagar) tu vivienda habitual antes de 2013 y conservas el régimen
-        transitorio. Si compraste después, esta deducción no aplica.
-      </p>
       <NumberField
-        label="¿Cuánto has pagado este año por la vivienda (cuota, intereses…)?"
+        label="¿Cuánto has pagado este año por la vivienda?"
         value={value.homeInvestmentPaid}
-        onChange={(amount) => onChange({ ...value, homeInvestmentPaid: amount, homeTransitionalRight: true })}
-        help="Pagos por adquisición o financiación de la vivienda habitual. El motor aplica el tope legal."
+        onChange={(amount) => onChange({ ...value, homeInvestmentPaid: amount })}
+        help="Las cuotas de la hipoteca del año, intereses incluidos."
       />
       <NumberField
-        label="¿Qué porcentaje de la vivienda es tuyo?"
+        label="¿Qué parte de la vivienda es tuya?"
         value={value.homeOwnershipPercent}
-        onChange={(amount) => onChange({ ...value, homeOwnershipPercent: Math.min(100, amount), homeTransitionalRight: true })}
+        onChange={(amount) => onChange({ ...value, homeOwnershipPercent: Math.min(100, amount) })}
         max={100}
         unit="%"
-        help="Si es a medias con otra persona, suele ser 50 %."
+        help="Si la compraste a medias con otra persona, suele ser 50 %."
       />
-      <SelectField
-        label="Tramo autonómico de vivienda"
-        value={String(value.homeRegionalRate)}
-        onChange={(next) => onChange({
-          ...value,
-          homeRegionalRate: Number(next) as 7.5 | 9,
-          homeRegionalSpecialVerified: Number(next) === 9 ? value.homeRegionalSpecialVerified : false,
-        })}
-        help="El general es 7,5 %. El 9 % solo aplica en Cataluña si cumples los requisitos especiales."
-      >
-        <option value="7.5">7,5 % general</option>
-        <option value="9">9 % especial Cataluña</option>
-      </SelectField>
-      {value.homeRegionalRate === 9 ? (
-        <div className="irpf-marital-subask">
-          <p>¿Has comprobado que te aplica el 9 % catalán?</p>
-          <small>Sin esa comprobación, usamos el 7,5 % general para no inventar el requisito.</small>
-          <YesNoChips
-            label="Requisitos del 9 % catalán verificados"
-            value={value.homeRegionalSpecialVerified ? 'yes' : 'no'}
-            onChange={(next) => onChange({ ...value, homeRegionalSpecialVerified: next === 'yes' })}
-          />
-        </div>
-      ) : null}
     </div>
   )
 }
@@ -1870,17 +1746,8 @@ function NewCompanyQuestions({
         label="¿Cuánto invertiste?"
         value={value.newCompanyInvestment}
         onChange={(amount) => onChange({ ...value, newCompanyInvestment: amount })}
-        help="Inversión en empresas de nueva o reciente creación. El motor aplica el 50 % sobre un máximo de 100.000 €."
+        help="Se deduce la mitad de lo invertido, hasta 100.000 € al año."
       />
-      <div className="irpf-marital-subask">
-        <p>¿Tienes la certificación de que la empresa y la inversión cumplen los requisitos?</p>
-        <small>Sin ese documento, no aplicamos la deducción.</small>
-        <YesNoChips
-          label="Certificación y requisitos societarios verificados"
-          value={value.newCompanyRequirementsVerified ? 'yes' : value.newCompanyInvestment > 0 ? 'no' : ''}
-          onChange={(next) => onChange({ ...value, newCompanyRequirementsVerified: next === 'yes' })}
-        />
-      </div>
     </div>
   )
 }
@@ -1892,65 +1759,49 @@ function MaternityQuestions({
   value: Irpf2025AdjustmentInput
   onChange: (value: Irpf2025AdjustmentInput) => void
 }) {
+  const children = Math.max(1, Math.trunc(value.maternityEligibleChildren))
+  // Por dentro la deduccion cuenta meses-hijo, pero eso no se le pregunta a
+  // nadie: se piden meses normales y se multiplican por los hijos.
+  const months = Math.min(12, Math.round(value.maternityEligibleMonths / children) || 0)
+
   return (
     <div className="irpf-marital-subflow">
       <CountField
-        label="¿Cuántos hijos menores de 3 años generan la deducción?"
+        label="¿Cuántos hijos menores de 3 años tienes?"
         value={value.maternityEligibleChildren}
+        onChange={(count) => {
+          const nextChildren = Math.max(1, count)
+          onChange({
+            ...value,
+            maternityEligible: true,
+            maternityEligibleChildren: nextChildren,
+            maternityEligibleMonths: months * nextChildren,
+          })
+        }}
+        max={20}
+        unit="uds."
+        help="Cada hijo puede generar hasta 1.200 € al año."
+      />
+      <CountField
+        label="¿Cuántos meses del año has estado trabajando?"
+        value={months}
         onChange={(count) => onChange({
           ...value,
           maternityEligible: true,
-          maternityEligibleChildren: Math.max(1, count),
+          maternityEligibleMonths: Math.min(12, count) * children,
         })}
-        max={20}
-        unit="uds."
-        help="Cada hijo puede generar hasta 1.200 € al año (100 € por mes con derecho)."
-      />
-      <CountField
-        label="Suma de meses con derecho (por todos los hijos)"
-        value={value.maternityEligibleMonths}
-        onChange={(count) => onChange({ ...value, maternityEligible: true, maternityEligibleMonths: count })}
-        max={120}
-        hint="Ejemplo: dos hijos durante 12 meses = 24."
-        help="Cuenta meses por hijo. Dos hijos durante doce meses equivalen a veinticuatro meses-hijo."
-      />
-      <CountField
-        label="Hijos con el incremento único de 150 €"
-        value={value.maternityOneTime150Count}
-        onChange={(count) => onChange({
-          ...value,
-          maternityEligible: true,
-          maternityOneTime150Count: count,
-          maternityOneTime150Eligible: count > 0,
-        })}
-        max={20}
-        unit="uds."
-        help="Algunos casos suman 150 € de una vez. Si no te aplica, déjalo en 0."
-      />
-      <NumberField
-        label="Abono anticipado de maternidad que ya has cobrado"
-        value={value.maternityAdvanceReceived}
-        onChange={(amount) => onChange({ ...value, maternityAdvanceReceived: amount })}
-        help="Lo que Hacienda te ha ido pagando mes a mes. Se resta para no cobrarlo otra vez."
-        hint="Si no has pedido el anticipo, déjalo en 0 €."
+        max={12}
+        help="Son 100 € por hijo y mes trabajado. Si has trabajado todo el año, son 12."
       />
       <div className="irpf-marital-subask">
-        <p>¿Has pagado guardería o centro autorizado por esos hijos?</p>
-        <small>Puede sumar hasta 1.000 € más por hijo, sobre lo que hayas gastado de verdad.</small>
+        <p>¿Pagas guardería por esos hijos?</p>
+        <small>Puede sumar hasta 1.000 € más al año.</small>
         <YesNoChips
-          label="Incremento de guardería"
+          label="Pago de guardería"
           value={value.daycareEligible ? 'yes' : 'no'}
           onChange={(next) => {
             if (next === 'no') {
-              onChange({
-                ...value,
-                daycareEligible: false,
-                daycareEligibleChildren: 1,
-                daycareFullMonths: 0,
-                daycareTotalExpense: 0,
-                daycareSubsidies: 0,
-                daycareEmployerExemptAmount: 0,
-              })
+              onChange({ ...value, daycareEligible: false, daycareTotalExpense: 0 })
               return
             }
             onChange({ ...value, maternityEligible: true, daycareEligible: true })
@@ -1958,38 +1809,12 @@ function MaternityQuestions({
         />
       </div>
       {value.daycareEligible ? (
-        <div className="irpf-rule-grid">
-          <CountField
-            label="Hijos que generan el incremento de guardería"
-            value={value.daycareEligibleChildren}
-            onChange={(count) => onChange({ ...value, daycareEligibleChildren: Math.max(1, count) })}
-            max={20}
-            unit="uds."
-          />
-          <CountField
-            label="Suma de meses completos de guardería"
-            value={value.daycareFullMonths}
-            onChange={(count) => onChange({ ...value, daycareFullMonths: count })}
-            max={120}
-          />
-          <NumberField
-            label="Gasto anual de guardería"
-            value={value.daycareTotalExpense}
-            onChange={(amount) => onChange({ ...value, daycareTotalExpense: amount })}
-          />
-          <NumberField
-            label="Subvenciones de guardería"
-            value={value.daycareSubsidies}
-            onChange={(amount) => onChange({ ...value, daycareSubsidies: amount })}
-            hint="Ayudas que restan del gasto computable."
-          />
-          <NumberField
-            label="Guardería que ya pagó la empresa (exenta)"
-            value={value.daycareEmployerExemptAmount}
-            onChange={(amount) => onChange({ ...value, daycareEmployerExemptAmount: amount })}
-            help="No debe contarse dos veces: si ya está exenta como especie, aquí se resta."
-          />
-        </div>
+        <NumberField
+          label="¿Cuánto has pagado de guardería en el año?"
+          value={value.daycareTotalExpense}
+          onChange={(amount) => onChange({ ...value, daycareTotalExpense: amount })}
+          help="Lo que has pagado tú, sin contar becas ni la parte que pague tu empresa."
+        />
       ) : null}
     </div>
   )
@@ -2008,7 +1833,7 @@ function LargeFamilyQuestions({
   return (
     <div className="irpf-marital-subflow">
       <div className="irpf-marital-subask">
-        <p>¿Tienes título vigente de familia numerosa?</p>
+        <p>¿Tienes el título de familia numerosa en vigor?</p>
         <YesNoChips
           label="Título de familia numerosa vigente"
           value={hasFamily ? 'yes' : 'no'}
@@ -2019,65 +1844,50 @@ function LargeFamilyQuestions({
                 largeFamilyEligible: false,
                 largeFamilyCategory: 'none',
                 largeFamilyEligibleMonths: 0,
-                largeFamilyExtraChildren: 0,
                 largeFamilyEntitlementShare: 1,
-                largeFamilyAdvanceReceived: 0,
               })
               return
             }
-            onChange({ ...value, largeFamilyEligible: true, largeFamilyCategory: 'general' })
+            onChange({
+              ...value,
+              largeFamilyEligible: true,
+              largeFamilyCategory: 'general',
+              largeFamilyEligibleMonths: 12,
+            })
           }}
         />
       </div>
       {hasFamily ? (
         <>
           <SelectField
-            label="Categoría de familia numerosa"
+            label="¿General o especial?"
             value={value.largeFamilyCategory === 'none' ? 'general' : value.largeFamilyCategory}
             onChange={(next) => onChange({
               ...value,
               largeFamilyEligible: true,
               largeFamilyCategory: next as Irpf2025AdjustmentInput['largeFamilyCategory'],
+              // El titulo se da por vigente el ano entero; no se pregunta por meses.
+              largeFamilyEligibleMonths: 12,
             })}
-            help="General: 1.200 € al año. Especial: 2.400 €. Se prorratea por meses con título."
+            help="Viene escrito en el título. General: 1.200 € al año. Especial: 2.400 €."
           >
             <option value="general">General</option>
             <option value="special">Especial</option>
           </SelectField>
-          <CountField
-            label="Meses del año con el título en vigor"
-            value={value.largeFamilyEligibleMonths}
-            onChange={(count) => onChange({ ...value, largeFamilyEligibleMonths: count, largeFamilyEligible: true })}
-          />
-          <CountField
-            label="Hijos por encima del mínimo de la categoría"
-            value={value.largeFamilyExtraChildren}
-            onChange={(count) => onChange({ ...value, largeFamilyExtraChildren: count, largeFamilyEligible: true })}
-            max={20}
-            unit="uds."
-            help="Pueden aumentar la deducción 50 € al mes cada uno."
-          />
           <SelectField
-            label="¿Te corresponde el 100 % o lo compartes?"
+            label="¿Lo compartes con la otra persona progenitora?"
             value={String(value.largeFamilyEntitlementShare)}
             onChange={(next) => onChange({ ...value, largeFamilyEntitlementShare: Number(next) })}
-            help="Si otro progenitor también declara, suele ser 50 %."
           >
-            <option value="1">100 %</option>
-            <option value="0.5">50 %</option>
+            <option value="1">No, me corresponde entero</option>
+            <option value="0.5">Sí, a medias</option>
           </SelectField>
-          <NumberField
-            label="Abono anticipado de familia numerosa ya cobrado"
-            value={value.largeFamilyAdvanceReceived}
-            onChange={(amount) => onChange({ ...value, largeFamilyAdvanceReceived: amount })}
-            hint="Si no has pedido el anticipo, déjalo en 0 €."
-          />
         </>
       ) : null}
 
       <div className="irpf-marital-subask">
         <p>¿Tienes a cargo una persona con discapacidad?</p>
-        <small>Descendiente, ascendiente o cónyuge con discapacidad, si conviven o dependen de ti.</small>
+        <small>Hijo, padre, madre o cónyuge con discapacidad que conviva contigo o dependa de ti.</small>
         <YesNoChips
           label="Personas a cargo con discapacidad"
           value={hasDisability ? 'yes' : 'no'}
@@ -2087,97 +1897,33 @@ function LargeFamilyQuestions({
                 ...value,
                 disabilityEligiblePersonMonths: 0,
                 disabilityEntitlementShare: 1,
-                disabilityAdvanceReceived: 0,
               })
               return
             }
-            onChange({ ...value, disabilityEligiblePersonMonths: Math.max(1, value.disabilityEligiblePersonMonths) })
+            onChange({ ...value, disabilityEligiblePersonMonths: 12 })
           }}
         />
       </div>
       {hasDisability ? (
         <>
           <CountField
-            label="Suma de meses-persona con derecho"
+            label="¿Cuántos meses las has tenido a cargo?"
             value={value.disabilityEligiblePersonMonths}
             onChange={(count) => onChange({ ...value, disabilityEligiblePersonMonths: count })}
             max={120}
-            hint="Ejemplo: dos personas durante 12 meses = 24."
-            help="Cada mes-persona genera 100 €, con el tope de cotizaciones si aplica."
+            help="Son 100 € por persona y mes. Con dos personas todo el año, 24."
+            hint="Si es una persona durante todo el año, son 12."
           />
           <SelectField
-            label="¿Te corresponde el 100 % o lo compartes?"
+            label="¿Lo compartes con alguien más?"
             value={String(value.disabilityEntitlementShare)}
             onChange={(next) => onChange({ ...value, disabilityEntitlementShare: Number(next) })}
           >
-            <option value="1">100 %</option>
-            <option value="0.5">50 %</option>
+            <option value="1">No, me corresponde entero</option>
+            <option value="0.5">Sí, a medias</option>
           </SelectField>
-          <NumberField
-            label="Abonos anticipados por discapacidad ya cobrados"
-            value={value.disabilityAdvanceReceived}
-            onChange={(amount) => onChange({ ...value, disabilityAdvanceReceived: amount })}
-            hint="Si no has pedido el anticipo, déjalo en 0 €."
-          />
         </>
       ) : null}
-
-      {hasFamily || hasDisability ? (
-        <>
-          <div className="irpf-marital-subask">
-            <p>¿Este derecho nace de una prestación que no limita por cotizaciones?</p>
-            <small>
-              Si estás de alta y cotizas, Hacienda limita la deducción a lo cotizado. Algunas prestaciones
-              quitan ese tope.
-            </small>
-            <YesNoChips
-              label="Derecho por prestación habilitante sin límite de cotizaciones"
-              value={value.refundableBenefitEntitlement ? 'yes' : 'no'}
-              onChange={(next) => onChange({
-                ...value,
-                refundableBenefitEntitlement: next === 'yes',
-                refundableContributionLimit: next === 'yes' ? 0 : value.refundableContributionLimit,
-              })}
-            />
-          </div>
-          {!value.refundableBenefitEntitlement ? (
-            <NumberField
-              label="Cotizaciones del año que sirven de tope"
-              value={value.refundableContributionLimit}
-              onChange={(amount) => onChange({ ...value, refundableContributionLimit: amount })}
-              help="Suma anual de cotizaciones cuando el derecho nace por estar de alta. Si no las pones, la deducción queda a 0 para no inventarlas."
-              hint="Míralo en el certificado de retenciones o en Vida Laboral."
-            />
-          ) : null}
-        </>
-      ) : null}
-    </div>
-  )
-}
-
-function WithholdingQuestions({
-  value,
-  onChange,
-}: {
-  value: Irpf2025AdjustmentInput
-  onChange: (value: Irpf2025AdjustmentInput) => void
-}) {
-  return (
-    <div className="irpf-marital-subflow">
-      <NumberField
-        label="IRPF que te han retenido en la nómina este año"
-        value={value.withholdings}
-        onChange={(amount) => onChange({ ...value, withholdings: amount })}
-        help="Suma de las retenciones de todas las nóminas. Está en el certificado de retenciones de la empresa."
-        hint="Casilla de retenciones del certificado, no el líquido de un mes."
-      />
-      <NumberField
-        label="Otros pagos a cuenta (si los hay)"
-        value={value.paymentsOnAccount}
-        onChange={(amount) => onChange({ ...value, paymentsOnAccount: amount })}
-        help="Ingresos a cuenta distintos de la nómina: por ejemplo, si has pagado tú a Hacienda a cuenta."
-        hint="Si solo tienes nómina, déjalo en 0 €."
-      />
     </div>
   )
 }
@@ -2193,6 +1939,7 @@ export function Irpf2025StructuredAdjustmentsForm({
   previewTaxableIncome = 0,
   stateIntegralQuota = 0,
   regionalIntegralQuota = 0,
+  socialSecurityContributions = 0,
   onChange,
 }: Props) {
   const update = <Key extends keyof Irpf2025AdjustmentInput>(key: Key, nextValue: Irpf2025AdjustmentInput[Key]) => {
@@ -2243,7 +1990,7 @@ export function Irpf2025StructuredAdjustmentsForm({
   const regionalQuota = Math.max(0, regionalIntegralQuota)
   const donationEffect = sliceQuotaDeduction(
     value,
-    ['donationAmount', 'donation2024', 'donation2023', 'donationLaw49Eligible'],
+    ['donationAmount', 'donationLaw49Eligible'],
     taxableIncome,
     taxableBase,
     stateQuota,
@@ -2259,7 +2006,7 @@ export function Irpf2025StructuredAdjustmentsForm({
   ).totalApplied
   const homeEffect = sliceQuotaDeduction(
     value,
-    ['homeInvestmentPaid', 'homeTransitionalRight', 'homeOwnershipPercent', 'homeRegionalRate', 'homeRegionalSpecialVerified'],
+    ['homeInvestmentPaid', 'homeTransitionalRight', 'homePriorDeductionRight', 'homeOwnershipPercent'],
     taxableIncome,
     taxableBase,
     stateQuota,
@@ -2277,34 +2024,22 @@ export function Irpf2025StructuredAdjustmentsForm({
     'maternityEligible',
     'maternityEligibleChildren',
     'maternityEligibleMonths',
-    'maternityOneTime150Eligible',
-    'maternityOneTime150Count',
-    'maternityAdvanceReceived',
     'daycareEligible',
-    'daycareEligibleChildren',
-    'daycareFullMonths',
     'daycareTotalExpense',
-    'daycareSubsidies',
-    'daycareEmployerExemptAmount',
+    'companyDaycareAnnualAmount',
   ]
   const largeFamilyKeys: Array<keyof Irpf2025AdjustmentInput> = [
     'largeFamilyEligible',
     'largeFamilyCategory',
     'largeFamilyEligibleMonths',
-    'largeFamilyExtraChildren',
     'largeFamilyEntitlementShare',
-    'largeFamilyAdvanceReceived',
     'disabilityEligiblePersonMonths',
     'disabilityEntitlementShare',
-    'disabilityAdvanceReceived',
-    'refundableContributionLimit',
-    'refundableBenefitEntitlement',
   ]
-  const maternitySlice = sliceRefundable(value, maternityKeys, 0)
-  const largeFamilySlice = sliceRefundable(value, largeFamilyKeys, 0)
+  const maternitySlice = sliceRefundable(value, maternityKeys, 0, socialSecurityContributions)
+  const largeFamilySlice = sliceRefundable(value, largeFamilyKeys, 0, socialSecurityContributions)
   const maternityEffect = maternitySlice.maternityGenerated + maternitySlice.daycareGenerated
   const largeFamilyEffect = largeFamilySlice.largeFamilyGenerated + largeFamilySlice.disabilityGenerated
-  const withholdingEffect = Math.max(0, value.withholdings) + Math.max(0, value.paymentsOnAccount)
   const inKindInitiallyRelevant = value.mealCardEligible
     || value.mealCardDailyAmount > 0
     || value.transportCardEligible
@@ -2318,7 +2053,6 @@ export function Irpf2025StructuredAdjustmentsForm({
   const showInKind = deductionsGroup === 'all' || deductionsGroup === 'in-kind'
   const showQuota = deductionsGroup === 'all' || deductionsGroup === 'quota'
   const showRefundable = deductionsGroup === 'all' || deductionsGroup === 'refundable'
-  const showWithholdings = deductionsGroup === 'all' || deductionsGroup === 'withholdings'
 
   if (focus === 'reductions') {
     const showWorkExpenses = reductionsGroup !== 'base-reductions'
@@ -2417,44 +2151,65 @@ export function Irpf2025StructuredAdjustmentsForm({
         {showQuota ? (
           <>
             <ReductionQuestion
-              question="¿Has donado a una ONG o fundación?"
-              description="Solo donativos a entidades que dan derecho a deducción. El certificado de donación suele indicarlo."
+              question="¿Has donado a una ONG o fundación en 2025?"
+              description="Cuenta si te dieron un certificado de la donación: es lo que dan las ONG, fundaciones y entidades declaradas de utilidad pública."
               initiallyRelevant={value.donationAmount > 0 || value.donationLaw49Eligible}
               effectAmount={donationEffect}
               effectKind="deduction"
+              onYes={() => {
+                if (!value.donationLaw49Eligible) onChange({ ...value, donationLaw49Eligible: true })
+              }}
               onNo={() => onChange(clearDonationFields(value))}
             >
               <DonationQuestions value={value} onChange={onChange} />
             </ReductionQuestion>
             <ReductionQuestion
-              question="¿Pagas alquiler de tu vivienda habitual?"
-              description="La deducción estatal solo queda si el contrato es de antes de 2015. Mira el contrato, no el recibo del banco."
+              question="¿Vives de alquiler desde antes de 2015 y ya te lo deducías entonces?"
+              description="La deducción por alquiler desapareció para los contratos nuevos. Solo sigue viva si es el mismo alquiler y ya te lo restabas en aquellas declaraciones."
               initiallyRelevant={value.rentPaid > 0 || value.rentContractBefore2015}
               effectAmount={rentEffect}
               effectKind="deduction"
+              onYes={() => {
+                if (!value.rentContractBefore2015) {
+                  onChange({
+                    ...value,
+                    rentContractBefore2015: true,
+                    rentPaidBefore2015: true,
+                    rentPriorDeductionRight: true,
+                    rentIsMainHome: true,
+                  })
+                }
+              }}
               onNo={() => onChange(clearRentFields(value))}
             >
               <RentQuestions value={value} onChange={onChange} />
             </ReductionQuestion>
             <ReductionQuestion
-              question="¿Compraste tu vivienda antes de 2013?"
-              description="Solo si sigues pagando esa vivienda habitual y conservas el régimen transitorio. Si compraste después, no aplica."
+              question="¿Compraste tu vivienda antes de 2013 y ya te la deducías entonces?"
+              description="Esta deducción se cerró en 2013. Solo sigue viva si es la misma vivienda y ya te la restabas en la declaración de 2012 o antes."
               initiallyRelevant={value.homeInvestmentPaid > 0 || value.homeTransitionalRight}
               effectAmount={homeEffect}
               effectKind="deduction"
               onYes={() => {
-                if (!value.homeTransitionalRight) onChange({ ...value, homeTransitionalRight: true })
+                if (!value.homeTransitionalRight) {
+                  onChange({ ...value, homeTransitionalRight: true, homePriorDeductionRight: true })
+                }
               }}
               onNo={() => onChange(clearHomeFields(value))}
             >
               <HomeQuestions value={value} onChange={onChange} />
             </ReductionQuestion>
             <ReductionQuestion
-              question="¿Invertiste en una empresa nueva?"
-              description="Empresas de nueva o reciente creación, con certificación. No es comprar acciones de una cotizada."
+              question="¿Invertiste en una empresa recién creada y te dieron su certificado?"
+              description="La empresa tiene que darte un certificado conforme cumple los requisitos. No vale comprar acciones en bolsa."
               initiallyRelevant={value.newCompanyInvestment > 0 || value.newCompanyRequirementsVerified}
               effectAmount={newCompanyEffect}
               effectKind="deduction"
+              onYes={() => {
+                if (!value.newCompanyRequirementsVerified) {
+                  onChange({ ...value, newCompanyRequirementsVerified: true })
+                }
+              }}
               onNo={() => onChange(clearNewCompanyFields(value))}
             >
               <NewCompanyQuestions value={value} onChange={onChange} />
@@ -2465,7 +2220,7 @@ export function Irpf2025StructuredAdjustmentsForm({
           <>
             <ReductionQuestion
               question="¿Tienes hijos menores de 3 años?"
-              description="Puede generar la deducción por maternidad y, si pagas guardería, un incremento. Mira también si ya cobras el anticipo."
+              description="Si trabajas y cotizas, cada hijo menor de 3 años puede darte hasta 1.200 € al año, y más si pagas guardería."
               initiallyRelevant={value.maternityEligible || value.daycareEligible}
               effectAmount={maternityEffect}
               effectKind="deduction"
@@ -2478,7 +2233,7 @@ export function Irpf2025StructuredAdjustmentsForm({
             </ReductionQuestion>
             <ReductionQuestion
               question="¿Familia numerosa o personas a cargo con discapacidad?"
-              description="Hace falta título vigente o convivencia/dependencia. El abono anticipado que ya hayas cobrado se descuenta."
+              description="Te las pagan aunque no te salga nada a pagar por IRPF."
               initiallyRelevant={value.largeFamilyEligible || value.disabilityEligiblePersonMonths > 0}
               effectAmount={largeFamilyEffect}
               effectKind="deduction"
@@ -2487,18 +2242,6 @@ export function Irpf2025StructuredAdjustmentsForm({
               <LargeFamilyQuestions value={value} onChange={onChange} />
             </ReductionQuestion>
           </>
-        ) : null}
-        {showWithholdings ? (
-          <ReductionQuestion
-            question="¿Cuánto te han retenido este año?"
-            description="Está en el certificado de retenciones de la empresa, no en una sola nómina. Es lo que ya has pagado a cuenta."
-            initiallyRelevant={value.withholdings > 0 || value.paymentsOnAccount > 0}
-            effectAmount={withholdingEffect}
-            effectKind="deduction"
-            onNo={() => onChange(clearWithholdingFields(value))}
-          >
-            <WithholdingQuestions value={value} onChange={onChange} />
-          </ReductionQuestion>
         ) : null}
       </div>
     </section>

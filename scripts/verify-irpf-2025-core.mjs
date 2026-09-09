@@ -150,10 +150,10 @@ const maternity = createEmptyIrpf2025Adjustments()
 maternity.maternityEligible = true
 maternity.maternityEligibleChildren = 1
 maternity.maternityEligibleMonths = 10
-maternity.maternityAdvanceReceived = 400
 const maternityResult = calculateRefundableDeductions2025(maternity, 3_000)
 assert.equal(maternityResult.maternityGenerated, 1_000)
-assert.equal(maternityResult.netRefundable, 600)
+// El recorrido no pregunta por el abono anticipado: lo generado es lo que resta.
+assert.equal(maternityResult.netRefundable, 1_000)
 
 const employerDaycare = createEmptyIrpf2025Adjustments()
 employerDaycare.maternityEligible = true
@@ -192,10 +192,21 @@ assert.equal(roundCents(eligibleRentResult.rentDeduction), 904.5)
 const home = createEmptyIrpf2025Adjustments()
 home.homeInvestmentPaid = 10_000
 home.homeTransitionalRight = true
+home.homePriorDeductionRight = true
 home.homeOwnershipPercent = 100
 const homeResult = calculateGeneralDeductions2025(home, 30_000, 30_000, 20_000, 20_000)
 assert.equal(roundCents(homeResult.homeStateDeduction), 678)
 assert.equal(roundCents(homeResult.homeRegionalDeduction), 678)
+
+// La DT18 pide comprar antes de 2013 y haberse deducido la vivienda antes de
+// esa fecha. Con solo lo primero no hay deduccion.
+const homeWithoutPriorRight = createEmptyIrpf2025Adjustments()
+homeWithoutPriorRight.homeInvestmentPaid = 10_000
+homeWithoutPriorRight.homeTransitionalRight = true
+homeWithoutPriorRight.homeOwnershipPercent = 100
+const homeWithoutPriorRightResult = calculateGeneralDeductions2025(homeWithoutPriorRight, 30_000, 30_000, 20_000, 20_000)
+assert.equal(roundCents(homeWithoutPriorRightResult.homeStateDeduction), 0)
+assert.equal(roundCents(homeWithoutPriorRightResult.homeRegionalDeduction), 0)
 
 const newCompany = createEmptyIrpf2025Adjustments()
 newCompany.newCompanyInvestment = 10_000
@@ -204,14 +215,43 @@ const newCompanyResult = calculateGeneralDeductions2025(newCompany, 30_000, 30_0
 assert.equal(roundCents(newCompanyResult.newCompanyDeduction), 5_000)
 assert.equal(roundCents(newCompanyResult.regionalApplied), 0)
 
+// El tope de las reembolsables ya no se pregunta: lo pone la cotizacion anual
+// del trabajador, que es el tercer argumento.
 const largeFamily = createEmptyIrpf2025Adjustments()
 largeFamily.largeFamilyEligible = true
 largeFamily.largeFamilyCategory = 'general'
 largeFamily.largeFamilyEligibleMonths = 12
-largeFamily.largeFamilyExtraChildren = 1
 largeFamily.largeFamilyEntitlementShare = 1
-largeFamily.refundableContributionLimit = 5_000
-assert.equal(calculateRefundableDeductions2025(largeFamily, 3_000).largeFamilyGenerated, 1_800)
+assert.equal(calculateRefundableDeductions2025(largeFamily, 3_000, 5_000).largeFamilyGenerated, 1_200)
+assert.equal(calculateRefundableDeductions2025(largeFamily, 3_000, 800).largeFamilyGenerated, 800)
 
-const checks = goldenCases.length + 22
+// Media custodia: la mitad del importe anual.
+const largeFamilyShared = createEmptyIrpf2025Adjustments()
+largeFamilyShared.largeFamilyEligible = true
+largeFamilyShared.largeFamilyCategory = 'special'
+largeFamilyShared.largeFamilyEligibleMonths = 12
+largeFamilyShared.largeFamilyEntitlementShare = 0.5
+assert.equal(calculateRefundableDeductions2025(largeFamilyShared, 3_000, 5_000).largeFamilyGenerated, 1_200)
+
+// Guarderia: tope de 1.000 EUR por hijo, prorrateado por meses y limitado por
+// el gasto real menos lo que ya paga la empresa como especie exenta.
+const daycare = createEmptyIrpf2025Adjustments()
+daycare.maternityEligible = true
+daycare.maternityEligibleChildren = 1
+daycare.maternityEligibleMonths = 12
+daycare.daycareEligible = true
+daycare.daycareTotalExpense = 3_000
+daycare.companyDaycareAnnualAmount = 500
+assert.equal(calculateRefundableDeductions2025(daycare, 3_000, 5_000).daycareGenerated, 1_000)
+const daycarePartial = { ...daycare, daycareTotalExpense: 900, companyDaycareAnnualAmount: 500 }
+assert.equal(calculateRefundableDeductions2025(daycarePartial, 3_000, 5_000).daycareGenerated, 400)
+
+// Donativos: sin tramo de recurrencia, todo lo que pasa de 250 EUR va al 40 %.
+const donationLarge = createEmptyIrpf2025Adjustments()
+donationLarge.donationAmount = 1_250
+donationLarge.donationLaw49Eligible = true
+const donationLargeResult = calculateGeneralDeductions2025(donationLarge, 30_000, 30_000, 20_000, 20_000)
+assert.equal(roundCents(donationLargeResult.donationDeduction), 600)
+
+const checks = goldenCases.length + 30
 console.log(`IRPF 2025 verificado: ${checks} comprobaciones superadas.`)
