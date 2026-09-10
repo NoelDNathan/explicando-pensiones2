@@ -1295,6 +1295,12 @@
     flex-wrap: wrap;
   }
 
+  /* Sin tope, la fila de acciones mide lo que suman sus botones y el wrap de
+     dentro nunca llega a actuar: la cabecera desbordaba en movil. */
+  .fwd-actions {
+    max-width: 100%;
+  }
+
   .fwd-pension-flow {
     grid-template-columns: 1fr;
   }
@@ -1407,33 +1413,4 @@
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
-}
-
-/* Acceso a la cuenta desde la cabecera. Mismo tamanyo y forma que los botones
-   de al lado, con el acento del tema para que se lea como la accion principal
-   de las tres. */
-.fwd-cuenta-enlace {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  min-width: 112px;
-  min-height: 38px;
-  padding: 0 15px;
-  border: 1px solid var(--fiscal-primary);
-  border-radius: var(--fiscal-radius-small);
-  background: var(--fiscal-primary-soft);
-  color: var(--fiscal-primary-strong);
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.fwd-cuenta-enlace:hover {
-  background: var(--fiscal-primary);
-  color: var(--fiscal-surface);
-}
-
-.fwd-cuenta-enlace:focus-visible {
-  outline: 2px solid var(--fiscal-primary);
-  outline-offset: 2px;
 }

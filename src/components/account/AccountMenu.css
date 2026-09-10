@@ -1,0 +1,354 @@
+/*
+ * Menu de cuenta y dialogo de la boveda.
+ *
+ * Vive dentro de `.fwd--soft`, asi que usa los tokens de FiscalSoftTheme.css y
+ * ninguno de `:root`: la calculadora tiene su paleta y la cuenta es parte de
+ * ella. Cero colores literales a proposito (`pnpm verify:styles`).
+ *
+ * Los selectores llevan `.fwd--soft .fwd-actions` delante porque el tema ya
+ * estiliza `.fwd-actions button` con esa especificidad y, sin igualarla, los
+ * botones del panel saldrian con el aspecto de los de la cabecera.
+ */
+
+.cuenta-menu {
+  position: relative;
+}
+
+/* --- Boton de la cabecera ------------------------------------------------ */
+
+.fwd--soft .fwd-actions .cuenta-menu__boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 112px;
+  max-width: 200px;
+  padding: 0 15px;
+  border: 1px solid var(--fiscal-primary);
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-primary-soft);
+  color: var(--fiscal-primary-strong);
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.fwd--soft .fwd-actions .cuenta-menu__boton:hover,
+.fwd--soft .fwd-actions .cuenta-menu__boton[aria-expanded='true'] {
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary);
+  color: var(--fiscal-surface);
+}
+
+/* Con sesion el boton lleva el nombre: se recorta en vez de estirar la cabecera. */
+.cuenta-menu__etiqueta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Desplegable ---------------------------------------------------------- */
+
+.cuenta-menu__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 320px;
+  padding: 18px;
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-panel);
+  background: var(--fiscal-surface);
+  color: var(--fiscal-ink);
+  box-shadow: var(--fiscal-shadow);
+  text-align: left;
+}
+
+.cuenta-menu__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cuenta-menu__texto {
+  margin: 0;
+  color: var(--fiscal-copy);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.cuenta-menu__texto strong {
+  color: var(--fiscal-ink);
+  overflow-wrap: anywhere;
+}
+
+.cuenta-menu__nota {
+  margin: 0;
+  color: var(--fiscal-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.cuenta-menu__nota--pendiente {
+  padding-top: 8px;
+  border-top: 1px dashed var(--fiscal-line);
+}
+
+.cuenta-menu__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--fiscal-copy);
+  font-size: 13px;
+}
+
+.cuenta-menu__campo input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--fiscal-line-strong);
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-surface-soft);
+  color: var(--fiscal-ink);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.cuenta-menu__campo input:focus-visible {
+  border-color: var(--fiscal-primary);
+}
+
+.cuenta-menu__campo input:disabled {
+  color: var(--fiscal-muted);
+}
+
+/* Botones del panel: mismo tamanyo, dos pesos. */
+.fwd--soft .fwd-actions .cuenta-menu__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--fiscal-primary);
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-primary);
+  color: var(--fiscal-surface);
+  font-size: 13.5px;
+  box-shadow: none;
+}
+
+.fwd--soft .fwd-actions .cuenta-menu__btn:hover:not(:disabled) {
+  border-color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-strong);
+  color: var(--fiscal-surface);
+}
+
+.fwd--soft .fwd-actions .cuenta-menu__btn:disabled {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  color: var(--fiscal-muted);
+  cursor: default;
+}
+
+.fwd--soft .fwd-actions .cuenta-menu__btn--secundario {
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  color: var(--fiscal-primary-strong);
+}
+
+.fwd--soft .fwd-actions .cuenta-menu__btn--secundario:hover:not(:disabled) {
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
+  color: var(--fiscal-primary-strong);
+}
+
+/* Accion menor, sin caja: cambiar de correo, pedir otro codigo. */
+.fwd--soft .fwd-actions .cuenta-menu__enlace {
+  align-self: flex-start;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--fiscal-primary-strong);
+  font-size: 12.5px;
+  text-decoration: underline;
+  box-shadow: none;
+}
+
+.cuenta-menu__error {
+  margin: 0;
+  padding: 9px 12px;
+  border: 1px solid color-mix(in srgb, var(--fiscal-red) 30%, var(--fiscal-line));
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-red-soft);
+  color: var(--fiscal-red);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+/* --- Boveda dentro del panel ---------------------------------------------- */
+
+.cuenta-menu__boveda {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-surface-tint);
+}
+
+.cuenta-menu__boveda h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: var(--fiscal-ink);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+/* --- Dialogo de la frase -------------------------------------------------- */
+
+/* `margin: auto` explicito: algun reset de la calculadora lo pone a cero y el
+   dialogo se quedaria pegado a la esquina en vez de centrado. */
+.boveda-dialogo {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: hidden auto;
+  border: 1px solid var(--fiscal-line-strong);
+  border-radius: var(--fiscal-radius-panel);
+  background: var(--fiscal-surface);
+  color: var(--fiscal-ink);
+  box-shadow: var(--fiscal-shadow);
+  text-align: left;
+}
+
+.boveda-dialogo::backdrop {
+  background: color-mix(in srgb, var(--fiscal-ink) 45%, transparent);
+}
+
+.boveda-dialogo__cuerpo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px 28px 28px;
+}
+
+.boveda-dialogo h2 {
+  margin: 0;
+  color: var(--fiscal-ink);
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+/* Solo el paso de la frase tiene aspa: el titulo le deja sitio. */
+.boveda-dialogo__cuerpo--cerrable h2 {
+  padding-right: 36px;
+}
+
+.fwd--soft .fwd-actions .boveda-dialogo__cerrar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  min-width: 0;
+  min-height: 0;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--fiscal-line);
+  border-radius: 50%;
+  background: var(--fiscal-surface);
+  color: var(--fiscal-muted);
+  box-shadow: none;
+}
+
+.boveda-dialogo__aviso {
+  margin: 0;
+  padding: 11px 14px;
+  border: 1px solid color-mix(in srgb, var(--fiscal-orange) 34%, var(--fiscal-line));
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-orange-soft);
+  color: var(--fiscal-copy);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.boveda-dialogo__aviso strong {
+  color: var(--fiscal-ink);
+}
+
+/* El codigo se lee y se transcribe a mano: monoespaciado, grande y separado. */
+.boveda-dialogo__codigo {
+  margin: 4px 0;
+  padding: 16px;
+  border: 1px dashed var(--fiscal-primary);
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-primary-soft);
+  color: var(--fiscal-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 19px;
+  letter-spacing: 0.09em;
+  text-align: center;
+  word-break: break-all;
+  user-select: all;
+}
+
+.boveda-dialogo__acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.boveda-dialogo__confirmacion {
+  display: flex;
+  gap: 10px;
+}
+
+.boveda-dialogo__confirmacion label {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--fiscal-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.boveda-dialogo__confirmacion input {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 0;
+  border: 1px solid var(--fiscal-line-strong);
+  border-radius: var(--fiscal-radius-small);
+  background: var(--fiscal-surface-soft);
+  color: var(--fiscal-ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 19px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .cuenta-menu__panel {
+    width: min(320px, calc(100vw - 40px));
+  }
+
+  .boveda-dialogo__acciones {
+    flex-direction: column;
+  }
+
+  .boveda-dialogo__codigo {
+    font-size: 16px;
+  }
+}

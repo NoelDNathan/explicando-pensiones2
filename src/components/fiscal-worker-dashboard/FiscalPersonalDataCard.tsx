@@ -90,14 +90,14 @@ export function FiscalPersonalDataCard({
       <ul className="fpdc-list">
         <StepperRow
           icon={<User size={23} strokeWidth={1.9} />}
-          label="Hijos con derecho a minimo"
+          label="Hijos con derecho a mínimo"
           value={childrenCount}
           max={8}
           onChange={handleChildrenCount}
         />
         <StepperRow
           icon={<Baby size={24} strokeWidth={1.9} />}
-          label="Hijos menores de 3 anos"
+          label="Hijos menores de 3 años"
           value={childrenUnder3}
           max={8}
           onChange={(value) => {
@@ -125,7 +125,7 @@ export function FiscalPersonalDataCard({
             >
               <option value="none">No</option>
               <option value="33_64">33% a 64%</option>
-              <option value="65_or_more">65% o mas</option>
+              <option value="65_or_more">65% o más</option>
             </select>
             <ChevronDown size={18} strokeWidth={2.3} aria-hidden="true" />
           </div>
@@ -133,7 +133,7 @@ export function FiscalPersonalDataCard({
 
         <li className="fpdc-row">
           <span className="fpdc-row__icon" aria-hidden="true"><FileText size={24} strokeWidth={1.9} /></span>
-          <label className="fpdc-row__label" htmlFor="fpdc-autonomic-deduction">Deduccion autonomica verificada</label>
+          <label className="fpdc-row__label" htmlFor="fpdc-autonomic-deduction">Deducción autonómica verificada</label>
           <div className="fpdc-euro-shell">
             <Euro size={21} strokeWidth={2.2} aria-hidden="true" />
             <input
@@ -143,7 +143,7 @@ export function FiscalPersonalDataCard({
               step={50}
               value={autonomicDeduction}
               onChange={(event) => onAutonomicDeductionChange(Math.max(0, Number(event.target.value)))}
-              aria-label="Deduccion autonomica verificada en euros"
+              aria-label="Deducción autonómica verificada en euros"
             />
           </div>
         </li>

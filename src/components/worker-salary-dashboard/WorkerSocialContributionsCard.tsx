@@ -165,8 +165,8 @@ export function getOccupationalAccidentsRate(categoryId: string) {
 const contractLabels: Record<WorkerContractType, string> = {
   indefinite: 'Indefinido',
   temporary: 'Temporal',
-  internship: 'Practicas',
-  training: 'Formacion',
+  internship: 'Prácticas',
+  training: 'Formación',
 }
 
 function formatEuro(value: number) {
@@ -406,7 +406,7 @@ function ContributionRows<Key extends string>({
                   {row.label}
                 </span>
                 <InfoButton
-                  label={`Informacion sobre ${row.label}`}
+                  label={`Información sobre ${row.label}`}
                   size="sm"
                   placement="top"
                   className="wscc-help"
@@ -513,7 +513,7 @@ export function WorkerSocialContributionsCard({
           </div>
         </header>
         <div className="wscc-empty">
-          Primero calcula tu base real y selecciona tu grupo de cotizacion.
+          Primero calcula tu base real y selecciona tu grupo de cotización.
         </div>
       </section>
     )
@@ -536,7 +536,7 @@ export function WorkerSocialContributionsCard({
     },
     {
       key: 'professionalTraining',
-      label: 'Formacion profesional',
+      label: 'Formación profesional',
       rate: contributionRatesWithAtEp.worker.professionalTraining,
       amount: result.breakdown.worker.professionalTraining,
       help: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
@@ -574,7 +574,7 @@ export function WorkerSocialContributionsCard({
     },
     {
       key: 'professionalTraining',
-      label: 'Formacion profesional',
+      label: 'Formación profesional',
       rate: contributionRatesWithAtEp.company.professionalTraining,
       amount: result.breakdown.company.professionalTraining,
       help: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
@@ -591,7 +591,7 @@ export function WorkerSocialContributionsCard({
       label: 'AT/EP',
       rate: contributionRatesWithAtEp.company.occupationalAccidents,
       amount: result.breakdown.company.occupationalAccidents,
-      help: `Cubre accidentes de trabajo y enfermedades profesionales. En esta calculadora se aplica la categoria seleccionada: ${selectedAtEpCategory.code} - ${selectedAtEpCategory.label}.`,
+      help: `Cubre accidentes de trabajo y enfermedades profesionales. En esta calculadora se aplica la categoría seleccionada: ${selectedAtEpCategory.code} - ${selectedAtEpCategory.label}.`,
     },
   ]
 
@@ -681,14 +681,14 @@ export function WorkerSocialContributionsCard({
         <div className={`wscc-alert ${isAboveMaximumBase ? 'wscc-alert--maximum' : 'wscc-alert--minimum'}`}>
           {isAboveMaximumBase ? (
             <>
-              <strong>Salario por encima de la base maxima.</strong>
+              <strong>Salario por encima de la base máxima.</strong>
               <span>Las cotizaciones ordinarias se calculan solo hasta {formatEuro(baseUsedAnnual)} al año.</span>
               <em>Exceso mensual: {formatEuro(excessOverMaximumMonthly)}</em>
             </>
           ) : (
             <>
-              <strong>Base minima aplicada.</strong>
-              <span>Las cotizaciones se calculan sobre la base minima de tu grupo, no sobre una base inferior.</span>
+              <strong>Base mínima aplicada.</strong>
+              <span>Las cotizaciones se calculan sobre la base mínima de tu grupo, no sobre una base inferior.</span>
             </>
           )}
         </div>
@@ -740,7 +740,7 @@ export function WorkerSocialContributionsCard({
 
         <article className="wscc-panel wscc-panel--company">
           <h3>Empresa</h3>
-          <p>La empresa lo paga ademas de tu salario bruto.</p>
+          <p>La empresa lo paga además de tu salario bruto.</p>
           <ContributionRows
             rows={companyRows}
             totalAmount={result.companyContributionsAnnual}
@@ -790,7 +790,7 @@ export function WorkerSocialContributionsCard({
             <strong className="wscc-summary__worker">{formatEuro(workerTotalDisplay)}</strong>
           </div>
           <div className="wscc-summary__item">
-            <span>Bruto despues de cotizaciones</span>
+            <span>Bruto después de cotizaciones</span>
             <strong className="wscc-summary__after-contributions">{formatEuro(salaryAfterDisplay)}</strong>
           </div>
           <div className="wscc-summary__divider" aria-hidden="true"></div>

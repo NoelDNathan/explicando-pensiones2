@@ -228,7 +228,7 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
   const baseRows: PayrollBaseRow[] = [
     {
       id: 'salary-monthly',
-      concept: 'Importe remuneracion mensual',
+      concept: 'Importe remuneración mensual',
       base: formatPayrollNumber(contributionBaseMonthly),
     },
     {
@@ -253,7 +253,7 @@ function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
     },
     {
       id: 'irpf',
-      concept: 'Base sujeta a retencion del IRPF',
+      concept: 'Base sujeta a retención del IRPF',
       base: formatPayrollNumber(grossMonthly),
     },
   ]
@@ -301,36 +301,36 @@ const WORKER_FISCAL_STEPS: WorkerFiscalStep[] = [
 
 La calculadora lo convierte en una referencia mensual dividiendo el total anual entre 12. No es todavía la base de cotización ni la base liquidable del IRPF.`,
     checklist: [],
-    helpTitle: 'Que significa base real?',
+    helpTitle: '¿Qué significa base real?',
     helpBody: 'Es una base de trabajo para la calculadora. Intenta acercarse a todo lo que recibes de la empresa antes de restar cotizaciones o impuestos.',
     details: [
-      'Incluye dinero y retribuciones en especie, como coche, seguro o vales si forman parte de tu remuneracion.',
-      'Sirve para ordenar el calculo: primero se mide el bruto completo y despues se aplican limites, cuotas e impuestos.',
+      'Incluye dinero y retribuciones en especie, como coche, seguro o vales si forman parte de tu remuneración.',
+      'Sirve para ordenar el cálculo: primero se mide el bruto completo y después se aplican límites, cuotas e impuestos.',
       'Si introduces importes mensuales, la calculadora los lleva a una cifra anual para comparar todo con la misma unidad.',
     ],
-    important: 'No es todavia la base de cotizacion ni la base del IRPF. Es el bruto completo desde el que empezamos.',
+    important: 'No es todavía la base de cotización ni la base del IRPF. Es el bruto completo desde el que empezamos.',
     Icon: Calculator,
   },
   {
     id: 2,
-    title: 'Limites de cotizacion',
-    subtitle: 'Del bruto a la base de cotizacion',
+    title: 'Límites de cotización',
+    subtitle: 'Del bruto a la base de cotización',
     description: ` Para calcular cuánto pagas a la Seguridad Social, se toma como referencia tu salario. 
                    
-    Sin embargo, si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pension). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.
+    Sin embargo, si ganas menos que la base mínima, cotizarás por esa cantidad, por lo que pagarás algo más de lo que cotizarías por tu salario, pero también generarás derecho a prestaciones más altas (Ej. Pensión). En cambio, si ganas más que la base máxima, solo cotizarás hasta ese límite, por lo que pagarás proporcionalmente menos, aunque tus prestaciones también estarán limitadas por esa base máxima.
     
     Hay diferentes grupos de cotización dependiendo de tu tipo de trabajo, cada grupo tiene un mínimo y un máximo de cotización distinto.
     
-    En este paso, calculamos tu base de cotización y en el siguiente veremos cuanto pagas en consecuencia de esta base.`,
+    En este paso, calculamos tu base de cotización y en el siguiente veremos cuánto pagas en consecuencia de esta base.`,
     checklist: [],
-    helpTitle: 'Que es el grupo de cotizacion?',
-    helpBody: 'Es una categoria laboral de la Seguridad Social. Agrupa puestos parecidos y fija limites de cotizacion. No siempre coincide con tu puesto comercial o tu convenio.',
+    helpTitle: '¿Qué es el grupo de cotización?',
+    helpBody: 'Es una categoría laboral de la Seguridad Social. Agrupa puestos parecidos y fija límites de cotización. No siempre coincide con tu puesto comercial o tu convenio.',
     details: [
-      'La base minima actua como suelo: si tu base queda por debajo, se usa ese minimo para cotizar.',
-      'La base maxima actua como techo: si tu salario supera el limite, las cuotas ordinarias no crecen por encima de ese tope.',
+      'La base mínima actúa como suelo: si tu base queda por debajo, se usa ese mínimo para cotizar.',
+      'La base máxima actúa como techo: si tu salario supera el límite, las cuotas ordinarias no crecen por encima de ese tope.',
       'La base usada es la cifra final sobre la que se calculan las cotizaciones sociales del paso siguiente.',
     ],
-    important: 'Si tu bruto supera la base maxima, no cotizas mas por la parte que queda por encima en las cuotas ordinarias.',
+    important: 'Si tu bruto supera la base máxima, no cotizas más por la parte que queda por encima en las cuotas ordinarias.',
     Icon: Scale,
   },
   {
@@ -341,14 +341,14 @@ La calculadora lo convierte en una referencia mensual dividiendo el total anual 
 
 Aquí puedes comparar ambas aportaciones y ver qué financia cada concepto.`,
     checklist: [],
-    helpTitle: 'Que son las categorias de cotizacion?',
-    helpBody: 'Son destinos de la cuota: jubilacion y bajas comunes, desempleo, formacion, refuerzo de pensiones o coberturas empresariales. Cada una puede tener un porcentaje distinto.',
+    helpTitle: '¿Qué son las categorías de cotización?',
+    helpBody: 'Son destinos de la cuota: jubilación y bajas comunes, desempleo, formación, refuerzo de pensiones o coberturas empresariales. Cada una puede tener un porcentaje distinto.',
     details: [
-      'La cuota del trabajador aparece como descuento en la nomina y reduce el salario neto.',
-      'La aportacion de la empresa no se descuenta de tu nomina, pero forma parte del coste total de contratar.',
-      'Algunas categorias financian prestaciones comunes; otras cubren desempleo, formacion, accidentes o mecanismos especificos.',
+      'La cuota del trabajador aparece como descuento en la nómina y reduce el salario neto.',
+      'La aportación de la empresa no se descuenta de tu nómina, pero forma parte del coste total de contratar.',
+      'Algunas categorías financian prestaciones comunes; otras cubren desempleo, formación, accidentes o mecanismos específicos.',
     ],
-    important: 'Tu neto baja por la parte del trabajador. La parte de empresa aumenta el coste laboral, pero no se resta de tu nomina.',
+    important: 'Tu neto baja por la parte del trabajador. La parte de empresa aumenta el coste laboral, pero no se resta de tu nómina.',
     Icon: Shield,
   },
   {
@@ -403,12 +403,12 @@ Aquí puedes comparar ambas aportaciones y ver qué financia cada concepto.`,
     helpTitle: 'Exento para Hacienda, no para la Seguridad Social',
     helpBody: 'Desde 2013 casi toda la retribución en especie cotiza a la Seguridad Social por su valor completo. La exención del IRPF no cambia lo que cotizaste en el paso 3: solo baja el bruto que tributa.',
     details: [
-      'El ticket restaurante queda exento hasta 11 EUR por dia efectivamente trabajado; lo que pase de ahi tributa.',
-      'El abono de transporte queda exento hasta 136,36 EUR al mes y 1.500 EUR al ano.',
-      'El seguro medico queda exento hasta 500 EUR por persona asegurada, o 1.500 EUR si tiene discapacidad; la guarderia de empresa no tiene tope si cumple los requisitos.',
-      'Si la empresa asume el ingreso a cuenta y no te lo repercute, ese importe suma a la valoracion en lugar de restar.',
+      'El ticket restaurante queda exento hasta 11 EUR por día efectivamente trabajado; lo que pase de ahí tributa.',
+      'El abono de transporte queda exento hasta 136,36 EUR al mes y 1.500 EUR al año.',
+      'El seguro médico queda exento hasta 500 EUR por persona asegurada, o 1.500 EUR si tiene discapacidad; la guardería de empresa no tiene tope si cumple los requisitos.',
+      'Si la empresa asume el ingreso a cuenta y no te lo repercute, ese importe suma a la valoración en lugar de restar.',
     ],
-    important: 'La parte exenta no es una resta que veas despues: baja el bruto desde el que arrancan todos los pasos siguientes.',
+    important: 'La parte exenta no es una resta que veas después: baja el bruto desde el que arrancan todos los pasos siguientes.',
     Icon: Gift,
   },
   {
@@ -490,11 +490,11 @@ No cobra un único porcentaje sobre toda tu renta. Reparte esa base entre una es
     helpTitle: 'Tipo marginal y tipo efectivo',
     helpBody: 'El tipo marginal afecta solo al siguiente euro que entra en ese tramo. El tipo efectivo es la media real que pagas sobre toda la base.',
     details: [
-      'La base liquidable se reparte por escalones: cada tramo calcula impuesto solo sobre la parte que cae dentro de el.',
-      'El tramo estatal y el autonomico se suman para aproximar la cuota total de IRPF.',
+      'La base liquidable se reparte por escalones: cada tramo calcula impuesto solo sobre la parte que cae dentro de él.',
+      'El tramo estatal y el autonómico se suman para aproximar la cuota total de IRPF.',
       'El tipo efectivo ayuda a leer el resultado real: cuota total dividida entre la base considerada.',
     ],
-    important: 'Subir de tramo no hace que todo tu salario tribute al porcentaje mas alto.',
+    important: 'Subir de tramo no hace que todo tu salario tribute al porcentaje más alto.',
     Icon: BarChart3,
   },
   {
@@ -557,11 +557,11 @@ Por eso estos impuestos dependen de cómo gastas, no solo de lo que cobras. Dist
 
 Si no completas el reparto, el resumen mantendrá una aproximación general claramente identificada.`,
     checklist: [],
-    helpTitle: 'Que son categorias de gasto?',
-    helpBody: 'Son grupos de consumo: vivienda, comida, transporte, ocio, energia, etc. Cada grupo puede tener un tipo de IVA o un impuesto distinto.',
+    helpTitle: '¿Qué son categorías de gasto?',
+    helpBody: 'Son grupos de consumo: vivienda, comida, transporte, ocio, energía, etc. Cada grupo puede tener un tipo de IVA o un impuesto distinto.',
     details: [
-      'El IVA se paga al comprar bienes o servicios y no sale directamente de la nomina.',
-      'Los impuestos especiales afectan a consumos concretos, como carburantes, alcohol, tabaco o energia, segun el caso.',
+      'El IVA se paga al comprar bienes o servicios y no sale directamente de la nómina.',
+      'Los impuestos especiales afectan a consumos concretos, como carburantes, alcohol, tabaco o energía, según el caso.',
       'Este paso solo mide el consumo corriente: lo que pagas por tener vivienda o coche va en el paso siguiente.',
     ],
     important: 'Dos personas con el mismo neto pueden pagar impuestos indirectos muy distintos si consumen de forma diferente.',
@@ -577,14 +577,14 @@ Aquí también puedes recuperar lo que pagaste al comprar (IVA, ITP, AJD o matri
 
 Si no tienes vivienda ni coche en propiedad, responde «No» a las dos preguntas y continúa.`,
     checklist: [],
-    helpTitle: 'Por que no va con el IVA?',
+    helpTitle: '¿Por qué no va con el IVA?',
     helpBody: 'El IVA lo pagas cada vez que compras algo. El IBI y el IVTM los pagas por ser propietario, aunque ese año no gastes nada. Son dos hechos distintos y por eso ocupan pasos distintos.',
     details: [
-      'El IBI lo fija tu ayuntamiento sobre el valor catastral; el IVTM, sobre la potencia fiscal del vehiculo. Ambos son anuales y recurrentes.',
-      'El impuesto de la compra (IVA o ITP en vivienda; IVA, ITP o matriculacion en coche) fue un pago unico y no se reparte entre las cuotas de la hipoteca o del prestamo.',
-      'Pais Vasco y Navarra tienen regimen foral propio en transmisiones y aqui no se estiman.',
+      'El IBI lo fija tu ayuntamiento sobre el valor catastral; el IVTM, sobre la potencia fiscal del vehículo. Ambos son anuales y recurrentes.',
+      'El impuesto de la compra (IVA o ITP en vivienda; IVA, ITP o matriculación en coche) fue un pago único y no se reparte entre las cuotas de la hipoteca o del préstamo.',
+      'País Vasco y Navarra tienen régimen foral propio en transmisiones y aquí no se estiman.',
     ],
-    important: 'Solo el IBI y el IVTM se suman a tu impacto mensual. Los impuestos de la compra son contexto historico.',
+    important: 'Solo el IBI y el IVTM se suman a tu impacto mensual. Los impuestos de la compra son contexto histórico.',
     Icon: Home,
   },
   {
@@ -595,14 +595,14 @@ Si no tienes vivienda ni coche en propiedad, responde «No» a las dos preguntas
 
 Debajo verás la otra cara de esas mismas figuras: cuánto recauda el conjunto de Administraciones Públicas con cada una, en euros, sobre los ingresos públicos y sobre el PIB, en qué se gasta y qué efecto tiene sobre ti.`,
     checklist: ['Reparto del coste laboral', 'Casa y coche', 'Recaudación por impuesto', 'Destino y efecto de cada figura'],
-    helpTitle: 'Como leer este resumen?',
+    helpTitle: '¿Cómo leer este resumen?',
     helpBody: 'Empieza por el gráfico: la porción verde es lo que te queda de cada 100 € que cuesta tu puesto. El resto son impuestos y cotizaciones ordenados por tamaño. Después contrasta tu cifra con lo que recauda el Estado por esa misma figura.',
     details: [
-      'El reparto usa el coste laboral (bruto mas cotizaciones de empresa) como total, no el salario bruto.',
-      'El IBI y el IVTM se pagan por tener vivienda o coche, aunque ese ano no ingreses nada por ellos.',
-      'Las cifras de recaudacion son de 2024 en contabilidad nacional y corresponden al conjunto de Administraciones Publicas, no a una persona.',
+      'El reparto usa el coste laboral (bruto más cotizaciones de empresa) como total, no el salario bruto.',
+      'El IBI y el IVTM se pagan por tener vivienda o coche, aunque ese año no ingreses nada por ellos.',
+      'Las cifras de recaudación son de 2024 en contabilidad nacional y corresponden al conjunto de Administraciones Públicas, no a una persona.',
     ],
-    important: 'El resumen no inventa datos nuevos: consolida lo que ya has calculado y lo compara con la recaudacion oficial de cada figura.',
+    important: 'El resumen no inventa datos nuevos: consolida lo que ya has calculado y lo compara con la recaudación oficial de cada figura.',
     Icon: WalletCards,
   },
   {
@@ -617,27 +617,27 @@ No hay que escribir nada: se responde eligiendo, ordenando, emparejando, clasifi
 
 Tus respuestas se envían de forma anónima, solo para saber qué apartados explicamos mal. No se envía tu información personal ni ninguna cifra de la calculadora.`,
     checklist: [],
-    helpTitle: 'Para que sirve el repaso?',
-    helpBody: 'No es un examen ni guarda nota en ningun sitio. Sirve para localizar los apartados que no se entienden y reescribirlos.',
+    helpTitle: '¿Para qué sirve el repaso?',
+    helpBody: 'No es un examen ni guarda nota en ningún sitio. Sirve para localizar los apartados que no se entienden y reescribirlos.',
     details: [
       'Diez apartados, uno por cada bloque del recorrido, con preguntas de varios tipos.',
       'Cada pregunta se puede marcar como «esto no estaba bien explicado», aunque la aciertes.',
       'El progreso se guarda en tu navegador: puedes salir, seguir con el recorrido y volver donde lo dejaste.',
-      'Solo viaja el resultado del cuestionario, y de forma anonima: nunca tu salario, tu comunidad ni tu situacion familiar.',
+      'Solo viaja el resultado del cuestionario, y de forma anónima: nunca tu salario, tu comunidad ni tu situación familiar.',
     ],
-    important: 'Es un paso opcional, pero es la mejor forma de decirnos donde nos hemos explicado mal.',
+    important: 'Es un paso opcional, pero es la mejor forma de decirnos dónde nos hemos explicado mal.',
     Icon: GraduationCap,
   },
   {
     id: 12,
-    title: 'Fuentes del calculo',
-    subtitle: 'Origen y valor de cada parametro',
-    description: 'Consulta en una sola pantalla las fuentes oficiales utilizadas, el enlace al documento original y el valor concreto aplicado a tu calculo.',
-    checklist: ['Nombre del parametro', 'Organismo oficial', 'Valor utilizado', 'Enlace verificable'],
-    helpTitle: 'Como comprobar el resultado',
+    title: 'Fuentes del cálculo',
+    subtitle: 'Origen y valor de cada parámetro',
+    description: 'Consulta en una sola pantalla las fuentes oficiales utilizadas, el enlace al documento original y el valor concreto aplicado a tu cálculo.',
+    checklist: ['Nombre del parámetro', 'Organismo oficial', 'Valor utilizado', 'Enlace verificable'],
+    helpTitle: 'Cómo comprobar el resultado',
     helpBody: 'Cada bloque conecta el valor aplicado con su norma o dataset institucional.',
     details: [],
-    important: 'Los valores cambian cuando modificas tus datos; las fuentes permanecen visibles para que el calculo sea auditable.',
+    important: 'Los valores cambian cuando modificas tus datos; las fuentes permanecen visibles para que el cálculo sea auditable.',
     Icon: BookOpenCheck,
   },
 ]
@@ -664,11 +664,11 @@ const PAYROLL_TOTALS = [
 ]
 
 const PAYROLL_BASE_ROWS: PayrollBaseRow[] = [
-  { id: 'salary-monthly', concept: 'Importe remuneracion mensual', base: '1.750,00' },
+  { id: 'salary-monthly', concept: 'Importe remuneración mensual', base: '1.750,00' },
   { id: 'common-base-detail', concept: 'TOTAL', base: '1.750,00', rate: '24,35', company: '426,12' },
   { id: 'unemployment-base', concept: 'Desempleo', rate: '5,50', company: '96,25' },
   { id: 'training-base', concept: 'Form. Profesional', base: '1.750,00', rate: '0,60', company: '10,50' },
-  { id: 'irpf', concept: 'Base sujeta a retencion del IRPF', base: '1.750,00' },
+  { id: 'irpf', concept: 'Base sujeta a retención del IRPF', base: '1.750,00' },
 ]
 
 const PAYROLL_EXAMPLES: Record<number, PayrollExample> = {
@@ -760,7 +760,7 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
             <span>RECIBO INDIVIDUAL JUSTIFICATIVO DEL PAGO DE SALARIOS</span>
             <strong>[DATOS PERSONALES OCULTOS]</strong>
           </div>
-          <div className="wfsc-payroll-meta" aria-label="Datos de la nomina">
+          <div className="wfsc-payroll-meta" aria-label="Datos de la nómina">
             <div>
               <strong>TRABAJADOR/A</strong>
               <span>[OCULTO]</span>
@@ -807,7 +807,7 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
             </div>
           </div>
 
-          <div className="wfsc-payroll-table" aria-label="Conceptos de nomina">
+          <div className="wfsc-payroll-table" aria-label="Conceptos de nómina">
             <div className="wfsc-payroll-table__head">
               <span>COD.</span>
               <span>CONCEPTO</span>
@@ -830,7 +830,7 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
             })}
           </div>
 
-          <div className="wfsc-payroll-totals" aria-label="Totales de nomina">
+          <div className="wfsc-payroll-totals" aria-label="Totales de nómina">
             {payrollSnapshot.totals.map((total) => (
               <div className={rowHighlightClass(total.id)} key={total.id}>
                 <span>{total.label}</span>
@@ -844,7 +844,7 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
             <strong className={rowHighlightClass('net-pay')}>{payrollSnapshot.netPay}</strong>
           </div>
 
-          <section className="wfsc-payroll-bases" aria-label="Bases de cotizacion e IRPF">
+          <section className="wfsc-payroll-bases" aria-label="Bases de cotización e IRPF">
             <h3>DETERMINACION DE LAS BASES DE COTIZACION A LA SEGURIDAD SOCIAL Y CONCEPTOS DE RECAUDACION CONJUNTA Y DE LA BASE SUJETA A RETENCION DEL IRPF Y APORTACION DE LA EMPRESA</h3>
             <div className="wfsc-payroll-bases__head">
               <span>CONCEPTO</span>
@@ -922,7 +922,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
       ref={sectionRef}
       className="wfsc"
       aria-labelledby={isCompactStep ? undefined : 'wfsc-title'}
-      aria-label={isCompactStep ? 'Navegacion del recorrido fiscal' : undefined}
+      aria-label={isCompactStep ? 'Navegación del recorrido fiscal' : undefined}
     >
       {!isCompactStep ? (
         <div className={`wfsc-stage wfsc-stage--step-${activeStep.id}${isSummaryStep ? ' wfsc-stage--summary' : ''}`}>
@@ -978,7 +978,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
         </div>
       ) : null}
 
-      <div className="wfsc-chrome" role="navigation" aria-label="Navegacion del recorrido fiscal">
+      <div className="wfsc-chrome" role="navigation" aria-label="Navegación del recorrido fiscal">
         <button
           className="wfsc-nav wfsc-nav--previous"
           type="button"

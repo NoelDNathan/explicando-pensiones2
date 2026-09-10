@@ -62,11 +62,12 @@ export async function requestMagicLink(email: string): Promise<AuthOutcome> {
     email: email.trim(),
     options: {
       shouldCreateUser: true,
-      // Vuelve a /cuenta, que es donde se recoge la sesion. El dominio tiene
-      // que estar en la lista de redirecciones permitidas del proyecto: sin
-      // esa lista, `emailRedirectTo` seria un redirector abierto que entrega
-      // el token a donde diga quien construya el enlace.
-      emailRedirectTo: `${window.location.origin}/cuenta`,
+      // Vuelve a la calculadora, que es donde vive el menu de cuenta; el
+      // `AccountProvider` recoge la sesion de la URL al cargar. El dominio
+      // tiene que estar en la lista de redirecciones permitidas del proyecto:
+      // sin esa lista, `emailRedirectTo` seria un redirector abierto que
+      // entrega el token a donde diga quien construya el enlace.
+      emailRedirectTo: `${window.location.origin}/`,
     },
   })
 

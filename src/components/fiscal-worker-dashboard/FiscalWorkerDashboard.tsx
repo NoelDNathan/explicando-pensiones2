@@ -3,7 +3,6 @@ import {
   Bookmark,
   Info,
   Share2,
-  UserRound,
 } from 'lucide-react'
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
 import fiscalParams2005Json from '../../../data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json'
@@ -53,7 +52,6 @@ import {
 } from './fiscalScenarioTransfer'
 import {
   buildShareChartData,
-  canShareImageFiles,
   copyImageToClipboard,
   downloadBlob,
   renderShareChartImage,
@@ -64,6 +62,7 @@ import { calculateIrpf2025Core } from './irpf2025Calc'
 import { calculateGeographicMobilityIncrement2025, calculateInKindBenefits2025 } from './irpf2025Adjustments'
 import { VAT_PROXY_SOURCE, estimateVatFromNetSalary } from './vatEpFProxy'
 import { describeSource, resolveAtEpSourceRef, resolveFiscalSourceRefs } from './fiscalSourceRefs'
+import { AccountMenu } from '../account/AccountMenu'
 import './FiscalWorkerDashboard.css'
 import './FiscalSoftTheme.css'
 
@@ -185,26 +184,26 @@ const fiscalParams2005 = fiscalParams2005Json as LegacyFiscalParams2005
 const autonomicCoverage = autonomicCoverageJson as AutonomicCoverage
 
 const REGION_LABELS: Record<string, string> = {
-  andalucia: 'Andalucia',
-  aragon: 'Aragon',
+  andalucia: 'Andalucía',
+  aragon: 'Aragón',
   asturias: 'Asturias',
   illes_balears: 'Illes Balears',
   canarias: 'Canarias',
   cantabria: 'Cantabria',
   castilla_la_mancha: 'Castilla-La Mancha',
-  castilla_y_leon: 'Castilla y Leon',
-  cataluna: 'Cataluna',
+  castilla_y_leon: 'Castilla y León',
+  cataluna: 'Cataluña',
   extremadura: 'Extremadura',
   galicia: 'Galicia',
   madrid: 'Madrid',
-  murcia: 'Region de Murcia',
+  murcia: 'Región de Murcia',
   la_rioja: 'La Rioja',
   comunitat_valenciana: 'Comunitat Valenciana',
 }
 
 const CONTRIBUTION_GROUP_LABELS: Record<number, string> = {
   1: 'Ingenieros y Licenciados',
-  2: 'Ingenieros Tecnicos, Peritos y Ayudantes Titulados',
+  2: 'Ingenieros Técnicos, Peritos y Ayudantes Titulados',
   3: 'Jefes Administrativos y de Taller',
   4: 'Ayudantes no Titulados',
   5: 'Oficiales Administrativos',
@@ -560,7 +559,7 @@ export function FiscalWorkerDashboard() {
       return
     }
     applyScenario(loaded)
-    setTransferNotice('Copia abierta. Se ha recuperado lo que habia guardado en ella.')
+    setTransferNotice('Copia abierta. Se ha recuperado lo que había guardado en ella.')
     setSavePanelOpen(false)
   }, [applyScenario])
 
@@ -570,12 +569,12 @@ export function FiscalWorkerDashboard() {
 
     if (copied) {
       setShareLink(null)
-      setTransferNotice('Enlace copiado. Quien lo abra vera tus cifras: tu salario, tu comunidad y tu situacion familiar.')
+      setTransferNotice('Enlace copiado. Quien lo abra verá tus cifras: tu salario, tu comunidad y tu situación familiar.')
       return
     }
     // Sin portapapeles (hace falta HTTPS o permiso), se ofrece a la vista.
     setShareLink(url)
-    setTransferNotice('Copia el enlace a mano. Quien lo abra vera tus cifras.')
+    setTransferNotice('Copia el enlace a mano. Quien lo abra verá tus cifras.')
   }, [scenario])
 
   /*
@@ -787,7 +786,7 @@ export function FiscalWorkerDashboard() {
         taxSourceLabel: 'BOE 2005',
         otherTaxSourceLabel: 'Entrada usuario',
         regionalTaxLabel: 'Complementario',
-        deductionNote: 'No hay reglas automaticas 2005; solo importe manual verificado.',
+        deductionNote: 'No hay reglas automáticas 2005; solo importe manual verificado.',
         pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP y FOGASA empresa; AT/EP queda fuera por actividad',
       }
     }
@@ -930,8 +929,8 @@ export function FiscalWorkerDashboard() {
       vatSourceLabel: hasAssignedConsumption ? 'Paso consumo' : `INE EPF 2024: ${epfVatEstimate.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % del neto`,
       taxSourceLabel: 'AEAT/BOE 2025',
       otherTaxSourceLabel: 'Entrada usuario / AEAT IART',
-      regionalTaxLabel: 'Autonomico',
-      deductionNote: 'El catalogo AEAT 2025 esta localizado por comunidad. Esta pantalla no aplica reglas automaticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
+      regionalTaxLabel: 'Autonómico',
+      deductionNote: 'El catálogo AEAT 2025 está localizado por comunidad. Esta pantalla no aplica reglas automáticas si faltan campos del usuario; permite introducir solo importes ya verificados para no simular requisitos.',
       pensionSubtitle: 'Cuota anual con contingencias comunes, desempleo, FP, MEI y solidaridad si procede',
     }
   }, [age, ascendants, ascendantsOver75, children, childrenUnder3, consumptionTaxes, contributionGroupId, dependentDisabilityMinimum, disability, hasAssignedConsumption, manualAutonomicDeduction, mobility, otherTaxes, personalAdjustments, region, salary, salaryComplements, taxpayerDisabilityAssistanceMinimum, taxYear, wealthRecurringTaxAnnual])
@@ -976,7 +975,7 @@ export function FiscalWorkerDashboard() {
   }), [consumptionTaxes?.specialTaxesAnnual, result.grossSalaryAnnual, result.irpf, result.vat, socialContributions.companyContributionsAnnual, socialContributions.workerContributionsAnnual, wealthRecurringTaxAnnual])
 
   const resultsShareText = useMemo(
-    () => `Por fin entiendo cuantos impuestos pago: de cada 100 € que cuesta mi puesto, ${shareChartData.takeHomePer100} € son para mi. Si tu tambien quieres entender cuanto pagas, mira este enlace:`,
+    () => `Por fin entiendo cuántos impuestos pago: de cada 100 € que paga mi empresa, ${shareChartData.takeHomePer100} € son para mí. Si tú también quieres entender cuántos impuestos pagas, mira este enlace:`,
     [shareChartData.takeHomePer100],
   )
 
@@ -1012,33 +1011,6 @@ export function FiscalWorkerDashboard() {
     return () => { cancelled = true }
   }, [sharePanelOpen, buildShareImage])
 
-  /*
-   * Comparte con imagen adjunta cuando el navegador lo permite (Web Share API
-   * de nivel 2, sobre todo en movil): ahi la persona elige ella misma X,
-   * Facebook, Instagram o cualquier otra app desde el selector nativo, y la
-   * imagen viaja de verdad. Es la unica via real para Instagram, que no
-   * tiene ninguna direccion web para prellenar una publicacion. Solo se
-   * intenta cuando `canShareImageFiles()` ya dijo que si (comprobado antes,
-   * de forma sincrona, en el propio gestor del clic).
-   */
-  const shareResultsNatively = useCallback(async (): Promise<boolean> => {
-    const blob = shareImageCacheRef.current ?? await buildShareImage()
-    if (blob === null) return false
-
-    const file = new File([blob], shareImageFileName(taxYear), { type: 'image/png' })
-    const shareData = { text: `${resultsShareText} ${resultsShareUrl}`, files: [file] }
-
-    if (typeof navigator.canShare === 'function' && !navigator.canShare(shareData)) return false
-
-    try {
-      await navigator.share(shareData)
-      return true
-    } catch {
-      // Cancelado por la persona o fallo del selector.
-      return false
-    }
-  }, [buildShareImage, resultsShareText, resultsShareUrl, taxYear])
-
   const handleDownloadShareImage = useCallback(async () => {
     const blob = shareImageCacheRef.current ?? await buildShareImage()
     if (blob === null) {
@@ -1046,7 +1018,7 @@ export function FiscalWorkerDashboard() {
       return
     }
     downloadBlob(blob, shareImageFileName(taxYear))
-    setTransferNotice('Imagen descargada. Adjuntala tu al publicar: las webs de X, Facebook e Instagram no dejan adjuntarla en automatico.')
+    setTransferNotice('Imagen descargada. Adjúntala tú al publicar: las webs de X, Facebook e Instagram no dejan adjuntarla en automático.')
   }, [buildShareImage, taxYear])
 
   /*
@@ -1066,44 +1038,26 @@ export function FiscalWorkerDashboard() {
     }
     const copied = await copyImageToClipboard(blob)
     if (copied) {
-      setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. Tambien hemos copiado la imagen del grafico: pegala ahi (Ctrl+V o Cmd+V) antes de publicar.`)
+      setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. También hemos copiado la imagen del gráfico: pégala ahí (Ctrl+V o Cmd+V) antes de publicar.`)
       return
     }
     downloadBlob(blob, shareImageFileName(taxYear))
-    setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. No se ha podido copiar la imagen automaticamente, asi que la hemos descargado: adjuntala tu.`)
+    setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. No se ha podido copiar la imagen automáticamente, así que la hemos descargado: adjúntala tú.`)
   }, [buildShareImage, taxYear])
 
   const handleShareResultsToX = useCallback(() => {
-    if (canShareImageFiles()) {
-      void (async () => {
-        if (await shareResultsNatively()) { setSharePanelOpen(false); return }
-        const params = new URLSearchParams({ text: resultsShareText, url: resultsShareUrl })
-        window.open(`https://twitter.com/intent/tweet?${params.toString()}`, '_blank', 'noopener,noreferrer')
-        setSharePanelOpen(false)
-      })()
-      return
-    }
     const params = new URLSearchParams({ text: resultsShareText, url: resultsShareUrl })
     window.open(`https://twitter.com/intent/tweet?${params.toString()}`, '_blank', 'noopener,noreferrer')
     setSharePanelOpen(false)
     void copyShareImageWithNotice('X (Twitter)')
-  }, [copyShareImageWithNotice, resultsShareText, resultsShareUrl, shareResultsNatively])
+  }, [copyShareImageWithNotice, resultsShareText, resultsShareUrl])
 
   const handleShareResultsToFacebook = useCallback(() => {
-    if (canShareImageFiles()) {
-      void (async () => {
-        if (await shareResultsNatively()) { setSharePanelOpen(false); return }
-        const params = new URLSearchParams({ u: resultsShareUrl, quote: resultsShareText })
-        window.open(`https://www.facebook.com/sharer/sharer.php?${params.toString()}`, '_blank', 'noopener,noreferrer')
-        setSharePanelOpen(false)
-      })()
-      return
-    }
     const params = new URLSearchParams({ u: resultsShareUrl, quote: resultsShareText })
     window.open(`https://www.facebook.com/sharer/sharer.php?${params.toString()}`, '_blank', 'noopener,noreferrer')
     setSharePanelOpen(false)
     void copyShareImageWithNotice('Facebook')
-  }, [copyShareImageWithNotice, resultsShareText, resultsShareUrl, shareResultsNatively])
+  }, [copyShareImageWithNotice, resultsShareText, resultsShareUrl])
 
   /*
    * Instagram no tiene ninguna direccion web para prellenar una publicacion
@@ -1112,14 +1066,6 @@ export function FiscalWorkerDashboard() {
    * texto se deja a la vista, en el campo de abajo, para copiarlo aparte.
    */
   const handleShareResultsToInstagram = useCallback(() => {
-    if (canShareImageFiles()) {
-      void (async () => {
-        if (await shareResultsNatively()) { setSharePanelOpen(false); return }
-        window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
-        setSharePanelOpen(false)
-      })()
-      return
-    }
     window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
     setSharePanelOpen(false)
     void (async () => {
@@ -1127,13 +1073,13 @@ export function FiscalWorkerDashboard() {
       const copied = blob !== null && await copyImageToClipboard(blob)
       setShareLink(`${resultsShareText} ${resultsShareUrl}`)
       if (copied) {
-        setTransferNotice('Hemos abierto Instagram y copiado la imagen: pegala ahi (Ctrl+V o Cmd+V). Instagram no deja prellenar el texto: copialo tu debajo.')
+        setTransferNotice('Hemos abierto Instagram y copiado la imagen: pégala ahí (Ctrl+V o Cmd+V). Instagram no deja prellenar el texto: cópialo tú debajo.')
         return
       }
       if (blob !== null) downloadBlob(blob, shareImageFileName(taxYear))
-      setTransferNotice('Hemos abierto Instagram. No se ha podido copiar la imagen: te la hemos descargado. Instagram no deja prellenar el texto: copialo tu debajo.')
+      setTransferNotice('Hemos abierto Instagram. No se ha podido copiar la imagen: te la hemos descargado. Instagram no deja prellenar el texto: cópialo tú debajo.')
     })()
-  }, [buildShareImage, resultsShareText, resultsShareUrl, shareResultsNatively, taxYear])
+  }, [buildShareImage, resultsShareText, resultsShareUrl, taxYear])
 
   const calculationSources = useMemo<CalculationSourceItem[]>(() => {
     const percent = (value: number) => `${(value * 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`
@@ -1157,14 +1103,14 @@ export function FiscalWorkerDashboard() {
 
     const socialSecurityItem: CalculationSourceItem = {
       id: `social-security-${taxYear}`,
-      name: 'Bases y tipos de cotizacion del Regimen General',
+      name: 'Bases y tipos de cotización del Régimen General',
       ...sourceRefs.socialSecurity,
       values: isLegacyYear
         ? [
             { name: 'Grupo seleccionado', value: `Grupo ${result.contributionGroupId} · ${result.contributionGroupLabel}` },
             { name: 'Base aplicada', value: `${formatEuro(result.contributionBase)}/mes` },
             { name: 'Cuota trabajador', value: formatEuro(socialContributions.workerContributionsAnnual) },
-            { name: 'Aportacion empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
+            { name: 'Aportación empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
           ]
         : [
             { name: 'Grupo seleccionado', value: `Grupo ${result.contributionGroupId} · ${result.contributionGroupLabel}` },
@@ -1172,7 +1118,7 @@ export function FiscalWorkerDashboard() {
             { name: 'Tipo trabajador', value: percent(socialContributions.workerContributionRate) },
             { name: 'Cuota trabajador', value: formatEuro(socialContributions.workerContributionsAnnual) },
             { name: 'Tipo empresa', value: percent(socialContributions.companyContributionRate) },
-            { name: 'Aportacion empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
+            { name: 'Aportación empresa', value: formatEuro(socialContributions.companyContributionsAnnual) },
           ],
     }
 
@@ -1181,7 +1127,7 @@ export function FiscalWorkerDashboard() {
       name: 'Tarifa de accidentes de trabajo y enfermedades profesionales',
       ...resolveAtEpSourceRef(atEpParamsJson.sources),
       values: [
-        { name: 'Actividad u ocupacion', value: `${atEpCategory.code} · ${atEpCategory.label}` },
+        { name: 'Actividad u ocupación', value: `${atEpCategory.code} · ${atEpCategory.label}` },
         { name: 'IT', value: `${atEpCategory.it_percent.toLocaleString('es-ES')} %` },
         { name: 'IMS', value: `${atEpCategory.ims_percent.toLocaleString('es-ES')} %` },
         { name: 'Total aplicado', value: `${(atEpCategory.it_percent + atEpCategory.ims_percent).toLocaleString('es-ES')} %` },
@@ -1190,7 +1136,7 @@ export function FiscalWorkerDashboard() {
 
     const irpfStateItem: CalculationSourceItem = {
       id: `irpf-state-${taxYear}`,
-      name: isLegacyYear ? 'Escala estatal del IRPF' : 'Escala estatal, minimos y reducciones del IRPF',
+      name: isLegacyYear ? 'Escala estatal del IRPF' : 'Escala estatal, mínimos y reducciones del IRPF',
       ...sourceRefs.irpfState,
       values: isLegacyYear
         ? [
@@ -1199,7 +1145,7 @@ export function FiscalWorkerDashboard() {
           ]
         : [
             { name: 'Base liquidable', value: formatEuro(result.taxableBase) },
-            { name: 'Minimo estatal', value: formatEuro(result.stateMinimum) },
+            { name: 'Mínimo estatal', value: formatEuro(result.stateMinimum) },
             { name: 'Reducciones aplicadas', value: formatEuro(result.baseReductionsApplied) },
             { name: 'Cuota estatal', value: formatEuro(result.stateTax) },
           ],
@@ -1207,13 +1153,13 @@ export function FiscalWorkerDashboard() {
 
     const irpfRegionalItem: CalculationSourceItem = {
       id: `irpf-region-${result.effectiveRegion}-${taxYear}`,
-      name: isLegacyYear ? 'Escala complementaria de Madrid' : `Escala autonomica del IRPF · ${regionLabel}`,
+      name: isLegacyYear ? 'Escala complementaria de Madrid' : `Escala autonómica del IRPF · ${regionLabel}`,
       ...sourceRefs.irpfRegional,
       values: isLegacyYear
         ? [{ name: 'Cuota complementaria', value: formatEuro(result.regionalTax) }]
         : [
-            { name: 'Minimo autonomico', value: formatEuro(result.regionalMinimum) },
-            { name: 'Cuota autonomica', value: formatEuro(result.regionalTax) },
+            { name: 'Mínimo autonómico', value: formatEuro(result.regionalMinimum) },
+            { name: 'Cuota autonómica', value: formatEuro(result.regionalTax) },
             { name: 'Deducciones de cuota', value: formatEuro(result.quotaDeductionsApplied) },
             { name: 'IRPF final', value: formatEuro(result.irpf) },
           ],
@@ -1232,7 +1178,7 @@ export function FiscalWorkerDashboard() {
             { name: 'Tipo efectivo calculado', value: `${result.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 2 })} %` },
             { name: 'IVA estimado', value: formatEuro(result.vat) },
           ],
-          note: 'Estimacion por categorias: algunas mezclan bienes exentos y varios tipos de IVA.',
+          note: 'Estimación por categorías: algunas mezclan bienes exentos y varios tipos de IVA.',
         }
       : {
           id: 'vat-epf-proxy',
@@ -1240,13 +1186,13 @@ export function FiscalWorkerDashboard() {
           ...describeSource(VAT_PROXY_SOURCE),
           status: 'estimated',
           values: [
-            { name: 'Neto usado como aproximacion', value: formatEuro(result.annualConsumption) },
+            { name: 'Neto usado como aproximación', value: formatEuro(result.annualConsumption) },
             { name: 'Tipo efectivo proxy', value: `${result.vatRate.toLocaleString('es-ES', { maximumFractionDigits: 2 })} %` },
             { name: 'IVA estimado', value: formatEuro(result.vat) },
           ],
           note: isLegacyYear
-            ? 'Proxy contemporaneo para contexto: no representa el IVA historico observado en 2005.'
-            : 'La EPF mide hogares, no salarios individuales; el valor es orientativo y no una liquidacion.',
+            ? 'Proxy contemporáneo para contexto: no representa el IVA histórico observado en 2005.'
+            : 'La EPF mide hogares, no salarios individuales; el valor es orientativo y no una liquidación.',
         }
 
     return isLegacyYear
@@ -1456,7 +1402,7 @@ export function FiscalWorkerDashboard() {
         <header className="fwd-header">
           <div>
             <h2>Calculadora fiscal del trabajador {taxYear}</h2>
-            <p>{taxYear === '2005' ? 'Calculo legacy para Regimen General y caso base Comunidad de Madrid.' : 'Calculo anual para Regimen General con IRPF estatal y autonomico de comunidades de regimen comun.'}</p>
+            <p>{taxYear === '2005' ? 'Cálculo legacy para Régimen General y caso base Comunidad de Madrid.' : 'Cálculo anual para Régimen General con IRPF estatal y autonómico de comunidades de régimen común.'}</p>
           </div>
           <div className="fwd-actions">
             <div className="fwd-save" ref={savePanelRef}>
@@ -1472,7 +1418,7 @@ export function FiscalWorkerDashboard() {
               {savePanelOpen ? (
                 <div className="fwd-save-panel" role="group" aria-label="Copias de tu escenario">
                   <p className="fwd-save-panel__note">
-                    Lo que pones ya se guarda solo en este navegador. Aqui puedes llevarte una
+                    Lo que pones ya se guarda solo en este navegador. Aquí puedes llevarte una
                     copia o recuperar una que guardaste antes.
                   </p>
                   <button type="button" onClick={handleDownloadScenario}>
@@ -1510,15 +1456,15 @@ export function FiscalWorkerDashboard() {
               {sharePanelOpen ? (
                 <div className="fwd-save-panel" role="group" aria-label="Formas de compartir">
                   <p className="fwd-save-panel__note">
-                    Enlace privado: quien lo abra vera tus cifras (salario, comunidad, situacion
-                    familiar). En redes solo se comparte la imagen del grafico con cuanto te queda
+                    Enlace privado: quien lo abra verá tus cifras (salario, comunidad, situación
+                    familiar). En redes solo se comparte la imagen del gráfico con cuánto te queda
                     de cada 100 €, sin esos datos.
                   </p>
                   <button type="button" onClick={() => { void handleShareScenario() }}>
                     Copiar enlace privado
                   </button>
                   <button type="button" onClick={() => { void handleDownloadShareImage() }}>
-                    Descargar imagen del grafico
+                    Descargar imagen del gráfico
                   </button>
                   <button type="button" onClick={handleShareResultsToX}>
                     Compartir en X (Twitter)
@@ -1532,17 +1478,15 @@ export function FiscalWorkerDashboard() {
                 </div>
               ) : null}
             </div>
-            <a className="fwd-cuenta-enlace" href="/cuenta">
-              <UserRound size={16} aria-hidden="true" /> Tu cuenta
-            </a>
-            <button type="button" aria-label="Informacion"><Info size={18} /></button>
+            <AccountMenu />
+            <button type="button" aria-label="Información"><Info size={18} /></button>
           </div>
         </header>
 
         {viewingSharedScenario ? (
           <p className="fwd-transfer-notice fwd-transfer-notice--shared">
-            Estas viendo un caso que te han compartido, no el tuyo. Lo que tuvieras guardado en
-            este navegador sigue intacto: solo se sustituira si cambias algo aqui.
+            Estás viendo un caso que te han compartido, no el tuyo. Lo que tuvieras guardado en
+            este navegador sigue intacto: solo se sustituirá si cambias algo aquí.
           </p>
         ) : null}
 

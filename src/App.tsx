@@ -17,7 +17,7 @@ import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/Fis
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerPrivacyNotice, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
-import { AccountPage } from './components/account/AccountPage'
+import { AccountProvider } from './lib/supabase/auth/AccountProvider'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
 import {
   POPULATION_SCALE_MAX,
@@ -952,7 +952,7 @@ function Home() {
       <p className="eyebrow">Explicando pensiones</p>
       <h1>Una web didactica sobre las pensiones en Espana</h1>
       <p>
-        Este proyecto esta preparando sus componentes visuales. Puedes abrir el
+        Indice interno (solo en desarrollo). Puedes abrir el
         resumen en <a href="/resumen">/resumen</a>, el laboratorio interno en <a href="/componentes">/componentes</a>, ver la
         pagina de poblacion en <a href="/poblacion">/poblacion</a> o el panel
         de gasto sanitario en <a href="/gasto-sanitario">/gasto-sanitario</a>.
@@ -1125,30 +1125,36 @@ function HealthExpenditurePage() {
   )
 }
 
-function App() {
-  const path = window.location.pathname
-  const isComponentLab = path === '/componentes'
-  const isPopulationPage = path === '/poblacion'
-  const isHealthPage = path === '/gasto-sanitario'
-  const isSalaryNationalityPage = path === '/salario-nacionalidad'
-  const isFiscalWorkerPage = path === '/calculadora-fiscal'
-  const isSocialSecurityBasesPage = path === '/bases-cotizacion'
-  const isProgressiveIrpfPage = path === '/irpf'
-  const isWorkReductionPage = path === '/reduccion-trabajo'
-  const isPensionOverviewPage = path === '/resumen'
-  const isAccountPage = path === '/cuenta'
+// Rutas internas (laboratorio, borradores de otras secciones). Solo se sirven
+// en desarrollo o si se activa VITE_SHOW_INTERNAL=true; en produccion la web
+// publica es la calculadora fiscal y todo lo demas cae en ella.
+const INTERNAL_ROUTES_ENABLED =
+  import.meta.env.DEV || import.meta.env.VITE_SHOW_INTERNAL === 'true'
 
-  if (isAccountPage) return <AccountPage />
-  if (isPensionOverviewPage) return <PensionOverviewPage />
-  if (isComponentLab) return <ComponentLab />
-  if (isPopulationPage) return <PopulationPage />
-  if (isHealthPage) return <HealthExpenditurePage />
-  if (isSalaryNationalityPage) return <SalaryNationalityDashboard />
-  if (isFiscalWorkerPage) return <FiscalWorkerDashboard />
-  if (isSocialSecurityBasesPage) return <SocialSecurityBasesExplainer />
-  if (isProgressiveIrpfPage) return <ProgressiveIrpfExplainer />
-  if (isWorkReductionPage) return <WorkIncomeReductionExplainer />
-  return <Home />
+function App() {
+  return (
+    <AccountProvider>
+      <Routes />
+    </AccountProvider>
+  )
+}
+
+function Routes() {
+  const path = window.location.pathname
+
+  if (INTERNAL_ROUTES_ENABLED) {
+    if (path === '/inicio') return <Home />
+    if (path === '/resumen') return <PensionOverviewPage />
+    if (path === '/componentes') return <ComponentLab />
+    if (path === '/poblacion') return <PopulationPage />
+    if (path === '/gasto-sanitario') return <HealthExpenditurePage />
+    if (path === '/salario-nacionalidad') return <SalaryNationalityDashboard />
+    if (path === '/bases-cotizacion') return <SocialSecurityBasesExplainer />
+    if (path === '/irpf') return <ProgressiveIrpfExplainer />
+    if (path === '/reduccion-trabajo') return <WorkIncomeReductionExplainer />
+  }
+
+  return <FiscalWorkerDashboard />
 }
 
 export default App

@@ -10,8 +10,8 @@ const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 
 
 /** Referencias salariales dibujadas sobre la escala de bases (base = salario / 12). */
 const SCALE_REFERENCES = [
-  { label: 'SMI', baseMonthly: SMI_ANNUAL / 12, title: 'Salario minimo interprofesional 2025' },
-  { label: 'Salario medio', baseMonthly: AVERAGE_SALARY_ANNUAL / 12, title: 'Salario medio en Espana (INE 2023)' },
+  { label: 'SMI', baseMonthly: SMI_ANNUAL / 12, title: 'Salario mínimo interprofesional 2025' },
+  { label: 'Salario medio', baseMonthly: AVERAGE_SALARY_ANNUAL / 12, title: 'Salario medio en España (INE 2023)' },
 ]
 
 export type ContributionViewMode = 'monthly' | 'annual'
@@ -69,7 +69,7 @@ export const DEMO_CONTRIBUTION_GROUPS: ContributionGroup[] = [
   },
   {
     id: 2,
-    name: 'Ingenieros Tecnicos, Peritos y Ayudantes Titulados',
+    name: 'Ingenieros Técnicos, Peritos y Ayudantes Titulados',
     minBaseMonthly: 1599.6,
     maxBaseMonthly: 4909.5,
   },
@@ -159,18 +159,18 @@ function calculateContributionLimit(
 function getStatusCopy(status: ContributionStatus) {
   if (status === 'below_minimum') {
     return {
-      title: 'Debajo del minimo',
+      title: 'Debajo del mínimo',
       description:
-        'Tu base real esta por debajo de la base minima de tu grupo. Para cotizar se usara la base minima. Es decir, pagarás más de lo que debería pagar tu base, pero generarás mayor derecho a pensiones',
+        'Tu base real está por debajo de la base mínima de tu grupo. Para cotizar se usará la base mínima. Es decir, pagarás más de lo que debería pagar tu base, pero generarás mayor derecho a pensiones',
       accent: 'minimum',
     }
   }
 
   if (status === 'above_maximum') {
     return {
-      title: 'Por encima del maximo',
+      title: 'Por encima del máximo',
       description:
-        'Tu base real supera la base maxima. Para calcular cuanto pagas en las cotizaciones ordinarias, se usara la base maxima, todo lo que exceda no supone un pago mayor de impuestos, no cotiza ni genera más prestaciones.',
+        'Tu base real supera la base máxima. Para calcular cuánto pagas en las cotizaciones ordinarias, se usará la base máxima, todo lo que exceda no supone un pago mayor de impuestos, no cotiza ni genera más prestaciones.',
       accent: 'maximum',
     }
   }
@@ -178,14 +178,14 @@ function getStatusCopy(status: ContributionStatus) {
   return {
     title: 'Dentro del rango',
     description:
-      'Tu base real esta entre la base minima y la maxima. Cotizas por tu base real.',
+      'Tu base real está entre la base mínima y la máxima. Cotizas por tu base real.',
     accent: 'range',
   }
 }
 
 function getSummaryConnectorLabel(status: ContributionStatus) {
-  if (status === 'below_minimum') return 'Se eleva a la base minima'
-  if (status === 'above_maximum') return 'Se limita a la base maxima'
+  if (status === 'below_minimum') return 'Se eleva a la base mínima'
+  if (status === 'above_maximum') return 'Se limita a la base máxima'
   return 'Cotizas por tu base real'
 }
 
@@ -419,7 +419,7 @@ export function WorkerContributionLimitsCard({
   userBaseAnnual = 37_500,
   initialViewMode = 'monthly',
   dataAvailable = true,
-  sourceLabel: _sourceLabel = 'Fuente: BOE/AEAT 2025, Regimen General con bases mensuales.',
+  sourceLabel: _sourceLabel = 'Fuente: BOE/AEAT 2025, Régimen General con bases mensuales.',
   onUserBaseAnnualChange,
   onGroupChange,
   onResultChange,
@@ -503,17 +503,17 @@ export function WorkerContributionLimitsCard({
       <header className="wclc-header">
         <div className="wclc-title-group">
           <span className="wclc-step" aria-hidden="true">2.</span>
-          <h2 id="wclc-title">Limites de cotizacion</h2>
+          <h2 id="wclc-title">Límites de cotización</h2>
         </div>
     
       </header>
 
       {infoOpen && (
         <div className="wclc-popover" role="status">
-          El grupo de cotizacion marca un minimo y un maximo. Ejemplo sencillo:
-          si tu base queda por debajo de {selectedGroup ? formatEuro(selectedGroup.minBaseMonthly) : 'la base minima'},
-          se usa ese minimo. Si supera {selectedGroup ? formatEuro(selectedGroup.maxBaseMonthly) : 'la base maxima'},
-          se usa ese maximo para las cotizaciones ordinarias.
+          El grupo de cotización marca un mínimo y un máximo. Ejemplo sencillo:
+          si tu base queda por debajo de {selectedGroup ? formatEuro(selectedGroup.minBaseMonthly) : 'la base mínima'},
+          se usa ese mínimo. Si supera {selectedGroup ? formatEuro(selectedGroup.maxBaseMonthly) : 'la base máxima'},
+          se usa ese máximo para las cotizaciones ordinarias.
         </div>
       )}
 
@@ -550,7 +550,7 @@ export function WorkerContributionLimitsCard({
           }}
         />
 
-        <div className="wclc-mode" role="group" aria-label="Unidad de visualizacion">
+        <div className="wclc-mode" role="group" aria-label="Unidad de visualización">
           <button
             type="button"
             className={viewMode === 'monthly' ? 'is-active' : ''}
@@ -573,15 +573,15 @@ export function WorkerContributionLimitsCard({
           {!hasBase
             ? 'Primero calcula tu base real en el paso 1.'
             : !selectedGroup
-              ? 'Selecciona tu grupo de cotizacion para ver los limites aplicables.'
-              : 'No hay datos disponibles para este ano.'}
+              ? 'Selecciona tu grupo de cotización para ver los límites aplicables.'
+              : 'No hay datos disponibles para este año.'}
         </div>
       ) : result && statusCopy ? (
         <>
-          <div className="wclc-scale" aria-label="Comparacion de base minima, base real y base maxima">
+          <div className="wclc-scale" aria-label="Comparación de base mínima, base real y base máxima">
             <div className={scaleTopClassName}>
               <div className="wclc-marker-label wclc-marker-label--min" style={{ left: `${minPosition}%` }}>
-                <span>Base minima</span>
+                <span>Base mínima</span>
                 <strong>{getDisplayValue(result, viewMode, 'min')}</strong>
               </div>
               <div className="wclc-marker-label wclc-marker-label--user" style={{ left: `${userPosition}%` }}>
@@ -589,7 +589,7 @@ export function WorkerContributionLimitsCard({
                 <strong>{getDisplayValue(result, viewMode, 'user')}</strong>
               </div>
               <div className="wclc-marker-label wclc-marker-label--max" style={{ left: `${maxPosition}%` }}>
-                <span>Base maxima</span>
+                <span>Base máxima</span>
                 <strong>{getDisplayValue(result, viewMode, 'max')}</strong>
               </div>
             </div>
@@ -632,9 +632,9 @@ export function WorkerContributionLimitsCard({
             )}
 
             <div className="wclc-scale-bottom">
-              <span>Debajo del minimo</span>
+              <span>Debajo del mínimo</span>
               <span>Dentro del rango</span>
-              <span>Por encima del maximo</span>
+              <span>Por encima del máximo</span>
             </div>
           </div>
 
@@ -647,7 +647,7 @@ export function WorkerContributionLimitsCard({
             <article className={`wclc-distance wclc-distance--${statusCopy.accent}`}>
               {result.status === 'below_minimum' && (
                 <>
-                  <span className="wclc-distance__label">Te faltan para el minimo</span>
+                  <span className="wclc-distance__label">Te faltan para el mínimo</span>
                   <strong className="wclc-distance__value">{formatEuro(Math.abs(result.distanceToMinimum))}</strong>
                   <span className="wclc-distance__unit">al mes</span>
                 </>
@@ -657,17 +657,17 @@ export function WorkerContributionLimitsCard({
                   <span className="wclc-distance__label">Margen dentro del rango</span>
                   <span className="wclc-distance__pair">
                     <span>
-                      <strong>{formatEuro(result.distanceToMinimum)}</strong> sobre el minimo
+                      <strong>{formatEuro(result.distanceToMinimum)}</strong> sobre el mínimo
                     </span>
                     <span>
-                      <strong>{formatEuro(result.distanceToMaximum)}</strong> bajo el maximo
+                      <strong>{formatEuro(result.distanceToMaximum)}</strong> bajo el máximo
                     </span>
                   </span>
                 </>
               )}
               {result.status === 'above_maximum' && (
                 <>
-                  <span className="wclc-distance__label">Exceso sobre el maximo</span>
+                  <span className="wclc-distance__label">Exceso sobre el máximo</span>
                   <strong className="wclc-distance__value">{formatEuro(result.excessOverMaximum)}</strong>
                   <span className="wclc-distance__unit">al mes</span>
                 </>

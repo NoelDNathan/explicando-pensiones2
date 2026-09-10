@@ -207,24 +207,6 @@ export function shareImageFileName(taxYear: string): string {
 }
 
 /**
- * Comprueba, de forma sincrona, si el navegador puede compartir un archivo de
- * imagen con `navigator.share`. Sincrona a proposito: hay que decidir el
- * camino a seguir en el mismo evento de clic, antes de cualquier `await`,
- * porque un `window.open` para X o Facebook solo pasa el bloqueador de
- * pop-ups si es la primera instruccion del gestor del clic. Un archivo vacio
- * de prueba basta: `canShare` solo mira el tipo, no el contenido.
- */
-export function canShareImageFiles(): boolean {
-  if (typeof navigator === 'undefined' || typeof navigator.canShare !== 'function') return false
-  try {
-    const probe = new File([''], 'probe.png', { type: 'image/png' })
-    return navigator.canShare({ files: [probe] })
-  } catch {
-    return false
-  }
-}
-
-/**
  * Copia la imagen al portapapeles como cuando se copia una foto en el
  * explorador de archivos: la app donde se pegue (X, Facebook, Instagram...)
  * la recibe como una imagen adjunta, no como un enlace.

@@ -23,8 +23,8 @@ type WorkerCalculationSourcesCardProps = {
 const DEMO_ITEMS: CalculationSourceItem[] = [
   {
     id: 'demo-social-security',
-    name: 'Bases y tipos de cotizacion',
-    officialSource: 'Boletin Oficial del Estado (BOE)',
+    name: 'Bases y tipos de cotización',
+    officialSource: 'Boletín Oficial del Estado (BOE)',
     sourceDetail: 'Orden PJC/178/2025, de 25 de febrero',
     url: 'https://www.boe.es/buscar/act.php?id=BOE-A-2025-3780',
     urlLabel: 'boe.es · Orden PJC/178/2025',
@@ -36,8 +36,8 @@ const DEMO_ITEMS: CalculationSourceItem[] = [
   {
     id: 'demo-irpf',
     name: 'Escala estatal del IRPF',
-    officialSource: 'Agencia Estatal de Administracion Tributaria (AEAT)',
-    sourceDetail: 'Manual practico Renta 2025',
+    officialSource: 'Agencia Estatal de Administración Tributaria (AEAT)',
+    sourceDetail: 'Manual práctico Renta 2025',
     url: 'https://sede.agenciatributaria.gob.es/',
     urlLabel: 'sede.agenciatributaria.gob.es · Renta 2025',
     values: [
@@ -52,10 +52,10 @@ export function WorkerCalculationSourcesCard({ year = 2025, items = DEMO_ITEMS }
     <section className="wcsc" aria-labelledby="wcsc-title">
       <header className="wcsc-header">
         <div className="wcsc-heading">
-          <span className="wcsc-kicker"><FileCheck2 size={16} aria-hidden="true" /> Trazabilidad del calculo</span>
+          <span className="wcsc-kicker"><FileCheck2 size={16} aria-hidden="true" /> Trazabilidad del cálculo</span>
           <h2 id="wcsc-title">Fuentes y valores utilizados</h2>
           <p>
-            Este es el origen de cada parametro aplicado al resultado de {year}. Los valores reflejan tus selecciones actuales; los enlaces llevan al documento oficial.
+            Este es el origen de cada parámetro aplicado al resultado de {year}. Los valores reflejan tus selecciones actuales; los enlaces llevan al documento oficial.
           </p>
         </div>
         <div className="wcsc-seal" aria-label={`${items.length} fuentes documentadas`}>
@@ -76,7 +76,7 @@ export function WorkerCalculationSourcesCard({ year = 2025, items = DEMO_ITEMS }
                   <p><strong>{item.officialSource}</strong> · {item.sourceDetail}</p>
                 </div>
                 <span className={`wcsc-status wcsc-status--${item.status ?? 'official'}`}>
-                  {item.status === 'estimated' ? 'Estimacion' : 'Oficial'}
+                  {item.status === 'estimated' ? 'Estimación' : 'Oficial'}
                 </span>
               </div>
 
@@ -96,7 +96,7 @@ export function WorkerCalculationSourcesCard({ year = 2025, items = DEMO_ITEMS }
                     <ExternalLink size={16} aria-hidden="true" />
                   </a>
                 ) : (
-                  <p className="wcsc-source-nolink">Sin enlace registrado para este parametro.</p>
+                  <p className="wcsc-source-nolink">Sin enlace registrado para este parámetro.</p>
                 )}
                 {item.supportingUrl ? (
                   <a href={item.supportingUrl} target="_blank" rel="noreferrer">
@@ -112,7 +112,7 @@ export function WorkerCalculationSourcesCard({ year = 2025, items = DEMO_ITEMS }
       </div>
 
       <p className="wcsc-disclaimer">
-        La calculadora es didactica. Los enlaces permiten comprobar los parametros, pero el resultado no sustituye una nomina, una liquidacion tributaria ni asesoramiento profesional.
+        La calculadora es didáctica. Los enlaces permiten comprobar los parámetros, pero el resultado no sustituye una nómina, una liquidación tributaria ni asesoramiento profesional.
       </p>
     </section>
   )

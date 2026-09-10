@@ -186,12 +186,12 @@ const DEFAULT_BUDGET_ANNUAL = 28145.92
 const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
   {
     id: 'saving',
-    label: 'Ahorro / inversion',
+    label: 'Ahorro / inversión',
     initialSharePercent: 0,
     vatRate: 0,
     statutoryLabel: '0% ahora',
     tone: 'green',
-    help: 'No es consumo corriente ni deuda: aqui va el dinero que reservas en lugar de gastarlo ya. Depositos, fondos, acciones, aportaciones a pensiones privadas... No paga IVA al guardarlo, pero lo que luego compres con ese dinero si tributara en su categoria.',
+    help: 'No es consumo corriente ni deuda: aquí va el dinero que reservas en lugar de gastarlo ya. Depósitos, fondos, acciones, aportaciones a pensiones privadas... No paga IVA al guardarlo, pero lo que luego compres con ese dinero sí tributará en su categoría.',
   },
   {
     id: 'mortgage-debt',
@@ -205,21 +205,21 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
   },
   {
     id: 'basic-food',
-    label: 'Alimentacion basica',
+    label: 'Alimentación básica',
     initialSharePercent: 0,
     vatRate: 4,
     statutoryLabel: '4%',
     tone: 'green',
-    help: 'La frontera legal del IVA (4 % vs 10 %) no es obvia. Basica: pan, leche, huevos, fruta/verdura fresca, etc. General: resto de comida del supermercado no incluida en la basica.',
+    help: 'La frontera legal del IVA (4 % vs 10 %) no es obvia. Básica: pan, leche, huevos, fruta/verdura fresca, etc. General: resto de comida del supermercado no incluida en la básica.',
   },
   {
     id: 'general-food',
-    label: 'Alimentacion general',
+    label: 'Alimentación general',
     initialSharePercent: 0,
     vatRate: 10,
     statutoryLabel: '10%',
     tone: 'orange',
-    help: 'La frontera legal del IVA (4 % vs 10 %) no es obvia. Basica: pan, leche, huevos, fruta/verdura fresca, etc. General: resto de comida del supermercado no incluida en la basica.',
+    help: 'La frontera legal del IVA (4 % vs 10 %) no es obvia. Básica: pan, leche, huevos, fruta/verdura fresca, etc. General: resto de comida del supermercado no incluida en la básica.',
   },
   {
     id: 'restaurants',
@@ -228,7 +228,7 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     vatRate: 10,
     statutoryLabel: '10%',
     tone: 'orange',
-    help: 'Comidas fuera de casa y delivery. Puede solaparse con alimentacion general si compras comida preparada para llevar; aqui va lo que consumes en restaurante o te lo traen a domicilio.',
+    help: 'Comidas fuera de casa y delivery. Puede solaparse con alimentación general si compras comida preparada para llevar; aquí va lo que consumes en restaurante o te lo traen a domicilio.',
   },
   {
     id: 'shopping',
@@ -237,7 +237,7 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     vatRate: 21,
     statutoryLabel: '21%',
     tone: 'blue',
-    help: 'Es el cajon de sastre del 21 %. Ropa, electronica, muebles, higiene no farmaceutica, etc. Lo que no encaje en otra fila.',
+    help: 'Es el cajón de sastre del 21 %. Ropa, electrónica, muebles, higiene no farmacéutica, etc. Lo que no encaje en otra fila.',
   },
   {
     id: 'leisure',
@@ -249,7 +249,7 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     note: 'Algunos servicios de ocio o cultura pueden tributar al 10%.',
     help: 'Streaming, gimnasio, cine, videojuegos... Por defecto 21 %; algunos servicios culturales/de ocio pueden ir al 10 %.',
   },
-  { id: 'public-transport', label: 'Transporte publico', initialSharePercent: 0, vatRate: 10, statutoryLabel: '10%', tone: 'green' },
+  { id: 'public-transport', label: 'Transporte público', initialSharePercent: 0, vatRate: 10, statutoryLabel: '10%', tone: 'green' },
   {
     id: 'fuel',
     label: 'Gasolina',
@@ -269,7 +269,7 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     specialRate: 5.11,
     statutoryLabel: '21% + 5,11%',
     tone: 'cyan',
-    help: 'El 21 % + 5,11 % combina IVA e impuesto especial sobre la electricidad. Esta fila no incluye gas, agua u otros suministros si no los has repartido en otra categoria.',
+    help: 'El 21 % + 5,11 % combina IVA e impuesto especial sobre la electricidad. Esta fila no incluye gas, agua u otros suministros si no los has repartido en otra categoría.',
   },
   {
     id: 'health',
@@ -278,8 +278,8 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     vatRate: 0,
     statutoryLabel: '0%',
     tone: 'cyan',
-    note: 'Segun el caso, algunos productos o servicios pueden tributar a tipos superiores, incluso al 21%.',
-    help: 'Medicamentos con receta y productos sanitarios basicos suelen ir al 0 % o tipos reducidos; otros productos de farmacia/parafarmacia (cosmetica, optica...) pueden ir al 21 %.',
+    note: 'Según el caso, algunos productos o servicios pueden tributar a tipos superiores, incluso al 21%.',
+    help: 'Medicamentos con receta y productos sanitarios básicos suelen ir al 0 % o tipos reducidos; otros productos de farmacia/parafarmacia (cosmética, óptica...) pueden ir al 21 %.',
   },
   {
     id: 'tobacco',
@@ -299,7 +299,7 @@ const DEFAULT_CATEGORIES: ConsumptionTaxCategory[] = [
     specialRate: 5,
     statutoryLabel: '21% + 5%',
     tone: 'orange',
-    help: 'Bebidas alcoholicas: cerveza, vino, licores, etc. El 21 % + 5 % mezcla IVA e impuesto especial sobre el alcohol; el tipo especial varia segun producto, aqui usamos una cifra orientativa.',
+    help: 'Bebidas alcohólicas: cerveza, vino, licores, etc. El 21 % + 5 % mezcla IVA e impuesto especial sobre el alcohol; el tipo especial varía según producto, aquí usamos una cifra orientativa.',
   },
 ]
 
@@ -596,7 +596,7 @@ export function WorkerConsumptionTaxesCard({
         <div className="wctc-heading">
           <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 12</span>
           <h2 id="wctc-title">8. IVA y consumo diario</h2>
-          <p>Distribuye tu gasto y calcula cuanto pagas al mes en IVA e impuestos especiales.</p>
+          <p>Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>
         </div>
 
         <div className="wctc-header-actions">
@@ -614,20 +614,20 @@ export function WorkerConsumptionTaxesCard({
         <Lightbulb size={20} aria-hidden="true" />
         <p>
           <strong>Consejo.</strong> En la app de tu banco suele aparecer el gasto mensual y el
-          porcentaje de cada categoria (alimentacion, ocio, transporte...). Usa esas cifras
-          para rellenar importe y % con tu patron real, no con una media.
+          porcentaje de cada categoría (alimentación, ocio, transporte...). Usa esas cifras
+          para rellenar importe y % con tu patrón real, no con una media.
         </p>
       </aside>
 
       <div className="wctc-layout">
-        <section className="wctc-left" aria-label="Distribucion del gasto">
+        <section className="wctc-left" aria-label="Distribución del gasto">
           <ConsumptionSpendDonut
             lines={result.lines}
             monthlyTotal={toMonthly(result.assignedSpendAnnual)}
           />
           <div className="wctc-spend-scroll">
             <div className="wctc-grid-head" aria-hidden="true">
-              <span>Categoria de gasto</span>
+              <span>Categoría de gasto</span>
               <span>Tipo impositivo / regla</span>
               <span>Importe al mes</span>
               <span>% del gasto</span>
@@ -647,7 +647,7 @@ export function WorkerConsumptionTaxesCard({
                     <strong>{line.label}</strong>
                     {line.help && (
                       <InfoButton
-                        label={`Que incluye ${line.label.replace(/\s*\*$/, '')}`}
+                        label={`Qué incluye ${line.label.replace(/\s*\*$/, '')}`}
                         size="sm"
                         placement="end"
                         className="wctc-help"
@@ -755,7 +755,7 @@ export function WorkerConsumptionTaxesCard({
           </output>
 
           <p className="wctc-summary-note">
-            El IBI de tu vivienda y el IVTM de tu coche no dependen de como gastas: se estiman en
+            El IBI de tu vivienda y el IVTM de tu coche no dependen de cómo gastas: se estiman en
             el paso 9.
           </p>
         </aside>

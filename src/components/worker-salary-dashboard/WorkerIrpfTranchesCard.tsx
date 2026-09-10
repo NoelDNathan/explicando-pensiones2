@@ -103,8 +103,8 @@ const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 
 
 const DEFAULT_REGIONS: RegionOption[] = [
   { value: "madrid", label: "Madrid" },
-  { value: "andalucia", label: "Andalucia" },
-  { value: "cataluna", label: "Cataluna" },
+  { value: "andalucia", label: "Andalucía" },
+  { value: "cataluna", label: "Cataluña" },
   { value: "valencia", label: "C. Valenciana" },
 ];
 
@@ -188,7 +188,7 @@ export function WorkerIrpfTranchesCard({
   regionalMinimumQuota,
   stateGeneralQuotaDeductions = 0,
   regionalGeneralQuotaDeductions = 0,
-  regionalTaxLabel = "Autonomico",
+  regionalTaxLabel = "Autonómico",
   grossSalary,
   onSalaryChange,
   onRegionChange,
@@ -600,18 +600,18 @@ export function WorkerIrpfTranchesCard({
               <li className="witc-calc-row witc-calc-row--blue">
                 <span aria-hidden="true" />
                 <p>Cuota estatal</p>
-                <b>escala estatal - minimo</b>
+                <b>escala estatal - mínimo</b>
                 <strong>= {formatEuro(stateTax ?? 0, 2)}</strong>
               </li>
               <li className="witc-calc-row witc-calc-row--orange">
                 <span aria-hidden="true" />
                 <p>Cuota {regionLabel}</p>
-                <b>escala {regionalTaxLabel.toLowerCase()} - minimo</b>
+                <b>escala {regionalTaxLabel.toLowerCase()} - mínimo</b>
                 <strong>= {formatEuro(regionalTax ?? 0, 2)}</strong>
               </li>
               <li className="witc-calc-row witc-calc-row--green">
                 <span aria-hidden="true" />
-                <p>Cuota integra</p>
+                <p>Cuota íntegra</p>
                 <b>estatal + {regionLabel}</b>
                 <strong>= {formatEuro(result.quota, 2)}</strong>
               </li>
@@ -667,7 +667,7 @@ export function WorkerIrpfTranchesCard({
             </>
           ) : (
             <output className="witc-result witc-result--quota">
-              <span>Cuota integra estimada</span>
+              <span>Cuota íntegra estimada</span>
               <strong>{formatEuro(result.quota, 2)}</strong>
             </output>
           )}

@@ -189,18 +189,18 @@ function buildWarnings(adjustments: Irpf2025AdjustmentInput) {
     warnings.push('No se aplican los beneficios sujetos al umbral de 6.500 EUR hasta confirmar las otras rentas no exentas.')
   }
   if (adjustments.professionalDues > 0 && !adjustments.professionalMembershipMandatory) {
-    warnings.push('Las cuotas colegiales no se aplican porque no se ha confirmado que la colegiacion sea obligatoria.')
+    warnings.push('Las cuotas colegiales no se aplican porque no se ha confirmado que la colegiación sea obligatoria.')
   }
   if (adjustments.compensatoryPensionPaid > 0 && !adjustments.compensatoryPensionFormalized) {
-    warnings.push('La pension compensatoria no se aplica sin resolucion o convenio formalizado.')
+    warnings.push('La pensión compensatoria no se aplica sin resolución o convenio formalizado.')
   }
   if (adjustments.protectedAssetsContribution > 0 && !protectedAssetsMeetsRequirements(adjustments)) {
     if (!adjustments.protectedAssetsFormalEstate) {
-      warnings.push('La aportacion al patrimonio protegido no se aplica sin un patrimonio protegido constituido formalmente.')
+      warnings.push('La aportación al patrimonio protegido no se aplica sin un patrimonio protegido constituido formalmente.')
     } else if (!adjustments.protectedAssetsValidContributor) {
-      warnings.push('La aportacion al patrimonio protegido no se aplica sin parentesco o legitimacion validos para aportar.')
+      warnings.push('La aportación al patrimonio protegido no se aplica sin parentesco o legitimación válidos para aportar.')
     } else if (!adjustments.protectedAssetsContributorNotBeneficiary) {
-      warnings.push('La aportacion al patrimonio protegido no se aplica si eres tu el titular del patrimonio.')
+      warnings.push('La aportación al patrimonio protegido no se aplica si eres tú el titular del patrimonio.')
     }
   }
   if (adjustments.verifiedRegionalReduction > 0 && !(
@@ -209,12 +209,12 @@ function buildWarnings(adjustments: Irpf2025AdjustmentInput) {
     && adjustments.regionalReductionSourceUrl.trim()
     && adjustments.regionalReductionCalculation.trim()
   )) {
-    warnings.push('La reduccion autonomica manual no se aplica sin verificacion documentada.')
+    warnings.push('La reducción autonómica manual no se aplica sin verificación documentada.')
   }
   if (adjustments.childSupportPaid > 0 && !(
     adjustments.childSupportFormalized && adjustments.childSupportMinimumExcluded
   )) {
-    warnings.push('La especialidad de anualidades no se aplica hasta confirmar el titulo formal y la exclusion del minimo por descendiente.')
+    warnings.push('La especialidad de anualidades no se aplica hasta confirmar el título formal y la exclusión del mínimo por descendiente.')
   }
   if (adjustments.donationAmount > 0 && !adjustments.donationLaw49Eligible) {
     warnings.push('El donativo no se aplica hasta confirmar la entidad beneficiaria de la Ley 49/2002.')
@@ -225,13 +225,13 @@ function buildWarnings(adjustments: Irpf2025AdjustmentInput) {
     && adjustments.rentPriorDeductionRight
     && adjustments.rentIsMainHome
   )) {
-    warnings.push('El alquiler no cumple o no acredita todos los requisitos del regimen transitorio estatal.')
+    warnings.push('El alquiler no cumple o no acredita todos los requisitos del régimen transitorio estatal.')
   }
   if (adjustments.homeInvestmentPaid > 0 && !adjustments.homeTransitionalRight) {
-    warnings.push('La inversion en vivienda no se aplica sin acreditar el regimen transitorio anterior a 2013.')
+    warnings.push('La inversión en vivienda no se aplica sin acreditar el régimen transitorio anterior a 2013.')
   }
   if (adjustments.newCompanyInvestment > 0 && !adjustments.newCompanyRequirementsVerified) {
-    warnings.push('La inversion en empresa nueva queda pendiente de verificacion documental.')
+    warnings.push('La inversión en empresa nueva queda pendiente de verificación documental.')
   }
   if (adjustments.verifiedRegionalDeduction > 0 && !(
     adjustments.regionalDeductionVerified
@@ -239,7 +239,7 @@ function buildWarnings(adjustments: Irpf2025AdjustmentInput) {
     && adjustments.regionalDeductionSourceUrl.trim()
     && adjustments.regionalDeductionCalculation.trim()
   )) {
-    warnings.push('La deduccion autonomica manual no se aplica sin regla, fuente y requisitos verificados.')
+    warnings.push('La deducción autonómica manual no se aplica sin regla, fuente y requisitos verificados.')
   }
   return warnings
 }

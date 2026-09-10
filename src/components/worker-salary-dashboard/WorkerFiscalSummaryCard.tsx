@@ -251,13 +251,13 @@ export function WorkerFiscalSummaryCard({
           <p className="wfsc-summary__eyebrow">
             {isFinal
               ? "Paso 10 · Resultado de todo el recorrido"
-              : "Cuanto pagas, cuanto paga tu empresa y con cuanto dinero te quedas"}
+              : "Cuánto pagas, cuánto paga tu empresa y con cuánto dinero te quedas"}
           </p>
           <h2 id="wfsc-summary-title">{isFinal ? "Resumen del cálculo" : "Entiende tu nómina"}</h2>
           <p>
             {isFinal
               ? "Aquí se reúnen las cifras que has construido paso a paso: coste de empresa, cotizaciones, IRPF, IVA y lo que te queda. Puedes seguir ajustando el salario bruto para ver cómo cambia el resultado."
-              : "En esta primera parte ves una aproximación de cuanto te tocaría pagar a ti y a tu empresa en impuestos por tu salario. En los siguientes pasos calcularemos con más precisión cuanto pagas y te ayudaremos a entender que estás pagando de impuestos"}
+              : "En esta primera parte ves una aproximación de cuánto te tocaría pagar a ti y a tu empresa en impuestos por tu salario. En los siguientes pasos calcularemos con más precisión cuánto pagas y te ayudaremos a entender qué estás pagando de impuestos"}
           </p>
         </div>
 
@@ -371,7 +371,7 @@ export function WorkerFiscalSummaryCard({
             ? "Los porcentajes toman tu salario bruto como referencia; por eso el coste total de empresa puede superar el 100 %."
             : isFinal
               ? "Este resumen usa los valores vivos de los pasos anteriores. El neto laboral solo resta cotizaciones e IRPF; el IVA y otros impuestos dependen de tu consumo y van aparte."
-              : "Son importes aproximados: una nómina real puede variar por contrato, situación personal, comunidad autónoma y otros ajustes. Mira los siguientes pasos para descubir cuanto pagas con mayor precisión."}
+              : "Son importes aproximados: una nómina real puede variar por contrato, situación personal, comunidad autónoma y otros ajustes. Mira los siguientes pasos para descubrir cuánto pagas con mayor precisión."}
         </p>
         {isFinal ? (
           onContinue ? (

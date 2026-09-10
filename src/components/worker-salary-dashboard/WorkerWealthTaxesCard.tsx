@@ -108,21 +108,21 @@ const DEFAULT_IBI_RATE_PERCENT = 0.6
 
 const REGION_OPTIONS = [
   { value: 'madrid', label: 'Madrid' },
-  { value: 'andalucia', label: 'Andalucia' },
-  { value: 'aragon', label: 'Aragon' },
+  { value: 'andalucia', label: 'Andalucía' },
+  { value: 'aragon', label: 'Aragón' },
   { value: 'asturias', label: 'Asturias' },
   { value: 'illes_balears', label: 'Illes Balears' },
   { value: 'canarias', label: 'Canarias' },
   { value: 'cantabria', label: 'Cantabria' },
   { value: 'castilla_la_mancha', label: 'Castilla-La Mancha' },
-  { value: 'castilla_y_leon', label: 'Castilla y Leon' },
-  { value: 'cataluna', label: 'Cataluna' },
+  { value: 'castilla_y_leon', label: 'Castilla y León' },
+  { value: 'cataluna', label: 'Cataluña' },
   { value: 'extremadura', label: 'Extremadura' },
   { value: 'galicia', label: 'Galicia' },
-  { value: 'murcia', label: 'Region de Murcia' },
+  { value: 'murcia', label: 'Región de Murcia' },
   { value: 'la_rioja', label: 'La Rioja' },
   { value: 'comunitat_valenciana', label: 'Comunitat Valenciana' },
-  { value: 'pais_vasco', label: 'Pais Vasco' },
+  { value: 'pais_vasco', label: 'País Vasco' },
   { value: 'navarra', label: 'Navarra' },
 ] as const
 

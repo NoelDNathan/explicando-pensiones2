@@ -455,7 +455,7 @@ export function WorkerIrpfRegionComparison({
         <div className="wirc-title-group">
           <h3 id="wirc-title">Comparador de IRPF por comunidad</h3>
           <p>
-            Contrasta tu comunidad (la del selector de arriba) con otra CCAA y la media en el grafico. El ranking
+            Contrasta tu comunidad (la del selector de arriba) con otra CCAA y la media en el gráfico. El ranking
             solo elige con quien comparar; no cambia tu IRPF real.
           </p>
         </div>
@@ -502,7 +502,7 @@ export function WorkerIrpfRegionComparison({
           />
           <SummaryStat
             title={summary.highest.label}
-            tag="mas IRPF"
+            tag="más IRPF"
             color={summary.highest.color}
             rate={summary.highest.rate}
             irpf={summary.highest.irpf}
@@ -525,7 +525,7 @@ export function WorkerIrpfRegionComparison({
             viewBox={`0 0 ${VW} ${VH}`}
             className="wirc-chart"
             role="img"
-            aria-label="Grafico de IRPF por comunidad segun salario"
+            aria-label="Gráfico de IRPF por comunidad según salario"
           >
             <rect x={ML} y={MT} width={PW} height={PH} className="wirc-plot-bg" />
 
@@ -638,8 +638,8 @@ export function WorkerIrpfRegionComparison({
       </div>
 
       <p className="wirc-note">
-        Estimacion didactica basada en la escala estatal y autonomica 2025 (AEAT/BOE) y el minimo personal del
-        perfil tipo. No incluye deducciones autonomicas ni circunstancias personales; tu calculo real esta arriba.
+        Estimación didáctica basada en la escala estatal y autonómica 2025 (AEAT/BOE) y el mínimo personal del
+        perfil tipo. No incluye deducciones autonómicas ni circunstancias personales; tu cálculo real está arriba.
       </p>
     </section>
   );

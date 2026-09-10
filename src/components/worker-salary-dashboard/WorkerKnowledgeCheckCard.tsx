@@ -705,7 +705,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                         link(activeLeft, pair.id)
                       }}
                       disabled={showFeedback}
-                      aria-label={`${pair.right}. Arrastralo hasta su pareja de la izquierda`}
+                      aria-label={`${pair.right}. Arrástralo hasta su pareja de la izquierda`}
                     >
                       <span className="wkcc-match__grip" aria-hidden="true">
                         <GripVertical size={15} />

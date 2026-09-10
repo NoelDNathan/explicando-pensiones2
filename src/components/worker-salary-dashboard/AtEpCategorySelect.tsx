@@ -213,7 +213,7 @@ export function AtEpCategorySelect({
               ref={searchRef}
               type="search"
               value={searchQuery}
-              placeholder="Buscar por codigo o actividad"
+              placeholder="Buscar por código o actividad"
               aria-controls={listboxId}
               onChange={(event) => setSearchQuery(event.target.value)}
               onKeyDown={handleSearchKeyDown}
@@ -227,7 +227,7 @@ export function AtEpCategorySelect({
             className="atep-select__options"
           >
             {filteredCategories.length === 0 ? (
-              <p className="atep-select__empty">No hay actividades que coincidan con tu busqueda.</p>
+              <p className="atep-select__empty">No hay actividades que coincidan con tu búsqueda.</p>
             ) : (
               filteredCategories.map((category, index) => {
                 const isSelected = category.id === value

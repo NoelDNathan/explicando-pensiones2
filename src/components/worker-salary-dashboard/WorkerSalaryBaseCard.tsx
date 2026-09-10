@@ -266,7 +266,7 @@ export function WorkerSalaryBaseCard({
         <div className="wsbc-label-row">
           <label className="wsbc-label" htmlFor="wsbc-complements">Complementos salariales anuales</label>
           <InfoButton
-            label="Que son los complementos salariales anuales"
+            label="Qué son los complementos salariales anuales"
             size="sm"
             placement="end"
             className="wsbc-help"

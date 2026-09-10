@@ -41,14 +41,14 @@ export type FiscalSourceRefs = {
 }
 
 const INSTITUTIONS: Array<{ pattern: RegExp; name: string }> = [
-  { pattern: /^bo(?:e\b|letin oficial)/, name: 'Boletin Oficial del Estado (BOE)' },
-  { pattern: /^(?:aeat\b|agencia (?:tributaria|estatal))/, name: 'Agencia Estatal de Administracion Tributaria (AEAT)' },
-  { pattern: /^(?:ine\b|instituto nacional de estadistica)/, name: 'Instituto Nacional de Estadistica (INE)' },
+  { pattern: /^bo(?:e\b|letin oficial)/, name: 'Boletín Oficial del Estado (BOE)' },
+  { pattern: /^(?:aeat\b|agencia (?:tributaria|estatal))/, name: 'Agencia Estatal de Administración Tributaria (AEAT)' },
+  { pattern: /^(?:ine\b|instituto nacional de estadistica)/, name: 'Instituto Nacional de Estadística (INE)' },
 ]
 
 const UNREGISTERED_SOURCE: FiscalSourceDescriptor = {
   officialSource: 'Fuente sin registrar',
-  sourceDetail: 'El paquete de parametros de este ano no declara la norma aplicable',
+  sourceDetail: 'El paquete de parámetros de este año no declara la norma aplicable',
   url: '',
   urlLabel: '',
 }
