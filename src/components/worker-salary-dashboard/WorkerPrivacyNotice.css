@@ -257,3 +257,30 @@
     width: 100%;
   }
 }
+
+/* Enlace a la cuenta. Usa el acento del sitio, no un azul inventado. */
+.wpn-enlace {
+  /* Dentro de la calculadora manda su paleta (fwd--soft). El --accent del sitio
+     es otro verde y canta. El fallback cubre el laboratorio de componentes. */
+  color: var(--fiscal-primary, var(--accent));
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.wpn-enlace:hover {
+  color: var(--fiscal-primary-strong, var(--accent-strong));
+}
+
+.wpn-enlace:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Matiz: lo que la cuenta todavia NO hace. Se lee despues, no antes. */
+.wpn-matiz {
+  margin-top: 6px;
+  opacity: 0.82;
+  font-size: 0.92em;
+}

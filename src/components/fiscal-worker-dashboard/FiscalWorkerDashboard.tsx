@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Bookmark,
   Info,
   Share2,
+  UserRound,
 } from 'lucide-react'
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
 import fiscalParams2005Json from '../../../data/processed/fiscal/2026-06-03_calculadora-fiscal-trabajador-parametros-2005.json'
@@ -41,6 +42,23 @@ import type {
   WorkerContractType,
 } from '../worker-salary-dashboard'
 import type { DisabilityMode } from './types'
+import type { FiscalScenario } from './fiscalScenario'
+import { FISCAL_SCENARIO_VERSION, scenarioSignature } from './fiscalScenario'
+import { flushScenarioSave, loadScenario, scheduleScenarioSave } from './fiscalScenarioStorage'
+import {
+  buildShareUrl,
+  copyToClipboard,
+  downloadScenarioFile,
+  readScenarioFile,
+} from './fiscalScenarioTransfer'
+import {
+  buildShareChartData,
+  canShareImageFiles,
+  copyImageToClipboard,
+  downloadBlob,
+  renderShareChartImage,
+  shareImageFileName,
+} from './shareResultsImage'
 import { calculateFamilyMinimum2025 } from './familyMinimum2025'
 import { calculateIrpf2025Core } from './irpf2025Calc'
 import { calculateGeographicMobilityIncrement2025, calculateInKindBenefits2025 } from './irpf2025Adjustments'
@@ -354,35 +372,271 @@ function getContributionRatesForYear(taxYear: TaxYear): SocialContributionRates 
 }
 
 export function FiscalWorkerDashboard() {
-  const [taxYear] = useState<TaxYear>('2025')
-  const [salary, setSalary] = useState(35000)
-  const [salaryComplements, setSalaryComplements] = useState(0)
-  const [region, setRegion] = useState('madrid')
+  /*
+   * El escenario guardado se lee una sola vez y de forma sincrona, ANTES del
+   * primer render. Tiene que ser asi: las tarjetas reciben su estado inicial por
+   * props `initial*` y las leen solo al montarse, de modo que cargarlo desde un
+   * efecto llegaria tarde y obligaria a empujarles el estado despues.
+   */
+  const [initialLoad] = useState(loadScenario)
+  const savedScenario = initialLoad.scenario
+
+  const [taxYear] = useState<TaxYear>(savedScenario.taxYear)
+  const [salary, setSalary] = useState(savedScenario.salary)
+  const [salaryComplements, setSalaryComplements] = useState(savedScenario.salaryComplements)
+  // No entran en el calculo, pero sin ellos quien escribio «2.000 al mes en 14
+  // pagas» volveria y veria «28.000 al anyo»: su cifra, presentada como no la puso.
+  const [payPeriod, setPayPeriod] = useState(savedScenario.payPeriod)
+  const [payCount, setPayCount] = useState(savedScenario.payCount)
+  const [region, setRegion] = useState(savedScenario.region)
   const [age] = useState(40)
-  const [selectedChildren, setSelectedChildren] = useState(0)
-  const [children, setChildren] = useState(0)
-  const [childrenUnder3, setChildrenUnder3] = useState(0)
-  const [selectedAscendants, setSelectedAscendants] = useState(0)
-  const [ascendants, setAscendants] = useState(0)
-  const [ascendantsOver75, setAscendantsOver75] = useState(0)
-  const [disability, setDisability] = useState<DisabilityMode>('none')
-  const [dependentDisabilityMinimum, setDependentDisabilityMinimum] = useState(0)
-  const [taxpayerDisabilityAssistanceMinimum, setTaxpayerDisabilityAssistanceMinimum] = useState(0)
+  const [selectedChildren, setSelectedChildren] = useState(savedScenario.selectedChildren)
+  const [children, setChildren] = useState(savedScenario.children)
+  const [childrenUnder3, setChildrenUnder3] = useState(savedScenario.childrenUnder3)
+  const [selectedAscendants, setSelectedAscendants] = useState(savedScenario.selectedAscendants)
+  const [ascendants, setAscendants] = useState(savedScenario.ascendants)
+  const [ascendantsOver75, setAscendantsOver75] = useState(savedScenario.ascendantsOver75)
+  const [disability, setDisability] = useState<DisabilityMode>(savedScenario.disability)
+  const [dependentDisabilityMinimum, setDependentDisabilityMinimum] = useState(savedScenario.dependentDisabilityMinimum)
+  const [taxpayerDisabilityAssistanceMinimum, setTaxpayerDisabilityAssistanceMinimum] =
+    useState(savedScenario.taxpayerDisabilityAssistanceMinimum)
   const [mobility] = useState(false)
   const [manualAutonomicDeduction] = useState(0)
   const [otherTaxes] = useState(0)
-  const [contributionGroupId, setContributionGroupId] = useState(7)
-  const [contractType, setContractType] = useState<WorkerContractType>('indefinite')
-  const [occupationalAccidentsCategoryId, setOccupationalAccidentsCategoryId] = useState(DEFAULT_AT_EP_2025_CATEGORY_ID)
-  const [personalAdjustments, setPersonalAdjustments] = useState<PersonalReductionResult | null>(null)
-  const [consumptionTaxes, setConsumptionTaxes] = useState<ConsumptionTaxesResult | null>(null)
-  const [consumptionTaxesDraft, setConsumptionTaxesDraft] = useState<ConsumptionTaxesDraft | null>(null)
-  const [wealthTaxes, setWealthTaxes] = useState<WealthTaxesResult | null>(null)
-  const [wealthTaxesDraft, setWealthTaxesDraft] = useState<WealthTaxesDraft | null>(null)
-  const [activeWorkerStepId, setActiveWorkerStepId] = useState(0)
+  const [contributionGroupId, setContributionGroupId] = useState(savedScenario.contributionGroupId)
+  const [contractType, setContractType] = useState<WorkerContractType>(savedScenario.contractType)
+  const [occupationalAccidentsCategoryId, setOccupationalAccidentsCategoryId] =
+    useState(savedScenario.occupationalAccidentsCategoryId || DEFAULT_AT_EP_2025_CATEGORY_ID)
+  const [personalAdjustments, setPersonalAdjustments] =
+    useState<PersonalReductionResult | null>(savedScenario.personalAdjustments)
+  const [consumptionTaxes, setConsumptionTaxes] =
+    useState<ConsumptionTaxesResult | null>(savedScenario.consumptionTaxes)
+  const [consumptionTaxesDraft, setConsumptionTaxesDraft] =
+    useState<ConsumptionTaxesDraft | null>(savedScenario.consumptionTaxesDraft)
+  const [wealthTaxes, setWealthTaxes] = useState<WealthTaxesResult | null>(savedScenario.wealthTaxes)
+  const [wealthTaxesDraft, setWealthTaxesDraft] =
+    useState<WealthTaxesDraft | null>(savedScenario.wealthTaxesDraft)
+  const [activeWorkerStepId, setActiveWorkerStepId] = useState(savedScenario.activeWorkerStepId)
+
+  /* Sube cada vez que se carga un escenario de fuera; se usa como `key` para
+   * remontar las tarjetas, que solo leen sus props `initial*` al montarse. */
+  const [scenarioEpoch, setScenarioEpoch] = useState(0)
+  /* Cierto mientras se mira un escenario que llego por enlace y nadie lo ha
+   * tocado: hasta entonces, lo que el visitante tuviera guardado sigue intacto. */
+  const [viewingSharedScenario, setViewingSharedScenario] = useState(initialLoad.source === 'link')
+  const [savePanelOpen, setSavePanelOpen] = useState(false)
+  const [sharePanelOpen, setSharePanelOpen] = useState(false)
+  const [transferNotice, setTransferNotice] = useState<string | null>(null)
+  /* Solo se rellena si el portapapeles falla: entonces hay que ensenyar el
+   * enlace para copiarlo a mano. */
+  const [shareLink, setShareLink] = useState<string | null>(null)
+  const scenarioFileInputRef = useRef<HTMLInputElement>(null)
+  const savePanelRef = useRef<HTMLDivElement>(null)
+  const sharePanelRef = useRef<HTMLDivElement>(null)
   const hasAssignedConsumption = (consumptionTaxes?.assignedSpendAnnual ?? 0) > 0
   /** IBI + IVTM del paso 9: recurrentes, por eso entran en el resumen mensual. */
   const wealthRecurringTaxAnnual = wealthTaxes?.recurringTaxAnnual ?? 0
+
+  /*
+   * El escenario actual, compuesto a partir del estado que ya existe.
+   *
+   * Se compone en lugar de sustituir los `useState` por un reducer: en un
+   * componente de mil lineas, reescribir el reparto de estado tiene mucho mas
+   * riesgo de regresion que derivar una vista de solo lectura de el.
+   */
+  const scenario = useMemo<FiscalScenario>(() => ({
+    version: FISCAL_SCENARIO_VERSION,
+    savedAt: '',
+    taxYear,
+    salary,
+    salaryComplements,
+    payPeriod,
+    payCount,
+    region,
+    contributionGroupId,
+    contractType,
+    occupationalAccidentsCategoryId,
+    selectedChildren,
+    children,
+    childrenUnder3,
+    selectedAscendants,
+    ascendants,
+    ascendantsOver75,
+    disability,
+    dependentDisabilityMinimum,
+    taxpayerDisabilityAssistanceMinimum,
+    personalAdjustments,
+    consumptionTaxesDraft,
+    consumptionTaxes,
+    wealthTaxesDraft,
+    wealthTaxes,
+    activeWorkerStepId,
+  }), [
+    taxYear, salary, salaryComplements, payPeriod, payCount, region,
+    contributionGroupId, contractType, occupationalAccidentsCategoryId,
+    selectedChildren, children, childrenUnder3,
+    selectedAscendants, ascendants, ascendantsOver75,
+    disability, dependentDisabilityMinimum, taxpayerDisabilityAssistanceMinimum,
+    personalAdjustments, consumptionTaxesDraft, consumptionTaxes,
+    wealthTaxesDraft, wealthTaxes, activeWorkerStepId,
+  ])
+
+  /*
+   * Un escenario que ha llegado por enlace NO se guarda mientras siga intacto.
+   * Sin esto, abrir el enlace de otra persona borraria en silencio lo que el
+   * visitante tuviera guardado, sin haber tocado nada. En cuanto cambia algo,
+   * la huella deja de coincidir y vuelve el autoguardado normal.
+   */
+  const untouchedSharedSignature = useRef(
+    initialLoad.source === 'link' ? scenarioSignature(initialLoad.scenario) : null,
+  )
+
+  useEffect(() => {
+    if (untouchedSharedSignature.current !== null) {
+      if (scenarioSignature(scenario) === untouchedSharedSignature.current) return
+      untouchedSharedSignature.current = null
+      setViewingSharedScenario(false)
+    }
+    scheduleScenarioSave(scenario)
+  }, [scenario])
+
+  /*
+   * `WorkerSalaryBaseCard` espera el salario TAL Y COMO SE ESCRIBIO, no el
+   * anualizado: es ella quien multiplica por el numero de pagas. Pasarle el
+   * anual junto a periodicidad mensual mostraria «28.000 al mes».
+   */
+  const initialTypedSalary = payPeriod === 'monthly' ? salary / Number(payCount) : salary
+
+  /*
+   * Carga un escenario que llega de fuera (un archivo abierto).
+   *
+   * El incremento de `scenarioEpoch` no es un detalle: las tarjetas leen sus
+   * props `initial*` solo al montarse, asi que cambiar el estado del dashboard
+   * no basta para que se enteren. Usar la epoca como `key` las remonta con los
+   * valores nuevos, que es justo lo que hace el navegador al abrir un enlace
+   * compartido, solo que sin recargar.
+   */
+  const applyScenario = useCallback((next: FiscalScenario) => {
+    setSalary(next.salary)
+    setSalaryComplements(next.salaryComplements)
+    setPayPeriod(next.payPeriod)
+    setPayCount(next.payCount)
+    setRegion(next.region)
+    setContributionGroupId(next.contributionGroupId)
+    setContractType(next.contractType)
+    setOccupationalAccidentsCategoryId(next.occupationalAccidentsCategoryId || DEFAULT_AT_EP_2025_CATEGORY_ID)
+    setSelectedChildren(next.selectedChildren)
+    setChildren(next.children)
+    setChildrenUnder3(next.childrenUnder3)
+    setSelectedAscendants(next.selectedAscendants)
+    setAscendants(next.ascendants)
+    setAscendantsOver75(next.ascendantsOver75)
+    setDisability(next.disability)
+    setDependentDisabilityMinimum(next.dependentDisabilityMinimum)
+    setTaxpayerDisabilityAssistanceMinimum(next.taxpayerDisabilityAssistanceMinimum)
+    setPersonalAdjustments(next.personalAdjustments)
+    setConsumptionTaxes(next.consumptionTaxes)
+    setConsumptionTaxesDraft(next.consumptionTaxesDraft)
+    setWealthTaxes(next.wealthTaxes)
+    setWealthTaxesDraft(next.wealthTaxesDraft)
+    setActiveWorkerStepId(next.activeWorkerStepId)
+    setScenarioEpoch((epoch) => epoch + 1)
+  }, [])
+
+  const handleDownloadScenario = useCallback(() => {
+    const ok = downloadScenarioFile(scenario)
+    setTransferNotice(ok
+      ? 'Copia descargada. Tus datos ya se guardan solos en este navegador; esto es una copia que puedes llevarte.'
+      : 'No se ha podido descargar la copia. Prueba con otro navegador.')
+    setSavePanelOpen(false)
+  }, [scenario])
+
+  const handleOpenScenarioFile = useCallback(async (file: File | undefined) => {
+    if (file === undefined) return
+
+    const loaded = await readScenarioFile(file)
+    if (loaded === null) {
+      setTransferNotice('Ese archivo no es una copia de la calculadora.')
+      return
+    }
+    applyScenario(loaded)
+    setTransferNotice('Copia abierta. Se ha recuperado lo que habia guardado en ella.')
+    setSavePanelOpen(false)
+  }, [applyScenario])
+
+  const handleShareScenario = useCallback(async () => {
+    const url = buildShareUrl(scenario, window.location.origin, window.location.pathname)
+    const copied = await copyToClipboard(url)
+
+    if (copied) {
+      setShareLink(null)
+      setTransferNotice('Enlace copiado. Quien lo abra vera tus cifras: tu salario, tu comunidad y tu situacion familiar.')
+      return
+    }
+    // Sin portapapeles (hace falta HTTPS o permiso), se ofrece a la vista.
+    setShareLink(url)
+    setTransferNotice('Copia el enlace a mano. Quien lo abra vera tus cifras.')
+  }, [scenario])
+
+  /*
+   * Un panel emergente tiene que poder cerrarse sin usarlo: con Escape y
+   * pinchando fuera. Sin esto, la unica salida es volver a pulsar «Guardar»,
+   * que no es lo que nadie espera de algo que flota sobre el contenido.
+   */
+  useEffect(() => {
+    if (!savePanelOpen) return
+
+    const cerrarConEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSavePanelOpen(false)
+    }
+    const cerrarAlPincharFuera = (event: MouseEvent) => {
+      const target = event.target
+      if (target instanceof Node && savePanelRef.current?.contains(target) !== true) {
+        setSavePanelOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', cerrarConEscape)
+    document.addEventListener('mousedown', cerrarAlPincharFuera)
+    return () => {
+      document.removeEventListener('keydown', cerrarConEscape)
+      document.removeEventListener('mousedown', cerrarAlPincharFuera)
+    }
+  }, [savePanelOpen])
+
+  useEffect(() => {
+    if (!sharePanelOpen) return
+
+    const cerrarConEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSharePanelOpen(false)
+    }
+    const cerrarAlPincharFuera = (event: MouseEvent) => {
+      const target = event.target
+      if (target instanceof Node && sharePanelRef.current?.contains(target) !== true) {
+        setSharePanelOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', cerrarConEscape)
+    document.addEventListener('mousedown', cerrarAlPincharFuera)
+    return () => {
+      document.removeEventListener('keydown', cerrarConEscape)
+      document.removeEventListener('mousedown', cerrarAlPincharFuera)
+    }
+  }, [sharePanelOpen])
+
+  /*
+   * `visibilitychange` y no `beforeunload`: en moviles la pestanya se descarta
+   * a menudo sin llegar a disparar `beforeunload`, y quien cierra el navegador
+   * dentro de la ventana de retardo perderia lo ultimo que escribio.
+   */
+  useEffect(() => {
+    const flushIfHidden = () => {
+      if (document.visibilityState === 'hidden') flushScenarioSave(scenario)
+    }
+    document.addEventListener('visibilitychange', flushIfHidden)
+    return () => document.removeEventListener('visibilitychange', flushIfHidden)
+  }, [scenario])
 
   const contributionGroups = useMemo(() => {
     const params = taxYear === '2005' ? fiscalParams2005 : fiscalParams2025
@@ -400,6 +654,8 @@ export function FiscalWorkerDashboard() {
       : values.salary * Number(values.payCount)
     setSalary(baseSalaryAnnual)
     setSalaryComplements(values.salaryComplements)
+    setPayPeriod(values.payPeriod)
+    setPayCount(values.payCount)
   }, [])
 
   const handleUserBaseAnnualChange = useCallback((baseAnnual: number) => {
@@ -698,6 +954,187 @@ export function FiscalWorkerDashboard() {
     rates: contributionRates,
   }), [contractType, contributionRates, result.contributionBase, result.grossSalaryAnnual])
 
+  /*
+   * A diferencia del enlace de mas arriba, esto NO lleva el escenario: en
+   * redes es publico para cualquiera, no solo para quien recibe un enlace
+   * privado. Solo van la cifra y el grafico del paso final (cuanto te queda
+   * de cada 100 € que cuesta tu puesto) y el enlace general a la
+   * calculadora, nunca el salario ni la comunidad.
+   *
+   * Los importes son los mismos que recibe WorkerFinalSummaryCard un poco
+   * mas abajo, para que la imagen que se comparte coincida siempre con lo
+   * que la persona ve en su propia pantalla.
+   */
+  const shareChartData = useMemo(() => buildShareChartData({
+    grossSalaryAnnual: result.grossSalaryAnnual,
+    employerContributionsAnnual: socialContributions.companyContributionsAnnual,
+    workerContributionsAnnual: socialContributions.workerContributionsAnnual,
+    irpfAnnual: result.irpf,
+    vatAnnual: result.vat,
+    specialTaxesAnnual: consumptionTaxes?.specialTaxesAnnual ?? 0,
+    wealthTaxesAnnual: wealthRecurringTaxAnnual,
+  }), [consumptionTaxes?.specialTaxesAnnual, result.grossSalaryAnnual, result.irpf, result.vat, socialContributions.companyContributionsAnnual, socialContributions.workerContributionsAnnual, wealthRecurringTaxAnnual])
+
+  const resultsShareText = useMemo(
+    () => `Por fin entiendo cuantos impuestos pago: de cada 100 € que cuesta mi puesto, ${shareChartData.takeHomePer100} € son para mi. Si tu tambien quieres entender cuanto pagas, mira este enlace:`,
+    [shareChartData.takeHomePer100],
+  )
+
+  const resultsShareUrl = useMemo(
+    () => `${window.location.origin}${window.location.pathname}`,
+    [],
+  )
+
+  /*
+   * Se genera bajo demanda (al pulsar un boton de compartir), no en cada
+   * render: dibujar el canvas cuesta y solo hace falta justo antes de
+   * compartir o descargar.
+   */
+  const buildShareImage = useCallback(
+    () => renderShareChartImage(shareChartData, taxYear),
+    [shareChartData, taxYear],
+  )
+
+  /*
+   * Dibujar el grafico cuesta, y en el momento del clic hace falta ya
+   * listo (para pegarlo al portapapeles sin demora, o para adjuntarlo al
+   * `navigator.share`). Por eso se prepara en cuanto se abre el panel, no en
+   * el clic, y se guarda en una ref: no necesita volver a renderizar nada.
+   */
+  const shareImageCacheRef = useRef<Blob | null>(null)
+  useEffect(() => {
+    if (!sharePanelOpen) return
+    shareImageCacheRef.current = null
+    let cancelled = false
+    void buildShareImage().then((blob) => {
+      if (!cancelled) shareImageCacheRef.current = blob
+    })
+    return () => { cancelled = true }
+  }, [sharePanelOpen, buildShareImage])
+
+  /*
+   * Comparte con imagen adjunta cuando el navegador lo permite (Web Share API
+   * de nivel 2, sobre todo en movil): ahi la persona elige ella misma X,
+   * Facebook, Instagram o cualquier otra app desde el selector nativo, y la
+   * imagen viaja de verdad. Es la unica via real para Instagram, que no
+   * tiene ninguna direccion web para prellenar una publicacion. Solo se
+   * intenta cuando `canShareImageFiles()` ya dijo que si (comprobado antes,
+   * de forma sincrona, en el propio gestor del clic).
+   */
+  const shareResultsNatively = useCallback(async (): Promise<boolean> => {
+    const blob = shareImageCacheRef.current ?? await buildShareImage()
+    if (blob === null) return false
+
+    const file = new File([blob], shareImageFileName(taxYear), { type: 'image/png' })
+    const shareData = { text: `${resultsShareText} ${resultsShareUrl}`, files: [file] }
+
+    if (typeof navigator.canShare === 'function' && !navigator.canShare(shareData)) return false
+
+    try {
+      await navigator.share(shareData)
+      return true
+    } catch {
+      // Cancelado por la persona o fallo del selector.
+      return false
+    }
+  }, [buildShareImage, resultsShareText, resultsShareUrl, taxYear])
+
+  const handleDownloadShareImage = useCallback(async () => {
+    const blob = shareImageCacheRef.current ?? await buildShareImage()
+    if (blob === null) {
+      setTransferNotice('No se ha podido generar la imagen. Prueba con otro navegador.')
+      return
+    }
+    downloadBlob(blob, shareImageFileName(taxYear))
+    setTransferNotice('Imagen descargada. Adjuntala tu al publicar: las webs de X, Facebook e Instagram no dejan adjuntarla en automatico.')
+  }, [buildShareImage, taxYear])
+
+  /*
+   * En escritorio no hay Web Share API con archivos: lo unico que funciona de
+   * verdad es abrir la ventana de X o Facebook ya rellena con el texto -y
+   * tiene que ser lo PRIMERO que hace el gestor del clic, sin ningun `await`
+   * por delante, porque si no el navegador la trata como un pop-up y la
+   * bloquea silenciosamente-. La imagen no cabe en ese enlace, asi que se
+   * copia al portapapeles aparte para que la persona la pegue ella misma en
+   * el hueco de foto del tuit o la publicacion.
+   */
+  const copyShareImageWithNotice = useCallback(async (networkLabel: string) => {
+    const blob = shareImageCacheRef.current ?? await buildShareImage()
+    if (blob === null) {
+      setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. No hemos podido preparar la imagen: prueba con otro navegador.`)
+      return
+    }
+    const copied = await copyImageToClipboard(blob)
+    if (copied) {
+      setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. Tambien hemos copiado la imagen del grafico: pegala ahi (Ctrl+V o Cmd+V) antes de publicar.`)
+      return
+    }
+    downloadBlob(blob, shareImageFileName(taxYear))
+    setTransferNotice(`Hemos abierto ${networkLabel} con tu texto. No se ha podido copiar la imagen automaticamente, asi que la hemos descargado: adjuntala tu.`)
+  }, [buildShareImage, taxYear])
+
+  const handleShareResultsToX = useCallback(() => {
+    if (canShareImageFiles()) {
+      void (async () => {
+        if (await shareResultsNatively()) { setSharePanelOpen(false); return }
+        const params = new URLSearchParams({ text: resultsShareText, url: resultsShareUrl })
+        window.open(`https://twitter.com/intent/tweet?${params.toString()}`, '_blank', 'noopener,noreferrer')
+        setSharePanelOpen(false)
+      })()
+      return
+    }
+    const params = new URLSearchParams({ text: resultsShareText, url: resultsShareUrl })
+    window.open(`https://twitter.com/intent/tweet?${params.toString()}`, '_blank', 'noopener,noreferrer')
+    setSharePanelOpen(false)
+    void copyShareImageWithNotice('X (Twitter)')
+  }, [copyShareImageWithNotice, resultsShareText, resultsShareUrl, shareResultsNatively])
+
+  const handleShareResultsToFacebook = useCallback(() => {
+    if (canShareImageFiles()) {
+      void (async () => {
+        if (await shareResultsNatively()) { setSharePanelOpen(false); return }
+        const params = new URLSearchParams({ u: resultsShareUrl, quote: resultsShareText })
+        window.open(`https://www.facebook.com/sharer/sharer.php?${params.toString()}`, '_blank', 'noopener,noreferrer')
+        setSharePanelOpen(false)
+      })()
+      return
+    }
+    const params = new URLSearchParams({ u: resultsShareUrl, quote: resultsShareText })
+    window.open(`https://www.facebook.com/sharer/sharer.php?${params.toString()}`, '_blank', 'noopener,noreferrer')
+    setSharePanelOpen(false)
+    void copyShareImageWithNotice('Facebook')
+  }, [copyShareImageWithNotice, resultsShareText, resultsShareUrl, shareResultsNatively])
+
+  /*
+   * Instagram no tiene ninguna direccion web para prellenar una publicacion
+   * (a diferencia de X o Facebook), asi que en escritorio no hay texto que
+   * precargar: se copia la imagen (lo que de verdad hace falta pegar) y el
+   * texto se deja a la vista, en el campo de abajo, para copiarlo aparte.
+   */
+  const handleShareResultsToInstagram = useCallback(() => {
+    if (canShareImageFiles()) {
+      void (async () => {
+        if (await shareResultsNatively()) { setSharePanelOpen(false); return }
+        window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
+        setSharePanelOpen(false)
+      })()
+      return
+    }
+    window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
+    setSharePanelOpen(false)
+    void (async () => {
+      const blob = shareImageCacheRef.current ?? await buildShareImage()
+      const copied = blob !== null && await copyImageToClipboard(blob)
+      setShareLink(`${resultsShareText} ${resultsShareUrl}`)
+      if (copied) {
+        setTransferNotice('Hemos abierto Instagram y copiado la imagen: pegala ahi (Ctrl+V o Cmd+V). Instagram no deja prellenar el texto: copialo tu debajo.')
+        return
+      }
+      if (blob !== null) downloadBlob(blob, shareImageFileName(taxYear))
+      setTransferNotice('Hemos abierto Instagram. No se ha podido copiar la imagen: te la hemos descargado. Instagram no deja prellenar el texto: copialo tu debajo.')
+    })()
+  }, [buildShareImage, resultsShareText, resultsShareUrl, shareResultsNatively, taxYear])
+
   const calculationSources = useMemo<CalculationSourceItem[]>(() => {
     const percent = (value: number) => `${(value * 100).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`
     const regionLabel = REGION_LABELS[result.effectiveRegion] ?? result.effectiveRegion
@@ -849,9 +1286,9 @@ export function FiscalWorkerDashboard() {
       case 1:
         return (
           <WorkerSalaryBaseCard
-            initialSalary={salary}
-            initialPayPeriod="annual"
-            initialPayCount="12"
+            initialSalary={initialTypedSalary}
+            initialPayPeriod={payPeriod}
+            initialPayCount={payCount}
             initialSalaryComplements={salaryComplements}
             onValuesChange={handleSalaryBaseValuesChange}
           />
@@ -1009,7 +1446,7 @@ export function FiscalWorkerDashboard() {
       case 12:
         return <WorkerCalculationSourcesCard year={Number(taxYear)} items={calculationSources} />
       default:
-        return <WorkerSalaryBaseCard initialSalary={salary} initialPayPeriod="annual" initialPayCount="12" />
+        return <WorkerSalaryBaseCard initialSalary={initialTypedSalary} initialPayPeriod={payPeriod} initialPayCount={payCount} />
     }
   })()
 
@@ -1022,11 +1459,108 @@ export function FiscalWorkerDashboard() {
             <p>{taxYear === '2005' ? 'Calculo legacy para Regimen General y caso base Comunidad de Madrid.' : 'Calculo anual para Regimen General con IRPF estatal y autonomico de comunidades de regimen comun.'}</p>
           </div>
           <div className="fwd-actions">
-            <button type="button"><Bookmark size={16} /> Guardar</button>
-            <button type="button"><Share2 size={16} /> Compartir</button>
+            <div className="fwd-save" ref={savePanelRef}>
+              <button
+                type="button"
+                aria-expanded={savePanelOpen}
+                aria-haspopup="true"
+                onClick={() => { setSavePanelOpen((open) => !open); setTransferNotice(null) }}
+              >
+                <Bookmark size={16} /> Guardar
+              </button>
+
+              {savePanelOpen ? (
+                <div className="fwd-save-panel" role="group" aria-label="Copias de tu escenario">
+                  <p className="fwd-save-panel__note">
+                    Lo que pones ya se guarda solo en este navegador. Aqui puedes llevarte una
+                    copia o recuperar una que guardaste antes.
+                  </p>
+                  <button type="button" onClick={handleDownloadScenario}>
+                    Descargar una copia
+                  </button>
+                  <button type="button" onClick={() => scenarioFileInputRef.current?.click()}>
+                    Abrir una copia guardada
+                  </button>
+                </div>
+              ) : null}
+
+              <input
+                ref={scenarioFileInputRef}
+                type="file"
+                accept="application/json,.json"
+                className="fwd-visually-hidden"
+                onChange={(event) => {
+                  void handleOpenScenarioFile(event.target.files?.[0])
+                  // Permite volver a elegir el mismo archivo despues.
+                  event.target.value = ''
+                }}
+              />
+            </div>
+
+            <div className="fwd-save" ref={sharePanelRef}>
+              <button
+                type="button"
+                aria-expanded={sharePanelOpen}
+                aria-haspopup="true"
+                onClick={() => { setSharePanelOpen((open) => !open); setTransferNotice(null) }}
+              >
+                <Share2 size={16} /> Compartir
+              </button>
+
+              {sharePanelOpen ? (
+                <div className="fwd-save-panel" role="group" aria-label="Formas de compartir">
+                  <p className="fwd-save-panel__note">
+                    Enlace privado: quien lo abra vera tus cifras (salario, comunidad, situacion
+                    familiar). En redes solo se comparte la imagen del grafico con cuanto te queda
+                    de cada 100 €, sin esos datos.
+                  </p>
+                  <button type="button" onClick={() => { void handleShareScenario() }}>
+                    Copiar enlace privado
+                  </button>
+                  <button type="button" onClick={() => { void handleDownloadShareImage() }}>
+                    Descargar imagen del grafico
+                  </button>
+                  <button type="button" onClick={handleShareResultsToX}>
+                    Compartir en X (Twitter)
+                  </button>
+                  <button type="button" onClick={handleShareResultsToFacebook}>
+                    Compartir en Facebook
+                  </button>
+                  <button type="button" onClick={handleShareResultsToInstagram}>
+                    Compartir en Instagram
+                  </button>
+                </div>
+              ) : null}
+            </div>
+            <a className="fwd-cuenta-enlace" href="/cuenta">
+              <UserRound size={16} aria-hidden="true" /> Tu cuenta
+            </a>
             <button type="button" aria-label="Informacion"><Info size={18} /></button>
           </div>
         </header>
+
+        {viewingSharedScenario ? (
+          <p className="fwd-transfer-notice fwd-transfer-notice--shared">
+            Estas viendo un caso que te han compartido, no el tuyo. Lo que tuvieras guardado en
+            este navegador sigue intacto: solo se sustituira si cambias algo aqui.
+          </p>
+        ) : null}
+
+        {transferNotice !== null ? (
+          <p className="fwd-transfer-notice" role="status">{transferNotice}</p>
+        ) : null}
+
+        {shareLink !== null ? (
+          <label className="fwd-share-fallback">
+            <span>Texto para copiar</span>
+            <input
+              type="text"
+              readOnly
+              value={shareLink}
+              onFocus={(event) => event.target.select()}
+            />
+          </label>
+        ) : null}
 
         {activeWorkerStepId === 0 ? (
           <>
@@ -1044,7 +1578,10 @@ export function FiscalWorkerDashboard() {
         ) : null}
 
         <section className="fwd-worker-dashboard" aria-label="Pasos detallados del worker salary dashboard">
-          <div className="fwd-worker-card">
+          {/* La `key` remonta las tarjetas al abrir una copia: leen sus props
+              `initial*` solo al montarse, asi que sin esto no verian el
+              escenario nuevo. */}
+          <div className="fwd-worker-card" key={scenarioEpoch}>
             {activeWorkerStepCard}
           </div>
         </section>

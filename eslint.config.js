@@ -6,7 +6,10 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // `supabase/functions` corre sobre Deno, no sobre el navegador: usa globales
+  // (`Deno`) e imports (`jsr:`) que esta configuracion no conoce. Se revisa con
+  // `deno lint`, no con esta.
+  globalIgnores(['dist', 'supabase/functions']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

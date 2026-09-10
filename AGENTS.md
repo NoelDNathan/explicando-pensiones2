@@ -40,13 +40,13 @@ Objetivo del proyecto: crear una pagina web clara, verificable y didactica para 
 ## Reglas de diseno frontend
 
 1. Mantener una identidad visual coherente: usar los colores, tipografias, espaciados y radios definidos como variables o tokens globales antes de introducir nuevos valores.
+   Hay dos paletas y conviene no confundirlas: `:root` en `src/index.css` para las paginas del sitio, y los tokens de `FiscalSoftTheme.css` para lo que se renderiza dentro de `.fwd--soft` (la calculadora fiscal). Si el color no existe como token, anyadir el token, no el literal. `pnpm verify:styles` falla si un archivo CSS gana colores escritos a mano.
 2. No duplicar patrones de interfaz: cuando una pieza se repita o pueda repetirse, crear un componente reutilizable con props claras en lugar de copiar markup y estilos.
 3. Antes de integrar un nuevo componente en una pagina publica, anadirlo o revisarlo en `/componentes` con sus variantes principales, estados interactivos y estado deshabilitado cuando aplique.
 4. Los componentes deben ser accesibles por defecto: HTML semantico, etiquetas `aria` solo cuando aporten claridad, foco visible, contraste suficiente y textos que no dependan solo del color.
 5. Mantener los estilos cerca del sistema existente: preferir clases y variables compartidas; si se crea una variante visual, documentar su proposito mediante el nombre del componente o sus props.
 6. Evitar estilos puntuales no reutilizables en paginas finales. Si una pagina necesita un boton, tarjeta, aviso, etiqueta de fuente, control de grafico o modulo repetible, debe usar o ampliar un componente existente.
-7. Cada cambio visual debe comprobarse en escritorio y movil cuando afecte layout, tamanos, interaccion o legibilidad.
-8. Considerar Tailwind cuando haya mas UI repetida: es una buena opcion si se crean muchas tarjetas, botones, layouts, estados responsive y paginas narrativas, pero debe configurarse con tokens propios del proyecto y no con colores sueltos como `bg-blue-500`.
+7. Considerar Tailwind cuando haya mas UI repetida: es una buena opcion si se crean muchas tarjetas, botones, layouts, estados responsive y paginas narrativas, pero debe configurarse con tokens propios del proyecto y no con colores sueltos como `bg-blue-500`.
 
 
 # Fuentes 

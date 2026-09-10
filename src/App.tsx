@@ -17,6 +17,7 @@ import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/Fis
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerPrivacyNotice, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
+import { AccountPage } from './components/account/AccountPage'
 import { IndicatorInfoModal } from './components/pension-overview/IndicatorInfoModal'
 import {
   POPULATION_SCALE_MAX,
@@ -1135,7 +1136,9 @@ function App() {
   const isProgressiveIrpfPage = path === '/irpf'
   const isWorkReductionPage = path === '/reduccion-trabajo'
   const isPensionOverviewPage = path === '/resumen'
+  const isAccountPage = path === '/cuenta'
 
+  if (isAccountPage) return <AccountPage />
   if (isPensionOverviewPage) return <PensionOverviewPage />
   if (isComponentLab) return <ComponentLab />
   if (isPopulationPage) return <PopulationPage />

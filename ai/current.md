@@ -19,6 +19,7 @@ Aplicacion React + TypeScript + Vite, sin backend. Rutas en `src/App.tsx`:
 | `/gasto-sanitario` | Perfil de gasto sanitario por edad y sexo. |
 | `/resumen` | **Prototipo.** Los datos estan escritos a mano en el componente. |
 | `/irpf`, `/bases-cotizacion`, `/reduccion-trabajo`, `/salario-nacionalidad` | Piezas didacticas sueltas, sin integrar editorialmente. |
+| `/cuenta` | Entrar y salir con enlace magico o codigo de 6 digitos. No sincroniza datos todavia. |
 | `/componentes` | Laboratorio interno de componentes. |
 
 ### Calculadora fiscal
@@ -33,6 +34,18 @@ fuentes del calculo.
 - Comunidades: las 15 de regimen comun para el IRPF autonomico; sin deducciones autonomicas
   automaticas.
 - Todo se calcula en el navegador y se guarda en `localStorage`; no hay backend.
+- El estado completo vive en `fiscalScenario.ts` (tipo `FiscalScenario`, con version, serializado
+  y validacion defensiva) y se autoguarda con retardo en `fwd-fiscal-scenario-v1`. Al recargar se
+  recupera todo: salario y periodicidad tal y como se escribieron, comunidad, situacion familiar,
+  ajustes, borradores de consumo y patrimonio, y el paso en el que se estaba. El escenario se lee
+  de forma **sincrona antes del primer render**, porque las tarjetas leen sus props `initial*` solo
+  al montarse. Un escenario intacto no se guarda; uno corrupto degrada a los valores de inicio.
+- «Guardar» abre un panel para descargar una copia en JSON o volver a abrir una guardada;
+  «Compartir» copia un enlace con el escenario en el **fragmento** de la URL (`#escenario=...`),
+  que no viaja al servidor ni aparece en `Referer` ni en los registros de acceso. Abrir un enlace
+  compartido muestra ese caso y avisa de que es ajeno: **no pisa lo que el visitante tuviera
+  guardado** hasta que cambie algo. Compartir advierte de que quien reciba el enlace vera el
+  salario, la comunidad y la situacion familiar.
 - El paso 13 lee las fuentes de los propios datasets (`fiscalSourceRefs.ts`), no de constantes.
 - El simulador de la reduccion del paso 5 muestra una cajita *bruto − especie =
   lo que tributa*. El slider sigue siendo el salario de nomina; la Seguridad Social
@@ -53,6 +66,36 @@ fuentes del calculo.
 - El paso 8 define el IVA (Impuesto sobre el Valor Añadido) y los impuestos especiales
   antes de pedir el reparto del gasto; el subtítulo es «El impuesto sobre lo que compras».
 
+### Base de datos (Supabase)
+
+**Desplegado** en el proyecto `explicando-pensiones` (region `eu-west-1`, Irlanda), con las 10
+migraciones y el seed aplicados: 7 tablas en `public`, 10 en `intake`, todas con RLS. La
+aplicacion ya se conecta para **entrar y salir** (`/cuenta`); todavia no sube ni sincroniza
+ningun dato de la calculadora.
+
+- 10 migraciones en `supabase/migrations/`, mas `config.toml`, `seed.sql` y las Edge Functions
+  `knowledge-check` y `fiscal-stats`.
+- Dos mundos separados **por construccion**, no por permisos: el esquema `public` guarda lo
+  identificado (perfil, sobres de clave, escenarios cifrados, suscripciones) y el esquema
+  `intake` la ingesta anonima. Ninguna tabla de `intake` tiene FK a `auth.users`, y `intake`
+  no entra en `db.schemas` de PostgREST, asi que no es alcanzable con la anon key.
+- Los escenarios se cifran en el navegador (AES-256-GCM con clave derivada por HKDF de una DEK
+  que se envuelve con una frase via Argon2id). El servidor solo ve el tamanyo y las fechas.
+- Las cifras estadisticas van bucketizadas: nunca un salario exacto ni un importe en euros,
+  solo tasas efectivas con un decimal. La vista de publicacion exige k >= 25.
+- Los parametros fiscales **no** se mueven a la base de datos: siguen en `data/processed/` bajo
+  el regimen de checksums y fichas, que es lo que los hace auditables.
+
+Hecho ya: el esquema, el despliegue, el tipo `FiscalScenario` con autoguardado local y la
+entrada por enlace magico. Falta `docs/privacidad.md` y la base legal, la boveda de claves
+(Argon2id + DEK envuelta), el repositorio de escenarios cifrados, y desplegar las Edge
+Functions de ingesta anonima. El plan por fases esta en las notas de sesion del 2026-09-09.
+
+Pendiente de configurar a mano en el panel de Supabase: la lista de redirecciones permitidas
+(Authentication > URL Configuration) con la URL de desarrollo y la de produccion, y un SMTP
+propio, porque el correo integrado de Supabase solo envia a miembros del proyecto y con un
+limite muy bajo.
+
 ### Datos
 
 `data/` separa `raw/` (204 archivos de evidencia, sin editar), `processed/` (102 datasets),
@@ -64,9 +107,27 @@ fuentes del calculo.
 ```bash
 pnpm run build            # tsc -b + vite build
 pnpm run lint             # arrastra 24 errores previos en ficheros no tocados
-pnpm run verify:irpf2025  # 26 comprobaciones del motor de IRPF contra casos dorados
+pnpm run verify:irpf2025  # 34 comprobaciones del motor de IRPF contra casos dorados
 pnpm run verify:data      # 469 comprobaciones de trazabilidad de data/
+pnpm run verify:scenario  # 17 comprobaciones del escenario guardado y del enlace compartido
+pnpm run verify:supabase  # 15 comprobaciones del esquema de la base de datos
+pnpm run verify:styles    # ningun color literal nuevo en CSS (linea base por archivo)
+pnpm run seed:quiz        # regenera la lista blanca de preguntas en supabase/seed.sql
 ```
+
+`verify:supabase` levanta un cluster de PostgreSQL desechable en un directorio temporal,
+aplica las 10 migraciones y el seed, y comprueba el comportamiento: aislamiento por RLS entre
+dos usuarios, k-anonimato de la vista de publicacion, rechazo de un salario exacto disfrazado
+de banda, limite de peticiones, cuota de escenarios y rotacion de la frase de cifrado. No
+necesita Docker ni la CLI de Supabase, solo los binarios de PostgreSQL; usa el puerto 55433,
+configurable con `EPS_VERIFY_PGPORT`. Con `--keep` deja el cluster en marcha para inspeccionarlo.
+
+`verify:styles` NO prohibe los colores literales (el repo ya tiene ~2.550), sino que fija una
+linea base por archivo en `scripts/styles-baseline.json` y falla cuando un archivo gana colores
+escritos a mano o aparece uno nuevo con ellos. Existe porque las reglas 1 y 7 de `AGENTS.md`
+(usar tokens, comprobar en pantalla) se pueden incumplir sin que nada avise: asi paso una
+pantalla entera en azul marino sobre una web clara. Con `--write` se regenera la linea base;
+bajarla siempre esta bien, subirla hay que justificarlo.
 
 `verify:data` valida el SHA-256 de todos los archivos de datos, detecta entradas huerfanas,
 exige ficha en `metadata.md` y avisa de lo que falta en `inventory.md` y `sources.md`. Con

@@ -39,6 +39,11 @@
   --accent-wash: rgba(11, 111, 130, 0.1);
   --disabled-bg: #e5dfd4;
   --focus: rgba(202, 122, 43, 0.45);
+  /* Estado de error. Existe como token para que ninguna pieza tenga que
+     inventarse su propio rojo. */
+  --danger: #9c2f43;
+  --danger-line: rgba(156, 47, 67, 0.38);
+  --danger-wash: rgba(156, 47, 67, 0.08);
   --sans: Avenir Next, Segoe UI, system-ui, sans-serif;
 
   color: var(--text);

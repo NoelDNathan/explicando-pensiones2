@@ -9,9 +9,16 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "verify:irpf2025": "node --experimental-strip-types scripts/verify-irpf-2025-core.mjs",
-    "verify:data": "node scripts/verify-data-traceability.mjs"
+    "verify:data": "node scripts/verify-data-traceability.mjs",
+    "seed:quiz": "node --experimental-strip-types scripts/generate-quiz-seed.mjs --write",
+    "verify:supabase": "node scripts/verify-supabase-schema.mjs",
+    "verify:scenario": "node --experimental-strip-types scripts/verify-fiscal-scenario.mjs",
+    "verify:styles": "node scripts/verify-styles.mjs",
+    "verify:crypto": "node --experimental-strip-types scripts/verify-crypto.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "hash-wasm": "^4.12.0",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

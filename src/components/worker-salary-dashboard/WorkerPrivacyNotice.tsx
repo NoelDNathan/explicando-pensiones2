@@ -97,12 +97,16 @@ export function WorkerPrivacyNotice() {
               <UserPlus size={18} />
             </span>
             <div>
-              <h3>
-                Cuenta para conservarlos <span className="wpn-soon">en camino</span>
-              </h3>
+              <h3>Cuenta para conservarlos</h3>
               <p>
-                Podrás crear una cuenta para llevarte tus datos de un dispositivo a otro. Aunque te
-                hagas la cuenta, nosotros no tendremos acceso a ellos.
+                Puedes crear una cuenta para llevarte tus datos de un dispositivo a otro. Se cifran
+                en este navegador con una frase que solo tú conoces: nosotros no podemos leerlos.
+                {' '}
+                <a className="wpn-enlace" href="/cuenta">Crear una cuenta o entrar</a>.
+              </p>
+              <p className="wpn-matiz">
+                Todavía no sube nada: la cuenta y el cifrado ya funcionan, pero falta la parte que
+                guarda tus escenarios.
               </p>
             </div>
           </li>
