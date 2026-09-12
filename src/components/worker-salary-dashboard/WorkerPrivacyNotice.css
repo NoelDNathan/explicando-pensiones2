@@ -1,165 +1,31 @@
-/* Aviso de privacidad de la cabecera (`wpn`) y consentimiento estadistico del
-   resumen (`wsc`). Usan los tokens del tema claro con valor de reserva. */
+/* Consentimiento estadistico del resumen (`wsc`). Usa los tokens del tema
+   claro con valor de reserva. */
 
-.wpn,
 .wsc {
-  --wpn-ink: var(--fiscal-ink, #172033);
-  --wpn-copy: var(--fiscal-copy, #4f5f70);
-  --wpn-muted: var(--fiscal-muted, #718096);
-  --wpn-line: var(--fiscal-line, #dbe4ec);
-  --wpn-line-strong: var(--fiscal-line-strong, #c4d2df);
-  --wpn-surface: var(--fiscal-surface, #ffffff);
-  --wpn-surface-soft: var(--fiscal-surface-soft, #f8fafc);
-  --wpn-primary: var(--fiscal-primary, #147d75);
-  --wpn-primary-strong: var(--fiscal-primary-strong, #0f655f);
-  --wpn-primary-soft: var(--fiscal-primary-soft, #ddf3ef);
-  --wpn-violet: var(--fiscal-violet, #7557c8);
-  --wpn-violet-soft: var(--fiscal-violet-soft, #f0ebfb);
-  --wpn-green: var(--fiscal-green, #18865b);
-  --wpn-green-soft: var(--fiscal-green-soft, #e3f5ec);
+  --wpn-ink: var(--fiscal-ink, var(--heading));
+  --wpn-copy: var(--fiscal-copy, var(--text));
+  --wpn-muted: var(--fiscal-muted, var(--muted));
+  --wpn-line: var(--fiscal-line, var(--border));
+  --wpn-line-strong: var(--fiscal-line-strong, var(--border));
+  --wpn-surface: var(--fiscal-surface, var(--surface));
+  --wpn-surface-soft: var(--fiscal-surface-soft, var(--bg));
+  --wpn-primary: var(--fiscal-primary, var(--accent));
+  --wpn-primary-strong: var(--fiscal-primary-strong, var(--accent-strong));
+  --wpn-green: var(--fiscal-green, var(--accent));
+  --wpn-green-soft: var(--fiscal-green-soft, var(--accent-wash));
   --wpn-radius: var(--fiscal-radius-panel, 18px);
   --wpn-radius-control: var(--fiscal-radius-control, 14px);
 }
 
-.wpn *,
 .wsc *,
-.wpn *::before,
 .wsc *::before {
   box-sizing: border-box;
 }
 
-.wpn h2,
-.wpn h3,
-.wpn p,
 .wsc h3,
 .wsc p {
   margin: 0;
 }
-
-/* Aviso de cabecera */
-
-.wpn {
-  width: 100%;
-  padding: 14px 18px;
-  color: var(--wpn-ink);
-  border: 1px solid color-mix(in srgb, var(--wpn-primary) 24%, var(--wpn-line));
-  border-radius: var(--wpn-radius);
-  background: var(--wpn-primary-soft);
-}
-
-.wpn-head {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
-.wpn-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 40px;
-  height: 40px;
-  color: var(--wpn-primary-strong);
-  border-radius: 12px;
-  background: var(--wpn-surface);
-}
-
-.wpn-headline {
-  flex: 1 1 360px;
-  min-width: 0;
-}
-
-.wpn-headline h2 {
-  font-size: 1rem;
-  line-height: 1.3;
-  color: var(--wpn-ink);
-}
-
-.wpn-headline p {
-  margin-top: 3px;
-  max-width: 86ch;
-  font-size: 0.89rem;
-  line-height: 1.5;
-  color: var(--wpn-copy);
-}
-
-.wpn-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex: none;
-  padding: 8px 13px;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 650;
-  color: var(--wpn-primary-strong);
-  cursor: pointer;
-  border: 1px solid color-mix(in srgb, var(--wpn-primary) 34%, var(--wpn-line));
-  border-radius: 999px;
-  background: var(--wpn-surface);
-}
-
-.wpn-toggle:hover {
-  border-color: var(--wpn-primary);
-  background: var(--wpn-surface-soft);
-}
-
-.wpn-points {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 10px;
-  margin: 13px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.wpn-points li {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 12px 14px;
-  border: 1px solid var(--wpn-line);
-  border-radius: var(--wpn-radius-control);
-  background: var(--wpn-surface);
-}
-
-.wpn-points__icon {
-  display: inline-flex;
-  flex: none;
-  margin-top: 1px;
-  color: var(--wpn-primary);
-}
-
-.wpn-points h3 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  align-items: center;
-  font-size: 0.92rem;
-  color: var(--wpn-ink);
-}
-
-.wpn-points p {
-  margin-top: 4px;
-  font-size: 0.86rem;
-  line-height: 1.5;
-  color: var(--wpn-copy);
-}
-
-.wpn-soon {
-  padding: 2px 8px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--wpn-violet);
-  border-radius: 999px;
-  background: var(--wpn-violet-soft);
-}
-
-/* Consentimiento estadistico del resumen */
 
 .wsc {
   width: 100%;
@@ -227,7 +93,7 @@
 }
 
 .wsc-btn.is-selected {
-  color: #ffffff;
+  color: var(--wpn-surface);
   border-color: var(--wpn-primary-strong);
   background: var(--wpn-primary);
 }
@@ -243,12 +109,32 @@
   color: var(--wpn-muted);
 }
 
-@media (max-width: 720px) {
-  .wpn-toggle {
-    width: 100%;
-    justify-content: center;
-  }
+.wsc-legal {
+  margin-top: 12px;
+  max-width: 78ch;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--wpn-muted);
+}
 
+.wsc-enlace {
+  color: var(--fiscal-primary, var(--accent));
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.wsc-enlace:hover {
+  color: var(--fiscal-primary-strong, var(--accent-strong));
+}
+
+.wsc-enlace:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (max-width: 720px) {
   .wsc-actions {
     flex-direction: column;
   }
@@ -256,31 +142,4 @@
   .wsc-btn {
     width: 100%;
   }
-}
-
-/* Enlace a la cuenta. Usa el acento del sitio, no un azul inventado. */
-.wpn-enlace {
-  /* Dentro de la calculadora manda su paleta (fwd--soft). El --accent del sitio
-     es otro verde y canta. El fallback cubre el laboratorio de componentes. */
-  color: var(--fiscal-primary, var(--accent));
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.wpn-enlace:hover {
-  color: var(--fiscal-primary-strong, var(--accent-strong));
-}
-
-.wpn-enlace:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-  border-radius: 3px;
-}
-
-/* Matiz: lo que la cuenta todavia NO hace. Se lee despues, no antes. */
-.wpn-matiz {
-  margin-top: 6px;
-  opacity: 0.82;
-  font-size: 0.92em;
 }

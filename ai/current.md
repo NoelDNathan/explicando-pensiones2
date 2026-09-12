@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-07
+Fecha: 2026-09-11
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -19,14 +19,16 @@ Aplicacion React + TypeScript + Vite, sin backend. Rutas en `src/App.tsx`:
 | `/gasto-sanitario` | Perfil de gasto sanitario por edad y sexo. |
 | `/resumen` | **Prototipo.** Los datos estan escritos a mano en el componente. |
 | `/irpf`, `/bases-cotizacion`, `/reduccion-trabajo`, `/salario-nacionalidad` | Piezas didacticas sueltas, sin integrar editorialmente. |
-| `/cuenta` | Entrar y salir con enlace magico o codigo de 6 digitos. No sincroniza datos todavia. |
+| `/cuenta` | Ya no es pagina: entrar y salir esta en el menu de la calculadora. No sincroniza datos todavia. |
+| `/privacidad` | Terminos de uso y politica de privacidad. Publica tambien en produccion (`/terminos` apunta a lo mismo). |
 | `/componentes` | Laboratorio interno de componentes. |
 
 ### Calculadora fiscal
 
 Paso 0 de entrada mas 13 pasos: base real, limites de cotizacion, cotizaciones sociales,
 retribucion en especie, base liquidable, IRPF por tramos, deducciones de cuota, IVA y consumo
-diario, vivienda y coche, resumen del calculo, comprueba lo aprendido, preguntas frecuentes y
+diario, vivienda y coche, resumen del calculo (paso 10, con el permiso opcional de
+estadisticas), comprueba lo aprendido, preguntas frecuentes y
 fuentes del calculo.
 
 - Ejercicios conectados: **2025** y **2005** (rama legacy). `TaxYear` solo admite esos dos,
@@ -87,7 +89,7 @@ ningun dato de la calculadora.
   el regimen de checksums y fichas, que es lo que los hace auditables.
 
 Hecho ya: el esquema, el despliegue, el tipo `FiscalScenario` con autoguardado local y la
-entrada por enlace magico. Falta `docs/privacidad.md` y la base legal, la boveda de claves
+entrada por enlace magico. La base legal visible esta en `/privacidad`. Falta aun un correo de contacto del responsable, la boveda de claves
 (Argon2id + DEK envuelta), el repositorio de escenarios cifrados, y desplegar las Edge
 Functions de ingesta anonima. El plan por fases esta en las notas de sesion del 2026-09-09.
 

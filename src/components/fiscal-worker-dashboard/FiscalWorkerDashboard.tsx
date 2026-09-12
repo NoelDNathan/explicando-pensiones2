@@ -17,7 +17,6 @@ import {
   WorkerFiscalSummaryCard,
   WorkerIrpfRegionComparison,
   WorkerKnowledgeCheckCard,
-  WorkerPrivacyNotice,
   WorkerStatsConsent,
   WorkerIrpfTranchesCard,
   WorkerPersonalReductionsCard,
@@ -1371,21 +1370,24 @@ export function FiscalWorkerDashboard() {
         )
       case 10:
         return (
-          <WorkerFinalSummaryCard
-            grossSalaryAnnual={result.grossSalaryAnnual}
-            employerContributionsAnnual={socialContributions.companyContributionsAnnual}
-            workerContributionsAnnual={socialContributions.workerContributionsAnnual}
-            irpfAnnual={result.irpf}
-            vatAnnual={result.vat}
-            specialTaxesAnnual={consumptionTaxes?.specialTaxesAnnual ?? 0}
-            propertyTaxAnnual={wealthTaxes?.propertyTaxAnnual ?? 0}
-            vehicleTaxAnnual={wealthTaxes?.vehicleTaxAnnual ?? 0}
-            propertyPurchaseTaxTotal={wealthTaxes?.propertyPurchaseTaxTotal ?? 0}
-            vehiclePurchaseTaxTotal={wealthTaxes?.vehiclePurchaseTaxTotal ?? 0}
-            onSalaryChange={setSalary}
-            onGoToWealthStep={() => setActiveWorkerStepId(9)}
-            onContinue={() => setActiveWorkerStepId(12)}
-          />
+          <div className="fwd-step-stack">
+            <WorkerFinalSummaryCard
+              grossSalaryAnnual={result.grossSalaryAnnual}
+              employerContributionsAnnual={socialContributions.companyContributionsAnnual}
+              workerContributionsAnnual={socialContributions.workerContributionsAnnual}
+              irpfAnnual={result.irpf}
+              vatAnnual={result.vat}
+              specialTaxesAnnual={consumptionTaxes?.specialTaxesAnnual ?? 0}
+              propertyTaxAnnual={wealthTaxes?.propertyTaxAnnual ?? 0}
+              vehicleTaxAnnual={wealthTaxes?.vehicleTaxAnnual ?? 0}
+              propertyPurchaseTaxTotal={wealthTaxes?.propertyPurchaseTaxTotal ?? 0}
+              vehiclePurchaseTaxTotal={wealthTaxes?.vehiclePurchaseTaxTotal ?? 0}
+              onSalaryChange={setSalary}
+              onGoToWealthStep={() => setActiveWorkerStepId(9)}
+              onContinue={() => setActiveWorkerStepId(12)}
+            />
+            <WorkerStatsConsent />
+          </div>
         )
       case 11:
         return <WorkerKnowledgeCheckCard onGoToStep={setActiveWorkerStepId} nextStepId={12} />
@@ -1506,13 +1508,6 @@ export function FiscalWorkerDashboard() {
           </label>
         ) : null}
 
-        {activeWorkerStepId === 0 ? (
-          <>
-            <WorkerPrivacyNotice />
-            <WorkerStatsConsent />
-          </>
-        ) : null}
-
         {activeWorkerStepId !== 0 ? (
           <WorkerFiscalStepsCard
             activeStepId={activeWorkerStepId}
@@ -1529,6 +1524,10 @@ export function FiscalWorkerDashboard() {
             {activeWorkerStepCard}
           </div>
         </section>
+
+        <p className="fwd-legal">
+          <a href="/privacidad">Términos y privacidad</a>
+        </p>
 
       </main>
     </div>

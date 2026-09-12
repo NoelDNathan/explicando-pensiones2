@@ -1,27 +1,13 @@
 /*
- * Privacidad de la calculadora fiscal.
+ * Permiso opcional para ceder cifras anonimas a estadisticas.
  *
- * - `WorkerPrivacyNotice`: aviso de cabecera. Explica que no se recoge nada de la
- *   situacion economica sin permiso, que los datos viven en el navegador de quien
- *   calcula y que la cuenta (en camino) servira para conservarlos sin que nosotros
- *   los veamos.
- * - `WorkerStatsConsent`: la pregunta del paso de resumen, para ceder las cifras
- *   con fines estadisticos. Opcional y reversible; por defecto, no.
+ * Vive en el paso 10 (resumen del calculo). Por defecto no se envia nada.
+ * Los terminos y la politica de privacidad estan en `/privacidad`.
  */
 
 import { useEffect, useState } from "react";
-import {
-  BellRing,
-  ChevronDown,
-  ChevronUp,
-  Lock,
-  ShieldCheck,
-  Smartphone,
-  UserPlus,
-} from "lucide-react";
 import "./WorkerPrivacyNotice.css";
 
-const NOTICE_STORAGE_KEY = "fwd-privacy-notice-open";
 const CONSENT_STORAGE_KEY = "fwd-stats-consent";
 
 export type StatsConsent = "unset" | "granted" | "denied";
@@ -42,105 +28,6 @@ function writeStored(key: string, value: string) {
   } catch {
     /* almacenamiento no disponible: la eleccion vale solo para esta visita */
   }
-}
-
-export function WorkerPrivacyNotice() {
-  const [open, setOpen] = useState(() => readStored(NOTICE_STORAGE_KEY) !== "closed");
-
-  const toggle = () => {
-    const next = !open;
-    setOpen(next);
-    writeStored(NOTICE_STORAGE_KEY, next ? "open" : "closed");
-  };
-
-  return (
-    <section className={`wpn${open ? " is-open" : ""}`} aria-labelledby="wpn-title">
-      <div className="wpn-head">
-        <span className="wpn-icon" aria-hidden="true">
-          <ShieldCheck size={22} />
-        </span>
-        <div className="wpn-headline">
-          <h2 id="wpn-title">Tus datos económicos no salen de tu navegador</h2>
-          <p>
-            No recogemos ningún dato sobre tu situación económica sin tu permiso. Aplicamos los
-            estándares más altos de seguridad y privacidad: el cálculo se hace entero en tu
-            dispositivo.
-          </p>
-        </div>
-        <button type="button" className="wpn-toggle" onClick={toggle} aria-expanded={open}>
-          {open ? "Ocultar detalles" : "Ver detalles"}
-          {open ? (
-            <ChevronUp size={16} aria-hidden="true" />
-          ) : (
-            <ChevronDown size={16} aria-hidden="true" />
-          )}
-        </button>
-      </div>
-
-      {open ? (
-        <ul className="wpn-points">
-          <li>
-            <span className="wpn-points__icon" aria-hidden="true">
-              <Smartphone size={18} />
-            </span>
-            <div>
-              <h3>Se guarda en este navegador</h3>
-              <p>
-                Si recargas la página verás lo que ya habías puesto, porque queda guardado dentro de
-                tu navegador. Si cambias de navegador o de dispositivo, no lo verás: esos datos no
-                viajan contigo.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span className="wpn-points__icon" aria-hidden="true">
-              <UserPlus size={18} />
-            </span>
-            <div>
-              <h3>Cuenta para conservarlos</h3>
-              <p>
-                Puedes crear una cuenta para llevarte tus datos de un dispositivo a otro. Se cifran
-                en este navegador con una frase que solo tú conoces: nosotros no podemos leerlos.
-                {' '}
-                <a className="wpn-enlace" href="/cuenta">Crear una cuenta o entrar</a>.
-              </p>
-              <p className="wpn-matiz">
-                Todavía no sube nada: la cuenta y el cifrado ya funcionan, pero falta la parte que
-                guarda tus escenarios.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span className="wpn-points__icon" aria-hidden="true">
-              <BellRing size={18} />
-            </span>
-            <div>
-              <h3>
-                Avisos de contenido nuevo <span className="wpn-soon">en camino</span>
-              </h3>
-              <p>
-                Con cuenta podrás activar avisos cuando publiquemos algo nuevo: por ejemplo, cómo
-                funcionan las pensiones en España y si son sostenibles, o un informe sobre si hoy
-                cuesta más acceder a una vivienda que en el pasado.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span className="wpn-points__icon" aria-hidden="true">
-              <Lock size={18} />
-            </span>
-            <div>
-              <h3>Solo se comparte lo que tú autorices</h3>
-              <p>
-                Justo debajo puedes cedernos tus cifras para estadísticas, siempre de forma anónima
-                y siempre voluntaria. Si no dices nada, no se envía nada.
-              </p>
-            </div>
-          </li>
-        </ul>
-      ) : null}
-    </section>
-  );
 }
 
 type WorkerStatsConsentProps = {
@@ -201,9 +88,14 @@ export function WorkerStatsConsent({ onChange }: WorkerStatsConsentProps) {
               ? "Perfecto: no se enviará ninguna cifra. Puedes cambiarlo aquí cuando quieras."
               : "Mientras no elijas nada, no se envía ninguna cifra."}
         </p>
+
+        <p className="wsc-legal">
+          Cómo se calcula, qué se guarda en tu navegador y qué implica este permiso está en los{" "}
+          <a className="wsc-enlace" href="/privacidad">términos y la política de privacidad</a>.
+        </p>
       </div>
     </section>
   );
 }
 
-export default WorkerPrivacyNotice;
+export default WorkerStatsConsent;

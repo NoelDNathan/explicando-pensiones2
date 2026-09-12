@@ -379,6 +379,35 @@
   min-width: 0;
 }
 
+.fwd-step-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+}
+
+.fwd-legal {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+}
+
+.fwd-legal a {
+  color: var(--fwd-muted);
+  font-weight: 650;
+  text-underline-offset: 3px;
+}
+
+.fwd-legal a:hover {
+  color: var(--fwd-text);
+}
+
+.fwd-legal a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
 .fwd-worker-card > .wsbc,
 .fwd-worker-card > .wclc,
 .fwd-worker-card > .wscc,

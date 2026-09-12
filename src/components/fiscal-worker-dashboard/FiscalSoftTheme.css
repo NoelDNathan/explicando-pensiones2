@@ -64,6 +64,14 @@
   padding: clamp(18px, 2.5vw, 34px);
 }
 
+.fwd--soft .fwd-legal a {
+  color: var(--fiscal-muted);
+}
+
+.fwd--soft .fwd-legal a:hover {
+  color: var(--fiscal-primary-strong);
+}
+
 .fwd--soft .fwd-header h2,
 .fwd--soft .fwd-worker-card :is(h2, h3, h4) {
   color: var(--fiscal-ink);
