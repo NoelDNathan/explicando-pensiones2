@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-11
+Fecha: 2026-09-12
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -301,6 +301,8 @@ y `/resumen` tras la extraccion de `DashboardSidebar`.
 
 ### Frontend e infraestructura
 
+- Vercel Web Analytics esta montado en `src/main.tsx` con `@vercel/analytics/react`
+  (Vite, no Next). Hay que tenerlo activado en el panel del proyecto de Vercel.
 - Al reorganizar componentes: separar los reutilizables, mantener tokens compartidos y evitar
   estilos duplicados en paginas finales.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la

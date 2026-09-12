@@ -1,6 +1,6 @@
 import "./PrivacyTermsPage.css";
 
-const UPDATED_ON = "11 de septiembre de 2026";
+const UPDATED_ON = "12 de septiembre de 2026";
 
 export function PrivacyTermsPage() {
   return (
@@ -93,9 +93,10 @@ export function PrivacyTermsPage() {
         <h3>Cookies y registro técnico</h3>
         <p>
           No usamos cookies de publicidad ni de seguimiento de terceros. El
-          alojamiento y la autenticación pueden registrar de forma técnica la
-          IP, el navegador y la hora de una petición, el tiempo necesario para
-          operar el servicio y detectar abusos.
+          alojamiento (Vercel Web Analytics) cuenta visitas de forma agregada,
+          sin cookies de publicidad. El alojamiento y la autenticación pueden
+          registrar de forma técnica la IP, el navegador y la hora de una
+          petición, el tiempo necesario para operar el servicio y detectar abusos.
         </p>
 
         <h3>Encargados</h3>
