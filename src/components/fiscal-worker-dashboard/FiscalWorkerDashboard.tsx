@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Bookmark,
-  Info,
   Share2,
 } from 'lucide-react'
 import fiscalParams2025Json from '../../../data/processed/fiscal/2026-06-01_calculadora-fiscal-trabajador-parametros-2025.json'
@@ -1481,7 +1480,6 @@ export function FiscalWorkerDashboard() {
               ) : null}
             </div>
             <AccountMenu />
-            <button type="button" aria-label="Información"><Info size={18} /></button>
           </div>
         </header>
 

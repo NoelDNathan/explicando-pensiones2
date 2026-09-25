@@ -324,10 +324,6 @@
   background: rgba(4, 14, 28, 0.5);
 }
 
-.fwd-actions button:last-child {
-  min-width: 76px;
-}
-
 .fwd-kpi,
 .fwd-panel.dp {
   border: 1px solid var(--fwd-border);
@@ -388,18 +384,24 @@
 }
 
 .fwd-legal {
-  margin: 4px 0 0;
-  font-size: 0.82rem;
+  margin: 2px 0 0;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-align: end;
 }
 
 .fwd-legal a {
-  color: var(--fwd-muted);
-  font-weight: 650;
-  text-underline-offset: 3px;
+  color: var(--fwd-faint);
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0.55;
 }
 
 .fwd-legal a:hover {
-  color: var(--fwd-text);
+  color: var(--fwd-muted);
+  opacity: 0.9;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .fwd-legal a:focus-visible {

@@ -66,10 +66,11 @@
 
 .fwd--soft .fwd-legal a {
   color: var(--fiscal-muted);
+  font-weight: 400;
 }
 
 .fwd--soft .fwd-legal a:hover {
-  color: var(--fiscal-primary-strong);
+  color: var(--fiscal-copy);
 }
 
 .fwd--soft .fwd-header h2,
