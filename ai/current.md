@@ -72,6 +72,14 @@ fuentes del calculo.
 - El paso 8 define el IVA (Impuesto sobre el Valor Añadido) y los impuestos especiales
   antes de pedir el reparto del gasto; el subtítulo es «El impuesto sobre lo que compras».
 
+### Rediseño visual de la calculadora (en curso)
+
+Fase 1 (auditoría) hecha en `ai/rediseno-calculadora/01-auditoria.md`: medidas por paso,
+problemas por impacto y 27 textos redundantes candidatos (T1-T27). **No se ha borrado
+ningún texto**: cada eliminación necesita aprobación explícita. El rediseño no cambia
+el flujo, las preguntas, los cálculos ni el contenido educativo. Siguiente: tokens de
+tipografía, espaciado y movimiento, y piloto en los pasos 0 y 5.
+
 ### Base de datos (Supabase)
 
 **Desplegado** en el proyecto `explicando-pensiones` (region `eu-west-1`, Irlanda), con las 10
