@@ -143,3 +143,38 @@ export function flushScenarioSave(scenario: FiscalScenario): void {
   if (isPristineScenario(scenario)) return
   saveScenario(scenario)
 }
+
+/*
+ * La respuesta a «¿cuántos crees que acaban en Hacienda?» se guarda aparte del
+ * escenario, a proposito: es de quien visita, no del caso calculado. Si fuera en
+ * el escenario viajaria en los enlaces compartidos, y quien abre el enlace de
+ * otra persona se saltaria la pregunta y veria la respuesta ajena.
+ */
+export const TAX_GUESS_STORAGE_KEY = 'fwd-tax-guess-v1'
+
+/** Euros de cada 100 que la persona cree que se van; null si aun no respondio. */
+export function loadTaxGuess(): number | null {
+  const storage = getStorage()
+  if (storage === null) return null
+
+  try {
+    const raw = storage.getItem(TAX_GUESS_STORAGE_KEY)
+    const value = Number(raw)
+    if (raw === null || raw === '' || !Number.isInteger(value) || value < 0 || value > 100) return null
+    return value
+  } catch {
+    return null
+  }
+}
+
+export function saveTaxGuess(value: number | null): void {
+  const storage = getStorage()
+  if (storage === null) return
+
+  try {
+    if (value === null) storage.removeItem(TAX_GUESS_STORAGE_KEY)
+    else storage.setItem(TAX_GUESS_STORAGE_KEY, String(value))
+  } catch {
+    /* sin almacenamiento la pregunta vuelve a salir la proxima vez; no pasa nada */
+  }
+}

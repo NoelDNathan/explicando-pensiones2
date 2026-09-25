@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-25
+Fecha: 2026-09-26
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -35,6 +35,10 @@ fuentes del calculo.
   aunque en `data/` hay paquetes de parametros de 2015 y 2018-2024 listos.
 - Comunidades: las 15 de regimen comun para el IRPF autonomico; sin deducciones autonomicas
   automaticas.
+- El paso 0 empieza con una pregunta obligatoria: «De cada 100 € que cuesta tu trabajo, ¿cuántos
+  crees que acaban en Hacienda y la Seguridad Social?» (deslizador 0-70 €), luego el salario y
+  después la comparación con el cálculo. La respuesta se guarda en `fwd-tax-guess-v1`, fuera del
+  escenario, para que no viaje en los enlaces compartidos.
 - Todo se calcula en el navegador y se guarda en `localStorage`; no hay backend.
 - El estado completo vive en `fiscalScenario.ts` (tipo `FiscalScenario`, con version, serializado
   y validacion defensiva) y se autoguarda con retardo en `fwd-fiscal-scenario-v1`. Al recargar se

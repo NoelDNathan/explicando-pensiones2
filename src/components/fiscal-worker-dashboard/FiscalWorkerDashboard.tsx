@@ -41,7 +41,7 @@ import type {
 import type { DisabilityMode } from './types'
 import type { FiscalScenario } from './fiscalScenario'
 import { FISCAL_SCENARIO_VERSION, scenarioSignature } from './fiscalScenario'
-import { flushScenarioSave, loadScenario, scheduleScenarioSave } from './fiscalScenarioStorage'
+import { flushScenarioSave, loadScenario, loadTaxGuess, saveTaxGuess, scheduleScenarioSave } from './fiscalScenarioStorage'
 import {
   buildShareUrl,
   copyToClipboard,
@@ -380,6 +380,13 @@ export function FiscalWorkerDashboard() {
 
   const [taxYear] = useState<TaxYear>(savedScenario.taxYear)
   const [salary, setSalary] = useState(savedScenario.salary)
+  // La respuesta a la pregunta de entrada es de quien visita, no del escenario:
+  // se guarda aparte y no viaja en los enlaces compartidos.
+  const [taxGuess, setTaxGuess] = useState(loadTaxGuess)
+  const handleTaxGuessChange = useCallback((value: number | null) => {
+    setTaxGuess(value)
+    saveTaxGuess(value)
+  }, [])
   const [salaryComplements, setSalaryComplements] = useState(savedScenario.salaryComplements)
   // No entran en el calculo, pero sin ellos quien escribio «2.000 al mes en 14
   // pagas» volveria y veria «28.000 al anyo»: su cifra, presentada como no la puso.
@@ -1225,6 +1232,8 @@ export function FiscalWorkerDashboard() {
             vatAnnual={result.vat}
             onSalaryChange={setSalary}
             onExploreDetails={() => setActiveWorkerStepId(1)}
+            taxGuess={taxGuess}
+            onTaxGuessChange={handleTaxGuessChange}
           />
         )
       case 1:

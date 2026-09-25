@@ -66,8 +66,10 @@ function WorkerContributionLimitsShowcase() {
   )
 }
 
-function WorkerFiscalSummaryShowcase() {
+/** Con `quiz`, el resumen empieza con la pregunta de entrada, como en la calculadora. */
+function WorkerFiscalSummaryShowcase({ quiz = false, initialGuess = null }: { quiz?: boolean; initialGuess?: number | null }) {
   const [salary, setSalary] = React.useState(35_000)
+  const [taxGuess, setTaxGuess] = React.useState<number | null>(initialGuess)
   const salaryFactor = salary / 35_000
   const workerContributionsAnnual = 2_270 * salaryFactor
   const irpfAnnual = 4_350 * salaryFactor
@@ -82,6 +84,8 @@ function WorkerFiscalSummaryShowcase() {
       irpfAnnual={irpfAnnual}
       vatAnnual={vatAnnual}
       onSalaryChange={setSalary}
+      taxGuess={taxGuess}
+      onTaxGuessChange={quiz ? setTaxGuess : undefined}
     />
   )
 }
@@ -703,12 +707,22 @@ function ComponentLab() {
           <p>
             Vista condensada del coste total para la empresa, los impuestos y
             cotizaciones del trabajador y el salario neto, con lectura en euros
-            o porcentaje del bruto.
+            o porcentaje del bruto. En la calculadora empieza con una pregunta
+            obligatoria (cuantos euros de cada 100 crees que acaban en Hacienda y
+            la Seguridad Social), pide el salario y compara la respuesta.
           </p>
         </div>
 
-        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
-          <WorkerFiscalSummaryShowcase />
+        <div className="component-preview-stack">
+          <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card" aria-label="Sin pregunta de entrada">
+            <WorkerFiscalSummaryShowcase />
+          </div>
+          <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card" aria-label="Con pregunta de entrada, sin responder: Siguiente queda deshabilitado hasta mover el deslizador">
+            <WorkerFiscalSummaryShowcase quiz />
+          </div>
+          <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card" aria-label="Con pregunta de entrada ya respondida: quien vuelve ve la comparacion">
+            <WorkerFiscalSummaryShowcase quiz initialGuess={25} />
+          </div>
         </div>
       </section>
 

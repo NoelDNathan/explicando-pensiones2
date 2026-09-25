@@ -379,6 +379,341 @@
   line-height: 1.5;
 }
 
+/* ---------- Pregunta de entrada: «¿cuántos crees que acaban en Hacienda?» ---------- */
+
+.wfsc-quiz,
+.wfsc-quiz-result {
+  --quiz-guess: var(--fiscal-worker);
+  --quiz-guess-ink: var(--fiscal-worker-ink);
+  --quiz-real: var(--fiscal-state);
+  --quiz-real-ink: var(--fiscal-state-ink);
+  /* Carril vacío con más contraste que el del sueldo: aquí es lo único que se ve al empezar. */
+  --quiz-track-empty: var(--fiscal-line-strong);
+}
+
+.wfsc-summary--intro .wfsc-quiz__step {
+  margin: 0 0 10px;
+  color: var(--intro-eyebrow);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wfsc-summary--intro .wfsc-intro__header h2:focus {
+  outline: none;
+}
+
+.wfsc-summary--intro .wfsc-intro__header h2:focus-visible {
+  outline: 3px solid var(--intro-focus);
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+
+.wfsc-quiz .wfsc-intro__header h2 {
+  font-size: clamp(30px, 4vw, 50px);
+  line-height: 1.1;
+}
+
+.wfsc-quiz__answer {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--intro-surface-border);
+  border-radius: 18px;
+  background: var(--intro-surface);
+}
+
+.wfsc-summary--intro .wfsc-quiz__value {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+  color: var(--quiz-guess);
+  line-height: 1.15;
+}
+
+.wfsc-quiz__value strong {
+  font-size: clamp(72px, 12vw, 128px);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.wfsc-quiz__value span {
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 800;
+}
+
+.wfsc-summary--intro .wfsc-quiz__value.is-pending {
+  color: var(--intro-text-muted);
+}
+
+.wfsc-summary--intro .wfsc-quiz__value-note {
+  margin: 0 0 14px;
+  color: var(--intro-text);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.wfsc-quiz__range {
+  --wfsc-quiz-thumb: 34px;
+  width: 100%;
+  max-width: 640px;
+  height: var(--wfsc-quiz-thumb);
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.wfsc-quiz__range:focus {
+  outline: none;
+}
+
+.wfsc-quiz__range::-webkit-slider-runnable-track {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--quiz-guess) 0%,
+    var(--quiz-guess) var(--wfsc-quiz-fill),
+    var(--quiz-track-empty) var(--wfsc-quiz-fill),
+    var(--quiz-track-empty) 100%
+  );
+}
+
+.wfsc-quiz__range::-moz-range-track {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--quiz-guess) 0%,
+    var(--quiz-guess) var(--wfsc-quiz-fill),
+    var(--quiz-track-empty) var(--wfsc-quiz-fill),
+    var(--quiz-track-empty) 100%
+  );
+}
+
+.wfsc-quiz__range::-webkit-slider-thumb {
+  width: var(--wfsc-quiz-thumb);
+  height: var(--wfsc-quiz-thumb);
+  margin-top: calc((12px - var(--wfsc-quiz-thumb)) / 2);
+  border: 4px solid var(--fiscal-surface);
+  border-radius: 50%;
+  background: var(--quiz-guess);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--quiz-guess) 18%, transparent), 0 3px 8px color-mix(in srgb, var(--fiscal-shade) 22%, transparent);
+  appearance: none;
+}
+
+.wfsc-quiz__range::-moz-range-thumb {
+  width: var(--wfsc-quiz-thumb);
+  height: var(--wfsc-quiz-thumb);
+  border: 4px solid var(--fiscal-surface);
+  border-radius: 50%;
+  background: var(--quiz-guess);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--quiz-guess) 18%, transparent), 0 3px 8px color-mix(in srgb, var(--fiscal-shade) 22%, transparent);
+}
+
+/* Sin responder: la barra no se rellena y el pulgar queda neutro, para que no
+   parezca que ya hay una respuesta elegida. */
+.wfsc-quiz__range.is-pending::-webkit-slider-runnable-track {
+  background: var(--quiz-track-empty);
+}
+
+.wfsc-quiz__range.is-pending::-moz-range-track {
+  background: var(--quiz-track-empty);
+}
+
+.wfsc-quiz__range.is-pending::-webkit-slider-thumb {
+  background: var(--fiscal-muted);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--fiscal-muted) 18%, transparent), 0 3px 8px color-mix(in srgb, var(--fiscal-shade) 22%, transparent);
+}
+
+.wfsc-quiz__range.is-pending::-moz-range-thumb {
+  background: var(--fiscal-muted);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--fiscal-muted) 18%, transparent), 0 3px 8px color-mix(in srgb, var(--fiscal-shade) 22%, transparent);
+}
+
+.wfsc-quiz__range:focus-visible::-webkit-slider-thumb {
+  outline: 3px solid var(--intro-focus);
+  outline-offset: 3px;
+}
+
+.wfsc-quiz__range:focus-visible::-moz-range-thumb {
+  outline: 3px solid var(--intro-focus);
+  outline-offset: 3px;
+}
+
+.wfsc-quiz__scale {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 640px;
+  color: var(--intro-text-muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.wfsc-intro__cta:disabled {
+  border-color: var(--fiscal-line);
+  color: var(--fiscal-muted);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.wfsc-quiz__back {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--fiscal-blue-ink);
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.wfsc-quiz__back:hover {
+  color: var(--fiscal-ink);
+}
+
+.wfsc-quiz__back:focus-visible {
+  outline: 3px solid var(--intro-focus);
+  outline-offset: 2px;
+}
+
+/* Resultado: la respuesta frente al cálculo, en la misma escala de 0 a 100 €. */
+.wfsc-quiz-result {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  padding: clamp(20px, 2.6vw, 30px);
+  border: 1px solid var(--fiscal-state-line);
+  border-radius: 18px;
+  text-align: center;
+  background: linear-gradient(160deg, var(--fiscal-state-soft), var(--intro-card-base));
+}
+
+.wfsc-summary--intro .wfsc-quiz-result__title {
+  max-width: 640px;
+  margin: 0;
+  color: var(--intro-text-strong);
+  font-size: clamp(19px, 2vw, 23px);
+  line-height: 1.4;
+}
+
+.wfsc-quiz-result__rows {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0;
+}
+
+.wfsc-quiz-result__row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  text-align: left;
+}
+
+.wfsc-quiz-result__row dt {
+  color: var(--intro-text);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.wfsc-quiz-result__row dd {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  margin: 0;
+}
+
+.wfsc-quiz-result__row strong {
+  font-size: clamp(34px, 4.6vw, 52px);
+  font-weight: 850;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.wfsc-quiz-result__row--guess strong { color: var(--quiz-guess-ink); }
+.wfsc-quiz-result__row--real strong { color: var(--quiz-real-ink); }
+
+.wfsc-quiz-result__bar {
+  position: relative;
+  height: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--fiscal-surface);
+  box-shadow: inset 0 0 0 1px var(--fiscal-line);
+}
+
+.wfsc-quiz-result__bar::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--wfsc-quiz-share);
+  border-radius: inherit;
+  background: var(--quiz-bar);
+  transform-origin: left center;
+  transition: width 300ms ease;
+  animation: wfsc-quiz-grow 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.wfsc-quiz-result__row--guess .wfsc-quiz-result__bar { --quiz-bar: var(--quiz-guess); }
+.wfsc-quiz-result__row--real .wfsc-quiz-result__bar::after { animation-delay: 250ms; }
+.wfsc-quiz-result__row--real .wfsc-quiz-result__bar { --quiz-bar: var(--quiz-real); }
+
+@keyframes wfsc-quiz-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wfsc-quiz-result__bar::after {
+    animation: none;
+    transition: none;
+  }
+}
+
+.wfsc-summary--intro .wfsc-quiz-result__verdict {
+  max-width: 640px;
+  margin: 4px 0 0;
+  color: var(--intro-text-strong);
+  font-size: clamp(19px, 2vw, 22px);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.wfsc-summary--intro .wfsc-quiz-result__note {
+  max-width: 640px;
+  margin: 0;
+  color: var(--intro-text-muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .wfsc-quiz-result__row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .wfsc-quiz-result__row dd {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+}
+
 /* Slider de sueldo: dos escalones tipográficos más solo dentro del resumen intro. */
 .wfsc-summary--intro .salary-slider__value-input {
   font-size: clamp(23px, 2.8vw, 28px);

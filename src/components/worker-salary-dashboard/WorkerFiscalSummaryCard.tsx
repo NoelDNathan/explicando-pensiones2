@@ -8,13 +8,20 @@ import {
   ShoppingCart,
   WalletCards,
 } from "lucide-react";
-import { useState } from "react";
+import type { CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SalarySlider } from "../ui/SalarySlider";
 import "./WorkerFiscalSummaryCard.css";
 
 type SummaryDisplayMode = "absolute" | "percentage";
 type SummaryPeriod = "month" | "year";
 type SummaryVariant = "intro" | "final";
+type QuizStage = "guess" | "salary" | "reveal";
+
+/** Tope del deslizador de la pregunta: el cálculo real no llega a 70 € de cada 100. */
+const GUESS_MAX = 70;
+/** Diferencia, en euros de cada 100, que todavía cuenta como «casi exacto». */
+const GUESS_TOLERANCE = 3;
 
 type WorkerFiscalSummaryCardProps = {
   variant?: SummaryVariant;
@@ -27,7 +34,26 @@ type WorkerFiscalSummaryCardProps = {
   onSalaryChange?: (salary: number) => void;
   onExploreDetails?: () => void;
   onContinue?: () => void;
+  /**
+   * Respuesta a «de cada 100 € que cuesta tu trabajo, ¿cuántos crees que acaban en
+   * Hacienda y la Seguridad Social?». Si se pasa `onTaxGuessChange`, el resumen
+   * intro empieza preguntando: primero esa cifra (obligatoria), luego el salario,
+   * y después compara la respuesta con el cálculo. Sin él, se ve como siempre.
+   */
+  taxGuess?: number | null;
+  onTaxGuessChange?: (value: number | null) => void;
 };
+
+function guessVerdict(guess: number, real: number) {
+  const diff = real - guess;
+  if (Math.abs(diff) <= GUESS_TOLERANCE) {
+    return "Casi exacto: tu intuición está muy cerca del cálculo.";
+  }
+  if (diff > 0) {
+    return `Te quedaste corto por ${diff} €. Hay dos partes que no se ven en la nómina: la cotización que paga tu empresa y el IVA de lo que compras.`;
+  }
+  return `Te pasaste por ${-diff} €. Con este salario, lo que acaba en Hacienda y la Seguridad Social es menos de lo que pensabas.`;
+}
 
 const percentFormatter = new Intl.NumberFormat("es-ES", {
   minimumFractionDigits: 1,
@@ -58,7 +84,27 @@ export function WorkerFiscalSummaryCard({
   onSalaryChange,
   onExploreDetails,
   onContinue,
+  taxGuess = null,
+  onTaxGuessChange,
 }: WorkerFiscalSummaryCardProps) {
+  const quizEnabled = onTaxGuessChange !== undefined;
+  const [stage, setStage] = useState<QuizStage>(
+    quizEnabled && taxGuess === null ? "guess" : "reveal",
+  );
+  const [draftGuess, setDraftGuess] = useState<number | null>(taxGuess);
+  const quizHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const previousStage = useRef(stage);
+
+  // Al cambiar de pantalla, el foco va al nuevo titular: quien usa lector de
+  // pantalla o teclado sigue el recorrido sin volver al principio de la página.
+  // Se compara con la pantalla anterior (no «primer render») porque en modo
+  // estricto el efecto corre dos veces al montar y robaría el foco al cargar.
+  useEffect(() => {
+    if (previousStage.current === stage) return;
+    previousStage.current = stage;
+    quizHeadingRef.current?.focus();
+  }, [stage]);
+
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>("absolute");
   const [period, setPeriod] = useState<SummaryPeriod>("month");
   const isFinal = variant === "final";
@@ -94,6 +140,128 @@ export function WorkerFiscalSummaryCard({
     const shareOfCost = (value: number) =>
       companyCostAnnual > 0 ? (value / companyCostAnnual) * 100 : 0;
     const takeHomePer100 = Math.round(shareOfCost(remainingAfterConsumption));
+    // Se deriva de takeHomePer100 para que las dos cifras sumen siempre 100.
+    const taxesPer100 = 100 - takeHomePer100;
+    const showGuessResult = quizEnabled && draftGuess !== null;
+
+    if (quizEnabled && stage === "guess") {
+      const isPending = draftGuess === null;
+      const sliderValue = draftGuess ?? GUESS_MAX / 2;
+      return (
+        <section
+          className="wfsc-summary wfsc-summary--intro wfsc-theme--soft wfsc-quiz"
+          aria-labelledby="wfsc-quiz-title"
+        >
+          <header className="wfsc-intro__header">
+            <p className="wfsc-quiz__step">Pregunta 1 de 2</p>
+            <h2 id="wfsc-quiz-title" ref={quizHeadingRef} tabIndex={-1}>
+              De cada 100 € que cuesta tu trabajo, ¿cuántos crees que acaban en Hacienda y la
+              Seguridad Social?
+            </h2>
+            <p className="wfsc-intro__lead">
+              Piensa en todo: lo que te descuentan en la nómina, lo que paga tu empresa por tenerte
+              contratado y los impuestos de lo que compras.
+            </p>
+          </header>
+
+          <div className="wfsc-quiz__answer">
+            <p className={`wfsc-quiz__value${isPending ? " is-pending" : ""}`} aria-hidden="true">
+              <strong>{isPending ? "¿?" : draftGuess}</strong>
+              {isPending ? null : <span>€</span>}
+            </p>
+            <p className="wfsc-quiz__value-note" aria-live="polite">
+              {isPending ? "Mueve el deslizador para responder" : "de cada 100 €"}
+            </p>
+            <input
+              type="range"
+              className={`wfsc-quiz__range${isPending ? " is-pending" : ""}`}
+              min={0}
+              max={GUESS_MAX}
+              step={1}
+              value={sliderValue}
+              style={{ "--wfsc-quiz-fill": `${(sliderValue / GUESS_MAX) * 100}%` } as CSSProperties}
+              onChange={(event) => setDraftGuess(Number(event.target.value))}
+              // Un clic justo en el valor de partida no dispara onChange: también cuenta.
+              onPointerUp={(event) => setDraftGuess(Number(event.currentTarget.value))}
+              aria-label="Euros de cada 100 que crees que acaban en Hacienda y la Seguridad Social"
+              aria-valuetext={isPending ? "Sin responder" : `${draftGuess} euros de cada 100`}
+            />
+            <div className="wfsc-quiz__scale" aria-hidden="true">
+              <span>0 €</span>
+              <span>{GUESS_MAX / 2} €</span>
+              <span>{GUESS_MAX} €</span>
+            </div>
+          </div>
+
+          <footer className="wfsc-intro__footer">
+            <button
+              type="button"
+              className="wfsc-intro__cta"
+              disabled={isPending}
+              onClick={() => setStage("salary")}
+            >
+              Siguiente
+              <ArrowRight size={18} aria-hidden="true" />
+            </button>
+            <p>No hay respuesta mala: es para ver cuánto se acerca tu intuición al cálculo.</p>
+          </footer>
+        </section>
+      );
+    }
+
+    if (quizEnabled && stage === "salary") {
+      return (
+        <section
+          className="wfsc-summary wfsc-summary--intro wfsc-theme--soft wfsc-quiz"
+          aria-labelledby="wfsc-quiz-title"
+        >
+          <header className="wfsc-intro__header">
+            <p className="wfsc-quiz__step">Pregunta 2 de 2</p>
+            <h2 id="wfsc-quiz-title" ref={quizHeadingRef} tabIndex={-1}>
+              ¿Cuál es tu salario?
+            </h2>
+            <p className="wfsc-intro__lead">
+              Bruto al año, antes de impuestos. Si no lo sabes exacto, una cifra aproximada vale. El
+              cálculo se hace en tu navegador.
+            </p>
+          </header>
+
+          <div className="wfsc-intro__controls">
+            <div className="wfsc-intro__salary">
+              <SalarySlider
+                id="wfsc-quiz-salary"
+                value={grossSalaryAnnual}
+                onChange={onSalaryChange ?? (() => undefined)}
+                min={14_000}
+                max={500_000}
+                step={1_000}
+                markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+                scale="log"
+                unitLabel="brutos al año"
+                ariaLabel="Tu salario bruto anual"
+              />
+            </div>
+          </div>
+
+          <footer className="wfsc-intro__footer">
+            <button
+              type="button"
+              className="wfsc-intro__cta"
+              onClick={() => {
+                onTaxGuessChange?.(draftGuess);
+                setStage("reveal");
+              }}
+            >
+              Ver mi resultado
+              <ArrowRight size={18} aria-hidden="true" />
+            </button>
+            <button type="button" className="wfsc-quiz__back" onClick={() => setStage("guess")}>
+              Cambiar mi respuesta ({draftGuess} €)
+            </button>
+          </footer>
+        </section>
+      );
+    }
 
     const flowSegments = [
       {
@@ -132,10 +300,13 @@ export function WorkerFiscalSummaryCard({
         aria-labelledby="wfsc-summary-title"
       >
         <header className="wfsc-intro__header">
-          <h2 id="wfsc-summary-title">¿Cuántos impuestos pagas?</h2>
+          <h2 id="wfsc-summary-title" ref={quizHeadingRef} tabIndex={quizEnabled ? -1 : undefined}>
+            {showGuessResult ? "Tu respuesta, frente al cálculo" : "¿Cuántos impuestos pagas?"}
+          </h2>
           <p className="wfsc-intro__lead">
-            Mueve tu sueldo y verás, en un vistazo, cuánto acaba en tu bolsillo y cuánto se reparte
-            entre impuestos y cotizaciones. Después lo iremos afinando paso a paso.
+            {showGuessResult
+              ? "Mueve tu sueldo para ver cómo cambia. Debajo tienes a dónde va cada parte; después lo afinamos paso a paso."
+              : "Mueve tu sueldo y verás, en un vistazo, cuánto acaba en tu bolsillo y cuánto se reparte entre impuestos y cotizaciones. Después lo iremos afinando paso a paso."}
           </p>
         </header>
 
@@ -179,6 +350,55 @@ export function WorkerFiscalSummaryCard({
           </div>
         </div>
 
+        {showGuessResult ? (
+          <div className="wfsc-quiz-result" aria-live="polite">
+            <p className="wfsc-quiz-result__title">
+              De cada <strong>100 €</strong> que cuesta tu trabajo, acaban en Hacienda y la Seguridad
+              Social
+            </p>
+            <dl className="wfsc-quiz-result__rows">
+              <div className="wfsc-quiz-result__row wfsc-quiz-result__row--guess">
+                <dt>Tú dijiste</dt>
+                <dd>
+                  <strong>{draftGuess} €</strong>
+                  <span
+                    className="wfsc-quiz-result__bar"
+                    style={{ "--wfsc-quiz-share": `${draftGuess}%` } as CSSProperties}
+                    aria-hidden="true"
+                  />
+                </dd>
+              </div>
+              <div className="wfsc-quiz-result__row wfsc-quiz-result__row--real">
+                <dt>El cálculo</dt>
+                <dd>
+                  <strong>{taxesPer100} €</strong>
+                  <span
+                    className="wfsc-quiz-result__bar"
+                    style={{ "--wfsc-quiz-share": `${taxesPer100}%` } as CSSProperties}
+                    aria-hidden="true"
+                  />
+                </dd>
+              </div>
+            </dl>
+            <p className="wfsc-quiz-result__verdict">{guessVerdict(draftGuess, taxesPer100)}</p>
+            <p className="wfsc-quiz-result__note">
+              A tu bolsillo llegan {takeHomePer100} €: son {formatPeriodEuro(remainingAfterConsumption)}{" "}
+              {periodSuffix} de los {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu
+              puesto.
+            </p>
+            <button
+              type="button"
+              className="wfsc-quiz__back"
+              onClick={() => {
+                onTaxGuessChange?.(null);
+                setDraftGuess(null);
+                setStage("guess");
+              }}
+            >
+              Volver a responder
+            </button>
+          </div>
+        ) : (
         <div className="wfsc-intro__headline" aria-live="polite">
           <p>
             De cada <strong>100 €</strong> que le cuestas a tu empresa, a tu bolsillo llegan
@@ -191,6 +411,7 @@ export function WorkerFiscalSummaryCard({
             {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu puesto.
           </p>
         </div>
+        )}
 
         <div className="wfsc-intro__flow">
           <div
