@@ -1,15 +1,15 @@
 .wfsc {
-  --wfsc-bg: #020b18;
-  --wfsc-panel: rgba(4, 20, 39, 0.88);
-  --wfsc-panel-soft: rgba(7, 31, 55, 0.82);
-  --wfsc-border: rgba(31, 125, 199, 0.48);
-  --wfsc-border-strong: rgba(49, 142, 235, 0.64);
-  --wfsc-text: #f4f8ff;
-  --wfsc-muted: #aab8ca;
-  --wfsc-faint: #6f8199;
-  --wfsc-blue: #4aa3ff;
-  --wfsc-green: #5fe875;
-  --wfsc-green-deep: #2eb95a;
+  --wfsc-bg: var(--fiscal-canvas);
+  --wfsc-panel: var(--fiscal-surface);
+  --wfsc-panel-soft: var(--fiscal-surface-soft);
+  --wfsc-border: var(--fiscal-line);
+  --wfsc-border-strong: var(--fiscal-blue);
+  --wfsc-text: var(--fiscal-ink);
+  --wfsc-muted: var(--fiscal-copy);
+  --wfsc-faint: var(--fiscal-muted);
+  --wfsc-blue: var(--fiscal-blue);
+  --wfsc-green: var(--fiscal-primary);
+  --wfsc-green-deep: var(--fiscal-primary-strong);
 
   position: relative;
   width: 100%;
@@ -32,14 +32,13 @@
   overflow: hidden;
   padding: clamp(24px, 3vw, 40px) clamp(24px, 3vw, 48px);
   border: 1px solid var(--wfsc-border);
-  border-radius: 16px;
+  border-radius: var(--fiscal-radius-card);
   background:
-    radial-gradient(circle at 12% 18%, rgba(30, 97, 180, 0.22), transparent 32%),
-    radial-gradient(circle at 78% 18%, rgba(72, 232, 121, 0.08), transparent 30%),
-    linear-gradient(180deg, rgba(3, 18, 36, 0.98), rgba(1, 9, 22, 0.98));
+    radial-gradient(circle at 8% 8%, rgba(20, 125, 117, 0.08), transparent 26%),
+    linear-gradient(145deg, #ffffff, #f3f7fb);
   box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    var(--fiscal-shadow);
+  border-color: var(--fiscal-line);
 }
 
 .wfsc-stage::before {
@@ -85,7 +84,7 @@
 
 .wfsc-chrome__status {
   margin: 0;
-  color: var(--wfsc-text);
+  color: var(--fiscal-ink);
   font-size: 13px;
   font-weight: 760;
   line-height: 1.2;
@@ -111,6 +110,7 @@
 
 .wfsc-nav--previous {
   grid-area: prev;
+  color: var(--fiscal-ink);
 }
 
 .wfsc-nav--next {
@@ -120,9 +120,9 @@
   max-width: min(320px, 42vw);
   padding: 0 14px 0 16px;
   border-radius: 12px;
-  color: #061322;
-  background: linear-gradient(135deg, #76f485, #41d66e);
-  box-shadow: 0 8px 22px rgba(85, 229, 119, 0.28);
+  color: #ffffff;
+  background: var(--fiscal-primary);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--fiscal-primary) 28%, transparent);
   transition:
     filter 160ms ease,
     transform 160ms ease,
@@ -134,17 +134,18 @@
   height: 40px;
   padding: 9px;
   border-radius: 11px;
-  background: rgba(67, 90, 122, 0.38);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: var(--fiscal-surface-soft);
+  box-shadow: inset 0 0 0 1px var(--fiscal-line);
   transition:
     background 160ms ease,
     color 160ms ease,
     transform 160ms ease,
     box-shadow 160ms ease;
+  color: var(--fiscal-ink);
 }
 
 .wfsc-nav--previous > span {
-  color: var(--wfsc-muted);
+  color: var(--fiscal-ink);
   font-size: 14px;
   font-weight: 760;
 }
@@ -164,7 +165,7 @@
 
 .wfsc-nav__next-text em {
   overflow: hidden;
-  color: rgba(6, 19, 34, 0.72);
+  color: rgba(255, 255, 255, 0.84);
   font-size: 12px;
   font-style: normal;
   font-weight: 650;
@@ -310,11 +311,12 @@
   padding: 8px 12px;
   border-left: 3px solid var(--wfsc-blue);
   border-radius: 0 10px 10px 0;
-  background: color-mix(in srgb, var(--wfsc-blue) 10%, transparent);
+  background: var(--fiscal-blue-soft);
+  border-left-color: var(--fiscal-blue);
 }
 
 .wfsc-defs dt {
-  color: var(--wfsc-text);
+  color: var(--fiscal-ink);
   font-size: clamp(14px, 1.12vw, 16px);
   line-height: 1.35;
   font-weight: 760;
@@ -341,12 +343,14 @@
   padding: 16px 18px;
   border: 1px solid var(--wfsc-border);
   border-radius: 14px;
-  background: var(--wfsc-panel-soft);
+  background: var(--fiscal-surface);
+  border-color: var(--fiscal-line);
+  box-shadow: var(--fiscal-shadow-control);
 }
 
 .wfsc-concept h3 {
   margin: 0 0 8px;
-  color: var(--wfsc-text);
+  color: var(--fiscal-ink);
   font-size: clamp(16px, 1.3vw, 19px);
   line-height: 1.2;
   font-weight: 820;
@@ -354,7 +358,7 @@
 
 .wfsc-concept p {
   margin: 0;
-  color: var(--wfsc-muted);
+  color: var(--fiscal-copy);
   font-size: clamp(13px, 1.05vw, 15px);
   line-height: 1.48;
   font-weight: 560;
@@ -431,6 +435,9 @@
   display: grid;
   gap: 3px;
   text-align: left;
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
 }
 
 .wfsc-concept .wfsc-concept__formula b {
@@ -462,13 +469,12 @@
   min-width: 0;
   padding: clamp(14px, 1.4vw, 22px);
   border: 1px solid var(--wfsc-border-strong);
-  border-radius: 16px;
+  border-radius: var(--fiscal-radius-panel);
   background:
-    linear-gradient(135deg, rgba(20, 64, 106, 0.3), rgba(4, 19, 37, 0.78)),
-    rgba(4, 19, 37, 0.76);
+    rgba(255, 255, 255, 0.72);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 22px 54px rgba(0, 0, 0, 0.26);
+    0 10px 28px rgba(35, 54, 78, 0.07);
+  border-color: var(--fiscal-line);
 }
 
 .wfsc-payroll {
@@ -847,15 +853,15 @@
   height: 4px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(69, 92, 122, 0.28);
+  background: color-mix(in srgb, var(--fiscal-line) 80%, #ffffff);
 }
 
 .wfsc-progress span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #79df78, #39c56a);
-  box-shadow: 0 0 12px rgba(83, 220, 102, 0.28);
+  background: var(--fiscal-primary);
+  box-shadow: none;
   transition: width 180ms ease;
 }
 
@@ -878,9 +884,11 @@
   height: 26px;
   border: 1px solid rgba(92, 139, 184, 0.42);
   border-radius: 999px;
-  color: #9fb0c5;
-  background: rgba(7, 24, 46, 0.78);
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface);
   cursor: pointer;
+  border-color: var(--fiscal-line);
+  box-shadow: none;
 }
 
 .wfsc-step-dots button.is-done {
@@ -893,7 +901,7 @@
   color: #071323;
   border-color: rgba(95, 232, 117, 0.82);
   background: linear-gradient(135deg, #82f594, #42d66f);
-  box-shadow: 0 0 18px rgba(95, 232, 117, 0.28);
+  box-shadow: none;
 }
 
 .wfsc-step-dots span {
@@ -1177,4 +1185,64 @@
     font-size: 8.5px;
     white-space: normal;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.wfsc-description p,
+.wfsc-payroll figcaption,
+.wfsc-defs dd {
+  color: var(--fiscal-copy);
+}
+
+.wfsc-copy__subtitle {
+  color: var(--fiscal-copy);
+}
+
+.wfsc-nav--next:hover:not(:disabled),
+.wfsc-nav--next:focus-visible:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+.wfsc-nav--next:disabled {
+  visibility: hidden;
+}
+
+:is(.wfsc-stage--step-8, .wfsc-stage--step-9) .wfsc-hero {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:is(.wfsc-stage--step-8, .wfsc-stage--step-9) .wfsc-help {
+  display: none;
+}
+
+.wfsc-nav--previous:hover:not(:disabled) svg,
+.wfsc-nav--previous:focus-visible:not(:disabled) svg {
+  color: var(--fiscal-ink);
+  background: var(--fiscal-primary-soft);
+  box-shadow: inset 0 0 0 1px var(--fiscal-primary);
+}
+
+.wfsc-step-dots button:hover {
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
+}
+
+@media (max-width: 720px) {
+
+  .wfsc-step-dots {
+    display: none;
+  }
+}
+
+.wfsc-step-dots button.is-done {
+  color: var(--fiscal-primary-strong);
+  border-color: color-mix(in srgb, var(--fiscal-primary) 40%, var(--fiscal-line));
+  background: var(--fiscal-primary-soft);
+}
+
+.wfsc-step-dots button.is-active {
+  color: #ffffff;
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary);
 }

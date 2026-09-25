@@ -21,14 +21,14 @@
 
 .irpf-marital-subask p {
   margin: 0;
-  color: #eef5ff;
+  color: var(--fiscal-ink);
   font-size: 15px;
   line-height: 1.35;
   font-weight: 720;
 }
 
 .irpf-marital-subask small {
-  color: #9fb2d4;
+  color: var(--fiscal-copy);
   font-size: 13px;
   line-height: 1.35;
 }
@@ -38,21 +38,22 @@
   padding: 10px 12px;
   border: 1px solid rgba(74, 183, 255, 0.35);
   border-radius: 9px;
-  color: #c8e8ff;
-  background: rgba(74, 183, 255, 0.1);
+  color: var(--fiscal-copy);
+  background: #eaf4fc;
   font-size: 13px;
   line-height: 1.4;
+  border-color: #bfd7ef;
 }
 
 .irpf-marital-note strong {
-  color: #eef5ff;
+  color: var(--fiscal-ink);
   font-weight: 820;
 }
 
 .irpf-marital-note--muted {
-  border-color: rgba(143, 165, 200, 0.28);
-  color: #aebbd1;
-  background: rgba(143, 165, 200, 0.08);
+  border-color: var(--fiscal-line);
+  color: var(--fiscal-muted);
+  background: var(--fiscal-surface-soft);
 }
 
 .irpf-marital-infobox {
@@ -61,7 +62,8 @@
   padding: 0;
   border: 1px solid rgba(75, 134, 205, 0.38);
   border-radius: 10px;
-  background: rgba(3, 18, 37, 0.55);
+  background: var(--fiscal-surface-soft);
+  border-color: var(--fiscal-line);
 }
 
 .irpf-marital-infobox__toggle {
@@ -73,7 +75,7 @@
   padding: 10px 14px;
   border: 0;
   border-radius: 10px;
-  color: #eef5ff;
+  color: var(--fiscal-violet);
   background: transparent;
   font-size: 14px;
   font-weight: 820;
@@ -82,12 +84,14 @@
 }
 
 .irpf-marital-infobox__toggle:hover {
-  background: rgba(74, 183, 255, 0.08);
+  background: var(--fiscal-violet-soft);
+  color: var(--fiscal-primary-strong);
 }
 
 .irpf-marital-infobox__toggle:focus-visible {
   outline: 2px solid rgba(74, 183, 255, 0.65);
   outline-offset: 2px;
+  outline-color: color-mix(in srgb, var(--fiscal-violet) 55%, transparent);
 }
 
 .irpf-marital-infobox__toggle svg {
@@ -117,14 +121,14 @@
 }
 
 .irpf-marital-infobox dt {
-  color: #c8e8ff;
+  color: var(--fiscal-ink);
   font-size: 13px;
   font-weight: 780;
 }
 
 .irpf-marital-infobox dd {
   margin: 0;
-  color: #9fb2d4;
+  color: var(--fiscal-copy);
   font-size: 13px;
   line-height: 1.4;
 }
@@ -139,7 +143,9 @@
   padding: 18px;
   border: 1px solid rgba(75, 134, 205, 0.48);
   border-radius: 14px;
-  background: rgba(2, 16, 37, 0.72);
+  background: var(--fiscal-surface);
+  border-color: var(--fiscal-line);
+  box-shadow: var(--fiscal-shadow-soft);
 }
 
 .irpf-reduction-question__prompt {
@@ -156,10 +162,11 @@
   place-items: center;
   border: 1px solid rgba(39, 229, 240, 0.45);
   border-radius: 999px;
-  color: #27e5f0;
-  background: rgba(39, 229, 240, 0.1);
+  color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
   font-size: 22px;
   font-weight: 900;
+  border-color: #b8ded7;
 }
 
 .irpf-reduction-question h3,
@@ -180,7 +187,7 @@
 }
 
 .irpf-reduction-question h3 {
-  color: #eef5ff;
+  color: var(--fiscal-ink);
   font-size: 18px;
   line-height: 1.2;
 }
@@ -200,12 +207,14 @@
   font-style: normal;
   letter-spacing: 0.01em;
   text-align: center;
+  padding-block: 3px;
+  line-height: 1.25;
 }
 
 .irpf-question-effect--minimum {
-  border-color: rgba(167, 139, 250, 0.5);
-  color: #ddd0ff;
-  background: rgba(139, 106, 245, 0.18);
+  border-color: #d7ccef;
+  color: #6044ad;
+  background: var(--fiscal-violet-soft);
 }
 
 .irpf-question-effect--reduction {
@@ -223,26 +232,26 @@
 /* Gasto deducible: baja el rendimiento neto, no la base. Color propio para que
    no se confunda con el azul de lo que resta de la base o de la cuota. */
 .irpf-question-effect--expense {
-  border-color: rgba(94, 214, 200, 0.5);
-  color: #b6f2e8;
-  background: rgba(48, 176, 162, 0.16);
+  border-color: #b6ded3;
+  color: #14614f;
+  background: #e6f6f1;
 }
 
 .irpf-question-effect--exempt {
-  border-color: rgba(255, 210, 90, 0.5);
-  color: #ffe7a8;
-  background: rgba(255, 196, 60, 0.12);
+  border-color: #efd0a8;
+  color: #8a4b12;
+  background: #fff3e4;
 }
 
 .irpf-question-effect--minimum[aria-label^="Resta"] {
-  border-color: rgba(255, 176, 102, 0.5);
-  color: #ffd7b0;
-  background: rgba(255, 160, 80, 0.14);
+  border-color: #efd0a8;
+  color: #8a4b12;
+  background: #fff3e4;
 }
 
 .irpf-reduction-question__prompt p {
   margin-top: 4px;
-  color: #9fb2d4;
+  color: var(--fiscal-copy);
   font-size: 13px;
   line-height: 1.4;
 }
@@ -288,6 +297,7 @@
   gap: 12px;
   padding-top: 14px;
   border-top: 1px solid rgba(75, 134, 205, 0.32);
+  border-color: var(--fiscal-line);
 }
 
 /* Aviso breve del limite del 30 % dentro de la pregunta del plan de pensiones. */
@@ -305,22 +315,23 @@
 
 .irpf-pension-limit p {
   margin-top: 9px;
-  color: #b9c9e3;
+  color: var(--fiscal-copy);
   font-size: 12.5px;
   line-height: 1.45;
   font-weight: 620;
 }
 
 .irpf-pension-limit strong {
-  color: #eaf3ff;
+  color: var(--fiscal-ink);
   font-weight: 800;
 }
 
 .irpf-rule-group {
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(75, 134, 205, 0.48);
-  border-radius: 14px;
-  background: rgba(2, 16, 37, 0.72);
+  border-radius: var(--fiscal-radius-panel);
+  background: var(--fiscal-surface);
+  border-color: var(--fiscal-line);
 }
 
 .irpf-rule-group summary {
@@ -329,9 +340,10 @@
   gap: 12px;
   align-items: center;
   padding: 15px 17px;
-  color: #eef5ff;
+  color: var(--fiscal-ink);
   cursor: pointer;
   list-style: none;
+  background: var(--fiscal-surface-soft);
 }
 
 .irpf-rule-group summary::-webkit-details-marker {
@@ -345,8 +357,9 @@
   height: 42px;
   border: 1px solid rgba(39, 229, 240, 0.45);
   border-radius: 11px;
-  color: #27e5f0;
-  background: rgba(39, 229, 240, 0.1);
+  color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
+  border-color: #b8ded7;
 }
 
 .irpf-rule-group summary svg {
@@ -374,6 +387,8 @@
   gap: 14px;
   padding: 16px;
   border-top: 1px solid rgba(75, 134, 205, 0.32);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
 }
 
 .irpf-rule-grid {
@@ -431,10 +446,15 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 44px;
   align-items: center;
-  min-height: 40px;
-  border: 1px solid rgba(87, 139, 204, 0.48);
-  border-radius: 9px;
-  background: rgba(1, 11, 29, 0.8);
+  min-height: 42px;
+  border: 0;
+  border-radius: var(--fiscal-radius-control);
+  background: #ffffff;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  box-shadow: inset 0 1px 2px rgba(43, 70, 94, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 .irpf-rule-field__control--count {
@@ -461,7 +481,7 @@
 }
 
 .irpf-rule-field__control > span {
-  color: #87a0c6;
+  color: var(--fiscal-muted);
   font-size: 11px;
   font-weight: 780;
   text-align: center;
@@ -495,14 +515,15 @@
   gap: 4px;
   padding: 10px;
   border: 1px solid rgba(88, 241, 113, 0.28);
-  border-radius: 9px;
-  color: #9db2d2;
-  background: rgba(15, 55, 45, 0.35);
+  border-radius: var(--fiscal-radius-small);
+  color: var(--fiscal-copy);
+  background: var(--fiscal-green-soft);
   font-size: 12px;
+  border-color: #b8ded7;
 }
 
 .irpf-rule-result strong {
-  color: #58f171;
+  color: var(--fiscal-green);
   font-size: 16px;
 }
 
@@ -533,17 +554,18 @@
   padding: 11px 13px;
   border: 1px solid rgba(255, 184, 107, 0.45);
   border-radius: 9px;
-  color: #ffe0b7;
-  background: rgba(72, 40, 13, 0.5);
+  color: #7a4a17;
+  background: var(--fiscal-orange-soft);
   font-size: 13px;
   line-height: 1.4;
+  border-color: #efd2a9;
 }
 
 .irpf-rule-subtitle {
   display: flex;
   gap: 8px;
   align-items: center;
-  color: #c7d8f2;
+  color: var(--fiscal-ink);
   font-size: 15px;
   font-weight: 800;
 }
@@ -583,14 +605,15 @@
   padding: 2px;
   border: 1px solid rgba(87, 139, 204, 0.48);
   border-radius: 999px;
-  background: rgba(1, 11, 29, 0.8);
+  background: var(--fiscal-surface-soft);
+  border-color: color-mix(in srgb, var(--fiscal-line) 70%, transparent);
 }
 
 .irpf-period-toggle button {
   padding: 6px 11px;
   border: 0;
   border-radius: 999px;
-  color: #9db2d2;
+  color: var(--fiscal-copy);
   background: transparent;
   cursor: pointer;
   font: inherit;
@@ -605,7 +628,7 @@
 }
 
 .irpf-period-field__mirror strong {
-  color: #eaf2ff;
+  color: var(--fiscal-ink);
 }
 
 .irpf-period-field__split {
@@ -634,22 +657,23 @@
   padding: 11px 13px;
   border: 1px solid rgba(88, 241, 113, 0.28);
   border-radius: 11px;
-  background: rgba(15, 55, 45, 0.35);
+  background: var(--fiscal-green-soft);
+  border-color: #b8ded7;
 }
 
 .irpf-inkind-total span {
-  color: #9db2d2;
+  color: var(--fiscal-copy);
   font-size: 12px;
   font-weight: 720;
 }
 
 .irpf-inkind-total strong {
-  color: #58f171;
+  color: var(--fiscal-green);
   font-size: 17px;
 }
 
 .irpf-inkind-total small {
-  color: #91a7ca;
+  color: var(--fiscal-copy);
   font-size: 12px;
   line-height: 1.35;
 }
@@ -666,4 +690,153 @@
   .irpf-period-toggle {
     justify-self: start;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.irpf-rule-field,
+.irpf-rule-check,
+.irpf-rule-field__control {
+  border-radius: var(--fiscal-radius-control);
+}
+
+:is(.wsbc-help, .wscc-help, .wctc-help, .wprc-help) .info-button__panel {
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 13px 15px;
+  border-color: var(--fiscal-line);
+  border-radius: var(--fiscal-radius-control);
+  color: var(--fiscal-copy);
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(35, 54, 78, 0.14);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.irpf-rule-group,
+.irpf-rule-section {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.irpf-rule-form input,
+.irpf-rule-form select {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.irpf-question-effect--reduction,
+.irpf-question-effect--deduction {
+  color: #1f4f7a;
+  border-color: #bfd7ef;
+  background: #eaf4fc;
+}
+
+.irpf-reduction-question__choices button,
+.irpf-reduction-question__options button {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.wprc-family-questions .irpf-reduction-question__body > p {
+  color: var(--fiscal-copy);
+}
+
+.irpf-pension-limit summary,
+.irpf-inkind-detail summary {
+  color: var(--fiscal-primary-strong);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.irpf-rule-group summary small,
+:is(.irpf-rule-field small, .irpf-rule-check small) {
+  color: var(--fiscal-copy);
+}
+
+:is(.irpf-rule-field, .irpf-rule-check) {
+  color: var(--fiscal-ink);
+  border-color: color-mix(in srgb, var(--fiscal-line) 42%, transparent);
+  background: #ffffff;
+  overflow: visible;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 38%, transparent),
+    0 4px 12px rgba(45, 71, 94, 0.05);
+}
+
+.irpf-rule-field__control::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1.5px solid color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.irpf-rule-field__control > * {
+  position: relative;
+  z-index: 1;
+}
+
+.irpf-rule-field:focus-within {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 28%, var(--fiscal-line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fiscal-primary) 10%, transparent),
+    0 6px 16px rgba(45, 71, 94, 0.07);
+}
+
+.irpf-rule-field:focus-within .irpf-rule-field__control::before {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
+}
+
+.irpf-rule-field > :is(input, select) {
+  min-height: 42px;
+  border: 0;
+  border-radius: var(--fiscal-radius-control);
+  outline: 1.5px solid color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
+  outline-offset: -1.5px;
+  color: var(--fiscal-ink);
+  background: #ffffff;
+  box-shadow: inset 0 1px 2px rgba(43, 70, 94, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.irpf-rule-field > :is(input, select):focus-visible {
+  outline-color: color-mix(in srgb, var(--fiscal-primary) 52%, var(--fiscal-line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fiscal-primary) 12%, transparent);
+}
+
+.irpf-period-toggle button:focus-visible {
+  outline: 2px solid var(--fiscal-primary);
+  outline-offset: 1px;
+}
+
+.irpf-period-field__mirror {
+  color: var(--fiscal-copy);
+}
+
+.irpf-period-field__split,
+.irpf-period-field__split strong {
+  color: var(--fiscal-green);
+}
+
+.irpf-reduction-question__choices button.is-selected:first-child,
+.irpf-reduction-question__options button.is-selected {
+  color: #fff;
+  border-color: var(--fiscal-primary);
+  background: var(--fiscal-primary);
+}
+
+.irpf-reduction-question__choices button.is-selected:last-child {
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: #eef3f6;
+}
+
+.irpf-period-toggle button.is-selected {
+  color: #ffffff;
+  background: var(--fiscal-primary);
 }

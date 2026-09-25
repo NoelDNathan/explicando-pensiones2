@@ -785,21 +785,22 @@
 .wir-callout--blocked svg { color: var(--wir-yellow); }
 
 .wir-callout--out-of-range {
-  border-color: var(--wir-orange-line);
-  border-left-color: var(--wir-orange);
-  background: var(--wir-orange-tint);
+  border-color: #f0c878;
+  border-left-color: var(--fiscal-orange);
+  background: var(--fiscal-orange-soft);
+  box-shadow: var(--fiscal-shadow-control);
 }
 
 .wir-callout--out-of-range svg {
-  color: var(--wir-orange);
+  color: var(--fiscal-orange);
 }
 
 .wir.wir .wir-callout--out-of-range h3 {
-  color: var(--wir-warn-text);
+  color: var(--fiscal-orange);
 }
 
 .wir.wir .wir-callout--out-of-range p {
-  color: #ffe8c4;
+  color: var(--fiscal-copy);
 }
 
 /* ── Regla y tramos ── */
@@ -1185,14 +1186,17 @@
   border: 1px solid var(--wir-blue-line);
   border-left: 4px solid var(--wir-blue);
   border-radius: 11px;
-  background: var(--wir-blue-tint);
-  color: var(--wir-info-text);
+  background: var(--fiscal-blue-soft);
+  color: var(--fiscal-copy);
   font-size: 0.92rem;
   line-height: 1.6;
+  border-color: #b8d4f5;
+  border-left-color: var(--fiscal-blue);
+  box-shadow: var(--fiscal-shadow-control);
 }
 
 .wir.wir .wir-footnote--key em {
-  color: #dff4ff;
+  color: var(--fiscal-blue);
   font-style: normal;
   font-weight: 600;
 }

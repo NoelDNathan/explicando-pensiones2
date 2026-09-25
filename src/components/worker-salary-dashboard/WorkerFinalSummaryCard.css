@@ -3,23 +3,23 @@
    FiscalSoftTheme.css sin tocar el resto de reglas. */
 
 .wfin {
-  --wfin-text: #f3f7ff;
-  --wfin-muted: #a9b8d2;
-  --wfin-faint: #8395b3;
-  --wfin-line: rgba(37, 123, 213, 0.42);
-  --wfin-line-strong: rgba(48, 151, 255, 0.78);
-  --wfin-panel: rgba(4, 21, 43, 0.72);
-  --wfin-panel-soft: rgba(6, 27, 52, 0.55);
-  --wfin-shadow: 0 26px 90px rgba(0, 5, 19, 0.55);
-  --wfin-radius: 18px;
+  --wfin-text: var(--fiscal-ink);
+  --wfin-muted: var(--fiscal-copy);
+  --wfin-faint: var(--fiscal-muted);
+  --wfin-line: var(--fiscal-line);
+  --wfin-line-strong: var(--fiscal-line-strong);
+  --wfin-panel: var(--fiscal-surface);
+  --wfin-panel-soft: var(--fiscal-surface-soft);
+  --wfin-shadow: var(--fiscal-shadow);
+  --wfin-radius: var(--fiscal-radius-card);
 
-  --wfin-chart-take-home: #62d96f;
-  --wfin-chart-employer-contributions: #35a8ff;
-  --wfin-chart-worker-contributions: #31d6dd;
-  --wfin-chart-irpf: #a765ff;
-  --wfin-chart-vat: #ff9828;
-  --wfin-chart-special-taxes: #ff5b59;
-  --wfin-chart-wealth-taxes: #f2c14b;
+  --wfin-chart-take-home: var(--fiscal-green);
+  --wfin-chart-employer-contributions: var(--fiscal-blue);
+  --wfin-chart-worker-contributions: var(--fiscal-primary);
+  --wfin-chart-irpf: var(--fiscal-violet);
+  --wfin-chart-vat: var(--fiscal-orange);
+  --wfin-chart-special-taxes: var(--fiscal-red);
+  --wfin-chart-wealth-taxes: var(--fiscal-yellow);
 
   position: relative;
   container-type: inline-size;
@@ -32,10 +32,9 @@
   border-radius: var(--wfin-radius);
   color: var(--wfin-text);
   background:
-    radial-gradient(circle at 5% -14%, rgba(34, 150, 255, 0.23), transparent 28%),
-    radial-gradient(circle at 85% 2%, rgba(38, 106, 181, 0.2), transparent 24%),
-    linear-gradient(135deg, #061a31 0%, #031327 48%, #051427 100%);
+    var(--fiscal-surface);
   box-shadow: var(--wfin-shadow);
+  border-color: var(--fiscal-line);
 }
 
 .wfin *,
@@ -97,7 +96,7 @@
   padding: 4px;
   border: 1px solid var(--wfin-line);
   border-radius: 999px;
-  background: var(--wfin-panel-soft);
+  background: var(--fiscal-surface-soft);
 }
 
 .wfin-period button {
@@ -188,11 +187,12 @@
   gap: 2px;
   padding: 9px 12px;
   font-size: 0.8rem;
-  color: var(--wfin-text);
+  color: var(--fiscal-ink);
   border: 1px solid var(--wfin-line-strong);
   border-radius: 12px;
-  background: #04182c;
-  box-shadow: 0 12px 28px rgba(0, 5, 19, 0.5);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+  border-color: var(--fiscal-line-strong);
 }
 
 .wfin-chart__tooltip span {
@@ -428,7 +428,7 @@
   border: 1px solid var(--wfin-line);
   border-left: 3px solid var(--wfin-state-color, var(--wfin-faint));
   border-radius: 14px;
-  background: var(--wfin-panel-soft);
+  background: var(--fiscal-surface-soft);
 }
 
 .wfin-state__item--social_contributions { --wfin-state-color: var(--wfin-chart-worker-contributions); }
@@ -458,7 +458,8 @@
 .wfin-state__figures > div {
   padding: 8px 9px;
   border-radius: 10px;
-  background: var(--wfin-panel);
+  background: var(--fiscal-surface);
+  border: 1px solid var(--fiscal-line);
 }
 
 .wfin-state__figures dt {
@@ -540,7 +541,7 @@
   color: #04182c;
   border: 0;
   border-radius: 999px;
-  background: var(--wfin-chart-take-home);
+  background: var(--fiscal-primary);
   cursor: pointer;
 }
 
@@ -588,4 +589,37 @@
   .wfin-footer__cta {
     justify-content: center;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.wfin :is(.wfin-chart, .wfin-headline, .wfin-home, .wfin-state) {
+  border-radius: var(--fiscal-radius-panel);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.wfin :is(.wfin-legend__item, .wfin-home__rows li, .wfin-state__item, .wfin-state__figures > div) {
+  border-radius: var(--fiscal-radius-small);
+}
+
+.wfin :is(.wfin-legend__item, .wfin-home__rows li) {
+  background: var(--fiscal-surface-soft);
+}
+
+.wfin :is(.wfin-home__icon, .wfin-home__cta, .wfin-footer__cta) {
+  color: #ffffff;
+}
+
+.wfin-home__icon,
+.wfin-home__cta {
+  background: var(--fiscal-orange);
+}
+
+.wfin .wfin-state__head h4 {
+  color: var(--wfin-state-color, var(--fiscal-ink));
+}
+
+.wfin-period button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-primary);
 }

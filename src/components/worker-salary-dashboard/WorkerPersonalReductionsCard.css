@@ -1,13 +1,13 @@
 .wprc {
-  --wprc-cyan: #27e5f0;
-  --wprc-blue: #2f8cff;
-  --wprc-blue-soft: rgba(47, 140, 255, 0.24);
-  --wprc-violet: #9b63ff;
-  --wprc-violet-soft: rgba(155, 99, 255, 0.24);
-  --wprc-text: #eef4ff;
-  --wprc-muted: #93a6cf;
-  --wprc-line: rgba(70, 148, 236, 0.35);
-  --wprc-panel: rgba(2, 16, 38, 0.78);
+  --wprc-cyan: var(--fiscal-primary);
+  --wprc-blue: var(--fiscal-blue);
+  --wprc-blue-soft: var(--fiscal-blue-soft);
+  --wprc-violet: var(--fiscal-violet);
+  --wprc-violet-soft: var(--fiscal-violet-soft);
+  --wprc-text: var(--fiscal-ink);
+  --wprc-muted: var(--fiscal-copy);
+  --wprc-line: var(--fiscal-line);
+  --wprc-panel: var(--fiscal-surface-soft);
 
   position: relative;
   /*
@@ -15,24 +15,17 @@
    * no crea un contenedor de scroll, asi que los `position: sticky` de dentro
    * (el simulador del explicador de la reduccion) siguen pegandose a la ventana.
    */
-  overflow: clip;
+  overflow: visible;
   container-type: inline-size;
   width: min(100%, 1360px);
   padding: clamp(18px, 2.6vw, 32px);
-  border: 1.5px solid rgba(49, 132, 255, 0.9);
-  border-radius: 24px;
-  color: var(--wprc-text);
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-card);
+  color: var(--fiscal-ink);
   background:
-    radial-gradient(circle at 7% -8%, rgba(39, 229, 240, 0.16), transparent 31%),
-    radial-gradient(circle at 78% -9%, rgba(79, 111, 255, 0.16), transparent 28%),
-    radial-gradient(circle at 101% 87%, rgba(0, 172, 255, 0.17), transparent 26%),
-    linear-gradient(145deg, #04152b 0%, #020817 49%, #04112a 100%);
+    var(--fiscal-surface);
   box-shadow:
-    0 24px 74px rgba(0, 6, 20, 0.56),
-    0 0 0 1px rgba(98, 185, 255, 0.09),
-    0 0 34px rgba(42, 139, 255, 0.27),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 0 52px rgba(26, 129, 255, 0.08);
+    var(--fiscal-shadow);
 }
 
 .wprc::before {
@@ -43,6 +36,7 @@
   background:
     linear-gradient(90deg, transparent, rgba(57, 181, 255, 0.25), transparent) 48% 0 / 76% 1px no-repeat,
     linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 35%);
+  opacity: 0.08;
 }
 
 .wprc-hero,
@@ -66,14 +60,14 @@
 
 .wprc-hero {
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.25fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(18px, 3vw, 42px);
   align-items: center;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .wprc-header {
-  display: grid;
+  display: none;
   grid-template-columns: 112px minmax(0, 1fr);
   gap: 24px;
   align-items: center;
@@ -130,15 +124,17 @@
 }
 
 .wprc-hero-panel {
-  padding: clamp(22px, 3vw, 36px);
+  padding: 18px 20px;
   border: 1px solid rgba(77, 157, 245, 0.55);
   border-radius: 15px;
   background:
-    radial-gradient(circle at 8% 0%, rgba(71, 242, 113, 0.13), transparent 28%),
-    linear-gradient(180deg, rgba(5, 26, 58, 0.74), rgba(2, 15, 37, 0.82));
+    var(--fiscal-primary-soft);
   box-shadow:
-    0 22px 50px rgba(0, 6, 20, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    none;
+  color: var(--fiscal-ink);
+  border-color: #b8ded7;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
 }
 
 .wprc-hero-panel h3 {
@@ -146,10 +142,12 @@
   font-size: clamp(21px, 2.1vw, 30px);
   line-height: 1.1;
   font-weight: 900;
+  grid-column: 1;
+  margin: 0;
 }
 
 .wprc-hero-panel ul {
-  display: grid;
+  display: none;
   gap: 15px;
   margin: 22px 0;
   padding: 0;
@@ -161,15 +159,15 @@
   grid-template-columns: 26px minmax(0, 1fr);
   gap: 13px;
   align-items: center;
-  color: #ecf3ff;
+  color: var(--fiscal-ink);
   font-size: clamp(16px, 1.45vw, 21px);
   line-height: 1.25;
   font-weight: 650;
 }
 
 .wprc-hero-panel li svg {
-  color: #58f171;
-  filter: drop-shadow(0 0 10px rgba(88, 241, 113, 0.35));
+  color: var(--fiscal-primary);
+  filter: none;
 }
 
 .wprc-hero-panel strong {
@@ -183,10 +181,11 @@
 .wprc-hero-panel > span {
   display: block;
   margin-top: 8px;
-  color: #aab8d3;
+  color: var(--fiscal-copy);
   font-size: 15px;
   line-height: 1.3;
   font-weight: 680;
+  grid-column: 1;
 }
 
 .wprc-question-intro {
@@ -198,7 +197,9 @@
   padding: 15px 17px;
   border: 1px solid rgba(88, 241, 113, 0.48);
   border-radius: 14px;
-  background: linear-gradient(110deg, rgba(12, 57, 61, 0.72), rgba(4, 24, 54, 0.7));
+  background: linear-gradient(115deg, #edf9f5, #f8fbff);
+  border-color: #b8ded7;
+  box-shadow: var(--fiscal-shadow-soft);
 }
 
 .wprc-question-intro--no-num,
@@ -212,21 +213,21 @@
   aspect-ratio: 1;
   place-items: center;
   border-radius: 999px;
-  color: #032337;
-  background: #58f171;
+  color: #fff;
+  background: var(--fiscal-primary);
   font-size: 19px;
   font-weight: 900;
 }
 
 .wprc-question-intro h3 {
-  color: #f3f8ff;
+  color: var(--fiscal-ink);
   font-size: 19px;
   line-height: 1.15;
 }
 
 .wprc-question-intro p {
   margin-top: 4px;
-  color: #b9c9e3;
+  color: var(--fiscal-copy);
   font-size: 13px;
   line-height: 1.35;
   font-weight: 650;
@@ -238,7 +239,9 @@
   padding: 16px 18px;
   border: 1px solid rgba(70, 148, 236, 0.42);
   border-radius: 14px;
-  background: linear-gradient(120deg, rgba(6, 33, 68, 0.72), rgba(3, 17, 41, 0.7));
+  background: var(--fiscal-surface);
+  border-color: var(--fiscal-line);
+  box-shadow: var(--fiscal-shadow-control);
 }
 
 .wprc-net-income__head {
@@ -258,14 +261,14 @@
   aspect-ratio: 1;
   place-items: center;
   border-radius: 999px;
-  color: #032337;
-  background: #58f171;
+  color: #fff;
+  background: var(--fiscal-primary);
   font-size: 19px;
   font-weight: 900;
 }
 
 .wprc-net-income h3 {
-  color: #f3f8ff;
+  color: var(--fiscal-ink);
   font-size: 18px;
   line-height: 1.2;
 }
@@ -288,11 +291,12 @@
   padding: 5px 11px;
   border: 1px solid rgba(88, 241, 113, 0.5);
   border-radius: 999px;
-  color: #58f171;
-  background: rgba(12, 57, 61, 0.6);
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-soft);
   font-size: 11px;
   font-weight: 800;
   white-space: nowrap;
+  border-color: #b8ded7;
 }
 
 .wprc-net-income__equation {
@@ -310,12 +314,13 @@
   padding: 9px 13px;
   border: 1px solid rgba(99, 147, 205, 0.34);
   border-radius: 11px;
-  background: rgba(3, 18, 40, 0.6);
+  background: var(--fiscal-surface-soft);
+  border-color: var(--fiscal-line);
 }
 
 .wprc-net-income__term::before {
   content: "";
-  color: #8ea3c6;
+  color: var(--fiscal-muted);
   font-size: 16px;
   font-weight: 800;
   line-height: 1;
@@ -338,21 +343,21 @@
 .wprc-net-income__term dt {
   display: grid;
   gap: 2px;
-  color: #cfdcf3;
+  color: var(--fiscal-ink);
   font-size: 13px;
   line-height: 1.2;
   font-weight: 700;
 }
 
 .wprc-net-income__term dt small {
-  color: #93a6cf;
+  color: var(--fiscal-muted);
   font-size: 11px;
   line-height: 1.25;
   font-weight: 620;
 }
 
 .wprc-net-income__term dd {
-  color: #eef4ff;
+  color: var(--fiscal-ink);
   font-size: 17px;
   line-height: 1.05;
   font-weight: 820;
@@ -360,8 +365,8 @@
 }
 
 .wprc-net-income__term.is-result {
-  border-color: rgba(88, 241, 113, 0.45);
-  background: rgba(9, 45, 48, 0.5);
+  border-color: #b8ded7;
+  background: var(--fiscal-primary-soft);
 }
 
 .wprc-net-income__term.is-result dd {
@@ -388,10 +393,12 @@
   padding: 6px 11px;
   border: 1px solid rgba(99, 147, 205, 0.34);
   border-radius: 999px;
-  color: #cfdcf3;
+  color: var(--fiscal-primary-strong);
   cursor: pointer;
   font-size: 12px;
   font-weight: 720;
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
 }
 
 .wprc-net-income__more ul {
@@ -415,24 +422,24 @@
  * va en azul para no confundirla con los bloques verdes del mismo paso.
  */
 .wprc-net-income--deduction {
-  border-color: rgba(96, 165, 250, 0.42);
+  border-color: color-mix(in srgb, var(--fiscal-blue) 28%, var(--fiscal-line));
 }
 
 .wprc-net-income--deduction .wprc-net-income__pill {
-  color: #93c5fd;
-  border-color: rgba(96, 165, 250, 0.5);
-  background: rgba(12, 40, 80, 0.6);
+  color: var(--fiscal-blue);
+  border-color: color-mix(in srgb, var(--fiscal-blue) 32%, var(--fiscal-line));
+  background: var(--fiscal-blue-soft);
 }
 
 .wprc-net-income--deduction .wprc-net-income__pill--muted {
-  color: #93a6cf;
-  border-color: rgba(99, 147, 205, 0.34);
-  background: rgba(3, 18, 40, 0.6);
+  color: var(--fiscal-muted);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
 }
 
 .wprc-net-income--deduction .wprc-net-income__term.is-result {
-  border-color: rgba(96, 165, 250, 0.45);
-  background: rgba(9, 32, 62, 0.5);
+  border-color: color-mix(in srgb, var(--fiscal-blue) 32%, var(--fiscal-line));
+  background: var(--fiscal-blue-soft);
 }
 
 .wprc-net-income--deduction .wprc-net-income__term.is-result::before,
@@ -453,17 +460,16 @@
 
 .wprc-top-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  min-height: 91px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  min-height: 0;
   margin-bottom: 18px;
-  border: 1px solid rgba(52, 123, 207, 0.58);
+  border: 0;
   border-radius: 15px;
   background:
-    linear-gradient(180deg, rgba(7, 32, 69, 0.8), rgba(3, 17, 41, 0.82)),
-    var(--wprc-panel);
+    transparent;
   box-shadow:
-    0 15px 36px rgba(0, 6, 20, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    none;
+  gap: 10px;
 }
 
 .wprc-family-questions {
@@ -490,22 +496,27 @@
 .wprc-top-field {
   position: relative;
   display: grid;
-  grid-template-columns: 46px minmax(0, 1fr) auto;
-  gap: 18px;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  gap: 14px;
   align-items: center;
   min-width: 0;
-  padding: 18px 82px 18px 26px;
+  padding: 16px 14px;
+  min-height: 94px;
+  border: 1px solid color-mix(in srgb, var(--fiscal-line-strong) 72%, transparent);
+  border-radius: var(--fiscal-radius-control);
+  box-shadow: 0 8px 22px rgba(45, 71, 94, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
 .wprc-top-field + .wprc-top-field {
-  border-left: 1px solid rgba(63, 121, 195, 0.54);
+  border-left: 1px solid color-mix(in srgb, var(--fiscal-line-strong) 72%, transparent);
 }
 
 .wprc-top-field > svg {
-  width: 34px;
-  height: 34px;
-  color: var(--wprc-cyan);
-  filter: drop-shadow(0 0 12px rgba(39, 229, 240, 0.42));
+  width: 32px;
+  height: 32px;
+  color: var(--fiscal-primary);
+  filter: none;
 }
 
 .wprc-top-field__copy {
@@ -515,20 +526,20 @@
 }
 
 .wprc-top-field__copy span {
-  color: #b2c2eb;
-  font-size: clamp(15px, 1.35vw, 18px);
+  color: var(--fiscal-copy);
+  font-size: clamp(13px, 1.05vw, 16px);
   line-height: 1.12;
-  font-weight: 760;
+  font-weight: 780;
 }
 
 .wprc-top-field__copy strong {
-  color: #f6f9ff;
-  overflow: hidden;
-  font-size: clamp(20px, 2vw, 27px);
+  color: var(--fiscal-ink);
+  overflow: visible;
+  font-size: clamp(18px, 1.55vw, 24px);
   line-height: 1.08;
   font-weight: 780;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 .wprc-select {
@@ -591,17 +602,18 @@
 
 .wprc-top-select__trigger {
   display: grid;
-  width: 44px;
-  min-width: 44px;
-  min-height: 44px;
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
   padding: 0;
   place-items: center;
   border: 1px solid rgba(75, 121, 179, 0.56);
   border-radius: 999px;
-  color: var(--wprc-cyan);
-  background: linear-gradient(180deg, rgba(7, 24, 51, 0.94), rgba(2, 13, 31, 0.92));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--fiscal-primary);
+  background: var(--fiscal-surface);
+  box-shadow: 0 3px 10px rgba(35, 54, 78, 0.06);
   cursor: pointer;
+  border-color: var(--fiscal-line-strong);
 }
 
 .wprc-top-select__trigger span {
@@ -622,12 +634,13 @@
   top: calc(100% + 8px);
   right: 0;
   display: grid;
-  min-width: 132px;
+  min-width: 148px;
   padding: 6px;
   border: 1px solid rgba(75, 121, 179, 0.62);
-  border-radius: 12px;
-  background: #071833;
-  box-shadow: 0 16px 30px rgba(0, 6, 20, 0.32);
+  border-radius: var(--fiscal-radius-control);
+  background: var(--fiscal-surface);
+  box-shadow: 0 14px 28px rgba(35, 54, 78, 0.16);
+  border-color: var(--fiscal-line-strong);
 }
 
 .wprc-top-select__menu button {
@@ -635,7 +648,7 @@
   padding: 7px 10px;
   border: 0;
   border-radius: 8px;
-  color: #edf4ff;
+  color: var(--fiscal-copy);
   background: transparent;
   cursor: pointer;
   font: 760 14px/1.1 var(--sans);
@@ -669,6 +682,7 @@
 .wprc-person + .wprc-person {
   padding-top: 18px;
   border-top: 1px solid rgba(75, 134, 205, 0.28);
+  border-top-color: var(--fiscal-line);
 }
 
 .wprc-person__head {
@@ -684,11 +698,11 @@
   aspect-ratio: 1;
   place-items: center;
   border-radius: 999px;
-  color: #06283a;
-  background: linear-gradient(145deg, #7ef0ff, #58f171);
+  color: #fff;
+  background: var(--fiscal-primary);
   font-size: 16px;
   font-weight: 900;
-  box-shadow: 0 0 18px rgba(88, 241, 113, 0.22);
+  box-shadow: none;
 }
 
 .wprc-person-flow--ascendant .wprc-person__head > span {
@@ -697,7 +711,7 @@
 
 .wprc-person__head h4 {
   margin: 0;
-  color: #f3f8ff;
+  color: var(--fiscal-ink);
   font-size: clamp(17px, 1.55vw, 21px);
   line-height: 1.2;
   font-weight: 820;
@@ -716,19 +730,20 @@
   padding: 6px 10px;
   border: 1px solid rgba(88, 241, 113, 0.48);
   border-radius: 999px;
-  color: #58f171;
-  background: rgba(88, 241, 113, 0.1);
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-soft);
   font-size: 12px;
   font-style: normal;
   font-weight: 830;
   line-height: 1;
   white-space: nowrap;
+  border-color: #b8ded7;
 }
 
 .wprc-person.is-excluded .wprc-person__status {
-  color: #a5b1c7;
-  border-color: rgba(165, 177, 199, 0.38);
-  background: rgba(165, 177, 199, 0.08);
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
 }
 
 .wprc-person.is-excluded .wprc-person__head > span {
@@ -757,7 +772,7 @@
   margin: 0;
   flex: 1 1 auto;
   min-width: min(100%, 12rem);
-  color: #d7e4ff;
+  color: var(--fiscal-ink);
   font-size: 15px;
   line-height: 1.3;
   font-weight: 740;
@@ -772,9 +787,9 @@
 }
 
 .wprc-person-ask__status {
-  color: #a5b1c7;
-  border-color: rgba(165, 177, 199, 0.38);
-  background: rgba(165, 177, 199, 0.08);
+  color: var(--fiscal-copy);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
   font-size: 11px;
 }
 
@@ -812,10 +827,11 @@
   padding: 0 14px;
   border: 1px solid rgba(87, 139, 204, 0.48);
   border-radius: 10px;
-  color: #edf4ff;
-  background: rgba(4, 23, 49, 0.68);
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface-soft);
   font: 760 15px/1 var(--sans);
   text-align: right;
+  border-color: var(--fiscal-line);
 }
 
 .wprc-person-amount input:focus-visible {
@@ -834,7 +850,7 @@
   padding: 10px 12px;
   border-radius: 9px;
   color: #9fb2d4;
-  background: rgba(143, 165, 200, 0.1);
+  background: var(--fiscal-surface-soft);
   font-size: 13px;
   line-height: 1.4;
   font-weight: 620;
@@ -1260,9 +1276,11 @@
 }
 
 .wprc-adjustment-list {
-  overflow: hidden;
-  border: 1px solid rgba(73, 134, 205, 0.44);
+  overflow: visible;
+  border: 0;
   border-radius: 12px;
+  display: grid;
+  gap: 10px;
 }
 
 .wprc-panel--deductions .wprc-adjustment-list {
@@ -1344,12 +1362,15 @@
   padding: 16px 18px;
   border: 1px solid rgba(255, 184, 107, 0.48);
   border-radius: 13px;
-  color: #ffe2bd;
-  background: rgba(65, 35, 12, 0.48);
+  color: var(--fiscal-ink);
+  background: linear-gradient(180deg, #fff9ef 0%, var(--fiscal-orange-soft) 100%);
+  border-color: #efc891;
+  box-shadow: none;
 }
 
 .wprc-calculation-warnings strong {
   font-size: 16px;
+  color: #8a4d12;
 }
 
 .wprc-calculation-warnings ul {
@@ -1357,13 +1378,13 @@
   gap: 6px;
   margin: 0;
   padding-left: 20px;
-  color: #d7e2f5;
+  color: var(--fiscal-copy);
   font-size: 14px;
   line-height: 1.45;
 }
 
 .wprc-warning-link {
-  color: #ffd7a6;
+  color: #8a4d12;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -1387,7 +1408,7 @@
   min-height: 82px;
   padding: 12px;
   border: 1px solid rgba(99, 147, 205, 0.36);
-  border-radius: 11px;
+  border-radius: var(--fiscal-radius-small);
   background: rgba(3, 18, 40, 0.64);
 }
 
@@ -1417,7 +1438,7 @@
 }
 
 .wprc-explained .is-minus dd {
-  color: #ffb86b;
+  color: var(--fiscal-ink);
 }
 
 .wprc-explained .is-minus.is-applied dd {
@@ -1463,8 +1484,8 @@
 }
 
 .wprc-explained .is-result {
-  border-color: rgba(88, 241, 113, 0.58);
-  background: rgba(16, 61, 49, 0.62);
+  border-color: #b8ded7;
+  background: var(--fiscal-green-soft);
 }
 
 .wprc-explained .is-result dd {
@@ -1472,16 +1493,16 @@
 }
 
 .wprc-explained .is-minimum {
-  border-color: rgba(129, 103, 218, 0.52);
-  background: rgba(48, 33, 91, 0.52);
+  border-color: #d7ccef;
+  background: var(--fiscal-violet-soft);
 }
 
 .wprc-explained .is-minimum dd {
-  color: #c7b5ff;
+  color: #6044ad;
 }
 
 .wprc-explained small {
-  color: #b9c7e1;
+  color: var(--fiscal-copy);
   font-size: 12px;
   line-height: 1.3;
 }
@@ -1501,12 +1522,19 @@
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  box-shadow: 0 -10px 28px rgba(0, 6, 20, 0.16);
+  box-shadow: 0 -8px 22px rgba(35, 54, 78, 0.1);
   transition:
     padding 220ms ease-out,
     background-color 220ms ease-out,
     border-color 220ms ease-out,
     box-shadow 220ms ease-out;
+  border-color: var(--fiscal-line);
+  border-bottom-color: transparent;
+  background: color-mix(in srgb, var(--fiscal-surface) 96%, var(--fiscal-primary-soft));
+  --wprc-toggle-line: var(--fiscal-line);
+  --wprc-toggle-ink: var(--fiscal-copy);
+  --wprc-toggle-bg: color-mix(in srgb, var(--fiscal-surface) 96%, var(--fiscal-primary-soft));
+  --wprc-toggle-accent: var(--fiscal-primary-strong);
 }
 
 /*
@@ -1639,6 +1667,7 @@
   gap: 10px;
   padding-left: var(--wprc-chain-gap);
   border-left: 1px solid rgba(99, 147, 205, 0.36);
+  border-left-color: var(--fiscal-line);
 }
 
 .wprc-explained--sticky .wprc-chain__step {
@@ -1651,7 +1680,8 @@
   padding: 7px 12px;
   border: 1px solid rgba(99, 147, 205, 0.36);
   border-radius: 11px;
-  background: rgba(3, 18, 40, 0.64);
+  background: var(--fiscal-surface-soft);
+  border-color: var(--fiscal-line);
 }
 
 .wprc-explained--sticky .wprc-chain__step[data-op]::before {
@@ -1660,7 +1690,7 @@
   top: 50%;
   left: calc(var(--wprc-chain-gap) / -2);
   transform: translate(-50%, -50%);
-  color: #8ea3c6;
+  color: var(--fiscal-muted);
   font-size: 15px;
   font-weight: 800;
   line-height: 1;
@@ -1668,7 +1698,7 @@
 
 .wprc-explained--sticky .wprc-chain__step[data-op="equals"]::before {
   content: "=";
-  color: #58f171;
+  color: var(--fiscal-green);
   font-size: 17px;
 }
 
@@ -1677,7 +1707,7 @@
  * pero el numero protagonista sigue siendo la base liquidable.
  */
 .wprc-explained--sticky .wprc-chain__step.is-subresult[data-op="equals"]::before {
-  color: #8ea3c6;
+  color: var(--fiscal-muted);
   font-size: 15px;
 }
 
@@ -1704,7 +1734,7 @@
 
 /* Sin reducciones el eslabon queda apagado: solo confirma que no resta nada. */
 .wprc-explained--sticky .wprc-chain__step.is-empty dd {
-  color: #8ea3c6;
+  color: var(--fiscal-muted);
   font-weight: 700;
 }
 
@@ -1720,6 +1750,7 @@
 .wprc-explained--sticky .is-result dd {
   font-size: clamp(21px, 1.9vw, 28px);
   font-weight: 900;
+  color: var(--fiscal-green);
 }
 
 .wprc-explained--sticky .wprc-explained__status {
@@ -1783,11 +1814,11 @@
   height: 66px;
   border: 1px solid rgba(39, 229, 240, 0.65);
   border-radius: 999px;
-  color: var(--wprc-cyan);
-  background: radial-gradient(circle at 50% 46%, rgba(39, 229, 240, 0.16), rgba(4, 27, 57, 0.86));
+  color: var(--fiscal-primary);
+  background: var(--fiscal-primary-soft);
   box-shadow:
-    0 0 24px rgba(39, 229, 240, 0.33),
-    inset 0 0 23px rgba(39, 229, 240, 0.12);
+    none;
+  border-color: #b8ded7;
 }
 
 .wprc-summary-icon svg {
@@ -1824,7 +1855,10 @@
   padding: 12px 16px;
   border: 1px solid rgba(58, 134, 220, 0.45);
   border-radius: 13px;
-  background: rgba(3, 17, 39, 0.7);
+  background: linear-gradient(180deg, #f4fbf9 0%, var(--fiscal-primary-soft) 100%);
+  color: var(--fiscal-primary-strong);
+  border-color: #b8ded7;
+  box-shadow: none;
 }
 
 .wprc-total svg {
@@ -1835,8 +1869,9 @@
   box-sizing: content-box;
   border: 1px solid rgba(59, 143, 226, 0.24);
   border-radius: 12px;
-  color: #62adff;
-  background: rgba(8, 36, 75, 0.62);
+  color: var(--fiscal-primary);
+  background: rgba(255, 255, 255, 0.72);
+  border-color: #b8ded7;
 }
 
 .wprc-total span {
@@ -1856,13 +1891,14 @@
 }
 
 .wprc-total--deductions {
-  border-color: rgba(133, 104, 226, 0.45);
+  border-color: #d7ccef;
+  background: linear-gradient(180deg, #faf8fe 0%, var(--fiscal-violet-soft) 100%);
 }
 
 .wprc-total--deductions svg {
-  color: var(--wprc-violet);
-  border-color: rgba(133, 104, 226, 0.24);
-  background: rgba(27, 18, 67, 0.66);
+  color: var(--fiscal-violet);
+  border-color: #d7ccef;
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .wprc-total--deductions span,
@@ -1958,7 +1994,7 @@
 @media (max-width: 640px) {
   .wprc {
     padding: 14px;
-    border-radius: 18px;
+    border-radius: var(--fiscal-radius-card);
   }
 
   .wprc-header {
@@ -2242,4 +2278,208 @@
     grid-column: 1 / -1;
     width: 100%;
   }
+}
+
+/*
+    Tema claro de la calculadora (antes en FiscalSoftTheme.css). 
+   */
+
+.wprc-step {
+  color: var(--fiscal-primary);
+  text-shadow: none;
+}
+
+.wprc-hero-panel,
+.wprc-top-grid,
+.wprc-panel,
+.wprc-benefits,
+.wprc-explained,
+.wprc-summary {
+  border-radius: var(--fiscal-radius-panel);
+}
+
+.wprc-top-field,
+.wprc-person-amount input,
+.wprc-select {
+  border-radius: var(--fiscal-radius-control);
+}
+
+.fwd:has(.wfsc-chrome) .wprc--reductions:has(.wprc-explained--sticky) {
+  padding-bottom: calc(var(--wprc-sticky-height, 96px) + 24px);
+}
+
+.wprc-hero-panel > strong {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.wprc-hero-panel h3,
+.wprc-hero-panel strong {
+  color: var(--fiscal-primary-strong);
+}
+
+.wprc-top-grid,
+.wprc-benefits,
+.wprc-explained,
+.wprc-explained dl div,
+.wprc-summary {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+:is(.wprc-benefits__heading p, .wprc-explained p, .wprc-explained dt, .wprc-summary-copy span) {
+  color: var(--fiscal-copy);
+}
+
+.wprc-top-field,
+.wprc-select {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.wprc-top-field > .wprc-top-select {
+  position: relative;
+  top: auto;
+  right: auto;
+  align-self: center;
+  justify-self: end;
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  margin: 0;
+  border-radius: 999px;
+  opacity: 1;
+  transform: none;
+}
+
+.wprc-top-select__menu button:hover,
+.wprc-top-select__menu button:focus-visible {
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-soft);
+}
+
+.wprc-person__head p,
+.wprc-person-note,
+.wprc-person-amount > span {
+  color: var(--fiscal-copy);
+}
+
+.wprc-explained :is(h3, dd),
+.wprc-summary-copy p {
+  color: var(--fiscal-ink);
+}
+
+@media (max-width: 640px) {
+
+  .wprc--reductions:has(.wprc-explained--sticky) {
+    padding-bottom: calc(var(--wprc-sticky-height, 96px) + 18px);
+  }
+
+  .fwd:has(.wfsc-chrome) .wprc--reductions:has(.wprc-explained--sticky) {
+    padding-bottom: calc(var(--wprc-sticky-height, 96px) + 18px);
+  }
+}
+
+.wprc-warning-link:hover,
+.wprc-warning-link:focus-visible {
+  color: #5f330a;
+}
+
+.wprc-total :is(span, strong) {
+  color: var(--fiscal-primary-strong);
+  text-shadow: none;
+}
+
+.wprc-total--deductions :is(span, strong) {
+  color: #6044ad;
+}
+
+.wprc-panel,
+.wprc-summary {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.wprc-net-income__head p,
+.wprc-net-income__note,
+.wprc-net-income__more ul {
+  color: var(--fiscal-copy);
+}
+
+:is(.wprc-net-income__head strong, .wprc-net-income__more strong) {
+  color: var(--fiscal-ink);
+}
+
+.wprc-net-income__term.is-result::before,
+.wprc-net-income__term.is-result dd {
+  color: var(--fiscal-primary-strong);
+}
+
+.wprc-net-income--deduction .wprc-net-income__term.is-result::before {
+  color: var(--fiscal-blue);
+}
+
+.wprc-net-income--deduction .wprc-net-income__term.is-result dd {
+  color: var(--fiscal-blue);
+}
+
+.wprc-net-income--deduction .wprc-net-income__head em,
+.wprc-net-income--deduction .wprc-net-income__note strong {
+  color: var(--fiscal-ink);
+}
+
+.wprc-adjustment-row,
+.wprc--reductions .wprc-panels .wprc-adjustment-row,
+.wprc--deductions-benefits .wprc-panels .wprc-adjustment-row {
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--fiscal-line) 68%, transparent);
+  border-radius: var(--fiscal-radius-control);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 46%, transparent),
+    0 4px 12px rgba(45, 71, 94, 0.05);
+}
+
+.wprc-adjustment-row + .wprc-adjustment-row,
+.wprc--reductions .wprc-panels .wprc-adjustment-row + .wprc-adjustment-row,
+.wprc--deductions-benefits .wprc-panels .wprc-adjustment-row + .wprc-adjustment-row {
+  border-top: 1px solid color-mix(in srgb, var(--fiscal-line) 68%, transparent);
+}
+
+@media (max-width: 720px) {
+
+  .wprc-hero-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wprc-hero-panel > strong {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+.wprc-explained--sticky {
+  background: color-mix(in srgb, var(--fiscal-surface) 96%, var(--fiscal-primary-soft));
+  border-color: var(--fiscal-line);
+  border-bottom-color: transparent;
+  box-shadow: 0 -8px 22px rgba(35, 54, 78, 0.1);
+}
+
+.wprc-explained .is-result {
+  background: var(--fiscal-green-soft);
+  border-color: #b8ded7;
+}
+
+.wprc-explained .is-minimum {
+  background: var(--fiscal-violet-soft);
+  border-color: #d7ccef;
+}
+
+.wprc-top-select__menu button.is-selected {
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-primary-soft);
 }

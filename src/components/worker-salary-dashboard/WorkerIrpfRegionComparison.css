@@ -1,19 +1,18 @@
 .wirc {
-  --wirc-text: #f5f7ff;
-  --wirc-muted: #a9b6d2;
-  --wirc-line: rgba(77, 123, 188, 0.28);
+  --wirc-text: var(--fiscal-ink);
+  --wirc-muted: var(--fiscal-copy);
+  --wirc-line: var(--fiscal-line);
 
   container-type: inline-size;
   width: min(100%, 1280px);
   padding: clamp(14px, 1.65vw, 24px);
-  border: 1px solid rgba(74, 98, 168, 0.82);
-  border-radius: 16px;
-  color: var(--wirc-text);
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-card);
+  color: var(--fiscal-ink);
   background:
-    radial-gradient(circle at 6% -20%, rgba(40, 123, 255, 0.16), transparent 26%),
-    radial-gradient(circle at 92% -10%, rgba(153, 86, 255, 0.14), transparent 24%),
-    linear-gradient(135deg, #070b23 0%, #051225 48%, #061b31 100%);
-  box-shadow: 0 24px 74px rgba(0, 4, 17, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
+  border-color: var(--fiscal-line);
 }
 
 .wirc *,
@@ -53,8 +52,9 @@
   display: inline-flex;
   padding: 3px;
   border: 1px solid rgba(120, 150, 210, 0.4);
-  border-radius: 999px;
-  background: rgba(8, 17, 33, 0.6);
+  border-radius: var(--fiscal-radius-control);
+  background: var(--fiscal-surface-soft);
+  border-color: var(--fiscal-line);
 }
 
 .wirc-toggle button {
@@ -102,6 +102,7 @@
 
 .wirc-stat + .wirc-stat {
   border-left: 1px solid rgba(120, 150, 210, 0.22);
+  border-color: var(--fiscal-line);
 }
 
 .wirc-stat--clickable {
@@ -151,7 +152,7 @@
 
 .wirc-stat__values strong {
   font-weight: 800;
-  color: #f5f7ff;
+  color: var(--fiscal-ink);
 }
 
 .wirc-stat__sep {
@@ -186,8 +187,8 @@
 }
 
 .wirc-plot-bg {
-  fill: rgba(8, 17, 33, 0.55);
-  stroke: rgba(77, 123, 188, 0.22);
+  fill: var(--fiscal-surface-soft);
+  stroke: var(--fiscal-line);
   stroke-width: 1;
   rx: 8;
 }
@@ -219,7 +220,7 @@
 }
 
 .wirc-cursor {
-  stroke: rgba(180, 200, 240, 0.55);
+  stroke: var(--fiscal-muted);
   stroke-width: 1;
   stroke-dasharray: 4 4;
 }
@@ -237,7 +238,7 @@
 }
 
 .wirc-cursor-label {
-  fill: #cfe0ff;
+  fill: var(--fiscal-copy);
   font-size: 11px;
   font-weight: 700;
   font-family: inherit;
@@ -304,7 +305,7 @@
   width: 100%;
   padding: 6px 8px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--fiscal-radius-small);
   background: transparent;
   color: var(--wirc-text);
   font: inherit;
@@ -314,7 +315,7 @@
 }
 
 .wirc-rank-row:hover {
-  background: rgba(90, 130, 200, 0.14);
+  background: var(--fiscal-blue-soft);
 }
 
 .wirc-rank-row.is-selected {
@@ -323,8 +324,8 @@
 }
 
 .wirc-rank-row.is-compare {
-  background: rgba(143, 155, 255, 0.12);
-  border-color: rgba(143, 155, 255, 0.42);
+  background: var(--fiscal-violet-soft);
+  border-color: color-mix(in srgb, var(--fiscal-violet) 38%, var(--fiscal-line));
 }
 
 .wirc-rank-row.is-average,
@@ -390,7 +391,7 @@
 }
 
 .wirc-rank-diff.is-down {
-  color: #ff9aa2;
+  color: var(--fiscal-red);
   font-weight: 600;
 }
 
@@ -409,6 +410,7 @@
   .wirc-stat + .wirc-stat {
     border-left: none;
     border-top: 1px solid rgba(120, 150, 210, 0.22);
+    border-color: var(--fiscal-line);
   }
 
   .wirc-body {
@@ -417,4 +419,43 @@
   .wirc-ranking {
     max-height: none;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.wirc::before {
+  opacity: 0.08;
+}
+
+.wirc-stats,
+.wirc-ranking {
+  border-radius: var(--fiscal-radius-panel);
+}
+
+.wirc-panel {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.wirc-stats,
+.wirc-ranking {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+}
+
+.wirc-stat__delta,
+.wirc-rank-diff.is-up {
+  color: var(--fiscal-green);
+}
+
+.wirc-toggle button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
+}
+
+.wirc-rank-row.is-selected {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 42%, var(--fiscal-line));
+  background: var(--fiscal-primary-soft);
 }

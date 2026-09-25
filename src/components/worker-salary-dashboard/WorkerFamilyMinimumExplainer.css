@@ -4,27 +4,28 @@
  * suelto en /componentes sin perder contraste.
  */
 .wfme {
-  --wfme-line: var(--witc-line, rgba(77, 123, 188, 0.34));
-  --wfme-muted: var(--witc-muted, #a9b6d2);
-  --wfme-ink: #f6f8ff;
-  --wfme-copy: #c3cee5;
-  --wfme-amount: #f2f6ff;
-  --wfme-minimum: var(--witc-green, #44d247);
-  --wfme-result: #6aa8ff;
-  --wfme-panel: rgba(6, 24, 49, 0.55);
-  --wfme-minimum-line: rgba(68, 210, 71, 0.45);
-  --wfme-minimum-fill: rgba(16, 61, 49, 0.42);
-  --wfme-result-line: rgba(76, 145, 255, 0.45);
-  --wfme-result-fill: rgba(8, 32, 66, 0.55);
-  --wfme-surface: linear-gradient(180deg, rgba(4, 20, 43, 0.82), rgba(2, 13, 29, 0.84));
+  --wfme-line: var(--fiscal-line);
+  --wfme-muted: var(--fiscal-muted);
+  --wfme-ink: var(--fiscal-ink);
+  --wfme-copy: var(--fiscal-copy);
+  --wfme-amount: var(--fiscal-ink);
+  --wfme-minimum: var(--fiscal-green);
+  --wfme-result: var(--fiscal-blue);
+  --wfme-panel: var(--fiscal-surface);
+  --wfme-minimum-line: #b8ded7;
+  --wfme-minimum-fill: var(--fiscal-green-soft);
+  --wfme-result-line: #bdd4ef;
+  --wfme-result-fill: var(--fiscal-blue-soft);
+  --wfme-surface: var(--fiscal-surface-soft);
 
   display: grid;
   gap: 12px;
   margin-top: 12px;
   padding: clamp(12px, 1.3vw, 18px);
   border: 1px solid var(--wfme-line);
-  border-radius: 10px;
+  border-radius: var(--fiscal-radius-panel);
   background: var(--wfme-surface);
+  box-shadow: none;
 }
 
 .wfme *,
@@ -76,7 +77,7 @@
   gap: 4px;
   padding: 12px 14px;
   border: 1px solid var(--wfme-line);
-  border-radius: 9px;
+  border-radius: var(--fiscal-radius-small);
   background: var(--wfme-panel);
 }
 
@@ -168,14 +169,15 @@
 }
 
 .wfme__warning {
-  border-color: rgba(255, 184, 107, 0.42);
-  color: #f3ddc3;
-  background: rgba(65, 35, 12, 0.42);
+  border-color: #efd2a9;
+  color: #7a4a17;
+  background: var(--fiscal-orange-soft);
 }
 
 .wfme__more {
   border-top: 1px dashed rgba(94, 120, 170, 0.3);
   padding-top: 8px;
+  border-top-color: var(--fiscal-line);
 }
 
 .wfme__more summary {
@@ -222,4 +224,27 @@
   .wfme__amount {
     white-space: normal;
   }
+}
+
+/*
+  Tema claro de la calculadora (antes en FiscalSoftTheme.css). 
+ */
+
+.wfme__saving {
+  color: var(--fiscal-copy);
+  border-color: #bdd4ef;
+  background: var(--fiscal-blue-soft);
+}
+
+.wfme__more summary,
+.wfme__more summary::marker {
+  color: var(--fiscal-copy);
+}
+
+.wfme__more > p,
+.wfme__note,
+.wfme__arrow,
+.wfme__arrow::before,
+.wfme__more > p.wfme__source {
+  color: var(--fiscal-copy);
 }

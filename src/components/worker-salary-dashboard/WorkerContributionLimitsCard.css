@@ -1,31 +1,25 @@
 .wclc {
-  --wclc-blue: #15a9ff;
-  --wclc-blue-soft: rgba(21, 169, 255, 0.2);
-  --wclc-purple: #b783ff;
-  --wclc-orange: #ff9b22;
-  --wclc-text: #f2f6ff;
-  --wclc-muted: #aeb9d2;
-  --wclc-panel: rgba(3, 17, 36, 0.82);
-  --wclc-line: rgba(55, 130, 200, 0.4);
+  --wclc-blue: var(--fiscal-blue);
+  --wclc-blue-soft: var(--fiscal-blue-soft);
+  --wclc-purple: var(--fiscal-violet);
+  --wclc-orange: var(--fiscal-orange);
+  --wclc-text: var(--fiscal-ink);
+  --wclc-muted: var(--fiscal-copy);
+  --wclc-panel: var(--fiscal-surface-soft);
+  --wclc-line: var(--fiscal-line);
 
   position: relative;
   overflow: hidden;
   container-type: inline-size;
   width: min(100%, 980px);
   padding: clamp(18px, 3vw, 28px) clamp(18px, 3.5vw, 34px);
-  border: 2px solid rgba(23, 113, 189, 0.72);
-  border-radius: 18px;
-  color: var(--wclc-text);
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-card);
+  color: var(--fiscal-ink);
   background:
-    radial-gradient(circle at 12% -8%, rgba(27, 160, 255, 0.28), transparent 30%),
-    radial-gradient(circle at 82% 0%, rgba(255, 151, 28, 0.13), transparent 30%),
-    linear-gradient(145deg, #031a34 0%, #020c1b 52%, #031326 100%);
+    var(--fiscal-surface);
   box-shadow:
-    0 22px 64px rgba(0, 7, 20, 0.46),
-    0 0 0 1px rgba(82, 186, 255, 0.11),
-    0 0 34px rgba(14, 128, 228, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 0 44px rgba(0, 117, 210, 0.08);
+    var(--fiscal-shadow);
 }
 
 .wclc::before {
@@ -36,6 +30,7 @@
   background:
     linear-gradient(90deg, transparent, rgba(83, 190, 255, 0.18), transparent) 52% 0 / 72% 1px no-repeat,
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%);
+  opacity: 0.08;
 }
 
 .wclc-header,
@@ -92,11 +87,11 @@
 }
 
 .wclc-step {
-  color: #6fd0ff;
+  color: var(--fiscal-primary);
   font-size: clamp(25px, 3vw, 32px);
   line-height: 1;
   font-weight: 860;
-  text-shadow: 0 0 14px rgba(79, 194, 255, 0.5);
+  text-shadow: none;
 }
 
 .wclc h2 {
@@ -185,7 +180,7 @@
 }
 
 .wclc-group-select__label {
-  color: inherit;
+  color: var(--fiscal-copy);
 }
 
 .wclc-group-select__trigger,
@@ -203,19 +198,19 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
-  min-height: 52px;
+  min-height: 54px;
   padding: 8px 46px 8px 12px;
   border: 1px solid rgba(64, 112, 161, 0.56);
   border-radius: 8px;
-  color: #eef5ff;
+  color: var(--fiscal-ink);
   background:
-    linear-gradient(180deg, rgba(8, 30, 57, 0.94), rgba(3, 15, 32, 0.92));
+    linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   box-shadow:
-    0 12px 22px rgba(0, 6, 18, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 5px 14px rgba(35, 54, 78, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
   transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease;
+    border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+  border-color: var(--fiscal-line-strong);
 }
 
 .wclc-group-select__trigger:hover,
@@ -232,11 +227,15 @@
 .wclc-group-select__chevron {
   position: absolute;
   top: 50%;
-  right: 14px;
-  color: #8fa6c3;
+  right: 13px;
+  color: var(--fiscal-primary);
   pointer-events: none;
   transform: translateY(-50%);
   transition: transform 160ms ease;
+  box-sizing: content-box;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--fiscal-primary-soft);
 }
 
 .wclc-group-select--open .wclc-group-select__chevron {
@@ -257,11 +256,11 @@
   border: 1px solid rgba(83, 190, 255, 0.34);
   border-radius: 14px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(21, 169, 255, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(8, 28, 52, 0.98), rgba(2, 12, 28, 0.98));
+    linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
   box-shadow:
-    0 22px 40px rgba(0, 6, 20, 0.42),
-    0 0 0 1px rgba(83, 190, 255, 0.08);
+    0 18px 36px rgba(35, 54, 78, 0.14),
+    0 0 0 1px rgba(35, 54, 78, 0.04);
+  border-color: var(--fiscal-line-strong);
 }
 
 .wclc-group-select__option {
@@ -270,10 +269,11 @@
   border: 1px solid rgba(80, 139, 191, 0.18);
   border-radius: 11px;
   color: inherit;
-  background: rgba(3, 18, 39, 0.42);
+  background: var(--fiscal-surface-soft);
   transition:
     border-color 140ms ease,
     background 140ms ease;
+  border-color: var(--fiscal-line);
 }
 
 .wclc-group-select__option:hover,
@@ -314,13 +314,14 @@
   min-width: 34px;
   padding: 4px 8px;
   border-radius: 999px;
-  color: #9fe6ff;
-  background: rgba(21, 169, 255, 0.16);
+  color: var(--fiscal-blue);
+  background: var(--fiscal-blue-soft);
   border: 1px solid rgba(21, 169, 255, 0.34);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  border-color: #bdd4ef;
 }
 
 .wclc-group-select__option .wclc-group-select__badge {
@@ -329,7 +330,7 @@
 
 .wclc-group-select__name {
   min-width: 0;
-  color: #dbe7f8;
+  color: var(--fiscal-ink);
   font-size: clamp(14px, 1.5vw, 16px);
   line-height: 1.25;
   font-weight: 780;
@@ -378,25 +379,27 @@
 }
 
 .wclc-group-select__base--min {
-  color: #e2c8ff;
-  background: rgba(183, 131, 255, 0.16);
+  color: #5d469c;
+  background: var(--fiscal-violet-soft);
   border: 1px solid rgba(183, 131, 255, 0.34);
+  border-color: #d8cbed;
 }
 
 .wclc-group-select__base--min strong {
-  color: var(--wclc-purple);
-  text-shadow: 0 0 10px rgba(183, 131, 255, 0.28);
+  color: var(--fiscal-violet);
+  text-shadow: none;
 }
 
 .wclc-group-select__base--max {
-  color: #ffd89b;
-  background: rgba(255, 155, 34, 0.16);
+  color: #8b5418;
+  background: var(--fiscal-orange-soft);
   border: 1px solid rgba(255, 155, 34, 0.42);
+  border-color: #efd2a9;
 }
 
 .wclc-group-select__base--max strong {
-  color: var(--wclc-orange);
-  text-shadow: 0 0 10px rgba(255, 155, 34, 0.28);
+  color: var(--fiscal-orange);
+  text-shadow: none;
 }
 
 .wclc-mode,
@@ -427,6 +430,7 @@
 .wclc-mode button {
   min-width: 78px;
   padding: 0 13px;
+  color: var(--fiscal-copy);
 }
 
 .wclc-simulations button {
@@ -896,12 +900,13 @@
   padding: 4px 13px;
   border: 1px solid var(--wclc-accent-soft);
   border-radius: 999px;
-  color: var(--wclc-accent-strong);
-  background: rgba(4, 17, 36, 0.96);
+  color: var(--fiscal-primary-strong);
+  background: var(--fiscal-surface);
   font-size: 12px;
   font-weight: 840;
   letter-spacing: 0.01em;
   text-transform: uppercase;
+  border-color: #b8ded7;
 }
 
 .wclc-summary-connector svg {
@@ -912,15 +917,18 @@
   min-height: 62px;
   border-top: 1px solid rgba(96, 138, 189, 0.2);
   background:
-    linear-gradient(90deg, var(--wclc-accent-bg), transparent 78%);
+    var(--fiscal-primary-soft);
+  color: var(--fiscal-ink);
+  border-color: #b8ded7;
+  box-shadow: none;
 }
 
 .wclc-result .wclc-row-values strong {
-  color: var(--wclc-accent-strong);
+  color: var(--fiscal-primary-strong);
   font-size: clamp(23px, 3vw, 31px);
   line-height: 1;
   font-weight: 900;
-  text-shadow: 0 0 16px var(--wclc-accent-glow);
+  text-shadow: none;
   white-space: nowrap;
 }
 
@@ -1046,4 +1054,65 @@
   .wclc-scale-bottom {
     font-size: 12px;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.wclc-field,
+.wclc-scale,
+.wclc-status,
+.wclc-distance,
+.wclc-summary,
+.wclc-result {
+  border-radius: var(--fiscal-radius-panel);
+}
+
+.wclc-mode,
+.wclc-group-select__trigger,
+.wclc-group-select__panel,
+.wclc-group-select__option {
+  border-radius: var(--fiscal-radius-control);
+}
+
+.wclc :is(.wclc-field, .wclc-scale, .wclc-status, .wclc-distance, .wclc-summary) {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.wclc-group-select__trigger:hover,
+.wclc-group-select__trigger:focus-visible,
+.wclc-group-select--open .wclc-group-select__trigger {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 46%, var(--fiscal-line));
+  background: #ffffff;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--fiscal-primary) 9%, transparent),
+    0 7px 18px rgba(35, 54, 78, 0.09);
+}
+
+.wclc-group-select__option:hover,
+.wclc-group-select__option--active,
+.wclc-group-select__option--selected {
+  border-color: color-mix(in srgb, var(--fiscal-primary) 34%, var(--fiscal-line));
+  background: color-mix(in srgb, var(--fiscal-primary-soft) 70%, #ffffff);
+}
+
+.wclc-mode {
+  border-color: var(--fiscal-line-strong);
+  background: #e9eef4;
+}
+
+.wclc-status h3,
+.wclc-row-label,
+.wclc-real-base .wclc-row-values strong {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+:is(.wclc-status p, .wclc-distance__label, .wclc-distance__unit, .wclc-distance__pair, .wclc-row-values em) {
+  color: var(--fiscal-copy);
+}
+
+.wclc-mode button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
 }

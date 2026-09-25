@@ -1,34 +1,27 @@
 .wscc {
-  --wscc-blue: #19b6ff;
-  --wscc-blue-soft: rgba(25, 182, 255, 0.18);
-  --wscc-violet: #bb78ff;
-  --wscc-violet-soft: rgba(187, 120, 255, 0.18);
-  --wscc-orange: #ff9b18;
-  --wscc-orange-soft: rgba(255, 155, 24, 0.17);
-  --wscc-text: #f3f6ff;
-  --wscc-muted: #aeb9d2;
-  --wscc-panel: rgba(3, 18, 39, 0.78);
-  --wscc-line: rgba(80, 139, 191, 0.28);
+  --wscc-blue: var(--fiscal-blue);
+  --wscc-blue-soft: var(--fiscal-blue-soft);
+  --wscc-violet: var(--fiscal-violet);
+  --wscc-violet-soft: var(--fiscal-violet-soft);
+  --wscc-orange: var(--fiscal-orange);
+  --wscc-orange-soft: var(--fiscal-orange-soft);
+  --wscc-text: var(--fiscal-ink);
+  --wscc-muted: var(--fiscal-copy);
+  --wscc-panel: var(--fiscal-surface-soft);
+  --wscc-line: var(--fiscal-line);
 
   position: relative;
   overflow: hidden;
   container-type: inline-size;
   width: min(100%, 1180px);
   padding: clamp(18px, 3vw, 30px);
-  border: 2px solid rgba(96, 61, 145, 0.7);
-  border-radius: 18px;
-  color: var(--wscc-text);
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-card);
+  color: var(--fiscal-ink);
   background:
-    radial-gradient(circle at 9% -12%, rgba(163, 93, 255, 0.3), transparent 30%),
-    radial-gradient(circle at 88% 7%, rgba(255, 151, 28, 0.16), transparent 31%),
-    radial-gradient(circle at 46% 106%, rgba(25, 182, 255, 0.18), transparent 30%),
-    linear-gradient(145deg, #04152c 0%, #020b1b 52%, #03182c 100%);
+    var(--fiscal-surface);
   box-shadow:
-    0 24px 68px rgba(0, 7, 20, 0.48),
-    0 0 0 1px rgba(161, 112, 255, 0.12),
-    0 0 34px rgba(138, 82, 225, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 0 46px rgba(25, 182, 255, 0.06);
+    var(--fiscal-shadow);
 }
 
 .wscc::before {
@@ -39,6 +32,7 @@
   background:
     linear-gradient(90deg, transparent, rgba(156, 115, 255, 0.2), transparent) 50% 0 / 76% 1px no-repeat,
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%);
+  opacity: 0.08;
 }
 
 .wscc-header,
@@ -67,11 +61,11 @@
 }
 
 .wscc-step {
-  color: #f1d7ff;
+  color: var(--fiscal-primary);
   font-size: clamp(25px, 3vw, 33px);
   line-height: 1;
   font-weight: 860;
-  text-shadow: 0 0 14px rgba(205, 141, 255, 0.42);
+  text-shadow: none;
 }
 
 .wscc h2,
@@ -142,10 +136,13 @@
   --wscc-toolbar-control-height: 64px;
 
   display: grid;
-  grid-template-columns: minmax(230px, 0.95fr) minmax(160px, 0.38fr) minmax(300px, 1.1fr) auto;
+  grid-template-columns: minmax(220px, 0.75fr) minmax(150px, 0.4fr) minmax(400px, 1.25fr) auto;
   gap: 12px;
   align-items: stretch;
   margin-bottom: 16px;
+  border: 1px solid var(--fiscal-line);
+  border-radius: 14px;
+  background: var(--fiscal-surface-soft);
 }
 
 .wscc-toolbar-cell {
@@ -186,8 +183,10 @@
   padding: 11px 14px;
   border: 1px solid rgba(75, 139, 200, 0.34);
   border-radius: 12px;
-  background: rgba(3, 18, 39, 0.58);
+  background: var(--fiscal-primary-soft);
   align-content: center;
+  color: var(--fiscal-ink);
+  border-color: #b9d9d5;
 }
 
 .wscc-toolbar-cell .wscc-select-field {
@@ -226,10 +225,10 @@
   border: 1px solid rgba(64, 112, 161, 0.56);
   border-radius: 11px;
   background:
-    linear-gradient(180deg, rgba(8, 30, 57, 0.94), rgba(3, 15, 32, 0.92));
+    var(--fiscal-surface);
   box-shadow:
-    0 12px 22px rgba(0, 6, 18, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    var(--fiscal-shadow-control);
+  border-color: var(--fiscal-line-strong);
 }
 
 .wscc-select-shell select {
@@ -238,10 +237,11 @@
   min-height: 38px;
   padding: 0 42px 0 14px;
   border: 0;
-  color: #eef5ff;
+  color: var(--fiscal-ink);
   background: transparent;
   cursor: pointer;
   font: 780 14px/1.2 var(--sans);
+  border-color: var(--fiscal-line-strong);
 }
 
 .wscc-select-shell svg {
@@ -258,7 +258,8 @@
   padding: 4px;
   border: 1px solid rgba(83, 162, 255, 0.26);
   border-radius: 999px;
-  background: rgba(3, 18, 39, 0.72);
+  background: #e9eef4;
+  border-color: var(--fiscal-line-strong);
 }
 
 .wscc-segments button {
@@ -267,7 +268,7 @@
   padding: 0 12px;
   border: 0;
   border-radius: 999px;
-  color: #aeb9d2;
+  color: var(--fiscal-copy);
   background: transparent;
   cursor: pointer;
   font: 820 13px/1 var(--sans);
@@ -311,12 +312,14 @@
 
 .wscc-alert--maximum {
   border: 1px solid rgba(255, 155, 24, 0.36);
-  background: rgba(108, 61, 8, 0.25);
+  background: var(--fiscal-orange-soft);
+  border-color: #efd2a9;
 }
 
 .wscc-alert--minimum {
   border: 1px solid rgba(187, 120, 255, 0.36);
-  background: rgba(73, 42, 112, 0.25);
+  background: var(--fiscal-violet-soft);
+  border-color: #d5c9ee;
 }
 
 .wscc-grid {
@@ -411,11 +414,10 @@
   border: 1px solid rgba(187, 120, 255, 0.34);
   border-radius: 9px;
   background:
-    linear-gradient(135deg, rgba(96, 52, 138, 0.4), rgba(55, 29, 95, 0.24)),
-    rgba(24, 14, 38, 0.68);
+    var(--fiscal-violet-soft);
   box-shadow:
-    0 0 10px rgba(187, 120, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    none;
+  border-color: #d5c9ee;
 }
 
 .wscc-panel__mei-extra-row {
@@ -430,7 +432,7 @@
 }
 
 .wscc-panel__mei-extra-row > span:first-child {
-  color: #d9b8ff;
+  color: var(--fiscal-violet);
   font-size: 8px;
   font-weight: 820;
   letter-spacing: 0.03em;
@@ -509,8 +511,9 @@
   border: 1px solid rgba(255, 155, 24, 0.22);
   border-radius: 11px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(255, 155, 24, 0.16), transparent 36%),
-    rgba(31, 22, 10, 0.42);
+    var(--fiscal-orange-soft);
+  color: var(--fiscal-copy);
+  border-color: #efd2a9;
 }
 
 .wscc-atep-note span {
@@ -546,13 +549,16 @@
   margin-top: 1px;
   padding: 10px 11px;
   border-radius: 11px;
+  color: var(--fiscal-copy);
+  border-color: #d5c9ee;
+  background: var(--fiscal-violet-soft);
 }
 
 .wscc-mei-note--worker {
   border: 1px solid rgba(187, 120, 255, 0.24);
   background:
-    radial-gradient(circle at 0% 0%, rgba(187, 120, 255, 0.16), transparent 36%),
-    rgba(24, 14, 38, 0.42);
+    var(--fiscal-violet-soft);
+  border-color: #d5c9ee;
 }
 
 .wscc-mei-note--company {
@@ -608,7 +614,7 @@
   margin-top: 2px;
   padding: 0;
   border: 0;
-  color: #d9c4ff;
+  color: var(--fiscal-violet) !important;
   background: transparent;
   cursor: pointer;
   font: 820 11px/1.2 var(--sans);
@@ -730,7 +736,7 @@
 
 .wscc-line__values em {
   min-width: 82px;
-  color: #9fb0c8;
+  color: var(--fiscal-muted);
   font-size: 13px;
   font-style: normal;
   font-weight: 780;
@@ -757,7 +763,7 @@
 }
 
 .wscc-total em {
-  color: #d8e4f6;
+  color: var(--fiscal-copy);
   font-size: 14px;
   font-style: normal;
   font-weight: 820;
@@ -766,8 +772,9 @@
 
 .wscc-total--worker {
   border: 1px solid rgba(187, 120, 255, 0.28);
-  color: #efdcff;
-  background: linear-gradient(90deg, rgba(96, 52, 138, 0.42), rgba(55, 29, 95, 0.28));
+  color: var(--fiscal-violet);
+  background: var(--fiscal-violet-soft);
+  border-color: #d5c9ee;
 }
 
 .wscc-total--worker strong {
@@ -777,8 +784,9 @@
 
 .wscc-total--company {
   border: 1px solid rgba(255, 155, 24, 0.28);
-  color: #ffe3b7;
-  background: linear-gradient(90deg, rgba(111, 64, 8, 0.42), rgba(62, 38, 9, 0.26));
+  color: var(--fiscal-orange);
+  background: var(--fiscal-orange-soft);
+  border-color: #efd2a9;
 }
 
 .wscc-total--company strong {
@@ -803,23 +811,25 @@
   min-height: 48px;
   padding: 9px 11px;
   border: 1px solid rgba(70, 129, 185, 0.22);
-  border-radius: 10px;
-  background: rgba(2, 14, 30, 0.44);
+  border-radius: var(--fiscal-radius-control);
+  background: var(--fiscal-surface);
+  border-color: var(--fiscal-line);
 }
 
 .wscc-summary__item span {
-  color: #aab8cf;
+  color: var(--fiscal-copy);
   font-size: 13px;
   line-height: 1.2;
   font-weight: 790;
 }
 
 .wscc-summary__item strong {
-  color: #eaf4ff;
+  color: var(--fiscal-ink);
   font-size: clamp(18px, 2.1vw, 24px);
   line-height: 1;
   font-weight: 920;
   white-space: nowrap;
+  text-shadow: none !important;
 }
 
 .wscc-summary__gross {
@@ -843,13 +853,11 @@
 }
 
 .wscc-summary__item--hero {
-  border-color: rgba(255, 155, 24, 0.62);
+  border-color: #efd2a9;
   background:
-    linear-gradient(135deg, rgba(92, 48, 8, 0.44), rgba(48, 24, 4, 0.36)),
-    rgba(2, 14, 30, 0.56);
+    var(--fiscal-orange-soft);
   box-shadow:
-    0 0 22px rgba(255, 155, 24, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    none;
 }
 
 .wscc-summary__item--hero span,
@@ -863,13 +871,11 @@
 }
 
 .wscc-summary__item--total {
-  border-color: rgba(255, 91, 89, 0.58);
+  border-color: #efc5cc;
   background:
-    linear-gradient(135deg, rgba(92, 18, 28, 0.42), rgba(48, 10, 18, 0.36)),
-    rgba(2, 14, 30, 0.56);
+    var(--fiscal-red-soft);
   box-shadow:
-    0 0 22px rgba(255, 91, 89, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    none;
 }
 
 .wscc-summary__item--total span,
@@ -989,4 +995,131 @@
   .wscc-segments button {
     flex: 1 1 0;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.wscc-toolbar,
+.wscc-panel,
+.wscc-summary {
+  border-radius: var(--fiscal-radius-panel);
+}
+
+.wscc-select-shell,
+.wscc-segments {
+  border-radius: var(--fiscal-radius-control);
+}
+
+.wscc-base-note :is(strong, span, em) {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+.wscc-base-note :is(span, em) {
+  color: var(--fiscal-copy);
+}
+
+.wscc-panel,
+.wscc-summary {
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.wscc-line__text,
+.wscc-line__values small,
+.wscc-panel__intro p {
+  color: var(--fiscal-copy);
+}
+
+.wscc-line__label,
+.wscc-line__values strong {
+  color: var(--fiscal-ink);
+}
+
+.wscc-mei-note :is(span, p, em, strong, th, td),
+.wscc-mei-note__summary {
+  color: var(--fiscal-copy) !important;
+  text-shadow: none;
+}
+
+.wscc-mei-note :is(strong, tbody th) {
+  color: var(--fiscal-ink) !important;
+}
+
+.wscc-atep-note :is(span, p, em) {
+  color: var(--fiscal-copy);
+}
+
+.wscc-atep-note :is(span, strong) {
+  color: var(--fiscal-ink);
+}
+
+.wscc-panel__mei-extra :is(span, em, strong) {
+  color: var(--fiscal-violet);
+  text-shadow: none;
+}
+
+.wscc-total :is(strong, em) {
+  text-shadow: none;
+}
+
+.wscc-summary__title {
+  margin: 0;
+  color: var(--fiscal-ink);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+:is(.wscc-base-note, .wscc-mei-note, .wscc-atep-note, .wscc-alert, .wscc-total, .wscc-panel__mei-extra) {
+  border-radius: var(--fiscal-radius-control);
+}
+
+.wscc-alert--maximum :is(strong, span, em) {
+  color: #8b5418;
+}
+
+.wscc-alert--maximum span,
+.wscc-alert--maximum em {
+  color: var(--fiscal-orange);
+}
+
+.wscc-alert--minimum :is(strong, span, em) {
+  color: #5d469c;
+}
+
+.wscc-alert--minimum span,
+.wscc-alert--minimum em {
+  color: var(--fiscal-violet);
+}
+
+.wscc-summary__item--total :is(span, strong, em) {
+  color: var(--fiscal-red);
+}
+
+.wscc-summary__item--hero :is(span, strong) {
+  color: var(--fiscal-orange);
+}
+
+@media (max-width: 1100px) {
+
+  .wscc-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+
+  .wscc-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.wscc-toolbar {
+  border-radius: 14px;
+}
+
+.wscc-segments button.is-active {
+  color: #ffffff;
+  background: var(--fiscal-blue);
 }

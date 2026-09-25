@@ -1,27 +1,25 @@
 .witc {
-  --witc-text: #f5f7ff;
-  --witc-muted: #a9b6d2;
-  --witc-line: rgba(77, 123, 188, 0.34);
-  --witc-green: #44d247;
-  --witc-purple: #8f47ff;
-  --witc-blue: #0e9ce9;
-  --witc-orange: #f1850d;
-  --witc-yellow: #c9991a;
-  --witc-red: #df4d45;
+  --witc-text: var(--fiscal-ink);
+  --witc-muted: var(--fiscal-copy);
+  --witc-line: var(--fiscal-line);
+  --witc-green: var(--fiscal-green);
+  --witc-purple: var(--fiscal-violet);
+  --witc-blue: var(--fiscal-blue);
+  --witc-orange: var(--fiscal-orange);
+  --witc-yellow: var(--fiscal-yellow);
+  --witc-red: var(--fiscal-red);
 
   position: relative;
   overflow: hidden;
   container-type: inline-size;
   width: min(100%, 1280px);
   padding: clamp(14px, 1.65vw, 24px);
-  border: 1px solid rgba(74, 98, 168, 0.82);
-  border-radius: 16px;
-  color: var(--witc-text);
+  border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-card);
+  color: var(--fiscal-ink);
   background:
-    radial-gradient(circle at 5% -20%, rgba(153, 86, 255, 0.18), transparent 28%),
-    radial-gradient(circle at 88% 2%, rgba(40, 123, 255, 0.16), transparent 24%),
-    linear-gradient(135deg, #070b23 0%, #051225 48%, #061b31 100%);
-  box-shadow: 0 24px 74px rgba(0, 4, 17, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow);
 }
 
 .witc *,
@@ -52,11 +50,11 @@
 }
 
 .witc-title > span {
-  color: #f0b9ff;
+  color: var(--fiscal-primary);
   font-size: clamp(22px, 2.1vw, 34px);
   line-height: 1;
   font-weight: 900;
-  text-shadow: 0 0 14px rgba(188, 94, 255, 0.58);
+  text-shadow: none;
 }
 
 .witc-title h2 {
@@ -88,6 +86,7 @@
   display: inline-grid;
   align-items: center;
   min-width: 230px;
+  border-radius: var(--fiscal-radius-control);
 }
 
 .witc-select select {
@@ -216,15 +215,17 @@
 }
 
 .witc-scale-tag--state {
-  color: #cfe2ff;
-  background: rgba(76, 145, 255, 0.16);
+  color: #245a8f;
+  background: var(--fiscal-blue-soft);
   border: 1px solid rgba(76, 145, 255, 0.45);
+  border-color: #bdd4ef;
 }
 
 .witc-scale-tag--region {
-  color: #ffe0bd;
-  background: rgba(241, 133, 13, 0.16);
+  color: #8b5418;
+  background: var(--fiscal-orange-soft);
   border: 1px solid rgba(241, 133, 13, 0.45);
+  border-color: #efd2a9;
 }
 
 .witc-bracket {
@@ -237,25 +238,27 @@
   min-height: 78px;
   padding: 10px 8px 8px;
   border: 1px solid color-mix(in srgb, var(--tone) 58%, rgba(18, 36, 61, 0.8));
-  border-radius: 7px;
+  border-radius: var(--fiscal-radius-control);
   background:
-    radial-gradient(circle at 28% -18%, color-mix(in srgb, var(--tone) 34%, transparent), transparent 52%),
-    linear-gradient(180deg, color-mix(in srgb, var(--tone) 72%, #111b2d), color-mix(in srgb, var(--tone) 36%, #09111f));
+    color-mix(in srgb, var(--tone) 13%, #ffffff);
   opacity: 0.83;
+  color: var(--fiscal-ink);
+  border-color: color-mix(in srgb, var(--tone) 28%, var(--fiscal-line));
+  box-shadow: none;
 }
 
 .witc-bracket.is-active {
   opacity: 1;
-  box-shadow: 0 0 18px color-mix(in srgb, var(--tone) 34%, transparent);
+  box-shadow: none;
 }
 
 .witc-bracket.is-inactive {
-  border-color: rgba(105, 117, 141, 0.32);
+  border-color: var(--fiscal-line);
   background:
-    radial-gradient(circle at 28% -18%, rgba(133, 146, 168, 0.14), transparent 52%),
-    linear-gradient(180deg, rgba(32, 43, 63, 0.78), rgba(13, 21, 36, 0.82));
-  opacity: 0.54;
+    #edf1f5;
+  opacity: 0.82;
   filter: grayscale(0.72) saturate(0.46);
+  color: var(--fiscal-muted);
 }
 
 .witc-bracket.is-inactive strong {
@@ -281,7 +284,7 @@
 }
 
 .witc-bracket span:not(.witc-bracket__marker) {
-  color: color-mix(in srgb, var(--tone) 58%, #eff4ff);
+  color: var(--fiscal-ink);
   font-size: clamp(11px, 1vw, 14px);
   line-height: 1.12;
   font-weight: 860;
@@ -503,7 +506,7 @@
 
 .witc-tramo--summary .witc-tramo__range,
 .witc-tramo--minus .witc-tramo__range {
-  color: #aeb9d3;
+  color: var(--fiscal-copy);
   font-weight: 780;
   white-space: normal;
 }
@@ -521,7 +524,7 @@
 }
 
 .witc-tramo--total .witc-tramo__range {
-  color: #f4f7ff;
+  color: var(--fiscal-copy);
   font-weight: 880;
   white-space: normal;
 }
@@ -584,13 +587,14 @@
   margin-top: 10px;
   padding: 10px 12px;
   border: 1px solid rgba(255, 184, 107, 0.42);
-  border-radius: 9px;
-  color: #d9e6fa;
-  background: rgba(65, 35, 12, 0.42);
+  border-radius: var(--fiscal-radius-small);
+  color: #8b5418;
+  background: var(--fiscal-orange-soft);
+  border-color: #efd2a9;
 }
 
 .witc-total-deduction strong {
-  color: #ffb86b;
+  color: #8b5418;
   white-space: nowrap;
 }
 
@@ -696,7 +700,7 @@
 
 @media (max-width: 640px) {
   .witc {
-    border-radius: 13px;
+    border-radius: var(--fiscal-radius-card);
   }
 
   .witc-title {
@@ -725,3 +729,78 @@
     font-size: clamp(7px, 2vw, 9px);
   }
 }
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.witc::before {
+  opacity: 0.08;
+}
+
+.witc-step {
+  color: var(--fiscal-primary);
+  text-shadow: none;
+}
+
+.witc-max-rate,
+.witc-base-card,
+.witc-calc,
+.witc-result {
+  border-radius: var(--fiscal-radius-panel);
+}
+
+.witc-panel {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.witc input,
+.witc select {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+}
+
+.witc-max-rate,
+.witc-base-card,
+.witc-calc,
+.witc-result {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface-soft);
+  box-shadow: none;
+}
+
+.witc-max-rate :is(span, b),
+.witc-base-card p,
+.witc-result span {
+  color: var(--fiscal-copy);
+}
+
+.witc-base-card strong {
+  color: var(--fiscal-primary-strong);
+  text-shadow: none;
+}
+
+:is(.witc-region > span:first-child, .witc-salary__label, .witc-calc h3) {
+  color: var(--fiscal-ink);
+}
+
+.witc-bracket :is(strong, span) {
+  color: var(--fiscal-ink);
+  text-shadow: none;
+}
+
+.witc-bracket.is-inactive :is(strong, span) {
+  color: var(--fiscal-muted);
+}
+
+.witc-calc-row,
+.witc-tramo {
+  border-radius: var(--fiscal-radius-small);
+  border-color: var(--fiscal-line);
+  background: var(--fiscal-surface);
+}
+
+.witc-calc-row :is(p, b),

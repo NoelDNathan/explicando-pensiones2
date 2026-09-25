@@ -113,8 +113,9 @@
   min-height: 38px;
   border: 1px solid rgba(83, 162, 255, 0.28);
   border-radius: 10px;
-  color: #8fa6c3;
-  background: rgba(2, 14, 30, 0.72);
+  color: var(--fiscal-muted);
+  background: var(--fiscal-surface-soft);
+  border-color: var(--fiscal-line);
 }
 
 .atep-select__search input {
@@ -173,7 +174,7 @@
 }
 
 .atep-select__preview--compact {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(170px, 1fr) auto;
   gap: 10px;
   align-items: center;
 }
@@ -192,21 +193,25 @@
   min-width: 34px;
   padding: 3px 7px;
   border-radius: 999px;
-  color: #ffe3b7;
-  background: var(--atep-orange-soft);
+  color: var(--fiscal-orange);
+  background: var(--fiscal-orange-soft);
   border: 1px solid rgba(255, 155, 24, 0.34);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  border-color: #efd2a9;
 }
 
 .atep-select__name {
   min-width: 0;
-  color: #dbe7f8;
+  color: var(--fiscal-ink);
   font-size: 13px;
   line-height: 1.25;
   font-weight: 780;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .atep-select__rates {
@@ -243,39 +248,43 @@
 .atep-select__rate strong {
   font-size: 12px;
   font-weight: 920;
+  text-shadow: none;
 }
 
 .atep-select__rate--it {
-  color: #9fe6ff;
+  color: #235b94;
   background: var(--atep-blue-soft);
   border: 1px solid rgba(25, 182, 255, 0.34);
+  border-color: #bdd4ef;
 }
 
 .atep-select__rate--it strong {
   color: var(--atep-blue);
-  text-shadow: 0 0 10px rgba(25, 182, 255, 0.28);
+  text-shadow: none;
 }
 
 .atep-select__rate--ims {
-  color: #e2c8ff;
+  color: #5d469c;
   background: var(--atep-violet-soft);
   border: 1px solid rgba(187, 120, 255, 0.34);
+  border-color: #d8cbed;
 }
 
 .atep-select__rate--ims strong {
   color: var(--atep-violet);
-  text-shadow: 0 0 10px rgba(187, 120, 255, 0.28);
+  text-shadow: none;
 }
 
 .atep-select__rate--total {
-  color: #ffd89b;
+  color: #8b5418;
   background: var(--atep-orange-soft);
   border: 1px solid rgba(255, 155, 24, 0.42);
+  border-color: #efd2a9;
 }
 
 .atep-select__rate--total strong {
   color: var(--atep-orange);
-  text-shadow: 0 0 10px rgba(255, 155, 24, 0.28);
+  text-shadow: none;
 }
 
 .atep-select__empty {
@@ -317,4 +326,27 @@
   .atep-select__rate strong {
     font-size: 11px;
   }
+}
+
+/*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
+
+.atep-select__trigger,
+.atep-select__panel,
+.atep-select__search {
+  border-radius: var(--fiscal-radius-control);
+}
+
+.atep-select__trigger,
+.atep-select__panel,
+.atep-select__search input,
+.atep-select__option {
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-line-strong);
+  background: var(--fiscal-surface);
+  box-shadow: var(--fiscal-shadow-control);
+}
+
+.atep-select__option:hover,
+.atep-select__option[aria-selected="true"] {
+  background: var(--fiscal-blue-soft);
 }
