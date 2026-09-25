@@ -80,6 +80,10 @@ ningún texto**: cada eliminación necesita aprobación explícita. El rediseño
 el flujo, las preguntas, los cálculos ni el contenido educativo. Siguiente: tokens de
 tipografía, espaciado y movimiento, y piloto en los pasos 0 y 5.
 
+Propuestas visuales en un lienzo privado (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo),
+con el paso 3 completo como muestra: A Editorial, B Enfoque, C Nómina viva y D Escenario
+(oscuro y animado), cada una en escritorio y móvil. Pendiente: que se elija dirección.
+
 ### Base de datos (Supabase)
 
 **Desplegado** en el proyecto `explicando-pensiones` (region `eu-west-1`, Irlanda), con las 10
