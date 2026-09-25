@@ -305,6 +305,12 @@ y `/resumen` tras la extraccion de `DashboardSidebar`.
   (Vite, no Next). Hay que tenerlo activado en el panel del proyecto de Vercel.
 - Al reorganizar componentes: separar los reutilizables, mantener tokens compartidos y evitar
   estilos duplicados en paginas finales.
+- **CSS de la calculadora fiscal (diagnostico 2026-09-25, ver `ai/history/`)**: cada tarjeta
+  tiene su CSS base escrito para un tema oscuro con colores literales, y `FiscalSoftTheme.css`
+  lo repinta en claro con ~600 selectores `.fwd--soft` clase a clase. Todo componente nuevo
+  sin su bloque en ese archivo sale con la paleta oscura. Quedan fugas visibles (verdes y
+  azules neon sobre blanco en pasos 2, 3, 5, 6 y 8). Plan propuesto: tokens semanticos en
+  `.fwd--soft`, migrar cada CSS base a `var(--fiscal-*)` y borrar su bloque de parches.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la
   estructura definitiva de `src/components/`.
 - Ampliar `/componentes` con tarjetas de indicadores, etiquetas de fuente, avisos metodologicos
