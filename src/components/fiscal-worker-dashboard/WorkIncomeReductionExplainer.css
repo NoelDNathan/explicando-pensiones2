@@ -7,72 +7,72 @@
   --wir-gap: clamp(14px, 1.4vw, 20px);
   --wir-sticky-top: 10px;
   --wir-morph: 190ms;
-  --wir-sticky-shadow: rgba(0, 0, 0, 0.45);
+  --wir-sticky-shadow: color-mix(in srgb, var(--fiscal-shade) 45%, transparent);
   --wir-page-bg:
-    radial-gradient(circle at 12% 6%, rgba(23, 184, 255, 0.15), transparent 32%),
-    radial-gradient(circle at 78% 12%, rgba(255, 79, 88, 0.1), transparent 28%),
-    radial-gradient(circle at 60% 92%, rgba(190, 116, 255, 0.1), transparent 30%),
-    linear-gradient(135deg, #020713 0%, #05162b 48%, #020713 100%);
-  --wir-header-bg: linear-gradient(140deg, rgba(23, 184, 255, 0.12), rgba(4, 17, 32, 0.92) 55%);
-  --wir-panel: rgba(4, 17, 32, 0.9);
-  --wir-panel-shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
-  --wir-surface: rgba(2, 10, 22, 0.65);
-  --wir-border: rgba(76, 143, 211, 0.34);
-  --wir-border-soft: rgba(123, 157, 196, 0.2);
+    radial-gradient(circle at 12% 6%, color-mix(in srgb, var(--fiscal-blue) 15%, transparent), transparent 32%),
+    radial-gradient(circle at 78% 12%, color-mix(in srgb, var(--fiscal-red) 10%, transparent), transparent 28%),
+    radial-gradient(circle at 60% 92%, color-mix(in srgb, var(--fiscal-violet) 10%, transparent), transparent 30%),
+    linear-gradient(135deg, var(--fiscal-surface) 0%, var(--fiscal-surface) 48%, var(--fiscal-surface) 100%);
+  --wir-header-bg: linear-gradient(140deg, color-mix(in srgb, var(--fiscal-blue) 12%, transparent), color-mix(in srgb, var(--fiscal-surface) 92%, transparent) 55%);
+  --wir-panel: color-mix(in srgb, var(--fiscal-surface) 90%, transparent);
+  --wir-panel-shadow: 0 18px 48px color-mix(in srgb, var(--fiscal-surface) 34%, transparent);
+  --wir-surface: color-mix(in srgb, var(--fiscal-surface) 65%, transparent);
+  --wir-border: var(--fiscal-blue-line);
+  --wir-border-soft: var(--fiscal-surface-soft);
 
-  --wir-text: #f6f9ff;
-  --wir-muted: #b9c5d6;
-  --wir-faint: #7f91a8;
+  --wir-text: var(--fiscal-on-accent);
+  --wir-muted: var(--fiscal-ink);
+  --wir-faint: var(--fiscal-copy);
 
-  --wir-green: #6cf146;
-  --wir-purple: #be74ff;
-  --wir-blue: #17b8ff;
-  --wir-orange: #ffad18;
-  --wir-yellow: #ffc635;
-  --wir-red: #ff4f58;
+  --wir-green: var(--fiscal-green);
+  --wir-purple: var(--fiscal-violet);
+  --wir-blue: var(--fiscal-blue);
+  --wir-orange: var(--fiscal-orange);
+  --wir-yellow: var(--fiscal-yellow);
+  --wir-red: var(--fiscal-red);
 
-  --wir-green-tint: rgba(108, 241, 70, 0.1);
-  --wir-green-line: rgba(108, 241, 70, 0.5);
-  --wir-blue-tint: rgba(23, 184, 255, 0.11);
-  --wir-blue-line: rgba(23, 184, 255, 0.4);
-  --wir-yellow-tint: rgba(255, 198, 53, 0.1);
-  --wir-yellow-line: rgba(255, 198, 53, 0.45);
-  --wir-orange-tint: rgba(255, 173, 24, 0.1);
-  --wir-orange-line: rgba(255, 173, 24, 0.5);
-  --wir-red-tint: rgba(255, 79, 88, 0.1);
-  --wir-red-line: rgba(255, 79, 88, 0.38);
-  --wir-muted-tint: rgba(127, 145, 168, 0.1);
-  --wir-muted-line: rgba(127, 145, 168, 0.45);
+  --wir-green-tint: color-mix(in srgb, var(--fiscal-green) 10%, transparent);
+  --wir-green-line: var(--fiscal-green-line);
+  --wir-blue-tint: color-mix(in srgb, var(--fiscal-blue) 11%, transparent);
+  --wir-blue-line: var(--fiscal-blue-line);
+  --wir-yellow-tint: color-mix(in srgb, var(--fiscal-yellow) 10%, transparent);
+  --wir-yellow-line: var(--fiscal-yellow-line);
+  --wir-orange-tint: color-mix(in srgb, var(--fiscal-orange) 10%, transparent);
+  --wir-orange-line: var(--fiscal-orange-line);
+  --wir-red-tint: color-mix(in srgb, var(--fiscal-red) 10%, transparent);
+  --wir-red-line: var(--fiscal-red-line);
+  --wir-muted-tint: var(--fiscal-surface-soft);
+  --wir-muted-line: var(--fiscal-line-strong);
 
-  --wir-warn-text: #ffe6a3;
-  --wir-info-text: #cbe9ff;
-  --wir-punch-text: #ffd7d9;
+  --wir-warn-text: var(--fiscal-yellow);
+  --wir-info-text: var(--fiscal-blue-ink);
+  --wir-punch-text: var(--fiscal-red-ink);
 
-  --wir-badge-bg: rgba(255, 255, 255, 0.16);
-  --wir-handle: #fff;
-  --wir-handle-ring: rgba(2, 7, 19, 0.9);
+  --wir-badge-bg: color-mix(in srgb, var(--fiscal-surface) 16%, transparent);
+  --wir-handle: var(--fiscal-on-accent);
+  --wir-handle-ring: var(--fiscal-copy);
 
-  --wir-chart-grid: rgba(123, 157, 196, 0.16);
-  --wir-chart-axis: rgba(123, 157, 196, 0.45);
-  --wir-chart-band: rgba(255, 173, 24, 0.09);
-  --wir-chart-area-green: rgba(108, 241, 70, 0.14);
-  --wir-chart-area-red: rgba(255, 79, 88, 0.12);
-  --wir-chart-reference: rgba(246, 249, 255, 0.4);
-  --wir-chart-reference-text: rgba(246, 249, 255, 0.6);
-  --wir-chart-point-fill: #fff;
-  --wir-chart-point-stroke: #020713;
-  --wir-chart-marker-line: rgba(255, 255, 255, 0.55);
-  --wir-chart-marker-text: #f6f9ff;
-  --wir-chart-hover-line: rgba(246, 249, 255, 0.32);
-  --wir-chart-tip-bg: rgba(3, 10, 24, 0.94);
-  --wir-chart-tip-line: rgba(123, 157, 196, 0.35);
-  --wir-chart-tip-text: #f6f9ff;
-  --wir-chart-tip-muted: rgba(246, 249, 255, 0.7);
-  --wir-chart-tier-green: rgba(108, 241, 70, 0.22);
-  --wir-chart-tier-yellow: rgba(255, 198, 53, 0.22);
-  --wir-chart-tier-orange: rgba(255, 173, 24, 0.24);
-  --wir-chart-tier-edge: rgba(123, 157, 196, 0.28);
-  --wir-chart-tier-text: rgba(246, 249, 255, 0.62);
+  --wir-chart-grid: color-mix(in srgb, var(--fiscal-copy) 16%, transparent);
+  --wir-chart-axis: color-mix(in srgb, var(--fiscal-copy) 45%, transparent);
+  --wir-chart-band: color-mix(in srgb, var(--fiscal-orange) 9%, transparent);
+  --wir-chart-area-green: color-mix(in srgb, var(--fiscal-green) 14%, transparent);
+  --wir-chart-area-red: color-mix(in srgb, var(--fiscal-red) 12%, transparent);
+  --wir-chart-reference: color-mix(in srgb, var(--fiscal-on-accent) 40%, transparent);
+  --wir-chart-reference-text: color-mix(in srgb, var(--fiscal-on-accent) 60%, transparent);
+  --wir-chart-point-fill: var(--fiscal-on-accent);
+  --wir-chart-point-stroke: var(--fiscal-line);
+  --wir-chart-marker-line: color-mix(in srgb, var(--fiscal-surface) 55%, transparent);
+  --wir-chart-marker-text: var(--fiscal-on-accent);
+  --wir-chart-hover-line: var(--fiscal-surface-soft);
+  --wir-chart-tip-bg: color-mix(in srgb, var(--fiscal-surface) 94%, transparent);
+  --wir-chart-tip-line: var(--fiscal-line-strong);
+  --wir-chart-tip-text: var(--fiscal-on-accent);
+  --wir-chart-tip-muted: color-mix(in srgb, var(--fiscal-on-accent) 70%, transparent);
+  --wir-chart-tier-green: color-mix(in srgb, var(--fiscal-green) 22%, transparent);
+  --wir-chart-tier-yellow: color-mix(in srgb, var(--fiscal-yellow) 22%, transparent);
+  --wir-chart-tier-orange: color-mix(in srgb, var(--fiscal-orange) 24%, transparent);
+  --wir-chart-tier-edge: color-mix(in srgb, var(--fiscal-copy) 28%, transparent);
+  --wir-chart-tier-text: color-mix(in srgb, var(--fiscal-on-accent) 62%, transparent);
 
   min-height: 100svh;
   padding: clamp(12px, 1.6vw, 26px);
@@ -469,8 +469,8 @@
  * La barra del slider va pintada por tipo marginal: el velo del tramo aun no
  * alcanzado tiene que ser del color del fondo de cada variante.
  */
-.wir .salary-slider { --salary-slider-track-veil: rgba(2, 10, 22, 0.42); }
-.wir--embedded .salary-slider { --salary-slider-track-veil: rgba(248, 250, 252, 0.4); }
+.wir .salary-slider { --salary-slider-track-veil: var(--fiscal-muted); }
+.wir--embedded .salary-slider { --salary-slider-track-veil: color-mix(in srgb, var(--fiscal-on-accent) 40%, transparent); }
 
 .wir-ramp-legend {
   display: flex;
@@ -716,18 +716,6 @@
 
 .wir-note p { margin: 0; }
 
-.wir-note--warn {
-  border: 1px solid var(--wir-yellow-line);
-  background: var(--wir-yellow-tint);
-}
-
-.wir.wir .wir-note--warn,
-.wir.wir .wir-note--warn p {
-  color: var(--wir-warn-text);
-}
-
-.wir-note--warn svg { color: var(--wir-yellow); flex-shrink: 0; }
-
 .wir-note--info {
   border: 1px solid var(--wir-blue-line);
   background: var(--wir-blue-tint);
@@ -739,8 +727,6 @@
 }
 
 .wir-note--info svg { color: var(--wir-blue); flex-shrink: 0; }
-
-.wir-note--standalone { margin-top: 0; }
 
 /* Aviso de cabecera para "esto no te aplica" / "esto esta bloqueado". */
 .wir-callout {
@@ -785,7 +771,7 @@
 .wir-callout--blocked svg { color: var(--wir-yellow); }
 
 .wir-callout--out-of-range {
-  border-color: #f0c878;
+  border-color: var(--fiscal-yellow-line);
   border-left-color: var(--fiscal-orange);
   background: var(--fiscal-orange-soft);
   box-shadow: var(--fiscal-shadow-control);
@@ -1190,7 +1176,7 @@
   color: var(--fiscal-copy);
   font-size: 0.92rem;
   line-height: 1.6;
-  border-color: #b8d4f5;
+  border-color: var(--fiscal-blue-line);
   border-left-color: var(--fiscal-blue);
   box-shadow: var(--fiscal-shadow-control);
 }
@@ -1325,68 +1311,68 @@
  * ──────────────────────────────────────────────────────────────────────────── */
 
 .wir--embedded {
-  --wir-sticky-shadow: rgba(35, 54, 78, 0.16);
+  --wir-sticky-shadow: color-mix(in srgb, var(--fiscal-shade) 16%, transparent);
   --wir-page-bg: none;
-  --wir-header-bg: linear-gradient(140deg, #e9f1fd, #ffffff 62%);
-  --wir-panel: #ffffff;
-  --wir-panel-shadow: 0 4px 12px rgba(35, 54, 78, 0.07);
-  --wir-surface: #f8fafc;
-  --wir-border: #c4d2df;
-  --wir-border-soft: #dbe4ec;
+  --wir-header-bg: linear-gradient(140deg, var(--fiscal-blue-soft), var(--fiscal-surface) 62%);
+  --wir-panel: var(--fiscal-surface);
+  --wir-panel-shadow: 0 4px 12px var(--fiscal-surface-soft);
+  --wir-surface: var(--fiscal-surface-soft);
+  --wir-border: var(--fiscal-line-strong);
+  --wir-border-soft: var(--fiscal-line);
 
-  --wir-text: #172033;
-  --wir-muted: #4f5f70;
-  --wir-faint: #646f7e;
+  --wir-text: var(--fiscal-ink);
+  --wir-muted: var(--fiscal-copy);
+  --wir-faint: var(--fiscal-muted);
 
-  --wir-green: #14724e;
-  --wir-purple: #7557c8;
-  --wir-blue: #2a63b8;
-  --wir-orange: #9d5a13;
-  --wir-yellow: #7a5b10;
-  --wir-red: #b23a50;
+  --wir-green: var(--fiscal-green-ink);
+  --wir-purple: var(--fiscal-violet);
+  --wir-blue: var(--fiscal-blue);
+  --wir-orange: var(--fiscal-orange);
+  --wir-yellow: var(--fiscal-yellow-ink);
+  --wir-red: var(--fiscal-red);
 
-  --wir-green-tint: #e3f5ec;
-  --wir-green-line: #9ed7bd;
-  --wir-blue-tint: #e9f1fd;
-  --wir-blue-line: #a9c7ee;
-  --wir-yellow-tint: #fff7d9;
-  --wir-yellow-line: #ddc271;
-  --wir-orange-tint: #fff1df;
-  --wir-orange-line: #e8bd85;
-  --wir-red-tint: #fcecef;
-  --wir-red-line: #e7a5b1;
-  --wir-muted-tint: #f1f4f8;
-  --wir-muted-line: #cfd8e3;
+  --wir-green-tint: var(--fiscal-green-soft);
+  --wir-green-line: var(--fiscal-green-line);
+  --wir-blue-tint: var(--fiscal-blue-soft);
+  --wir-blue-line: var(--fiscal-blue-line);
+  --wir-yellow-tint: var(--fiscal-yellow-soft);
+  --wir-yellow-line: var(--fiscal-yellow-line);
+  --wir-orange-tint: var(--fiscal-orange-soft);
+  --wir-orange-line: var(--fiscal-orange-line);
+  --wir-red-tint: var(--fiscal-red-soft);
+  --wir-red-line: var(--fiscal-red-line);
+  --wir-muted-tint: var(--fiscal-surface-tint);
+  --wir-muted-line: var(--fiscal-line-strong);
 
-  --wir-warn-text: #6b4f0d;
-  --wir-info-text: #1d4a8a;
-  --wir-punch-text: #8a2436;
+  --wir-warn-text: var(--fiscal-ink);
+  --wir-info-text: var(--fiscal-blue);
+  --wir-punch-text: var(--fiscal-red);
 
-  --wir-badge-bg: rgba(23, 32, 51, 0.1);
-  --wir-handle: #172033;
-  --wir-handle-ring: #ffffff;
+  --wir-badge-bg: var(--fiscal-surface-soft);
+  --wir-handle: var(--fiscal-ink);
+  --wir-handle-ring: var(--fiscal-on-accent);
 
-  --wir-chart-grid: rgba(35, 54, 78, 0.12);
-  --wir-chart-axis: rgba(35, 54, 78, 0.32);
-  --wir-chart-band: rgba(185, 107, 24, 0.08);
-  --wir-chart-area-green: rgba(24, 134, 91, 0.12);
-  --wir-chart-area-red: rgba(196, 69, 91, 0.1);
-  --wir-chart-reference: rgba(23, 32, 51, 0.35);
-  --wir-chart-reference-text: rgba(23, 32, 51, 0.6);
-  --wir-chart-point-fill: #172033;
-  --wir-chart-point-stroke: #ffffff;
-  --wir-chart-marker-line: rgba(23, 32, 51, 0.42);
-  --wir-chart-marker-text: #172033;
-  --wir-chart-hover-line: rgba(23, 32, 51, 0.3);
-  --wir-chart-tip-bg: rgba(255, 255, 255, 0.97);
-  --wir-chart-tip-line: rgba(35, 54, 78, 0.22);
-  --wir-chart-tip-text: #172033;
-  --wir-chart-tip-muted: #4f5f70;
-  --wir-chart-tier-green: rgba(24, 134, 91, 0.2);
-  --wir-chart-tier-yellow: rgba(176, 132, 24, 0.24);
-  --wir-chart-tier-orange: rgba(185, 107, 24, 0.22);
-  --wir-chart-tier-edge: rgba(35, 54, 78, 0.2);
-  --wir-chart-tier-text: rgba(23, 32, 51, 0.6);
+  --wir-chart-grid: var(--fiscal-muted);
+  --wir-chart-axis: var(--fiscal-muted);
+  --wir-chart-band: color-mix(in srgb, var(--fiscal-orange) 8%, transparent);
+  --wir-chart-area-green: color-mix(in srgb, var(--fiscal-green) 12%, transparent);
+  --wir-chart-area-red: color-mix(in srgb, var(--fiscal-red) 10%, transparent);
+  --wir-chart-reference: var(--fiscal-muted);
+  --wir-chart-reference-text: var(--fiscal-copy);
+  --wir-chart-point-fill: var(--fiscal-ink);
+  --wir-chart-point-stroke: var(--fiscal-surface);
+  --wir-chart-marker-line: color-mix(in srgb, var(--fiscal-ink) 42%, transparent);
+  --wir-chart-marker-text: var(--fiscal-ink);
+  --wir-chart-hover-line: color-mix(in srgb, var(--fiscal-ink) 30%, transparent);
+  --wir-chart-tip-bg: color-mix(in srgb, var(--fiscal-surface) 97%, transparent);
+  --wir-chart-tip-line: var(--fiscal-line);
+  --wir-chart-tip-text: var(--fiscal-ink);
+  --wir-chart-tip-muted: var(--fiscal-copy);
+  --wir-chart-tier-green: color-mix(in srgb, var(--fiscal-green) 20%, transparent);
+  --wir-chart-tier-yellow: color-mix(in srgb, var(--fiscal-yellow) 24%, transparent);
+  --wir-chart-tier-orange: color-mix(in srgb, var(--fiscal-orange) 22%, transparent);
+  --wir-chart-tier-edge: var(--fiscal-muted);
+  --wir-chart-tier-text: var(--fiscal-copy);
 
   min-height: 0;
   padding: 0;

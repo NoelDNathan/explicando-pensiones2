@@ -1,18 +1,18 @@
-/* Consentimiento estadistico del resumen (`wsc`). Usa los tokens del tema
-   claro con valor de reserva. */
+/* Consentimiento estadistico del resumen (`wsc`). Usa los tokens de la
+   calculadora (--fiscal-*), sin reserva a la paleta del sitio. */
 
 .wsc {
-  --wpn-ink: var(--fiscal-ink, var(--heading));
-  --wpn-copy: var(--fiscal-copy, var(--text));
-  --wpn-muted: var(--fiscal-muted, var(--muted));
-  --wpn-line: var(--fiscal-line, var(--border));
-  --wpn-line-strong: var(--fiscal-line-strong, var(--border));
-  --wpn-surface: var(--fiscal-surface, var(--surface));
-  --wpn-surface-soft: var(--fiscal-surface-soft, var(--bg));
-  --wpn-primary: var(--fiscal-primary, var(--accent));
-  --wpn-primary-strong: var(--fiscal-primary-strong, var(--accent-strong));
-  --wpn-green: var(--fiscal-green, var(--accent));
-  --wpn-green-soft: var(--fiscal-green-soft, var(--accent-wash));
+  --wpn-ink: var(--fiscal-ink);
+  --wpn-copy: var(--fiscal-copy);
+  --wpn-muted: var(--fiscal-muted);
+  --wpn-line: var(--fiscal-line);
+  --wpn-line-strong: var(--fiscal-line-strong);
+  --wpn-surface: var(--fiscal-surface);
+  --wpn-surface-soft: var(--fiscal-surface-soft);
+  --wpn-primary: var(--fiscal-primary);
+  --wpn-primary-strong: var(--fiscal-primary-strong);
+  --wpn-green: var(--fiscal-green);
+  --wpn-green-soft: var(--fiscal-green-soft);
   --wpn-radius: var(--fiscal-radius-panel, 18px);
   --wpn-radius-control: var(--fiscal-radius-control, 14px);
 }
@@ -118,14 +118,14 @@
 }
 
 .wsc-enlace {
-  color: var(--fiscal-primary, var(--accent));
+  color: var(--fiscal-primary);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .wsc-enlace:hover {
-  color: var(--fiscal-primary-strong, var(--accent-strong));
+  color: var(--fiscal-primary-strong);
 }
 
 .wsc-enlace:focus-visible {

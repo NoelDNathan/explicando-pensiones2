@@ -30,17 +30,15 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, transparent, rgba(156, 115, 255, 0.2), transparent) 50% 0 / 76% 1px no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%);
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--fiscal-violet) 20%, transparent), transparent) 50% 0 / 76% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 5%, transparent), transparent 30%);
   opacity: 0.08;
 }
 
 .wscc-header,
-.wscc-popover,
 .wscc-toolbar,
 .wscc-alert,
 .wscc-grid,
-.wscc-formulas,
 .wscc-empty {
   position: relative;
 }
@@ -81,54 +79,10 @@
   letter-spacing: 0;
 }
 
-.wscc-info {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 38px;
-  height: 30px;
-  border: 2px solid rgba(38, 164, 236, 0.88);
-  border-radius: 999px;
-  color: #44c4ff;
-  background: rgba(0, 45, 80, 0.38);
-  box-shadow:
-    0 0 18px rgba(0, 157, 255, 0.36),
-    inset 0 0 12px rgba(0, 157, 255, 0.18);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    color 160ms ease,
-    transform 160ms ease,
-    box-shadow 160ms ease;
-}
-
-.wscc-info:hover,
-.wscc-info:focus-visible {
-  color: #d9f1ff;
-  border-color: #66d1ff;
-  box-shadow:
-    0 0 24px rgba(0, 157, 255, 0.54),
-    inset 0 0 14px rgba(0, 157, 255, 0.24);
-  transform: translateY(-1px);
-}
-
 .wscc button:focus-visible,
 .wscc select:focus-visible {
-  outline: 3px solid rgba(83, 190, 255, 0.42);
+  outline: 3px solid var(--fiscal-blue-line);
   outline-offset: 3px;
-}
-
-.wscc-popover {
-  margin: -4px 0 18px auto;
-  max-width: 720px;
-  padding: 12px 14px;
-  border: 1px solid rgba(83, 190, 255, 0.34);
-  border-radius: 10px;
-  color: #dbe8ff;
-  background: rgba(2, 17, 37, 0.94);
-  box-shadow: 0 18px 34px rgba(0, 6, 20, 0.28);
-  font-size: 14px;
-  line-height: 1.45;
 }
 
 .wscc-toolbar {
@@ -181,12 +135,12 @@
 
 .wscc-base-note {
   padding: 11px 14px;
-  border: 1px solid rgba(75, 139, 200, 0.34);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 12px;
   background: var(--fiscal-primary-soft);
   align-content: center;
   color: var(--fiscal-ink);
-  border-color: #b9d9d5;
+  border-color: var(--fiscal-primary-line);
 }
 
 .wscc-toolbar-cell .wscc-select-field {
@@ -203,14 +157,14 @@
 }
 
 .wscc-base-note strong {
-  color: #eef7ff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(19px, 2.2vw, 25px);
   line-height: 1;
   font-weight: 900;
 }
 
 .wscc-base-note em {
-  color: #8fa6c4;
+  color: var(--fiscal-copy);
   font-size: 12px;
   font-style: normal;
   font-weight: 760;
@@ -222,7 +176,7 @@
   align-items: center;
   min-height: var(--wscc-toolbar-control-height, 64px);
   height: 100%;
-  border: 1px solid rgba(64, 112, 161, 0.56);
+  border: 1px solid var(--fiscal-line);
   border-radius: 11px;
   background:
     var(--fiscal-surface);
@@ -247,7 +201,7 @@
 .wscc-select-shell svg {
   position: absolute;
   right: 13px;
-  color: #8fa6c3;
+  color: var(--fiscal-copy);
   pointer-events: none;
 }
 
@@ -256,9 +210,9 @@
   gap: 4px;
   align-self: center;
   padding: 4px;
-  border: 1px solid rgba(83, 162, 255, 0.26);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 999px;
-  background: #e9eef4;
+  background: var(--fiscal-blue-soft);
   border-color: var(--fiscal-line-strong);
 }
 
@@ -279,13 +233,13 @@
 }
 
 .wscc-segments button:hover {
-  color: #eef6ff;
+  color: var(--fiscal-on-accent);
 }
 
 .wscc-segments button.is-active {
-  color: #061326;
-  background: linear-gradient(180deg, #8fe3ff, #1da5f8);
-  box-shadow: 0 0 18px rgba(29, 165, 248, 0.34);
+  color: var(--fiscal-ink);
+  background: linear-gradient(180deg, var(--fiscal-blue), var(--fiscal-blue));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--fiscal-blue) 34%, transparent);
 }
 
 .wscc-alert {
@@ -301,25 +255,25 @@
 }
 
 .wscc-alert strong {
-  color: #fff7e7;
+  color: var(--fiscal-on-accent);
 }
 
 .wscc-alert span,
 .wscc-alert em {
-  color: #f5d7ab;
+  color: var(--fiscal-orange);
   font-style: normal;
 }
 
 .wscc-alert--maximum {
-  border: 1px solid rgba(255, 155, 24, 0.36);
+  border: 1px solid var(--fiscal-orange-line);
   background: var(--fiscal-orange-soft);
-  border-color: #efd2a9;
+  border-color: var(--fiscal-orange-line);
 }
 
 .wscc-alert--minimum {
-  border: 1px solid rgba(187, 120, 255, 0.36);
+  border: 1px solid var(--fiscal-violet-line);
   background: var(--fiscal-violet-soft);
-  border-color: #d5c9ee;
+  border-color: var(--fiscal-violet-line);
 }
 
 .wscc-grid {
@@ -334,11 +288,11 @@
   border: 1px solid var(--wscc-line);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, rgba(10, 34, 67, 0.68), rgba(2, 15, 33, 0.78)),
+    linear-gradient(180deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 78%, transparent)),
     var(--wscc-panel);
   box-shadow:
-    0 18px 36px rgba(0, 6, 20, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 18px 36px color-mix(in srgb, var(--fiscal-shade) 26%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 5%, transparent);
 }
 
 .wscc-panel {
@@ -348,19 +302,19 @@
 }
 
 .wscc-panel--worker {
-  border-color: rgba(187, 120, 255, 0.36);
+  border-color: var(--fiscal-worker-line);
   box-shadow:
-    0 18px 36px rgba(0, 6, 20, 0.26),
-    0 0 24px rgba(187, 120, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 18px 36px color-mix(in srgb, var(--fiscal-shade) 26%, transparent),
+    0 0 24px color-mix(in srgb, var(--fiscal-worker) 12%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 5%, transparent);
 }
 
 .wscc-panel--company {
-  border-color: rgba(255, 155, 24, 0.34);
+  border-color: var(--fiscal-company-line);
   box-shadow:
-    0 18px 36px rgba(0, 6, 20, 0.26),
-    0 0 24px rgba(255, 155, 24, 0.11),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 18px 36px color-mix(in srgb, var(--fiscal-shade) 26%, transparent),
+    0 0 24px color-mix(in srgb, var(--fiscal-company) 11%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 5%, transparent);
 }
 
 .wscc-panel h3 {
@@ -370,18 +324,18 @@
 }
 
 .wscc-panel--worker h3 {
-  color: var(--wscc-violet);
-  text-shadow: 0 0 14px rgba(187, 120, 255, 0.34);
+  color: var(--fiscal-worker);
+  text-shadow: none;
 }
 
 .wscc-panel--company h3 {
-  color: var(--wscc-orange);
-  text-shadow: 0 0 14px rgba(255, 155, 24, 0.28);
+  color: var(--fiscal-company);
+  text-shadow: none;
 }
 
 .wscc-panel > p {
   margin-top: 6px;
-  color: #95a4bd;
+  color: var(--fiscal-copy);
   font-size: 13px;
   font-weight: 740;
 }
@@ -399,7 +353,7 @@
 
 .wscc-panel__intro > p {
   margin-top: 6px;
-  color: #95a4bd;
+  color: var(--fiscal-copy);
   font-size: 13px;
   font-weight: 740;
 }
@@ -411,13 +365,13 @@
   min-width: 178px;
   max-width: min(100%, 210px);
   padding: 6px 10px;
-  border: 1px solid rgba(187, 120, 255, 0.34);
+  border: 1px solid var(--fiscal-violet-line);
   border-radius: 9px;
   background:
     var(--fiscal-violet-soft);
   box-shadow:
     none;
-  border-color: #d5c9ee;
+  border-color: var(--fiscal-violet-line);
 }
 
 .wscc-panel__mei-extra-row {
@@ -442,17 +396,17 @@
 }
 
 .wscc-panel__mei-extra strong {
-  color: #f2ddff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(13px, 1.55vw, 16px);
   line-height: 1;
   font-weight: 920;
-  text-shadow: 0 0 10px rgba(187, 120, 255, 0.28);
+  text-shadow: none;
   white-space: nowrap;
 }
 
 .wscc-panel__mei-extra-label {
   margin: 0;
-  color: #c9b0e8;
+  color: var(--fiscal-violet);
   font-size: 8px;
   font-style: normal;
   font-weight: 820;
@@ -463,7 +417,7 @@
 }
 
 .wscc-panel__mei-extra-split {
-  color: #a894c8;
+  color: var(--fiscal-violet);
   font-size: 8px;
   font-weight: 760;
   line-height: 1.2;
@@ -508,16 +462,16 @@
   gap: 6px;
   margin-top: 1px;
   padding: 10px 11px;
-  border: 1px solid rgba(255, 155, 24, 0.22);
+  border: 1px solid var(--fiscal-orange-line);
   border-radius: 11px;
   background:
     var(--fiscal-orange-soft);
   color: var(--fiscal-copy);
-  border-color: #efd2a9;
+  border-color: var(--fiscal-orange-line);
 }
 
 .wscc-atep-note span {
-  color: #ffd89b;
+  color: var(--fiscal-orange);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.02em;
@@ -527,7 +481,7 @@
 .wscc-atep-note p,
 .wscc-atep-note em {
   margin: 0;
-  color: #c9d4e7;
+  color: var(--fiscal-ink);
   font-size: 12px;
   line-height: 1.4;
   font-style: normal;
@@ -535,12 +489,12 @@
 }
 
 .wscc-atep-note strong {
-  color: #f4f8ff;
+  color: var(--fiscal-on-accent);
   font-weight: 900;
 }
 
 .wscc-atep-note em {
-  color: #aeb9d2;
+  color: var(--fiscal-ink);
 }
 
 .wscc-mei-note {
@@ -550,22 +504,22 @@
   padding: 10px 11px;
   border-radius: 11px;
   color: var(--fiscal-copy);
-  border-color: #d5c9ee;
+  border-color: var(--fiscal-violet-line);
   background: var(--fiscal-violet-soft);
 }
 
 .wscc-mei-note--worker {
-  border: 1px solid rgba(187, 120, 255, 0.24);
+  border: 1px solid var(--fiscal-worker-line);
   background:
-    var(--fiscal-violet-soft);
-  border-color: #d5c9ee;
+    var(--fiscal-worker-soft);
+  border-color: var(--fiscal-worker-line);
 }
 
 .wscc-mei-note--company {
-  border: 1px solid rgba(255, 155, 24, 0.22);
+  border: 1px solid var(--fiscal-company-line);
   background:
-    radial-gradient(circle at 0% 0%, rgba(255, 155, 24, 0.16), transparent 36%),
-    rgba(31, 22, 10, 0.42);
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--fiscal-company) 16%, transparent), transparent 36%),
+    color-mix(in srgb, var(--fiscal-surface) 42%, transparent);
 }
 
 .wscc-mei-note span {
@@ -576,17 +530,17 @@
 }
 
 .wscc-mei-note--worker span {
-  color: #e5c8ff;
+  color: var(--fiscal-worker-ink);
 }
 
 .wscc-mei-note--company span {
-  color: #ffd89b;
+  color: var(--fiscal-company);
 }
 
 .wscc-mei-note p,
 .wscc-mei-note em {
   margin: 0;
-  color: #c9d4e7;
+  color: var(--fiscal-ink);
   font-size: 12px;
   line-height: 1.4;
   font-style: normal;
@@ -594,7 +548,7 @@
 }
 
 .wscc-mei-note__summary {
-  color: #b8c6dc !important;
+  color: var(--fiscal-ink) !important;
 }
 
 .wscc-mei-note__details {
@@ -623,12 +577,12 @@
 }
 
 .wscc-mei-note--company .wscc-mei-note__toggle {
-  color: #ffd89b;
+  color: var(--fiscal-company);
 }
 
 .wscc-mei-note__toggle:hover,
 .wscc-mei-note__toggle:focus-visible {
-  color: #f4f8ff;
+  color: var(--fiscal-on-accent);
 }
 
 .wscc-mei-note__toggle svg {
@@ -640,12 +594,12 @@
 }
 
 .wscc-mei-note strong {
-  color: #f4f8ff;
+  color: var(--fiscal-on-accent);
   font-weight: 900;
 }
 
 .wscc-mei-note em {
-  color: #aeb9d2;
+  color: var(--fiscal-ink);
 }
 
 .wscc-mei-note__caption {
@@ -670,13 +624,13 @@
 .wscc-mei-note__table th,
 .wscc-mei-note__table td {
   padding: 4px 6px;
-  border-bottom: 1px solid rgba(104, 163, 224, 0.18);
+  border-bottom: 1px solid var(--fiscal-blue-line);
   text-align: right;
   font-weight: 780;
 }
 
 .wscc-mei-note__table thead th {
-  color: #aeb9d2;
+  color: var(--fiscal-ink);
   font-size: 10px;
   font-weight: 820;
   text-transform: uppercase;
@@ -684,23 +638,23 @@
 }
 
 .wscc-mei-note__table tbody th {
-  color: #eef6ff;
+  color: var(--fiscal-on-accent);
   text-align: left;
   font-weight: 900;
 }
 
 .wscc-mei-note__table tbody td {
-  color: #d7dfef;
+  color: var(--fiscal-ink);
 }
 
 .wscc-mei-note--worker .wscc-mei-note__table tbody tr:last-child td,
 .wscc-mei-note--worker .wscc-mei-note__table tbody tr:last-child th {
-  color: #efdcff;
+  color: var(--fiscal-on-accent);
 }
 
 .wscc-mei-note--company .wscc-mei-note__table tbody tr:last-child td,
 .wscc-mei-note--company .wscc-mei-note__table tbody tr:last-child th {
-  color: #ffe3b7;
+  color: var(--fiscal-company-ink);
 }
 
 .wscc-line__text {
@@ -712,7 +666,7 @@
   align-items: center;
   min-width: 0;
   gap: 7px;
-  color: #d7dfef;
+  color: var(--fiscal-ink);
   font-size: clamp(14px, 1.55vw, 16px);
   line-height: 1.18;
   font-weight: 780;
@@ -729,7 +683,7 @@
 
 .wscc-line__values strong {
   min-width: 64px;
-  color: #eef6ff;
+  color: var(--fiscal-on-accent);
   font-size: 15px;
   font-weight: 900;
 }
@@ -771,27 +725,27 @@
 }
 
 .wscc-total--worker {
-  border: 1px solid rgba(187, 120, 255, 0.28);
-  color: var(--fiscal-violet);
-  background: var(--fiscal-violet-soft);
-  border-color: #d5c9ee;
+  border: 1px solid var(--fiscal-worker-line);
+  color: var(--fiscal-worker);
+  background: var(--fiscal-worker-soft);
+  border-color: var(--fiscal-worker-line);
 }
 
 .wscc-total--worker strong {
-  color: var(--wscc-violet);
-  text-shadow: 0 0 14px rgba(187, 120, 255, 0.36);
+  color: var(--fiscal-worker);
+  text-shadow: none;
 }
 
 .wscc-total--company {
-  border: 1px solid rgba(255, 155, 24, 0.28);
-  color: var(--fiscal-orange);
-  background: var(--fiscal-orange-soft);
-  border-color: #efd2a9;
+  border: 1px solid var(--fiscal-company-line);
+  color: var(--fiscal-company);
+  background: var(--fiscal-company-soft);
+  border-color: var(--fiscal-company-line);
 }
 
 .wscc-total--company strong {
-  color: var(--wscc-orange);
-  text-shadow: 0 0 14px rgba(255, 155, 24, 0.3);
+  color: var(--fiscal-company);
+  text-shadow: none;
 }
 
 .wscc-summary {
@@ -799,10 +753,10 @@
   align-content: center;
   gap: 11px;
   padding: 16px;
-  border-color: rgba(255, 155, 24, 0.33);
+  border-color: var(--fiscal-orange-line);
   background:
-    radial-gradient(circle at 50% 0%, rgba(25, 182, 255, 0.14), transparent 34%),
-    linear-gradient(180deg, rgba(8, 31, 59, 0.8), rgba(2, 15, 32, 0.82));
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--fiscal-blue) 14%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 82%, transparent));
 }
 
 .wscc-summary__item {
@@ -810,7 +764,7 @@
   gap: 4px;
   min-height: 48px;
   padding: 9px 11px;
-  border: 1px solid rgba(70, 129, 185, 0.22);
+  border: 1px solid var(--fiscal-line);
   border-radius: var(--fiscal-radius-control);
   background: var(--fiscal-surface);
   border-color: var(--fiscal-line);
@@ -834,26 +788,26 @@
 
 .wscc-summary__gross {
   color: var(--wscc-blue) !important;
-  text-shadow: 0 0 14px rgba(25, 182, 255, 0.32);
+  text-shadow: none;
 }
 
 .wscc-summary__worker {
-  color: #ff6b69 !important;
-  text-shadow: 0 0 14px rgba(255, 91, 89, 0.32);
+  color: var(--fiscal-negative) !important;
+  text-shadow: none;
 }
 
 .wscc-summary__company {
-  color: var(--wscc-orange) !important;
-  text-shadow: 0 0 14px rgba(255, 155, 24, 0.28);
+  color: var(--fiscal-company) !important;
+  text-shadow: none;
 }
 
 .wscc-summary__after-contributions {
-  color: #62d76b !important;
-  text-shadow: 0 0 14px rgba(98, 215, 107, 0.32);
+  color: var(--fiscal-positive) !important;
+  text-shadow: none;
 }
 
 .wscc-summary__item--hero {
-  border-color: #efd2a9;
+  border-color: var(--fiscal-orange-line);
   background:
     var(--fiscal-orange-soft);
   box-shadow:
@@ -862,16 +816,16 @@
 
 .wscc-summary__item--hero span,
 .wscc-summary__item--hero strong {
-  color: #ffb347;
+  color: var(--fiscal-orange);
 }
 
 .wscc-summary__item--hero strong {
   font-size: clamp(24px, 3vw, 34px);
-  text-shadow: 0 0 18px rgba(255, 155, 24, 0.4);
+  text-shadow: none;
 }
 
 .wscc-summary__item--total {
-  border-color: #efc5cc;
+  border-color: var(--fiscal-red-line);
   background:
     var(--fiscal-red-soft);
   box-shadow:
@@ -880,16 +834,16 @@
 
 .wscc-summary__item--total span,
 .wscc-summary__item--total strong {
-  color: #ff6b69;
+  color: var(--fiscal-red);
 }
 
 .wscc-summary__item--total strong {
   font-size: clamp(26px, 3.2vw, 36px);
-  text-shadow: 0 0 18px rgba(255, 91, 89, 0.42);
+  text-shadow: none;
 }
 
 .wscc-summary__item--total em {
-  color: #ffb0ae;
+  color: var(--fiscal-red-ink);
   font-size: 12px;
   font-style: normal;
   font-weight: 740;
@@ -897,43 +851,24 @@
 
 .wscc-summary__divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(160, 177, 206, 0.34), transparent);
-}
-
-.wscc-formulas {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.wscc-formulas p {
-  padding: 11px 13px;
-  border: 1px solid rgba(80, 139, 191, 0.24);
-  border-radius: 11px;
-  color: #c4d1e5;
-  background: rgba(3, 18, 39, 0.52);
-  font-size: 13px;
-  line-height: 1.45;
-  font-weight: 720;
+  background: linear-gradient(90deg, transparent, var(--fiscal-surface-soft), transparent);
 }
 
 .wscc-empty {
   display: grid;
   place-items: center;
   min-height: 220px;
-  border: 1px dashed rgba(132, 166, 204, 0.38);
+  border: 1px dashed var(--fiscal-line-strong);
   border-radius: 14px;
-  color: #c5d2e7;
-  background: rgba(4, 20, 42, 0.45);
+  color: var(--fiscal-ink);
+  background: color-mix(in srgb, var(--fiscal-surface) 45%, transparent);
   text-align: center;
   font-weight: 780;
 }
 
 @media (max-width: 980px) {
   .wscc-toolbar,
-  .wscc-grid,
-  .wscc-formulas {
+  .wscc-grid {
     grid-template-columns: 1fr;
   }
 
@@ -983,8 +918,7 @@
 
 @container (max-width: 760px) {
   .wscc-toolbar,
-  .wscc-grid,
-  .wscc-formulas {
+  .wscc-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1076,7 +1010,7 @@
 }
 
 .wscc-alert--maximum :is(strong, span, em) {
-  color: #8b5418;
+  color: var(--fiscal-orange-ink);
 }
 
 .wscc-alert--maximum span,
@@ -1085,7 +1019,7 @@
 }
 
 .wscc-alert--minimum :is(strong, span, em) {
-  color: #5d469c;
+  color: var(--fiscal-violet-ink);
 }
 
 .wscc-alert--minimum span,
@@ -1120,6 +1054,6 @@
 }
 
 .wscc-segments button.is-active {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-blue);
 }

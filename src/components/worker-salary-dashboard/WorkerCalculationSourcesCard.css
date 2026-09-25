@@ -21,33 +21,33 @@
 .wcsc-kicker { display: inline-flex; align-items: center; gap: 8px; color: var(--wcsc-green); font-size: 13px; font-weight: 820; letter-spacing: .04em; text-transform: uppercase; }
 .wcsc-heading h2 { margin: 0; color: var(--wcsc-text); font-size: clamp(27px, 3.3vw, 44px); line-height: 1.02; }
 .wcsc-heading p { margin: 0; color: var(--wcsc-muted); font-size: 15px; line-height: 1.55; }
-.wcsc-seal { display: grid; grid-template-columns: auto auto; align-items: center; gap: 2px 9px; flex: 0 0 auto; padding: 13px 17px; border: 1px solid rgba(104, 237, 130, .34); border-radius: 14px; color: var(--wcsc-green); background: var(--fiscal-green-soft); border-color: #b8ded7; }
+.wcsc-seal { display: grid; grid-template-columns: auto auto; align-items: center; gap: 2px 9px; flex: 0 0 auto; padding: 13px 17px; border: 1px solid var(--fiscal-green-line); border-radius: 14px; color: var(--wcsc-green); background: var(--fiscal-green-soft); border-color: var(--fiscal-primary-line); }
 .wcsc-seal svg { grid-row: 1 / 3; }
 .wcsc-seal strong { font-size: 22px; line-height: 1; }
-.wcsc-seal span { color: #bed5cb; font-size: 12px; }
+.wcsc-seal span { color: var(--fiscal-green); font-size: 12px; }
 .wcsc-list { display: grid; gap: 12px; }
-.wcsc-source { display: grid; grid-template-columns: 52px minmax(0, 1fr); min-width: 0; overflow: hidden; border: 1px solid rgba(87, 132, 178, .3); border-radius: var(--fiscal-radius-panel); background: linear-gradient(120deg, rgba(18, 57, 94, .45), rgba(4, 19, 37, .76)); transition: border-color 160ms ease, transform 160ms ease; }
-.wcsc-source:hover { border-color: rgba(74, 163, 255, .6); transform: translateY(-1px); }
-.wcsc-source-index { display: grid; place-items: center; border-right: 1px solid rgba(87, 132, 178, .26); color: var(--fiscal-muted); background: var(--fiscal-surface-tint); font-size: 12px; font-weight: 850; letter-spacing: .08em; border-color: var(--fiscal-line); }
+.wcsc-source { display: grid; grid-template-columns: 52px minmax(0, 1fr); min-width: 0; overflow: hidden; border: 1px solid var(--fiscal-line-strong); border-radius: var(--fiscal-radius-panel); background: linear-gradient(120deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 76%, transparent)); transition: border-color 160ms ease, transform 160ms ease; }
+.wcsc-source:hover { border-color: var(--fiscal-blue-line); transform: translateY(-1px); }
+.wcsc-source-index { display: grid; place-items: center; border-right: 1px solid var(--fiscal-line-strong); color: var(--fiscal-muted); background: var(--fiscal-surface-tint); font-size: 12px; font-weight: 850; letter-spacing: .08em; border-color: var(--fiscal-line); }
 .wcsc-source-copy { display: grid; gap: 14px; min-width: 0; padding: 17px 18px; }
 .wcsc-source-title { display: flex; justify-content: space-between; gap: 16px; align-items: start; }
-.wcsc-source-title h3 { margin: 0 0 5px; color: #f5f9ff; font-size: 17px; line-height: 1.2; }
-.wcsc-source-title p { margin: 0; color: #9fb2ca; font-size: 13px; line-height: 1.4; }
-.wcsc-source-title p strong { color: #d8e6f6; font-weight: 720; }
+.wcsc-source-title h3 { margin: 0 0 5px; color: var(--fiscal-on-accent); font-size: 17px; line-height: 1.2; }
+.wcsc-source-title p { margin: 0; color: var(--fiscal-copy); font-size: 13px; line-height: 1.4; }
+.wcsc-source-title p strong { color: var(--fiscal-blue-ink); font-weight: 720; }
 .wcsc-status { flex: 0 0 auto; padding: 6px 9px; border-radius: 999px; color: var(--fiscal-green); background: var(--fiscal-green-soft); font-size: 11px; font-weight: 820; text-transform: uppercase; letter-spacing: .05em; }
 .wcsc-status--estimated { color: var(--fiscal-orange); background: var(--fiscal-orange-soft); }
 .wcsc-values { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 0; }
-.wcsc-values div { display: grid; gap: 4px; min-width: 0; padding: 10px 12px; border: 1px solid rgba(73, 118, 161, .23); border-radius: var(--fiscal-radius-control); background: rgba(1, 13, 27, .42); }
-.wcsc-values dt { color: #8fa6c1; font-size: 11px; line-height: 1.25; }
-.wcsc-values dd { margin: 0; overflow-wrap: anywhere; color: #f1f7ff; font-size: 14px; font-weight: 790; line-height: 1.3; }
+.wcsc-values div { display: grid; gap: 4px; min-width: 0; padding: 10px 12px; border: 1px solid var(--fiscal-line); border-radius: var(--fiscal-radius-control); background: color-mix(in srgb, var(--fiscal-surface) 42%, transparent); }
+.wcsc-values dt { color: var(--fiscal-copy); font-size: 11px; line-height: 1.25; }
+.wcsc-values dd { margin: 0; overflow-wrap: anywhere; color: var(--fiscal-on-accent); font-size: 14px; font-weight: 790; line-height: 1.3; }
 .wcsc-source-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
 .wcsc-source-footer a { display: inline-flex; align-items: center; gap: 8px; min-width: 0; color: var(--fiscal-blue); font-size: 13px; font-weight: 720; text-decoration: none; }
 .wcsc-source-footer a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.wcsc-source-footer a:hover, .wcsc-source-footer a:focus-visible { color: #a9d4ff; text-decoration: underline; text-underline-offset: 3px; }
+.wcsc-source-footer a:hover, .wcsc-source-footer a:focus-visible { color: var(--fiscal-blue-ink); text-decoration: underline; text-underline-offset: 3px; }
 .wcsc-source-footer a:focus-visible { outline: 2px solid var(--wcsc-green); outline-offset: 4px; border-radius: 3px; }
-.wcsc-source-footer p { max-width: 48%; margin: 0 0 0 auto; color: #9cadc2; font-size: 11px; line-height: 1.4; text-align: right; }
+.wcsc-source-footer p { max-width: 48%; margin: 0 0 0 auto; color: var(--fiscal-copy); font-size: 11px; line-height: 1.4; text-align: right; }
 .wcsc-source-footer p.wcsc-source-nolink { margin: 0; color: var(--fiscal-orange); font-size: 13px; font-style: italic; text-align: left; }
-.wcsc-disclaimer { margin: 0; padding-top: 4px; color: #899db6; font-size: 12px; line-height: 1.5; }
+.wcsc-disclaimer { margin: 0; padding-top: 4px; color: var(--fiscal-copy); font-size: 12px; line-height: 1.5; }
 
 @media (max-width: 720px) {
   .wcsc { padding: 18px; }
@@ -66,11 +66,6 @@
 
 .wcsc::before {
   opacity: 0.08;
-}
-
-.wcsc-step {
-  color: var(--fiscal-primary);
-  text-shadow: none;
 }
 
 .wcsc-source,

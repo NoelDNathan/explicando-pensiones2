@@ -41,22 +41,22 @@
 }
 
 .wctc-spend-chart {
-  --wctc-chart-saving: #18865b;
-  --wctc-chart-mortgage-debt: #64748b;
-  --wctc-chart-basic-food: #0f766e;
-  --wctc-chart-general-food: #b45309;
-  --wctc-chart-restaurants: #c2410c;
-  --wctc-chart-shopping: #1d4ed8;
-  --wctc-chart-leisure: #7c3aed;
-  --wctc-chart-public-transport: #047857;
-  --wctc-chart-fuel: #b91c1c;
-  --wctc-chart-electricity: #0e7490;
-  --wctc-chart-health: #4338ca;
-  --wctc-chart-tobacco: #991b1b;
-  --wctc-chart-alcohol: #a21caf;
+  --wctc-chart-saving: var(--fiscal-green);
+  --wctc-chart-mortgage-debt: var(--fiscal-muted);
+  --wctc-chart-basic-food: var(--fiscal-primary);
+  --wctc-chart-general-food: var(--fiscal-orange);
+  --wctc-chart-restaurants: var(--fiscal-orange);
+  --wctc-chart-shopping: var(--fiscal-blue);
+  --wctc-chart-leisure: var(--fiscal-violet);
+  --wctc-chart-public-transport: var(--fiscal-ink);
+  --wctc-chart-fuel: var(--fiscal-red);
+  --wctc-chart-electricity: var(--fiscal-blue);
+  --wctc-chart-health: var(--fiscal-blue);
+  --wctc-chart-tobacco: var(--fiscal-red-ink);
+  --wctc-chart-alcohol: var(--fiscal-violet);
   margin-bottom: 14px;
   padding: 12px 14px;
-  border: 1px solid rgba(42, 92, 145, 0.42);
+  border: 1px solid color-mix(in srgb, var(--fiscal-blue-ink) 42%, transparent);
   border-radius: 10px;
   background: var(--fiscal-surface);
   border-color: var(--fiscal-line);
@@ -64,7 +64,7 @@
 
 .wctc-spend-chart__title {
   margin: 0 0 10px;
-  color: #eef4ff;
+  color: var(--fiscal-on-accent);
   font-size: 15px;
   line-height: 1.2;
   font-weight: 820;
@@ -93,14 +93,14 @@
 }
 
 .wctc-spend-chart__center strong {
-  color: #f7f9ff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(17px, 2vw, 20px);
   line-height: 1;
   font-weight: 860;
 }
 
 .wctc-spend-chart__center span {
-  color: #a9b5cc;
+  color: var(--fiscal-ink);
   font-size: 12px;
   line-height: 1.2;
   font-weight: 700;
@@ -131,14 +131,14 @@
 
 .wctc-spend-chart__legend-label {
   min-width: 0;
-  color: #d5deef;
+  color: var(--fiscal-ink);
   font-size: 13px;
   line-height: 1.25;
   font-weight: 680;
 }
 
 .wctc-spend-chart__legend-value {
-  color: #eef4ff;
+  color: var(--fiscal-on-accent);
   font-size: 13px;
   line-height: 1.2;
   font-weight: 820;
@@ -149,7 +149,7 @@
   display: grid;
   gap: 2px;
   padding: 8px 10px;
-  border: 1px solid rgba(55, 145, 255, 0.55);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 10px;
   color: var(--fiscal-ink);
   background: var(--fiscal-surface);
@@ -170,7 +170,7 @@
 
 .wctc-spend-chart--empty p {
   margin: 0;
-  color: #a9b5cc;
+  color: var(--fiscal-ink);
   font-size: 14px;
   line-height: 1.4;
   font-weight: 680;
@@ -180,14 +180,14 @@
   --tone: var(--wctc-blue);
   min-height: 40px;
   padding: 5px 12px;
-  border-bottom: 1px solid rgba(52, 103, 158, 0.34);
+  border-bottom: 1px solid var(--fiscal-blue-line);
   background:
-    #ffffff;
+    var(--fiscal-surface);
   color: var(--fiscal-ink);
   border: 1px solid color-mix(in srgb, var(--fiscal-line) 74%, transparent);
   border-radius: var(--fiscal-radius-control);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 48%, transparent),
-    0 4px 12px rgba(45, 71, 94, 0.05);
+    0 4px 12px color-mix(in srgb, var(--fiscal-shade) 5%, transparent);
 }
 
 .wctc-row:last-child {
@@ -242,7 +242,7 @@
 .wctc-category strong,
 .wctc-rule {
   min-width: 0;
-  color: #eef4ff;
+  color: var(--fiscal-on-accent);
   font-size: 14px;
   line-height: 1.2;
   font-weight: 760;
@@ -266,7 +266,7 @@
   grid-column: 1 / -1;
   margin: 2px 0 0;
   padding: 7px 4px 0 74px;
-  border-top: 1px solid rgba(52, 103, 158, 0.3);
+  border-top: 1px solid var(--fiscal-blue-line);
   color: var(--fiscal-muted);
   font-size: 12px;
   line-height: 1.35;
@@ -279,7 +279,7 @@
 }
 
 .wctc-rule {
-  color: #e5ecfa;
+  color: var(--fiscal-on-accent);
 }
 
 .wctc-input {
@@ -292,8 +292,8 @@
   background:
     var(--fiscal-surface);
   box-shadow:
-    inset 0 1px 2px rgba(43, 70, 94, 0.06),
-    0 1px 0 rgba(255, 255, 255, 0.75);
+    inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 6%, transparent),
+    0 1px 0 color-mix(in srgb, var(--fiscal-surface) 75%, transparent);
   position: relative;
   isolation: isolate;
   overflow: visible;
@@ -331,7 +331,7 @@
   height: 6px;
   min-width: 0;
   border-radius: 999px;
-  background: rgba(51, 99, 145, 0.24);
+  background: var(--fiscal-surface-soft);
   overflow: hidden;
 }
 
@@ -366,8 +366,8 @@
 }
 
 .wctc-row--total .wctc-index {
-  color: #7ee687;
-  border-color: rgba(126, 230, 135, 0.62);
+  color: var(--fiscal-green);
+  border-color: var(--fiscal-green-line);
 }
 
 .wctc-total-cell {
@@ -375,7 +375,7 @@
   min-width: 0;
   width: 100%;
   padding: 4px 10px;
-  border: 1px solid rgba(98, 217, 111, 0.3);
+  border: 1px solid var(--fiscal-green-line);
   border-radius: 999px;
   color: var(--fiscal-ink);
   background: var(--fiscal-surface);
@@ -387,14 +387,14 @@
 }
 
 .wctc-row--total.is-warn .wctc-total-cell {
-  color: #ffbc62;
-  border-color: rgba(255, 188, 98, 0.44);
-  background: rgba(255, 149, 30, 0.13);
+  color: var(--fiscal-orange);
+  border-color: var(--fiscal-orange-line);
+  background: color-mix(in srgb, var(--fiscal-orange) 13%, transparent);
 }
 
 .wctc-row--total small,
 .wctc-total-hint {
-  color: #b9c5d8;
+  color: var(--fiscal-ink);
   font-size: 12px;
   font-weight: 760;
 }
@@ -409,7 +409,7 @@
   gap: 6px 16px;
   margin: 0;
   padding: 8px 12px;
-  border: 1px solid rgba(255, 188, 98, 0.38);
+  border: 1px solid var(--fiscal-orange-line);
   border-radius: 8px;
   background: var(--fiscal-orange-soft);
   line-height: 1.3;
@@ -432,7 +432,7 @@
 .wctc-row--total .wctc-rule--total {
   display: block;
   margin: 0;
-  color: #c9d6eb;
+  color: var(--fiscal-ink);
   font-weight: 820;
 }
 
@@ -488,7 +488,7 @@
   place-items: center;
   width: 48px;
   height: 48px;
-  border: 1px solid rgba(83, 213, 116, 0.28);
+  border: 1px solid var(--fiscal-green-line);
   border-radius: 50%;
   color: var(--fiscal-green);
   background: var(--fiscal-green-soft);
@@ -522,7 +522,7 @@
   align-items: start;
   width: 100%;
   padding: 14px 14px 13px;
-  border: 1px solid rgba(55, 145, 255, 0.5);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 14px;
   color: var(--fiscal-ink);
   text-align: left;
@@ -569,7 +569,7 @@
 .wctc-intro-choice:hover,
 .wctc-intro-choice:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(118, 244, 133, 0.78);
+  border-color: var(--fiscal-green-line);
 }
 
 @media (max-width: 520px) {

@@ -76,7 +76,7 @@
   padding: 14px 16px;
   border: 1px solid color-mix(in srgb, var(--wctc-strong-line) 34%, var(--wctc-line));
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--fiscal-surface);
   box-shadow: var(--fiscal-shadow-soft);
 }
 
@@ -107,7 +107,7 @@
   background: var(--fiscal-primary-soft);
   font-size: 16px;
   font-weight: 900;
-  border-color: #b8ded7;
+  border-color: var(--fiscal-primary-line);
 }
 
 .wctc-ownership-gate h4,
@@ -496,8 +496,8 @@
 
 .wctc-purchase-remove:not(:disabled):hover,
 .wctc-purchase-remove:not(:disabled):focus-visible {
-  border-color: rgba(255, 120, 120, 0.55);
-  color: #ffb0b0;
+  border-color: var(--fiscal-red-line);
+  color: var(--fiscal-red-ink);
 }
 
 .wctc-purchase-add {
@@ -595,9 +595,9 @@
   padding: 12px;
   border: 1px solid color-mix(in srgb, var(--wctc-line) 88%, transparent);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--fiscal-surface);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 72%, transparent),
-    0 4px 12px rgba(45, 71, 94, 0.04);
+    0 4px 12px color-mix(in srgb, var(--fiscal-shade) 4%, transparent);
 }
 
 .wctc-home-card__header {
@@ -786,8 +786,6 @@
 
 .wctc-home-strip,
 .wctc-ownership-gate,
-.wctc-ibi-block,
-.wctc-purchase-block,
 .wctc-homes {
   border-radius: var(--fiscal-radius-panel);
 }
@@ -799,17 +797,8 @@
   border-radius: var(--fiscal-radius-control);
 }
 
-.wctc-panel {
-  color: var(--fiscal-ink);
-  border-color: var(--fiscal-line);
-  background: var(--fiscal-surface-soft);
-  box-shadow: none;
-}
-
 .wctc-home-strip,
 .wctc-ownership-gate,
-.wctc-ibi-block,
-.wctc-purchase-block,
 .wctc-home-card {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line);
@@ -826,77 +815,14 @@
   border-color: color-mix(in srgb, var(--fiscal-primary) 45%, var(--fiscal-line));
 }
 
-.wctc-ownership-gate__body > .wctc-ibi-block,
-.wctc-ownership-gate__body > .wctc-purchase-block,
-.wctc-ownership-gate__body > .wctc-purchase-block--vehicle,
 .wctc-ownership-gate__body > .wctc-homes {
   background: transparent;
   box-shadow: none;
 }
 
-.wctc-ibi-block {
-  background: transparent;
-}
-
-.wctc-home-card__now,
-.wctc-home-card__then {
+.wctc-home-card__now {
   border-color: color-mix(in srgb, var(--fiscal-line) 74%, transparent);
   background: var(--fiscal-surface-soft);
-}
-
-.wctc-home-card__then {
-  background: color-mix(in srgb, var(--fiscal-primary) 8%, #ffffff);
-}
-
-.wctc-switch {
-  grid-template-columns: auto auto;
-  gap: 10px;
-  align-items: center;
-}
-
-.wctc-switch span {
-  width: 48px;
-  height: 28px;
-  border-color: color-mix(in srgb, var(--fiscal-blue) 18%, var(--fiscal-line));
-  background: linear-gradient(180deg, #ffffff, #eef5f7);
-  box-shadow: inset 0 1px 2px rgba(34, 61, 79, 0.1),
-    0 6px 15px rgba(55, 89, 115, 0.08);
-}
-
-.wctc-switch span::after {
-  background: #9db0c1;
-  box-shadow: 0 2px 6px rgba(54, 77, 96, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.82);
-}
-
-.wctc-switch:hover span,
-.wctc-switch input:focus-visible + span {
-  border-color: color-mix(in srgb, var(--fiscal-primary) 45%, var(--fiscal-line));
-  box-shadow: inset 0 1px 2px rgba(34, 61, 79, 0.1),
-    0 0 0 3px color-mix(in srgb, var(--fiscal-primary) 14%, transparent);
-}
-
-.wctc-switch input:checked + span {
-  border-color: color-mix(in srgb, var(--fiscal-primary) 58%, var(--fiscal-line));
-  background: linear-gradient(135deg, var(--fiscal-primary), var(--fiscal-green));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    0 9px 18px color-mix(in srgb, var(--fiscal-primary) 18%, transparent);
-}
-
-.wctc-switch input:checked + span::after {
-  background: #ffffff;
-}
-
-.wctc-switch em {
-  color: var(--fiscal-ink-soft);
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.wctc-switch input:checked ~ em {
-  color: var(--fiscal-primary-strong);
 }
 
 .wctc-home-strip__title,
@@ -909,21 +835,11 @@
   color: var(--fiscal-primary-strong);
 }
 
-.wctc-purchase-block {
-  color: var(--fiscal-ink);
-  border-color: var(--fiscal-line);
-  background: var(--fiscal-surface-soft);
-  box-shadow: none;
-}
-
-.wctc-purchase-title strong,
 .wctc-home-card strong {
   color: var(--fiscal-ink);
 }
 
-.wctc-purchase-head small,
 .wctc-purchase-field span,
-.wctc-purchase-tax small,
 .wctc-purchase-total small,
 .wctc-ibi-field > span,
 .wctc-home-card__hint,
@@ -931,14 +847,6 @@
   color: var(--fiscal-copy);
 }
 
-.wctc-purchase-index {
-  border-color: color-mix(in srgb, var(--fiscal-primary) 42%, var(--fiscal-line));
-  color: var(--fiscal-primary-strong);
-  background: var(--fiscal-primary-soft);
-  box-shadow: none;
-}
-
-.wctc-purchase-tax strong,
 .wctc-purchase-total strong,
 .wctc-ibi-amount strong,
 .wctc-home-card__tax > strong {
@@ -949,7 +857,7 @@
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line-strong);
   background: var(--fiscal-surface);
-  box-shadow: inset 0 1px 2px rgba(43, 70, 94, 0.06);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 6%, transparent);
 }
 
 .wctc-purchase-add:hover,
@@ -967,7 +875,7 @@
 }
 
 .wctc-ownership-gate {
-  background: #ffffff;
+  background: var(--fiscal-surface);
 }
 
 .wctc-ownership-gate__choices button.is-selected:first-child {
@@ -980,5 +888,5 @@
 .wctc-ownership-gate__choices button.is-selected:last-child {
   color: var(--fiscal-copy);
   border-color: var(--fiscal-line);
-  background: #eef3f6;
+  background: var(--fiscal-surface-tint);
 }

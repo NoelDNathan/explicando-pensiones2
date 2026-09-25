@@ -675,7 +675,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dashboard component-preview--bleed">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard component-preview--bleed">
           <WorkIncomeReductionExplainer />
         </div>
       </section>
@@ -691,7 +691,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <SalarySliderShowcase />
         </div>
       </section>
@@ -707,7 +707,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-salary-card">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerFiscalSummaryShowcase />
         </div>
       </section>
@@ -722,7 +722,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-salary-card">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerSalaryBaseCard />
         </div>
       </section>
@@ -738,7 +738,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-limits">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerContributionLimitsShowcase />
         </div>
       </section>
@@ -754,7 +754,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-social">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerSocialContributionsCard />
         </div>
       </section>
@@ -771,13 +771,13 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-personal">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerPersonalReductionsCard focus="in-kind" stepNumber={4} />
         </div>
-        <div className="component-preview component-preview--dark component-preview--worker-personal">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerPersonalReductionsCard />
         </div>
-        <div className="component-preview component-preview--dark component-preview--worker-personal">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerPersonalReductionsCard focus="deductions-benefits" stepNumber={7} />
         </div>
       </section>
@@ -792,7 +792,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-irpf">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerIrpfTranchesCard />
         </div>
       </section>
@@ -810,7 +810,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-consumption">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <button
             type="button"
             className="component-info-modal-trigger"
@@ -834,7 +834,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--worker-consumption">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card">
           <WorkerWealthTaxesCard />
         </div>
       </section>
@@ -850,7 +850,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--dashboard">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <WorkerFiscalStepsCard />
         </div>
       </section>
@@ -868,7 +868,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--dashboard">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <WorkerFinalSummaryCard
             grossSalaryAnnual={35_000}
             employerContributionsAnnual={11_060}
@@ -894,7 +894,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dark component-preview--dashboard">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <WorkerCalculationSourcesCard />
         </div>
       </section>
@@ -912,7 +912,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dashboard">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <WorkerKnowledgeCheckCard />
         </div>
       </section>
@@ -928,7 +928,7 @@ function ComponentLab() {
           </p>
         </div>
 
-        <div className="component-preview component-preview--dashboard">
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <WorkerStatsConsent />
         </div>
       </section>

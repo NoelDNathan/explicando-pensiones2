@@ -112,7 +112,7 @@
 }
 
 .wfin-period button.is-active {
-  color: #04182c;
+  color: var(--fiscal-ink);
   background: var(--wfin-chart-employer-contributions);
 }
 
@@ -314,7 +314,7 @@
   width: 30px;
   height: 30px;
   border-radius: 10px;
-  color: #04182c;
+  color: var(--fiscal-ink);
   background: var(--wfin-chart-wealth-taxes);
 }
 
@@ -387,7 +387,7 @@
   font: inherit;
   font-size: 0.84rem;
   font-weight: 650;
-  color: #04182c;
+  color: var(--fiscal-ink);
   border: 0;
   border-radius: 999px;
   background: var(--wfin-chart-wealth-taxes);
@@ -503,7 +503,7 @@
   height: 22px;
   border-radius: 7px;
   color: var(--wfin-state-color, var(--wfin-text));
-  background: color-mix(in srgb, var(--wfin-state-color, #ffffff) 16%, transparent);
+  background: color-mix(in srgb, var(--wfin-state-color, var(--fiscal-surface)) 16%, transparent);
 }
 
 .wfin-state__source {
@@ -538,7 +538,7 @@
   font: inherit;
   font-size: 0.88rem;
   font-weight: 650;
-  color: #04182c;
+  color: var(--fiscal-ink);
   border: 0;
   border-radius: 999px;
   background: var(--fiscal-primary);
@@ -607,7 +607,7 @@
 }
 
 .wfin :is(.wfin-home__icon, .wfin-home__cta, .wfin-footer__cta) {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
 }
 
 .wfin-home__icon,
@@ -620,6 +620,6 @@
 }
 
 .wfin-period button.is-active {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-primary);
 }

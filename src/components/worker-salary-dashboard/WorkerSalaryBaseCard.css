@@ -29,8 +29,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, transparent, rgba(95, 231, 255, 0.14), transparent) 58% 0 / 64% 1px no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 32%);
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--fiscal-primary) 14%, transparent), transparent) 58% 0 / 64% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 5%, transparent), transparent 32%);
   opacity: 0.08;
 }
 
@@ -71,41 +71,9 @@
   letter-spacing: 0;
 }
 
-.wsbc-info {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 36px;
-  height: 28px;
-  border: 2px solid rgba(0, 134, 217, 0.88);
-  border-radius: 999px;
-  color: #1ca9ff;
-  background: rgba(0, 45, 80, 0.38);
-  box-shadow:
-    0 0 18px rgba(0, 157, 255, 0.36),
-    inset 0 0 12px rgba(0, 157, 255, 0.18);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    color 160ms ease,
-    transform 160ms ease,
-    box-shadow 160ms ease;
-}
-
-.wsbc-info:hover,
-.wsbc-info:focus-visible {
-  color: #d9f1ff;
-  border-color: #2ec3ff;
-  box-shadow:
-    0 0 24px rgba(0, 157, 255, 0.5),
-    inset 0 0 14px rgba(0, 157, 255, 0.24);
-  transform: translateY(-1px);
-}
-
-.wsbc-info:focus-visible,
 .wsbc input:focus-visible,
 .wsbc select:focus-visible {
-  outline: 3px solid rgba(66, 184, 255, 0.38);
+  outline: 3px solid var(--fiscal-blue-line);
   outline-offset: 2px;
 }
 
@@ -116,7 +84,7 @@
   align-items: center;
   padding: 18px;
   border: 1px solid color-mix(in srgb, var(--fiscal-line) 74%, transparent);
-  background: radial-gradient(circle at 100% 0%, rgba(20, 125, 117, 0.055), transparent 38%),
+  background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--fiscal-primary) 5.5%, transparent), transparent 38%),
     var(--fiscal-surface-soft);
 }
 
@@ -144,28 +112,28 @@
 }
 
 .wsbc-help .info-button__trigger {
-  border-color: rgba(0, 134, 217, 0.88);
-  color: #1ca9ff;
-  background: rgba(0, 45, 80, 0.38);
+  border-color: var(--fiscal-blue-line);
+  color: var(--fiscal-blue);
+  background: var(--fiscal-surface-soft);
   box-shadow:
-    0 0 18px rgba(0, 157, 255, 0.36),
-    inset 0 0 12px rgba(0, 157, 255, 0.18);
+    0 0 18px color-mix(in srgb, var(--fiscal-blue) 36%, transparent),
+    inset 0 0 12px color-mix(in srgb, var(--fiscal-blue) 18%, transparent);
 }
 
 .wsbc-help .info-button__trigger:hover:not(:disabled),
 .wsbc-help .info-button__trigger[aria-expanded='true'] {
-  color: #d9f1ff;
-  border-color: #2ec3ff;
+  color: var(--fiscal-blue-ink);
+  border-color: var(--fiscal-blue-line);
   box-shadow:
-    0 0 24px rgba(0, 157, 255, 0.5),
-    inset 0 0 14px rgba(0, 157, 255, 0.24);
+    0 0 24px color-mix(in srgb, var(--fiscal-blue) 50%, transparent),
+    inset 0 0 14px color-mix(in srgb, var(--fiscal-blue) 24%, transparent);
 }
 
 .wsbc-help .info-button__panel {
   width: min(20rem, calc(100vw - 2rem));
-  border-color: rgba(0, 134, 217, 0.88);
-  color: #d9f1ff;
-  background: rgba(2, 15, 31, 0.96);
+  border-color: var(--fiscal-blue-line);
+  color: var(--fiscal-blue-ink);
+  background: color-mix(in srgb, var(--fiscal-surface) 96%, transparent);
 }
 
 .wsbc-control-row {
@@ -185,10 +153,6 @@
   gap: 10px;
   align-content: start;
   width: 148px;
-}
-
-.wsbc-control-row--single {
-  grid-template-columns: 1fr;
 }
 
 .wsbc-control-row--amount {
@@ -223,13 +187,13 @@
   display: flex;
   align-items: center;
   min-height: 42px;
-  border: 1px solid rgba(73, 116, 151, 0.58);
+  border: 1px solid var(--fiscal-line);
   border-radius: 7px;
   background:
-    linear-gradient(180deg, rgba(5, 27, 50, 0.9), rgba(0, 13, 29, 0.92));
+    linear-gradient(180deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 92%, transparent));
   box-shadow:
-    0 10px 20px rgba(0, 5, 17, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 10px 20px color-mix(in srgb, var(--fiscal-shade) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 5%, transparent);
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
@@ -240,11 +204,11 @@
 .wsbc-select-shell:hover,
 .wsbc-input-shell:focus-within,
 .wsbc-select-shell:focus-within {
-  border-color: rgba(47, 174, 235, 0.78);
+  border-color: var(--fiscal-blue-line);
   box-shadow:
-    0 12px 22px rgba(0, 5, 17, 0.26),
-    0 0 18px rgba(25, 181, 227, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    0 12px 22px color-mix(in srgb, var(--fiscal-shade) 26%, transparent),
+    0 0 18px color-mix(in srgb, var(--fiscal-blue) 18%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 7%, transparent);
 }
 
 .wsbc input,
@@ -253,7 +217,7 @@
   min-width: 0;
   min-height: 40px;
   border: 0;
-  color: #edf4ff;
+  color: var(--fiscal-on-accent);
   background: transparent;
   font: inherit;
   font-size: clamp(16px, 2vw, 20px);
@@ -269,11 +233,6 @@
   padding-right: 98px;
 }
 
-.wsbc-input-shell--percent input {
-  padding-right: 42px;
-  text-align: right;
-}
-
 .wsbc select {
   appearance: none;
   cursor: pointer;
@@ -284,12 +243,8 @@
 .wsbc-select-shell svg {
   position: absolute;
   right: 15px;
-  color: #8ca1bd;
+  color: var(--fiscal-copy);
   pointer-events: none;
-}
-
-.wsbc-input-shell--selectlike svg {
-  color: #8fb1c7;
 }
 
 .wsbc-select-shell--period,
@@ -307,7 +262,7 @@
 .wsbc-period-tag {
   position: absolute;
   right: 43px;
-  color: #94aabe;
+  color: var(--fiscal-copy);
   font-size: 12px;
   font-weight: 760;
   pointer-events: none;
@@ -322,14 +277,14 @@
   min-height: 52px;
   margin-top: 18px;
   padding: 8px 24px 8px 18px;
-  border: 2px solid rgba(39, 136, 53, 0.72);
+  border: 2px solid var(--fiscal-green-line);
   border-radius: 10px;
   color: var(--fiscal-primary-strong);
   background:
     var(--fiscal-primary-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  border-color: #b8ded7;
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 72%, transparent);
+  border-color: var(--fiscal-primary-line);
 }
 
 .wsbc-result span {
@@ -342,7 +297,7 @@
   font-size: clamp(26px, 4vw, 35px);
   line-height: 1;
   font-weight: 880;
-  text-shadow: 0 0 14px rgba(63, 227, 72, 0.38);
+  text-shadow: none;
   white-space: nowrap;
 }
 
@@ -428,7 +383,7 @@
   --info-size: 24px;
   --info-icon-size: 13px;
   --info-border: var(--fiscal-line-strong);
-  --info-bg: #ffffff;
+  --info-bg: var(--fiscal-surface);
   --info-fg: var(--fiscal-primary);
   --info-hover-border: color-mix(in srgb, var(--fiscal-primary) 58%, var(--fiscal-line));
   --info-hover-fg: var(--fiscal-primary-strong);
@@ -439,7 +394,7 @@
   border-color: var(--info-border);
   color: var(--info-fg);
   background: var(--info-bg);
-  box-shadow: 0 2px 7px rgba(35, 54, 78, 0.08);
+  box-shadow: 0 2px 7px color-mix(in srgb, var(--fiscal-shade) 8%, transparent);
 }
 
 :is(.wsbc-help, .wscc-help, .wctc-help, .wprc-help) .info-button__trigger:hover:not(:disabled),
@@ -447,7 +402,7 @@
   border-color: var(--info-hover-border);
   color: var(--info-hover-fg);
   background: var(--fiscal-primary-soft);
-  box-shadow: 0 3px 9px rgba(20, 125, 117, 0.12);
+  box-shadow: 0 3px 9px color-mix(in srgb, var(--fiscal-primary) 12%, transparent);
 }
 
 :is(.wsbc-input-shell, .wsbc-select-shell) {
@@ -460,9 +415,9 @@
 :is(.wsbc-input-shell, .wsbc-select-shell):hover,
 :is(.wsbc-input-shell, .wsbc-select-shell):focus-within {
   border-color: color-mix(in srgb, var(--fiscal-primary) 46%, var(--fiscal-line));
-  background: #ffffff;
+  background: var(--fiscal-surface);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--fiscal-primary) 9%, transparent),
-    0 6px 16px rgba(35, 54, 78, 0.09);
+    0 6px 16px color-mix(in srgb, var(--fiscal-shade) 9%, transparent);
 }
 
 .wsbc :is(select, input) {
@@ -471,8 +426,7 @@
 }
 
 .wsbc-select-shell--period,
-.wsbc-select-shell--pays,
-.wsbc-select-shell--amount {
+.wsbc-select-shell--pays {
   width: 100%;
 }
 

@@ -51,7 +51,7 @@
 .wirc-toggle {
   display: inline-flex;
   padding: 3px;
-  border: 1px solid rgba(120, 150, 210, 0.4);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: var(--fiscal-radius-control);
   background: var(--fiscal-surface-soft);
   border-color: var(--fiscal-line);
@@ -72,8 +72,8 @@
 }
 
 .wirc-toggle button.is-active {
-  color: #07101f;
-  background: linear-gradient(135deg, #5ad1ff, #8f9bff);
+  color: var(--fiscal-ink);
+  background: linear-gradient(135deg, var(--fiscal-blue), var(--fiscal-blue));
 }
 
 .wirc-stats {
@@ -81,9 +81,9 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
   margin-bottom: 18px;
-  border: 1px solid rgba(120, 150, 210, 0.32);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 12px;
-  background: rgba(5, 10, 22, 0.72);
+  background: color-mix(in srgb, var(--fiscal-surface) 72%, transparent);
   overflow: hidden;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .wirc-stat + .wirc-stat {
-  border-left: 1px solid rgba(120, 150, 210, 0.22);
+  border-left: 1px solid var(--fiscal-line-strong);
   border-color: var(--fiscal-line);
 }
 
@@ -111,7 +111,7 @@
 }
 
 .wirc-stat--clickable:hover {
-  background: rgba(90, 130, 200, 0.12);
+  background: var(--fiscal-surface-soft);
 }
 
 .wirc-stat__head {
@@ -157,11 +157,11 @@
 
 .wirc-stat__sep {
   margin: 0 0.35em;
-  color: rgba(169, 182, 210, 0.55);
+  color: var(--fiscal-copy);
 }
 
 .wirc-stat__delta {
-  color: #6ce3a8;
+  color: var(--fiscal-green);
   font-weight: 700;
 }
 
@@ -211,12 +211,12 @@
 }
 
 .wirc-line {
-  filter: drop-shadow(0 0 5px rgba(90, 209, 255, 0.16));
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--fiscal-blue) 16%, transparent));
   transition: stroke-opacity 0.12s ease, stroke-width 0.12s ease;
 }
 
 .wirc-line-group--selected .wirc-line {
-  filter: drop-shadow(0 0 8px rgba(90, 209, 255, 0.34));
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--fiscal-blue) 34%, transparent));
 }
 
 .wirc-cursor {
@@ -226,13 +226,13 @@
 }
 
 .wirc-cursor.is-pinned {
-  stroke: rgba(90, 209, 255, 0.95);
+  stroke: color-mix(in srgb, var(--fiscal-blue) 95%, transparent);
   stroke-width: 1.6;
   stroke-dasharray: none;
 }
 
 .wirc-cursor--preview {
-  stroke: rgba(180, 200, 240, 0.45);
+  stroke: color-mix(in srgb, var(--fiscal-blue-ink) 45%, transparent);
   stroke-width: 1;
   stroke-dasharray: 4 4;
 }
@@ -245,16 +245,12 @@
 }
 
 .wirc-cursor-label.is-pinned {
-  fill: #5ad1ff;
+  fill: var(--fiscal-blue);
 }
 
 .wirc-cursor-label--preview {
-  fill: rgba(180, 200, 240, 0.75);
+  fill: color-mix(in srgb, var(--fiscal-blue-ink) 75%, transparent);
   font-weight: 600;
-}
-
-.wirc-line-hit {
-  cursor: pointer;
 }
 
 .wirc-line-group {
@@ -263,9 +259,9 @@
 
 /* Ranking */
 .wirc-ranking {
-  border: 1px solid rgba(120, 150, 210, 0.28);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 12px;
-  background: rgba(7, 14, 30, 0.55);
+  background: color-mix(in srgb, var(--fiscal-surface) 55%, transparent);
   padding: 10px;
   max-height: 420px;
   overflow: auto;
@@ -319,8 +315,8 @@
 }
 
 .wirc-rank-row.is-selected {
-  background: rgba(90, 209, 255, 0.14);
-  border-color: rgba(90, 209, 255, 0.5);
+  background: color-mix(in srgb, var(--fiscal-blue) 14%, transparent);
+  border-color: var(--fiscal-blue-line);
 }
 
 .wirc-rank-row.is-compare {
@@ -358,7 +354,7 @@
   width: 10px;
   height: 10px;
   border-radius: 3px;
-  background: var(--rank-color, #5ad1ff);
+  background: var(--rank-color, var(--fiscal-blue));
 }
 
 .wirc-rank-label {
@@ -386,7 +382,7 @@
 }
 
 .wirc-rank-diff.is-up {
-  color: #6ce3a8;
+  color: var(--fiscal-green);
   font-weight: 600;
 }
 
@@ -409,7 +405,7 @@
 
   .wirc-stat + .wirc-stat {
     border-left: none;
-    border-top: 1px solid rgba(120, 150, 210, 0.22);
+    border-top: 1px solid var(--fiscal-line-strong);
     border-color: var(--fiscal-line);
   }
 
@@ -432,13 +428,6 @@
   border-radius: var(--fiscal-radius-panel);
 }
 
-.wirc-panel {
-  color: var(--fiscal-ink);
-  border-color: var(--fiscal-line);
-  background: var(--fiscal-surface-soft);
-  box-shadow: none;
-}
-
 .wirc-stats,
 .wirc-ranking {
   border-color: var(--fiscal-line);
@@ -451,7 +440,7 @@
 }
 
 .wirc-toggle button.is-active {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-blue);
 }
 

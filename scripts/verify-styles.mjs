@@ -14,6 +14,11 @@
  * archivo CSS nuevo con colores literales. Es decir, vigila lo que se escribe a
  * partir de ahora, sin obligar a arreglar el pasado.
  *
+ * Calculadora fiscal: ahi no hay linea base. Su CSS se escribe solo con
+ * var(--fiscal-*) (tokens en FiscalSoftTheme.css) y cualquier color a mano,
+ * token de otra paleta o regla `.fwd--soft` fuera del archivo de tokens hace
+ * fallar la comprobacion. Ver checkCalculator() mas abajo.
+ *
  * Uso:
  *   node scripts/verify-styles.mjs           comprueba
  *   node scripts/verify-styles.mjs --write   regenera la linea base
@@ -67,10 +72,94 @@ function countLiterals(fullPath) {
   return (withoutComments.match(COLOR_PATTERN) ?? []).length
 }
 
+/*
+ * CSS de la calculadora fiscal. Todo lo que se pinta dentro de `.fwd` vive aqui.
+ * ProgressiveIrpfExplainer, SocialSecurityBasesExplainer, FiscalKpiRow y
+ * FiscalPersonalDataCard no se usan en la calculadora (son piezas oscuras del
+ * laboratorio y de rutas internas) y siguen con la linea base.
+ */
+const CALCULATOR_THEME = 'src/components/fiscal-worker-dashboard/FiscalSoftTheme.css'
+const isCalculatorCss = (repoPath) =>
+  repoPath.startsWith('src/components/worker-salary-dashboard/') ||
+  repoPath === 'src/components/fiscal-worker-dashboard/FiscalWorkerDashboard.css' ||
+  repoPath === 'src/components/fiscal-worker-dashboard/WorkIncomeReductionExplainer.css'
+const isCalculatorScript = (repoPath) =>
+  /^src\/components\/(worker-salary-dashboard|fiscal-worker-dashboard)\/[^/]+\.tsx?$/.test(repoPath)
+// Scripts que dibujan en <canvas> o componentes sin uso: no pueden leer var().
+const SCRIPT_EXCEPTIONS = new Set([
+  'src/components/fiscal-worker-dashboard/shareResultsImage.ts',
+  'src/components/fiscal-worker-dashboard/Donut.tsx',
+  'src/components/fiscal-worker-dashboard/FiscalLineChart.tsx',
+])
+
+function listFiles(dir, test) {
+  const found = []
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry)
+    if (statSync(full).isDirectory()) found.push(...listFiles(full, test))
+    else if (test(entry)) found.push(full)
+  }
+  return found
+}
+
+function lineOf(text, index) {
+  return text.slice(0, index).split('\n').length
+}
+
+function checkCalculator() {
+  const errores = []
+  for (const file of listCssFiles(srcDir)) {
+    const repoPath = toRepoPath(file)
+    const raw = readFileSync(file, 'utf8')
+    const text = raw.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, ' '))
+    if (repoPath === CALCULATOR_THEME) {
+      // Literales solo dentro del bloque de tokens `.fwd--soft { ... }`.
+      const tokenBlock = text.match(/^\.fwd--soft\s*\{[^}]*\}/m)
+      const start = tokenBlock ? tokenBlock.index : -1
+      const end = tokenBlock ? start + tokenBlock[0].length : -1
+      for (const m of text.matchAll(COLOR_PATTERN)) {
+        if (m.index >= start && m.index < end) continue
+        errores.push(`${repoPath}:${lineOf(text, m.index)}  color ${m[0]} fuera del bloque de tokens`)
+      }
+      continue
+    }
+    if (!isCalculatorCss(repoPath)) continue
+    for (const m of text.matchAll(COLOR_PATTERN)) {
+      errores.push(`${repoPath}:${lineOf(text, m.index)}  color escrito a mano: ${m[0]}`)
+    }
+    for (const m of text.matchAll(/var\(--(color-[\w-]+|fwd-[\w-]+|bg|surface|text|muted|heading|border|accent[\w-]*)\)/g)) {
+      errores.push(`${repoPath}:${lineOf(text, m.index)}  token de otra paleta: ${m[0]} (usa var(--fiscal-*))`)
+    }
+    for (const m of text.matchAll(/[:,\s](white|black|red|blue|green|gray|grey|orange|purple|yellow|pink|navy|teal|silver)\s*[;,)!]/gi)) {
+      // En una mascara el negro solo marca opacidad: no es un color que se vea.
+      const linea = text.split('\n')[lineOf(text, m.index) - 1]
+      if (/mask/.test(linea)) continue
+      errores.push(`${repoPath}:${lineOf(text, m.index)}  color con nombre: ${m[1]}`)
+    }
+    for (const m of text.matchAll(/\.fwd--soft\b/g)) {
+      errores.push(`${repoPath}:${lineOf(text, m.index)}  regla .fwd--soft: el componente debe usar los tokens directamente, no repintarse por encima`)
+    }
+  }
+  for (const file of listFiles(srcDir, (f) => /\.tsx?$/.test(f))) {
+    const repoPath = toRepoPath(file)
+    if (!isCalculatorScript(repoPath) || SCRIPT_EXCEPTIONS.has(repoPath)) continue
+    const text = readFileSync(file, 'utf8')
+    for (const m of text.matchAll(/(["'`])(#[0-9a-fA-F]{3,8}|rgba?\([^)]*\))\1/g)) {
+      errores.push(`${repoPath}:${lineOf(text, m.index)}  color escrito a mano en el componente: ${m[2]} (usa "var(--fiscal-*)" en style)`)
+    }
+    for (const m of text.matchAll(/\b(?:bg|text|border|fill|stroke|from|to|via|ring)-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|white|black|surface-deep|text-inverted)[\w/-]*/g)) {
+      errores.push(`${repoPath}:${lineOf(text, m.index)}  clase de color de Tailwind: ${m[0]} (la calculadora usa var(--fiscal-*))`)
+    }
+  }
+  return errores
+}
+
+const erroresCalculadora = checkCalculator()
+
 const actual = {}
 for (const file of listCssFiles(srcDir)) {
   const repoPath = toRepoPath(file)
-  if (TOKEN_FILES.has(repoPath)) continue
+  if (TOKEN_FILES.has(repoPath) || isCalculatorCss(repoPath)) continue
   const count = countLiterals(file)
   if (count > 0) actual[repoPath] = count
 }
@@ -107,6 +196,15 @@ for (const [file, count] of Object.entries(actual)) {
 
 for (const { file, previo, count } of mejorados) {
   console.log(`  mejora  ${file}: ${previo} -> ${count}`)
+}
+
+if (erroresCalculadora.length > 0) {
+  console.error('\nCalculadora fiscal: estilos fuera de los tokens --fiscal-*\n')
+  for (const e of erroresCalculadora.slice(0, 60)) console.error('  ' + e)
+  if (erroresCalculadora.length > 60) console.error(`  ... y ${erroresCalculadora.length - 60} mas`)
+  console.error('\nLos colores de la calculadora se toman de FiscalSoftTheme.css. Si falta uno, anyade el token alli.')
+  console.error('Esta regla no tiene linea base: --write no la silencia.')
+  process.exit(1)
 }
 
 if (nuevos.length === 0 && empeorados.length === 0) {

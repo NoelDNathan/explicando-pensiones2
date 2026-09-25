@@ -1,6 +1,18 @@
 /*
- * Tema claro de la calculadora fiscal.
- * Para cambiar la paleta solo hay que editar los tokens de este primer bloque.
+ * Tokens de la calculadora fiscal.
+ *
+ * Este archivo define la paleta; no pinta componentes. Cada pieza de la
+ * calculadora escribe su CSS directamente con var(--fiscal-*): no hay un CSS
+ * base oscuro que luego se repinte aquí. Para un componente nuevo:
+ *   - superficies: --fiscal-surface, -surface-soft, -surface-tint, -canvas;
+ *   - texto: --fiscal-ink, -copy, -muted (y -on-accent sobre un acento sólido);
+ *   - líneas: --fiscal-line, -line-strong, o --fiscal-<acento>-line;
+ *   - acentos: primero los de significado (--fiscal-worker, -company, -state,
+ *     -region, -positive, -negative) y solo si no encaja ninguno, el color crudo
+ *     (--fiscal-blue, -violet, -orange...) con sus variantes -soft, -line, -ink;
+ *   - sombras: --fiscal-shadow, -shadow-control, o color-mix con --fiscal-shade.
+ * Si falta un color, se añade aquí como token; nunca un literal en el componente.
+ * Para cambiar la paleta solo hay que editar este bloque.
  */
 .fwd--soft {
   --fiscal-canvas: #f5f7fb;
@@ -48,6 +60,11 @@
 
   /* Texto sobre un acento sólido (botón primario, punto de paso activo). */
   --fiscal-on-accent: #ffffff;
+  /* Nómina dibujada del paso a paso: imita papel impreso, en blanco y negro a propósito. */
+  --fiscal-paper: #ffffff;
+  --fiscal-paper-ink: #050505;
+  --fiscal-paper-line: #111111;
+  --fiscal-paper-faint: #b0b0b0;
   /* Color base de sombras; la opacidad se pone con color-mix. */
   --fiscal-shade: #23364e;
 
@@ -56,20 +73,26 @@
   --fiscal-positive: var(--fiscal-green);
   --fiscal-positive-soft: var(--fiscal-green-soft);
   --fiscal-positive-line: var(--fiscal-green-line);
+  --fiscal-positive-ink: var(--fiscal-green-ink);
   --fiscal-negative: var(--fiscal-red);
   --fiscal-negative-soft: var(--fiscal-red-soft);
   --fiscal-negative-line: var(--fiscal-red-line);
+  --fiscal-negative-ink: var(--fiscal-red-ink);
   --fiscal-worker: var(--fiscal-violet);
   --fiscal-worker-soft: var(--fiscal-violet-soft);
   --fiscal-worker-line: var(--fiscal-violet-line);
+  --fiscal-worker-ink: var(--fiscal-violet-ink);
   --fiscal-company: var(--fiscal-orange);
   --fiscal-company-soft: var(--fiscal-orange-soft);
   --fiscal-company-line: var(--fiscal-orange-line);
+  --fiscal-company-ink: var(--fiscal-orange-ink);
   --fiscal-state: var(--fiscal-blue);
   --fiscal-state-soft: var(--fiscal-blue-soft);
+  --fiscal-state-line: var(--fiscal-blue-line);
   --fiscal-state-ink: var(--fiscal-blue-ink);
   --fiscal-region: var(--fiscal-orange);
   --fiscal-region-soft: var(--fiscal-orange-soft);
+  --fiscal-region-line: var(--fiscal-orange-line);
   --fiscal-region-ink: var(--fiscal-orange-ink);
   --fiscal-radius-card: 24px;
   --fiscal-radius-panel: 18px;
@@ -78,64 +101,33 @@
   --fiscal-shadow: 0 18px 46px rgba(35, 54, 78, 0.08);
   --fiscal-shadow-control: 0 4px 12px rgba(35, 54, 78, 0.07);
 
-  --fwd-text: var(--fiscal-ink);
-  --fwd-muted: var(--fiscal-copy);
-  --fwd-faint: var(--fiscal-muted);
-  --fwd-bg: var(--fiscal-canvas);
-  --fwd-panel: var(--fiscal-surface);
-  --fwd-panel-2: var(--fiscal-surface-soft);
-  --fwd-border: var(--fiscal-line);
-  --fwd-blue: var(--fiscal-blue);
-  --fwd-green: var(--fiscal-green);
-  --fwd-purple: var(--fiscal-violet);
-  --fwd-violet: var(--fiscal-violet);
-  --fwd-cyan: var(--fiscal-primary);
-  --fwd-orange: var(--fiscal-orange);
-  --fwd-yellow: var(--fiscal-yellow);
-  --fwd-danger: var(--fiscal-red);
 
-  color: var(--fiscal-ink);
-  background:
-    radial-gradient(circle at 8% 0%, rgba(47, 111, 206, 0.08), transparent 30%),
-    radial-gradient(circle at 92% 4%, rgba(20, 125, 117, 0.08), transparent 28%),
-    var(--fiscal-canvas);
 }
 
-/* Tarjetas principales */
-
-/* Controles compartidos */
-
-/* Geometría suave compartida por todo el recorrido */
-
-.fwd--soft .salary-slider {
-  border-radius: var(--fiscal-radius-panel);
-}
-
-.fwd--soft .salary-slider__value-input {
-  border-radius: var(--fiscal-radius-control);
-}
-
-/* Un unico modelo de ayuda contextual en toda la calculadora */
-
+/*
+ * SalarySlider (src/components/ui) se comparte con otras páginas y trae su propia
+ * paleta. Dentro de la calculadora se adapta aquí, con los tokens de arriba.
+ * Es lo único que debe vivir en este archivo además de los tokens: las piezas
+ * propias de la calculadora usan var(--fiscal-*) directamente en su CSS.
+ */
 .fwd--soft .salary-slider {
   color: var(--fiscal-ink);
   border: 1px solid var(--fiscal-line);
+  border-radius: var(--fiscal-radius-panel);
   padding: 12px 14px 10px;
   background: var(--fiscal-surface-soft);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 90%, transparent);
 }
 
 .fwd--soft .salary-slider__value-input {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line-strong);
+  border-radius: var(--fiscal-radius-control);
   background: var(--fiscal-surface);
   box-shadow: var(--fiscal-shadow-control);
 }
 
-.fwd--soft :is(.salary-slider__top span, .salary-slider__scale, .salary-slider__value-shell > span) {
-  color: var(--fiscal-copy);
-}
-
+.fwd--soft :is(.salary-slider__top span, .salary-slider__scale, .salary-slider__value-shell > span),
 .fwd--soft .salary-slider__ref-label {
   color: var(--fiscal-copy);
 }
@@ -146,60 +138,33 @@
 }
 
 .fwd--soft .salary-slider__ref-dot {
-  border-color: #ffffff;
+  border-color: var(--fiscal-surface);
   background: var(--fiscal-blue);
-  box-shadow: 0 1px 3px rgba(35, 54, 78, 0.28);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--fiscal-shade) 28%, transparent);
 }
 
 .fwd--soft .salary-slider input[type="range"]::-webkit-slider-runnable-track {
-  background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), #dbe4ec var(--salary-slider-value), #dbe4ec 100%);
-  box-shadow: inset 0 1px 2px rgba(35, 54, 78, 0.12);
+  background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), var(--fiscal-line) var(--salary-slider-value), var(--fiscal-line) 100%);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 12%, transparent);
 }
 
 .fwd--soft .salary-slider input[type="range"]::-moz-range-track {
-  background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), #dbe4ec var(--salary-slider-value), #dbe4ec 100%);
-  box-shadow: inset 0 1px 2px rgba(35, 54, 78, 0.12);
+  background: linear-gradient(90deg, var(--fiscal-primary) 0%, var(--fiscal-primary) var(--salary-slider-value), var(--fiscal-line) var(--salary-slider-value), var(--fiscal-line) 100%);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 12%, transparent);
 }
 
 .fwd--soft .salary-slider input[type="range"]::-webkit-slider-thumb {
-  border-color: #ffffff;
+  border-color: var(--fiscal-surface);
   background: var(--fiscal-primary);
-  box-shadow: 0 0 0 4px rgba(20, 125, 117, 0.14), 0 2px 6px rgba(35, 54, 78, 0.18);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--fiscal-primary) 14%, transparent), 0 2px 6px color-mix(in srgb, var(--fiscal-shade) 18%, transparent);
 }
 
 .fwd--soft .salary-slider input[type="range"]::-moz-range-thumb {
-  border-color: #ffffff;
+  border-color: var(--fiscal-surface);
   background: var(--fiscal-primary);
-  box-shadow: 0 0 0 4px rgba(20, 125, 117, 0.14), 0 2px 6px rgba(35, 54, 78, 0.18);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--fiscal-primary) 14%, transparent), 0 2px 6px color-mix(in srgb, var(--fiscal-shade) 18%, transparent);
 }
-
-/* Navegación didáctica */
-
-/* .fwd-main ya reserva la nav inferior; aqui solo hace falta el alto de la barra. */
-
-/* Paso 1 */
-
-/* Paso 2 */
-
-/* Paso 3 */
-
-/* Pasos 4 a 7 y fuentes */
-
-/* Tirador de plegado con la paleta clara, no con la oscura por defecto. */
-
-/* La altura real de la barra la publica el componente en --wprc-sticky-height. */
-
-/* El minimo personal y familiar va en violeta, como su linea del panel sticky:
-   asi no se confunde con el azul de lo que resta de la base o de la cuota. */
-
-/* Resultado y KPI */
 
 .fwd--soft .wfsc-summary:not(.wfsc-summary--intro) .salary-slider {
   background: var(--fiscal-surface-soft);
 }
-
-/* Especie: selector mes/ano y total detallado en el tema suave. */
-
-/* Resumen final del recorrido (paso 10) */
-
-/* El color de acento del titulo pierde ante la regla general de encabezados. */

@@ -1,5 +1,11 @@
 @import 'tailwindcss';
 
+/*
+ * Paleta OSCURA de las paginas de graficos (poblacion, gasto sanitario, resumen,
+ * rutas internas). No es la paleta de la calculadora fiscal: alli se usan solo
+ * los tokens --fiscal-* de FiscalSoftTheme.css, y `pnpm verify:styles` falla si
+ * una pieza de la calculadora usa estos --color-* o clases de color de Tailwind.
+ */
 @theme {
   /* Dark surface tokens used by chart panels and dashboards */
   --color-surface-deep: #0e1b2e;

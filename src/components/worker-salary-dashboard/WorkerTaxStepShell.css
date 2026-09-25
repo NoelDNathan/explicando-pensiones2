@@ -35,8 +35,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(57, 169, 255, 0.12), transparent 45%, rgba(91, 220, 138, 0.07)) 0 0 / 100% 1px no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 38%);
+    linear-gradient(90deg, color-mix(in srgb, var(--fiscal-blue) 12%, transparent), transparent 45%, color-mix(in srgb, var(--fiscal-green) 7%, transparent)) 0 0 / 100% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 5%, transparent), transparent 38%);
   opacity: 0.08;
 }
 
@@ -87,10 +87,10 @@
   gap: 9px;
   min-height: 34px;
   padding: 0 14px;
-  border: 1px solid rgba(83, 213, 116, 0.2);
+  border: 1px solid var(--fiscal-green-line);
   border-radius: 999px;
   color: var(--fiscal-primary);
-  background: rgba(39, 189, 94, 0.13);
+  background: color-mix(in srgb, var(--fiscal-green) 13%, transparent);
   font-size: 14px;
   font-weight: 850;
   text-shadow: none;
@@ -100,23 +100,23 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #6ce37a;
-  box-shadow: 0 0 16px rgba(108, 227, 122, 0.56);
+  background: var(--fiscal-green);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--fiscal-green) 56%, transparent);
 }
 
 .wctc-heading h2 {
   margin-top: 13px;
-  color: #f7f9ff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(31px, 3vw, 43px);
   line-height: 0.98;
   font-weight: 880;
   letter-spacing: 0;
-  text-shadow: 0 0 24px rgba(95, 164, 255, 0.22);
+  text-shadow: none;
 }
 
 .wctc-heading p {
   margin-top: 9px;
-  color: #aebbd1;
+  color: var(--fiscal-ink);
   font-size: clamp(15px, 1.12vw, 18px);
   line-height: 1.35;
   font-weight: 680;
@@ -137,7 +137,7 @@
   gap: 8px;
   min-height: 42px;
   padding: 0 14px;
-  border: 1px solid rgba(55, 145, 255, 0.76);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 10px;
   color: var(--fiscal-copy);
   font: inherit;
@@ -157,7 +157,7 @@
 
 .wctc-action--primary {
   border-color: var(--fiscal-primary);
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-primary);
 }
 
@@ -168,44 +168,21 @@
 
 .wctc-action--primary:hover,
 .wctc-action--primary:focus-visible {
-  border-color: rgba(118, 244, 133, 0.9);
-  box-shadow: 0 0 18px rgba(95, 232, 117, 0.18);
+  border-color: var(--fiscal-green-line);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--fiscal-green) 18%, transparent);
 }
 
 .wctc-action:focus-visible,
 .wctc-intro-choice:focus-visible,
-.wctc-nav button:focus-visible,
 .wctc-input input:focus-visible,
 .wctc-ibi-row input:focus-visible,
 .wctc-ownership-gate__choices button:focus-visible,
-.wctc-purchase-row input:focus-visible,
-.wctc-purchase-row select:focus-visible,
 .wctc-home-card input:focus-visible,
 .wctc-home-card select:focus-visible,
 .wctc-purchase-add:focus-visible,
 .wctc-purchase-remove:focus-visible {
-  outline: 3px solid rgba(70, 166, 255, 0.38);
+  outline: 3px solid var(--fiscal-blue-line);
   outline-offset: 3px;
-}
-
-.wctc-header-note {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
-  padding-top: 40px;
-  color: #bac6dc;
-}
-
-.wctc-header-note svg {
-  margin-top: 2px;
-  color: #45a8ff;
-}
-
-.wctc-header-note p {
-  font-size: 15px;
-  line-height: 1.45;
-  font-weight: 680;
 }
 
 .wctc-tip {
@@ -216,11 +193,11 @@
   align-items: start;
   margin-bottom: 14px;
   padding: 12px 14px;
-  border: 1px solid rgba(255, 196, 72, 0.42);
+  border: 1px solid var(--fiscal-yellow-line);
   border-radius: 12px;
   color: var(--fiscal-ink);
   background:
-    color-mix(in srgb, var(--fiscal-orange) 10%, #ffffff);
+    color-mix(in srgb, var(--fiscal-orange) 10%, var(--fiscal-surface));
   border-color: color-mix(in srgb, var(--fiscal-orange) 38%, var(--fiscal-line));
 }
 
@@ -242,33 +219,6 @@
   font-weight: 820;
 }
 
-.wctc-nav {
-  display: flex;
-  gap: 12px;
-  justify-content: flex-end;
-  padding-top: 34px;
-}
-
-.wctc-nav button {
-  display: grid;
-  place-items: center;
-  width: 70px;
-  height: 58px;
-  border: 1px solid rgba(55, 145, 255, 0.76);
-  border-radius: 10px;
-  color: #d9e7ff;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(55, 145, 255, 0.17), transparent 56%),
-    rgba(5, 23, 48, 0.78);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  cursor: pointer;
-}
-
-.wctc-nav button:last-child {
-  border-color: rgba(94, 211, 111, 0.72);
-  color: #ecfff0;
-}
-
 .wctc-layout {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(350px, 0.98fr);
@@ -278,14 +228,14 @@
 
 .wctc-left,
 .wctc-summary {
-  border: 1px solid rgba(48, 119, 190, 0.38);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 12px;
   background:
-    radial-gradient(circle at 50% -10%, rgba(40, 145, 255, 0.11), transparent 34%),
-    rgba(4, 19, 39, 0.68);
+    radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--fiscal-blue) 11%, transparent), transparent 34%),
+    color-mix(in srgb, var(--fiscal-surface) 68%, transparent);
   box-shadow:
-    0 18px 44px rgba(0, 5, 18, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 18px 44px color-mix(in srgb, var(--fiscal-shade) 24%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 5%, transparent);
 }
 
 .wctc-left {
@@ -322,11 +272,11 @@
 }
 
 .wctc-summary-title svg {
-  color: #8edb82;
+  color: var(--fiscal-green);
 }
 
 .wctc-summary-title h3 {
-  color: #f3f7ff;
+  color: var(--fiscal-on-accent);
   font-size: 18px;
   line-height: 1.1;
   font-weight: 850;
@@ -340,10 +290,10 @@
   align-items: center;
   min-height: 75px;
   padding: 14px 16px;
-  border: 1px solid color-mix(in srgb, var(--tone) 35%, rgba(51, 96, 148, 0.5));
+  border: 1px solid color-mix(in srgb, var(--tone) 35%, var(--fiscal-line));
   border-radius: var(--fiscal-radius-control);
   background:
-    color-mix(in srgb, var(--tone) 9%, #ffffff);
+    color-mix(in srgb, var(--tone) 9%, var(--fiscal-surface));
   border-color: color-mix(in srgb, var(--tone) 26%, var(--fiscal-line));
   box-shadow: none;
 }
@@ -369,14 +319,14 @@
 }
 
 .wctc-summary-card b {
-  color: #f5f8ff;
+  color: var(--fiscal-on-accent);
   font-size: 16px;
   line-height: 1.1;
   font-weight: 860;
 }
 
 .wctc-summary-card small {
-  color: #aebbd1;
+  color: var(--fiscal-ink);
   font-size: 13px;
   line-height: 1.18;
   font-weight: 680;
@@ -391,7 +341,7 @@
   line-height: 1;
   font-weight: 920;
   white-space: nowrap;
-  text-shadow: 0 0 16px color-mix(in srgb, var(--tone) 35%, transparent);
+  text-shadow: none;
 }
 
 .wctc-summary-card strong small {
@@ -457,14 +407,11 @@
     grid-template-columns: 1fr;
   }
 
-  .wctc-header-note,
-  .wctc-header-actions,
-  .wctc-nav {
+  .wctc-header-actions {
     padding-top: 0;
   }
 
-  .wctc-header-actions,
-  .wctc-nav {
+  .wctc-header-actions {
     justify-content: flex-start;
   }
 
@@ -504,11 +451,6 @@
     grid-column: 2;
     justify-items: start;
   }
-
-  .wctc-nav button {
-    width: 60px;
-    height: 52px;
-  }
 }
 
 /*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
@@ -518,7 +460,6 @@
   border-radius: var(--fiscal-radius-panel);
 }
 
-.wctc-purchase-row,
 .wctc-action {
   border-radius: var(--fiscal-radius-control);
 }
@@ -547,9 +488,9 @@
 }
 
 .wctc-ibi-row {
-  background: #ffffff;
+  background: var(--fiscal-surface);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 72%, transparent),
-    0 4px 12px rgba(45, 71, 94, 0.04);
+    0 4px 12px color-mix(in srgb, var(--fiscal-shade) 4%, transparent);
 }
 
 .wctc-summary-card :is(span, strong, small) {
@@ -574,18 +515,9 @@
   color: var(--fiscal-copy);
 }
 
-.wctc-purchase-row {
-  border-color: color-mix(in srgb, var(--fiscal-line) 74%, transparent);
-  border-radius: var(--fiscal-radius-control);
-  background: #ffffff;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fiscal-line) 48%, transparent),
-    0 4px 12px rgba(45, 71, 94, 0.05);
-}
-
-.wctc-purchase-row :is(input, select),
 .wctc-ibi-row input[type='number'] {
   color: var(--fiscal-ink);
   border-color: var(--fiscal-line-strong);
   background: var(--fiscal-surface);
-  box-shadow: inset 0 1px 2px rgba(43, 70, 94, 0.06);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 6%, transparent);
 }

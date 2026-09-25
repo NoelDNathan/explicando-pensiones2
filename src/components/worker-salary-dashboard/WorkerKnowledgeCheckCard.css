@@ -3,26 +3,26 @@
    tarjeta se vea igual dentro y fuera de `.fwd--soft`. */
 
 .wkcc {
-  --wkcc-ink: var(--fiscal-ink, #172033);
-  --wkcc-copy: var(--fiscal-copy, #4f5f70);
-  --wkcc-muted: var(--fiscal-muted, #718096);
-  --wkcc-line: var(--fiscal-line, #dbe4ec);
-  --wkcc-line-strong: var(--fiscal-line-strong, #c4d2df);
-  --wkcc-surface: var(--fiscal-surface, #ffffff);
-  --wkcc-surface-soft: var(--fiscal-surface-soft, #f8fafc);
-  --wkcc-primary: var(--fiscal-primary, #147d75);
-  --wkcc-primary-strong: var(--fiscal-primary-strong, #0f655f);
-  --wkcc-primary-soft: var(--fiscal-primary-soft, #ddf3ef);
-  --wkcc-blue: var(--fiscal-blue, #2f6fce);
-  --wkcc-blue-soft: var(--fiscal-blue-soft, #e9f1fd);
-  --wkcc-violet: var(--fiscal-violet, #7557c8);
-  --wkcc-violet-soft: var(--fiscal-violet-soft, #f0ebfb);
-  --wkcc-green: var(--fiscal-green, #18865b);
-  --wkcc-green-soft: var(--fiscal-green-soft, #e3f5ec);
-  --wkcc-red: var(--fiscal-red, #c4455b);
-  --wkcc-red-soft: var(--fiscal-red-soft, #fcecef);
-  --wkcc-orange: var(--fiscal-orange, #b96b18);
-  --wkcc-orange-soft: var(--fiscal-orange-soft, #fff1df);
+  --wkcc-ink: var(--fiscal-ink, var(--fiscal-ink));
+  --wkcc-copy: var(--fiscal-copy, var(--fiscal-copy));
+  --wkcc-muted: var(--fiscal-muted, var(--fiscal-muted));
+  --wkcc-line: var(--fiscal-line, var(--fiscal-line));
+  --wkcc-line-strong: var(--fiscal-line-strong, var(--fiscal-line-strong));
+  --wkcc-surface: var(--fiscal-surface, var(--fiscal-surface));
+  --wkcc-surface-soft: var(--fiscal-surface-soft, var(--fiscal-surface-soft));
+  --wkcc-primary: var(--fiscal-primary, var(--fiscal-primary));
+  --wkcc-primary-strong: var(--fiscal-primary-strong, var(--fiscal-primary-strong));
+  --wkcc-primary-soft: var(--fiscal-primary-soft, var(--fiscal-primary-soft));
+  --wkcc-blue: var(--fiscal-blue, var(--fiscal-blue));
+  --wkcc-blue-soft: var(--fiscal-blue-soft, var(--fiscal-blue-soft));
+  --wkcc-violet: var(--fiscal-violet, var(--fiscal-violet));
+  --wkcc-violet-soft: var(--fiscal-violet-soft, var(--fiscal-violet-soft));
+  --wkcc-green: var(--fiscal-green, var(--fiscal-green));
+  --wkcc-green-soft: var(--fiscal-green-soft, var(--fiscal-green-soft));
+  --wkcc-red: var(--fiscal-red, var(--fiscal-red));
+  --wkcc-red-soft: var(--fiscal-red-soft, var(--fiscal-red-soft));
+  --wkcc-orange: var(--fiscal-orange, var(--fiscal-orange));
+  --wkcc-orange-soft: var(--fiscal-orange-soft, var(--fiscal-orange-soft));
   --wkcc-radius: var(--fiscal-radius-card, 24px);
   --wkcc-radius-panel: var(--fiscal-radius-panel, 18px);
   --wkcc-radius-control: var(--fiscal-radius-control, 14px);
@@ -33,7 +33,7 @@
   border: 1px solid var(--wkcc-line);
   border-radius: var(--wkcc-radius);
   background: var(--wkcc-surface);
-  box-shadow: var(--fiscal-shadow, 0 18px 46px rgba(35, 54, 78, 0.08));
+  box-shadow: var(--fiscal-shadow, 0 18px 46px color-mix(in srgb, var(--fiscal-shade) 8%, transparent));
 }
 
 .wkcc *,
@@ -141,7 +141,7 @@
 }
 
 .wkcc-cta {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   border: 1px solid var(--wkcc-primary-strong);
   background: var(--wkcc-primary);
 }
@@ -369,7 +369,7 @@
 }
 
 .wkcc-rail__item.is-done .wkcc-rail__index {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--wkcc-green);
 }
 
@@ -380,7 +380,7 @@
 }
 
 .wkcc-rail__item.is-active .wkcc-rail__index {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--wkcc-primary);
 }
 
@@ -721,7 +721,7 @@
 }
 
 .wkcc-tf__btn.is-selected {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   border-color: var(--wkcc-primary-strong);
   background: var(--wkcc-primary);
 }
@@ -733,7 +733,7 @@
 }
 
 .wkcc-tf__btn.is-selected.is-right {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--wkcc-green);
 }
 
@@ -1066,7 +1066,7 @@
 }
 
 .wkcc-bucket.is-selected {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   border-color: var(--wkcc-primary-strong);
   background: var(--wkcc-primary);
 }
@@ -1078,7 +1078,7 @@
 }
 
 .wkcc-bucket.is-selected.is-right {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--wkcc-green);
 }
 
@@ -1378,6 +1378,6 @@
   border: 1px solid var(--wkcc-primary);
   border-radius: var(--wkcc-radius-control);
   background: var(--wkcc-surface);
-  box-shadow: 0 12px 26px rgb(15 23 42 / 18%);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--fiscal-shade) 18%, transparent);
   transform: translate(-50%, -140%);
 }

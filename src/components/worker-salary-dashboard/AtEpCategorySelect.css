@@ -1,12 +1,12 @@
 .atep-select {
-  --atep-blue: #19b6ff;
-  --atep-blue-soft: rgba(25, 182, 255, 0.16);
-  --atep-violet: #bb78ff;
-  --atep-violet-soft: rgba(187, 120, 255, 0.16);
-  --atep-orange: #ff9b18;
-  --atep-orange-soft: rgba(255, 155, 24, 0.18);
-  --atep-text: #eef5ff;
-  --atep-muted: #aeb9d2;
+  --atep-blue: var(--fiscal-blue);
+  --atep-blue-soft: color-mix(in srgb, var(--fiscal-blue) 16%, transparent);
+  --atep-violet: var(--fiscal-violet);
+  --atep-violet-soft: color-mix(in srgb, var(--fiscal-violet) 16%, transparent);
+  --atep-orange: var(--fiscal-orange);
+  --atep-orange-soft: color-mix(in srgb, var(--fiscal-orange) 18%, transparent);
+  --atep-text: var(--fiscal-on-accent);
+  --atep-muted: var(--fiscal-ink);
 
   position: relative;
   display: grid;
@@ -43,14 +43,14 @@
   min-height: 52px;
   height: 100%;
   padding: 8px 42px 8px 10px;
-  border: 1px solid rgba(64, 112, 161, 0.56);
+  border: 1px solid var(--fiscal-line);
   border-radius: 11px;
   color: var(--atep-text);
   background:
-    linear-gradient(180deg, rgba(8, 30, 57, 0.94), rgba(3, 15, 32, 0.92));
+    linear-gradient(180deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 92%, transparent));
   box-shadow:
-    0 12px 22px rgba(0, 6, 18, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 12px 22px color-mix(in srgb, var(--fiscal-shade) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 5%, transparent);
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease;
@@ -64,11 +64,11 @@
 .atep-select__trigger:hover,
 .atep-select__trigger:focus-visible,
 .atep-select--open .atep-select__trigger {
-  border-color: rgba(255, 155, 24, 0.58);
+  border-color: var(--fiscal-orange-line);
   box-shadow:
-    0 14px 24px rgba(0, 6, 18, 0.24),
-    0 0 0 1px rgba(255, 155, 24, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 14px 24px color-mix(in srgb, var(--fiscal-shade) 24%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--fiscal-orange) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 6%, transparent);
   outline: none;
 }
 
@@ -76,7 +76,7 @@
   position: absolute;
   top: 50%;
   right: 13px;
-  color: #8fa6c3;
+  color: var(--fiscal-copy);
   transform: translateY(-50%);
   transition: transform 160ms ease;
 }
@@ -94,14 +94,14 @@
   display: grid;
   gap: 8px;
   padding: 10px;
-  border: 1px solid rgba(255, 155, 24, 0.34);
+  border: 1px solid var(--fiscal-orange-line);
   border-radius: 14px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(255, 155, 24, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(8, 28, 52, 0.98), rgba(2, 12, 28, 0.98));
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--fiscal-orange) 12%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 98%, transparent));
   box-shadow:
-    0 22px 40px rgba(0, 6, 20, 0.42),
-    0 0 0 1px rgba(255, 155, 24, 0.08);
+    0 22px 40px color-mix(in srgb, var(--fiscal-shade) 42%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--fiscal-orange) 8%, transparent);
 }
 
 .atep-select__search {
@@ -111,7 +111,7 @@
   align-items: center;
   padding: 0 10px;
   min-height: 38px;
-  border: 1px solid rgba(83, 162, 255, 0.28);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 10px;
   color: var(--fiscal-muted);
   background: var(--fiscal-surface-soft);
@@ -121,7 +121,7 @@
 .atep-select__search input {
   width: 100%;
   border: 0;
-  color: #eef5ff;
+  color: var(--fiscal-on-accent);
   background: transparent;
   font: 760 13px/1.2 var(--sans);
 }
@@ -131,7 +131,7 @@
 }
 
 .atep-select__search input::placeholder {
-  color: #7f92ad;
+  color: var(--fiscal-copy);
 }
 
 .atep-select__options {
@@ -145,10 +145,10 @@
 .atep-select__option {
   display: block;
   padding: 9px 10px;
-  border: 1px solid rgba(80, 139, 191, 0.18);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 11px;
   color: inherit;
-  background: rgba(3, 18, 39, 0.42);
+  background: color-mix(in srgb, var(--fiscal-surface) 42%, transparent);
   transition:
     border-color 140ms ease,
     background 140ms ease,
@@ -157,14 +157,14 @@
 
 .atep-select__option:hover,
 .atep-select__option--active {
-  border-color: rgba(255, 155, 24, 0.34);
-  background: rgba(49, 31, 10, 0.42);
+  border-color: var(--fiscal-orange-line);
+  background: var(--fiscal-surface-soft);
 }
 
 .atep-select__option--selected {
-  border-color: rgba(255, 155, 24, 0.52);
+  border-color: var(--fiscal-orange-line);
   background:
-    linear-gradient(135deg, rgba(92, 48, 8, 0.34), rgba(31, 22, 10, 0.42));
+    linear-gradient(135deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 42%, transparent));
 }
 
 .atep-select__preview {
@@ -195,12 +195,12 @@
   border-radius: 999px;
   color: var(--fiscal-orange);
   background: var(--fiscal-orange-soft);
-  border: 1px solid rgba(255, 155, 24, 0.34);
+  border: 1px solid var(--fiscal-orange-line);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  border-color: #efd2a9;
+  border-color: var(--fiscal-orange-line);
 }
 
 .atep-select__name {
@@ -252,10 +252,10 @@
 }
 
 .atep-select__rate--it {
-  color: #235b94;
+  color: var(--fiscal-blue-ink);
   background: var(--atep-blue-soft);
-  border: 1px solid rgba(25, 182, 255, 0.34);
-  border-color: #bdd4ef;
+  border: 1px solid var(--fiscal-blue-line);
+  border-color: var(--fiscal-blue-line);
 }
 
 .atep-select__rate--it strong {
@@ -264,10 +264,10 @@
 }
 
 .atep-select__rate--ims {
-  color: #5d469c;
+  color: var(--fiscal-violet-ink);
   background: var(--atep-violet-soft);
-  border: 1px solid rgba(187, 120, 255, 0.34);
-  border-color: #d8cbed;
+  border: 1px solid var(--fiscal-violet-line);
+  border-color: var(--fiscal-violet-line);
 }
 
 .atep-select__rate--ims strong {
@@ -276,10 +276,10 @@
 }
 
 .atep-select__rate--total {
-  color: #8b5418;
+  color: var(--fiscal-orange-ink);
   background: var(--atep-orange-soft);
-  border: 1px solid rgba(255, 155, 24, 0.42);
-  border-color: #efd2a9;
+  border: 1px solid var(--fiscal-orange-line);
+  border-color: var(--fiscal-orange-line);
 }
 
 .atep-select__rate--total strong {
@@ -290,7 +290,7 @@
 .atep-select__empty {
   margin: 0;
   padding: 14px 10px;
-  color: #aeb9d2;
+  color: var(--fiscal-ink);
   font-size: 13px;
   line-height: 1.35;
   font-weight: 740;

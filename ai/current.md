@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-12
+Fecha: 2026-09-25
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -113,7 +113,7 @@ pnpm run verify:irpf2025  # 34 comprobaciones del motor de IRPF contra casos dor
 pnpm run verify:data      # 469 comprobaciones de trazabilidad de data/
 pnpm run verify:scenario  # 17 comprobaciones del escenario guardado y del enlace compartido
 pnpm run verify:supabase  # 15 comprobaciones del esquema de la base de datos
-pnpm run verify:styles    # ningun color literal nuevo en CSS (linea base por archivo)
+pnpm run verify:styles    # calculadora: solo var(--fiscal-*); resto: ningun color literal nuevo
 pnpm run seed:quiz        # regenera la lista blanca de preguntas en supabase/seed.sql
 ```
 
@@ -130,6 +130,12 @@ escritos a mano o aparece uno nuevo con ellos. Existe porque las reglas 1 y 7 de
 (usar tokens, comprobar en pantalla) se pueden incumplir sin que nada avise: asi paso una
 pantalla entera en azul marino sobre una web clara. Con `--write` se regenera la linea base;
 bajarla siempre esta bien, subirla hay que justificarlo.
+
+En la calculadora fiscal (`worker-salary-dashboard/*.css`, `FiscalWorkerDashboard.css`,
+`WorkIncomeReductionExplainer.css` y los TS/TSX de esas carpetas) no hay linea base: falla con
+cualquier color a mano o con nombre, token de otra paleta (`--color-*`, `--fwd-*`, `:root`),
+regla `.fwd--soft` fuera de `FiscalSoftTheme.css` o clase de color de Tailwind. En
+`FiscalSoftTheme.css` los literales solo se admiten dentro del bloque de tokens.
 
 `verify:data` valida el SHA-256 de todos los archivos de datos, detecta entradas huerfanas,
 exige ficha en `metadata.md` y avisa de lo que falta en `inventory.md` y `sources.md`. Con
@@ -305,12 +311,11 @@ y `/resumen` tras la extraccion de `DashboardSidebar`.
   (Vite, no Next). Hay que tenerlo activado en el panel del proyecto de Vercel.
 - Al reorganizar componentes: separar los reutilizables, mantener tokens compartidos y evitar
   estilos duplicados en paginas finales.
-- **CSS de la calculadora fiscal (diagnostico 2026-09-25, ver `ai/history/`)**: cada tarjeta
-  tiene su CSS base escrito para un tema oscuro con colores literales, y `FiscalSoftTheme.css`
-  lo repinta en claro con ~600 selectores `.fwd--soft` clase a clase. Todo componente nuevo
-  sin su bloque en ese archivo sale con la paleta oscura. Quedan fugas visibles (verdes y
-  azules neon sobre blanco en pasos 2, 3, 5, 6 y 8). Plan propuesto: tokens semanticos en
-  `.fwd--soft`, migrar cada CSS base a `var(--fiscal-*)` y borrar su bloque de parches.
+- **CSS de la calculadora fiscal** (migrado el 2026-09-25): cada tarjeta usa `var(--fiscal-*)`
+  directamente y `FiscalSoftTheme.css` solo define tokens (mas la adaptacion del `SalarySlider`
+  compartido). Pendiente menor: en `/componentes`, a ~1100 px, el selector Anual/Mensual del
+  paso 3 se monta sobre el chip de AT/EP (ya pasaba antes). `Donut.tsx` y `FiscalLineChart.tsx`
+  no se usan en ninguna parte; se podrian borrar.
 - Extraer `PlayButton` a un modulo propio cuando se incorporen mas componentes y decidir la
   estructura definitiva de `src/components/`.
 - Ampliar `/componentes` con tarjetas de indicadores, etiquetas de fuente, avisos metodologicos

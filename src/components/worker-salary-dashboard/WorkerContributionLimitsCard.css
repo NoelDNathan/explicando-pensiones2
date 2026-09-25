@@ -28,23 +28,19 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, transparent, rgba(83, 190, 255, 0.18), transparent) 52% 0 / 72% 1px no-repeat,
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 30%);
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--fiscal-blue) 18%, transparent), transparent) 52% 0 / 72% 1px no-repeat,
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 5%, transparent), transparent 30%);
   opacity: 0.08;
 }
 
 .wclc-header,
 .wclc-popover,
 .wclc-controls,
-.wclc-year,
 .wclc-empty,
 .wclc-scale,
 .wclc-insight-grid,
 .wclc-result,
-.wclc-real-base,
-.wclc-note,
-.wclc-simulations,
-.wclc-source {
+.wclc-real-base {
   position: relative;
 }
 
@@ -102,39 +98,8 @@
   letter-spacing: 0;
 }
 
-.wclc-info {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  width: 38px;
-  height: 30px;
-  border: 2px solid rgba(0, 137, 220, 0.88);
-  border-radius: 999px;
-  color: #2eb8ff;
-  background: rgba(0, 45, 80, 0.38);
-  box-shadow:
-    0 0 18px rgba(0, 157, 255, 0.36),
-    inset 0 0 12px rgba(0, 157, 255, 0.18);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    color 160ms ease,
-    transform 160ms ease,
-    box-shadow 160ms ease;
-}
-
-.wclc-info:hover,
-.wclc-info:focus-visible {
-  color: #d9f1ff;
-  border-color: #55ccff;
-  box-shadow:
-    0 0 24px rgba(0, 157, 255, 0.54),
-    inset 0 0 14px rgba(0, 157, 255, 0.24);
-  transform: translateY(-1px);
-}
-
 .wclc button:focus-visible {
-  outline: 3px solid rgba(83, 190, 255, 0.42);
+  outline: 3px solid var(--fiscal-blue-line);
   outline-offset: 3px;
 }
 
@@ -142,11 +107,11 @@
   margin: -8px 0 18px auto;
   max-width: 690px;
   padding: 12px 14px;
-  border: 1px solid rgba(83, 190, 255, 0.36);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 10px;
-  color: #dbe8ff;
-  background: rgba(2, 17, 37, 0.94);
-  box-shadow: 0 18px 34px rgba(0, 6, 20, 0.28);
+  color: var(--fiscal-blue-ink);
+  background: color-mix(in srgb, var(--fiscal-surface) 94%, transparent);
+  box-shadow: 0 18px 34px color-mix(in srgb, var(--fiscal-shade) 28%, transparent);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -200,14 +165,14 @@
   align-items: center;
   min-height: 54px;
   padding: 8px 46px 8px 12px;
-  border: 1px solid rgba(64, 112, 161, 0.56);
+  border: 1px solid var(--fiscal-line);
   border-radius: 8px;
   color: var(--fiscal-ink);
   background:
-    linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    linear-gradient(180deg, var(--fiscal-surface) 0%, var(--fiscal-surface) 100%);
   box-shadow:
-    0 5px 14px rgba(35, 54, 78, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    0 5px 14px color-mix(in srgb, var(--fiscal-shade) 7%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 92%, transparent);
   transition:
     border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
   border-color: var(--fiscal-line-strong);
@@ -216,11 +181,11 @@
 .wclc-group-select__trigger:hover,
 .wclc-group-select__trigger:focus-visible,
 .wclc-group-select--open .wclc-group-select__trigger {
-  border-color: rgba(83, 190, 255, 0.58);
+  border-color: var(--fiscal-blue-line);
   box-shadow:
-    0 14px 24px rgba(0, 6, 18, 0.24),
-    0 0 0 1px rgba(83, 190, 255, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 14px 24px color-mix(in srgb, var(--fiscal-shade) 24%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--fiscal-blue) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 6%, transparent);
   outline: none;
 }
 
@@ -253,20 +218,20 @@
   max-height: min(360px, 56vh);
   overflow: auto;
   padding: 10px;
-  border: 1px solid rgba(83, 190, 255, 0.34);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    linear-gradient(180deg, var(--fiscal-surface) 0%, var(--fiscal-surface-soft) 100%);
   box-shadow:
-    0 18px 36px rgba(35, 54, 78, 0.14),
-    0 0 0 1px rgba(35, 54, 78, 0.04);
+    0 18px 36px color-mix(in srgb, var(--fiscal-shade) 14%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--fiscal-shade) 4%, transparent);
   border-color: var(--fiscal-line-strong);
 }
 
 .wclc-group-select__option {
   display: block;
   padding: 10px 12px;
-  border: 1px solid rgba(80, 139, 191, 0.18);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 11px;
   color: inherit;
   background: var(--fiscal-surface-soft);
@@ -278,14 +243,14 @@
 
 .wclc-group-select__option:hover,
 .wclc-group-select__option--active {
-  border-color: rgba(83, 190, 255, 0.34);
-  background: rgba(12, 52, 86, 0.5);
+  border-color: var(--fiscal-blue-line);
+  background: var(--fiscal-surface-soft);
 }
 
 .wclc-group-select__option--selected {
-  border-color: rgba(83, 190, 255, 0.52);
+  border-color: var(--fiscal-blue-line);
   background:
-    linear-gradient(135deg, rgba(12, 76, 124, 0.42), rgba(8, 28, 52, 0.5));
+    linear-gradient(135deg, color-mix(in srgb, var(--fiscal-blue) 42%, transparent), var(--fiscal-surface-soft));
 }
 
 .wclc-group-select__preview {
@@ -316,12 +281,12 @@
   border-radius: 999px;
   color: var(--fiscal-blue);
   background: var(--fiscal-blue-soft);
-  border: 1px solid rgba(21, 169, 255, 0.34);
+  border: 1px solid var(--fiscal-blue-line);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  border-color: #bdd4ef;
+  border-color: var(--fiscal-blue-line);
 }
 
 .wclc-group-select__option .wclc-group-select__badge {
@@ -379,10 +344,10 @@
 }
 
 .wclc-group-select__base--min {
-  color: #5d469c;
+  color: var(--fiscal-violet-ink);
   background: var(--fiscal-violet-soft);
-  border: 1px solid rgba(183, 131, 255, 0.34);
-  border-color: #d8cbed;
+  border: 1px solid var(--fiscal-violet-line);
+  border-color: var(--fiscal-violet-line);
 }
 
 .wclc-group-select__base--min strong {
@@ -391,10 +356,10 @@
 }
 
 .wclc-group-select__base--max {
-  color: #8b5418;
+  color: var(--fiscal-orange-ink);
   background: var(--fiscal-orange-soft);
-  border: 1px solid rgba(255, 155, 34, 0.42);
-  border-color: #efd2a9;
+  border: 1px solid var(--fiscal-orange-line);
+  border-color: var(--fiscal-orange-line);
 }
 
 .wclc-group-select__base--max strong {
@@ -402,22 +367,20 @@
   text-shadow: none;
 }
 
-.wclc-mode,
-.wclc-simulations {
+.wclc-mode {
   display: inline-flex;
   gap: 4px;
   padding: 4px;
-  border: 1px solid rgba(83, 162, 255, 0.26);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: 999px;
-  background: rgba(3, 18, 39, 0.72);
+  background: color-mix(in srgb, var(--fiscal-surface) 72%, transparent);
 }
 
-.wclc-mode button,
-.wclc-simulations button {
+.wclc-mode button {
   min-height: 34px;
   border: 0;
   border-radius: 999px;
-  color: #aeb9d2;
+  color: var(--fiscal-ink);
   background: transparent;
   cursor: pointer;
   font: 820 13px/1 var(--sans);
@@ -433,27 +396,14 @@
   color: var(--fiscal-copy);
 }
 
-.wclc-simulations button {
-  padding: 0 14px;
+.wclc-mode button:hover {
+  color: var(--fiscal-on-accent);
 }
 
-.wclc-mode button:hover,
-.wclc-simulations button:hover {
-  color: #eef6ff;
-}
-
-.wclc-mode button.is-active,
-.wclc-simulations button.is-active {
-  color: #061326;
-  background: linear-gradient(180deg, #78d8ff, #1da5f8);
-  box-shadow: 0 0 18px rgba(29, 165, 248, 0.34);
-}
-
-.wclc-year {
-  margin: 12px 0 0;
-  color: #7fa2c4;
-  font-size: 13px;
-  font-weight: 760;
+.wclc-mode button.is-active {
+  color: var(--fiscal-ink);
+  background: linear-gradient(180deg, var(--fiscal-blue), var(--fiscal-blue));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--fiscal-blue) 34%, transparent);
 }
 
 .wclc-empty {
@@ -461,10 +411,10 @@
   place-items: center;
   min-height: 220px;
   margin-top: 18px;
-  border: 1px dashed rgba(132, 166, 204, 0.38);
+  border: 1px dashed var(--fiscal-line-strong);
   border-radius: 14px;
-  color: #c5d2e7;
-  background: rgba(4, 20, 42, 0.45);
+  color: var(--fiscal-ink);
+  background: color-mix(in srgb, var(--fiscal-surface) 45%, transparent);
   text-align: center;
   font-weight: 780;
 }
@@ -500,7 +450,7 @@
 
 .wclc-marker-label strong {
   margin-top: 4px;
-  color: #eff6ff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(14px, 1.8vw, 18px);
   line-height: 1.1;
   font-weight: 840;
@@ -515,19 +465,19 @@
 .wclc-marker-label--min span,
 .wclc-marker-label--min strong {
   color: var(--wclc-purple);
-  text-shadow: 0 0 12px rgba(183, 131, 255, 0.28);
+  text-shadow: none;
 }
 
 .wclc-marker-label--user span,
 .wclc-marker-label--user strong {
   color: var(--wclc-blue);
-  text-shadow: 0 0 12px rgba(21, 169, 255, 0.42);
+  text-shadow: none;
 }
 
 .wclc-marker-label--max span,
 .wclc-marker-label--max strong {
   color: var(--wclc-orange);
-  text-shadow: 0 0 12px rgba(255, 155, 34, 0.32);
+  text-shadow: none;
 }
 
 .wclc-track {
@@ -553,18 +503,18 @@
   content: "";
   background:
     linear-gradient(90deg,
-      rgba(183, 131, 255, 0.82) 0 var(--min-pos),
-      rgba(21, 169, 255, 0.86) var(--min-pos) var(--max-pos),
-      rgba(255, 155, 34, 0.84) var(--max-pos) 100%);
+      color-mix(in srgb, var(--fiscal-violet) 82%, transparent) 0 var(--min-pos),
+      color-mix(in srgb, var(--fiscal-blue) 86%, transparent) var(--min-pos) var(--max-pos),
+      color-mix(in srgb, var(--fiscal-orange) 84%, transparent) var(--max-pos) 100%);
   box-shadow:
-    0 0 16px rgba(21, 169, 255, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    0 0 16px color-mix(in srgb, var(--fiscal-blue) 26%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 42%, transparent);
 }
 
 .wclc-track-fill {
   content: "";
   width: var(--user-pos);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--fiscal-surface) 46%, transparent), color-mix(in srgb, var(--fiscal-surface) 0%, transparent));
   filter: blur(1px);
 }
 
@@ -573,12 +523,12 @@
   top: 7px;
   width: 23px;
   height: 23px;
-  border: 3px solid rgba(238, 244, 255, 0.86);
+  border: 3px solid var(--fiscal-blue-soft);
   border-radius: 999px;
-  background: #071328;
+  background: var(--fiscal-surface);
   transform: translateX(-50%);
   box-shadow:
-    0 0 0 3px rgba(2, 13, 30, 0.78),
+    0 0 0 3px color-mix(in srgb, var(--fiscal-shade) 78%, transparent),
     0 0 18px currentColor;
 }
 
@@ -598,19 +548,19 @@
 .wclc-tick--min {
   left: var(--min-pos);
   color: var(--wclc-purple);
-  background: linear-gradient(180deg, #d0a3ff, #8652e5);
+  background: linear-gradient(180deg, var(--fiscal-violet), var(--fiscal-violet));
 }
 
 .wclc-tick--user {
   left: var(--user-pos);
   color: var(--wclc-blue);
-  background: linear-gradient(180deg, #8be3ff, #1297e9);
+  background: linear-gradient(180deg, var(--fiscal-blue), var(--fiscal-blue));
 }
 
 .wclc-tick--max {
   left: var(--max-pos);
   color: var(--wclc-orange);
-  background: linear-gradient(180deg, #ffc15f, #ef8511);
+  background: linear-gradient(180deg, var(--fiscal-orange), var(--fiscal-orange));
 }
 
 /* Referencias salariales (SMI y salario medio) sobre la escala de bases. */
@@ -619,11 +569,11 @@
   top: 13px;
   width: 10px;
   height: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.92);
+  border: 2px solid color-mix(in srgb, var(--fiscal-surface) 92%, transparent);
   border-radius: 999px;
-  background: #64748b;
+  background: var(--fiscal-muted);
   transform: translateX(-50%);
-  box-shadow: 0 1px 4px rgba(15, 32, 56, 0.35);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--fiscal-ink) 35%, transparent);
 }
 
 .wclc-ref-dot::after {
@@ -634,7 +584,7 @@
   width: 2px;
   height: 12px;
   border-radius: 999px;
-  background: #64748b;
+  background: var(--fiscal-muted);
   opacity: 0.5;
   transform: translateX(-50%);
 }
@@ -652,8 +602,8 @@
   left: 0;
   padding: 1px 6px;
   border-radius: 5px;
-  background: rgba(148, 163, 184, 0.16);
-  color: #64748b;
+  background: var(--fiscal-surface-soft);
+  color: var(--fiscal-muted);
   font-size: 11px;
   line-height: 14px;
   font-weight: 820;
@@ -666,22 +616,22 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-top: 14px;
-  color: #bac5da;
+  color: var(--fiscal-ink);
   text-align: center;
   font-size: clamp(13px, 1.7vw, 16px);
   font-weight: 820;
 }
 
 .wclc-scale-bottom span:nth-child(1) {
-  color: #d8b6ff;
+  color: var(--fiscal-violet-ink);
 }
 
 .wclc-scale-bottom span:nth-child(2) {
-  color: #26c0ff;
+  color: var(--fiscal-blue);
 }
 
 .wclc-scale-bottom span:nth-child(3) {
-  color: #ffb14b;
+  color: var(--fiscal-orange);
 }
 
 /* Accent tokens driven by the current status. Set on the wrappers so that
@@ -689,28 +639,28 @@
 .wclc-insight-grid--minimum,
 .wclc-summary--minimum {
   --wclc-accent: var(--wclc-purple);
-  --wclc-accent-strong: #d0a3ff;
-  --wclc-accent-soft: rgba(183, 131, 255, 0.34);
-  --wclc-accent-glow: rgba(183, 131, 255, 0.28);
-  --wclc-accent-bg: rgba(56, 33, 91, 0.27);
+  --wclc-accent-strong: var(--fiscal-violet);
+  --wclc-accent-soft: color-mix(in srgb, var(--fiscal-violet) 34%, transparent);
+  --wclc-accent-glow: color-mix(in srgb, var(--fiscal-violet) 28%, transparent);
+  --wclc-accent-bg: var(--fiscal-surface-soft);
 }
 
 .wclc-insight-grid--range,
 .wclc-summary--range {
   --wclc-accent: var(--wclc-blue);
-  --wclc-accent-strong: #6fd0ff;
-  --wclc-accent-soft: rgba(21, 169, 255, 0.34);
-  --wclc-accent-glow: rgba(21, 169, 255, 0.32);
-  --wclc-accent-bg: rgba(12, 76, 124, 0.24);
+  --wclc-accent-strong: var(--fiscal-blue);
+  --wclc-accent-soft: color-mix(in srgb, var(--fiscal-blue) 34%, transparent);
+  --wclc-accent-glow: color-mix(in srgb, var(--fiscal-blue) 32%, transparent);
+  --wclc-accent-bg: color-mix(in srgb, var(--fiscal-blue) 24%, transparent);
 }
 
 .wclc-insight-grid--maximum,
 .wclc-summary--maximum {
   --wclc-accent: var(--wclc-orange);
-  --wclc-accent-strong: #ffc15f;
-  --wclc-accent-soft: rgba(255, 155, 34, 0.34);
-  --wclc-accent-glow: rgba(255, 155, 34, 0.3);
-  --wclc-accent-bg: rgba(101, 58, 11, 0.22);
+  --wclc-accent-strong: var(--fiscal-orange);
+  --wclc-accent-soft: color-mix(in srgb, var(--fiscal-orange) 34%, transparent);
+  --wclc-accent-glow: color-mix(in srgb, var(--fiscal-orange) 30%, transparent);
+  --wclc-accent-bg: var(--fiscal-surface-soft);
 }
 
 .wclc-insight-grid {
@@ -725,11 +675,11 @@
   border: 1px solid var(--wclc-accent-soft);
   border-radius: 14px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 3.5%, transparent), transparent 55%),
     var(--wclc-accent-bg);
   box-shadow:
-    0 12px 26px rgba(0, 6, 18, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 12px 26px color-mix(in srgb, var(--fiscal-shade) 24%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 6%, transparent);
 }
 
 .wclc-status {
@@ -754,7 +704,7 @@
   align-items: center;
   gap: 9px;
   margin: 0 0 7px;
-  color: #eef6ff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(17px, 2vw, 21px);
   line-height: 1.1;
 }
@@ -768,10 +718,9 @@
   box-shadow: 0 0 12px var(--wclc-accent-glow);
 }
 
-.wclc-status p,
-.wclc-note {
+.wclc-status p {
   margin: 0;
-  color: #c4d1e5;
+  color: var(--fiscal-ink);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -786,7 +735,7 @@
 }
 
 .wclc-distance__label {
-  color: #b6c3da;
+  color: var(--fiscal-ink);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.01em;
@@ -798,11 +747,11 @@
   line-height: 1.05;
   font-weight: 900;
   white-space: nowrap;
-  text-shadow: 0 0 16px var(--wclc-accent-glow);
+  text-shadow: none;
 }
 
 .wclc-distance__unit {
-  color: #93a3bf;
+  color: var(--fiscal-copy);
   font-size: 13px;
   font-weight: 720;
 }
@@ -811,7 +760,7 @@
   display: grid;
   gap: 7px;
   margin-top: 4px;
-  color: #c4d1e5;
+  color: var(--fiscal-ink);
   font-size: 14px;
   line-height: 1.3;
 }
@@ -826,15 +775,15 @@
 .wclc-summary {
   display: grid;
   margin-top: 18px;
-  border: 1px solid rgba(96, 138, 189, 0.32);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 16px;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
-    rgba(3, 16, 34, 0.72);
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 4%, transparent), transparent 40%),
+    color-mix(in srgb, var(--fiscal-surface) 72%, transparent);
   box-shadow:
-    0 18px 40px rgba(0, 6, 20, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 18px 40px color-mix(in srgb, var(--fiscal-shade) 32%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 6%, transparent);
 }
 
 .wclc-real-base,
@@ -847,7 +796,7 @@
 }
 
 .wclc-row-label {
-  color: #c9d6ec;
+  color: var(--fiscal-ink);
   font-size: clamp(14px, 1.7vw, 17px);
   font-weight: 820;
 }
@@ -859,14 +808,14 @@
 }
 
 .wclc-row-values em {
-  color: #93a3bf;
+  color: var(--fiscal-copy);
   font-style: normal;
   font-weight: 720;
   white-space: nowrap;
 }
 
 .wclc-real-base .wclc-row-values strong {
-  color: #eef6ff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(16px, 2vw, 20px);
   line-height: 1.15;
   font-weight: 860;
@@ -906,7 +855,7 @@
   font-weight: 840;
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  border-color: #b8ded7;
+  border-color: var(--fiscal-primary-line);
 }
 
 .wclc-summary-connector svg {
@@ -915,11 +864,11 @@
 
 .wclc-result {
   min-height: 62px;
-  border-top: 1px solid rgba(96, 138, 189, 0.2);
+  border-top: 1px solid var(--fiscal-line-strong);
   background:
     var(--fiscal-primary-soft);
   color: var(--fiscal-ink);
-  border-color: #b8ded7;
+  border-color: var(--fiscal-primary-line);
   box-shadow: none;
 }
 
@@ -930,27 +879,6 @@
   font-weight: 900;
   text-shadow: none;
   white-space: nowrap;
-}
-
-.wclc-note {
-  margin-top: 12px;
-  padding: 11px 13px;
-  border: 1px solid rgba(255, 155, 34, 0.28);
-  border-radius: 10px;
-  color: #f6d2a1;
-  background: rgba(101, 58, 11, 0.2);
-}
-
-.wclc-simulations {
-  margin-top: 14px;
-}
-
-.wclc-source {
-  margin: 10px 0 0;
-  color: #7890ad;
-  font-size: 12px;
-  line-height: 1.35;
-  font-weight: 700;
 }
 
 @media (max-width: 760px) {
@@ -969,13 +897,11 @@
     flex-wrap: wrap;
   }
 
-  .wclc-mode,
-  .wclc-simulations {
+  .wclc-mode {
     width: 100%;
   }
 
-  .wclc-mode button,
-  .wclc-simulations button {
+  .wclc-mode button {
     flex: 1 1 0;
   }
 
@@ -1041,13 +967,11 @@
     text-align: left;
   }
 
-  .wclc-mode,
-  .wclc-simulations {
+  .wclc-mode {
     width: 100%;
   }
 
-  .wclc-mode button,
-  .wclc-simulations button {
+  .wclc-mode button {
     flex: 1 1 0;
   }
 
@@ -1058,7 +982,6 @@
 
 /*  Tema claro de la calculadora (antes en FiscalSoftTheme.css).  */
 
-.wclc-field,
 .wclc-scale,
 .wclc-status,
 .wclc-distance,
@@ -1084,21 +1007,21 @@
 .wclc-group-select__trigger:focus-visible,
 .wclc-group-select--open .wclc-group-select__trigger {
   border-color: color-mix(in srgb, var(--fiscal-primary) 46%, var(--fiscal-line));
-  background: #ffffff;
+  background: var(--fiscal-surface);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--fiscal-primary) 9%, transparent),
-    0 7px 18px rgba(35, 54, 78, 0.09);
+    0 7px 18px color-mix(in srgb, var(--fiscal-shade) 9%, transparent);
 }
 
 .wclc-group-select__option:hover,
 .wclc-group-select__option--active,
 .wclc-group-select__option--selected {
   border-color: color-mix(in srgb, var(--fiscal-primary) 34%, var(--fiscal-line));
-  background: color-mix(in srgb, var(--fiscal-primary-soft) 70%, #ffffff);
+  background: color-mix(in srgb, var(--fiscal-primary-soft) 70%, var(--fiscal-surface));
 }
 
 .wclc-mode {
   border-color: var(--fiscal-line-strong);
-  background: #e9eef4;
+  background: var(--fiscal-blue-soft);
 }
 
 .wclc-status h3,
@@ -1113,6 +1036,6 @@
 }
 
 .wclc-mode button.is-active {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-blue);
 }

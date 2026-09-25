@@ -1,21 +1,21 @@
 .wfsc-summary {
-  --summary-company: #ffad42;
-  --summary-tax: #ff6f7d;
-  --summary-total-tax: #c69cff;
-  --summary-net: #62d76b;
+  --summary-company: var(--fiscal-orange);
+  --summary-tax: var(--fiscal-red);
+  --summary-total-tax: var(--fiscal-violet);
+  --summary-net: var(--fiscal-green);
   display: grid;
   gap: clamp(18px, 2.5vw, 28px);
   min-width: 0;
   max-width: 100%;
   padding: clamp(20px, 3vw, 36px);
-  border: 1px solid rgba(93, 164, 229, 0.48);
+  border: 1px solid var(--fiscal-blue-line);
   border-radius: var(--fiscal-radius-card);
-  color: #edf7ff;
+  color: var(--fiscal-on-accent);
   background:
-    radial-gradient(circle at 8% 0%, rgba(47, 128, 255, 0.2), transparent 32%),
-    radial-gradient(circle at 92% 100%, rgba(98, 215, 107, 0.12), transparent 34%),
-    linear-gradient(145deg, rgba(5, 31, 57, 0.97), rgba(2, 13, 29, 0.99));
-  box-shadow: 0 24px 64px rgba(0, 7, 20, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--fiscal-blue) 20%, transparent), transparent 32%),
+    radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--fiscal-green) 12%, transparent), transparent 34%),
+    linear-gradient(145deg, var(--fiscal-surface-soft), color-mix(in srgb, var(--fiscal-surface) 99%, transparent));
+  box-shadow: 0 24px 64px color-mix(in srgb, var(--fiscal-shade) 38%, transparent), inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 8%, transparent);
 }
 
 /* ---------- Paso 1 (intro): version orientada a publico general ---------- */
@@ -32,136 +32,62 @@
 
 /* Variante A: oscuro calido. Menos neon que el resto de la app, pero sigue
    encajando visualmente con los pasos 2-10. */
-.wfsc-theme--warm-dark {
-  --intro-net: #5fc98a;
-  --intro-worker: #e8798a;
-  --intro-company: #e5a04f;
-  --intro-consumption: #a894e0;
-
-  --intro-bg:
-    radial-gradient(circle at 6% 0%, rgba(229, 160, 79, 0.1), transparent 34%),
-    radial-gradient(circle at 94% 100%, rgba(95, 201, 138, 0.09), transparent 36%),
-    linear-gradient(150deg, #1a2431, #10171f);
-  --intro-border: rgba(150, 170, 190, 0.22);
-  --intro-shadow: 0 24px 64px rgba(0, 5, 14, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-  --intro-surface: rgba(255, 255, 255, 0.035);
-  --intro-surface-border: rgba(160, 180, 200, 0.18);
-  --intro-card-base: rgba(16, 23, 31, 0.8);
-  --intro-icon-base: rgba(16, 23, 31, 0.85);
-  --intro-tint: 12%;
-
-  --intro-text-strong: #f4f1ec;
-  --intro-text: #c2c9d1;
-  --intro-text-muted: #96a0ab;
-  --intro-eyebrow: #e5a04f;
-
-  --intro-toggle-bg: rgba(0, 0, 0, 0.25);
-  --intro-toggle-active-bg: linear-gradient(135deg, #3d8f6b, #2d6b50);
-  --intro-toggle-active-text: #f2fff8;
-
-  --intro-cta-bg: linear-gradient(135deg, #4aa87a, #35835f);
-  --intro-cta-border: rgba(95, 201, 138, 0.5);
-  --intro-cta-text: #f2fff8;
-  --intro-cta-shadow: 0 12px 30px rgba(45, 107, 80, 0.32);
-  --intro-focus: rgba(150, 200, 255, 0.7);
-}
 
 /* Variante B: claro editorial, estilo explicador de prensa. */
-.wfsc-theme--light {
-  --intro-net: #12855b;
-  --intro-worker: #c4344c;
-  --intro-company: #b5710f;
-  --intro-consumption: #6b4bb5;
-
-  --intro-bg:
-    radial-gradient(circle at 6% 0%, rgba(181, 113, 15, 0.07), transparent 36%),
-    linear-gradient(160deg, #fdfaf5, #f6efe4);
-  --intro-border: #e6ddd0;
-  --intro-shadow: 0 18px 44px rgba(72, 55, 32, 0.1);
-
-  --intro-surface: #ffffff;
-  --intro-surface-border: #ece3d6;
-  --intro-card-base: #ffffff;
-  --intro-icon-base: #ffffff;
-  --intro-tint: 9%;
-
-  --intro-text-strong: #1c2531;
-  --intro-text: #4a5560;
-  /* el texto secundario va a 12px: se mantiene por encima de 4.5:1 sobre crema */
-  --intro-text-muted: #5d6873;
-  --intro-eyebrow: #b5710f;
-
-  --intro-toggle-bg: #f1e9dc;
-  --intro-toggle-active-bg: #1c2531;
-  --intro-toggle-active-text: #ffffff;
-
-  --intro-cta-bg: linear-gradient(135deg, #12855b, #0d6b49);
-  --intro-cta-border: rgba(13, 107, 73, 0.4);
-  --intro-cta-text: #ffffff;
-  --intro-cta-shadow: 0 12px 28px rgba(13, 107, 73, 0.22);
-  --intro-focus: rgba(18, 133, 91, 0.55);
-}
 
 /* Variante C: claro frio y aireado, mas cercano a una app que a un periodico. */
 .wfsc-theme--soft {
-  --intro-net: #0d9f6e;
-  --intro-worker: #e0455f;
-  --intro-company: #d1810c;
-  --intro-consumption: #7357e6;
+  --intro-net: var(--fiscal-green);
+  --intro-worker: var(--fiscal-red);
+  --intro-company: var(--fiscal-orange);
+  --intro-consumption: var(--fiscal-violet);
 
   --intro-bg:
-    radial-gradient(circle at 8% 0%, rgba(47, 111, 208, 0.07), transparent 38%),
-    linear-gradient(160deg, #f9fbff, #eef3fa);
-  --intro-border: #dde5f0;
-  --intro-shadow: 0 18px 44px rgba(31, 51, 82, 0.09);
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--fiscal-blue) 7%, transparent), transparent 38%),
+    linear-gradient(160deg, var(--fiscal-surface-soft), var(--fiscal-surface-tint));
+  --intro-border: var(--fiscal-line);
+  --intro-shadow: 0 18px 44px color-mix(in srgb, var(--fiscal-shade) 9%, transparent);
 
-  --intro-surface: #ffffff;
-  --intro-surface-border: #e4ebf4;
-  --intro-card-base: #ffffff;
-  --intro-icon-base: #ffffff;
+  --intro-surface: var(--fiscal-surface);
+  --intro-surface-border: var(--fiscal-violet-soft);
+  --intro-card-base: var(--fiscal-on-accent);
+  --intro-icon-base: var(--fiscal-on-accent);
   --intro-tint: 8%;
 
-  --intro-text-strong: #17212e;
-  --intro-text: #4b5769;
+  --intro-text-strong: var(--fiscal-ink);
+  --intro-text: var(--fiscal-copy);
   /* el texto secundario va a 12px: se mantiene por encima de 4.5:1 sobre blanco */
-  --intro-text-muted: #5c6879;
-  --intro-eyebrow: #2f6fd0;
+  --intro-text-muted: var(--fiscal-muted);
+  --intro-eyebrow: var(--fiscal-blue);
 
-  --intro-toggle-bg: #eef2f8;
-  --intro-toggle-active-bg: linear-gradient(135deg, #3b7ee0, #2b62b8);
-  --intro-toggle-active-text: #ffffff;
+  --intro-toggle-bg: var(--fiscal-surface-tint);
+  --intro-toggle-active-bg: linear-gradient(135deg, var(--fiscal-blue), var(--fiscal-blue));
+  --intro-toggle-active-text: var(--fiscal-on-accent);
 
-  --intro-cta-bg: linear-gradient(135deg, #0d9f6e, #0a8459);
-  --intro-cta-border: rgba(10, 132, 89, 0.35);
-  --intro-cta-text: #ffffff;
-  --intro-cta-shadow: 0 12px 28px rgba(10, 132, 89, 0.2);
-  --intro-focus: rgba(47, 111, 208, 0.55);
+  --intro-cta-bg: linear-gradient(135deg, var(--fiscal-green), var(--fiscal-green));
+  --intro-cta-border: color-mix(in srgb, var(--fiscal-green) 35%, transparent);
+  --intro-cta-text: var(--fiscal-on-accent);
+  --intro-cta-shadow: 0 12px 28px color-mix(in srgb, var(--fiscal-green) 20%, transparent);
+  --intro-focus: color-mix(in srgb, var(--fiscal-blue) 55%, transparent);
 }
 
 /* En las variantes claras el SalarySlider (componente compartido, tematizado en
    oscuro) desentona dentro del panel blanco: se reviste solo aqui. */
-.wfsc-theme--light,
 .wfsc-theme--soft {
   --intro-slider-bg: var(--intro-surface);
   --intro-slider-track-empty: var(--intro-surface-border);
 }
 
-.wfsc-theme--light {
-  --intro-slider-bg: #fbf7f0;
-  --intro-slider-track-empty: #e3d9c9;
-}
-
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider {
   border-color: var(--intro-slider-track-empty);
   background: var(--intro-slider-bg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--fiscal-surface) 80%, transparent);
 }
 
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__value-input {
   color: var(--intro-text-strong);
   border-color: var(--intro-slider-track-empty);
-  background: #ffffff;
+  background: var(--fiscal-surface);
 }
 
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__top span,
@@ -179,7 +105,7 @@
     var(--intro-slider-track-empty) var(--salary-slider-value),
     var(--intro-slider-track-empty) 100%
   );
-  box-shadow: inset 0 1px 2px rgba(40, 50, 65, 0.14);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 14%, transparent);
 }
 
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-moz-range-track {
@@ -190,19 +116,19 @@
     var(--intro-slider-track-empty) var(--salary-slider-value),
     var(--intro-slider-track-empty) 100%
   );
-  box-shadow: inset 0 1px 2px rgba(40, 50, 65, 0.14);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--fiscal-shade) 14%, transparent);
 }
 
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-webkit-slider-thumb {
-  border-color: #ffffff;
+  border-color: var(--fiscal-surface);
   background: var(--intro-net);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--intro-net) 18%, transparent), 0 2px 6px rgba(40, 50, 65, 0.2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--intro-net) 18%, transparent), 0 2px 6px color-mix(in srgb, var(--fiscal-shade) 20%, transparent);
 }
 
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider input[type="range"]::-moz-range-thumb {
-  border-color: #ffffff;
+  border-color: var(--fiscal-surface);
   background: var(--intro-net);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--intro-net) 18%, transparent), 0 2px 6px rgba(40, 50, 65, 0.2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--intro-net) 18%, transparent), 0 2px 6px color-mix(in srgb, var(--fiscal-shade) 20%, transparent);
 }
 
 :is(.wfsc-theme--light, .wfsc-theme--soft) .salary-slider__value-shell > span {
@@ -326,7 +252,7 @@
 .wfsc-intro__bar-part {
   min-width: 4px;
   border-radius: 6px;
-  background: var(--part-color, #76b8ff);
+  background: var(--part-color, var(--fiscal-blue));
 }
 
 .wfsc-intro__bar-part--net { --part-color: var(--intro-net); }
@@ -356,7 +282,7 @@
 }
 
 .wfsc-intro__legend-item {
-  --item-color: #76b8ff;
+  --item-color: var(--fiscal-blue);
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr);
   gap: 12px;
@@ -492,7 +418,7 @@
 
 .wfsc-summary__eyebrow {
   margin: 0 0 8px;
-  color: #76b8ff;
+  color: var(--fiscal-blue);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -501,7 +427,7 @@
 
 .wfsc-summary__header h2 {
   margin: 0;
-  color: #f7fbff;
+  color: var(--fiscal-on-accent);
   font-size: clamp(27px, 3.4vw, 44px);
   line-height: 1.04;
 }
@@ -509,7 +435,7 @@
 .wfsc-summary__header > div:first-child > p:last-child {
   max-width: 720px;
   margin: 12px 0 0;
-  color: #b8c9dc;
+  color: var(--fiscal-ink);
   font-size: 14px;
   line-height: 1.55;
 }
@@ -519,9 +445,9 @@
   grid-template-columns: 1fr 1fr;
   flex: 0 0 auto;
   padding: 4px;
-  border: 1px solid rgba(105, 153, 202, 0.3);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 12px;
-  background: rgba(2, 15, 31, 0.72);
+  background: color-mix(in srgb, var(--fiscal-surface) 72%, transparent);
 }
 
 .wfsc-summary__mode button {
@@ -533,28 +459,28 @@
   padding: 0 13px;
   border: 0;
   border-radius: 8px;
-  color: #91a8c6;
+  color: var(--fiscal-copy);
   background: transparent;
   cursor: pointer;
 }
 
 .wfsc-summary__mode button.is-active {
-  color: #fff;
-  background: linear-gradient(135deg, #246fe0, #1854ad);
-  box-shadow: 0 8px 22px rgba(34, 109, 224, 0.28);
+  color: var(--fiscal-on-accent);
+  background: linear-gradient(135deg, var(--fiscal-blue), var(--fiscal-blue));
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--fiscal-blue) 28%, transparent);
 }
 
 .wfsc-summary__mode button:focus-visible,
 .wfsc-summary__footer button:focus-visible {
-  outline: 3px solid rgba(118, 184, 255, 0.72);
+  outline: 3px solid var(--fiscal-blue-line);
   outline-offset: 3px;
 }
 
 .wfsc-summary__salary {
   padding: 18px;
-  border: 1px solid rgba(86, 139, 190, 0.28);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: var(--fiscal-radius-panel);
-  background: rgba(3, 20, 39, 0.62);
+  background: color-mix(in srgb, var(--fiscal-surface) 62%, transparent);
 }
 
 .wfsc-summary__metrics {
@@ -564,7 +490,7 @@
 }
 
 .wfsc-summary__metric {
-  --metric-color: #76b8ff;
+  --metric-color: var(--fiscal-blue);
   display: grid;
   grid-template-columns: 46px minmax(0, 1fr);
   gap: 14px;
@@ -572,7 +498,7 @@
   padding: clamp(16px, 2vw, 22px);
   border: 1px solid color-mix(in srgb, var(--metric-color) 34%, transparent);
   border-radius: 15px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--metric-color) 11%, transparent), rgba(3, 19, 37, 0.78));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--metric-color) 11%, transparent), color-mix(in srgb, var(--fiscal-surface) 78%, transparent));
 }
 
 .wfsc-summary__metric--company { --metric-color: var(--summary-company); }
@@ -587,14 +513,14 @@
   height: 44px;
   border-radius: 12px;
   color: var(--metric-color);
-  background: color-mix(in srgb, var(--metric-color) 15%, rgba(2, 14, 29, 0.8));
+  background: color-mix(in srgb, var(--metric-color) 15%, color-mix(in srgb, var(--fiscal-surface) 80%, transparent));
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--metric-color) 25%, transparent);
 }
 
 .wfsc-summary__metric p {
   min-height: 35px;
   margin: 0;
-  color: #dce8f4;
+  color: var(--fiscal-blue-ink);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.3;
@@ -611,7 +537,7 @@
 
 .wfsc-summary__metric small {
   display: block;
-  color: #93a9c3;
+  color: var(--fiscal-copy);
   font-size: 11px;
   line-height: 1.45;
 }
@@ -622,13 +548,13 @@
   gap: 18px;
   align-items: center;
   padding-top: 18px;
-  border-top: 1px solid rgba(93, 135, 179, 0.24);
+  border-top: 1px solid var(--fiscal-line-strong);
 }
 
 .wfsc-summary__footer p {
   max-width: 720px;
   margin: 0;
-  color: #91a8c6;
+  color: var(--fiscal-copy);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -641,17 +567,17 @@
   flex: 0 0 auto;
   min-height: 44px;
   padding: 0 18px;
-  border: 1px solid rgba(98, 215, 107, 0.58);
+  border: 1px solid var(--fiscal-green-line);
   border-radius: 11px;
-  color: #eaffed;
+  color: var(--fiscal-on-accent);
   font-weight: 800;
-  background: linear-gradient(135deg, rgba(52, 151, 69, 0.88), rgba(30, 103, 57, 0.92));
-  box-shadow: 0 10px 28px rgba(48, 153, 71, 0.2);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--fiscal-green) 88%, transparent), color-mix(in srgb, var(--fiscal-green) 92%, transparent));
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--fiscal-green) 20%, transparent);
   cursor: pointer;
 }
 
 .wfsc-summary__footer button:hover {
-  border-color: rgba(116, 235, 127, 0.86);
+  border-color: var(--fiscal-green-line);
   transform: translateY(-1px);
 }
 
@@ -749,12 +675,12 @@
 
 .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__metric {
   border-color: color-mix(in srgb, var(--metric-color) 28%, var(--fiscal-line));
-  background: color-mix(in srgb, var(--metric-color) 9%, #ffffff);
+  background: color-mix(in srgb, var(--metric-color) 9%, var(--fiscal-surface));
   box-shadow: none;
 }
 
 .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__icon {
-  background: color-mix(in srgb, var(--metric-color) 12%, #ffffff);
+  background: color-mix(in srgb, var(--metric-color) 12%, var(--fiscal-surface));
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--metric-color) 24%, transparent);
 }
 
@@ -771,7 +697,7 @@
 }
 
 .wfsc-summary:not(.wfsc-summary--intro) .wfsc-summary__mode button.is-active {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-blue);
   box-shadow: var(--fiscal-shadow-control);
 }

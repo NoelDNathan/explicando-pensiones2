@@ -34,8 +34,8 @@
   border: 1px solid var(--wfsc-border);
   border-radius: var(--fiscal-radius-card);
   background:
-    radial-gradient(circle at 8% 8%, rgba(20, 125, 117, 0.08), transparent 26%),
-    linear-gradient(145deg, #ffffff, #f3f7fb);
+    radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--fiscal-primary) 8%, transparent), transparent 26%),
+    linear-gradient(145deg, var(--fiscal-surface), var(--fiscal-canvas));
   box-shadow:
     var(--fiscal-shadow);
   border-color: var(--fiscal-line);
@@ -46,7 +46,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 42%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 4.5%, transparent), transparent 42%);
 }
 
 .wfsc-stage--summary {
@@ -67,10 +67,10 @@
   gap: 8px 16px;
   align-items: center;
   padding: 10px clamp(14px, 3vw, 28px) calc(8px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid rgba(92, 139, 184, 0.28);
+  border-top: 1px solid var(--fiscal-line-strong);
   background:
-    linear-gradient(180deg, rgba(4, 18, 36, 0.96), rgba(2, 12, 26, 0.98));
-  box-shadow: 0 -14px 36px rgba(0, 4, 14, 0.28);
+    linear-gradient(180deg, color-mix(in srgb, var(--fiscal-surface) 96%, transparent), color-mix(in srgb, var(--fiscal-surface) 98%, transparent));
+  box-shadow: 0 -14px 36px color-mix(in srgb, var(--fiscal-shade) 28%, transparent);
   backdrop-filter: blur(10px);
 }
 
@@ -103,7 +103,7 @@
   min-width: 0;
   min-height: 44px;
   border: 0;
-  color: #d8e5f5;
+  color: var(--fiscal-blue-ink);
   background: transparent;
   cursor: pointer;
 }
@@ -120,7 +120,7 @@
   max-width: min(320px, 42vw);
   padding: 0 14px 0 16px;
   border-radius: 12px;
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   background: var(--fiscal-primary);
   box-shadow: 0 8px 18px color-mix(in srgb, var(--fiscal-primary) 28%, transparent);
   transition:
@@ -165,7 +165,7 @@
 
 .wfsc-nav__next-text em {
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.84);
+  color: color-mix(in srgb, var(--fiscal-on-accent) 84%, transparent);
   font-size: 12px;
   font-style: normal;
   font-weight: 650;
@@ -182,8 +182,8 @@
 
 .wfsc-nav--previous:hover:not(:disabled) svg,
 .wfsc-nav--previous:focus-visible:not(:disabled) svg {
-  color: #fff;
-  background: rgba(70, 118, 166, 0.58);
+  color: var(--fiscal-on-accent);
+  background: color-mix(in srgb, var(--fiscal-muted) 58%, transparent);
   transform: translateY(-1px);
 }
 
@@ -191,7 +191,7 @@
 .wfsc-nav--next:focus-visible:not(:disabled) {
   filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 10px 26px rgba(85, 229, 119, 0.34);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--fiscal-green) 34%, transparent);
 }
 
 .wfsc-nav:disabled {
@@ -228,13 +228,13 @@
   width: clamp(66px, 7vw, 94px);
   height: clamp(66px, 7vw, 94px);
   border-radius: 50%;
-  color: #f5fff6;
+  color: var(--fiscal-on-accent);
   background:
-    linear-gradient(135deg, rgba(98, 241, 125, 0.96), rgba(35, 181, 229, 0.9)),
-    #1ea768;
+    linear-gradient(135deg, color-mix(in srgb, var(--fiscal-green) 96%, transparent), color-mix(in srgb, var(--fiscal-blue) 90%, transparent)),
+    var(--fiscal-green);
   box-shadow:
-    0 0 38px rgba(91, 234, 120, 0.44),
-    0 0 58px rgba(45, 151, 255, 0.22);
+    0 0 38px color-mix(in srgb, var(--fiscal-green) 44%, transparent),
+    0 0 58px color-mix(in srgb, var(--fiscal-blue) 22%, transparent);
 }
 
 .wfsc-step-orb svg {
@@ -290,7 +290,7 @@
 
 .wfsc-description p {
   margin: 0;
-  color: #d2dbea;
+  color: var(--fiscal-ink);
   font-size: clamp(15px, 1.22vw, 18px);
   line-height: 1.52;
   font-weight: 500;
@@ -324,7 +324,7 @@
 
 .wfsc-defs dd {
   margin: 0;
-  color: #d2dbea;
+  color: var(--fiscal-ink);
   font-size: clamp(14px, 1.15vw, 17px);
   line-height: 1.45;
   font-weight: 500;
@@ -436,7 +436,7 @@
   gap: 3px;
   text-align: left;
   color: var(--fiscal-primary-strong);
-  border-color: #b8ded7;
+  border-color: var(--fiscal-primary-line);
   background: var(--fiscal-primary-soft);
 }
 
@@ -471,9 +471,9 @@
   border: 1px solid var(--wfsc-border-strong);
   border-radius: var(--fiscal-radius-panel);
   background:
-    rgba(255, 255, 255, 0.72);
+    color-mix(in srgb, var(--fiscal-surface) 72%, transparent);
   box-shadow:
-    0 10px 28px rgba(35, 54, 78, 0.07);
+    0 10px 28px color-mix(in srgb, var(--fiscal-shade) 7%, transparent);
   border-color: var(--fiscal-line);
 }
 
@@ -494,7 +494,7 @@
 
 .wfsc-payroll figcaption {
   width: min(100%, 600px);
-  color: #f3f7ff;
+  color: var(--fiscal-on-accent);
   font-size: 14px;
   line-height: 1.35;
   text-align: center;
@@ -529,27 +529,27 @@
 }
 
 .wfsc-payroll-legend__item--worker .wfsc-payroll-legend__swatch {
-  border: 1px solid rgba(41, 118, 214, 0.82);
-  background: rgba(88, 156, 255, 0.24);
+  border: 1px solid color-mix(in srgb, var(--fiscal-blue) 82%, transparent);
+  background: color-mix(in srgb, var(--fiscal-blue) 24%, transparent);
 }
 
 .wfsc-payroll-legend__item--company .wfsc-payroll-legend__swatch {
-  border: 1px solid rgba(43, 188, 69, 0.78);
-  background: rgba(95, 232, 117, 0.2);
+  border: 1px solid var(--fiscal-green-line);
+  background: color-mix(in srgb, var(--fiscal-green) 20%, transparent);
 }
 
 .wfsc-payroll-paper {
   width: min(100%, 600px);
   overflow: hidden;
   padding: 10px 12px 12px;
-  border: 1px solid #111;
+  border: 1px solid var(--fiscal-line);
   border-radius: 3px;
-  color: #050505;
-  background: #fff;
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface);
   font-family: "Courier New", Courier, monospace;
   box-shadow:
-    0 18px 42px rgba(0, 0, 0, 0.36),
-    0 0 0 1px rgba(255, 255, 255, 0.5);
+    0 18px 42px color-mix(in srgb, var(--fiscal-shade) 36%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--fiscal-surface) 50%, transparent);
 }
 
 .wfsc-payroll-title {
@@ -559,12 +559,12 @@
   align-items: start;
   min-height: 34px;
   margin-bottom: 6px;
-  border-bottom: 1px solid #b0b0b0;
+  border-bottom: 1px solid var(--fiscal-line-strong);
   text-align: left;
 }
 
 .wfsc-payroll-title span {
-  color: #050505;
+  color: var(--fiscal-ink);
   font-size: 10px;
   font-weight: 700;
   line-height: 1.25;
@@ -575,9 +575,9 @@
   justify-self: end;
   min-width: 160px;
   padding: 5px 8px;
-  border: 1px solid #111;
-  color: #050505;
-  background: #fff;
+  border: 1px solid var(--fiscal-line);
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface);
   font-family: Arial, "Segoe UI", sans-serif;
   font-size: 9px;
   font-weight: 500;
@@ -588,7 +588,7 @@
 .wfsc-payroll-meta {
   display: grid;
   grid-template-columns: 1.35fr 1.08fr 0.72fr 0.28fr;
-  border: 1px solid #111;
+  border: 1px solid var(--fiscal-line);
   border-bottom: 0;
 }
 
@@ -597,8 +597,8 @@
   grid-template-rows: auto 1fr;
   min-width: 0;
   min-height: 25px;
-  border-right: 1px solid #111;
-  border-bottom: 1px solid #111;
+  border-right: 1px solid var(--fiscal-line);
+  border-bottom: 1px solid var(--fiscal-line);
 }
 
 .wfsc-payroll-meta div:nth-child(4),
@@ -644,7 +644,7 @@
 
 .wfsc-payroll-table {
   display: grid;
-  border: 1px solid #111;
+  border: 1px solid var(--fiscal-line);
   border-top: 0;
 }
 
@@ -670,7 +670,7 @@
 
 .wfsc-payroll-table__head {
   min-height: 18px;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid var(--fiscal-line);
   font-weight: 700;
   text-align: center;
 }
@@ -683,26 +683,26 @@
 .wfsc-payroll-totals > div.is-highlighted,
 .wfsc-payroll-bases > div.is-highlighted,
 .wfsc-payroll-liquid strong.is-highlighted {
-  outline: 1px solid rgba(43, 188, 69, 0.78);
+  outline: 1px solid var(--fiscal-green-line);
   outline-offset: -1px;
-  background: rgba(95, 232, 117, 0.08);
+  background: color-mix(in srgb, var(--fiscal-green) 8%, transparent);
 }
 
 .wfsc-payroll-table > div.is-highlighted--worker,
 .wfsc-payroll-totals > div.is-highlighted--worker {
-  outline: 1px solid rgba(41, 118, 214, 0.82);
+  outline: 1px solid color-mix(in srgb, var(--fiscal-blue) 82%, transparent);
   outline-offset: -1px;
-  background: rgba(88, 156, 255, 0.12);
+  background: color-mix(in srgb, var(--fiscal-blue) 12%, transparent);
 }
 
 .wfsc-payroll-bases > div.is-highlighted--company {
-  outline: 1px solid rgba(43, 188, 69, 0.78);
+  outline: 1px solid var(--fiscal-green-line);
   outline-offset: -1px;
-  background: rgba(95, 232, 117, 0.08);
+  background: color-mix(in srgb, var(--fiscal-green) 8%, transparent);
 }
 
 .wfsc-payroll-table strong {
-  color: #050505;
+  color: var(--fiscal-ink);
   font-size: 10px;
   font-weight: 400;
   white-space: nowrap;
@@ -713,14 +713,14 @@
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   margin-top: 8px;
-  border: 1px solid #111;
+  border: 1px solid var(--fiscal-line);
 }
 
 .wfsc-payroll-totals > div {
   display: grid;
   grid-template-rows: 1fr auto;
   min-height: 38px;
-  border-right: 1px solid #111;
+  border-right: 1px solid var(--fiscal-line);
 }
 
 .wfsc-payroll-totals > div:last-child {
@@ -732,7 +732,7 @@
   min-width: 0;
   padding: 3px 4px;
   overflow: hidden;
-  color: #050505;
+  color: var(--fiscal-ink);
   font-size: 8.8px;
   line-height: 1.12;
   text-overflow: ellipsis;
@@ -753,15 +753,15 @@
   margin-left: auto;
   width: 42%;
   min-width: 230px;
-  border-right: 1px solid #111;
-  border-bottom: 1px solid #111;
-  border-left: 1px solid #111;
+  border-right: 1px solid var(--fiscal-line);
+  border-bottom: 1px solid var(--fiscal-line);
+  border-left: 1px solid var(--fiscal-line);
 }
 
 .wfsc-payroll-liquid span,
 .wfsc-payroll-liquid strong {
   padding: 4px 6px;
-  color: #050505;
+  color: var(--fiscal-ink);
   font-size: 10px;
   line-height: 1.1;
 }
@@ -771,7 +771,7 @@
 }
 
 .wfsc-payroll-liquid strong {
-  border-left: 1px solid #111;
+  border-left: 1px solid var(--fiscal-line);
   font-size: 12px;
   font-weight: 700;
   text-align: right;
@@ -780,14 +780,14 @@
 .wfsc-payroll-bases {
   display: grid;
   margin-top: 10px;
-  border: 1px solid #111;
+  border: 1px solid var(--fiscal-line);
 }
 
 .wfsc-payroll-bases h3 {
   margin: 0;
   padding: 5px 6px;
-  border-bottom: 1px solid #111;
-  color: #050505;
+  border-bottom: 1px solid var(--fiscal-line);
+  color: var(--fiscal-ink);
   font-size: 8.6px;
   line-height: 1.15;
   font-weight: 700;
@@ -802,7 +802,7 @@
 }
 
 .wfsc-payroll-bases__head {
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid var(--fiscal-line);
   font-weight: 700;
 }
 
@@ -811,7 +811,7 @@
   min-width: 0;
   padding: 3px 5px;
   overflow: hidden;
-  color: #050505;
+  color: var(--fiscal-ink);
   font-size: 9.2px;
   line-height: 1.14;
   text-overflow: ellipsis;
@@ -830,9 +830,9 @@
   align-items: center;
   margin-top: 8px;
   padding: 6px 8px;
-  border: 1px solid #111;
-  color: #050505;
-  background: #fff;
+  border: 1px solid var(--fiscal-line);
+  color: var(--fiscal-ink);
+  background: var(--fiscal-surface);
   font-size: 9.5px;
   line-height: 1.1;
 }
@@ -842,7 +842,7 @@
 }
 
 .wfsc-payroll-result strong {
-  color: #050505;
+  color: var(--fiscal-ink);
   font-size: 11px;
   white-space: nowrap;
 }
@@ -853,7 +853,7 @@
   height: 4px;
   overflow: hidden;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--fiscal-line) 80%, #ffffff);
+  background: color-mix(in srgb, var(--fiscal-line) 80%, var(--fiscal-surface));
 }
 
 .wfsc-progress span {
@@ -882,7 +882,7 @@
   place-items: center;
   width: 26px;
   height: 26px;
-  border: 1px solid rgba(92, 139, 184, 0.42);
+  border: 1px solid var(--fiscal-line-strong);
   border-radius: 999px;
   color: var(--fiscal-ink);
   background: var(--fiscal-surface);
@@ -892,15 +892,15 @@
 }
 
 .wfsc-step-dots button.is-done {
-  color: #86efac;
-  border-color: rgba(95, 232, 117, 0.45);
-  background: rgba(25, 96, 62, 0.45);
+  color: var(--fiscal-green);
+  border-color: var(--fiscal-green-line);
+  background: var(--fiscal-surface-soft);
 }
 
 .wfsc-step-dots button.is-active {
-  color: #071323;
-  border-color: rgba(95, 232, 117, 0.82);
-  background: linear-gradient(135deg, #82f594, #42d66f);
+  color: var(--fiscal-ink);
+  border-color: var(--fiscal-green-line);
+  background: linear-gradient(135deg, var(--fiscal-green), var(--fiscal-green));
   box-shadow: none;
 }
 
@@ -1065,7 +1065,7 @@
     justify-items: start;
     overflow-x: auto;
     padding-bottom: 4px;
-    scrollbar-color: rgba(95, 232, 117, 0.64) rgba(80, 113, 150, 0.18);
+    scrollbar-color: color-mix(in srgb, var(--fiscal-green) 64%, transparent) color-mix(in srgb, var(--fiscal-muted) 18%, transparent);
     scrollbar-width: thin;
   }
 
@@ -1242,7 +1242,7 @@
 }
 
 .wfsc-step-dots button.is-active {
-  color: #ffffff;
+  color: var(--fiscal-on-accent);
   border-color: var(--fiscal-primary);
   background: var(--fiscal-primary);
 }

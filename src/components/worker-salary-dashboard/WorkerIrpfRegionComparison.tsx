@@ -153,7 +153,8 @@ function SummaryStat({ title, tag, color, rate, irpf, madridRate, madridIrpf, on
   return <div className="wirc-stat">{content}</div>;
 }
 
-const AVERAGE_COLOR = "#8f9bff";
+// Se aplica como estilo (no como atributo SVG) para que el token resuelva.
+const AVERAGE_COLOR = "var(--fiscal-violet)";
 
 type ChartLine = {
   id: string;
@@ -494,7 +495,7 @@ export function WorkerIrpfRegionComparison({
           />
           <SummaryStat
             title={`Media (${summary.count} CCAA)`}
-            color="#8f9bff"
+            color={AVERAGE_COLOR}
             rate={summary.average.rate}
             irpf={summary.average.irpf}
             madridRate={summary.madridRate}
@@ -601,7 +602,7 @@ export function WorkerIrpfRegionComparison({
                   <path
                     d={path}
                     fill="none"
-                    stroke={line.color}
+                    style={{ stroke: line.color }}
                     strokeWidth={width}
                     strokeOpacity={line.kind === "average" ? 0.92 : 1}
                     strokeDasharray={line.kind === "average" ? "10 7" : undefined}
@@ -615,8 +616,7 @@ export function WorkerIrpfRegionComparison({
                       cx={xOf(line.points[activeIndex].salary)}
                       cy={yOf(valueOf(line.points[activeIndex]))}
                       r={line.role === "selected" ? 5.5 : 4.8}
-                      fill="#08111f"
-                      stroke={line.color}
+                      style={{ fill: "var(--fiscal-surface)", stroke: line.color }}
                       strokeWidth={2.8}
                     />
                   )}
