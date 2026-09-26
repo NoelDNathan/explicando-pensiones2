@@ -14,6 +14,7 @@ import { SalaryNationalityDashboard } from './components/salary-nationality/Sala
 import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSecurityBasesExplainer, WorkIncomeReductionExplainer } from './components/fiscal-worker-dashboard'
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
+import { FiscalVariantContext } from './components/fiscal-worker-dashboard/fiscalVariant'
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import { EscChapter, EscQuestion } from './components/worker-salary-dashboard/escenario/EscenarioCommon'
 import { PrivacyTermsPage } from './pages/PrivacyTermsPage'
@@ -146,6 +147,18 @@ function EscenarioCommonShowcase() {
         <p>Capítulo reutilizable para ordenar preguntas y explicaciones largas sin crear una tarjeta dentro de otra.</p>
       </EscChapter>
     </div>
+  )
+}
+
+function EscenarioFirstStepsShowcase() {
+  return (
+    <FiscalVariantContext.Provider value="escenario">
+      <div className="fwd--escenario">
+        <WorkerFiscalSummaryShowcase quiz initialGuess={35} />
+        <WorkerSalaryBaseCard />
+        <WorkerContributionLimitsShowcase />
+      </div>
+    </FiscalVariantContext.Provider>
   )
 }
 
@@ -902,6 +915,21 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <EscenarioCommonShowcase />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="escenario-first-steps-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Escenario · v2</p>
+          <h2 id="escenario-first-steps-title">Pasos 0–2</h2>
+          <p>
+            Maquetas funcionales de la entrada, reparto del salario y límites de cotización.
+            Incluyen los estados editables que usan los pasos públicos de la v2.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
+          <EscenarioFirstStepsShowcase />
         </div>
       </section>
 

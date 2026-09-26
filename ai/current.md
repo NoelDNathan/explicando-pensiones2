@@ -102,8 +102,11 @@ movimiento y patrones) para aplicarlo paso a paso.
   `/componentes` para los pasos 5, 7 y 9; su integración llegará con el rediseño de esos pasos.
 - **Paso 3 completo como la maqueta D** (consola, casillas + párrafo en vivo, trabajador/empresa
   con barras desplegables, paneles MEI y AT/EP, resumen en ecuación).
-- **Pendiente:** el cuerpo interactivo de los pasos 1-2 y 4-12 sigue siendo el de la v1 en oscuro.
-  Siguiente: darle su protagonista de D paso a paso, y llevar las piezas a `/componentes`.
+- **Pasos 0-2:** completos en D: las dos preguntas y el resultado con duelo y 100 casillas; el
+  reparto en 12/14 pagas y complementos; y el pasillo entre bases mínima y máxima. Sus estados
+  siguen conectados a los cálculos existentes y las tres piezas se pueden revisar en `/componentes`.
+- **Pendiente:** el cuerpo interactivo de los pasos 4-12 sigue siendo el de la v1 en oscuro.
+  Siguiente: darle su protagonista de D paso a paso, empezando por los pasos 4 y 5.
 - **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
   (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
   (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que

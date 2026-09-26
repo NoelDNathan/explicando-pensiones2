@@ -2,9 +2,12 @@ import { ArrowDown, ChevronDown } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { SalarySlider } from '../ui/SalarySlider'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscFigure, EscSegmented } from './escenario/EscenarioParts'
 import { AVERAGE_SALARY_ANNUAL, SMI_ANNUAL } from '../ui/salaryReferences'
 import { useSpreadLabels } from '../ui/useSpreadLabels'
 import './WorkerContributionLimitsCard.css'
+import './escenario/EscenarioContributionLimits.css'
 
 const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 250000, 500000] }
 
@@ -424,6 +427,7 @@ export function WorkerContributionLimitsCard({
   onGroupChange,
   onResultChange,
 }: WorkerContributionLimitsCardProps) {
+  const variant = useFiscalVariant()
   const [selectedGroupId, setSelectedGroupId] = useState<number | undefined>(initialGroupId)
   const [viewMode, setViewMode] = useState<ContributionViewMode>(initialViewMode)
   const [simulationMode, setSimulationMode] = useState<SimulationMode>('case')
@@ -497,6 +501,32 @@ export function WorkerContributionLimitsCard({
 
   const hasBase = activeUserBaseAnnual != null && Number.isFinite(activeUserBaseAnnual)
   const isEmpty = !hasBase || !selectedGroup || !dataAvailable
+
+  if (variant === 'escenario') {
+    if (isEmpty || !result || !statusCopy || !selectedGroup) {
+      return <section className="esc-limits" aria-label="Límites de cotización"><p className="wclc-empty">{!hasBase ? 'Primero calcula tu base real en el paso 1.' : !selectedGroup ? 'Selecciona tu grupo de cotización para ver los límites aplicables.' : 'No hay datos disponibles para este año.'}</p></section>
+    }
+    const verdict = result.status === 'below_minimum' ? 'Cotizas por la base mínima' : result.status === 'above_maximum' ? 'Cotizas por la base máxima' : 'Cotizas por tu base real'
+    return <section className="esc-limits" aria-label="Límites de cotización">
+      <div className="esc-limits__console">
+        {showSalaryControl ? <SalarySlider id="esc-limits-salary" value={localBaseAnnual} onChange={handleSalaryChange} min={SALARY_RANGE.min} max={SALARY_RANGE.max} markers={SALARY_RANGE.markers} scale="log" unitLabel="brutos al año" ariaLabel="Salario bruto anual en euros" /> : <span />}
+        <EscFigure className="esc-limits__salary" value={result.userBaseAnnual} format={formatEuro} />
+        <div className="esc-limits__controls">
+          <select value={selectedGroupId} aria-label="Grupo de cotización" onChange={(event) => { const id = Number(event.target.value); setSelectedGroupId(id); onGroupChange?.(id); setSimulationMode('case') }}>{groups.map((group) => <option value={group.id} key={group.id}>G{group.id} · {group.name}</option>)}</select>
+          <span className="esc-limits__pill">MÍN. <b>{formatEuro(getGroupBaseValue(selectedGroup, viewMode, 'min'))}</b></span><span className="esc-limits__pill">MÁX. <b>{formatEuro(getGroupBaseValue(selectedGroup, viewMode, 'max'))}</b></span>
+          <EscSegmented label="Unidad de visualización" value={viewMode} onChange={setViewMode} options={[{ value: 'monthly', label: 'Mensual' }, { value: 'annual', label: 'Anual' }]} />
+        </div>
+      </div>
+      <section className="esc-limits__lane" style={{ '--esc-min': `${minPosition}%`, '--esc-max': `${maxPosition}%`, '--esc-user': `${userPosition}%` } as CSSProperties} aria-label="El pasillo entre las bases de cotización">
+        <span className="esc-limits__lane-label esc-limits__lane-label--low">Debajo del mínimo</span><span className="esc-limits__lane-label esc-limits__lane-label--middle">Dentro del rango</span><span className="esc-limits__lane-label esc-limits__lane-label--high">Por encima del máximo</span>
+        <div className="esc-limits__zones" aria-hidden="true"><i className="esc-limits__zone esc-limits__zone--low" /><i className="esc-limits__zone esc-limits__zone--middle" /><i className="esc-limits__zone esc-limits__zone--high" /></div><i className="esc-limits__wall esc-limits__wall--min" aria-hidden="true" /><i className="esc-limits__wall esc-limits__wall--max" aria-hidden="true" /><i className="esc-limits__marker" aria-hidden="true" />
+        {scaleReferences.map((reference) => <span key={reference.label} className="esc-limits__reference" style={{ left: `${reference.percent}%` }} title={`${reference.title}: ${reference.display}`}>{reference.label}</span>)}
+      </section>
+      <div className="esc-limits__figures" aria-live="polite"><div><span>Base mínima</span><strong>{getDisplayValue(result, viewMode, 'min')}</strong></div><div><span>Tu base</span><strong>{getDisplayValue(result, viewMode, 'user')}</strong></div><div><span>Base máxima</span><strong>{getDisplayValue(result, viewMode, 'max')}</strong></div></div>
+      <section className="esc-limits__verdict" aria-live="polite"><span className="esc-limits__chip">{statusCopy.title}</span><h2>{verdict}</h2><p>{statusCopy.description}</p></section>
+      <section className="esc-limits__summary"><div className="esc-limits__margin"><h3>Margen dentro del rango</h3><div><span>sobre el mínimo</span><strong>{formatEuro(Math.max(0, result.distanceToMinimum))}</strong></div><div><span>bajo el máximo</span><strong>{formatEuro(Math.max(0, result.distanceToMaximum))}</strong></div></div><div className="esc-limits__equation"><div><span>Tu base real</span><strong>{getDisplayValue(result, viewMode, 'user')}</strong></div><b aria-hidden="true">→</b><div><span>Base usada para cotizar</span><strong>{getDisplayValue(result, viewMode, 'used')}</strong></div></div></section>
+    </section>
+  }
 
   return (
     <section className="wclc" aria-labelledby="wclc-title">

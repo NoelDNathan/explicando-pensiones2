@@ -1,8 +1,11 @@
 import { ChevronDown, Euro } from 'lucide-react'
-import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties } from 'react'
 import { InfoButton } from '../ui/InfoButton'
 import { SalarySlider } from '../ui/SalarySlider'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscFigure, EscSegmented } from './escenario/EscenarioParts'
 import './WorkerSalaryBaseCard.css'
+import './escenario/EscenarioSalaryBase.css'
 
 const SALARY_COMPLEMENTS_HELP =
   'Pagos que sumas al salario fijo durante el año: plus de convenio, nocturnidad, productividad, comisiones u otros conceptos en dinero. Elige un porcentaje prefijado o escribe el importe anual; el porcentaje es la referencia y los euros se recalculan si mueves el salario fijo.'
@@ -168,6 +171,7 @@ export function WorkerSalaryBaseCard({
   initialSalaryComplements = 2000,
   onValuesChange,
 }: WorkerSalaryBaseCardProps) {
+  const variant = useFiscalVariant()
   const initialAnnual = initialAnnualSalary(initialSalary, initialPayPeriod, initialPayCount)
   const [salary, setSalary] = useState(initialSalary)
   const [payPeriod, setPayPeriod] = useState<PayPeriod>(initialPayPeriod)
@@ -208,6 +212,39 @@ export function WorkerSalaryBaseCard({
 
     setPayPeriod(nextPayPeriod)
     setSalary(clamp(Math.round(convertedSalary / nextRange.step) * nextRange.step, nextRange.min, nextRange.max))
+  }
+
+  if (variant === 'escenario') {
+    const payCountNumber = Number(payCount)
+    const payAmount = annualSalary / payCountNumber
+    const complementAmount = salaryComplements / payCountNumber
+    const level = 120 + Math.min(170, Math.max(0, annualSalary / 500000 * 170))
+    return (
+      <section className="esc-base" aria-label="Base real">
+        <div className="esc-base__console">
+          <SalarySlider id="esc-base-salary" value={salary} onChange={setSalary} min={salaryRange.min} max={salaryRange.max} step={salaryRange.step} markers={salaryRange.markers} scale={payPeriod === 'annual' ? 'log' : 'linear'} unitLabel={payPeriod === 'annual' ? 'brutos al año' : 'brutos al mes'} ariaLabel="Salario anual o mensual en euros" />
+          <EscFigure className="esc-base__salary" value={annualSalary} format={(value) => `${formatNumber(value)} €`} />
+          <div className="esc-base__choices">
+            <EscSegmented label="Periodicidad del salario" value={payPeriod} onChange={handlePayPeriodChange} options={[{ value: 'annual', label: 'Anual' }, { value: 'monthly', label: 'Mensual' }]} />
+            <span>Repartido en</span>
+            <div className="esc-base__pays" role="group" aria-label="Número de pagas">{(['12', '14'] as const).map((option) => <button key={option} type="button" aria-pressed={payCount === option} onClick={() => setPayCount(option)}>{option} pagas</button>)}</div>
+          </div>
+        </div>
+        <section className="esc-base__figure" aria-labelledby="esc-base-pays-title">
+          <h3 id="esc-base-pays-title">÷ {payCount} pagas</h3>
+          <div className="esc-base__pays-grid" style={{ '--esc-pay-count': payCountNumber } as CSSProperties} role="img" aria-label={`${payCount} pagas de ${formatNumber(payAmount)} euros, con ${formatNumber(complementAmount)} euros de complementos repartidos`}>
+            {Array.from({ length: payCountNumber }, (_, index) => <div key={index} className={`esc-base__pay${index >= 12 ? ' esc-base__pay--extra' : ''}`} style={{ minHeight: `${level}px` }}><span className="esc-base__pay-complement" style={{ minHeight: `${Math.max(0, complementsPercent) * 2}px` }} /><strong>{formatNumber(payAmount)} €</strong></div>)}
+          </div>
+          <ul className="esc-base__legend" aria-hidden="true"><li>Nómina ordinaria</li><li>Paga extra</li><li>Complementos</li></ul>
+        </section>
+        <section className="esc-base__complements" aria-labelledby="esc-base-complements-title">
+          <div><h3 id="esc-base-complements-title">Complementos salariales anuales</h3><p>{SALARY_COMPLEMENTS_HELP}</p></div>
+          <input className="esc-base__amount" type="number" min={0} step={100} value={salaryComplements} onChange={(event) => setComplementsPercent(percentFromEuros(Math.max(0, Number(event.target.value) || 0), annualSalary))} aria-label="Complementos salariales anuales en euros" />
+          <div className="esc-base__preset-list" role="group" aria-label="Porcentaje de complementos salariales">{AMOUNT_PERCENT_PRESETS.map((preset) => <button key={preset} type="button" className="esc-base__preset" aria-pressed={Math.abs(complementsPercent - preset) < .0001} onClick={() => setComplementsPercent(preset)}>{preset} %</button>)}</div>
+        </section>
+        <output className="esc-base__result" aria-live="polite"><span>Base real calculada</span><strong>{formatNumber(realBase)} €</strong></output>
+      </section>
+    )
   }
 
   return (

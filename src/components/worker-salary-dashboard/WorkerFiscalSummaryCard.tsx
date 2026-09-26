@@ -11,6 +11,8 @@ import {
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { SalarySlider } from "../ui/SalarySlider";
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscenarioIntro } from './escenario/EscenarioIntro'
 import "./WorkerFiscalSummaryCard.css";
 
 type SummaryDisplayMode = "absolute" | "percentage";
@@ -87,6 +89,7 @@ export function WorkerFiscalSummaryCard({
   taxGuess = null,
   onTaxGuessChange,
 }: WorkerFiscalSummaryCardProps) {
+  const fiscalVariant = useFiscalVariant()
   const quizEnabled = onTaxGuessChange !== undefined;
   const [stage, setStage] = useState<QuizStage>(
     quizEnabled && taxGuess === null ? "guess" : "reveal",
@@ -143,6 +146,25 @@ export function WorkerFiscalSummaryCard({
     // Se deriva de takeHomePer100 para que las dos cifras sumen siempre 100.
     const taxesPer100 = 100 - takeHomePer100;
     const showGuessResult = quizEnabled && draftGuess !== null;
+
+    if (fiscalVariant === 'escenario') {
+      return <EscenarioIntro
+        grossSalaryAnnual={grossSalaryAnnual}
+        employerContributionsAnnual={employerContributionsAnnual}
+        workerContributionsAnnual={workerContributionsAnnual}
+        irpfAnnual={irpfAnnual}
+        vatAnnual={vatAnnual}
+        otherTaxesAnnual={otherTaxesAnnual}
+        onSalaryChange={onSalaryChange ?? (() => undefined)}
+        onExploreDetails={onExploreDetails}
+        taxGuess={taxGuess}
+        onTaxGuessChange={onTaxGuessChange}
+        stage={stage}
+        setStage={setStage}
+        draftGuess={draftGuess}
+        setDraftGuess={setDraftGuess}
+      />
+    }
 
     if (quizEnabled && stage === "guess") {
       const isPending = draftGuess === null;
