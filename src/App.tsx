@@ -15,6 +15,7 @@ import { FiscalKpiRow, FiscalWorkerDashboard, ProgressiveIrpfExplainer, SocialSe
 import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/vatEpFProxy'
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
+import { EscChapter, EscQuestion } from './components/worker-salary-dashboard/escenario/EscenarioCommon'
 import { PrivacyTermsPage } from './pages/PrivacyTermsPage'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
@@ -124,6 +125,26 @@ function SalarySliderShowcase() {
           ariaLabel="Salario escala logaritmica"
         />
       </div>
+    </div>
+  )
+}
+
+function EscenarioCommonShowcase() {
+  const [answer, setAnswer] = React.useState<boolean | null>(null)
+
+  return (
+    <div className="fwd--escenario">
+      <EscQuestion
+        question="¿Tienes una aportación a un plan de pensiones?"
+        help="La respuesta abre los mismos campos que usa el paso correspondiente."
+        value={answer}
+        onChange={setAnswer}
+      >
+        {answer === true ? <p>Campos de importe y límites del paso.</p> : null}
+      </EscQuestion>
+      <EscChapter number="01" title="Gastos deducibles">
+        <p>Capítulo reutilizable para ordenar preguntas y explicaciones largas sin crear una tarjeta dentro de otra.</p>
+      </EscChapter>
     </div>
   )
 }
@@ -866,6 +887,21 @@ function ComponentLab() {
 
         <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
           <WorkerFiscalStepsCard />
+        </div>
+      </section>
+
+      <section className="component-section component-section--wide" aria-labelledby="escenario-common-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Piezas reutilizables de Escenario</p>
+          <h2 id="escenario-common-title">Preguntas y capítulos</h2>
+          <p>
+            La pregunta Sí/No y el capítulo numerado que comparten los pasos 5, 7 y 9 de la v2.
+            Incluyen respuesta visible por teclado, estado seleccionado y contenido condicional.
+          </p>
+        </div>
+
+        <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
+          <EscenarioCommonShowcase />
         </div>
       </section>
 

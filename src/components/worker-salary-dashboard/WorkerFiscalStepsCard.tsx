@@ -26,6 +26,7 @@ import type {
 import './WorkerFiscalStepsCard.css'
 import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import { EscRibbon, EscSweepText, EscTitle } from './escenario/EscenarioParts'
+import { EscNomina } from './escenario/EscenarioCommon'
 import './escenario/EscenarioStep.css'
 
 type WorkerFiscalStepConcept = {
@@ -748,11 +749,28 @@ function getRowHighlightClass(id: string, example: PayrollExample) {
 }
 
 function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payrollLiveData?: PayrollLiveData }) {
+  const variant = useFiscalVariant()
   const example = PAYROLL_EXAMPLES[stepId] ?? PAYROLL_EXAMPLES[1]
   const payrollSnapshot = useMemo(() => buildPayrollSnapshot(payrollLiveData), [payrollLiveData])
   const rowHighlightClass = (id: string) => getRowHighlightClass(id, example)
   const resultValue = payrollSnapshot.resultValues[stepId] ?? example.resultValue
   const showDualHighlightLegend = Boolean(example.highlightWorkerRows?.length || example.highlightCompanyRows?.length)
+
+  if (variant === 'escenario') {
+    return (
+      <EscNomina
+        rows={payrollSnapshot.rows}
+        totals={payrollSnapshot.totals}
+        baseRows={payrollSnapshot.baseRows}
+        netPay={payrollSnapshot.netPay}
+        resultLabel={example.resultLabel}
+        resultValue={resultValue}
+        highlighted={example.highlightRows ?? []}
+        workerHighlighted={example.highlightWorkerRows ?? []}
+        companyHighlighted={example.highlightCompanyRows ?? []}
+      />
+    )
+  }
 
   return (
     <figure className="wfsc-payroll" aria-label="Nómina simplificada con la parte de este paso resaltada">

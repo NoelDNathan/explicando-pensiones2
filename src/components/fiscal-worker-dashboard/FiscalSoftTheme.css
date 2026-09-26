@@ -121,11 +121,18 @@
   --fiscal-stage-positive: var(--fiscal-stage-green);
   --fiscal-stage-worker-mark: #5d469c;
   --fiscal-stage-company-mark: #8b5418;
+  --fiscal-stage-positive-mark: #14614f;
   /* Rellenos sólidos de gráfico sobre el escenario (la v2 reasigna los acentos a sus tonos claros). */
   --fiscal-stage-positive-fill: #18865b;
   --fiscal-stage-company-fill: #b96b18;
   --fiscal-stage-yellow-fill: #9a7418;
   --fiscal-stage-red-fill: #c4455b;
+  --fiscal-stage-blue-fill: #2f6fce;
+  --fiscal-stage-vat-0: var(--fiscal-stage-line);
+  --fiscal-stage-vat-4: var(--fiscal-stage-yellow);
+  --fiscal-stage-vat-10: #e3a857;
+  --fiscal-stage-vat-21: var(--fiscal-stage-company-fill);
+  --fiscal-stage-vat-special: var(--fiscal-stage-red-fill);
   /* Avisos claros sobre el escenario (base máxima, base mínima). */
   --fiscal-stage-yellow-paper: #fff7d9;
   --fiscal-stage-yellow-ink: #7a5a10;

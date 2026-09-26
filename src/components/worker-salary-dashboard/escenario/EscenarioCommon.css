@@ -1,0 +1,63 @@
+/* Piezas compartidas de la v2 «Escenario». Solo tokens fiscales. */
+.esc-question {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px 32px;
+  padding: 28px 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+}
+.esc-question__copy h3 { margin: 0; color: var(--fiscal-stage-text); font-size: clamp(1.25rem, 1rem + 0.5vw, 1.375rem); line-height: 1.3; }
+.esc-question__help { margin-top: 8px; color: var(--fiscal-stage-muted); font-size: 1rem; line-height: 1.5; }
+.esc-question__help p { margin: 0; }
+.esc-question__answer { display: inline-flex; align-self: start; min-height: 52px; padding: 4px; border-radius: 999px; background: var(--fiscal-stage-raised); }
+.esc-question__answer button { min-width: 66px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; color: var(--fiscal-stage-text); background: transparent; font: inherit; font-weight: 800; cursor: pointer; }
+.esc-question__answer button[aria-pressed='true'] { color: var(--fiscal-stage); background: var(--fiscal-stage-positive); }
+.esc-question__answer button:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 3px; }
+.esc-question__follow-up { grid-column: 1 / -1; }
+
+.esc-chapter { display: grid; grid-template-columns: minmax(120px, 200px) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+.esc-chapter__number { color: var(--fiscal-stage-raised); font-family: var(--fiscal-font-display); font-size: clamp(6rem, 5rem + 7vw, 10.625rem); font-weight: 900; font-stretch: 70%; line-height: 0.78; -webkit-text-stroke: 2px var(--fiscal-stage-positive); }
+.esc-chapter__content { min-width: 0; }
+.esc-chapter__content > h2 { margin: 0 0 28px; color: var(--fiscal-stage-text); font-family: var(--fiscal-font-display); font-size: var(--fiscal-text-section); font-weight: 900; font-stretch: 120%; line-height: 0.95; text-transform: uppercase; }
+
+.esc-nomina { margin: 0; color: var(--fiscal-stage-text); }
+.esc-nomina > figcaption { margin-bottom: 16px; color: var(--fiscal-stage-muted); font-size: var(--fiscal-text-label); }
+.esc-nomina__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); overflow: hidden; border-radius: var(--fiscal-radius-stage-panel); background: var(--fiscal-stage-raised); }
+.esc-nomina__main { min-width: 0; padding: clamp(20px, 2.5vw, 36px); }
+.esc-nomina__header { display: flex; flex-direction: column; gap: 8px; padding-bottom: 24px; border-bottom: 1px solid var(--fiscal-stage-line); font-size: var(--fiscal-text-label); letter-spacing: 0.03em; }
+.esc-nomina__header span { font-weight: 800; }
+.esc-nomina__header strong { color: var(--fiscal-stage-muted); font-weight: 600; }
+.esc-nomina__group { padding-top: 24px; }
+.esc-nomina__group-title, .esc-nomina__head, .esc-nomina__row { display: grid; grid-template-columns: 58px minmax(0, 1fr) 76px 104px; gap: 10px; align-items: center; }
+.esc-nomina__group-title { grid-template-columns: 1fr 1fr; margin-bottom: 12px; color: var(--fiscal-stage-muted); font-size: var(--fiscal-text-label); font-weight: 800; }
+.esc-nomina__head { padding: 0 12px 8px; color: var(--fiscal-stage-faint); font-size: 0.75rem; font-weight: 700; }
+.esc-nomina__row { min-height: 42px; padding: 7px 12px; border-left: 4px solid transparent; color: var(--fiscal-stage-muted); font-size: 0.875rem; opacity: 0.38; }
+.esc-nomina__row strong { justify-self: end; font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.esc-nomina__row--positive { border-left-color: var(--fiscal-stage-positive); color: var(--fiscal-stage-positive); background: color-mix(in srgb, var(--fiscal-stage-text) 6%, transparent); opacity: 1; }
+.esc-nomina__row--worker { border-left-color: var(--fiscal-stage-worker); color: var(--fiscal-stage-worker); background: color-mix(in srgb, var(--fiscal-stage-worker) 12%, transparent); opacity: 1; }
+.esc-nomina__row--company { border-left-color: var(--fiscal-stage-company); color: var(--fiscal-stage-company); background: color-mix(in srgb, var(--fiscal-stage-company) 12%, transparent); opacity: 1; }
+.esc-nomina__company { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--fiscal-stage-line); }
+.esc-nomina__company > span { display: block; margin-bottom: 8px; color: var(--fiscal-stage-muted); font-size: var(--fiscal-text-label); font-weight: 800; }
+.esc-nomina__bases { display: flex; flex-direction: column; gap: 1px; padding: 20px; background: color-mix(in srgb, var(--fiscal-stage) 30%, var(--fiscal-stage-raised)); }
+.esc-nomina__base { display: flex; justify-content: space-between; gap: 12px; padding: 12px; color: var(--fiscal-stage-muted); font-size: 0.8125rem; }
+.esc-nomina__base strong { color: var(--fiscal-stage-text); font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.esc-nomina__base--positive { color: var(--fiscal-stage); background: var(--fiscal-stage-positive); }
+.esc-nomina__base--positive strong { color: var(--fiscal-stage); }
+.esc-nomina__base--worker { color: var(--fiscal-stage); background: var(--fiscal-stage-worker); }
+.esc-nomina__base--worker strong { color: var(--fiscal-stage); }
+.esc-nomina__base--company { color: var(--fiscal-stage); background: var(--fiscal-stage-company); }
+.esc-nomina__base--company strong { color: var(--fiscal-stage); }
+.esc-nomina__liquid { margin-top: auto; min-height: 104px; display: flex; flex-direction: column; justify-content: end; padding: 18px 12px; }
+.esc-nomina__liquid span, .esc-nomina__result span { color: var(--fiscal-stage-muted); font-size: var(--fiscal-text-label); font-weight: 800; }
+.esc-nomina__liquid strong, .esc-nomina__result strong { font-family: var(--fiscal-font-display); font-size: clamp(2.5rem, 1.4rem + 3vw, 3.5rem); font-weight: 900; font-variant-numeric: tabular-nums; line-height: 0.9; white-space: nowrap; }
+.esc-nomina__result { display: flex; flex-direction: column; gap: 6px; padding: 18px 12px 4px; border-top: 1px solid var(--fiscal-stage-line); }
+
+@media (max-width: 720px) {
+  .esc-question { grid-template-columns: minmax(0, 1fr); }
+  .esc-question__answer { justify-self: start; }
+  .esc-chapter { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .esc-chapter__number { font-size: 6rem; }
+  .esc-nomina__grid { grid-template-columns: minmax(0, 1fr); }
+  .esc-nomina__bases { gap: 4px; }
+  .esc-nomina__group-title, .esc-nomina__head, .esc-nomina__row { grid-template-columns: 42px minmax(0, 1fr) 60px 86px; gap: 6px; }
+}

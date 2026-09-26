@@ -13,6 +13,7 @@
 
 .esc-figure {
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .esc-tone--worker { color: var(--fiscal-stage-worker); }
@@ -256,7 +257,7 @@
   font-weight: 800;
   line-height: 1.05;
   font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 .esc-equation__value--hero { font-size: clamp(1.75rem, 1rem + 2.4vw, 3.5rem); font-weight: 900; }
 

@@ -81,8 +81,8 @@
   animation: esc-rise 0.8s var(--fiscal-ease-out) 0.3s both;
 }
 .esc-step__lead {
-  margin: 0 0 0 auto;
-  max-width: 620px;
+  margin: 0;
+  max-width: 860px;
   font-size: var(--fiscal-text-lead);
   line-height: 1.45;
   color: var(--fiscal-stage-text);
@@ -198,7 +198,6 @@
 
 @media (max-width: 720px) {
   .esc-step__status { display: none; }
-  .esc-step__lead { margin-left: 0; }
   .esc-step__pair { grid-template-columns: minmax(0, 1fr); }
   .esc-step__back { padding: 0 16px; }
   .esc-step__back span { display: none; }

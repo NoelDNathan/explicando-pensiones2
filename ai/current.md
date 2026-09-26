@@ -96,6 +96,10 @@ movimiento y patrones) para aplicarlo paso a paso.
   filas de carrera, escalera, aguja, ecuación, cifras que cuentan, interruptor segmentado).
 - **Todos los pasos:** barra de progreso con 12 segmentos, título a todo el ancho, textos sin
   tarjeta, nómina en panel y navegación en píldoras con el nombre del paso.
+- **Piezas comunes de D:** el primer párrafo de cada paso queda alineado a la izquierda; la
+  nómina de los pasos 1-6 y 8-9 ya se muestra en panel oscuro con las mismas cifras en vivo y
+  resaltados por paso. `EscQuestion` y `EscChapter` están preparados y documentados en
+  `/componentes` para los pasos 5, 7 y 9; su integración llegará con el rediseño de esos pasos.
 - **Paso 3 completo como la maqueta D** (consola, casillas + párrafo en vivo, trabajador/empresa
   con barras desplegables, paneles MEI y AT/EP, resumen en ecuación).
 - **Pendiente:** el cuerpo interactivo de los pasos 1-2 y 4-12 sigue siendo el de la v1 en oscuro.
