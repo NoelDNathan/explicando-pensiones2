@@ -115,6 +115,7 @@ movimiento y patrones) para aplicarlo paso a paso.
   conectado a `EscQuestion`; el IVA usa su cesta horizontal por tipos, y se añadieron las monedas
   del paso 7 y la jerarquía de los relojes/resultados. El paso 10 convierte sus seis figuras de
   recaudación en filas de carrera desplegables y el 11 hace protagonistas sus métricas 37/10.
+  La numeración de los capítulos usa 01–04 en el paso 5 y 01–02 en el paso 7 solo en v2.
   Chrome en modo local permitió revisar la portada a 1280 px; la captura móvil sigue bloqueada por
   su perfil temporal.
 - **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado

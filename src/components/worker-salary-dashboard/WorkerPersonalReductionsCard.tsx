@@ -1516,7 +1516,7 @@ export function WorkerPersonalReductionsCard({
         <>
           <section className="wprc-net-income" aria-labelledby="wprc-net-income-title">
             <header className="wprc-net-income__head">
-              <span className="wprc-net-income__num" aria-hidden="true">1</span>
+              <span className="wprc-net-income__num" aria-hidden="true">{variant === 'escenario' ? '01' : '1'}</span>
               <div>
                 <h3 id="wprc-net-income-title">Gastos deducibles</h3>
                 <p>
@@ -1628,7 +1628,7 @@ export function WorkerPersonalReductionsCard({
             onChange={setAdjustments}
           />
           <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
-            <span aria-hidden="true">2</span>
+            <span aria-hidden="true">{variant === 'escenario' ? '02' : '2'}</span>
             <div>
               <h3 id="wprc-work-benefits">Ventajas del trabajo</h3>
               <p>
@@ -1830,7 +1830,7 @@ export function WorkerPersonalReductionsCard({
             </div>
           </section>
           <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
-            <span aria-hidden="true">3</span>
+            <span aria-hidden="true">{variant === 'escenario' ? '03' : '3'}</span>
             <div>
               <h3 id="wprc-declared-reductions">Aportaciones que reducen tu base</h3>
               <p>
@@ -1849,7 +1849,7 @@ export function WorkerPersonalReductionsCard({
             onChange={setAdjustments}
           />
           <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
-            <span aria-hidden="true">4</span>
+            <span aria-hidden="true">{variant === 'escenario' ? '04' : '4'}</span>
             <div>
               <h3 id="wprc-family-questions">Cómo tu situación familiar afecta a tu IRPF</h3>
               <p>
@@ -2227,7 +2227,7 @@ export function WorkerPersonalReductionsCard({
           </section>
 
           <section className="wprc-question-intro" aria-labelledby="wprc-quota-deductions">
-            <span aria-hidden="true">1</span>
+            <span aria-hidden="true">{variant === 'escenario' ? '01' : '1'}</span>
             <div>
               <h3 id="wprc-quota-deductions">Deducciones de cuota</h3>
               <p>
@@ -2251,7 +2251,7 @@ export function WorkerPersonalReductionsCard({
           />
 
           <section className="wprc-question-intro" aria-labelledby="wprc-refundable">
-            <span aria-hidden="true">2</span>
+            <span aria-hidden="true">{variant === 'escenario' ? '02' : '2'}</span>
             <div>
               <h3 id="wprc-refundable">Reembolsables</h3>
               <p>
