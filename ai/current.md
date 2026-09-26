@@ -83,7 +83,8 @@ tipografía, espaciado y movimiento, y piloto en los pasos 0 y 5.
 Propuestas visuales en un lienzo privado (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo),
 con el paso 3 completo como muestra: A Editorial, B Enfoque, C Nómina viva, D Escenario
 (oscuro y animado), E Imprenta (risografía) y F Flujo (neobrutalista con diagrama de flujo),
-cada una en escritorio y móvil. D es la favorita por ahora. E y F usan paletas nuevas que no
+cada una en escritorio y móvil. D es la favorita; D2 es una variante suya (gráfico de
+mariposa trabajador/empresa, anillo AT/EP y resumen en cascada), junto a D en el lienzo. E y F usan paletas nuevas que no
 existen como tokens: si se eligen, habrá que crear sus `--fiscal-*` antes de implementarlas.
 Pendiente: que se elija dirección.
 
