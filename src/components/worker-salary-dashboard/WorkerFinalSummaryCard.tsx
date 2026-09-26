@@ -4,6 +4,8 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts'
 import stateRevenueJson from '../../../data/processed/fiscal/2026-09-01_igae-recaudacion-por-figura-aapp-2024.json'
 import { SalarySlider } from '../ui/SalarySlider'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscHundredCells } from './escenario/EscenarioParts'
 import './WorkerFinalSummaryCard.css'
 
 /** Identificadores de las porciones del grafico de coste laboral. */
@@ -187,6 +189,7 @@ export function WorkerFinalSummaryCard({
   onGoToWealthStep,
   onContinue,
 }: WorkerFinalSummaryCardProps) {
+  const variant = useFiscalVariant()
   const [period, setPeriod] = useState<'month' | 'year'>('year')
 
   const laborCostAnnual = grossSalaryAnnual + employerContributionsAnnual
@@ -330,7 +333,17 @@ export function WorkerFinalSummaryCard({
           </figcaption>
 
           <div className="wfin-chart__viz">
-            <ResponsiveContainer width="100%" height={260}>
+            {variant === 'escenario' ? (
+              <EscHundredCells
+                parts={slices.map((slice) => ({
+                  value: slice.sharePercent,
+                  tone: slice.id === 'take-home' ? 'positive' : slice.id === 'employer-contributions' ? 'company' : 'state',
+                }))}
+                label={`De cada cien euros que cuesta tu puesto, ${slices.map((slice) => `${Math.round(slice.sharePercent)} se destinan a ${slice.label}`).join(', ')}`}
+                caption={<span>Cada casilla representa 1 € de cada 100 que cuesta tu puesto.</span>}
+              />
+            ) : (
+              <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie
                   data={slices}
@@ -353,7 +366,8 @@ export function WorkerFinalSummaryCard({
                 </Pie>
                 <Tooltip content={<CostTooltip />} />
               </PieChart>
-            </ResponsiveContainer>
+              </ResponsiveContainer>
+            )}
             <div className="wfin-chart__center" aria-hidden="true">
               <strong>{takeHomePer100} €</strong>
               <span>de cada 100 € son para ti</span>

@@ -1,6 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { SalarySlider } from "../ui/SalarySlider";
+import { useFiscalVariant } from "../fiscal-worker-dashboard/fiscalVariant";
+import { EscStairs } from "./escenario/EscenarioParts";
 import { WorkerFamilyMinimumExplainer } from "./WorkerFamilyMinimumExplainer";
 import "./WorkerIrpfTranchesCard.css";
 
@@ -194,6 +196,7 @@ export function WorkerIrpfTranchesCard({
   onRegionChange,
   onResultChange,
 }: WorkerIrpfTranchesCardProps) {
+  const variant = useFiscalVariant();
   const [uncontrolledRegion, setUncontrolledRegion] = useState(initialRegion);
   const [uncontrolledSalary, setUncontrolledSalary] = useState(grossSalary ?? 0);
   const salary = grossSalary ?? uncontrolledSalary;
@@ -522,6 +525,23 @@ export function WorkerIrpfTranchesCard({
           })}
         </div>
       )}
+
+      {variant === "escenario" && hasScales ? (
+        <EscStairs
+          columns={[
+            ...stateLines.filter((line) => line.taxableAmount > 0).map((line) => ({
+              label: `${formatRate(line.rate)}%`,
+              total: formatEuro(line.quota, 0),
+              parts: [{ value: line.quota, tone: "worker" as const }],
+            })),
+            ...regionalLines.filter((line) => line.taxableAmount > 0).map((line) => ({
+              label: `${formatRate(line.rate)}%`,
+              total: formatEuro(line.quota, 0),
+              parts: [{ value: line.quota, tone: "company" as const }],
+            })),
+          ]}
+        />
+      ) : null}
 
       <div className="witc-lower">
         <aside className="witc-base-card" aria-label="Base liquidable">

@@ -29,9 +29,12 @@ import {
   workBenefitsCouldApply,
 } from "../fiscal-worker-dashboard/irpf2025Calc";
 import { InfoButton } from "../ui/InfoButton";
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscQuestion } from './escenario/EscenarioCommon'
 import { getRegionDeductionLink } from "./regionDeductionLinks";
 import "./Irpf2025StructuredAdjustmentsForm.css";
 import "./WorkerPersonalReductionsCard.css";
+import './escenario/EscenarioPersonalReductions.css'
 
 export type MaritalStatus = "single" | "married" | "divorced" | "widowed";
 export type SelectOption = { value: string; label: string };
@@ -369,6 +372,7 @@ function FamilyQuestion({
   onYes?: () => void;
   onNo: () => void;
 }) {
+  const variant = useFiscalVariant()
   const [answer, setAnswer] = useState<"unanswered" | "yes" | "no">(() =>
     initiallyRelevant ? "yes" : "no",
   );
@@ -380,6 +384,19 @@ function FamilyQuestion({
     onNo();
     setAnswer("no");
   };
+
+  if (variant === 'escenario') {
+    return (
+      <EscQuestion
+        question={question}
+        help={description}
+        value={answer === 'yes'}
+        onChange={(next) => next ? chooseYes() : chooseNo()}
+      >
+        {children}
+      </EscQuestion>
+    )
+  }
 
   return (
     <section className={`irpf-reduction-question is-${answer}`} aria-label={question}>
@@ -1084,6 +1101,7 @@ export function WorkerPersonalReductionsCard({
   engineWarnings = [],
   onResultChange,
 }: WorkerPersonalReductionsCardProps) {
+  const variant = useFiscalVariant()
   const showReductionsSection = focus === "reductions";
   const showInKindSection = focus === "in-kind";
   const showDeductionsSection = focus === "deductions-benefits";
@@ -1456,7 +1474,7 @@ export function WorkerPersonalReductionsCard({
   );
 
   return (
-    <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
+    <section className={`wprc wprc--${focus}${variant === 'escenario' ? ' wprc--escenario' : ''}`} aria-labelledby="wprc-title">
       <div className="wprc-hero">
         <header className="wprc-header">
           <div className="wprc-step-orb" aria-hidden="true">

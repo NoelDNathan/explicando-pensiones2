@@ -90,6 +90,125 @@
   animation: fwd-esc-rise var(--fiscal-duration-base) var(--fiscal-ease-out) both;
 }
 
+/* Pasos 6, 8 y 9: las mismas piezas interactivas se leen como una secuencia de escenario,
+   no como tarjetas de la versión clásica. */
+.fwd--escenario :is(.witc, .wctc, .wfin, .wkcc, .wcsc) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fiscal-space-block);
+  color: var(--fiscal-stage-text);
+  background: transparent;
+}
+.fwd--escenario :is(.witc-header, .wctc-header, .wfin-header, .wkcc-header, .wcsc-header) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd--escenario :is(.witc-step, .wctc-step, .wfin-step, .wkcc-step, .wcsc-kicker) {
+  color: var(--fiscal-stage-muted);
+  background: transparent;
+}
+.fwd--escenario :is(.witc-heading h2, .wctc-heading h2, .wfin-header h2, .wkcc-heading h2, .wcsc-heading h2) {
+  max-width: 1100px;
+  color: var(--fiscal-stage-text);
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(3.5rem, 2rem + 6vw, 7.75rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.04em;
+  line-height: .88;
+  text-transform: uppercase;
+}
+.fwd--escenario :is(.witc-intro, .wctc-heading > p, .wfin-lead, .wkcc-intro__lead, .wcsc-heading > p) {
+  max-width: 860px;
+  color: var(--fiscal-stage-copy);
+  font-size: var(--fiscal-text-lead);
+  line-height: 1.5;
+}
+.fwd--escenario :is(.witc-region, .witc-salary, .wctc-budget, .wfin-controls, .wkcc-badges) {
+  padding: 20px;
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+}
+.fwd--escenario :is(.witc-scales, .wctc-layout, .wfin-layout, .wkcc-intro, .wcsc-list) { gap: clamp(24px, 4vw, 56px); }
+.fwd--escenario :is(.witc-scale-group, .wctc-left, .wctc-summary, .wfin-summary, .wkcc-intro__aside, .wcsc-source) {
+  border-color: var(--fiscal-stage-line);
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+}
+.fwd--escenario .witc-scale-tag--state { color: var(--fiscal-stage-worker); background: color-mix(in srgb, var(--fiscal-stage-worker) 14%, var(--fiscal-stage)); }
+.fwd--escenario .witc-scale-tag--region { color: var(--fiscal-stage-company); background: color-mix(in srgb, var(--fiscal-stage-company) 14%, var(--fiscal-stage)); }
+.fwd--escenario .witc-bracket { border-color: var(--fiscal-stage-line); background: var(--fiscal-stage-raised); }
+.fwd--escenario .witc-bracket.is-active { border-color: var(--fiscal-stage-positive); background: color-mix(in srgb, var(--fiscal-stage-positive) 18%, var(--fiscal-stage-raised)); }
+.fwd--escenario :is(.witc-bracket__rate, .witc-max-rate strong, .witc-result strong, .wctc-total strong, .wfin-total strong, .wkcc-results__big, .wcsc-seal strong) {
+  font-family: var(--fiscal-font-display);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.fwd--escenario .witc-split-bar__fill--state { background: var(--fiscal-stage-worker); }
+.fwd--escenario .witc-split-bar__fill--region { background: var(--fiscal-stage-company-fill); }
+.fwd--escenario :is(.wctc-spend-chart, .wctc-home-card, .wctc-ownership-gate, .wfin-chart, .wfin-tax-card, .wkcc-intro__privacy, .wkcc-intro__facts, .wkcc-question, .wcsc-source) {
+  border-color: var(--fiscal-stage-line);
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+}
+.fwd--escenario .wctc-ownership-gate__choices button,
+.fwd--escenario .wkcc-choice,
+.fwd--escenario .wkcc-tf__btn,
+.fwd--escenario .wkcc-bucket {
+  border-color: var(--fiscal-stage-line);
+  color: var(--fiscal-stage-text);
+  background: transparent;
+}
+.fwd--escenario :is(.wctc-ownership-gate__choices button.is-selected, .wkcc-choice.is-selected, .wkcc-tf__btn.is-selected, .wkcc-bucket.is-selected) {
+  color: var(--fiscal-stage);
+  border-color: var(--fiscal-stage-positive);
+  background: var(--fiscal-stage-positive);
+}
+.fwd--escenario .wctc-summary-card--total,
+.fwd--escenario .wfin-total,
+.fwd--escenario .wkcc-cta {
+  color: var(--fiscal-stage);
+  background: var(--fiscal-stage-positive);
+}
+.fwd--escenario :is(.wctc-summary-card--total strong, .wfin-total strong, .wkcc-cta) { color: var(--fiscal-stage); }
+.fwd--escenario .wkcc-cta,
+.fwd--escenario .wkcc-ghost { min-height: 56px; border-radius: 999px; }
+.fwd--escenario .wkcc-ghost { border-color: var(--fiscal-stage-line); color: var(--fiscal-stage-muted); background: transparent; }
+.fwd--escenario .wfin-chart__viz .esc-cells { margin: 0; }
+.fwd--escenario .wfin-chart__center,
+.fwd--escenario .wctc-spend-chart__center { position: static; margin: 16px 0 0; color: var(--fiscal-stage-text); }
+.fwd--escenario .wctc-spend-chart__viz .esc-cells { margin: 0; }
+.fwd--escenario .wwtc .wctc-tip { display: grid; grid-template-columns: repeat(2, minmax(84px, 1fr)) minmax(0, 4fr); align-items: center; gap: 16px; }
+.fwd--escenario .wwtc .wctc-tip::before,
+.fwd--escenario .wwtc .wctc-tip::after { content: ''; width: min(14vw, 120px); aspect-ratio: 1; border: 8px solid var(--fiscal-stage-positive); border-radius: 50%; background: conic-gradient(var(--fiscal-stage-positive) 0 25%, var(--fiscal-stage-line) 25% 100%); }
+.fwd--escenario .wwtc .wctc-tip::after { border-color: var(--fiscal-stage-company); background: conic-gradient(var(--fiscal-stage-company) 0 62%, var(--fiscal-stage-line) 62% 100%); }
+.fwd--escenario .wkcc-intro__sections { display: grid; grid-template-columns: repeat(10, minmax(28px, 1fr)); align-items: end; gap: 8px; }
+.fwd--escenario .wkcc-intro__sections li { min-width: 0; padding: 10px 6px; border: 0; border-radius: 10px 10px 0 0; color: var(--fiscal-stage); background: var(--fiscal-stage-positive); overflow: hidden; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(1) { min-height: 44px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(2) { min-height: 52px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(3) { min-height: 60px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(4) { min-height: 68px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(5) { min-height: 76px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(6) { min-height: 84px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(7) { min-height: 92px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(8) { min-height: 100px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(9) { min-height: 108px; }
+.fwd--escenario .wkcc-intro__sections li:nth-child(10) { min-height: 116px; }
+.fwd--escenario .wcsc-seal { color: var(--fiscal-stage-positive); border-color: var(--fiscal-stage-positive); background: transparent; }
+.fwd--escenario .wcsc-source-index { color: var(--fiscal-stage-raised); font-family: var(--fiscal-font-display); font-size: clamp(4rem, 3rem + 5vw, 8rem); font-weight: 900; -webkit-text-stroke: 2px var(--fiscal-stage-positive); }
+.fwd--escenario .wcsc-status--official { color: var(--fiscal-stage); background: var(--fiscal-stage-positive); }
+.fwd--escenario .wcsc-status--estimated { color: var(--fiscal-stage); background: var(--fiscal-stage-yellow); }
+
+@media (max-width: 720px) {
+  .fwd--escenario :is(.witc-heading h2, .wctc-heading h2, .wfin-header h2, .wkcc-heading h2, .wcsc-heading h2) { font-size: clamp(3rem, 10vw, 4.5rem); }
+  .fwd--escenario .wkcc-intro__sections { grid-template-columns: repeat(5, minmax(40px, 1fr)); }
+  .fwd--escenario .wwtc .wctc-tip { grid-template-columns: repeat(2, 54px) minmax(0, 1fr); }
+}
+
 @keyframes fwd-esc-rise {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: none; }

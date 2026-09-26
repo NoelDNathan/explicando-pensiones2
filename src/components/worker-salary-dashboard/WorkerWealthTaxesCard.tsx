@@ -11,7 +11,9 @@ import {
 } from 'lucide-react'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { InfoButton } from '../ui/InfoButton'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
+import { EscQuestion } from './escenario/EscenarioCommon'
 import './WorkerTaxStepShell.css'
 import './WorkerWealthTaxesCard.css'
 
@@ -636,6 +638,19 @@ function OwnershipGate({
   onNo: () => void
   children?: ReactNode
 }) {
+  const variant = useFiscalVariant()
+  if (variant === 'escenario') {
+    return (
+      <EscQuestion
+        question={question}
+        help={description}
+        value={answer === 'unanswered' ? null : answer === 'yes'}
+        onChange={(next) => next ? onYes() : onNo()}
+      >
+        {answer === 'yes' ? children : null}
+      </EscQuestion>
+    )
+  }
   return (
     <section className={`wctc-ownership-gate is-${answer}`} aria-label={question}>
       <div className="wctc-ownership-gate__top">
@@ -795,7 +810,7 @@ export function WorkerWealthTaxesCard({
   const vehicleSummary = recurringSummary(ownsVehicle, vehicleTaxAnnual, 'No tienes coche en propiedad')
 
   return (
-    <section className="wctc" aria-labelledby="wwtc-title">
+    <section className="wctc wwtc" aria-labelledby="wwtc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
           <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 12</span>

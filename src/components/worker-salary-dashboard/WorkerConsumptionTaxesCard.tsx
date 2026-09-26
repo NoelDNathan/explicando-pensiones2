@@ -12,7 +12,9 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts'
 import { InfoButton } from '../ui/InfoButton'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
+import { EscHundredCells } from './escenario/EscenarioParts'
 import './WorkerTaxStepShell.css'
 import './WorkerConsumptionTaxesCard.css'
 
@@ -357,6 +359,7 @@ type ConsumptionSpendDonutProps = {
 }
 
 function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutProps) {
+  const variant = useFiscalVariant()
   const slices = useMemo<SpendChartSlice[]>(() => (
     lines
       .filter((line) => line.sharePercent > 0.005)
@@ -387,7 +390,25 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
       <figcaption className="wctc-spend-chart__title">Distribución del gasto</figcaption>
       <div className="wctc-spend-chart__body">
         <div className="wctc-spend-chart__viz">
-          <ResponsiveContainer width="100%" height={210}>
+          {variant === 'escenario' ? (
+            <EscHundredCells
+              parts={lines
+                .filter((line) => line.sharePercent > 0.005)
+                .map((line) => ({
+                  value: line.sharePercent,
+                  tone: line.specialRate
+                    ? 'state' as const
+                    : line.vatRate >= 21
+                      ? 'company' as const
+                      : line.vatRate >= 10
+                        ? 'worker' as const
+                        : 'positive' as const,
+                }))}
+              label={`Distribución del gasto: ${slices.map((slice) => `${formatNumber(slice.sharePercent)} % en ${slice.name}`).join(', ')}`}
+              caption={<span>Las casillas agrupan tu gasto por el tipo de IVA aplicable.</span>}
+            />
+          ) : (
+            <ResponsiveContainer width="100%" height={210}>
             <PieChart>
               <Pie
                 data={slices}
@@ -407,7 +428,8 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
               </Pie>
               <Tooltip content={<SpendDonutTooltip />} />
             </PieChart>
-          </ResponsiveContainer>
+            </ResponsiveContainer>
+          )}
           <div className="wctc-spend-chart__center" aria-hidden="true">
             <strong>{formatEuro(monthlyTotal)}</strong>
             <span>al mes</span>

@@ -17,6 +17,7 @@ import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/Fis
 import { FiscalVariantContext } from './components/fiscal-worker-dashboard/fiscalVariant'
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import { EscChapter, EscQuestion } from './components/worker-salary-dashboard/escenario/EscenarioCommon'
+import { EscHundredCells, EscStairs } from './components/worker-salary-dashboard/escenario/EscenarioParts'
 import { PrivacyTermsPage } from './pages/PrivacyTermsPage'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
@@ -146,6 +147,18 @@ function EscenarioCommonShowcase() {
       <EscChapter number="01" title="Gastos deducibles">
         <p>Capítulo reutilizable para ordenar preguntas y explicaciones largas sin crear una tarjeta dentro de otra.</p>
       </EscChapter>
+      <EscHundredCells
+        parts={[{ value: 58, tone: 'positive' }, { value: 27, tone: 'state' }, { value: 15, tone: 'company' }]}
+        label="Ejemplo de cien casillas para el resumen del coste laboral"
+        caption={<span>Cada casilla representa 1 € de cada 100.</span>}
+      />
+      <EscStairs
+        columns={[
+          { label: '19%', total: '2.100 €', parts: [{ value: 2_100, tone: 'worker' }] },
+          { label: '24%', total: '3.100 €', parts: [{ value: 3_100, tone: 'worker' }] },
+          { label: '30%', total: '4.600 €', parts: [{ value: 4_600, tone: 'company' }] },
+        ]}
+      />
     </div>
   )
 }
