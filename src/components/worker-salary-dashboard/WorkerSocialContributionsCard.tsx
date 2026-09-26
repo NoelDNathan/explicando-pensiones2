@@ -6,6 +6,10 @@ import meiEvolutionJson from '../../../data/processed/fiscal/2026-07-12_mei-evol
 import { InfoButton } from '../ui/InfoButton'
 import { AtEpCategorySelect } from './AtEpCategorySelect'
 import './WorkerSocialContributionsCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { buildContributionsLiveParagraph, formatPayrollNumber, formatPayrollPercent } from './WorkerFiscalStepsCard'
+import { EscEquation, EscFigure, EscHundredCells, EscNeedle, EscRaceRow, EscSegmented, EscStairs } from './escenario/EscenarioParts'
+import './escenario/EscenarioSocial.css'
 
 export type WorkerContractType = 'indefinite' | 'temporary' | 'internship' | 'training'
 export type SocialContributionViewMode = 'annual' | 'monthly'
@@ -452,6 +456,7 @@ export function WorkerSocialContributionsCard({
   onOccupationalAccidentsCategoryChange,
   onResultChange,
 }: WorkerSocialContributionsCardProps) {
+  const variant = useFiscalVariant()
   const [viewMode, setViewMode] = useState<SocialContributionViewMode>('annual')
   const displayMode: SocialContributionDisplayMode = 'both'
   const [meiNoteExpanded, setMeiNoteExpanded] = useState(false)
@@ -611,6 +616,297 @@ export function WorkerSocialContributionsCard({
   const companyTotalDisplay = getAmount(result, viewMode, 'companyContributionsAnnual')
   const companyCostDisplay = getAmount(result, viewMode, 'totalCompanyCostAnnual')
   const totalContributionsDisplay = getAmount(result, viewMode, 'totalContributionsAnnual')
+
+  if (variant === 'escenario') {
+    const monthly = viewMode === 'monthly'
+    const workerMax = Math.max(...workerRows.map((row) => row.amount), 1)
+    const companyMax = Math.max(...companyRows.map((row) => row.amount), 1)
+    const liveParagraph = buildContributionsLiveParagraph({
+      contributionBaseMonthly: formatPayrollNumber(result.contributionBaseMonthly),
+      workerRate: formatPayrollPercent(result.workerContributionRate),
+      workerMonthly: formatPayrollNumber(result.workerContributionsMonthly),
+      companyRate: formatPayrollPercent(result.companyContributionRate),
+      companyMonthly: formatPayrollNumber(result.companyContributionsMonthly),
+    })
+    const cellsLabel = `De cada 100 € que cuesta tu puesto: ${Math.round(result.salaryAfterWorkerContributionsAnnual / result.totalCompanyCostAnnual * 100)} € de bruto después de cotizaciones, ${Math.round(result.workerContributionsAnnual / result.totalCompanyCostAnnual * 100)} € de cotizaciones del trabajador y ${Math.round(result.companyContributionsAnnual / result.totalCompanyCostAnnual * 100)} € de coste adicional de la empresa.`
+    const meiColumns = meiEvolutionSchedule.slice(2).map((entry) => ({
+      label: String(entry.year ?? entry.year_label),
+      total: formatSchedulePercent(entry.total_percent),
+      parts: [
+        { value: entry.employer_percent, tone: 'company' as const },
+        { value: entry.employee_percent, tone: 'worker' as const },
+      ],
+    }))
+    const figure = (value: number) => formatEuro(value)
+    const rowHelp = (text: string) => <p>{text}</p>
+
+    return (
+      <section className="esc-wscc" aria-labelledby="wscc-title">
+        <h2 id="wscc-title" className="esc-sr">Cotizaciones sociales</h2>
+
+        <section className="esc-wscc__console" aria-label="Tu caso">
+          <div className="esc-wscc__controls">
+            <label className="esc-wscc__field">
+              <span>Contrato</span>
+              <select
+                className="esc-select"
+                value={selectedContractType}
+                onChange={(event) => {
+                  const nextContractType = event.target.value as WorkerContractType
+                  setSelectedContractType(nextContractType)
+                  onContractTypeChange?.(nextContractType)
+                }}
+              >
+                {Object.entries(contractLabels).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+            </label>
+            <div className="esc-wscc__atep">
+              <AtEpCategorySelect
+                categories={AT_EP_2025_CATEGORIES}
+                value={selectedAtEpCategoryId}
+                layout="compact"
+                onChange={(categoryId) => {
+                  setSelectedAtEpCategoryId(categoryId)
+                  onOccupationalAccidentsCategoryChange?.(categoryId)
+                }}
+              />
+            </div>
+            <EscSegmented
+              label="Vista de importes"
+              value={viewMode}
+              options={[{ value: 'annual', label: 'Anual' }, { value: 'monthly', label: 'Mensual' }]}
+              onChange={setViewMode}
+            />
+            <p className="esc-wscc__base">
+              <span>Base usada para cotizar</span>
+              <strong><EscFigure value={baseDisplay} format={figure} /> {modeSuffix}</strong>
+              <span>{selectedContributionGroup}</span>
+            </p>
+          </div>
+
+          {isAboveMaximumBase ? (
+            <p className="esc-alert esc-alert--maximum" role="status">
+              <strong>Salario por encima de la base máxima.</strong>{' '}
+              Las cotizaciones ordinarias se calculan solo hasta {formatEuro(baseUsedAnnual)} al año.{' '}
+              <em>Exceso mensual: {formatEuro(excessOverMaximumMonthly)}</em>
+            </p>
+          ) : null}
+          {isBelowMinimumBase ? (
+            <p className="esc-alert esc-alert--minimum" role="status">
+              <strong>Base mínima aplicada.</strong>{' '}
+              Las cotizaciones se calculan sobre la base mínima de tu grupo, no sobre una base inferior.
+            </p>
+          ) : null}
+        </section>
+
+        <section className="esc-wscc__hero" aria-label="De cada 100 €">
+          <EscHundredCells
+            label={cellsLabel}
+            parts={[
+              { value: result.salaryAfterWorkerContributionsAnnual, tone: 'positive' },
+              { value: result.workerContributionsAnnual, tone: 'worker' },
+              { value: result.companyContributionsAnnual, tone: 'company' },
+            ]}
+            caption={<>Coste total empresa: <strong><EscFigure value={companyCostDisplay} format={figure} /> {modeSuffix}</strong>. Cada casilla, 1 %.</>}
+          />
+          <div className="esc-wscc__live">
+            <p aria-live="polite">{liveParagraph}</p>
+            <dl className="esc-wscc__legend">
+              <div>
+                <dt><span className="esc-swatch esc-fill--positive" aria-hidden="true" />Bruto después de cotizaciones</dt>
+                <dd className="esc-tone--positive"><EscFigure value={salaryAfterDisplay} format={figure} /></dd>
+              </div>
+              <div>
+                <dt><span className="esc-swatch esc-fill--worker" aria-hidden="true" />Cotizaciones trabajador</dt>
+                <dd className="esc-tone--worker"><EscFigure value={workerTotalDisplay} format={figure} /></dd>
+              </div>
+              <div>
+                <dt><span className="esc-swatch esc-fill--company" aria-hidden="true" />Coste adicional empresa</dt>
+                <dd className="esc-tone--company"><EscFigure value={companyTotalDisplay} format={figure} /></dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <div className="esc-wscc__sides">
+          <section className="esc-wscc__side" aria-labelledby="esc-wscc-worker">
+            <h3 id="esc-wscc-worker" className="esc-side-title esc-tone--worker">Trabajador</h3>
+            <p className="esc-wscc__note">Se descuenta de tu salario bruto.</p>
+            {workerRows.map((row) => (
+              <EscRaceRow
+                key={row.key}
+                label={row.label}
+                rate={formatPercent(row.rate)}
+                amount={formatEuro(monthly ? row.amount / 12 : row.amount)}
+                share={(row.amount / workerMax) * 100}
+                tone="worker"
+                muted={row.muted}
+                help={rowHelp(row.help)}
+              />
+            ))}
+            <output className="esc-total esc-total--worker">
+              <span>Total trabajador</span>
+              <span className="esc-total__rate">{formatPercent(result.workerContributionRate)}</span>
+              <strong className="esc-tone--worker"><EscFigure value={workerTotalDisplay} format={figure} /></strong>
+            </output>
+          </section>
+
+          <section className="esc-wscc__side" aria-labelledby="esc-wscc-company">
+            <h3 id="esc-wscc-company" className="esc-side-title esc-tone--company">Empresa</h3>
+            <p className="esc-wscc__note">La empresa lo paga además de tu salario bruto.</p>
+            {companyRows.map((row) => (
+              <EscRaceRow
+                key={row.key}
+                label={row.label}
+                rate={formatPercent(row.rate)}
+                amount={formatEuro(monthly ? row.amount / 12 : row.amount)}
+                share={(row.amount / companyMax) * 100}
+                tone="company"
+                muted={row.muted}
+                help={rowHelp(row.help)}
+              />
+            ))}
+            <output className="esc-total esc-total--company">
+              <span>Total empresa</span>
+              <span className="esc-total__rate">{formatPercent(result.companyContributionRate)}</span>
+              <strong className="esc-tone--company"><EscFigure value={companyTotalDisplay} format={figure} /></strong>
+            </output>
+          </section>
+        </div>
+
+        <div className="esc-wscc__panels">
+          <section className="esc-panel" aria-label="MEI">
+            <strong className="esc-panel__title">MEI 2025: {formatSchedulePercent(meiCurrentScheduleEntry.total_percent)} total</strong>
+            <p>Cotización adicional para reforzar las pensiones públicas. Sube 0,1 puntos porcentuales al año hasta 2030.</p>
+            <EscStairs columns={meiColumns} />
+            <table className="esc-table">
+              <caption>Evolución programada del MEI</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Año</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Empresa</th>
+                  <th scope="col">Trabajador</th>
+                </tr>
+              </thead>
+              <tbody>
+                {meiEvolutionSchedule.slice(2).map((entry) => (
+                  <tr key={entry.year ?? entry.year_label}>
+                    <th scope="row">{entry.year ?? entry.year_label}</th>
+                    <td>{formatSchedulePercent(entry.total_percent)}</td>
+                    <td className="esc-tone--company">{formatSchedulePercent(entry.employer_percent)}</td>
+                    <td className="esc-tone--worker">{formatSchedulePercent(entry.employee_percent)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {!meiNoteExpanded && meiTotalExtra2030 !== 0 ? (
+              <p className="esc-panel__extra" aria-label="MEI adicional total en 2030 frente a hoy">
+                <span>
+                  MEI en 2030 extra
+                  <em>trabajador + empresa: {formatSignedEuro(meiWorkerExtra2030)} {formatSignedEuro(meiCompanyExtra2030)}</em>
+                </span>
+                <strong className="esc-tone--positive">{formatSignedEuro(meiTotalExtra2030)}</strong>
+              </p>
+            ) : null}
+            <div id="esc-wscc-mei-more" className="esc-panel__more" hidden={!meiNoteExpanded}>
+              <p>
+                El MEI (Mecanismo de Equidad Intergeneracional) refuerza el sistema público de pensiones. Lo pagan
+                trabajador y empresa sobre la base de cotización.
+              </p>
+              <p>
+                La cuota sube 0,1 puntos porcentuales al año hasta 2030. A partir de entonces el reparto queda al 50%:
+                <strong> {formatSchedulePercent(meiFinalScheduleEntry.employee_percent)} trabajador</strong>
+                {' + '}
+                <strong>{formatSchedulePercent(meiFinalScheduleEntry.employer_percent)} empresa</strong>.
+              </p>
+              <p>
+                Con tu base de {formatEuro(meiBaseDisplay)} {modeSuffix}, el MEI supone hoy
+                {' '}
+                <strong>{formatEuro(meiWorkerToday)}</strong> descontados de tu salario y
+                {' '}
+                <strong>{formatEuro(meiCompanyToday)}</strong> pagados por la empresa. En 2030-2050, con el mismo
+                total del {formatSchedulePercent(meiFinalScheduleEntry.total_percent)}, serían
+                {' '}
+                <strong>{formatEuro(meiWorker2030)}</strong> para ti y
+                {' '}
+                <strong>{formatEuro(meiCompany2030)}</strong> para la empresa.
+              </p>
+              <em>Fuente: Real Decreto-ley 21/2021 y órdenes anuales de cotización. Años 2026-2050: calendario legal programado.</em>
+            </div>
+            <button
+              type="button"
+              className="esc-outline-button"
+              aria-expanded={meiNoteExpanded}
+              aria-controls="esc-wscc-mei-more"
+              onClick={() => setMeiNoteExpanded(!meiNoteExpanded)}
+            >
+              {meiNoteExpanded ? 'Ver menos' : 'Ver más detalle'}
+            </button>
+          </section>
+
+          <section className="esc-panel" aria-label="AT/EP">
+            <strong className="esc-panel__title">AT/EP 2025: {formatPercent(selectedAtEpRate)}</strong>
+            <EscNeedle value={selectedAtEpRate * 100} min={1} max={7} minLabel="1 %" maxLabel="7 %" />
+            <p>
+              AT/EP es como un seguro que paga la empresa para proteger al trabajador frente a accidentes o
+              enfermedades causadas por el trabajo.
+            </p>
+            <p>
+              El porcentaje no es igual para todos los trabajadores. Depende principalmente de la actividad
+              profesional y del nivel de riesgo. Por eso, una persona que trabaja en una oficina puede tener un
+              porcentaje diferente a alguien que trabaja en construcción.
+            </p>
+            <p>En este caso, el {formatPercent(selectedAtEpRate)} se divide en:</p>
+            <div className="esc-panel__split" aria-hidden="true">
+              <span className="esc-fill--company" style={{ flexGrow: selectedAtEpCategory.it_percent }} />
+              <span className="esc-fill--company-light" style={{ flexGrow: selectedAtEpCategory.ims_percent }} />
+            </div>
+            <p>
+              <strong>IT ({formatPercent(selectedAtEpCategory.it_percent / 100)}):</strong> cubre las bajas
+              temporales por accidentes de trabajo o enfermedades profesionales.
+            </p>
+            <p>
+              <strong>IMS ({formatPercent(selectedAtEpCategory.ims_percent / 100)}):</strong> cubre situaciones más
+              graves, como incapacidad permanente, fallecimiento o supervivencia.
+            </p>
+            <p>
+              Este porcentaje lo paga la empresa, no se descuenta del salario del trabajador. Se calcula sobre la
+              base de contingencias profesionales.
+            </p>
+            {selectedAtEpCategory.note ? <em>{selectedAtEpCategory.note}</em> : null}
+          </section>
+        </div>
+
+        <section className="esc-wscc__summary" aria-labelledby="esc-wscc-summary">
+          <h3 id="esc-wscc-summary" className="esc-side-title">Resumen</h3>
+          <EscEquation
+            ops={['−', '=']}
+            terms={[
+              { label: 'Salario bruto trabajador', value: <EscFigure value={grossDisplay} format={figure} /> },
+              { label: 'Cotizaciones trabajador', value: <EscFigure value={workerTotalDisplay} format={figure} />, tone: 'worker' },
+              { label: 'Bruto después de cotizaciones', value: <EscFigure value={salaryAfterDisplay} format={figure} />, tone: 'positive' },
+            ]}
+          />
+          <EscEquation
+            className="esc-wscc__summary-second"
+            ops={['+', '=']}
+            terms={[
+              { label: 'Salario bruto trabajador', value: <EscFigure value={grossDisplay} format={figure} /> },
+              { label: 'Coste adicional empresa', value: <EscFigure value={companyTotalDisplay} format={figure} />, tone: 'company' },
+              { label: 'Coste total empresa', value: <EscFigure value={companyCostDisplay} format={figure} />, hero: true },
+            ]}
+          />
+          <p className="esc-wscc__total-line">
+            <span>Coste total cotizaciones <em>Trabajador + empresa</em></span>
+            <strong><EscFigure value={totalContributionsDisplay} format={figure} /></strong>
+          </p>
+        </section>
+      </section>
+    )
+  }
 
   return (
     <section className="wscc" aria-labelledby="wscc-title">

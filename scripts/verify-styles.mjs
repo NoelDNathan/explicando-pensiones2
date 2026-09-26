@@ -82,9 +82,10 @@ const CALCULATOR_THEME = 'src/components/fiscal-worker-dashboard/FiscalSoftTheme
 const isCalculatorCss = (repoPath) =>
   repoPath.startsWith('src/components/worker-salary-dashboard/') ||
   repoPath === 'src/components/fiscal-worker-dashboard/FiscalWorkerDashboard.css' ||
+  repoPath === 'src/components/fiscal-worker-dashboard/FiscalEscenario.css' ||
   repoPath === 'src/components/fiscal-worker-dashboard/WorkIncomeReductionExplainer.css'
 const isCalculatorScript = (repoPath) =>
-  /^src\/components\/(worker-salary-dashboard|fiscal-worker-dashboard)\/[^/]+\.tsx?$/.test(repoPath)
+  /^src\/components\/(worker-salary-dashboard|fiscal-worker-dashboard)\/(?:escenario\/)?[^/]+\.tsx?$/.test(repoPath)
 // Scripts que dibujan en <canvas> o componentes sin uso: no pueden leer var().
 const SCRIPT_EXCEPTIONS = new Set([
   'src/components/fiscal-worker-dashboard/shareResultsImage.ts',

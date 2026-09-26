@@ -61,6 +61,7 @@ import { calculateGeographicMobilityIncrement2025, calculateInKindBenefits2025 }
 import { VAT_PROXY_SOURCE, estimateVatFromNetSalary } from './vatEpFProxy'
 import { describeSource, resolveAtEpSourceRef, resolveFiscalSourceRefs } from './fiscalSourceRefs'
 import { AccountMenu } from '../account/AccountMenu'
+import { FiscalVariantContext, type FiscalDashboardVariant } from './fiscalVariant'
 import './FiscalWorkerDashboard.css'
 import './FiscalSoftTheme.css'
 import './FiscalEscenario.css'
@@ -372,9 +373,6 @@ function getContributionRatesForYear(taxYear: TaxYear): SocialContributionRates 
     },
   }
 }
-
-/** `escenario` es la v2 visual (/calculadora-fiscal/v2): mismos pasos y cálculos, otra piel. */
-export type FiscalDashboardVariant = 'clasica' | 'escenario'
 
 export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: FiscalDashboardVariant } = {}) {
   /*
@@ -1415,6 +1413,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
   })()
 
   return (
+    <FiscalVariantContext.Provider value={variant}>
     <div className={`fwd fwd--soft${variant === 'escenario' ? ' fwd--escenario' : ''}`}>
       <main className="fwd-main">
         <header className="fwd-header">
@@ -1546,6 +1545,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
 
       </main>
     </div>
+    </FiscalVariantContext.Provider>
   )
 }
 

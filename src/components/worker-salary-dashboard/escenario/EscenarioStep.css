@@ -1,0 +1,219 @@
+/*
+ * Cabecera y cuerpo de cada paso en la v2 «Escenario» (WorkerFiscalStepsCard con
+ * variant = escenario). Sin tarjetas: el espacio y la tipografía separan.
+ */
+.esc-step {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 48px);
+  container-type: inline-size;
+  font-family: var(--fiscal-font-body);
+  color: var(--fiscal-stage-text);
+}
+
+/* Barra fina: estado, 13 segmentos que llevan a cada paso y 03/12. */
+.esc-step__bar {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5vw, 32px);
+}
+.esc-step__status {
+  margin: 0;
+  font-size: var(--fiscal-text-label);
+  font-weight: 600;
+  color: var(--fiscal-stage-muted);
+  white-space: nowrap;
+}
+.esc-step__segments {
+  flex-grow: 1;
+  display: flex;
+  gap: 5px;
+}
+.esc-step__segments button {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.esc-step__segments button span {
+  display: block;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--fiscal-stage-raised);
+  transform-origin: left;
+}
+.esc-step__segments button.is-done span { background: var(--fiscal-stage-positive); }
+.esc-step__segments button.is-active span {
+  height: 10px;
+  background: var(--fiscal-stage-positive);
+  animation: esc-seg-grow var(--fiscal-duration-base) var(--fiscal-ease-out) both;
+}
+.esc-step__segments button:focus-visible {
+  outline: 3px solid var(--fiscal-stage-positive);
+  outline-offset: 2px;
+}
+.esc-step__count {
+  font-family: var(--fiscal-font-display);
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--fiscal-stage-positive);
+  font-variant-numeric: tabular-nums;
+}
+.esc-step__count span { color: var(--fiscal-stage-faint); }
+
+/* Título y primera explicación. */
+.esc-step__hero {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vw, 40px);
+  padding-top: clamp(24px, 5vw, 64px);
+}
+.esc-step__subtitle {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: var(--fiscal-text-lead);
+  font-weight: 700;
+  font-stretch: 110%;
+  color: var(--fiscal-stage-muted);
+  animation: esc-rise 0.8s var(--fiscal-ease-out) 0.3s both;
+}
+.esc-step__lead {
+  margin: 0 0 0 auto;
+  max-width: 620px;
+  font-size: var(--fiscal-text-lead);
+  line-height: 1.45;
+  color: var(--fiscal-stage-text);
+  animation: esc-rise 0.8s var(--fiscal-ease-out) 0.5s both;
+}
+.esc-step__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 5vw, 64px);
+  padding-top: clamp(16px, 4vw, 48px);
+}
+.esc-step__pair p,
+.esc-step__text {
+  margin: 0;
+  max-width: 860px;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--fiscal-stage-copy);
+  animation: esc-rise 0.8s var(--fiscal-ease-out) 0.7s both;
+}
+.esc-step__pair p:nth-child(2) { animation-delay: 0.9s; }
+
+.esc-step__defs {
+  margin: 0;
+}
+
+/* Nómina de ejemplo y conceptos: paneles elevados, sin tarjeta dentro de tarjeta. */
+.esc-step__payroll {
+  min-width: 0;
+  overflow-x: auto;
+  padding: clamp(18px, 3vw, 36px);
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+}
+.esc-step__concept {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--fiscal-stage-copy);
+}
+.esc-step__concept h3 {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: var(--fiscal-text-section);
+  font-weight: 900;
+  font-stretch: 120%;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--fiscal-stage-text);
+}
+
+/* Navegación fija abajo: atrás con borde, siguiente en píldora clara. */
+.esc-step__nav {
+  position: fixed;
+  z-index: 70;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px var(--fiscal-space-gutter) 18px;
+  background: linear-gradient(transparent, var(--fiscal-stage) 38%);
+}
+.esc-step__back,
+.esc-step__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.esc-step__back span,
+.esc-step__next span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.esc-step__back {
+  min-height: 56px;
+  padding: 0 22px;
+  border: 2px solid var(--fiscal-stage-line);
+  color: var(--fiscal-stage-muted);
+  background: var(--fiscal-stage);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.esc-step__next {
+  min-height: 64px;
+  padding: 0 30px;
+  border: 0;
+  color: var(--fiscal-stage);
+  background: var(--fiscal-stage-positive);
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.0625rem, 1rem + 0.5vw, 1.375rem);
+  font-weight: 800;
+  font-stretch: 115%;
+}
+.esc-step__back:disabled,
+.esc-step__next:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.esc-step__back:focus-visible,
+.esc-step__next:focus-visible {
+  outline: 3px solid var(--fiscal-stage-positive);
+  outline-offset: 4px;
+}
+
+@media (max-width: 720px) {
+  .esc-step__status { display: none; }
+  .esc-step__lead { margin-left: 0; }
+  .esc-step__pair { grid-template-columns: minmax(0, 1fr); }
+  .esc-step__back { padding: 0 16px; }
+  .esc-step__back span { display: none; }
+  .esc-step__next { flex: 1; justify-content: space-between; min-height: 56px; padding: 0 22px; }
+}
+
+@keyframes esc-seg-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes esc-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .esc-step__segments button.is-active span,
+  .esc-step__subtitle,
+  .esc-step__lead,
+  .esc-step__pair p,
+  .esc-step__text {
+    animation: none;
+  }
+}

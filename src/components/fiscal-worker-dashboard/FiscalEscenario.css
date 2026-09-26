@@ -1,7 +1,8 @@
 /*
  * v2 «Escenario» de la calculadora (/calculadora-fiscal/v2, skill diseno-escenario).
- * Los colores ya los reasigna FiscalSoftTheme.css en .fwd--escenario; aquí solo va lo
- * que no es color: tipografía, forma, ritmo y movimiento. La v1 no carga esta clase.
+ * Los colores los reasigna FiscalSoftTheme.css en .fwd--escenario. Aquí va el marco
+ * común a todos los pasos: márgenes, tipografía y fuera cajas. Las piezas propias de
+ * D están en worker-salary-dashboard/escenario/. La v1 no lleva esta clase.
  */
 .fwd--escenario {
   font-family: var(--fiscal-font-body);
@@ -9,94 +10,54 @@
   font-variant-numeric: tabular-nums;
 }
 
-.fwd--escenario :is(button, input, select, textarea) {
-  font-family: inherit;
+.fwd--escenario :is(button, input, select, textarea),
+.fwd--escenario .wfsc {
+  font-family: var(--fiscal-font-body);
 }
 
-/* Títulos en display. El del paso se estira al entrar. */
-.fwd--escenario :is(h1, h2, h3, h4) {
+.fwd--escenario .fwd-main {
+  width: min(100%, 1440px);
+  gap: var(--fiscal-space-block);
+  padding: 24px var(--fiscal-space-gutter) 140px;
+  /* La cinta inclinada sale un píxel por la esquina; se recorta en el borde de la pantalla. */
+  overflow-x: clip;
+}
+
+/* Cabecera de la app: una línea fina. */
+.fwd--escenario .fwd-header h2 {
+  font-family: var(--fiscal-font-body);
+  font-size: var(--fiscal-text-label);
+  font-weight: 600;
+  color: var(--fiscal-stage-muted);
+}
+.fwd--escenario .fwd-header p {
+  display: none;
+}
+.fwd--escenario .fwd-actions button {
+  border-radius: 999px;
+}
+
+/* Fuera cajas: las tarjetas de cada paso se funden con el escenario. */
+.fwd--escenario .fwd-worker-card > section {
+  padding-inline: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Títulos de las tarjetas en display. */
+.fwd--escenario .fwd-worker-card :is(h2, h3) {
   font-family: var(--fiscal-font-display);
   font-stretch: 115%;
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.05;
-  color: var(--fiscal-stage-text);
 }
-
-.fwd--escenario .fwd-header h2 {
-  font-size: var(--fiscal-text-label);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  line-height: 1.3;
-}
-
-.fwd--escenario .wfsc-copy {
-  container-type: inline-size;
-}
-
-.fwd--escenario #wfsc-title {
-  /* Se ajusta al ancho de su columna para que ninguna palabra se parta. */
-  font-size: min(var(--fiscal-text-hero), 11.5cqi);
-  font-weight: 900;
-  line-height: 0.9;
-  text-transform: uppercase;
-  text-wrap: balance;
-  hyphens: auto;
-  animation: fwd-esc-stretch var(--fiscal-duration-slow) var(--fiscal-ease-out) both;
-}
-
-.fwd--escenario .wfsc-concept h3 {
+.fwd--escenario .fwd-worker-card > section > header h2 {
   font-size: var(--fiscal-text-section);
-  text-transform: uppercase;
-}
-
-.fwd--escenario .wfsc-copy__subtitle,
-.fwd--escenario .wfsc-description > p:first-child {
-  font-size: var(--fiscal-text-lead);
-  color: var(--fiscal-stage-copy);
-}
-
-.fwd--escenario .wfsc-copy > * {
-  animation: fwd-esc-rise var(--fiscal-duration-base) var(--fiscal-ease-out) both;
-}
-.fwd--escenario .wfsc-copy > :nth-child(2) { animation-delay: 120ms; }
-.fwd--escenario .wfsc-copy > :nth-child(3) { animation-delay: 240ms; }
-.fwd--escenario .wfsc-copy > :nth-child(n + 4) { animation-delay: 360ms; }
-
-.fwd--escenario .fwd-worker-card > * {
-  animation: fwd-esc-rise var(--fiscal-duration-base) var(--fiscal-ease-out) both;
-}
-
-/* Cifras grandes en display, estrechas para que quepan en su columna. */
-.fwd--escenario .wfsc-quiz-result__row strong {
-  font-family: var(--fiscal-font-display);
-  font-stretch: 75%;
   font-weight: 900;
-  white-space: nowrap;
-}
-
-/* Navegación: píldoras grandes. «Siguiente» en claro, «atrás» con borde. */
-.fwd--escenario .wfsc-nav {
-  min-height: 56px;
-  border-radius: 999px;
-  font-family: var(--fiscal-font-body);
-  font-weight: 700;
-}
-.fwd--escenario .wfsc-nav--next {
-  color: var(--fiscal-stage);
-  background: var(--fiscal-stage-positive);
-  border-color: var(--fiscal-stage-positive);
-}
-.fwd--escenario .wfsc-nav--previous {
-  color: var(--fiscal-stage-text);
-  background: transparent;
-  border: 1px solid var(--fiscal-stage-line);
-}
-.fwd--escenario .wfsc-chrome__status {
-  font-family: var(--fiscal-font-display);
-  font-weight: 800;
-  font-stretch: 120%;
+  text-transform: uppercase;
 }
 
 /* Controles: pastillas y objetivos táctiles de 44 px. */
@@ -104,21 +65,29 @@
   min-height: 44px;
   border-radius: 999px;
 }
+.fwd--escenario input[type='range'] {
+  accent-color: var(--fiscal-stage-positive);
+}
 
-/* Foco visible sobre el escenario. */
 .fwd--escenario :focus-visible {
   outline: 3px solid var(--fiscal-stage-positive);
   outline-offset: 4px;
 }
 
-/* Enlaces legibles sobre fondo oscuro. */
 .fwd--escenario a {
   color: var(--fiscal-stage-positive);
 }
 
-@keyframes fwd-esc-stretch {
-  from { font-stretch: 50%; opacity: 0; }
-  to { font-stretch: 115%; opacity: 1; }
+/* Cifras del paso 0 en display, estrechas para que quepan en su columna. */
+.fwd--escenario .wfsc-quiz-result__row strong {
+  font-family: var(--fiscal-font-display);
+  font-stretch: 75%;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.fwd--escenario .fwd-worker-card > * {
+  animation: fwd-esc-rise var(--fiscal-duration-base) var(--fiscal-ease-out) both;
 }
 
 @keyframes fwd-esc-rise {

@@ -24,6 +24,9 @@ import type {
   WorkerContractType,
 } from './WorkerSocialContributionsCard'
 import './WorkerFiscalStepsCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscRibbon, EscSweepText, EscTitle } from './escenario/EscenarioParts'
+import './escenario/EscenarioStep.css'
 
 type WorkerFiscalStepConcept = {
   id: string
@@ -110,11 +113,11 @@ const payrollNumberFormatter = new Intl.NumberFormat('es-ES', {
   maximumFractionDigits: 2,
 })
 
-function formatPayrollNumber(value: number) {
+export function formatPayrollNumber(value: number) {
   return payrollNumberFormatter.format(Number.isFinite(value) ? value : 0)
 }
 
-function formatPayrollPercent(rate: number) {
+export function formatPayrollPercent(rate: number) {
   return payrollNumberFormatter.format((Number.isFinite(rate) ? rate : 0) * 100)
 }
 
@@ -132,7 +135,19 @@ function getStepDescription(step: WorkerFiscalStep, live?: PayrollLiveData) {
      Una parte se descuenta directamente de tu salario bruto y aparece en tu nómina como cotización del trabajador. Por eso reduce tu salario neto, es decir, lo que finalmente cobras. 
      La otra parte la paga la empresa además de tu salario bruto. No se resta de tu nómina, pero sí forma parte del coste total que tiene la empresa por contratarte. 
      Estas cotizaciones sirven para financiar prestaciones como la jubilación, las bajas por enfermedad, el desempleo, la formación profesional, los accidentes laborales o el refuerzo del sistema de pensiones. 
-    Con el salario que has introducido, tu base de cotización es de ${contributionBaseMonthly} € al mes. Si la parte del trabajador suma un ${workerRate} %, se descontarían unos ${workerMonthly} € de tu salario bruto. Además, la empresa tendría que pagar sus propias cotizaciones: en este caso, un ${companyRate} %, unos ${companyMonthly} € adicionales al mes, que no se descuentan de tu nómina, pero sí aumentan el coste total de contratarte.`
+    ${buildContributionsLiveParagraph({ contributionBaseMonthly, workerRate, workerMonthly, companyRate, companyMonthly })}`
+}
+
+/** Párrafo con las cifras de tu caso del paso 3. La v2 lo coloca junto a las casillas. */
+export function buildContributionsLiveParagraph(values: {
+  contributionBaseMonthly: string
+  workerRate: string
+  workerMonthly: string
+  companyRate: string
+  companyMonthly: string
+}) {
+  const { contributionBaseMonthly, workerRate, workerMonthly, companyRate, companyMonthly } = values
+  return `Con el salario que has introducido, tu base de cotización es de ${contributionBaseMonthly} € al mes. Si la parte del trabajador suma un ${workerRate} %, se descontarían unos ${workerMonthly} € de tu salario bruto. Además, la empresa tendría que pagar sus propias cotizaciones: en este caso, un ${companyRate} %, unos ${companyMonthly} € adicionales al mes, que no se descuentan de tu nómina, pero sí aumentan el coste total de contratarte.`
 }
 
 function buildPayrollSnapshot(live?: PayrollLiveData): PayrollSnapshot {
@@ -872,8 +887,28 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
   )
 }
 
+/**
+ * Extras de la v2 por paso. Las frases marcadas y las palabras de la cinta salen
+ * literalmente del texto del paso; aquí solo se elige qué resaltar.
+ */
+const ESCENARIO_STEP_EXTRAS: Record<number, {
+  marks?: { phrase: string; tone: 'worker' | 'company' }[]
+  ribbon?: string[]
+  liveParagraphInCard?: boolean
+}> = {
+  3: {
+    marks: [
+      { phrase: 'cotización del trabajador', tone: 'worker' },
+      { phrase: 'la paga la empresa', tone: 'company' },
+    ],
+    ribbon: ['jubilación', 'bajas por enfermedad', 'desempleo', 'formación profesional', 'accidentes laborales', 'refuerzo del sistema de pensiones'],
+    liveParagraphInCard: true,
+  },
+}
+
 export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveData }: WorkerFiscalStepsCardProps) {
   const [internalActiveStepId, setInternalActiveStepId] = useState(0)
+  const variant = useFiscalVariant()
   const sectionRef = useRef<HTMLElement>(null)
   const skipInitialScrollRef = useRef(true)
   const currentStepId = activeStepId ?? internalActiveStepId
@@ -916,6 +951,113 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
 
     sectionRef.current?.scrollIntoView({ block: 'start' })
   }, [currentStepId])
+
+  if (variant === 'escenario') {
+    const previousStep = WORKER_FISCAL_STEPS[activeIndex - 1]
+    const escenario = ESCENARIO_STEP_EXTRAS[activeStep.id]
+    // En la v2 cada salto de línea del texto es un párrafo. El texto no cambia.
+    const lines = activeDescription.split(/\n+/).map((line) => line.trim()).filter(Boolean)
+    const shownLines = escenario?.liveParagraphInCard && payrollLiveData ? lines.slice(0, -1) : lines
+    const [leadLine, ...restLines] = shownLines
+    const pairLines = restLines.length >= 2 ? restLines.slice(0, 2) : []
+    const tailLines = restLines.slice(pairLines.length)
+    const renderLine = (line: string) => (escenario?.marks ? <EscSweepText text={line} marks={escenario.marks} /> : line)
+
+    return (
+      <section
+        ref={sectionRef}
+        className="wfsc esc-step"
+        aria-labelledby={isCompactStep ? undefined : 'wfsc-title'}
+        aria-label={isCompactStep ? statusLabel : undefined}
+      >
+        <div className="esc-step__bar">
+          <p className="esc-step__status">{statusLabel}</p>
+          <nav className="esc-step__segments" aria-label="Cambiar paso">
+            {WORKER_FISCAL_STEPS.map((step) => {
+              const isActive = step.id === activeStep.id
+              const isDone = step.id < activeStep.id
+              return (
+                <button
+                  key={step.id}
+                  type="button"
+                  className={isActive ? 'is-active' : isDone ? 'is-done' : undefined}
+                  onClick={() => setActiveStep(step.id)}
+                  aria-current={isActive ? 'step' : undefined}
+                  aria-label={step.id === 0 ? 'Ir al resumen rápido' : `Ir al paso ${step.id}: ${step.title}`}
+                >
+                  <span />
+                </button>
+              )
+            })}
+          </nav>
+          <span className="esc-step__count" aria-hidden="true">
+            {String(activeStep.id).padStart(2, '0')}<span>/{detailStepCount}</span>
+          </span>
+        </div>
+
+        {!isCompactStep ? (
+          <>
+            <div className="esc-step__hero" key={activeStep.id}>
+              <EscTitle id="wfsc-title" text={activeStep.title} />
+              <p className="esc-step__subtitle">{activeStep.subtitle}</p>
+              {leadLine ? <p className="esc-step__lead">{renderLine(leadLine)}</p> : null}
+            </div>
+            {pairLines.length > 0 ? (
+              <div className="esc-step__pair">
+                {pairLines.map((line) => <p key={line}>{renderLine(line)}</p>)}
+              </div>
+            ) : null}
+            {tailLines.map((line) => <p key={line} className="esc-step__text">{renderLine(line)}</p>)}
+            {activeStep.definitions && activeStep.definitions.length > 0 ? (
+              <dl className="wfsc-defs esc-step__defs">
+                {activeStep.definitions.map((item) => (
+                  <div key={item.term} className="wfsc-defs__item">
+                    <dt>{item.term}</dt>
+                    <dd>{item.meaning}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+            {escenario?.ribbon ? <EscRibbon words={escenario.ribbon} /> : null}
+            {showPayrollHelp ? (
+              <aside className="wfsc-help esc-step__payroll" aria-label="Ayuda del paso activo">
+                <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
+              </aside>
+            ) : null}
+            {stepConcepts.map((concept) => (
+              <section key={concept.id} className="wfsc-concept esc-step__concept" aria-labelledby={`wfsc-concept-${concept.id}`}>
+                <h3 id={`wfsc-concept-${concept.id}`}>{concept.title}</h3>
+                {concept.body}
+              </section>
+            ))}
+          </>
+        ) : null}
+
+        <nav className="esc-step__nav" aria-label="Navegación del recorrido fiscal">
+          <button
+            type="button"
+            className="esc-step__back"
+            onClick={goToPrevious}
+            disabled={activeStep.id === 0}
+            aria-label="Ir al paso anterior"
+          >
+            <ChevronLeft size={20} aria-hidden="true" />
+            <span>{previousStep ? previousStep.title : 'Anterior'}</span>
+          </button>
+          <button
+            type="button"
+            className="esc-step__next"
+            onClick={goToNext}
+            disabled={!nextStep}
+            aria-label={nextStep ? `Ir al siguiente paso: ${nextStep.title}` : 'No hay más pasos'}
+          >
+            <span>{nextStep ? nextStep.title : 'Continuar'}</span>
+            <ChevronRight size={22} aria-hidden="true" />
+          </button>
+        </nav>
+      </section>
+    )
+  }
 
   return (
     <section

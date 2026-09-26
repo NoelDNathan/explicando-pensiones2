@@ -89,13 +89,17 @@ existen como tokens: si se eligen, habrá que crear sus `--fiscal-*` antes de im
 **Elegida la dirección D (Escenario)** el 2026-09-26. La skill del proyecto
 `.claude/skills/diseno-escenario/` recoge su lenguaje (tokens de escenario, tipografía,
 movimiento y patrones) para aplicarlo paso a paso.
-**v2 en `/calculadora-fiscal/v2`** (2026-09-26): la misma calculadora con la piel Escenario;
-`/calculadora-fiscal` sigue siendo la v1 para comparar. Es una capa, no una copia: la clase
-`fwd--escenario` reasigna los tokens `--fiscal-*` al fondo oscuro (FiscalSoftTheme.css) y
-`FiscalEscenario.css` pone tipografía (Anybody + Instrument Sans, por Fontsource), títulos
-display, navegación en píldora, foco y entradas animadas. Comparten el escenario guardado.
-Aún no están las piezas propias de D (100 casillas, barras de carrera, escalera MEI, aguja,
-ecuación): siguiente, montarlas paso a paso solo en la v2 con la skill.
+**v2 en `/calculadora-fiscal/v2`** (2026-09-26): la misma calculadora con el diseño D;
+`/calculadora-fiscal` sigue siendo la v1 para comparar (comparten el escenario guardado).
+- Contexto `fiscalVariant.ts`: cada componente sabe si pinta la v1 (`clasica`) o la v2 (`escenario`).
+- Piezas de D en `worker-salary-dashboard/escenario/` (título display, barrido, cinta, 100 casillas,
+  filas de carrera, escalera, aguja, ecuación, cifras que cuentan, interruptor segmentado).
+- **Todos los pasos:** barra de progreso con 12 segmentos, título a todo el ancho, textos sin
+  tarjeta, nómina en panel y navegación en píldoras con el nombre del paso.
+- **Paso 3 completo como la maqueta D** (consola, casillas + párrafo en vivo, trabajador/empresa
+  con barras desplegables, paneles MEI y AT/EP, resumen en ecuación).
+- **Pendiente:** el cuerpo interactivo de los pasos 1-2 y 4-12 sigue siendo el de la v1 en oscuro.
+  Siguiente: darle su protagonista de D paso a paso, y llevar las piezas a `/componentes`.
 
 ### Base de datos (Supabase)
 

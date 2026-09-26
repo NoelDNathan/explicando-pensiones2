@@ -1,0 +1,262 @@
+/* Paso 3 (Cotizaciones sociales) en la v2 «Escenario». Solo tokens --fiscal-*. */
+.esc-wscc {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 8vw, 120px);
+  color: var(--fiscal-stage-text);
+  font-family: var(--fiscal-font-body);
+}
+
+/* Consola de control. */
+.esc-wscc__console { display: flex; flex-direction: column; gap: 20px; }
+.esc-wscc__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px 20px;
+}
+.esc-wscc__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 1.0625rem;
+}
+.esc-wscc__field > span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fiscal-stage-muted);
+}
+.esc-select {
+  min-height: 52px;
+  padding: 12px 44px 12px 20px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--fiscal-stage-text);
+  background-color: var(--fiscal-stage-raised);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--fiscal-stage-positive) 50%),
+    linear-gradient(135deg, var(--fiscal-stage-positive) 50%, transparent 50%);
+  background-position: calc(100% - 24px) 55%, calc(100% - 18px) 55%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  font: inherit;
+  appearance: none;
+  cursor: pointer;
+}
+.esc-select option { color: var(--fiscal-stage); background: var(--fiscal-stage-text); }
+.esc-wscc__atep { min-width: min(100%, 320px); }
+.esc-wscc__base {
+  margin: 0 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.875rem;
+  color: var(--fiscal-stage-muted);
+  text-align: right;
+}
+.esc-wscc__base strong {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  font-weight: 800;
+  color: var(--fiscal-stage-text);
+}
+
+.esc-alert {
+  margin: 0;
+  padding: 16px 22px;
+  border-radius: 18px;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+.esc-alert--maximum { color: var(--fiscal-stage-yellow-ink); background: var(--fiscal-stage-yellow-paper); }
+.esc-alert--minimum { color: var(--fiscal-stage-blue-ink); background: var(--fiscal-stage-blue-paper); }
+
+/* Casillas + párrafo en vivo. */
+.esc-wscc__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 72px);
+  align-items: center;
+}
+.esc-wscc__live { display: flex; flex-direction: column; gap: 32px; }
+.esc-wscc__live > p {
+  margin: 0;
+  font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+  line-height: 1.6;
+  color: var(--fiscal-stage-copy);
+}
+.esc-wscc__legend {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.esc-wscc__legend div { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.esc-wscc__legend dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--fiscal-stage-muted);
+}
+.esc-wscc__legend dd {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.375rem, 1rem + 1.2vw, 2.125rem);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+.esc-swatch { flex: 0 0 auto; width: 14px; height: 14px; border-radius: 4px; }
+
+/* Trabajador | Empresa. */
+.esc-wscc__sides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 56px;
+  align-items: start;
+}
+.esc-wscc__side { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.esc-side-title {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: var(--fiscal-text-section);
+  font-weight: 900;
+  font-stretch: 130%;
+  line-height: 1;
+  text-transform: uppercase;
+  animation: esc-stretch var(--fiscal-duration-slow) var(--fiscal-ease-out) both;
+}
+.esc-wscc__note { margin: 0 0 18px; font-size: 1.1875rem; color: var(--fiscal-stage-muted); }
+.esc-total {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 18px 16px 0;
+  border-top: 2px solid currentColor;
+  font-size: 1.1875rem;
+  font-weight: 700;
+}
+.esc-total--worker { border-color: var(--fiscal-stage-worker); }
+.esc-total--company { border-color: var(--fiscal-stage-company); }
+.esc-total > span:first-child { flex-grow: 1; }
+.esc-total__rate { font-size: 1rem; font-weight: 400; color: var(--fiscal-stage-muted); }
+.esc-total strong {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 1.4vw, 2.375rem);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+/* Paneles MEI y AT/EP. */
+.esc-wscc__panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+.esc-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: clamp(22px, 3vw, 36px);
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--fiscal-stage-copy);
+}
+.esc-panel p { margin: 0; }
+.esc-panel strong { color: var(--fiscal-stage-text); }
+.esc-panel em { font-size: 0.875rem; color: var(--fiscal-stage-muted); }
+.esc-panel__title {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
+  font-weight: 900;
+  font-stretch: 120%;
+  line-height: 1.1;
+}
+.esc-panel__extra {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.esc-panel__extra span { display: flex; flex-direction: column; }
+.esc-panel__extra strong.esc-tone--positive {
+  font-family: var(--fiscal-font-display);
+  font-size: 1.875rem;
+  font-weight: 900;
+  color: var(--fiscal-stage-positive);
+  white-space: nowrap;
+}
+.esc-panel__more { display: flex; flex-direction: column; gap: 10px; animation: esc-unfold var(--fiscal-duration-quick) var(--fiscal-ease-out) both; }
+.esc-panel__more[hidden] { display: none; }
+.esc-panel__split { display: flex; gap: 4px; height: 16px; }
+.esc-panel__split span:first-child { border-radius: 99px 4px 4px 99px; }
+.esc-panel__split span:last-child { border-radius: 4px 99px 99px 4px; }
+.esc-fill--company-light { background: var(--fiscal-stage-company); }
+
+.esc-table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.esc-table caption {
+  padding-bottom: 6px;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fiscal-stage-muted);
+}
+.esc-table th, .esc-table td { padding: 6px 0; text-align: right; border-bottom: 1px solid var(--fiscal-stage-line); }
+.esc-table thead th { font-weight: 600; color: var(--fiscal-stage-muted); }
+.esc-table :is(th, td):first-child { text-align: left; }
+.esc-table tbody th { font-weight: 600; color: var(--fiscal-stage-text); }
+
+.esc-outline-button {
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 2px solid var(--fiscal-stage-positive);
+  border-radius: 999px;
+  color: var(--fiscal-stage-positive);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.esc-outline-button:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 4px; }
+
+/* Resumen como ecuación. */
+.esc-wscc__summary { display: flex; flex-direction: column; gap: 22px; }
+.esc-wscc__summary .esc-side-title { margin-bottom: 12px; }
+.esc-wscc__summary-second { padding-top: 22px; border-top: 1px solid var(--fiscal-stage-line); }
+.esc-wscc__total-line {
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  font-size: 1.125rem;
+  color: var(--fiscal-stage-muted);
+}
+.esc-wscc__total-line strong { font-size: 1.75rem; color: var(--fiscal-stage-text); }
+
+@media (max-width: 900px) {
+  .esc-wscc__hero,
+  .esc-wscc__sides,
+  .esc-wscc__panels { grid-template-columns: minmax(0, 1fr); }
+  .esc-wscc__base { margin-left: 0; align-items: flex-start; text-align: left; }
+}
+@media (max-width: 560px) {
+  .esc-wscc__legend { grid-template-columns: minmax(0, 1fr); }
+  .esc-wscc__controls > * { width: 100%; }
+  .esc-select { width: 100%; }
+  .esc-total { flex-wrap: wrap; }
+  .esc-total strong { flex-basis: 100%; }
+}
+
+@keyframes esc-unfold { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* Los títulos de cada lado llevan su color: gana a la regla general de títulos de tarjeta. */
+.esc-wscc .esc-side-title.esc-tone--worker { color: var(--fiscal-stage-worker); }
+.esc-wscc .esc-side-title.esc-tone--company { color: var(--fiscal-stage-company); }
