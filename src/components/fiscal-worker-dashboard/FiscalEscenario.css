@@ -178,6 +178,10 @@
 .fwd--escenario .wkcc-cta,
 .fwd--escenario .wkcc-ghost { min-height: 56px; border-radius: 999px; }
 .fwd--escenario .wkcc-ghost { border-color: var(--fiscal-stage-line); color: var(--fiscal-stage-muted); background: transparent; }
+.fwd--escenario .wkcc-scenario-metrics { display: flex; gap: clamp(28px, 5vw, 72px); margin-top: clamp(28px, 5vw, 72px); }
+.fwd--escenario .wkcc-scenario-metrics > span { display: flex; flex-direction: column; }
+.fwd--escenario .wkcc-scenario-metrics strong { color: var(--fiscal-stage-positive); font-family: var(--fiscal-font-display); font-size: clamp(7rem, 4rem + 11vw, 16.25rem); font-weight: 900; line-height: .72; white-space: nowrap; }
+.fwd--escenario .wkcc-scenario-metrics small { margin-top: 12px; color: var(--fiscal-stage-muted); font-family: var(--fiscal-font-display); font-size: var(--fiscal-text-lead); font-weight: 800; text-transform: uppercase; }
 .fwd--escenario .wfin-chart__viz .esc-cells { margin: 0; }
 .fwd--escenario .wfin-chart__center,
 .fwd--escenario .wctc-spend-chart__center { position: static; margin: 16px 0 0; color: var(--fiscal-stage-text); }
