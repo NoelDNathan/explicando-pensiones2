@@ -14,7 +14,7 @@ import type { TooltipProps } from 'recharts'
 import { InfoButton } from '../ui/InfoButton'
 import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
-import { EscHundredCells } from './escenario/EscenarioParts'
+import { EscVatBasket } from './escenario/EscenarioParts'
 import './WorkerTaxStepShell.css'
 import './WorkerConsumptionTaxesCard.css'
 
@@ -375,6 +375,26 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
   const chartSummary = slices.length > 0
     ? slices.map((slice) => `${slice.name}: ${formatNumber(slice.sharePercent)} %`).join('; ')
     : 'Sin gasto asignado'
+  const vatBuckets = useMemo(() => {
+    const values = { zero: 0, reduced: 0, intermediate: 0, general: 0, special: 0 }
+    lines.forEach((line) => {
+      if (line.specialRate && line.specialRate > 0) values.special += line.sharePercent
+      else if (line.vatRate <= 0) values.zero += line.sharePercent
+      else if (line.vatRate <= 4) values.reduced += line.sharePercent
+      else if (line.vatRate <= 10) values.intermediate += line.sharePercent
+      else values.general += line.sharePercent
+    })
+    const assigned = Object.values(values).reduce((total, value) => total + value, 0)
+    return [
+      // texto nuevo D: rótulos de la escala visual de IVA.
+      { id: 'zero' as const, label: '0 %', value: values.zero },
+      { id: 'reduced' as const, label: '4 %', value: values.reduced },
+      { id: 'intermediate' as const, label: '10 %', value: values.intermediate },
+      { id: 'general' as const, label: '21 %', value: values.general },
+      { id: 'special' as const, label: '21 % + especial', value: values.special },
+      { id: 'missing' as const, label: 'Falta', value: Math.max(0, 100 - assigned) },
+    ]
+  }, [lines])
 
   if (slices.length === 0) {
     return (
@@ -391,22 +411,7 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
       <div className="wctc-spend-chart__body">
         <div className="wctc-spend-chart__viz">
           {variant === 'escenario' ? (
-            <EscHundredCells
-              parts={lines
-                .filter((line) => line.sharePercent > 0.005)
-                .map((line) => ({
-                  value: line.sharePercent,
-                  tone: line.specialRate
-                    ? 'state' as const
-                    : line.vatRate >= 21
-                      ? 'company' as const
-                      : line.vatRate >= 10
-                        ? 'worker' as const
-                        : 'positive' as const,
-                }))}
-              label={`Distribución del gasto: ${slices.map((slice) => `${formatNumber(slice.sharePercent)} % en ${slice.name}`).join(', ')}`}
-              caption={<span>Las casillas agrupan tu gasto por el tipo de IVA aplicable.</span>}
-            />
+            <EscVatBasket segments={vatBuckets} label={`Distribución del gasto por tipo de IVA: ${chartSummary}`} />
           ) : (
             <ResponsiveContainer width="100%" height={210}>
             <PieChart>

@@ -106,10 +106,15 @@ movimiento y patrones) para aplicarlo paso a paso.
   reparto en 12/14 pagas y complementos; y el pasillo entre bases mínima y máxima. Sus estados
   siguen conectados a los cálculos existentes y las tres piezas se pueden revisar en `/componentes`.
 - **Pasos 4-12:** los cuerpos de la v2 ya incorporan sus protagonistas D sin alterar el cálculo:
-  preguntas Sí/No y capítulos en 4, 5 y 7; escalones por tramo en 6; cesta de cien casillas
+  preguntas Sí/No y capítulos en 4, 5 y 7; escalones por tramo en 6; cesta horizontal
   para el IVA en 8; preguntas y relojes de vivienda/coche en 9; cien casillas en el resumen 10;
   escalera de apartados en 11; y fuentes numeradas en 12. La revisión visual final a 1280 y 390 px
   sigue pendiente porque el navegador local de la sesión no consigue iniciarse.
+- **Ajuste de fidelidad posterior:** la portada del paso 0 usa ya la escala de 84 px que fija la
+  maqueta de pregunta. Las preguntas que manejan los estados reales de los pasos 4, 5 y 7 se han
+  conectado a `EscQuestion`; el IVA usa su cesta horizontal por tipos, y se añadieron las monedas
+  del paso 7 y la jerarquía de los relojes/resultados. Chrome en modo local permitió revisar la
+  portada a 1280 px; la captura móvil sigue bloqueada por su perfil temporal.
 - **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
   (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
   (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que

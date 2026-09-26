@@ -181,11 +181,13 @@
 .fwd--escenario .wfin-chart__viz .esc-cells { margin: 0; }
 .fwd--escenario .wfin-chart__center,
 .fwd--escenario .wctc-spend-chart__center { position: static; margin: 16px 0 0; color: var(--fiscal-stage-text); }
+.fwd--escenario .wfin-chart__center strong { color: var(--fiscal-stage-positive); font-family: var(--fiscal-font-display); font-size: clamp(7rem, 4rem + 11vw, 12.5rem); font-weight: 900; line-height: .75; white-space: nowrap; }
 .fwd--escenario .wctc-spend-chart__viz .esc-cells { margin: 0; }
 .fwd--escenario .wwtc .wctc-tip { display: grid; grid-template-columns: repeat(2, minmax(84px, 1fr)) minmax(0, 4fr); align-items: center; gap: 16px; }
 .fwd--escenario .wwtc .wctc-tip::before,
 .fwd--escenario .wwtc .wctc-tip::after { content: ''; width: min(14vw, 120px); aspect-ratio: 1; border: 8px solid var(--fiscal-stage-positive); border-radius: 50%; background: conic-gradient(var(--fiscal-stage-positive) 0 25%, var(--fiscal-stage-line) 25% 100%); }
 .fwd--escenario .wwtc .wctc-tip::after { border-color: var(--fiscal-stage-company); background: conic-gradient(var(--fiscal-stage-company) 0 62%, var(--fiscal-stage-line) 62% 100%); }
+.fwd--escenario .wwtc .wctc-tip p strong { display: block; margin-bottom: 18px; color: var(--fiscal-stage-text); font-family: var(--fiscal-font-display); font-size: clamp(3rem, 2rem + 4vw, 4.75rem); font-weight: 900; line-height: .9; text-transform: uppercase; }
 .fwd--escenario .wkcc-intro__sections { display: grid; grid-template-columns: repeat(10, minmax(28px, 1fr)); align-items: end; gap: 8px; }
 .fwd--escenario .wkcc-intro__sections li { min-width: 0; padding: 10px 6px; border: 0; border-radius: 10px 10px 0 0; color: var(--fiscal-stage); background: var(--fiscal-stage-positive); overflow: hidden; }
 .fwd--escenario .wkcc-intro__sections li:nth-child(1) { min-height: 44px; }

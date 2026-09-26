@@ -17,7 +17,7 @@ import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/Fis
 import { FiscalVariantContext } from './components/fiscal-worker-dashboard/fiscalVariant'
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import { EscChapter, EscQuestion } from './components/worker-salary-dashboard/escenario/EscenarioCommon'
-import { EscHundredCells, EscStairs } from './components/worker-salary-dashboard/escenario/EscenarioParts'
+import { EscHundredCells, EscStairs, EscVatBasket } from './components/worker-salary-dashboard/escenario/EscenarioParts'
 import { PrivacyTermsPage } from './pages/PrivacyTermsPage'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
@@ -158,6 +158,17 @@ function EscenarioCommonShowcase() {
           { label: '24%', total: '3.100 €', parts: [{ value: 3_100, tone: 'worker' }] },
           { label: '30%', total: '4.600 €', parts: [{ value: 4_600, tone: 'company' }] },
         ]}
+      />
+      <EscVatBasket
+        segments={[
+          { id: 'zero', label: '0 %', value: 8 },
+          { id: 'reduced', label: '4 %', value: 22 },
+          { id: 'intermediate', label: '10 %', value: 30 },
+          { id: 'general', label: '21 %', value: 32 },
+          { id: 'special', label: '21 % + especial', value: 8 },
+          { id: 'missing', label: 'Falta', value: 0 },
+        ]}
+        label="Ejemplo de cesta de IVA por tipo"
       />
     </div>
   )

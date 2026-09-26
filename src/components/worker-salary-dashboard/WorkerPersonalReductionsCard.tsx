@@ -1500,6 +1500,15 @@ export function WorkerPersonalReductionsCard({
             </p>
           </div>
         </header>
+
+        {variant === 'escenario' && showDeductionsSection ? (
+          <div className="wprc-deduction-coins" aria-hidden="true">
+            {/* texto nuevo D */}
+            <span className="wprc-deduction-coin wprc-deduction-coin--full"><strong>1 €</strong><small>deducción</small></span>
+            {/* texto nuevo D */}
+            <span className="wprc-deduction-coin wprc-deduction-coin--partial"><strong>0,30 €</strong><small>reducción</small></span>
+          </div>
+        ) : null}
  
       </div>
 

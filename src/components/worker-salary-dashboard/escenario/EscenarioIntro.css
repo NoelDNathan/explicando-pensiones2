@@ -1,6 +1,7 @@
 .esc-intro { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 56px); color: var(--fiscal-stage-text); font-family: var(--fiscal-font-body); }
 .esc-intro__step { margin: 0; color: var(--fiscal-stage-muted); font-size: var(--fiscal-text-label); font-weight: 700; }
 .esc-intro > h1 { margin: 0; max-width: 1100px; color: var(--fiscal-stage-text); font-family: var(--fiscal-font-display); font-size: min(var(--fiscal-text-hero), 12vw); font-weight: 900; font-stretch: 125%; line-height: .88; letter-spacing: -.04em; text-transform: uppercase; }
+.esc-intro--question > h1 { max-width: 1120px; font-size: clamp(3.5rem, 2.5rem + 3.5vw, 5.25rem); line-height: .95; }
 .esc-intro--question > h1 span { color: var(--fiscal-stage-positive); }
 .esc-intro__lead { max-width: 860px; margin: 0; color: var(--fiscal-stage-copy); font-size: var(--fiscal-text-lead); line-height: 1.5; }
 .esc-intro__guess { display: grid; grid-template-columns: minmax(250px, 420px) minmax(0, 1fr); gap: 18px 56px; align-items: end; }

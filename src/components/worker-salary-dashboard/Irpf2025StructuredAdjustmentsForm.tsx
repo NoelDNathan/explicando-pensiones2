@@ -18,6 +18,8 @@ import {
   workBenefitsCouldApply,
 } from '../fiscal-worker-dashboard/irpf2025Calc'
 import { InfoButton } from '../ui/InfoButton'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscQuestion } from './escenario/EscenarioCommon'
 import './Irpf2025StructuredAdjustmentsForm.css'
 
 type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed'
@@ -254,6 +256,7 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
   onYes?: () => void
   onNo: () => void
 }) {
+  const variant = useFiscalVariant()
   const [answer, setAnswer] = useState<'unanswered' | 'yes' | 'no'>(() => initiallyRelevant ? 'yes' : 'no')
   const chooseYes = () => {
     onYes?.()
@@ -262,6 +265,19 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
   const chooseNo = () => {
     onNo()
     setAnswer('no')
+  }
+
+  if (variant === 'escenario') {
+    return (
+      <EscQuestion
+        question={<>{question}<QuestionEffect amount={effectAmount} kind={effectKind} /></>}
+        help={<>{description}{guide ? <div className="irpf-reduction-question__guide">{guide}</div> : null}</>}
+        value={answer === 'unanswered' ? null : answer === 'yes'}
+        onChange={(next) => next ? chooseYes() : chooseNo()}
+      >
+        {answer === 'yes' ? children : null}
+      </EscQuestion>
+    )
   }
 
   return (

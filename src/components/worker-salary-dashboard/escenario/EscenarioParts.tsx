@@ -141,6 +141,30 @@ export function EscHundredCells({ parts, label, caption }: {
   )
 }
 
+/** Cesta de IVA: agrupa el gasto por tipo antes del detalle por categoría. */
+export function EscVatBasket({ segments, label }: {
+  segments: { id: 'zero' | 'reduced' | 'intermediate' | 'general' | 'special' | 'missing'; label: string; value: number }[]
+  label: string
+}) {
+  return (
+    <figure className="esc-vat" aria-label={label}>
+      <div className="esc-vat__bar" role="img" aria-label={label}>
+        {segments.filter((segment) => segment.value > 0).map((segment) => (
+          <span
+            key={segment.id}
+            className={`esc-vat__segment esc-vat__segment--${segment.id}`}
+            style={{ flexGrow: segment.value }}
+          >
+            <strong>{segment.label}</strong>
+            <small>{segment.value.toLocaleString('es-ES', { maximumFractionDigits: 1 })} %</small>
+          </span>
+        ))}
+      </div>
+      <figcaption>Tu gasto agrupado por el tipo de IVA aplicable.</figcaption>
+    </figure>
+  )
+}
+
 /** Fila de carrera: etiqueta, tipo, importe y barra. Se abre al tocar para leer su explicación. */
 export function EscRaceRow({ label, rate, amount, share, tone, help, muted = false }: {
   label: string

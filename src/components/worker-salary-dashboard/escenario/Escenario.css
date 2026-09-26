@@ -115,6 +115,19 @@
 }
 .esc-cells figcaption strong { color: var(--fiscal-stage-text); }
 
+.esc-vat { display: grid; gap: 16px; margin: 0; }
+.esc-vat__bar { display: flex; min-height: 140px; overflow: hidden; border-radius: var(--fiscal-radius-stage-panel); background: var(--fiscal-stage-raised); }
+.esc-vat__segment { display: flex; flex: 1 1 0; flex-direction: column; justify-content: end; min-width: 48px; padding: 18px 12px; color: var(--fiscal-stage); font-family: var(--fiscal-font-display); font-variant-numeric: tabular-nums; text-align: center; animation: esc-growx var(--fiscal-duration-base) var(--fiscal-ease-out) both; transform-origin: left; }
+.esc-vat__segment strong { font-size: clamp(1.25rem, 1rem + 1vw, 2rem); font-weight: 900; white-space: nowrap; }
+.esc-vat__segment small { margin-top: 4px; font-family: var(--fiscal-font-body); font-size: var(--fiscal-text-label); font-weight: 700; white-space: nowrap; }
+.esc-vat__segment--zero { color: var(--fiscal-stage-text); background: var(--fiscal-stage-vat-0); }
+.esc-vat__segment--reduced { background: var(--fiscal-stage-vat-4); }
+.esc-vat__segment--intermediate { background: var(--fiscal-stage-vat-10); }
+.esc-vat__segment--general { background: var(--fiscal-stage-vat-21); }
+.esc-vat__segment--special { background: var(--fiscal-stage-vat-special); }
+.esc-vat__segment--missing { color: var(--fiscal-stage-muted); background: repeating-linear-gradient(135deg, var(--fiscal-stage-raised) 0 12px, var(--fiscal-stage-line) 12px 24px); }
+.esc-vat figcaption { color: var(--fiscal-stage-muted); font-size: var(--fiscal-text-label); line-height: 1.45; }
+
 /* Filas de carrera desplegables. */
 .esc-race { display: flex; flex-direction: column; }
 .esc-race__button {
