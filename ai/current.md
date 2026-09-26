@@ -100,6 +100,10 @@ movimiento y patrones) para aplicarlo paso a paso.
   con barras desplegables, paneles MEI y AT/EP, resumen en ecuación).
 - **Pendiente:** el cuerpo interactivo de los pasos 1-2 y 4-12 sigue siendo el de la v1 en oscuro.
   Siguiente: darle su protagonista de D paso a paso, y llevar las piezas a `/componentes`.
+- **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
+  (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
+  (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que
+  la persona usuaria las revise antes de implementarlas en la v2.
 
 ### Base de datos (Supabase)
 
