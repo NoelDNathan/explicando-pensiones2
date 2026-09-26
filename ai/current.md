@@ -113,8 +113,10 @@ movimiento y patrones) para aplicarlo paso a paso.
 - **Auditoría de fidelidad abierta (2026-09-26):** el paso 4 ya recupera el orden, el título, el
   subtítulo y el texto de la maqueta; su pregunta se muestra antes de la bifurcación fiscal. Las
   cabeceras de los pasos 5-9 y 11 eliminan en v2 la numeración propia de la v1 y usan los textos de
-  las maquetas. Sigue pendiente una revisión visual real: Chrome local dejó un perfil temporal
-  bloqueado y no hay captura móvil verificable en esta sesión.
+  las maquetas. El patrón de capítulos 01–04/01–02 ya reserva la columna de 200 px y permite que
+  sus títulos se partan en la columna restante, evitando el corte detectado en «Ventajas del
+  trabajo». Sigue pendiente una revisión visual real: el navegador local no inicia y no hay
+  captura móvil verificable en esta sesión.
 - **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
   (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
   (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que
