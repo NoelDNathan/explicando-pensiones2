@@ -101,7 +101,98 @@
   --fiscal-shadow: 0 18px 46px rgba(35, 54, 78, 0.08);
   --fiscal-shadow-control: 0 4px 12px rgba(35, 54, 78, 0.07);
 
+  /* Escenario (v2, diseño D): fondo azul noche y acentos claros. Son literales y no
+     alias porque .fwd--escenario reasigna --fiscal-ink y los acentos a partir de ellos. */
+  --fiscal-stage: #172033;
+  --fiscal-stage-raised: #23364e;
+  --fiscal-stage-line: #4f5f70;
+  --fiscal-stage-text: #ffffff;
+  --fiscal-stage-copy: #dbe4ec;
+  --fiscal-stage-muted: #c4d2df;
+  --fiscal-stage-faint: #718096;
+  --fiscal-stage-blue: #bdd4ef;
+  --fiscal-stage-violet: #d5c9ee;
+  --fiscal-stage-orange: #efd2a9;
+  --fiscal-stage-yellow: #efd7a0;
+  --fiscal-stage-red: #efc5cc;
+  --fiscal-stage-green: #b6ded3;
+  --fiscal-stage-worker: var(--fiscal-stage-violet);
+  --fiscal-stage-company: var(--fiscal-stage-orange);
+  --fiscal-stage-positive: var(--fiscal-stage-green);
+  --fiscal-stage-worker-mark: #5d469c;
+  --fiscal-stage-company-mark: #8b5418;
 
+  /* Tipografía, escala, espacio y movimiento del escenario. */
+  --fiscal-font-display: "Anybody Variable", "Anybody", system-ui, sans-serif;
+  --fiscal-font-body: "Instrument Sans", system-ui, sans-serif;
+  --fiscal-text-hero: clamp(2.5rem, 1.6rem + 4.4vw, 6.5rem);
+  --fiscal-text-section: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+  --fiscal-text-figure: clamp(1.5rem, 1.1rem + 2vw, 3.5rem);
+  --fiscal-text-lead: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --fiscal-text-body: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --fiscal-text-label: 0.9375rem;
+  --fiscal-space-gutter: clamp(1rem, 0.5rem + 4vw, 5rem);
+  --fiscal-space-block: clamp(3.5rem, 2.5rem + 4vw, 7.5rem);
+  --fiscal-space-stack: clamp(1rem, 0.8rem + 1vw, 1.75rem);
+  --fiscal-radius-stage-panel: clamp(1.625rem, 1.4rem + 1vw, 2rem);
+  --fiscal-duration-quick: 400ms;
+  --fiscal-duration-base: 700ms;
+  --fiscal-duration-slow: 1400ms;
+  --fiscal-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fiscal-ease-spring: cubic-bezier(0.3, 1.4, 0.5, 1);
+
+
+}
+
+/*
+ * v2 «Escenario» (/calculadora-fiscal/v2). Reasigna la paleta de arriba al escenario
+ * oscuro: fondo azul noche, texto claro y acentos en su variante clara. Las piezas no
+ * cambian; leen los mismos tokens. Solo referencias, ningún literal.
+ */
+.fwd.fwd--escenario {
+  --fiscal-canvas: var(--fiscal-stage);
+  --fiscal-surface: var(--fiscal-stage);
+  --fiscal-surface-soft: var(--fiscal-stage-raised);
+  --fiscal-surface-tint: color-mix(in srgb, var(--fiscal-stage-green) 10%, var(--fiscal-stage));
+  --fiscal-ink: var(--fiscal-stage-text);
+  --fiscal-copy: var(--fiscal-stage-copy);
+  --fiscal-muted: var(--fiscal-stage-muted);
+  --fiscal-line: color-mix(in srgb, var(--fiscal-stage-text) 12%, var(--fiscal-stage));
+  --fiscal-line-strong: color-mix(in srgb, var(--fiscal-stage-text) 26%, var(--fiscal-stage));
+  --fiscal-primary: var(--fiscal-stage-green);
+  --fiscal-primary-strong: var(--fiscal-stage-text);
+  --fiscal-primary-soft: color-mix(in srgb, var(--fiscal-stage-green) 16%, var(--fiscal-stage));
+  --fiscal-primary-line: color-mix(in srgb, var(--fiscal-stage-green) 45%, var(--fiscal-stage));
+  --fiscal-primary-ink: var(--fiscal-stage-green);
+  --fiscal-blue: var(--fiscal-stage-blue);
+  --fiscal-blue-soft: color-mix(in srgb, var(--fiscal-stage-blue) 16%, var(--fiscal-stage));
+  --fiscal-blue-line: color-mix(in srgb, var(--fiscal-stage-blue) 45%, var(--fiscal-stage));
+  --fiscal-blue-ink: var(--fiscal-stage-blue);
+  --fiscal-violet: var(--fiscal-stage-violet);
+  --fiscal-violet-soft: color-mix(in srgb, var(--fiscal-stage-violet) 16%, var(--fiscal-stage));
+  --fiscal-violet-line: color-mix(in srgb, var(--fiscal-stage-violet) 45%, var(--fiscal-stage));
+  --fiscal-violet-ink: var(--fiscal-stage-violet);
+  --fiscal-orange: var(--fiscal-stage-orange);
+  --fiscal-orange-soft: color-mix(in srgb, var(--fiscal-stage-orange) 16%, var(--fiscal-stage));
+  --fiscal-orange-line: color-mix(in srgb, var(--fiscal-stage-orange) 45%, var(--fiscal-stage));
+  --fiscal-orange-ink: var(--fiscal-stage-orange);
+  --fiscal-yellow: var(--fiscal-stage-yellow);
+  --fiscal-yellow-soft: color-mix(in srgb, var(--fiscal-stage-yellow) 16%, var(--fiscal-stage));
+  --fiscal-yellow-line: color-mix(in srgb, var(--fiscal-stage-yellow) 45%, var(--fiscal-stage));
+  --fiscal-yellow-ink: var(--fiscal-stage-yellow);
+  --fiscal-red: var(--fiscal-stage-red);
+  --fiscal-red-soft: color-mix(in srgb, var(--fiscal-stage-red) 16%, var(--fiscal-stage));
+  --fiscal-red-line: color-mix(in srgb, var(--fiscal-stage-red) 45%, var(--fiscal-stage));
+  --fiscal-red-ink: var(--fiscal-stage-red);
+  --fiscal-green: var(--fiscal-stage-green);
+  --fiscal-green-soft: color-mix(in srgb, var(--fiscal-stage-green) 16%, var(--fiscal-stage));
+  --fiscal-green-line: color-mix(in srgb, var(--fiscal-stage-green) 45%, var(--fiscal-stage));
+  --fiscal-green-ink: var(--fiscal-stage-green);
+  --fiscal-on-accent: var(--fiscal-stage);
+  --fiscal-radius-card: var(--fiscal-radius-stage-panel);
+  --fiscal-radius-panel: 22px;
+  --fiscal-shadow: none;
+  --fiscal-shadow-control: none;
 }
 
 /*

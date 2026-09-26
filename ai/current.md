@@ -88,7 +88,14 @@ mariposa trabajador/empresa, anillo AT/EP y resumen en cascada), junto a D en el
 existen como tokens: si se eligen, habrá que crear sus `--fiscal-*` antes de implementarlas.
 **Elegida la dirección D (Escenario)** el 2026-09-26. La skill del proyecto
 `.claude/skills/diseno-escenario/` recoge su lenguaje (tokens de escenario, tipografía,
-movimiento y patrones) para aplicarlo paso a paso. Siguiente: piloto en los pasos 0 y 5.
+movimiento y patrones) para aplicarlo paso a paso.
+**v2 en `/calculadora-fiscal/v2`** (2026-09-26): la misma calculadora con la piel Escenario;
+`/calculadora-fiscal` sigue siendo la v1 para comparar. Es una capa, no una copia: la clase
+`fwd--escenario` reasigna los tokens `--fiscal-*` al fondo oscuro (FiscalSoftTheme.css) y
+`FiscalEscenario.css` pone tipografía (Anybody + Instrument Sans, por Fontsource), títulos
+display, navegación en píldora, foco y entradas animadas. Comparten el escenario guardado.
+Aún no están las piezas propias de D (100 casillas, barras de carrera, escalera MEI, aguja,
+ecuación): siguiente, montarlas paso a paso solo en la v2 con la skill.
 
 ### Base de datos (Supabase)
 

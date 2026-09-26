@@ -63,6 +63,11 @@ import { describeSource, resolveAtEpSourceRef, resolveFiscalSourceRefs } from '.
 import { AccountMenu } from '../account/AccountMenu'
 import './FiscalWorkerDashboard.css'
 import './FiscalSoftTheme.css'
+import './FiscalEscenario.css'
+import '@fontsource-variable/anybody/wdth.css'
+import '@fontsource/instrument-sans/400.css'
+import '@fontsource/instrument-sans/600.css'
+import '@fontsource/instrument-sans/700.css'
 
 type ScaleBracket = {
   base_from_eur: number
@@ -368,7 +373,10 @@ function getContributionRatesForYear(taxYear: TaxYear): SocialContributionRates 
   }
 }
 
-export function FiscalWorkerDashboard() {
+/** `escenario` es la v2 visual (/calculadora-fiscal/v2): mismos pasos y cálculos, otra piel. */
+export type FiscalDashboardVariant = 'clasica' | 'escenario'
+
+export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: FiscalDashboardVariant } = {}) {
   /*
    * El escenario guardado se lee una sola vez y de forma sincrona, ANTES del
    * primer render. Tiene que ser asi: las tarjetas reciben su estado inicial por
@@ -1407,7 +1415,7 @@ export function FiscalWorkerDashboard() {
   })()
 
   return (
-    <div className="fwd fwd--soft">
+    <div className={`fwd fwd--soft${variant === 'escenario' ? ' fwd--escenario' : ''}`}>
       <main className="fwd-main">
         <header className="fwd-header">
           <div>

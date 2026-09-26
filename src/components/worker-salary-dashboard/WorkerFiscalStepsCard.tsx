@@ -934,7 +934,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
               </span>
               <div className="wfsc-copy">
                 <p>{activeStep.id === 0 ? 'Antes de empezar' : `Paso ${activeStep.id} de ${detailStepCount}`}</p>
-                <h2 id="wfsc-title">{activeStep.title}</h2>
+                <h2 id="wfsc-title" key={activeStep.id}>{activeStep.title}</h2>
                 <p className="wfsc-copy__subtitle">{activeStep.subtitle}</p>
                 <div className="wfsc-description">
                   {descriptionParagraphs.map((paragraph) => (

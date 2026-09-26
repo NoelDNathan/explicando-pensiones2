@@ -1171,6 +1171,7 @@ function Routes() {
     if (path === '/reduccion-trabajo') return <WorkIncomeReductionExplainer />
   }
 
+  if (path === '/calculadora-fiscal/v2') return <FiscalWorkerDashboard variant="escenario" />
   return <FiscalWorkerDashboard />
 }
 

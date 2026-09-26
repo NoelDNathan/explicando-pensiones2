@@ -17,6 +17,8 @@
     "verify:crypto": "node --experimental-strip-types scripts/verify-crypto.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/anybody": "^5.3.0",
+    "@fontsource/instrument-sans": "^5.3.0",
     "@supabase/supabase-js": "^2.116.0",
     "@vercel/analytics": "^2.0.1",
     "hash-wasm": "^4.12.0",
