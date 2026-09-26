@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Paso 12 · Fuentes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#172033}
+.pg{--st:#172033;--raised:#23364e;--line:#4f5f70;--copy:#dbe4ec;--muted:#c4d2df;--faint:#718096;--w:#d5c9ee;--c:#efd2a9;--pos:#b6ded3;--blue:#bdd4ef;--yel:#efd7a0;--red:#efc5cc;--posfill:#18865b;--cfill:#b96b18;--yfill:#9a7418;--rfill:#c4455b;--wmark:#5d469c;--cmark:#8b5418;--bfill:#2f6fce;
+  width:1280px;box-sizing:border-box;background:#172033;color:#ffffff;font-family:'Instrument Sans',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.D{font-family:'Anybody',system-ui,sans-serif}
+.num{font-variant-numeric:tabular-nums}
+@keyframes stretch{from{font-variation-settings:'wdth' 50,'wght' 300;letter-spacing:.1em;opacity:0}to{font-variation-settings:'wdth' 130,'wght' 900;letter-spacing:-.035em;opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes cell{0%{opacity:0;transform:scale(.2) rotate(-30deg)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes unfold{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes sweep{from{background-size:0% 100%}to{background-size:100% 100%}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:none;opacity:1}}
+@keyframes seggrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.kin{font-family:'Anybody',system-ui,sans-serif;animation:stretch 1.4s cubic-bezier(.2,.8,.2,1) both}
+.rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.cell{aspect-ratio:1;border-radius:10px;animation:cell .5s cubic-bezier(.2,.8,.2,1) both;transition:background-color .4s ease}
+.growx{transform-origin:left;animation:growx 1s cubic-bezier(.2,.8,.2,1) both}
+.growy{transform-origin:bottom;animation:growy .9s cubic-bezier(.2,.8,.2,1) both}
+.unfold{animation:unfold .4s cubic-bezier(.2,.8,.2,1) both}
+.pop{animation:pop .7s cubic-bezier(.3,1.4,.5,1) both}
+.sweepV,.sweepO,.sweepG{background-repeat:no-repeat;animation:sweep 1s cubic-bezier(.2,.8,.2,1) .8s both;padding:0 4px;border-radius:4px;color:#ffffff;font-weight:700}
+.sweepV{background-image:linear-gradient(#5d469c,#5d469c)}
+.sweepO{background-image:linear-gradient(#8b5418,#8b5418);animation-delay:1.1s}
+.sweepG{background-image:linear-gradient(#14614f,#14614f);animation-delay:1s}
+.h1{margin:0;font-size:150px;line-height:.86;font-weight:900;text-transform:uppercase}
+.h2{margin:0;font-size:64px;line-height:1;font-weight:900;text-transform:uppercase}
+.h3{margin:0;font-family:'Anybody',system-ui,sans-serif;font-size:30px;line-height:1.1;font-weight:900;font-variation-settings:'wdth' 120}
+.acc{color:#b6ded3}
+.sub{margin:0;font-family:'Anybody',system-ui,sans-serif;font-size:28px;font-weight:700;font-variation-settings:'wdth' 110;color:#c4d2df}
+.lead{margin:0;max-width:860px;font-size:26px;line-height:1.45;color:#ffffff}
+.txt{margin:0;font-size:24px;line-height:1.5;color:#dbe4ec}
+.small{margin:0;font-size:17px;line-height:1.55;color:#dbe4ec}
+.lab{font-size:14px;font-weight:600;color:#c4d2df}
+.note{margin:0;font-size:15px;line-height:1.5;color:#c4d2df}
+.panel{padding:36px;border-radius:32px;background:#23364e;display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.55;color:#dbe4ec}
+.panel p{margin:0}
+.fig{font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+.ribbon{padding:18px 0;overflow:hidden;background:#b6ded3;color:#172033;transform:rotate(-1.5deg)}
+.ribbon>div{display:flex;width:max-content;gap:40px;font-family:'Anybody',system-ui,sans-serif;font-size:34px;font-weight:800;text-transform:uppercase;font-variation-settings:'wdth' 120;white-space:nowrap;animation:marquee 28s linear infinite}
+button{font:inherit;cursor:pointer;color:inherit}
+.cta{display:inline-flex;align-items:center;gap:14px;min-height:64px;padding:0 34px;border:0;border-radius:999px;background:#b6ded3;color:#172033;font-family:'Anybody',system-ui,sans-serif;font-size:22px;font-weight:800;font-variation-settings:'wdth' 115}
+.ghost{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 22px;border:2px solid #4f5f70;border-radius:999px;background:transparent;color:#c4d2df;font-size:17px;font-weight:600}
+.outline{align-self:flex-start;min-height:48px;padding:0 22px;border:2px solid #b6ded3;border-radius:999px;background:transparent;color:#b6ded3;font-size:16px;font-weight:700}
+.segs{display:inline-flex;padding:5px;gap:4px;border-radius:999px;background:#23364e}
+.segs button{min-height:42px;padding:0 20px;border:0;border-radius:999px;background:transparent;color:#ffffff;font-weight:600}
+.segs button[aria-pressed=true]{background:#ffffff;color:#172033}
+.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 32px;align-items:center;padding:22px 0;border-top:1px solid #4f5f70}
+.q strong{font-size:22px;line-height:1.35;font-weight:600}
+.q p{margin:4px 0 0;font-size:16px;line-height:1.5;color:#c4d2df}
+.yn{display:inline-flex;gap:8px}
+.yn button{min-width:84px;min-height:52px;border:2px solid #4f5f70;border-radius:999px;background:transparent;color:#ffffff;font-size:18px;font-weight:700}
+.yn button[aria-pressed=true]{background:#b6ded3;border-color:#b6ded3;color:#172033}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:#23364e;color:#c4d2df;font-size:14px;font-weight:600}
+.lane{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:0;border-radius:18px;background:transparent;color:#ffffff;text-align:left;width:100%}
+.lane[aria-expanded=true]{background:#23364e}
+.track{display:block;width:100%;height:14px;border-radius:99px;background:#23364e}
+.bar{display:block;height:14px;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.eq{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr) 48px minmax(0,1fr);align-items:end;gap:12px}
+.eq .op{font-family:'Anybody',system-ui,sans-serif;font-size:48px;font-weight:900;color:#718096;text-align:center;line-height:1}
+.eq span.l{display:block;font-size:16px;color:#c4d2df;margin-bottom:4px}
+.eq strong{font-family:'Anybody',system-ui,sans-serif;font-size:40px;font-weight:800;font-variant-numeric:tabular-nums}
+.alert{margin:0;padding:16px 22px;border-radius:18px;font-size:17px;line-height:1.5}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:48px;margin:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-moz-range-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;margin-top:-13px;border-radius:50%;background:#ffffff;border:6px solid #18865b;box-shadow:0 0 0 8px rgba(182,222,211,.18)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#ffffff;border:6px solid #18865b}
+select{font:inherit;color:#ffffff;background-color:#23364e;border:0;border-radius:999px;padding:12px 44px 12px 20px;min-height:52px;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#b6ded3 50%),linear-gradient(135deg,#b6ded3 50%,transparent 50%);background-position:calc(100% - 24px) 55%,calc(100% - 18px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+select option{color:#172033;background:#ffffff}
+table{border-collapse:collapse}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #b6ded3;outline-offset:4px}
+a{color:#b6ded3}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.sweepV,.sweepO,.sweepG{background-size:100% 100%}}
+</style>
+</helmet>
+<div class="pg" style="height: 3200px;">
+<header style="padding: 32px 80px 0; display: flex; align-items: center; gap: 32px;"><span style="font-size: 15px; font-weight: 600; color: #c4d2df; white-space: nowrap;">Paso 12 de 12</span><div style="flex-grow: 1; display: flex; align-items: center; gap: 5px;" aria-hidden="true"><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 10px; border-radius: 99px; background: #b6ded3; transform-origin: left; animation: seggrow .9s cubic-bezier(.2,.8,.2,1) both;"></span></div><span class="num D" style="font-size: 22px; font-weight: 800; color: #b6ded3;">12<span style="color: #718096;">/12</span></span></header>
+
+  <section style="padding: 80px 80px 0; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: end;">
+    <div style="display: flex; flex-direction: column; gap: 32px;">
+      <span class="lab" style="letter-spacing: .1em;">TRAZABILIDAD DEL CÁLCULO</span>
+      <h1 class="kin h1" style="font-size: 124px;">Fuentes y valores <span class="acc">utilizados</span></h1>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-end;"><span class="fig pop" style="font-size: 240px; color: #b6ded3;">5</span><span class="sub" style="color: #ffffff;">fuentes</span></div>
+  </section>
+  <p class="lead rise" style="margin: 48px 80px 0; animation-delay: .5s;">Este es el origen de cada parámetro aplicado al resultado de 2025. Los valores reflejan tus selecciones actuales; los enlaces llevan al documento oficial.</p>
+
+  <section aria-label="Fuentes" style="margin: 96px 80px 0; display: flex; flex-direction: column;">
+    <sc-for list="{{src}}" as="s" hint-placeholder-count="5">
+      <article class="rise" style="display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 40px; padding: 48px 0; border-top: 1px solid #4f5f70;">
+        <span class="fig" aria-hidden="true" style="font-size: 130px; line-height: .8; font-variation-settings: 'wdth' 70; color: #23364e; -webkit-text-stroke: 2px {{s.color}};">{{s.n}}</span>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;">
+            <h2 class="h3" style="font-size: 34px;">{{s.title}}</h2>
+            <span class="chip" style="{{s.badge}} flex-shrink: 0;">{{s.kind}}</span>
+          </div>
+          <p class="note" style="font-size: 16px;">{{s.pub}}</p>
+          <dl style="margin: 8px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 24px;">
+            <sc-for list="{{s.vals}}" as="v" hint-placeholder-count="4"><div style="display: flex; flex-direction: column; gap: 4px;"><dt class="lab">{{v.k}}</dt><dd class="fig" style="margin: 0; font-size: 26px; font-weight: 800; white-space: normal; line-height: 1.15;">{{v.v}}</dd></div></sc-for>
+          </dl>
+          <a href="#" style="align-self: flex-start; font-size: 16px; font-weight: 700;">{{s.link}} ↗</a>
+          <sc-if value="{{s.hasNote}}" hint-placeholder-val="{{ false }}"><p class="note" style="font-size: 15px;">{{s.note}}</p></sc-if>
+        </div>
+      </article>
+    </sc-for>
+  </section>
+
+  <p class="txt" style="margin: 48px 80px 0; max-width: 980px; font-size: 19px;">La calculadora es didáctica. Los enlaces permiten comprobar los parámetros, pero el resultado no sustituye una nómina, una liquidación tributaria ni asesoramiento profesional.</p>
+
+<nav aria-label="Pasos" style="margin-top: auto; padding: 96px 80px 64px; display: flex; justify-content: space-between; align-items: center;"><button type="button" class="ghost" style="min-height: 56px; padding: 0 24px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Comprueba lo aprendido</button></nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":3200}}'>
+class Component extends DCLogic {
+  state = { o: {}, a: {} };
+  ids() { return []; }
+  // Kit común: T.x abre/cierra, O.x abierto, C.x cerrado, E.x aria-expanded, S.x signo +/−,
+  // Y.x / N.x responden Sí / No y AY.x / AN.x dan su aria-pressed.
+  kit() {
+    const o = (this.state && this.state.o) || {};
+    const a = (this.state && this.state.a) || {};
+    const k = { T: {}, O: {}, C: {}, E: {}, S: {}, Y: {}, N: {}, AY: {}, AN: {}, YES: {} };
+    for (const id of this.ids()) {
+      k.T[id] = () => this.setState({ o: Object.assign({}, this.state.o, { [id]: !(this.state.o || {})[id] }) });
+      k.O[id] = !!o[id];
+      k.C[id] = !o[id];
+      k.E[id] = o[id] ? 'true' : 'false';
+      k.S[id] = o[id] ? '−' : '+';
+      k.Y[id] = () => this.setState({ a: Object.assign({}, this.state.a, { [id]: 'si' }) });
+      k.N[id] = () => this.setState({ a: Object.assign({}, this.state.a, { [id]: 'no' }) });
+      k.AY[id] = a[id] === 'si' ? 'true' : 'false';
+      k.AN[id] = a[id] === 'no' ? 'true' : 'false';
+      k.YES[id] = a[id] === 'si';
+    }
+    return k;
+  }
+
+  // 100 casillas por resto mayor: parts = [[valor, color], ...].
+  cells(parts) {
+    const total = parts.reduce((s, p) => s + p[0], 0) || 1;
+    const raw = parts.map((p) => (p[0] / total) * 100);
+    const fl = raw.map(Math.floor);
+    let left = 100 - fl.reduce((s, v) => s + v, 0);
+    raw.map((v, i) => [i, v - fl[i]]).sort((x, y) => y[1] - x[1]).forEach(([i]) => { if (left > 0) { fl[i] += 1; left -= 1; } });
+    const out = [];
+    fl.forEach((n, i) => { for (let j = 0; j < n; j += 1) out.push({ style: 'background: ' + parts[i][1] + '; animation-delay: ' + (out.length * 12) + 'ms;' }); });
+    return out;
+  }
+
+  eur(v, dec) {
+    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }).format(v) + ' €';
+  }
+  renderVals() {
+    const off = 'background: #b6ded3; color: #172033;';
+    const est = 'background: #efd7a0; color: #172033;';
+    const S = [
+      ['Bases y tipos de cotización del Régimen General', 'Boletín Oficial del Estado (BOE) · Orden PJC/178/2025, de 25 de febrero', 'OFICIAL', [['Grupo seleccionado', 'Grupo 7 · Auxiliares Administrativos'], ['Base aplicada', '2917 €/mes'], ['Tipo trabajador', '6,48 %'], ['Cuota trabajador', '2268 €'], ['Tipo empresa', '32,07 %'], ['Aportación empresa', '11.225 €']], 'boe.es · Orden PJC/178/2025', '', '#d5c9ee'],
+      ['Tarifa de accidentes de trabajo y enfermedades profesionales', 'Boletín Oficial del Estado (BOE) · Ley 42/2006, disposicion adicional cuarta, redaccion vigente para 2025 tras Real Decreto-ley 28/2018', 'OFICIAL', [['Actividad u ocupación', '62 · Programacion, consultoria y actividades informaticas'], ['IT', '0,8 %'], ['IMS', '0,7 %'], ['Total aplicado', '1,5 %']], 'boe.es · Ley 42/2006', '', '#efd2a9'],
+      ['Escala estatal, mínimos y reducciones del IRPF', 'Agencia Estatal de Administración Tributaria (AEAT) · Manual practico Renta 2025, gravamen estatal de la base liquidable general', 'OFICIAL', [['Base liquidable', '30.732 €'], ['Mínimo estatal', '5550 €'], ['Reducciones aplicadas', '0 €'], ['Cuota estatal', '3165 €']], 'sede.agenciatributaria.gob.es · Manual practico Renta 2025', '', '#efc5cc'],
+      ['Escala autonómica del IRPF · Madrid', 'Agencia Estatal de Administración Tributaria (AEAT) · Manual practico Renta 2025 · Madrid', 'OFICIAL', [['Mínimo autonómico', '5957 €'], ['Cuota autonómica', '2734 €'], ['Deducciones de cuota', '0 €'], ['IRPF final', '5900 €']], 'sede.agenciatributaria.gob.es · Manual practico Renta 2025', '', '#efc5cc'],
+      ['Proxy de IVA medio por nivel de ingresos', 'Instituto Nacional de Estadística (INE) · Encuesta de Presupuestos Familiares 2024, tabla 73809', 'ESTIMACIÓN', [['Neto usado como aproximación', '26.832 €'], ['Tipo efectivo proxy', '9,63 %'], ['IVA estimado', '2584 €']], 'ine.es · Encuesta de Presupuestos Familiares 2024', 'La EPF mide hogares, no salarios individuales; el valor es orientativo y no una liquidación.', '#bdd4ef']
+    ];
+    return Object.assign(this.kit(), {
+      src: S.map((s, i) => ({ n: '0' + (i + 1), title: s[0], pub: s[1], kind: s[2], badge: s[2] === 'OFICIAL' ? off : est, vals: s[3].map((v) => ({ k: v[0], v: v[1] })), link: s[4], hasNote: !!s[5], note: s[5], color: s[6] }))
+    });
+  }
+}
+</script>
+</body>
+</html>

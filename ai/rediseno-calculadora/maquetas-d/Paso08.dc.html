@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Paso 8 · IVA y consumo diario</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#172033}
+.pg{--st:#172033;--raised:#23364e;--line:#4f5f70;--copy:#dbe4ec;--muted:#c4d2df;--faint:#718096;--w:#d5c9ee;--c:#efd2a9;--pos:#b6ded3;--blue:#bdd4ef;--yel:#efd7a0;--red:#efc5cc;--posfill:#18865b;--cfill:#b96b18;--yfill:#9a7418;--rfill:#c4455b;--wmark:#5d469c;--cmark:#8b5418;--bfill:#2f6fce;
+  width:1280px;box-sizing:border-box;background:#172033;color:#ffffff;font-family:'Instrument Sans',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.D{font-family:'Anybody',system-ui,sans-serif}
+.num{font-variant-numeric:tabular-nums}
+@keyframes stretch{from{font-variation-settings:'wdth' 50,'wght' 300;letter-spacing:.1em;opacity:0}to{font-variation-settings:'wdth' 130,'wght' 900;letter-spacing:-.035em;opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes cell{0%{opacity:0;transform:scale(.2) rotate(-30deg)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes unfold{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes sweep{from{background-size:0% 100%}to{background-size:100% 100%}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:none;opacity:1}}
+@keyframes seggrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.kin{font-family:'Anybody',system-ui,sans-serif;animation:stretch 1.4s cubic-bezier(.2,.8,.2,1) both}
+.rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.cell{aspect-ratio:1;border-radius:10px;animation:cell .5s cubic-bezier(.2,.8,.2,1) both;transition:background-color .4s ease}
+.growx{transform-origin:left;animation:growx 1s cubic-bezier(.2,.8,.2,1) both}
+.growy{transform-origin:bottom;animation:growy .9s cubic-bezier(.2,.8,.2,1) both}
+.unfold{animation:unfold .4s cubic-bezier(.2,.8,.2,1) both}
+.pop{animation:pop .7s cubic-bezier(.3,1.4,.5,1) both}
+.sweepV,.sweepO,.sweepG{background-repeat:no-repeat;animation:sweep 1s cubic-bezier(.2,.8,.2,1) .8s both;padding:0 4px;border-radius:4px;color:#ffffff;font-weight:700}
+.sweepV{background-image:linear-gradient(#5d469c,#5d469c)}
+.sweepO{background-image:linear-gradient(#8b5418,#8b5418);animation-delay:1.1s}
+.sweepG{background-image:linear-gradient(#14614f,#14614f);animation-delay:1s}
+.h1{margin:0;font-size:150px;line-height:.86;font-weight:900;text-transform:uppercase}
+.h2{margin:0;font-size:64px;line-height:1;font-weight:900;text-transform:uppercase}
+.h3{margin:0;font-family:'Anybody',system-ui,sans-serif;font-size:30px;line-height:1.1;font-weight:900;font-variation-settings:'wdth' 120}
+.acc{color:#b6ded3}
+.sub{margin:0;font-family:'Anybody',system-ui,sans-serif;font-size:28px;font-weight:700;font-variation-settings:'wdth' 110;color:#c4d2df}
+.lead{margin:0;max-width:860px;font-size:26px;line-height:1.45;color:#ffffff}
+.txt{margin:0;font-size:24px;line-height:1.5;color:#dbe4ec}
+.small{margin:0;font-size:17px;line-height:1.55;color:#dbe4ec}
+.lab{font-size:14px;font-weight:600;color:#c4d2df}
+.note{margin:0;font-size:15px;line-height:1.5;color:#c4d2df}
+.panel{padding:36px;border-radius:32px;background:#23364e;display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.55;color:#dbe4ec}
+.panel p{margin:0}
+.fig{font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+.ribbon{padding:18px 0;overflow:hidden;background:#b6ded3;color:#172033;transform:rotate(-1.5deg)}
+.ribbon>div{display:flex;width:max-content;gap:40px;font-family:'Anybody',system-ui,sans-serif;font-size:34px;font-weight:800;text-transform:uppercase;font-variation-settings:'wdth' 120;white-space:nowrap;animation:marquee 28s linear infinite}
+button{font:inherit;cursor:pointer;color:inherit}
+.cta{display:inline-flex;align-items:center;gap:14px;min-height:64px;padding:0 34px;border:0;border-radius:999px;background:#b6ded3;color:#172033;font-family:'Anybody',system-ui,sans-serif;font-size:22px;font-weight:800;font-variation-settings:'wdth' 115}
+.ghost{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 22px;border:2px solid #4f5f70;border-radius:999px;background:transparent;color:#c4d2df;font-size:17px;font-weight:600}
+.outline{align-self:flex-start;min-height:48px;padding:0 22px;border:2px solid #b6ded3;border-radius:999px;background:transparent;color:#b6ded3;font-size:16px;font-weight:700}
+.segs{display:inline-flex;padding:5px;gap:4px;border-radius:999px;background:#23364e}
+.segs button{min-height:42px;padding:0 20px;border:0;border-radius:999px;background:transparent;color:#ffffff;font-weight:600}
+.segs button[aria-pressed=true]{background:#ffffff;color:#172033}
+.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 32px;align-items:center;padding:22px 0;border-top:1px solid #4f5f70}
+.q strong{font-size:22px;line-height:1.35;font-weight:600}
+.q p{margin:4px 0 0;font-size:16px;line-height:1.5;color:#c4d2df}
+.yn{display:inline-flex;gap:8px}
+.yn button{min-width:84px;min-height:52px;border:2px solid #4f5f70;border-radius:999px;background:transparent;color:#ffffff;font-size:18px;font-weight:700}
+.yn button[aria-pressed=true]{background:#b6ded3;border-color:#b6ded3;color:#172033}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:#23364e;color:#c4d2df;font-size:14px;font-weight:600}
+.lane{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:0;border-radius:18px;background:transparent;color:#ffffff;text-align:left;width:100%}
+.lane[aria-expanded=true]{background:#23364e}
+.track{display:block;width:100%;height:14px;border-radius:99px;background:#23364e}
+.bar{display:block;height:14px;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.eq{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr) 48px minmax(0,1fr);align-items:end;gap:12px}
+.eq .op{font-family:'Anybody',system-ui,sans-serif;font-size:48px;font-weight:900;color:#718096;text-align:center;line-height:1}
+.eq span.l{display:block;font-size:16px;color:#c4d2df;margin-bottom:4px}
+.eq strong{font-family:'Anybody',system-ui,sans-serif;font-size:40px;font-weight:800;font-variant-numeric:tabular-nums}
+.alert{margin:0;padding:16px 22px;border-radius:18px;font-size:17px;line-height:1.5}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:48px;margin:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-moz-range-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;margin-top:-13px;border-radius:50%;background:#ffffff;border:6px solid #18865b;box-shadow:0 0 0 8px rgba(182,222,211,.18)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#ffffff;border:6px solid #18865b}
+select{font:inherit;color:#ffffff;background-color:#23364e;border:0;border-radius:999px;padding:12px 44px 12px 20px;min-height:52px;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#b6ded3 50%),linear-gradient(135deg,#b6ded3 50%,transparent 50%);background-position:calc(100% - 24px) 55%,calc(100% - 18px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+select option{color:#172033;background:#ffffff}
+table{border-collapse:collapse}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #b6ded3;outline-offset:4px}
+a{color:#b6ded3}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.sweepV,.sweepO,.sweepG{background-size:100% 100%}}
+</style>
+<style>
+.cat{display:grid;grid-template-columns:44px minmax(0,1fr) 150px 150px 110px;gap:16px;align-items:center;padding:14px 0;border-top:1px solid #4f5f70}
+.cat .rate{justify-self:start;padding:6px 12px;border-radius:999px;font-size:14px;font-weight:800;color:#172033}
+.inp{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;background:#23364e}
+.inp input{width:100%;border:0;background:transparent;color:#ffffff;font:inherit;font-size:18px;font-weight:700;text-align:right}
+.basket{display:flex;height:140px;border-radius:28px;overflow:hidden;background:#23364e}
+.basket span{transition:flex-grow .7s cubic-bezier(.2,.8,.2,1)}
+</style>
+</helmet>
+<div class="pg" style="height: 3450px;">
+<header style="padding: 32px 80px 0; display: flex; align-items: center; gap: 32px;"><span style="font-size: 15px; font-weight: 600; color: #c4d2df; white-space: nowrap;">Paso 8 de 12</span><div style="flex-grow: 1; display: flex; align-items: center; gap: 5px;" aria-hidden="true"><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 10px; border-radius: 99px; background: #b6ded3; transform-origin: left; animation: seggrow .9s cubic-bezier(.2,.8,.2,1) both;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span></div><span class="num D" style="font-size: 22px; font-weight: 800; color: #b6ded3;">08<span style="color: #718096;">/12</span></span></header>
+
+  <section style="padding: 80px 80px 0; display: flex; flex-direction: column; gap: 40px;">
+    <h1 class="kin h1">IVA y consumo <span class="acc">diario</span></h1>
+    <p class="sub rise" style="animation-delay: .3s;">El impuesto sobre lo que compras</p>
+    <p class="lead rise" style="animation-delay: .5s;">El IVA es el Impuesto sobre el Valor Añadido: el impuesto que pagas al comprar bienes o servicios. <span class="sweepG">Va incluido en el precio</span>; no se descuenta de la nómina como el IRPF. Los impuestos especiales se suman en consumos concretos, como carburantes, alcohol, tabaco o energía.</p>
+  </section>
+
+  <section style="padding: 72px 80px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px;">
+    <p class="txt rise" style="animation-delay: .7s;">Por eso estos impuestos dependen de cómo gastas, no solo de lo que cobras. Distribuye tu gasto mensual para obtener una estimación por categorías.</p>
+    <p class="txt rise" style="animation-delay: .9s;">Si no completas el reparto, el resumen mantendrá una aproximación general claramente identificada.</p>
+  </section>
+
+  <section aria-labelledby="cesta" style="margin: 120px 80px 0; display: flex; flex-direction: column; gap: 22px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <h2 id="cesta" class="kin h2">Distribución <span class="acc">del gasto</span></h2>
+        <p class="small" style="font-size: 19px;">Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-end;"><span class="fig" style="font-size: 88px; color: {{missColor}};">{{assignedPct}}</span><span class="lab" style="font-size: 16px;">{{missTxt}}</span></div>
+    </div>
+    <div class="basket" role="img" aria-label="{{basketLabel}}"><sc-for list="{{slices}}" as="s" hint-placeholder-count="5"><span style="{{s.style}} display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; padding: 14px 16px; min-width: 0; overflow: hidden; border-right: 4px solid #172033;"><strong class="D" style="font-size: 26px; font-weight: 900; white-space: nowrap;">{{s.label}}</strong><span class="num" style="font-size: 15px; font-weight: 700; white-space: nowrap;">{{s.pct}}</span></span></sc-for></div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 15px; color: #c4d2df;">
+      <span style="padding: 4px 12px; border-radius: 999px; background: #4f5f70; color: #ffffff; font-weight: 700;">0%</span><span aria-hidden="true">→</span>
+      <span style="padding: 4px 12px; border-radius: 999px; background: #efd7a0; color: #172033; font-weight: 700;">4%</span><span aria-hidden="true">→</span>
+      <span style="padding: 4px 12px; border-radius: 999px; background: #e3a857; color: #172033; font-weight: 700;">10%</span><span aria-hidden="true">→</span>
+      <span style="padding: 4px 12px; border-radius: 999px; background: #b96b18; color: #ffffff; font-weight: 700;">21%</span><span aria-hidden="true">→</span>
+      <span style="padding: 4px 12px; border-radius: 999px; background: #c4455b; color: #ffffff; font-weight: 700;">21% + especial</span>
+      <span style="margin-left: auto;" class="num">2236,03 € / mes</span>
+    </div>
+    <div style="display: flex; gap: 12px; padding-top: 8px;">
+      <button type="button" class="outline" onClick="{{fillAvg}}">Valores medios (España)</button>
+      <button type="button" class="ghost" onClick="{{reset}}">Restablecer</button>
+    </div>
+    <p class="note" style="max-width: 900px; font-size: 16px;"><strong style="color: #ffffff;">Consejo.</strong> En la app de tu banco suele aparecer el gasto mensual y el porcentaje de cada categoría (alimentación, ocio, transporte...). Usa esas cifras para rellenar importe y % con tu patrón real, no con una media.</p>
+  </section>
+
+  <section aria-label="Categorías" style="margin: 72px 80px 0; display: flex; flex-direction: column;">
+    <div class="cat lab" style="border-top: 0;"><span></span><span>Categoría de gasto</span><span>Tipo impositivo / regla</span><span>Importe al mes</span><span>% del gasto</span></div>
+    <sc-for list="{{cats}}" as="c" hint-placeholder-count="13">
+      <div style="display: flex; flex-direction: column;">
+        <div class="cat">
+          <span class="fig" style="font-size: 26px; color: #718096;">{{c.n}}</span>
+          <strong style="font-size: 20px;">{{c.name}}</strong>
+          <span class="rate" style="{{c.badge}}">{{c.rate}}</span>
+          <label class="inp"><input value="{{c.eur}}" aria-label="Importe mensual en {{c.name}}"><span>€</span></label>
+          <label class="inp"><input value="{{c.pct}}" aria-label="Porcentaje del gasto en {{c.name}}"><span>%</span></label>
+        </div>
+        <sc-if value="{{c.hasNote}}" hint-placeholder-val="{{ false }}"><p class="note" style="padding: 0 0 12px 60px;">{{c.note}}</p></sc-if>
+      </div>
+    </sc-for>
+    <div class="cat" style="border-top: 2px solid #ffffff;"><span class="fig" style="font-size: 26px;">Σ</span><strong style="font-size: 20px;">TOTAL</strong><span>—</span><strong class="num" style="text-align: right; padding-right: 16px;">{{totalEur}}</strong><strong class="num" style="text-align: right; padding-right: 16px;">{{assignedPct}}</strong></div>
+  </section>
+
+  <section aria-labelledby="imp" style="margin: 120px 80px 0; display: flex; flex-direction: column; gap: 24px;">
+    <h2 id="imp" class="h3" style="font-size: 44px;">Resumen de impacto fiscal</h2>
+    <div class="eq" style="grid-template-columns: minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr);">
+      <div><span class="l">Gasto asignado · Total al mes distribuido</span><strong>{{totalEur}}</strong></div><span class="op" aria-hidden="true">→</span>
+      <div><span class="l">IVA estimado · Aprox. al mes</span><strong style="color: #efd7a0;">{{vatTxt}}</strong><span class="l" style="margin-top: 4px;">{{emptyNote}}</span></div><span class="op" aria-hidden="true">+</span>
+      <div><span class="l">Impuestos especiales · Aprox. al mes</span><strong style="color: #efc5cc;">{{specTxt}}</strong><span class="l" style="margin-top: 4px;">{{emptyNote}}</span></div><span class="op" aria-hidden="true">=</span>
+      <div><span class="l">Impuestos al consumir · Suma al mes</span><strong style="color: #b6ded3; font-size: 56px;">{{consTxt}}</strong><span class="l" style="margin-top: 4px;">{{emptyNote}}</span></div>
+    </div>
+    <p class="note" style="font-size: 17px;">El IBI de tu vivienda y el IVTM de tu coche no dependen de cómo gastas: se estiman en el paso 9.</p>
+  </section>
+
+<nav aria-label="Pasos" style="margin-top: auto; padding: 96px 80px 64px; display: flex; justify-content: space-between; align-items: center;"><button type="button" class="ghost" style="min-height: 56px; padding: 0 24px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Deducciones de cuota</button><button type="button" class="cta">Vivienda y coche<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":3450}}'>
+class Component extends DCLogic {
+  state = { o: {}, a: {}, filled: true };
+  ids() { return []; }
+  // Kit común: T.x abre/cierra, O.x abierto, C.x cerrado, E.x aria-expanded, S.x signo +/−,
+  // Y.x / N.x responden Sí / No y AY.x / AN.x dan su aria-pressed.
+  kit() {
+    const o = (this.state && this.state.o) || {};
+    const a = (this.state && this.state.a) || {};
+    const k = { T: {}, O: {}, C: {}, E: {}, S: {}, Y: {}, N: {}, AY: {}, AN: {}, YES: {} };
+    for (const id of this.ids()) {
+      k.T[id] = () => this.setState({ o: Object.assign({}, this.state.o, { [id]: !(this.state.o || {})[id] }) });
+      k.O[id] = !!o[id];
+      k.C[id] = !o[id];
+      k.E[id] = o[id] ? 'true' : 'false';
+      k.S[id] = o[id] ? '−' : '+';
+      k.Y[id] = () => this.setState({ a: Object.assign({}, this.state.a, { [id]: 'si' }) });
+      k.N[id] = () => this.setState({ a: Object.assign({}, this.state.a, { [id]: 'no' }) });
+      k.AY[id] = a[id] === 'si' ? 'true' : 'false';
+      k.AN[id] = a[id] === 'no' ? 'true' : 'false';
+      k.YES[id] = a[id] === 'si';
+    }
+    return k;
+  }
+
+  // 100 casillas por resto mayor: parts = [[valor, color], ...].
+  cells(parts) {
+    const total = parts.reduce((s, p) => s + p[0], 0) || 1;
+    const raw = parts.map((p) => (p[0] / total) * 100);
+    const fl = raw.map(Math.floor);
+    let left = 100 - fl.reduce((s, v) => s + v, 0);
+    raw.map((v, i) => [i, v - fl[i]]).sort((x, y) => y[1] - x[1]).forEach(([i]) => { if (left > 0) { fl[i] += 1; left -= 1; } });
+    const out = [];
+    fl.forEach((n, i) => { for (let j = 0; j < n; j += 1) out.push({ style: 'background: ' + parts[i][1] + '; animation-delay: ' + (out.length * 12) + 'ms;' }); });
+    return out;
+  }
+
+  eur(v, dec) {
+    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }).format(v) + ' €';
+  }
+  renderVals() {
+    const st = this.state;
+    const net = 2236.03;
+    // [nombre, etiqueta, iva, especial, color, nota, % ilustrativo]
+    const cats = [
+      ['Ahorro / inversión', '0% ahora', 0, 0, 'r0', '', 10],
+      ['Hipoteca / deudas', '0% en la cuota', 0, 0, 'r0', 'En el paso 9 puedes estimar el IVA o ITP pagado al comprar.', 25],
+      ['Alimentación básica', '4%', 0.04, 0, 'r4', '', 8],
+      ['Alimentación general', '10%', 0.10, 0, 'r10', '', 10],
+      ['Restaurantes / delivery', '10%', 0.10, 0, 'r10', '', 7],
+      ['Compras generales', '21%', 0.21, 0, 'r21', '', 12],
+      ['Ocio / suscripciones *', '21%', 0.21, 0, 'r21', 'Algunos servicios de ocio o cultura pueden tributar al 10%.', 6],
+      ['Transporte público', '10%', 0.10, 0, 'r10', '', 3],
+      ['Gasolina', '21% + 20%', 0.21, 0.20, 'r21e', 'En el paso 9 puedes estimar el IVTM anual y el impuesto de la compra.', 7],
+      ['Electricidad', '21% + 5,11%', 0.21, 0.0511, 'r21e', '', 5],
+      ['Salud / farmacia *', '0%', 0, 0, 'r0', 'Según el caso, algunos productos o servicios pueden tributar a tipos superiores, incluso al 21%.', 4],
+      ['Tabaco', '21% + 55%', 0.21, 0.55, 'r21e', '', 1],
+      ['Alcohol', '21% + 5%', 0.21, 0.05, 'r21e', '', 2]
+    ];
+    const R = {
+      r0: { bg: '#4f5f70', fg: '#ffffff', label: '0%' },
+      r4: { bg: '#efd7a0', fg: '#172033', label: '4%' },
+      r10: { bg: '#e3a857', fg: '#172033', label: '10%' },
+      r21: { bg: '#b96b18', fg: '#ffffff', label: '21%' },
+      r21e: { bg: '#c4455b', fg: '#ffffff', label: '21% + especial' }
+    };
+    const order = ['r0', 'r4', 'r10', 'r21', 'r21e'];
+    let vat = 0, spec = 0, sum = 0;
+    const rows = cats.map((c, i) => {
+      const pct = st.filled ? c[6] : 0;
+      const eur = net * pct / 100;
+      sum += pct;
+      const base = eur / (1 + c[2] + c[3]);
+      vat += base * c[2];
+      spec += base * c[3];
+      return { n: i + 1, name: c[0], rate: c[1], badge: 'background: ' + R[c[4]].bg + '; color: ' + R[c[4]].fg + ';', eur: st.filled ? eur.toFixed(2).replace('.', ',') : '', pct: st.filled ? String(pct) : '', hasNote: !!c[5], note: c[5], color: c[4], share: pct };
+    });
+    const f = (v) => this.eur(v, 2);
+    const missing = 100 - sum;
+    return Object.assign(this.kit(), {
+      cats: rows,
+      slices: order.map((g) => ({ g: g, pct: rows.filter((r) => r.color === g).reduce((a, r) => a + r.share, 0) })).filter((x) => x.pct > 0)
+        .map((x) => ({ style: 'flex-grow: ' + x.pct + '; background: ' + R[x.g].bg + '; color: ' + R[x.g].fg + ';', label: R[x.g].label, pct: x.pct + ' %' }))
+        .concat(missing > 0 ? [{ style: 'flex-grow: ' + missing + '; background: repeating-linear-gradient(135deg, #23364e 0 10px, #172033 10px 20px); color: #c4d2df;', label: 'Falta', pct: missing + ' %' }] : []),
+      basketLabel: 'Gasto asignado: ' + sum + ' % de 2236,03 € al mes.',
+      assignedPct: sum.toFixed(2).replace('.', ',') + '%',
+      missTxt: missing > 0 ? 'Falta ' + missing.toFixed(2).replace('.', ',') + ' %' : 'Reparto completo',
+      missColor: missing > 0 ? '#efd7a0' : '#b6ded3',
+      totalEur: f(net * sum / 100),
+      vatTxt: f(vat), specTxt: f(spec), consTxt: f(vat + spec),
+      emptyNote: sum > 0 ? '' : 'Sin gasto asignado',
+      fillAvg: () => this.setState({ filled: true }),
+      reset: () => this.setState({ filled: false })
+    });
+  }
+}
+</script>
+</body>
+</html>

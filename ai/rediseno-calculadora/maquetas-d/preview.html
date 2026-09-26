@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Vista previa local</title>
+<style>body{margin:0;background:#0d1320}#bar{position:fixed;top:0;left:0;right:0;z-index:9;background:#000;color:#fff;font:14px system-ui;padding:6px}</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage" style="padding-top:30px"></div>
+<script>
+class DCLogic { constructor(props) { this.props = props || {}; } setState(p) { this.state = Object.assign({}, this.state, typeof p === 'function' ? p(this.state) : p); window.__rerender && window.__rerender(); } forceUpdate() { window.__rerender && window.__rerender(); } }
+const get = (scope, path) => path.split('.').reduce((a, k) => (a == null ? undefined : a[k]), scope);
+function interp(str, scope) {
+  const whole = str.match(/^\s*\{\{\s*([^}\s]+)\s*\}\}\s*$/);
+  if (whole) return get(scope, whole[1]);
+  return str.replace(/\{\{\s*([^}\s]+)\s*\}\}/g, (_, p) => { const v = get(scope, p); return v == null ? '' : String(v); });
+}
+function render(node, scope, out) {
+  for (const n of [...node.childNodes]) {
+    if (n.nodeType === 3) { out.appendChild(document.createTextNode(interp(n.textContent, scope) ?? '')); continue; }
+    if (n.nodeType !== 1) continue;
+    const tag = n.tagName.toLowerCase();
+    if (tag === 'sc-if') { if (interp(n.getAttribute('value'), scope)) render(n, scope, out); continue; }
+    if (tag === 'sc-for') {
+      const list = interp(n.getAttribute('list'), scope) || [];
+      const as = n.getAttribute('as');
+      list.forEach((item, i) => render(n, Object.assign(Object.create(scope), { [as]: item, $index: i }), out));
+      continue;
+    }
+    const el = document.createElement(tag);
+    for (const a of n.attributes) {
+      const v = interp(a.value, scope);
+      if (/^on[A-Z]/.test(a.name) || /^on[a-z]/.test(a.name) && typeof v === 'function') {
+        const ev = a.name.slice(2).toLowerCase();
+        el.addEventListener(ev === 'change' ? 'input' : ev, v);
+      } else if (a.name === 'value' && (tag === 'input' || tag === 'select')) { el.__val = v; }
+      else el.setAttribute(a.name, v == null ? '' : v);
+    }
+    render(n, scope, el);
+    if (el.__val !== undefined) el.value = el.__val;
+    out.appendChild(el);
+  }
+}
+async function show(file, auto) {
+  const txt = await (await fetch(file)).text();
+  const doc = new DOMParser().parseFromString(txt, 'text/html');
+  const helmet = doc.querySelector('helmet');
+  const xdc = doc.querySelector('x-dc');
+  const js = doc.querySelector('script[data-dc-script]').textContent;
+  const props = JSON.parse(doc.querySelector('script[data-dc-script]').getAttribute('data-props'));
+  const defaults = {}; for (const k in props) if (props[k] && 'default' in props[k]) defaults[k] = props[k].default;
+  const C = new Function('DCLogic', js + '\nreturn Component;')(DCLogic);
+  const c = new C(defaults);
+  const stage = document.getElementById('stage');
+  document.head.querySelectorAll('.dc-helmet').forEach((e) => e.remove());
+  for (const h of [...helmet.children]) { const cl = h.cloneNode(true); cl.classList.add('dc-helmet'); document.head.appendChild(cl.tagName === 'STYLE' || cl.tagName === 'LINK' ? cl : document.importNode(h, true)); }
+  const tpl = xdc.cloneNode(true); tpl.querySelector('helmet').remove();
+  window.__rerender = () => { stage.innerHTML = ''; render(tpl, c.renderVals(), stage); if (auto) stage.querySelector('.pg').style.height = 'auto'; };
+  window.__rerender();
+  c.componentDidMount && c.componentDidMount();
+  const pg = stage.querySelector('.pg');
+  return { file, set: parseInt(pg.style.height), content: pg.scrollHeight };
+}
+window.show = show;
+const q = new URLSearchParams(location.search).get('f');
+if (q) show(q, false).then((r) => { document.getElementById('bar').textContent = JSON.stringify(r); });
+</script>
+</body>
+</html>

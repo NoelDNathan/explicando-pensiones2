@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Paso 6 · IRPF por tramos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#172033}
+.pg{--st:#172033;--raised:#23364e;--line:#4f5f70;--copy:#dbe4ec;--muted:#c4d2df;--faint:#718096;--w:#d5c9ee;--c:#efd2a9;--pos:#b6ded3;--blue:#bdd4ef;--yel:#efd7a0;--red:#efc5cc;--posfill:#18865b;--cfill:#b96b18;--yfill:#9a7418;--rfill:#c4455b;--wmark:#5d469c;--cmark:#8b5418;--bfill:#2f6fce;
+  width:1280px;box-sizing:border-box;background:#172033;color:#ffffff;font-family:'Instrument Sans',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.D{font-family:'Anybody',system-ui,sans-serif}
+.num{font-variant-numeric:tabular-nums}
+@keyframes stretch{from{font-variation-settings:'wdth' 50,'wght' 300;letter-spacing:.1em;opacity:0}to{font-variation-settings:'wdth' 130,'wght' 900;letter-spacing:-.035em;opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes cell{0%{opacity:0;transform:scale(.2) rotate(-30deg)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes unfold{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes sweep{from{background-size:0% 100%}to{background-size:100% 100%}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:none;opacity:1}}
+@keyframes seggrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.kin{font-family:'Anybody',system-ui,sans-serif;animation:stretch 1.4s cubic-bezier(.2,.8,.2,1) both}
+.rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.cell{aspect-ratio:1;border-radius:10px;animation:cell .5s cubic-bezier(.2,.8,.2,1) both;transition:background-color .4s ease}
+.growx{transform-origin:left;animation:growx 1s cubic-bezier(.2,.8,.2,1) both}
+.growy{transform-origin:bottom;animation:growy .9s cubic-bezier(.2,.8,.2,1) both}
+.unfold{animation:unfold .4s cubic-bezier(.2,.8,.2,1) both}
+.pop{animation:pop .7s cubic-bezier(.3,1.4,.5,1) both}
+.sweepV,.sweepO,.sweepG{background-repeat:no-repeat;animation:sweep 1s cubic-bezier(.2,.8,.2,1) .8s both;padding:0 4px;border-radius:4px;color:#ffffff;font-weight:700}
+.sweepV{background-image:linear-gradient(#5d469c,#5d469c)}
+.sweepO{background-image:linear-gradient(#8b5418,#8b5418);animation-delay:1.1s}
+.sweepG{background-image:linear-gradient(#14614f,#14614f);animation-delay:1s}
+.h1{margin:0;font-size:150px;line-height:.86;font-weight:900;text-transform:uppercase}
+.h2{margin:0;font-size:64px;line-height:1;font-weight:900;text-transform:uppercase}
+.h3{margin:0;font-family:'Anybody',system-ui,sans-serif;font-size:30px;line-height:1.1;font-weight:900;font-variation-settings:'wdth' 120}
+.acc{color:#b6ded3}
+.sub{margin:0;font-family:'Anybody',system-ui,sans-serif;font-size:28px;font-weight:700;font-variation-settings:'wdth' 110;color:#c4d2df}
+.lead{margin:0;max-width:860px;font-size:26px;line-height:1.45;color:#ffffff}
+.txt{margin:0;font-size:24px;line-height:1.5;color:#dbe4ec}
+.small{margin:0;font-size:17px;line-height:1.55;color:#dbe4ec}
+.lab{font-size:14px;font-weight:600;color:#c4d2df}
+.note{margin:0;font-size:15px;line-height:1.5;color:#c4d2df}
+.panel{padding:36px;border-radius:32px;background:#23364e;display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.55;color:#dbe4ec}
+.panel p{margin:0}
+.fig{font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+.ribbon{padding:18px 0;overflow:hidden;background:#b6ded3;color:#172033;transform:rotate(-1.5deg)}
+.ribbon>div{display:flex;width:max-content;gap:40px;font-family:'Anybody',system-ui,sans-serif;font-size:34px;font-weight:800;text-transform:uppercase;font-variation-settings:'wdth' 120;white-space:nowrap;animation:marquee 28s linear infinite}
+button{font:inherit;cursor:pointer;color:inherit}
+.cta{display:inline-flex;align-items:center;gap:14px;min-height:64px;padding:0 34px;border:0;border-radius:999px;background:#b6ded3;color:#172033;font-family:'Anybody',system-ui,sans-serif;font-size:22px;font-weight:800;font-variation-settings:'wdth' 115}
+.ghost{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 22px;border:2px solid #4f5f70;border-radius:999px;background:transparent;color:#c4d2df;font-size:17px;font-weight:600}
+.outline{align-self:flex-start;min-height:48px;padding:0 22px;border:2px solid #b6ded3;border-radius:999px;background:transparent;color:#b6ded3;font-size:16px;font-weight:700}
+.segs{display:inline-flex;padding:5px;gap:4px;border-radius:999px;background:#23364e}
+.segs button{min-height:42px;padding:0 20px;border:0;border-radius:999px;background:transparent;color:#ffffff;font-weight:600}
+.segs button[aria-pressed=true]{background:#ffffff;color:#172033}
+.q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 32px;align-items:center;padding:22px 0;border-top:1px solid #4f5f70}
+.q strong{font-size:22px;line-height:1.35;font-weight:600}
+.q p{margin:4px 0 0;font-size:16px;line-height:1.5;color:#c4d2df}
+.yn{display:inline-flex;gap:8px}
+.yn button{min-width:84px;min-height:52px;border:2px solid #4f5f70;border-radius:999px;background:transparent;color:#ffffff;font-size:18px;font-weight:700}
+.yn button[aria-pressed=true]{background:#b6ded3;border-color:#b6ded3;color:#172033}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:#23364e;color:#c4d2df;font-size:14px;font-weight:600}
+.lane{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:0;border-radius:18px;background:transparent;color:#ffffff;text-align:left;width:100%}
+.lane[aria-expanded=true]{background:#23364e}
+.track{display:block;width:100%;height:14px;border-radius:99px;background:#23364e}
+.bar{display:block;height:14px;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.eq{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr) 48px minmax(0,1fr);align-items:end;gap:12px}
+.eq .op{font-family:'Anybody',system-ui,sans-serif;font-size:48px;font-weight:900;color:#718096;text-align:center;line-height:1}
+.eq span.l{display:block;font-size:16px;color:#c4d2df;margin-bottom:4px}
+.eq strong{font-family:'Anybody',system-ui,sans-serif;font-size:40px;font-weight:800;font-variant-numeric:tabular-nums}
+.alert{margin:0;padding:16px 22px;border-radius:18px;font-size:17px;line-height:1.5}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:48px;margin:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-moz-range-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;margin-top:-13px;border-radius:50%;background:#ffffff;border:6px solid #18865b;box-shadow:0 0 0 8px rgba(182,222,211,.18)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#ffffff;border:6px solid #18865b}
+select{font:inherit;color:#ffffff;background-color:#23364e;border:0;border-radius:999px;padding:12px 44px 12px 20px;min-height:52px;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#b6ded3 50%),linear-gradient(135deg,#b6ded3 50%,transparent 50%);background-position:calc(100% - 24px) 55%,calc(100% - 18px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+select option{color:#172033;background:#ffffff}
+table{border-collapse:collapse}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #b6ded3;outline-offset:4px}
+a{color:#b6ded3}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.sweepV,.sweepO,.sweepG{background-size:100% 100%}}
+</style>
+<style>
+.stairs{position:relative;display:flex;align-items:flex-end;gap:4px;height:300px}
+.stairs .t{position:relative;height:var(--h);border-radius:14px 14px 0 0;background:#23364e;overflow:hidden;min-width:0}
+.stairs .f{position:absolute;left:0;bottom:0;top:0;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.stairs .r{position:absolute;left:10px;top:8px;font-family:'Anybody',system-ui,sans-serif;font-size:22px;font-weight:900;color:#ffffff;mix-blend-mode:normal}
+.stairs .a{position:absolute;left:10px;bottom:10px;font-size:15px;font-weight:700;color:#172033;white-space:nowrap}
+.rng{display:flex;gap:4px;font-size:12px;color:#c4d2df}
+.rng span{min-width:0;overflow:hidden;white-space:nowrap}
+.rank{display:grid;grid-template-columns:36px minmax(0,1fr) 90px 70px;gap:12px;align-items:center;padding:8px 12px;border-radius:12px;font-size:16px}
+.rank.me{background:#b6ded3;color:#172033}
+.rank.cmp{background:#23364e}
+</style>
+</helmet>
+<div class="pg" style="height: 6850px;">
+<header style="padding: 32px 80px 0; display: flex; align-items: center; gap: 32px;"><span style="font-size: 15px; font-weight: 600; color: #c4d2df; white-space: nowrap;">Paso 6 de 12</span><div style="flex-grow: 1; display: flex; align-items: center; gap: 5px;" aria-hidden="true"><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #b6ded3;"></span><span style="flex-grow: 1; height: 10px; border-radius: 99px; background: #b6ded3; transform-origin: left; animation: seggrow .9s cubic-bezier(.2,.8,.2,1) both;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span><span style="flex-grow: 1; height: 6px; border-radius: 99px; background: #23364e;"></span></div><span class="num D" style="font-size: 22px; font-weight: 800; color: #b6ded3;">06<span style="color: #718096;">/12</span></span></header>
+
+  <section style="padding: 80px 80px 0; display: flex; flex-direction: column; gap: 40px;">
+    <h1 class="kin h1">IRPF por <span class="acc">tramos</span></h1>
+    <p class="sub rise" style="animation-delay: .3s;">El impuesto sobre lo que ganas</p>
+    <p class="lead rise" style="animation-delay: .5s;">El IRPF es el Impuesto sobre la Renta de las Personas Físicas: el impuesto personal que pagas a Hacienda sobre lo que ganas en el año. En el paso 5 calculamos la base liquidable, que es la cantidad sobre la que se aplica.</p>
+  </section>
+
+  <section style="padding: 72px 80px 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start;">
+    <p class="txt rise" style="animation-delay: .7s;">No cobra un único porcentaje sobre toda tu renta. Reparte esa base entre <span class="sweepV">una escala estatal</span> y <span class="sweepO">otra autonómica</span>, y cada porcentaje se aplica solo a la parte que cae en ese tramo.</p>
+    <dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+      <div class="panel" style="padding: 26px;"><dt class="h3" style="font-size: 26px; color: #ffffff;">Tipo marginal</dt><dd style="margin: 0; font-size: 19px;">Afecta al siguiente euro.</dd></div>
+      <div class="panel" style="padding: 26px;"><dt class="h3" style="font-size: 26px; color: #ffffff;">Tipo efectivo</dt><dd style="margin: 0; font-size: 19px;">Resume lo pagado sobre el conjunto.</dd></div>
+    </dl>
+  </section>
+
+  <section aria-label="Tu caso" style="margin: 96px 80px 0; display: flex; flex-direction: column; gap: 22px;">
+    <p class="small" style="font-size: 19px; max-width: 900px;">Tu IRPF se calcula con dos escalas distintas: la estatal y la de tu comunidad. Solo se tributa por la parte de renta que cae en cada tramo.</p>
+    <div style="display: flex; align-items: flex-end; gap: 32px;">
+      <label style="display: flex; flex-direction: column; gap: 6px;"><span class="lab">Comunidad autónoma</span>
+        <select value="madrid" style="min-width: 260px;"><option>Andalucía</option><option>Aragón</option><option>Asturias</option><option>Illes Balears</option><option>Canarias</option><option>Cantabria</option><option>Castilla-La Mancha</option><option>Castilla y León</option><option>Cataluña</option><option>Extremadura</option><option>Galicia</option><option value="madrid">Madrid</option><option>Región de Murcia</option><option>La Rioja</option><option>Comunitat Valenciana</option></select>
+      </label>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+        <label for="s6" class="lab">Salario bruto anual</label>
+        <input id="s6" type="range" min="14000" max="120000" step="500" value="{{salary}}" onChange="{{onSalary}}" style="--fill: {{fill}}%;">
+      </div>
+      <span style="display: flex; flex-direction: column; align-items: flex-end;"><span class="fig" style="font-size: 56px; color: #b6ded3;">{{salaryTxt}}</span><span class="lab">brutos al año</span></span>
+    </div>
+  </section>
+
+  <section aria-labelledby="esc" style="margin: 96px 80px 0; display: flex; flex-direction: column; gap: 18px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;">
+      <h2 id="esc" class="kin h2">Escala estatal <span class="acc">y autonómica</span></h2>
+      <div style="display: flex; flex-direction: column; align-items: flex-end;"><span class="lab">Base liquidable</span><strong class="fig" style="font-size: 52px; white-space: nowrap;">{{baseTxt}}</strong></div>
+    </div>
+    <span class="lab" style="font-size: 16px; color: #d5c9ee;">Escala estatal</span>
+    <div class="stairs" aria-hidden="true">
+      <sc-for list="{{est}}" as="t" hint-placeholder-count="6"><div class="t" style="{{t.style}}"><span class="f" style="{{t.fill}} background: #d5c9ee;"></span><span class="r">{{t.rate}}</span><span class="a">{{t.amount}}</span></div></sc-for>
+    </div>
+    <div class="rng"><sc-for list="{{est}}" as="t" hint-placeholder-count="6"><span style="{{t.w}}">{{t.range}}</span></sc-for></div>
+    <span class="lab" style="font-size: 16px; color: #efd2a9; padding-top: 24px;">Escala autonómica · Madrid</span>
+    <div class="stairs" aria-hidden="true" style="height: 240px;">
+      <sc-for list="{{aut}}" as="t" hint-placeholder-count="5"><div class="t" style="{{t.style}}"><span class="f" style="{{t.fill}} background: #efd2a9;"></span><span class="r">{{t.rate}}</span><span class="a">{{t.amount}}</span></div></sc-for>
+    </div>
+    <div class="rng"><sc-for list="{{aut}}" as="t" hint-placeholder-count="5"><span style="{{t.w}}">{{t.range}}</span></sc-for></div>
+    <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 24px;">
+      <span class="small" style="font-size: 19px;">IRPF marginal máximo actual</span>
+      <span><strong class="fig" style="font-size: 44px;">27,8%</strong> <span class="note" style="display: inline;">15% estatal + 12,8% Madrid</span></span>
+    </div>
+  </section>
+
+  <section aria-labelledby="calc" style="margin: 120px 80px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px;">
+    <h2 id="calc" class="h3" style="grid-column: 1 / -1; font-size: 40px;">Cálculo por tramos</h2>
+    <sc-for list="{{cols}}" as="c" hint-placeholder-count="2">
+      <div class="panel num">
+        <strong class="h3" style="color: {{c.color}};">{{c.name}}</strong>
+        <sc-for list="{{c.rows}}" as="r" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; border-top: 1px solid #4f5f70;"><span>{{r.range}}<br><span style="font-size: 14px; color: #c4d2df;">{{r.op}}</span></span><strong>{{r.v}}</strong></div></sc-for>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #4f5f70;"><span>La escala sobre tu base</span><strong>{{c.scale}}</strong></div>
+        <div style="display: flex; justify-content: space-between; padding: 8px 0; color: #efc5cc;"><span>Cuota del mínimo personal y familiar<br><span style="font-size: 14px; color: #c4d2df;">{{c.minNote}}</span></span><strong>{{c.min}}</strong></div>
+        <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 2px solid {{c.color}};"><span style="font-weight: 700;">{{c.quotaLabel}}</span><strong class="fig" style="font-size: 32px; color: {{c.color}};">{{c.quota}}</strong></div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section aria-label="Total" style="margin: 72px 80px 0; display: flex; flex-direction: column; gap: 22px;">
+    <div aria-hidden="true" style="display: flex; height: 22px; gap: 4px;"><span class="growx" style="flex: 54; border-radius: 99px 4px 4px 99px; background: #d5c9ee;"></span><span class="growx" style="flex: 46; border-radius: 4px 99px 99px 4px; background: #efd2a9; animation-delay: .2s;"></span></div>
+    <div style="display: flex; justify-content: space-between; font-size: 16px;"><span style="color: #d5c9ee;">Estado 54%</span><span style="color: #efd2a9;">Madrid 46%</span></div>
+    <div class="eq">
+      <div><span class="l">Cuota estatal</span><strong style="color: #d5c9ee;">3165,30 €</strong></div><span class="op" aria-hidden="true">+</span>
+      <div><span class="l">Cuota Madrid</span><strong style="color: #efd2a9;">2734,32 €</strong></div><span class="op" aria-hidden="true">=</span>
+      <div><span class="l">Total IRPF</span><strong style="font-size: 64px;">5899,62 €</strong><span class="l" style="margin-top: 6px;">Tipo efectivo sobre bruto <strong style="font-size: 22px; color: #b6ded3;">16,9%</strong></span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="min" style="margin: 140px 80px 0; display: flex; flex-direction: column; gap: 28px;">
+    <h2 id="min" class="kin h2" style="font-size: 60px;">El mínimo personal y familiar no se resta de tu renta: <span class="acc">se resta del impuesto</span></h2>
+    <p class="txt" style="max-width: 980px;">Tu mínimo personal y familiar es lo que el IRPF considera imprescindible para vivir: 5550 € en la escala estatal y 5957 € en la de Madrid. No se descuenta de la base liquidable: recorre estas mismas escalas, empezando por el tramo de abajo, y lo que sale se resta de la cuota.</p>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 60px minmax(0, 1fr) 60px minmax(0, 1fr); gap: 16px; align-items: stretch;">
+      <div class="panel"><span class="lab">Tu base liquidable</span><strong class="fig" style="font-size: 34px;">30.732,00 €</strong><span class="note">pasa por la escala</span><span class="lab" style="padding-top: 10px;">Cuota de la escala</span><strong class="fig" style="font-size: 40px;">6933,18 €</strong></div>
+      <span class="fig" style="align-self: center; text-align: center; font-size: 56px; color: #718096;" aria-hidden="true">−</span>
+      <div class="panel"><span class="lab">Tu mínimo personal y familiar</span><strong class="fig" style="font-size: 34px; color: #bdd4ef;">5550,00 €</strong><span class="note">y 5956,65 € en la escala de Madrid</span><span class="note">pasa por la misma escala</span><span class="lab" style="padding-top: 10px;">Cuota del mínimo</span><strong class="fig" style="font-size: 40px; color: #bdd4ef;">1033,57 €</strong></div>
+      <span class="fig" style="align-self: center; text-align: center; font-size: 56px; color: #718096;" aria-hidden="true">=</span>
+      <div class="panel" style="background: #b6ded3; color: #172033;"><span class="lab" style="color: #172033;">Y se restan</span><span class="num" style="font-size: 17px;">6933,18 € − 1033,57 €</span><span class="lab" style="padding-top: 10px; color: #172033;">Cuota íntegra</span><strong class="fig" style="font-size: 52px;">5899,61 €</strong><span style="font-size: 15px;">Sobre ella se aplican después las deducciones.</span></div>
+    </div>
+    <p class="txt" style="color: #ffffff;">El mínimo te ahorra <strong class="fig" style="font-size: 40px; color: #b6ded3;">1034 €</strong>, un 15 % de lo que habrías pagado sin él.</p>
+    <sc-for list="{{more}}" as="m" hint-placeholder-count="3">
+      <div style="border-top: 1px solid #4f5f70;">
+        <button type="button" class="lane" onClick="{{m.toggle}}" aria-expanded="{{m.expanded}}" style="flex-direction: row; justify-content: space-between; font-size: 20px; font-weight: 600;"><span>{{m.title}}</span><span aria-hidden="true" style="color: #b6ded3;">{{m.sign}}</span></button>
+        <sc-if value="{{m.open}}" hint-placeholder-val="{{ false }}"><div class="unfold small" style="padding: 4px 16px 20px; display: flex; flex-direction: column; gap: 10px; font-size: 18px;"><sc-for list="{{m.ps}}" as="p" hint-placeholder-count="2"><p>{{p.t}}</p></sc-for></div></sc-if>
+      </div>
+    </sc-for>
+  </section>
+
+  <section aria-labelledby="cmp" style="margin: 140px 80px 0; display: flex; flex-direction: column; gap: 24px;">
+    <h2 id="cmp" class="kin h2">Comparador de IRPF <span class="acc">por comunidad</span></h2>
+    <p class="txt" style="max-width: 980px;">Contrasta tu comunidad (la del selector de arriba) con otra CCAA y la media en el gráfico. El ranking solo elige con quien comparar; no cambia tu IRPF real.</p>
+    <div class="segs" role="group" aria-label="Unidad" style="align-self: flex-start;"><button type="button" aria-pressed="true">% del salario</button><button type="button" aria-pressed="false">€ al año</button></div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;">
+      <div class="panel" style="padding: 24px;"><span class="lab">Madrid · referencia</span><strong class="fig" style="font-size: 40px; color: #b6ded3;">17,1 %</strong><span class="note">6105 €</span></div>
+      <div class="panel" style="padding: 24px;"><span class="lab">Media (15 CCAA)</span><strong class="fig" style="font-size: 40px;">17,9 %</strong><span class="note">6409 € · +0,9 pp · +304 €</span></div>
+      <div class="panel" style="padding: 24px;"><span class="lab">Cataluña · más IRPF</span><strong class="fig" style="font-size: 40px; color: #efc5cc;">18,6 %</strong><span class="note">6639 € · +1,5 pp · +534 €</span></div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 40px; align-items: start; padding-top: 12px;">
+      <figure style="margin: 0; display: flex; flex-direction: column; gap: 10px;">
+        <svg viewBox="0 0 600 320" role="img" aria-label="Tipo de IRPF en % del salario según el salario bruto, para Madrid, la media y Cataluña." style="width: 100%; height: auto;">
+          <g stroke="#23364e"><line x1="40" x2="590" y1="270" y2="270"></line><line x1="40" x2="590" y1="200" y2="200"></line><line x1="40" x2="590" y1="130" y2="130"></line><line x1="40" x2="590" y1="60" y2="60"></line></g>
+          <g fill="#c4d2df" font-size="12" font-family="Instrument Sans"><text x="10" y="274">0</text><text x="6" y="204">10</text><text x="6" y="134">20</text><text x="6" y="64">30</text><text x="40" y="292">14k €</text><text x="180" y="292">50k €</text><text x="320" y="292">120k €</text><text x="450" y="292">250k €</text><text x="540" y="292">500k €</text></g>
+          <path d="M40 262 C150 175 300 110 590 55" fill="none" stroke="#b6ded3" stroke-width="4"></path>
+          <path d="M40 260 C150 168 300 100 590 44" fill="none" stroke="#c4d2df" stroke-width="3" stroke-dasharray="6 6"></path>
+          <path d="M40 258 C150 162 300 94 590 38" fill="none" stroke="#efc5cc" stroke-width="4"></path>
+          <line x1="140" x2="140" y1="30" y2="270" stroke="#ffffff" stroke-dasharray="3 5"></line>
+          <text x="148" y="40" fill="#ffffff" font-size="14" font-family="Instrument Sans">En 35.789 €</text>
+        </svg>
+        <p class="note">clic = comparar · tu IRPF se cambia arriba</p>
+      </figure>
+      <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px;">
+        <sc-for list="{{ranking}}" as="r" hint-placeholder-count="15"><li class="rank {{r.cls}}"><span class="num" style="color: {{r.nc}};">{{r.n}}</span><span>{{r.name}} <em style="font-size: 13px; font-style: normal; opacity: .8;">{{r.tag}}</em></span><strong class="num" style="text-align: right;">{{r.v}}</strong><span class="num" style="text-align: right; font-size: 14px;">{{r.d}}</span></li></sc-for>
+      </ol>
+    </div>
+    <p class="note">Estimación didáctica basada en la escala estatal y autonómica 2025 (AEAT/BOE) y el mínimo personal del perfil tipo. No incluye deducciones autonómicas ni circunstancias personales; tu cálculo real está arriba.</p>
+  </section>
+
+  <section style="margin: 120px 80px 0;">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 16px;"><figcaption style="font-size: 15px; color: #c4d2df;">Nómina simplificada: lo resaltado es la parte que se trata en este paso.</figcaption><div style="padding: 36px; border-radius: 32px; background: #23364e; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px;"><div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; justify-content: space-between; gap: 16px; padding-bottom: 14px; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #c4d2df;"><span>RECIBO INDIVIDUAL JUSTIFICATIVO DEL PAGO DE SALARIOS</span><span>01.05.2025 - 31.05.2025 · [DATOS PERSONALES OCULTOS]</span></div><span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #b6ded3; padding: 4px 16px;">DEVENGOS</span><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">0001</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">SALARIO BASE</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;"></span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">2916,67</span></div><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">0003</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">PLUS CONVENIO</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;"></span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">—</span></div><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">0005</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">COMPLEMENTO A DEVENGOS</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;"></span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">—</span></div><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">0006</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">PAGA EXTRA PRORRATEADA</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;"></span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">—</span></div><span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #d5c9ee; padding: 14px 16px 4px;">DEDUCCIONES</span><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">/350</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">TRAB.CONT.COMUNES</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;">4,83 %</span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">140,88</span></div><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">/370</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">TRAB.DESEMPLEO</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;">1,55 %</span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">45,21</span></div><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; opacity: .38;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">/380</span><span style="font-size: 16px; font-weight: 500; letter-spacing: .02em;">TRAB.FORMAC.PROFESIONAL</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;">0,10 %</span><span class="fig" style="text-align: right; font-size: 20px; font-weight: 800; color: #ffffff;">2,92</span></div><div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) 80px 130px; gap: 16px; align-items: baseline; padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,.06); box-shadow: inset 4px 0 0 #b6ded3;"><span style="font-family: 'Courier New', monospace; font-size: 13px; color: #c4d2df;">/475</span><span style="font-size: 16px; font-weight: 700; letter-spacing: .02em;">RETENCION IRPF</span><span class="num" style="text-align: right; font-size: 15px; color: #c4d2df;">16,86 %</span><span class="fig" style="text-align: right; font-size: 26px; font-weight: 800; color: #b6ded3;">491,63</span></div><p style="margin: 14px 16px 0; font-size: 13px; line-height: 1.5; color: #c4d2df;">APORTACION EMPRESA: TOTAL 2916,67 × 32,07 = 935,38 · Desempleo 5,50 = 160,42 · Form. Profesional 0,60 = 17,50</p></div><div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; opacity: .45;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">REM.TOTALES</span><span class="fig" style="font-size: 18px; font-weight: 800;">2916,67</span></div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; opacity: .45;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">BASE IRPF ESPECIE</span><span class="fig" style="font-size: 18px; font-weight: 800;">0,00</span></div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; background: #b6ded3; color: #172033;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">BASE IRPF</span><span class="fig" style="font-size: 18px; font-weight: 800;">2916,67</span></div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; opacity: .45;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">BASE CC.CC.</span><span class="fig" style="font-size: 18px; font-weight: 800;">2916,67</span></div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; opacity: .45;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">BASE CC.PP.</span><span class="fig" style="font-size: 18px; font-weight: 800;">2916,67</span></div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; opacity: .45;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">TOTAL DEVENGADO</span><span class="fig" style="font-size: 18px; font-weight: 800;">2916,67</span></div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px; border-radius: 12px; opacity: .45;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .04em;">TOT.DEDUCCIONES</span><span class="fig" style="font-size: 18px; font-weight: 800;">680,63</span></div><div style="margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 4px; opacity: .6;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #c4d2df;">LIQUIDO TOTAL</span><span class="fig" style="font-size: 56px; color: #ffffff;">2236,03 €</span></div></div></div></figure>
+  </section>
+
+<nav aria-label="Pasos" style="margin-top: auto; padding: 96px 80px 64px; display: flex; justify-content: space-between; align-items: center;"><button type="button" class="ghost" style="min-height: 56px; padding: 0 24px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Base liquidable</button><button type="button" class="cta">Deducciones de cuota<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button></nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":6850}}'>
+class Component extends DCLogic {
+  state = { o: {}, a: {}, salary: 35000 };
+  ids() { return ['m1', 'm2', 'm3']; }
+  // Kit común: T.x abre/cierra, O.x abierto, C.x cerrado, E.x aria-expanded, S.x signo +/−,
+  // Y.x / N.x responden Sí / No y AY.x / AN.x dan su aria-pressed.
+  kit() {
+    const o = (this.state && this.state.o) || {};
+    const a = (this.state && this.state.a) || {};
+    const k = { T: {}, O: {}, C: {}, E: {}, S: {}, Y: {}, N: {}, AY: {}, AN: {}, YES: {} };
+    for (const id of this.ids()) {
+      k.T[id] = () => this.setState({ o: Object.assign({}, this.state.o, { [id]: !(this.state.o || {})[id] }) });
+      k.O[id] = !!o[id];
+      k.C[id] = !o[id];
+      k.E[id] = o[id] ? 'true' : 'false';
+      k.S[id] = o[id] ? '−' : '+';
+      k.Y[id] = () => this.setState({ a: Object.assign({}, this.state.a, { [id]: 'si' }) });
+      k.N[id] = () => this.setState({ a: Object.assign({}, this.state.a, { [id]: 'no' }) });
+      k.AY[id] = a[id] === 'si' ? 'true' : 'false';
+      k.AN[id] = a[id] === 'no' ? 'true' : 'false';
+      k.YES[id] = a[id] === 'si';
+    }
+    return k;
+  }
+
+  // 100 casillas por resto mayor: parts = [[valor, color], ...].
+  cells(parts) {
+    const total = parts.reduce((s, p) => s + p[0], 0) || 1;
+    const raw = parts.map((p) => (p[0] / total) * 100);
+    const fl = raw.map(Math.floor);
+    let left = 100 - fl.reduce((s, v) => s + v, 0);
+    raw.map((v, i) => [i, v - fl[i]]).sort((x, y) => y[1] - x[1]).forEach(([i]) => { if (left > 0) { fl[i] += 1; left -= 1; } });
+    const out = [];
+    fl.forEach((n, i) => { for (let j = 0; j < n; j += 1) out.push({ style: 'background: ' + parts[i][1] + '; animation-delay: ' + (out.length * 12) + 'ms;' }); });
+    return out;
+  }
+
+  eur(v, dec) {
+    return new Intl.NumberFormat('es-ES', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }).format(v) + ' €';
+  }
+  stairs(base, tramos, color) {
+    const CAP = 70000;
+    return tramos.map(([from, to, rate, label]) => {
+      const end = Math.min(to, CAP);
+      const w = Math.max(0, end - from) / CAP * 100;
+      const inside = Math.max(0, Math.min(base, to) - from);
+      const fillPct = to > from ? Math.min(100, inside / (end - from) * 100) : 0;
+      return {
+        style: 'flex: ' + Math.max(w, 8).toFixed(2) + ' 1 0; --h: ' + (rate * 10) + 'px;',
+        w: 'flex: ' + Math.max(w, 8).toFixed(2) + ' 1 0;',
+        fill: 'width: ' + fillPct.toFixed(1) + '%;',
+        rate: String(rate).replace('.', ',') + '%',
+        amount: inside > 0 ? this.eur(inside * rate / 100, 2) : '',
+        range: label
+      };
+    });
+  }
+  renderVals() {
+    const k = this.kit();
+    const st = this.state;
+    const base = st.salary * (1 - 0.0648) - 2000;
+    const more = [
+      ['m1', 'Tramo a tramo: de dónde salen esos 1034 €', ['Al mínimo no se le aplica tu tipo marginal, ni un porcentaje único: se le aplica la escala entera desde el primer tramo, igual que a tu base.', 'Estatal: 5550 € × 9,5 % = 527,25 € · Madrid: 5957 € × 8,5 % = 506,32 €']],
+      ['m2', '¿Por qué no se resta directamente de la base?', ['Porque el ahorro dependería de lo que ganas. Restarlo de la base equivale a librar tus últimos euros, los que tributan a tu tipo marginal: el mismo mínimo valdría más cuanto más alto es tu salario. Al pasarlo por la escala desde abajo, esos euros salen siempre de los primeros tramos y el ahorro es idéntico para todo el que tenga el mismo mínimo.', 'El efecto se parece a decir que los primeros 5550 € no pagan IRPF, con un matiz importante: tus últimos euros siguen tributando a tu tipo marginal, porque el mínimo se agota en los tramos bajos.']],
+      ['m3', '¿Por qué hay un mínimo estatal y otro de Madrid?', ['Cada escala descuenta su propio mínimo: 5550 € en la estatal y 5957 € en la de Madrid, porque las comunidades pueden aprobar importes propios. Por eso el desglose de abajo tiene una cuota del mínimo en cada columna.', 'Arts. 56, 63 y 74 de la Ley 35/2006 del IRPF.']]
+    ];
+    const rk = [['Cataluña', '18,6 %', '+0,6 %'], ['Castilla-La Mancha', '18,3 %', '+0,4 %'], ['Illes Balears', '18,3 %', '+0,4 %'], ['Extremadura', '18,2 %', '+0,3 %'], ['Aragón', '18,2 %', '+0,3 %'], ['Andalucía', '18,1 %', '+0,2 %'], ['Comunitat Valenciana', '18,0 %', '+0,1 %'], ['Galicia', '17,9 %', '+0,0 %'], ['Castilla y León', '17,9 %', '-0,0 %'], ['Asturias', '17,9 %', '-0,0 %'], ['Canarias', '17,7 %', '-0,2 %'], ['Cantabria', '17,6 %', '-0,3 %'], ['Región de Murcia', '17,6 %', '-0,3 %'], ['La Rioja', '17,3 %', '-0,6 %'], ['Madrid', '17,1 %', '-0,9 %']];
+    return Object.assign(k, {
+      salary: st.salary,
+      fill: ((st.salary - 14000) / 106000 * 100).toFixed(1),
+      salaryTxt: this.eur(st.salary),
+      onSalary: (e) => this.setState({ salary: Number(e.target.value) }),
+      baseTxt: this.eur(base, 2),
+      est: this.stairs(base, [[0, 12450, 9.5, '0 - 12.450 €'], [12450, 20200, 12, '12.450 - 20.200 €'], [20200, 35200, 15, '20.200 - 35.200 €'], [35200, 60000, 18.5, '35.200 - 60.000 €'], [60000, 300000, 22.5, '60.000 - 300.000 €'], [300000, 1e9, 24.5, '> 300.000 €']]),
+      aut: this.stairs(base, [[0, 13362.22, 8.5, '0 - 13.362,22 €'], [13362.22, 19004.63, 10.7, '13.362,22 - 19.004,63 €'], [19004.63, 35425.68, 12.8, '19.004,63 - 35.425,68 €'], [35425.68, 57320.4, 17.4, '35.425,68 - 57.320,4 €'], [57320.4, 1e9, 20.5, '> 57.320,4 €']]),
+      cols: [
+        { name: 'Estatal', color: '#d5c9ee', quotaLabel: 'Cuota estatal', quota: '3165,30 €', scale: '3692,55 €', min: '− 527,25 €', minNote: '5550 € por la misma escala',
+          rows: [{ range: '0 - 12.450 €', op: '12.450 € x 9,5%', v: '1182,75 €' }, { range: '12.450 - 20.200 €', op: '7750 € x 12%', v: '930,00 €' }, { range: '20.200 - 35.200 €', op: '10.532 € x 15%', v: '1579,80 €' }] },
+        { name: 'Madrid', color: '#efd2a9', quotaLabel: 'Cuota Madrid', quota: '2734,32 €', scale: '3240,63 €', min: '− 506,32 €', minNote: '5957 € por la misma escala',
+          rows: [{ range: '0 - 13.362,22 €', op: '13.362 € x 8,5%', v: '1135,79 €' }, { range: '13.362,22 - 19.004,63 €', op: '5642 € x 10,7%', v: '603,74 €' }, { range: '19.004,63 - 35.425,68 €', op: '11.727 € x 12,8%', v: '1501,10 €' }] }
+      ],
+      more: more.map(([id, title, ps]) => ({ title: title, ps: ps.map((t) => ({ t: t })), toggle: k.T[id], open: k.O[id], expanded: k.E[id], sign: k.S[id] })),
+      ranking: rk.map((r, i) => ({ n: i + 1, name: r[0], v: r[1], d: r[2], cls: r[0] === 'Madrid' ? 'me' : r[0] === 'Andalucía' ? 'cmp' : '', tag: r[0] === 'Madrid' ? 'tu irpf (arriba)' : r[0] === 'Andalucía' ? 'comparando' : '', nc: r[0] === 'Madrid' ? '#172033' : '#718096' }))
+    });
+  }
+}
+</script>
+</body>
+</html>

@@ -104,6 +104,10 @@ movimiento y patrones) para aplicarlo paso a paso.
   (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
   (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que
   la persona usuaria las revise antes de implementarlas en la v2.
+- **Aprobadas con ajustes.** Copias en `ai/rediseno-calculadora/maquetas-d/` (visor:
+  `python -m http.server 8765 --directory ai/rediseno-calculadora/maquetas-d` →
+  `preview.html?f=Paso05.dc.html`). Plan de implementación en
+  `ai/rediseno-calculadora/02-plan-v2-escenario.md`; lo ejecuta Codex.
 
 ### Base de datos (Supabase)
 
