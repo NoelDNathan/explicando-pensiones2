@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>D · Escenario · escritorio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#172033}
+@keyframes stretch{from{font-variation-settings:'wdth' 50,'wght' 300;letter-spacing:.1em;opacity:0}to{font-variation-settings:'wdth' 130,'wght' 900;letter-spacing:-.035em;opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes cell{0%{opacity:0;transform:scale(.2) rotate(-30deg)}70%{transform:scale(1.15)}100%{opacity:1;transform:none}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes seggrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes unfold{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes flashA{0%{text-shadow:0 0 24px currentColor}100%{text-shadow:none}}
+@keyframes flashB{0%{text-shadow:0 0 24px currentColor}100%{text-shadow:none}}
+@keyframes sweep{from{background-size:0% 100%}to{background-size:100% 100%}}
+.kin{font-family:'Anybody',system-ui,sans-serif;animation:stretch 1.4s cubic-bezier(.2,.8,.2,1) both}
+.rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.cell{animation:cell .5s cubic-bezier(.2,.8,.2,1) both;transition:background-color .5s ease}
+.marquee{animation:marquee 28s linear infinite}
+.growx{transform-origin:left;animation:growx 1s cubic-bezier(.2,.8,.2,1) both}
+.growy{transform-origin:bottom;animation:growy .9s cubic-bezier(.2,.8,.2,1) both}
+.unfold{animation:unfold .4s cubic-bezier(.2,.8,.2,1) both}
+.flashA{animation:flashA .9s ease-out}
+.flashB{animation:flashB .9s ease-out}
+.sweepV{background-image:linear-gradient(#5d469c,#5d469c);background-repeat:no-repeat;animation:sweep 1s cubic-bezier(.2,.8,.2,1) .8s both;padding:0 4px;border-radius:4px}
+.sweepO{background-image:linear-gradient(#8b5418,#8b5418);background-repeat:no-repeat;animation:sweep 1s cubic-bezier(.2,.8,.2,1) 1.1s both;padding:0 4px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+.race{transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.needle{transition:left .8s cubic-bezier(.3,1.4,.5,1)}
+.bar span{transition:flex-grow .7s cubic-bezier(.2,.8,.2,1)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:48px;margin:0;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-moz-range-track{height:14px;border-radius:99px;background:linear-gradient(90deg,#b6ded3 var(--fill),#23364e var(--fill))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;margin-top:-13px;border-radius:50%;background:#ffffff;border:6px solid #18865b;box-shadow:0 0 0 8px rgba(182,222,211,.18)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#ffffff;border:6px solid #18865b}
+select{font:inherit;color:#ffffff;background-color:#23364e;border:0;border-radius:999px;padding:12px 44px 12px 20px;min-height:52px;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#b6ded3 50%),linear-gradient(135deg,#b6ded3 50%,transparent 50%);background-position:calc(100% - 24px) 55%,calc(100% - 18px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+select option{color:#172033;background:#ffffff}
+.seg[aria-pressed=true]{background:#ffffff;color:#172033}
+.lane[aria-expanded=true]{background:#23364e}
+button{font:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input[type=range]:focus-visible{outline:3px solid #b6ded3;outline-offset:4px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.sweepV,.sweepO{background-size:100% 100%}}
+</style>
+</helmet>
+<div style="width: 1280px; height: 4700px; box-sizing: border-box; overflow: hidden; background: #172033; color: #ffffff; font-family: 'Instrument Sans', system-ui, sans-serif; display: flex; flex-direction: column; --seg-on: #b6ded3; --seg-off: #23364e; --seg-h: 6px; --k-net: #18865b; --k-worker: #d5c9ee; --k-company: #b96b18;">
+
+  <header style="padding: 32px 80px 0; display: flex; align-items: center; gap: 32px;">
+    <span style="font-size: 15px; font-weight: 600; color: #c4d2df;">Calculadora fiscal del trabajador 2025</span>
+    <div style="flex-grow: 1; display: flex; gap: 5px;" aria-hidden="true">
+      <sc-for list="{{segs}}" as="seg" hint-placeholder-count="12"><span style="{{seg.style}}"></span></sc-for>
+    </div>
+    <span class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: #b6ded3;">03<span style="color: #718096;">/12</span></span>
+  </header>
+
+  <section style="padding: 80px 80px 0; display: flex; flex-direction: column; gap: 48px;">
+    <h1 class="kin" style="margin: 0; font-size: 150px; line-height: .86; font-weight: 900; text-transform: uppercase;">Cotizaciones<br><span style="color: #b6ded3;">sociales</span></h1>
+    <p class="rise" style="margin: 0 0 0 auto; max-width: 620px; font-size: 26px; line-height: 1.45; color: #ffffff; animation-delay: .5s;">Las cotizaciones sociales son las cantidades que se pagan cada mes a la Seguridad Social. Se calculan aplicando distintos porcentajes sobre tu base de cotización (mirar paso 2).</p>
+  </section>
+
+  <section style="padding: 96px 80px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px;">
+    <p class="rise" style="margin: 0; font-size: 24px; line-height: 1.5; color: #dbe4ec; animation-delay: .7s;">Una parte se descuenta directamente de tu salario bruto y aparece en tu nómina como <span class="sweepV" style="color: #ffffff; font-weight: 700;">cotización del trabajador</span>. Por eso reduce tu salario neto, es decir, lo que finalmente cobras.</p>
+    <p class="rise" style="margin: 0; font-size: 24px; line-height: 1.5; color: #dbe4ec; animation-delay: .9s;">La otra parte <span class="sweepO" style="color: #ffffff; font-weight: 700;">la paga la empresa</span> además de tu salario bruto. No se resta de tu nómina, pero sí forma parte del coste total que tiene la empresa por contratarte.</p>
+  </section>
+
+  <p class="rise" style="margin: 72px 80px 0; max-width: 860px; font-size: 24px; line-height: 1.5; color: #dbe4ec;">Estas cotizaciones sirven para financiar prestaciones como la jubilación, las bajas por enfermedad, el desempleo, la formación profesional, los accidentes laborales o el refuerzo del sistema de pensiones.</p>
+
+  <div aria-hidden="true" style="margin-top: 48px; padding: 18px 0; overflow: hidden; background: #b6ded3; color: #172033; transform: rotate(-1.5deg);">
+    <div class="marquee" style="display: flex; width: max-content; gap: 40px; font-family: 'Anybody', system-ui, sans-serif; font-size: 34px; font-weight: 800; text-transform: uppercase; font-variation-settings: 'wdth' 120; white-space: nowrap;">
+      <span>jubilación • bajas por enfermedad • desempleo • formación profesional • accidentes laborales • refuerzo del sistema de pensiones •</span>
+      <span>jubilación • bajas por enfermedad • desempleo • formación profesional • accidentes laborales • refuerzo del sistema de pensiones •</span>
+    </div>
+  </div>
+
+  <section aria-label="Tu caso" style="margin: 96px 80px 0; display: flex; flex-direction: column; gap: 28px;">
+    <div style="display: flex; align-items: flex-end; gap: 48px;">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px;">
+        <label for="d-salary" style="font-size: 16px; font-weight: 600; color: #c4d2df;">Salario bruto anual (paso 1)</label>
+        <input id="d-salary" type="range" min="14000" max="120000" step="500" value="{{salary}}" onChange="{{onSalary}}" style="--fill: {{fill}}%;">
+      </div>
+      <span class="num" style="min-width: 340px; text-align: right; font-family: 'Anybody', system-ui, sans-serif; font-size: 80px; line-height: 1; font-weight: 900; font-variation-settings: 'wdth' 110; color: #b6ded3;">{{salaryTxt}}</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 20px;">
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 17px;"><span style="font-size: 14px; font-weight: 600; color: #c4d2df;">Contrato</span>
+        <select value="{{contract}}" onChange="{{onContract}}"><option value="indefinite">Indefinido</option><option value="temporary">Temporal</option><option value="internship">Prácticas</option><option value="training">Formación</option></select>
+      </label>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 17px;"><span style="font-size: 14px; font-weight: 600; color: #c4d2df;">Actividad para AT/EP</span>
+        <select value="{{atep}}" onChange="{{onAtep}}"><option value="cnae-62">62 · Programación e informática</option><option value="occupation-a-office">a · Trabajos exclusivos de oficina</option><option value="cnae-55-56">55/56 · Hostelería</option><option value="cnae-47">47 · Comercio al por menor</option><option value="cnae-494">494 · Transporte de mercancías</option><option value="cnae-41-43">41/43 · Construcción</option></select>
+      </label>
+      <div role="group" aria-label="Vista de importes" style="display: flex; padding: 5px; gap: 4px; border-radius: 999px; background: #23364e;">
+        <button type="button" class="seg" aria-pressed="{{isMonthly}}" onClick="{{setMonthly}}" style="min-height: 42px; padding: 0 20px; border: 0; border-radius: 999px; background: transparent; color: #ffffff; font-weight: 600;">Mensual</button>
+        <button type="button" class="seg" aria-pressed="{{isAnnual}}" onClick="{{setAnnual}}" style="min-height: 42px; padding: 0 20px; border: 0; border-radius: 999px; background: transparent; color: #ffffff; font-weight: 600;">Anual</button>
+      </div>
+      <p style="margin: 0 0 0 auto; display: flex; flex-direction: column; align-items: flex-end; font-size: 14px; color: #c4d2df;"><span>Base usada para cotizar</span><strong class="num {{flash}}" style="font-size: 26px; color: #ffffff;">{{baseTxt}} {{suffix}}</strong><span>{{groupTxt}}</span></p>
+    </div>
+    <sc-if value="{{alertMax}}" hint-placeholder-val="{{ false }}">
+      <p class="unfold" role="status" style="margin: 0; padding: 16px 22px; border-radius: 18px; background: #fff7d9; color: #7a5a10; font-size: 17px; line-height: 1.5;"><strong>Salario por encima de la base máxima.</strong> Las cotizaciones ordinarias se calculan solo hasta {{maxAnnualTxt}} al año. <em>Exceso mensual: {{excessTxt}}</em></p>
+    </sc-if>
+    <sc-if value="{{alertMin}}" hint-placeholder-val="{{ false }}">
+      <p class="unfold" role="status" style="margin: 0; padding: 16px 22px; border-radius: 18px; background: #e9f1fd; color: #245a8f; font-size: 17px; line-height: 1.5;"><strong>Base mínima aplicada.</strong> Las cotizaciones se calculan sobre la base mínima de tu grupo, no sobre una base inferior.</p>
+    </sc-if>
+  </section>
+
+  <section style="margin: 72px 80px 0; display: grid; grid-template-columns: 460px minmax(0, 1fr); gap: 72px; align-items: center;">
+    <figure style="margin: 0; display: flex; flex-direction: column; gap: 16px;">
+      <div role="img" aria-label="{{barLabel}}" style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px;">
+        <sc-for list="{{dots}}" as="d" hint-placeholder-count="100"><span class="cell" style="{{d.style}} aspect-ratio: 1; border-radius: 10px;"></span></sc-for>
+      </div>
+      <figcaption style="font-size: 15px; color: #c4d2df;">Coste total empresa: <strong class="num" style="color: #ffffff;">{{costTxt}} {{suffix}}</strong>. Cada casilla, 1 %.</figcaption>
+    </figure>
+    <div style="display: flex; flex-direction: column; gap: 32px;">
+      <p style="margin: 0; font-size: 22px; line-height: 1.6; color: #dbe4ec;" aria-live="polite">Con el salario que has introducido, tu base de cotización es de <strong class="num" style="color: #ffffff;">{{pBaseTxt}}</strong> al mes. Si la parte del trabajador suma un {{pWRate}} %, se descontarían unos <strong class="num" style="color: #d5c9ee;">{{pWTxt}}</strong> de tu salario bruto. Además, la empresa tendría que pagar sus propias cotizaciones: en este caso, un {{pCRate}} %, unos <strong class="num" style="color: #efd2a9;">{{pCTxt}}</strong> adicionales al mes, que no se descuentan de tu nómina, pero sí aumentan el coste total de contratarte.</p>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;"><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #c4d2df;"><span style="width: 14px; height: 14px; border-radius: 4px; background: #18865b;"></span>Bruto después de cotizaciones</span><strong class="num {{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 34px; font-weight: 800; color: #b6ded3;">{{afterTxt}}</strong></div>
+        <div style="display: flex; flex-direction: column; gap: 6px;"><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #c4d2df;"><span style="width: 14px; height: 14px; border-radius: 4px; background: #d5c9ee;"></span>Cotizaciones trabajador</span><strong class="num {{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 34px; font-weight: 800; color: #d5c9ee;">{{wTotTxt}}</strong></div>
+        <div style="display: flex; flex-direction: column; gap: 6px;"><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #c4d2df;"><span style="width: 14px; height: 14px; border-radius: 4px; background: #b96b18;"></span>Coste adicional empresa</span><strong class="num {{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 34px; font-weight: 800; color: #efd2a9;">{{cTotTxt}}</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin: 120px 80px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; align-items: start;">
+    <div aria-labelledby="d-worker" style="display: flex; flex-direction: column; gap: 6px;">
+      <h2 id="d-worker" class="kin" style="margin: 0; font-size: 64px; line-height: 1; font-weight: 900; text-transform: uppercase; color: #d5c9ee;">Trabajador</h2>
+      <p style="margin: 0 0 18px; font-size: 19px; color: #c4d2df;">Se descuenta de tu salario bruto.</p>
+      <sc-for list="{{workerRows}}" as="r" hint-placeholder-count="4">
+        <div style="display: flex; flex-direction: column;">
+          <button type="button" class="lane" onClick="{{r.toggle}}" aria-expanded="{{r.expanded}}" style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border: 0; border-radius: 18px; background: transparent; color: #ffffff; text-align: left;">
+            <span style="width: 100%; display: flex; align-items: baseline; gap: 14px;"><span style="flex-grow: 1; font-size: 20px; font-weight: 600;">{{r.label}}</span><span class="num" style="font-size: 16px; color: #c4d2df;">{{r.rate}}</span><strong class="num" style="font-size: 20px; color: #d5c9ee;">{{r.amount}}</strong><span aria-hidden="true" style="width: 18px; font-size: 22px; color: #d5c9ee;">{{r.sign}}</span></span>
+            <span class="growx" style="width: 100%; height: 14px; border-radius: 99px; background: #23364e;"><span class="race" style="{{r.bar}} display: block; height: 14px; border-radius: 99px; background: #d5c9ee;"></span></span>
+          </button>
+          <sc-if value="{{r.open}}" hint-placeholder-val="{{ false }}"><p class="unfold" style="margin: 0; padding: 6px 16px 16px; font-size: 17px; line-height: 1.55; color: #dbe4ec;">{{r.help}}</p></sc-if>
+        </div>
+      </sc-for>
+      <output style="margin-top: 12px; padding: 18px 16px 0; border-top: 2px solid #d5c9ee; display: flex; align-items: baseline; gap: 14px;"><span style="flex-grow: 1; font-size: 19px; font-weight: 700;">Total trabajador</span><span class="num" style="font-size: 16px; color: #c4d2df;">{{wRateTxt}}</span><strong class="num {{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 38px; font-weight: 900; color: #d5c9ee;">{{wTotTxt}}</strong></output>
+    </div>
+    <div aria-labelledby="d-company" style="display: flex; flex-direction: column; gap: 6px;">
+      <h2 id="d-company" class="kin" style="margin: 0; font-size: 64px; line-height: 1; font-weight: 900; text-transform: uppercase; color: #efd2a9;">Empresa</h2>
+      <p style="margin: 0 0 18px; font-size: 19px; color: #c4d2df;">La empresa lo paga además de tu salario bruto.</p>
+      <sc-for list="{{companyRows}}" as="r" hint-placeholder-count="6">
+        <div style="display: flex; flex-direction: column;">
+          <button type="button" class="lane" onClick="{{r.toggle}}" aria-expanded="{{r.expanded}}" style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border: 0; border-radius: 18px; background: transparent; color: #ffffff; text-align: left;">
+            <span style="width: 100%; display: flex; align-items: baseline; gap: 14px;"><span style="flex-grow: 1; font-size: 20px; font-weight: 600;">{{r.label}}</span><span class="num" style="font-size: 16px; color: #c4d2df;">{{r.rate}}</span><strong class="num" style="font-size: 20px; color: #efd2a9;">{{r.amount}}</strong><span aria-hidden="true" style="width: 18px; font-size: 22px; color: #efd2a9;">{{r.sign}}</span></span>
+            <span class="growx" style="width: 100%; height: 14px; border-radius: 99px; background: #23364e;"><span class="race" style="{{r.bar}} display: block; height: 14px; border-radius: 99px; background: #b96b18;"></span></span>
+          </button>
+          <sc-if value="{{r.open}}" hint-placeholder-val="{{ false }}"><p class="unfold" style="margin: 0; padding: 6px 16px 16px; font-size: 17px; line-height: 1.55; color: #dbe4ec;">{{r.help}}</p></sc-if>
+        </div>
+      </sc-for>
+      <output style="margin-top: 12px; padding: 18px 16px 0; border-top: 2px solid #efd2a9; display: flex; align-items: baseline; gap: 14px;"><span style="flex-grow: 1; font-size: 19px; font-weight: 700;">Total empresa</span><span class="num" style="font-size: 16px; color: #c4d2df;">{{cRateTxt}}</span><strong class="num {{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 38px; font-weight: 900; color: #efd2a9;">{{cTotTxt}}</strong></output>
+    </div>
+  </section>
+
+  <section style="margin: 120px 80px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start;">
+    <div aria-label="MEI" style="padding: 36px; border-radius: 32px; background: #23364e; display: flex; flex-direction: column; gap: 16px; font-size: 17px; line-height: 1.55; color: #dbe4ec;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;">
+        <strong style="font-family: 'Anybody', system-ui, sans-serif; font-size: 30px; font-weight: 900; font-variation-settings: 'wdth' 120; color: #ffffff;">MEI 2025: 0,80 % total</strong>
+      </div>
+      <p style="margin: 0;">Cotización adicional para reforzar las pensiones públicas. Sube 0,1 puntos porcentuales al año hasta 2030.</p>
+      <div aria-hidden="true" style="display: flex; align-items: flex-end; gap: 14px; height: 190px; padding-top: 10px;">
+        <sc-for list="{{meiRows}}" as="m" hint-placeholder-count="6">
+          <div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
+            <span class="num" style="font-size: 14px; font-weight: 700; color: #ffffff;">{{m.total}}</span>
+            <div style="width: 100%; flex-grow: 1; display: flex; flex-direction: column-reverse;">
+              <span class="growy" style="{{m.cBar}} {{m.delay}} display: block; background: #b96b18; border-radius: 0 0 8px 8px;"></span>
+              <span class="growy" style="{{m.wBar}} {{m.delay}} display: block; background: #d5c9ee; border-radius: 8px 8px 0 0;"></span>
+            </div>
+            <span style="font-size: 13px; color: #c4d2df; white-space: nowrap;">{{m.year}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+        <caption style="text-align: left; padding-bottom: 6px; font-size: 14px; font-weight: 600; color: #c4d2df;">Evolución programada del MEI</caption>
+        <thead><tr style="color: #c4d2df; text-align: right;"><th scope="col" style="text-align: left; padding: 5px 0; font-weight: 600;">Año</th><th scope="col" style="padding: 5px 0; font-weight: 600;">Total</th><th scope="col" style="padding: 5px 0; font-weight: 600;">Empresa</th><th scope="col" style="padding: 5px 0; font-weight: 600;">Trabajador</th></tr></thead>
+        <tbody>
+<tr class="num" style="border-top: 1px solid #4f5f70; text-align: right;"><th scope="row" style="text-align: left; padding: 6px 0; font-weight: 600;">2025</th><td style="padding: 6px 0;">0,80 %</td><td style="padding: 6px 0; color: #efd2a9;">0,67 %</td><td style="padding: 6px 0; color: #d5c9ee;">0,13 %</td></tr>
+<tr class="num" style="border-top: 1px solid #4f5f70; text-align: right;"><th scope="row" style="text-align: left; padding: 6px 0; font-weight: 600;">2026</th><td style="padding: 6px 0;">0,90 %</td><td style="padding: 6px 0; color: #efd2a9;">0,75 %</td><td style="padding: 6px 0; color: #d5c9ee;">0,15 %</td></tr>
+<tr class="num" style="border-top: 1px solid #4f5f70; text-align: right;"><th scope="row" style="text-align: left; padding: 6px 0; font-weight: 600;">2027</th><td style="padding: 6px 0;">1,00 %</td><td style="padding: 6px 0; color: #efd2a9;">0,83 %</td><td style="padding: 6px 0; color: #d5c9ee;">0,17 %</td></tr>
+<tr class="num" style="border-top: 1px solid #4f5f70; text-align: right;"><th scope="row" style="text-align: left; padding: 6px 0; font-weight: 600;">2028</th><td style="padding: 6px 0;">1,10 %</td><td style="padding: 6px 0; color: #efd2a9;">0,92 %</td><td style="padding: 6px 0; color: #d5c9ee;">0,18 %</td></tr>
+<tr class="num" style="border-top: 1px solid #4f5f70; text-align: right;"><th scope="row" style="text-align: left; padding: 6px 0; font-weight: 600;">2029</th><td style="padding: 6px 0;">1,20 %</td><td style="padding: 6px 0; color: #efd2a9;">1,00 %</td><td style="padding: 6px 0; color: #d5c9ee;">0,20 %</td></tr>
+<tr class="num" style="border-top: 1px solid #4f5f70; text-align: right;"><th scope="row" style="text-align: left; padding: 6px 0; font-weight: 600;">2030-2050</th><td style="padding: 6px 0;">1,20 %</td><td style="padding: 6px 0; color: #efd2a9;">0,60 %</td><td style="padding: 6px 0; color: #d5c9ee;">0,60 %</td></tr>
+        </tbody>
+      </table>
+      <sc-if value="{{meiClosed}}" hint-placeholder-val="{{ true }}">
+        <p style="margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px;"><span style="display: flex; flex-direction: column;">MEI en 2030 extra<em style="font-size: 14px; color: #c4d2df;">trabajador + empresa: {{meiExtraWTxt}} {{meiExtraCTxt}}</em></span><strong class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 30px; font-weight: 900; color: #b6ded3;">{{meiExtraTxt}}</strong></p>
+      </sc-if>
+      <sc-if value="{{meiOpen}}" hint-placeholder-val="{{ false }}">
+        <div id="d-mei-more" class="unfold" style="display: flex; flex-direction: column; gap: 10px;">
+          <p style="margin: 0;">El MEI (Mecanismo de Equidad Intergeneracional) refuerza el sistema público de pensiones. Lo pagan trabajador y empresa sobre la base de cotización.</p>
+          <p style="margin: 0;">La cuota sube 0,1 puntos porcentuales al año hasta 2030. A partir de entonces el reparto queda al 50%: <strong style="color: #ffffff;">0,60 % trabajador</strong> + <strong style="color: #ffffff;">0,60 % empresa</strong>.</p>
+          <p style="margin: 0;">Con tu base de {{meiBaseTxt}} {{suffix}}, el MEI supone hoy <strong style="color: #ffffff;">{{meiWTxt}}</strong> descontados de tu salario y <strong style="color: #ffffff;">{{meiCTxt}}</strong> pagados por la empresa. En 2030-2050, con el mismo total del 1,20 %, serían <strong style="color: #ffffff;">{{meiW30Txt}}</strong> para ti y <strong style="color: #ffffff;">{{meiC30Txt}}</strong> para la empresa.</p>
+          <em style="font-size: 14px; color: #c4d2df;">Fuente: Real Decreto-ley 21/2021 y órdenes anuales de cotización. Años 2026-2050: calendario legal programado.</em>
+        </div>
+      </sc-if>
+      <button type="button" onClick="{{toggleMei}}" aria-expanded="{{meiExpanded}}" aria-controls="d-mei-more" style="align-self: flex-start; min-height: 48px; padding: 0 22px; border: 2px solid #b6ded3; border-radius: 999px; background: transparent; color: #b6ded3; font-size: 16px; font-weight: 700;">{{meiToggleLabel}}</button>
+    </div>
+
+    <div aria-label="AT/EP" style="padding: 36px; border-radius: 32px; background: #23364e; display: flex; flex-direction: column; gap: 14px; font-size: 17px; line-height: 1.55; color: #dbe4ec;">
+      <strong class="{{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 30px; font-weight: 900; font-variation-settings: 'wdth' 120; color: #ffffff;">AT/EP 2025: {{atepRateTxt}}</strong>
+      <div aria-hidden="true" style="position: relative; margin: 18px 0 8px; height: 64px;">
+        <div style="position: absolute; left: 0; right: 0; top: 26px; height: 12px; border-radius: 99px; background: linear-gradient(90deg, #18865b, #9a7418, #c4455b);"></div>
+        <div class="needle" style="{{atepNeedle}} position: absolute; top: 0; width: 0; height: 64px;">
+          <span style="position: absolute; left: -3px; top: 8px; width: 6px; height: 48px; border-radius: 99px; background: #ffffff; box-shadow: 0 0 0 4px #172033;"></span>
+        </div>
+        <span style="position: absolute; left: 0; top: 44px; font-size: 13px; color: #c4d2df;">1 %</span>
+        <span style="position: absolute; right: 0; top: 44px; font-size: 13px; color: #c4d2df;">7 %</span>
+      </div>
+      <p style="margin: 0;">AT/EP es como un seguro que paga la empresa para proteger al trabajador frente a accidentes o enfermedades causadas por el trabajo.</p>
+      <p style="margin: 0;">El porcentaje no es igual para todos los trabajadores. Depende principalmente de la actividad profesional y del nivel de riesgo. Por eso, una persona que trabaja en una oficina puede tener un porcentaje diferente a alguien que trabaja en construcción.</p>
+      <p style="margin: 0;">En este caso, el {{atepRateTxt}} se divide en:</p>
+      <div class="bar" style="display: flex; gap: 4px; height: 16px;" aria-hidden="true"><span style="{{itShare}} border-radius: 99px 4px 4px 99px; background: #b96b18;"></span><span style="{{imsShare}} border-radius: 4px 99px 99px 4px; background: #efd2a9;"></span></div>
+      <p style="margin: 0;"><strong style="color: #ffffff;">IT ({{itTxt}}):</strong> cubre las bajas temporales por accidentes de trabajo o enfermedades profesionales.</p>
+      <p style="margin: 0;"><strong style="color: #ffffff;">IMS ({{imsTxt}}):</strong> cubre situaciones más graves, como incapacidad permanente, fallecimiento o supervivencia.</p>
+      <p style="margin: 0;">Este porcentaje lo paga la empresa, no se descuenta del salario del trabajador. Se calcula sobre la base de contingencias profesionales.</p>
+      <sc-if value="{{hasAtepNote}}" hint-placeholder-val="{{ false }}"><em style="color: #c4d2df;">{{atepNote}}</em></sc-if>
+    </div>
+  </section>
+
+  <section aria-labelledby="d-summary" style="margin: 120px 80px 0; display: flex; flex-direction: column; gap: 22px;">
+    <h2 id="d-summary" class="kin" style="margin: 0 0 12px; font-size: 64px; line-height: 1; font-weight: 900; text-transform: uppercase;">Resumen</h2>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) 48px minmax(0, 1fr); align-items: end; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 16px; color: #c4d2df;">Salario bruto trabajador</span><strong class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 40px; font-weight: 800;">{{grossTxt}}</strong></div>
+      <span aria-hidden="true" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 48px; font-weight: 900; color: #718096; text-align: center;">−</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 16px; color: #c4d2df;">Cotizaciones trabajador</span><strong class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 40px; font-weight: 800; color: #d5c9ee;">{{wTotTxt}}</strong></div>
+      <span aria-hidden="true" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 48px; font-weight: 900; color: #718096; text-align: center;">=</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 16px; color: #c4d2df;">Bruto después de cotizaciones</span><strong class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 40px; font-weight: 800; color: #b6ded3;">{{afterTxt}}</strong></div>
+    </div>
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) 48px minmax(0, 1fr); align-items: end; gap: 12px; padding-top: 22px; border-top: 1px solid #4f5f70;">
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 16px; color: #c4d2df;">Salario bruto trabajador</span><strong class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 40px; font-weight: 800;">{{grossTxt}}</strong></div>
+      <span aria-hidden="true" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 48px; font-weight: 900; color: #718096; text-align: center;">+</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 16px; color: #c4d2df;">Coste adicional empresa</span><strong class="num" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 40px; font-weight: 800; color: #efd2a9;">{{cTotTxt}}</strong></div>
+      <span aria-hidden="true" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 48px; font-weight: 900; color: #718096; text-align: center;">=</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-size: 16px; color: #c4d2df;">Coste total empresa</span><strong class="num {{flash}}" style="font-family: 'Anybody', system-ui, sans-serif; font-size: 56px; line-height: 1; font-weight: 900; color: #ffffff;">{{costTxt}}</strong></div>
+    </div>
+    <p style="margin: 8px 0 0; display: flex; align-items: baseline; gap: 16px; font-size: 18px; color: #c4d2df;"><span>Coste total cotizaciones <em>(trabajador + empresa)</em></span><strong class="num" style="font-size: 28px; color: #ffffff;">{{totalTxt}}</strong></p>
+  </section>
+
+  <nav style="margin-top: auto; padding: 0 80px 64px; display: flex; justify-content: space-between; align-items: center;" aria-label="Pasos">
+    <button type="button" style="display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 24px; border: 2px solid #4f5f70; border-radius: 999px; background: transparent; color: #c4d2df; font-size: 17px; font-weight: 600;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+      Límites de cotización
+    </button>
+    <button type="button" style="display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 0 34px; border: 0; border-radius: 999px; background: #b6ded3; color: #172033; font-family: 'Anybody', system-ui, sans-serif; font-size: 22px; font-weight: 800; font-variation-settings: 'wdth' 115;">
+      Retribución en especie
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+    </button>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":4700}}'>
+class Component extends DCLogic {
+  state = { salary: 36000, contract: 'indefinite', atep: 'cnae-62', view: 'monthly', meiOpen: false, help: null, chunk: null, flip: null, shown: null };
+
+  params() {
+    return {
+      MIN: 1381.2,
+      MAX: 4909.5,
+      unempW: { indefinite: 1.55, temporary: 1.6, internship: 1.55, training: 0 },
+      unempC: { indefinite: 5.5, temporary: 6.7, internship: 5.5, training: 0 },
+      cats: {
+        'cnae-62': { code: '62', label: 'Programación, consultoría y actividades informáticas', it: 0.8, ims: 0.7, note: '' },
+        'occupation-a-office': { code: 'a', label: 'Trabajos exclusivos de oficina', it: 0.8, ims: 0.7, note: 'Solo si trabaja exclusivamente en oficina y sin exposición a los riesgos de la actividad principal.' },
+        'cnae-55-56': { code: '55/56', label: 'Hostelería: alojamiento, comidas y bebidas', it: 0.8, ims: 0.7, note: '' },
+        'cnae-47': { code: '47', label: 'Comercio al por menor, regla general', it: 0.95, ims: 0.7, note: '' },
+        'cnae-494': { code: '494', label: 'Transporte de mercancías por carretera y mudanzas', it: 2.0, ims: 1.7, note: '' },
+        'cnae-41-43': { code: '41/43', label: 'Construcción de edificios y construcción especializada', it: 3.35, ims: 3.35, note: '' }
+      }
+    };
+  }
+
+  helpTexts() {
+    return {
+      cc: 'Cubren situaciones habituales como una baja por enfermedad común, un accidente no laboral, la maternidad, la paternidad o la jubilación. Esta cotización ayuda a financiar prestaciones que puedes necesitar a lo largo de tu vida laboral.',
+      un: 'Sirve para financiar la prestación por paro. Gracias a esta cotización, si pierdes el trabajo y cumples los requisitos, puedes tener derecho a cobrar una ayuda mientras buscas otro empleo.',
+      fp: 'Financia programas de formación para trabajadores. Te aporta la posibilidad de acceder a cursos y acciones formativas que ayudan a mejorar tus competencias profesionales.',
+      mei: 'Es una cotización adicional destinada a reforzar el sistema público de pensiones. No te da una prestación concreta e inmediata, pero contribuye a sostener las pensiones futuras.',
+      fo: 'Protege al trabajador si la empresa no puede pagar salarios o indemnizaciones, por ejemplo por insolvencia o concurso. En esos casos, este fondo puede asumir parte de las cantidades pendientes.'
+    };
+  }
+
+  rates(st) {
+    const p = this.params();
+    const cat = p.cats[st.atep] || p.cats['cnae-62'];
+    return {
+      w: { cc: 4.7, un: p.unempW[st.contract], fp: 0.1, mei: 0.13 },
+      c: { cc: 23.6, un: p.unempC[st.contract], fo: 0.2, fp: 0.6, mei: 0.67, at: cat.it + cat.ims },
+      cat: cat
+    };
+  }
+
+  calc(st) {
+    const p = this.params();
+    const r = this.rates(st);
+    const gross = st.salary / 12;
+    const base = Math.min(Math.max(gross, p.MIN), p.MAX);
+    const f = st.view === 'annual' ? 12 : 1;
+    const o = { gross: gross * f, base: base * f, pBase: base };
+    let wt = 0;
+    let ct = 0;
+    for (const k in r.w) { o['w_' + k] = base * r.w[k] / 100 * f; wt += base * r.w[k] / 100; }
+    for (const k in r.c) { o['c_' + k] = base * r.c[k] / 100 * f; ct += base * r.c[k] / 100; }
+    o.wTot = wt * f;
+    o.cTot = ct * f;
+    o.after = (gross - wt) * f;
+    o.cost = (gross + ct) * f;
+    o.total = (wt + ct) * f;
+    o.pW = wt;
+    o.pC = ct;
+    o.pGross = gross;
+    o.meiW = base * 0.0013 * f;
+    o.meiC = base * 0.0067 * f;
+    o.meiW30 = base * 0.006 * f;
+    o.meiC30 = base * 0.006 * f;
+    return o;
+  }
+
+  tween(from, to) {
+    cancelAnimationFrame(this.raf);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = performance.now();
+    const step = (now) => {
+      const k = reduce ? 1 : Math.min(1, (now - start) / 600);
+      const e = 1 - Math.pow(1 - k, 3);
+      const s = {};
+      for (const key in to) s[key] = from[key] + (to[key] - from[key]) * e;
+      this.setState({ shown: s });
+      if (k < 1) this.raf = requestAnimationFrame(step);
+    };
+    this.raf = requestAnimationFrame(step);
+  }
+
+  countUp() {
+    const to = this.calc(this.state);
+    const zero = {};
+    for (const k in to) zero[k] = 0;
+    this.tween(zero, to);
+  }
+
+  update(patch) {
+    const from = this.state.shown || this.calc(this.state);
+    const next = Object.assign({}, this.state, patch);
+    this.setState(Object.assign({}, patch, { flip: !this.state.flip }));
+    this.tween(from, this.calc(next));
+  }
+
+  componentDidMount() { this.countUp(); }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+
+  chunkCount() { return 7; }
+  chunk() {
+    if (this.state.chunk !== null) return this.state.chunk;
+    const start = Number(this.props.startAt ?? 1);
+    return Math.min(this.chunkCount() - 1, Math.max(0, start - 1));
+  }
+
+  renderVals() {
+    const st = this.state;
+    const p = this.params();
+    const r = this.rates(st);
+    const s = st.shown || this.calc(st);
+    const nf = (v, d) => new Intl.NumberFormat('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+    const eur = (v) => nf(v, 2) + ' €';
+    const eur0 = (v) => nf(v, 0) + ' €';
+    const pct = (v) => nf(v, 2) + ' %';
+    const signed = (v) => (v > 0.004 ? '+' : v < -0.004 ? '−' : '') + eur(Math.abs(v));
+    const help = this.helpTexts();
+    const gross = st.salary / 12;
+    const monthly = st.view === 'monthly';
+    const flash = st.flip === null ? '' : st.flip ? 'flashA' : 'flashB';
+
+    const mkRow = (side, key, label, rate, amount, helpText, max) => {
+      const id = side + '-' + key;
+      return {
+        id: id,
+        label: label,
+        rate: pct(rate),
+        amount: eur(amount),
+        help: helpText,
+        open: st.help === id,
+        expanded: st.help === id ? 'true' : 'false',
+        sign: st.help === id ? '−' : '+',
+        flash: flash,
+        bar: 'width: ' + Math.max(0.6, rate / max * 100).toFixed(2) + '%;',
+        muted: rate === 0,
+        toggle: () => this.setState({ help: st.help === id ? null : id })
+      };
+    };
+    const cat = r.cat;
+    const workerRows = [
+      mkRow('w', 'cc', 'Contingencias comunes', r.w.cc, s.w_cc, help.cc, 23.6),
+      mkRow('w', 'un', 'Desempleo', r.w.un, s.w_un, help.un, 23.6),
+      mkRow('w', 'fp', 'Formación profesional', r.w.fp, s.w_fp, help.fp, 23.6),
+      mkRow('w', 'mei', 'MEI', r.w.mei, s.w_mei, help.mei, 23.6)
+    ];
+    const companyRows = [
+      mkRow('c', 'cc', 'Contingencias comunes', r.c.cc, s.c_cc, help.cc, 23.6),
+      mkRow('c', 'un', 'Desempleo', r.c.un, s.c_un, help.un, 23.6),
+      mkRow('c', 'fo', 'FOGASA', r.c.fo, s.c_fo, help.fo, 23.6),
+      mkRow('c', 'fp', 'Formación profesional', r.c.fp, s.c_fp, help.fp, 23.6),
+      mkRow('c', 'mei', 'MEI', r.c.mei, s.c_mei, help.mei, 23.6),
+      mkRow('c', 'at', 'AT/EP', r.c.at, s.c_at, 'Cubre accidentes de trabajo y enfermedades profesionales. En esta calculadora se aplica la categoría seleccionada: ' + cat.code + ' - ' + cat.label + '.', 23.6)
+    ];
+    const wRate = r.w.cc + r.w.un + r.w.fp + r.w.mei;
+    const cRate = r.c.cc + r.c.un + r.c.fo + r.c.fp + r.c.mei + r.c.at;
+
+    const meiRows = [
+      ['2025', '0,80 %', '0,67 %', '0,13 %'],
+      ['2026', '0,90 %', '0,75 %', '0,15 %'],
+      ['2027', '1,00 %', '0,83 %', '0,17 %'],
+      ['2028', '1,10 %', '0,92 %', '0,18 %'],
+      ['2029', '1,20 %', '1,00 %', '0,20 %'],
+      ['2030-2050', '1,20 %', '0,60 %', '0,60 %']
+    ].map((m, i) => ({
+      year: m[0], total: m[1], company: m[2], worker: m[3],
+      now: i === 0,
+      wBar: 'height: ' + (parseFloat(m[3].replace(',', '.')) / 1.2 * 100).toFixed(1) + '%;',
+      cBar: 'height: ' + (parseFloat(m[2].replace(',', '.')) / 1.2 * 100).toFixed(1) + '%;',
+      delay: 'animation-delay: ' + (i * 90) + 'ms;'
+    }));
+
+    const cost = Math.max(s.pGross + s.pC, 1);
+    const shares = [(s.pGross - s.pW) / cost * 100, s.pW / cost * 100, s.pC / cost * 100];
+    const floors = shares.map((v) => Math.floor(Math.max(v, 0)));
+    let rest = 100 - floors.reduce((a, b) => a + b, 0);
+    const order = shares.map((v, i) => [v - Math.floor(v), i]).sort((a, b) => b[0] - a[0]);
+    for (let i = 0; i < rest && i < 3; i++) floors[order[i][1]] += 1;
+    const per100 = floors;
+    const dotColors = ['var(--k-net)', 'var(--k-worker)', 'var(--k-company)'];
+    const dots = [];
+    for (let i = 0; i < 100; i++) {
+      const kind = i < per100[0] ? 0 : i < per100[0] + per100[1] ? 1 : 2;
+      dots.push({ style: 'background-color: ' + dotColors[kind] + '; animation-delay: ' + (i * 12) + 'ms;' });
+    }
+
+    const fa = Math.max(s.pGross - s.pW, 0) / cost;
+    const fw = s.pW / cost;
+    const fc = s.pC / cost;
+    const sankey = (horiz, A, X) => {
+      const pad = 16;
+      const gap = 40;
+      const span = X - 2 * pad;
+      const a = fa * span, w = fw * span, c = fc * span;
+      const k = (span - gap) / span;
+      const l = [[pad, pad + a], [pad + a, pad + a + w], [pad + a + w, pad + span]];
+      const r = [[pad, pad + a * k], [pad + a * k + gap, pad + a * k + gap + w * k], [pad + a * k + gap + w * k, pad + span]];
+      const x0 = 12, x1 = A - 12, xm = A / 2;
+      const P = (u, v) => (horiz ? u.toFixed(1) + ' ' + v.toFixed(1) : v.toFixed(1) + ' ' + u.toFixed(1));
+      const rib = (i) => 'M' + P(x0, l[i][0]) + ' C' + P(xm, l[i][0]) + ' ' + P(xm, r[i][0]) + ' ' + P(x1, r[i][0]) + ' L' + P(x1, r[i][1]) + ' C' + P(xm, r[i][1]) + ' ' + P(xm, l[i][1]) + ' ' + P(x0, l[i][1]) + ' Z';
+      const mid = (i) => {
+        const y0 = (l[i][0] + l[i][1]) / 2, y1 = (r[i][0] + r[i][1]) / 2;
+        return 'M' + P(x0, y0) + ' C' + P(xm, y0) + ' ' + P(xm, y1) + ' ' + P(x1, y1);
+      };
+      return {
+        a: rib(0), w: rib(1), c: rib(2), la: mid(0), lw: mid(1), lc: mid(2),
+        wa: Math.max(1, a * 0.5).toFixed(1), ww: Math.max(1, w * 0.5).toFixed(1), wc: Math.max(1, c * 0.5).toFixed(1),
+        posA: (horiz ? 'top: ' : 'left: ') + (pad + a * k / 2).toFixed(1) + 'px;',
+        posCot: (horiz ? 'top: ' : 'left: ') + (pad + a * k + gap + (span - a * k - gap) / 2).toFixed(1) + 'px;'
+      };
+    };
+    const bfDefs = [
+      ['cc', 'Contingencias comunes', help.cc], ['un', 'Desempleo', help.un], ['fp', 'Formación profesional', help.fp],
+      ['mei', 'MEI', help.mei], ['fo', 'FOGASA', help.fo],
+      ['at', 'AT/EP', 'Cubre accidentes de trabajo y enfermedades profesionales. En esta calculadora se aplica la categoría seleccionada: ' + cat.code + ' - ' + cat.label + '.']
+    ];
+    const butterfly = bfDefs.map((d, i) => {
+      const k = d[0];
+      const id = 'b-' + k;
+      const wr = r.w[k];
+      const cr = r.c[k];
+      return {
+        label: d[1], help: d[2],
+        hasW: wr !== undefined, hasC: cr !== undefined,
+        noW: wr === undefined,
+        wRate: wr === undefined ? '' : pct(wr), cRate: pct(cr),
+        wAmount: wr === undefined ? '' : eur(s['w_' + k]), cAmount: eur(s['c_' + k]),
+        wBar: 'width: ' + (wr === undefined ? 0 : Math.max(0.8, wr / 23.6 * 100)).toFixed(2) + '%;',
+        cBar: 'width: ' + Math.max(0.8, cr / 23.6 * 100).toFixed(2) + '%;',
+        delay: 'animation-delay: ' + (i * 80) + 'ms;',
+        open: st.help === id,
+        expanded: st.help === id ? 'true' : 'false',
+        sign: st.help === id ? '−' : '+',
+        toggle: () => this.setState({ help: st.help === id ? null : id })
+      };
+    });
+    const pctS = (v) => (Math.max(v, 0) * 100).toFixed(2) + '%';
+    const wfGross = s.pGross / cost;
+    const wfAfter = fa;
+    const segs = [];
+    for (let i = 1; i <= 12; i++) segs.push({ style: 'flex: 1; height: var(--seg-h); border-radius: 99px; background-color: ' + (i <= 3 ? 'var(--seg-on)' : 'var(--seg-off)') + ';' + (i === 3 ? ' transform-origin: left; animation: seggrow .9s cubic-bezier(.2,.8,.2,1) both;' : '') });
+
+    const chunk = this.chunk();
+    const n = this.chunkCount();
+    const chunkFlags = {};
+    for (let i = 0; i < n; i++) chunkFlags['c' + i] = chunk === i;
+    const chunkDots = [];
+    for (let i = 0; i < n; i++) chunkDots.push({ style: 'height: 10px; border-radius: 99px; width: ' + (i === chunk ? 32 : 10) + 'px; background-color: ' + (i <= chunk ? 'var(--dot-on)' : 'var(--dot-off)') + ';' });
+
+    return Object.assign(chunkFlags, {
+      salary: st.salary,
+      fill: ((st.salary - 14000) / (120000 - 14000)) * 100,
+      salaryTxt: eur0(st.salary),
+      onSalary: (e) => this.update({ salary: Number(e.target.value) }),
+      contract: st.contract,
+      onContract: (e) => this.update({ contract: e.target.value }),
+      atep: st.atep,
+      onAtep: (e) => this.update({ atep: e.target.value }),
+      isMonthly: monthly,
+      isAnnual: !monthly,
+      setMonthly: () => { if (!monthly) this.update({ view: 'monthly' }); },
+      setAnnual: () => { if (monthly) this.update({ view: 'annual' }); },
+      suffix: monthly ? '/ mes' : '/ año',
+      flash: flash,
+
+      baseTxt: eur(s.base),
+      groupTxt: 'Grupo 7 - Auxiliares Administrativos',
+      alertMax: gross > p.MAX,
+      alertMin: gross < p.MIN,
+      maxAnnualTxt: eur(p.MAX * 12),
+      excessTxt: eur(Math.max(gross - p.MAX, 0)),
+
+      workerRows: workerRows,
+      companyRows: companyRows,
+      wTotTxt: eur(s.wTot),
+      cTotTxt: eur(s.cTot),
+      wRateTxt: pct(wRate),
+      cRateTxt: pct(cRate),
+
+      meiRows: meiRows,
+      meiOpen: st.meiOpen,
+      meiClosed: !st.meiOpen,
+      meiExpanded: st.meiOpen ? 'true' : 'false',
+      meiToggleLabel: st.meiOpen ? 'Ver menos' : 'Ver más detalle',
+      toggleMei: () => this.setState({ meiOpen: !st.meiOpen }),
+      meiBaseTxt: eur(s.base),
+      meiWTxt: eur(s.meiW),
+      meiCTxt: eur(s.meiC),
+      meiW30Txt: eur(s.meiW30),
+      meiC30Txt: eur(s.meiC30),
+      meiExtraTxt: signed(s.meiW30 + s.meiC30 - s.meiW - s.meiC),
+      meiExtraWTxt: signed(s.meiW30 - s.meiW),
+      meiExtraCTxt: signed(s.meiC30 - s.meiC),
+
+      atepRateTxt: pct(r.c.at),
+      itTxt: pct(cat.it),
+      imsTxt: pct(cat.ims),
+      atepNote: cat.note,
+      hasAtepNote: cat.note !== '',
+      atepNeedle: 'left: ' + Math.min(100, (r.c.at - 1) / (7 - 1) * 100).toFixed(1) + '%;',
+      itShare: 'flex-grow: ' + cat.it + ';',
+      imsShare: 'flex-grow: ' + cat.ims + ';',
+
+      grossTxt: eur(s.gross),
+      afterTxt: eur(s.after),
+      totalTxt: eur(s.total),
+      costTxt: eur(s.cost),
+
+      pBaseTxt: eur(s.pBase),
+      pWRate: nf(wRate, 2),
+      pWTxt: eur(s.pW),
+      pCRate: nf(cRate, 2),
+      pCTxt: eur(s.pC),
+
+      netGrow: 'flex-grow: ' + Math.max(s.pGross - s.pW, 0.01) + ';',
+      workerGrow: 'flex-grow: ' + Math.max(s.pW, 0.01) + ';',
+      companyGrow: 'flex-grow: ' + Math.max(s.pC, 0.01) + ';',
+      net100: per100[0],
+      w100: per100[1],
+      c100: per100[2],
+      dots: dots,
+      donut: 'background: conic-gradient(var(--k-net) 0 ' + (fa * 100).toFixed(2) + '%, var(--k-worker) 0 ' + ((fa + fw) * 100).toFixed(2) + '%, var(--k-company) 0 100%);',
+      skH: sankey(true, 1000, 400),
+      skV: sankey(false, 520, 360),
+      atepDeg: 'transform: rotate(' + (-90 + Math.min(1, (r.c.at - 1) / 6) * 180).toFixed(1) + 'deg);',
+      atepFill: 'height: ' + (Math.min(1, (r.c.at - 1) / 6) * 100).toFixed(1) + '%;',
+      atepFillW: 'width: ' + (Math.max(0.04, Math.min(1, (r.c.at - 1) / 6)) * 100).toFixed(1) + '%;',
+      butterfly: butterfly,
+      wf1: 'height: ' + pctS(wfGross) + ';',
+      wf2: 'bottom: ' + pctS(wfAfter) + '; height: ' + pctS(fw) + ';',
+      wf3: 'height: ' + pctS(wfAfter) + ';',
+      wf4: 'bottom: ' + pctS(wfGross) + '; height: ' + pctS(fc) + ';',
+      wf5: 'height: 100%;',
+      wfLine1: 'bottom: ' + pctS(wfGross) + ';',
+      wfLine2: 'bottom: ' + pctS(wfAfter) + ';',
+      ring: 'background: conic-gradient(#c4455b 0 ' + (Math.min(1, (r.c.at - 1) / 6) * 100).toFixed(1) + '%, #23364e 0 100%);',
+      riskShare: (Math.min(1, (r.c.at - 1) / 6) * 100).toFixed(0),
+      barLabel: 'De cada 100 € que cuesta tu puesto al mes: ' + per100[0] + ' € de bruto después de cotizaciones, ' + per100[1] + ' € de cotizaciones del trabajador y ' + per100[2] + ' € de cotizaciones de la empresa.',
+
+      segs: segs,
+      chunkDots: chunkDots,
+      atStart: chunk === 0,
+      atEnd: chunk === n - 1,
+      notEnd: chunk !== n - 1,
+      prev: () => this.setState({ chunk: Math.max(0, chunk - 1) }),
+      next: () => { if (chunk < n - 1) this.setState({ chunk: chunk + 1 }); },
+      chunkLabel: (chunk + 1) + ' / ' + n
+    });
+  }
+}
+</script>
+</body>
+</html>

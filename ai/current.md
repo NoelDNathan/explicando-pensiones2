@@ -86,7 +86,9 @@ con el paso 3 completo como muestra: A Editorial, B Enfoque, C Nómina viva, D E
 cada una en escritorio y móvil. D es la favorita; D2 es una variante suya (gráfico de
 mariposa trabajador/empresa, anillo AT/EP y resumen en cascada), junto a D en el lienzo. E y F usan paletas nuevas que no
 existen como tokens: si se eligen, habrá que crear sus `--fiscal-*` antes de implementarlas.
-Pendiente: que se elija dirección.
+**Elegida la dirección D (Escenario)** el 2026-09-26. La skill del proyecto
+`.claude/skills/diseno-escenario/` recoge su lenguaje (tokens de escenario, tipografía,
+movimiento y patrones) para aplicarlo paso a paso. Siguiente: piloto en los pasos 0 y 5.
 
 ### Base de datos (Supabase)
 
