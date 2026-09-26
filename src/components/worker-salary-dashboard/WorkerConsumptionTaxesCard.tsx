@@ -486,6 +486,7 @@ export function WorkerConsumptionTaxesCard({
   onResultChange,
   onDraftChange,
 }: WorkerConsumptionTaxesCardProps) {
+  const variant = useFiscalVariant()
   const storedIntroChoice = introChoiceMode === 'once' ? readIntroChoice() : null
   const [budgetAnnual, setBudgetAnnual] = useState(
     initialDraft?.budgetAnnual ?? initialBudgetAnnual,
@@ -622,8 +623,13 @@ export function WorkerConsumptionTaxesCard({
       <header className="wctc-header">
         <div className="wctc-heading">
           <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 12</span>
-          <h2 id="wctc-title">8. IVA y consumo diario</h2>
-          <p>Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>
+          <h2 id="wctc-title">{variant === 'escenario' ? 'IVA y consumo diario' : '8. IVA y consumo diario'}</h2>
+          {variant === 'escenario' ? (
+            <>
+              <p className="wctc-heading__subtitle">El impuesto sobre lo que compras</p>
+              <p>El IVA es el Impuesto sobre el Valor Añadido: el impuesto que pagas al comprar bienes o servicios. Va incluido en el precio; no se descuenta de la nómina como el IRPF. Los impuestos especiales se suman en consumos concretos, como carburantes, alcohol, tabaco o energía.</p>
+            </>
+          ) : <p>Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>}
         </div>
 
         <div className="wctc-header-actions">

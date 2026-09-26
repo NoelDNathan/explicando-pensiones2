@@ -126,6 +126,7 @@
   font-size: var(--fiscal-text-lead);
   line-height: 1.5;
 }
+.fwd--escenario .wctc-heading__subtitle { margin-bottom: 18px; color: var(--fiscal-stage-text); font-size: clamp(1.4rem, 1rem + 1vw, 2rem); font-weight: 750; }
 .fwd--escenario :is(.witc-region, .witc-salary, .wctc-budget, .wfin-controls, .wkcc-badges) {
   padding: 20px;
   border-radius: var(--fiscal-radius-stage-panel);

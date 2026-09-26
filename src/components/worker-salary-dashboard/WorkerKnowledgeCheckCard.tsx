@@ -815,7 +815,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
             <span aria-hidden="true" />
             Paso 11 de 12
           </span>
-          <h2 id="wkcc-title">11. Comprueba lo aprendido</h2>
+          <h2 id="wkcc-title">{variant === 'escenario' ? 'Comprueba lo aprendido' : '11. Comprueba lo aprendido'}</h2>
           <p>
             Un repaso por apartados para ver qué se te ha quedado del recorrido. No hay nota que valga para nada:
             sirve para detectar lo que aún no está claro.

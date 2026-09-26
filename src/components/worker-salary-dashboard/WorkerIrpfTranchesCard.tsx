@@ -442,8 +442,9 @@ export function WorkerIrpfTranchesCard({
       </header>
 
       <p className="witc-intro">
-        Tu IRPF se calcula con dos escalas distintas: la estatal y la de tu comunidad. Solo se tributa
-        por la parte de renta que cae en cada tramo.
+        {variant === 'escenario'
+          ? 'El IRPF es el Impuesto sobre la Renta de las Personas Físicas: el impuesto personal que pagas a Hacienda sobre lo que ganas en el año. En el paso 5 calculamos la base liquidable, que es la cantidad sobre la que se aplica.'
+          : 'Tu IRPF se calcula con dos escalas distintas: la estatal y la de tu comunidad. Solo se tributa por la parte de renta que cae en cada tramo.'}
       </p>
 
       {currentCombinedMarginalRate > 0 && !showSalaryControl && (

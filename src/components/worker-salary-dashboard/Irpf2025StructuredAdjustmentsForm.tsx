@@ -270,7 +270,7 @@ function ReductionQuestion({ question, description, guide, children, initiallyRe
   if (variant === 'escenario') {
     return (
       <EscQuestion
-        question={<>{question}<QuestionEffect amount={effectAmount} kind={effectKind} /></>}
+        question={effectKind === 'exempt' ? question : <>{question}<QuestionEffect amount={effectAmount} kind={effectKind} /></>}
         help={<>{description}{guide ? <div className="irpf-reduction-question__guide">{guide}</div> : null}</>}
         value={answer === 'unanswered' ? null : answer === 'yes'}
         onChange={(next) => next ? chooseYes() : chooseNo()}

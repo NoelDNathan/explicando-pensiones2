@@ -105,19 +105,16 @@ movimiento y patrones) para aplicarlo paso a paso.
 - **Pasos 0-2:** completos en D: las dos preguntas y el resultado con duelo y 100 casillas; el
   reparto en 12/14 pagas y complementos; y el pasillo entre bases mínima y máxima. Sus estados
   siguen conectados a los cálculos existentes y las tres piezas se pueden revisar en `/componentes`.
-- **Pasos 4-12:** los cuerpos de la v2 ya incorporan sus protagonistas D sin alterar el cálculo:
-  preguntas Sí/No y capítulos en 4, 5 y 7; escalones por tramo en 6; cesta horizontal
-  para el IVA en 8; preguntas y relojes de vivienda/coche en 9; cien casillas en el resumen 10;
-  escalera de apartados en 11; y fuentes numeradas en 12. La revisión visual final a 1280 y 390 px
-  sigue pendiente porque el navegador local de la sesión no consigue iniciarse.
-- **Ajuste de fidelidad posterior:** la portada del paso 0 usa ya la escala de 84 px que fija la
-  maqueta de pregunta. Las preguntas que manejan los estados reales de los pasos 4, 5 y 7 se han
-  conectado a `EscQuestion`; el IVA usa su cesta horizontal por tipos, y se añadieron las monedas
-  del paso 7 y la jerarquía de los relojes/resultados. El paso 10 convierte sus seis figuras de
-  recaudación en filas de carrera desplegables y el 11 hace protagonistas sus métricas 37/10.
-  La numeración de los capítulos usa 01–04 en el paso 5 y 01–02 en el paso 7 solo en v2.
-  Chrome en modo local permitió revisar la portada a 1280 px; la captura móvil sigue bloqueada por
-  su perfil temporal.
+- **Pasos 4-12:** tienen una primera integración de sus protagonistas D sin alterar el cálculo:
+  preguntas Sí/No y capítulos en 4, 5 y 7; escalones por tramo en 6; cesta horizontal para el IVA
+  en 8; preguntas y relojes de vivienda/coche en 9; cien casillas en el resumen 10; escalera de
+  apartados en 11; y fuentes numeradas en 12. **No se deben dar por terminados todavía**: hace falta
+  reemplazar las composiciones genéricas por cada maqueta y comparar cada paso a 1280 y 390 px.
+- **Auditoría de fidelidad abierta (2026-09-26):** el paso 4 ya recupera el orden, el título, el
+  subtítulo y el texto de la maqueta; su pregunta se muestra antes de la bifurcación fiscal. Las
+  cabeceras de los pasos 5-9 y 11 eliminan en v2 la numeración propia de la v1 y usan los textos de
+  las maquetas. Sigue pendiente una revisión visual real: Chrome local dejó un perfil temporal
+  bloqueado y no hay captura móvil verificable en esta sesión.
 - **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
   (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
   (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que

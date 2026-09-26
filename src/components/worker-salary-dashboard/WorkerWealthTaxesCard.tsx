@@ -699,6 +699,7 @@ export function WorkerWealthTaxesCard({
   onResultChange,
   onDraftChange,
 }: WorkerWealthTaxesCardProps) {
+  const variant = useFiscalVariant()
   const [hasOwnedHome, setHasOwnedHome] = useState<OwnershipAnswer>(() => (
     initialDraft?.hasOwnedHome
     ?? (initialHasOwnedHome || initialCadastralValue > 0 ? 'yes' : 'unanswered')
@@ -814,13 +815,20 @@ export function WorkerWealthTaxesCard({
       <header className="wctc-header">
         <div className="wctc-heading">
           <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 12</span>
-          <h2 id="wwtc-title">9. Vivienda y coche</h2>
-          <p>
-            Aquí no pagas por gastar, sino por tener: el <b>IBI</b> (Impuesto sobre Bienes
-            Inmuebles) de tu vivienda y el <b>IVTM</b> (Impuesto sobre Vehículos de Tracción
-            Mecánica, el llamado «impuesto de circulación») de tu coche se cobran cada año.
-            También puedes recuperar lo que pagaste al comprar, que fue un pago único.
-          </p>
+          <h2 id="wwtc-title">{variant === 'escenario' ? 'Vivienda y coche' : '9. Vivienda y coche'}</h2>
+          {variant === 'escenario' ? (
+            <>
+              <p className="wctc-heading__subtitle">Impuestos por tener, no por gastar</p>
+              <p>Hay impuestos que no dependen de tu consumo, sino de lo que posees. El IBI (Impuesto sobre Bienes Inmuebles) de tu vivienda y el IVTM (Impuesto sobre Vehículos de Tracción Mecánica, el llamado «impuesto de circulación») de tu coche se cobran cada año, así que se reparten al mes y entran en el resumen.</p>
+            </>
+          ) : (
+            <p>
+              Aquí no pagas por gastar, sino por tener: el <b>IBI</b> (Impuesto sobre Bienes
+              Inmuebles) de tu vivienda y el <b>IVTM</b> (Impuesto sobre Vehículos de Tracción
+              Mecánica, el llamado «impuesto de circulación») de tu coche se cobran cada año.
+              También puedes recuperar lo que pagaste al comprar, que fue un pago único.
+            </p>
+          )}
         </div>
       </header>
 
