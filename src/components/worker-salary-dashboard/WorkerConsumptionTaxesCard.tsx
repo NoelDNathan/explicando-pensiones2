@@ -15,6 +15,9 @@ import { InfoButton } from '../ui/InfoButton'
 import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
 import './WorkerTaxStepShell.css'
 import './WorkerConsumptionTaxesCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { DH2 } from './escenario/EscenarioParts'
+import './escenario/EscenarioIva.css'
 
 type ConsumptionTaxTone = 'green' | 'blue' | 'cyan' | 'orange' | 'purple' | 'red' | 'neutral'
 
@@ -459,6 +462,7 @@ export function WorkerConsumptionTaxesCard({
   onResultChange,
   onDraftChange,
 }: WorkerConsumptionTaxesCardProps) {
+  const isEscenario = useFiscalVariant() === 'escenario'
   const storedIntroChoice = introChoiceMode === 'once' ? readIntroChoice() : null
   const [budgetAnnual, setBudgetAnnual] = useState(
     initialDraft?.budgetAnnual ?? initialBudgetAnnual,
@@ -587,6 +591,177 @@ export function WorkerConsumptionTaxesCard({
   const formatShareOfSpend = (value: number) => result.assignedSpendAnnual > 0
     ? `${formatNumber((value / result.assignedSpendAnnual) * 100)}% del gasto`
     : 'Sin gasto asignado'
+
+  if (isEscenario) {
+    const rateGroup = (line: ConsumptionTaxLine) => (
+      (line.specialRate ?? 0) > 0 ? 'special' : line.vatRate >= 21 ? '21' : line.vatRate >= 10 ? '10' : line.vatRate >= 4 ? '4' : '0'
+    )
+    const groupLabels: Record<string, string> = { '0': '0%', '4': '4%', '10': '10%', '21': '21%', special: '21% + especial' }
+    const groups = ['0', '4', '10', '21', 'special']
+      .map((group) => ({
+        group,
+        share: result.lines.filter((line) => rateGroup(line) === group).reduce((total, line) => total + line.sharePercent, 0),
+      }))
+      .filter((entry) => entry.share > 0.005)
+    const missingShare = Math.max(0, shareDifference)
+    const monthly = (value: number) => formatEuro(toMonthly(value))
+    return (
+      <>
+      <ConsumptionTaxesIntroDialog open={introOpen} onChoose={handleIntroChoice} />
+      <section className="d-page esc-iva" aria-labelledby="wctc-title">
+        <h2 id="wctc-title" className="esc-sr">8. IVA y consumo diario</h2>
+        <section className="d-stack" aria-labelledby="esc-iva-dist">
+          <div className="esc-iva__head">
+            <div className="d-stack">
+              <DH2 id="esc-iva-dist" accent="del gasto">Distribución</DH2>
+              <p className="d-small">Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>
+            </div>
+            <output className="esc-iva__total" aria-live="polite">
+              <span className={`d-fig d-fig-xl ${totalStatus === 'ok' ? 'd-acc' : 'd-yellow'}`}>{formatNumber(result.totalSharePercent)}%</span>
+              <span className="d-lab">
+                {totalStatus === 'ok'
+                  ? 'Distribución completa'
+                  : `${shareDifference > 0 ? 'Falta' : 'Sobran'} ${formatNumber(shareGapPercent)} % · ${formatEuro(amountGapMonthly)} / mes`}
+              </span>
+            </output>
+          </div>
+          <div
+            className="esc-iva__basket"
+            role="img"
+            aria-label={groups.length > 0
+              ? `Reparto del gasto por tipo de IVA: ${groups.map((entry) => `${groupLabels[entry.group]}, ${formatNumber(entry.share)} %`).join('; ')}`
+              : 'Asigna importe o porcentaje a las categorías para ver el reparto.'}
+          >
+            {groups.map((entry) => (
+              <span key={entry.group} className={`esc-iva__slice esc-vat--${entry.group}`} style={{ flexGrow: entry.share }}>
+                <strong>{groupLabels[entry.group]}</strong>
+                <span>{formatNumber(entry.share)} %</span>
+              </span>
+            ))}
+            {missingShare > 0.05 ? (
+              <span className="esc-iva__slice esc-iva__slice--missing" style={{ flexGrow: missingShare }}>
+                {/* texto nuevo D: rótulo del hueco sin repartir */}
+                <strong>Falta</strong>
+                <span>{formatNumber(missingShare)} %</span>
+              </span>
+            ) : null}
+          </div>
+          <div className="esc-iva__scale" aria-hidden="true">
+            {['0', '4', '10', '21', 'special'].map((group, index) => (
+              <span key={group} className="esc-iva__scale-item">
+                {index > 0 ? <span className="d-faint">→</span> : null}
+                <span className={`esc-iva__chip esc-vat--${group}`}>{groupLabels[group]}</span>
+              </span>
+            ))}
+          </div>
+          <div className="d-row">
+            <button type="button" className="d-outline" onClick={applyAverageSharePresets}>Valores medios (España)</button>
+            <button type="button" className="d-ghost" onClick={resetShares}>
+              <RotateCcw size={18} aria-hidden="true" />
+              Restablecer
+            </button>
+          </div>
+          <p className="d-note esc-iva__tip">
+            <strong>Consejo.</strong> En la app de tu banco suele aparecer el gasto mensual y el
+            porcentaje de cada categoría (alimentación, ocio, transporte...). Usa esas cifras
+            para rellenar importe y % con tu patrón real, no con una media.
+          </p>
+        </section>
+
+        <section className="esc-iva__table" aria-label="Distribución del gasto">
+          <div className="esc-iva__row esc-iva__row--head" aria-hidden="true">
+            <span />
+            <span>Categoría de gasto</span>
+            <span>Tipo impositivo / regla</span>
+            <span>Importe al mes</span>
+            <span>% del gasto</span>
+          </div>
+          {result.lines.map((line, index) => (
+            <div key={line.id} className="esc-iva__line">
+              <div className="esc-iva__row">
+                <span className="d-fig esc-iva__n">{index + 1}</span>
+                <span className="esc-iva__label">
+                  <strong>{line.label}</strong>
+                  {line.help ? (
+                    <InfoButton label={`Qué incluye ${line.label.replace(/\s*\*$/, '')}`} size="sm" placement="end" className="wctc-help">
+                      <p>{line.help}</p>
+                    </InfoButton>
+                  ) : null}
+                </span>
+                <span className={`esc-iva__chip esc-vat--${rateGroup(line)}`}>{line.statutoryLabel}</span>
+                <label className="d-input">
+                  <span className="esc-sr">Importe mensual en {line.label}</span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={Number(toMonthly(line.spendAnnual).toFixed(2))}
+                    onChange={(event) => updateAmount(line.id, Number(event.target.value))}
+                  />
+                  <span>€</span>
+                </label>
+                <label className="d-input">
+                  <span className="esc-sr">Porcentaje del gasto en {line.label}</span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={0.01}
+                    value={Number(line.sharePercent.toFixed(2))}
+                    onChange={(event) => updateShare(line.id, Number(event.target.value))}
+                  />
+                  <span>%</span>
+                </label>
+              </div>
+              {line.note ? <p className="d-note esc-iva__note">{line.note}</p> : null}
+            </div>
+          ))}
+          <div className="esc-iva__row esc-iva__row--total">
+            <span className="d-fig esc-iva__n" aria-hidden="true">Σ</span>
+            <strong>TOTAL</strong>
+            <output aria-label="Tipo impositivo medio del reparto">
+              {showAverageConsumptionTaxRate ? `${formatNumber(averageConsumptionTaxRate)} % medio` : '—'}
+            </output>
+            <output className="esc-iva__cell">{monthly(result.assignedSpendAnnual)}</output>
+            <output className="esc-iva__cell">{formatNumber(result.totalSharePercent)}%</output>
+          </div>
+        </section>
+
+        <section className="d-stack" aria-labelledby="esc-iva-sum">
+          <h3 id="esc-iva-sum" className="d-h3 d-h3--big">Resumen de impacto fiscal</h3>
+          <div className="d-eq">
+            <output className="d-eq__term">
+              <span className="d-eq__l">Gasto asignado · Total al mes distribuido</span>
+              <strong className="d-eq__v">{monthly(result.assignedSpendAnnual)}</strong>
+            </output>
+            <span className="d-eq__op" aria-hidden="true">→</span>
+            <output className="d-eq__term">
+              <span className="d-eq__l">IVA estimado · Aprox. al mes</span>
+              <strong className="d-eq__v d-yellow">{monthly(result.vatAnnual)}</strong>
+              <span className="d-eq__l">{formatShareOfSpend(result.vatAnnual)}</span>
+            </output>
+            <span className="d-eq__op" aria-hidden="true">+</span>
+            <output className="d-eq__term">
+              <span className="d-eq__l">Impuestos especiales · Aprox. al mes</span>
+              <strong className="d-eq__v d-red">{monthly(result.specialTaxesAnnual)}</strong>
+              <span className="d-eq__l">{formatShareOfSpend(result.specialTaxesAnnual)}</span>
+            </output>
+            <span className="d-eq__op" aria-hidden="true">=</span>
+            <output className="d-eq__term">
+              <span className="d-eq__l">Impuestos al consumir · Suma al mes</span>
+              <strong className="d-eq__v d-eq__v--hero d-acc">{monthly(result.totalTaxAnnual)}</strong>
+              <span className="d-eq__l">{formatShareOfSpend(result.totalTaxAnnual)}</span>
+            </output>
+          </div>
+          <p className="d-note">
+            El IBI de tu vivienda y el IVTM de tu coche no dependen de cómo gastas: se estiman en
+            el paso 9.
+          </p>
+        </section>
+      </section>
+      </>
+    )
+  }
 
   return (
     <>

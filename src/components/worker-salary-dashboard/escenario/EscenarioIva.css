@@ -1,0 +1,58 @@
+/* Paso 8 (IVA y consumo diario) en la v2. Maqueta: Paso08.dc.html */
+.esc-vat--0 { background: var(--fiscal-stage-vat-0); color: var(--fiscal-stage-text); }
+.esc-vat--4 { background: var(--fiscal-stage-vat-4); color: var(--fiscal-stage); }
+.esc-vat--10 { background: var(--fiscal-stage-vat-10); color: var(--fiscal-stage); }
+.esc-vat--21 { background: var(--fiscal-stage-vat-21); color: var(--fiscal-stage-text); }
+.esc-vat--special { background: var(--fiscal-stage-vat-special); color: var(--fiscal-stage-text); }
+
+.esc-iva__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 20px 32px; }
+.esc-iva__total { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.esc-iva__basket { display: flex; min-height: 140px; border-radius: 28px; overflow: hidden; background: var(--fiscal-stage-raised); }
+.esc-iva__slice {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 0;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-right: 4px solid var(--fiscal-stage);
+  transition: flex-grow var(--fiscal-duration-base) var(--fiscal-ease-out);
+}
+.esc-iva__slice:last-child { border-right: 0; }
+.esc-iva__slice strong { font-family: var(--fiscal-font-display); font-size: clamp(1.125rem, 0.8rem + 1.2vw, 1.625rem); font-weight: 900; white-space: nowrap; }
+.esc-iva__slice span { font-size: 0.9375rem; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.esc-iva__slice--missing { background: repeating-linear-gradient(135deg, var(--fiscal-stage-raised) 0 10px, var(--fiscal-stage) 10px 20px); color: var(--fiscal-stage-muted); }
+.esc-iva__scale { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 0.9375rem; }
+.esc-iva__scale-item { display: inline-flex; align-items: center; gap: 6px; }
+.esc-iva__chip { display: inline-flex; align-items: center; justify-self: start; padding: 5px 12px; border-radius: 999px; font-size: 0.875rem; font-weight: 800; white-space: nowrap; }
+.esc-iva__tip strong { color: var(--fiscal-stage-text); }
+
+.esc-iva__table { display: flex; flex-direction: column; }
+.esc-iva__row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 170px 160px 120px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+}
+.esc-iva__line { border-top: 1px solid var(--fiscal-stage-line); }
+.esc-iva__row--head { padding: 0 0 8px; font-size: 0.875rem; font-weight: 600; color: var(--fiscal-stage-muted); }
+.esc-iva__row--total { border-top: 2px solid var(--fiscal-stage-text); font-weight: 700; }
+.esc-iva__row--total output { color: var(--fiscal-stage-muted); }
+.esc-iva__row--total .esc-iva__cell { text-align: right; padding-right: 16px; color: var(--fiscal-stage-text); font-variant-numeric: tabular-nums; }
+.esc-iva__n { font-size: 1.625rem; color: var(--fiscal-stage-faint); }
+.esc-iva__label { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.esc-iva__label strong { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); }
+.esc-iva__note { padding: 0 0 12px 60px; }
+@media (max-width: 900px) {
+  .esc-iva__row { grid-template-columns: 36px minmax(0, 1fr) minmax(0, 1fr); }
+  .esc-iva__row--head { display: none; }
+  .esc-iva__row .esc-iva__chip { grid-column: 2 / -1; }
+  .esc-iva__row .d-input { grid-column: auto; }
+  .esc-iva__row > .d-input:first-of-type { grid-column: 2; }
+  .esc-iva__row--total { grid-template-columns: 36px minmax(0, 1fr) auto; }
+  .esc-iva__note { padding-left: 52px; }
+  .esc-iva__head { grid-template-columns: minmax(0, 1fr); }
+  .esc-iva__total { align-items: flex-start; }
+}
