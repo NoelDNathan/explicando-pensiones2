@@ -38,7 +38,8 @@ fuentes del calculo.
 - El paso 0 empieza con una pregunta obligatoria: «De cada 100 € que cuesta tu trabajo, ¿cuántos
   crees que acaban en Hacienda y la Seguridad Social?» (deslizador 0-70 €), luego el salario y
   después la comparación con el cálculo. La respuesta se guarda en `fwd-tax-guess-v1`, fuera del
-  escenario, para que no viaje en los enlaces compartidos.
+  escenario, para que no viaje en los enlaces compartidos; solo se puede contestar una vez (sin
+  «Volver a responder» ni borrado desde la UI).
 - Todo se calcula en el navegador y se guarda en `localStorage`; no hay backend.
 - El estado completo vive en `fiscalScenario.ts` (tipo `FiscalScenario`, con version, serializado
   y validacion defensiva) y se autoguarda con retardo en `fwd-fiscal-scenario-v1`. Al recargar se

@@ -123,6 +123,13 @@ export function WorkerFiscalSummaryCard({
     quizHeadingRef.current?.focus();
   }, [stage]);
 
+  // Una vez guardada la respuesta (prop o localStorage del padre), no se repite el cuestionario.
+  useEffect(() => {
+    if (!quizEnabled || taxGuess === null) return;
+    setDraftGuess(taxGuess);
+    setStage("reveal");
+  }, [quizEnabled, taxGuess]);
+
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>("absolute");
   const [period, setPeriod] = useState<SummaryPeriod>("month");
   const fiscalVariant = useFiscalVariant();
@@ -288,9 +295,6 @@ export function WorkerFiscalSummaryCard({
               >
                 Ver mi resultado {arrow}
               </button>
-              <button type="button" className="d-ghost" onClick={() => setStage("guess")}>
-                Cambiar mi respuesta ({draftGuess} €)
-              </button>
             </footer>
           </section>
         );
@@ -385,17 +389,6 @@ export function WorkerFiscalSummaryCard({
                     {periodSuffix} de los {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu
                     puesto.
                   </p>
-                  <button
-                    type="button"
-                    className="d-outline"
-                    onClick={() => {
-                      onTaxGuessChange?.(null);
-                      setDraftGuess(null);
-                      setStage("guess");
-                    }}
-                  >
-                    Volver a responder
-                  </button>
                 </div>
               </div>
             </section>
@@ -558,9 +551,6 @@ export function WorkerFiscalSummaryCard({
               Ver mi resultado
               <ArrowRight size={18} aria-hidden="true" />
             </button>
-            <button type="button" className="wfsc-quiz__back" onClick={() => setStage("guess")}>
-              Cambiar mi respuesta ({draftGuess} €)
-            </button>
           </footer>
         </section>
       );
@@ -689,17 +679,6 @@ export function WorkerFiscalSummaryCard({
               {periodSuffix} de los {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu
               puesto.
             </p>
-            <button
-              type="button"
-              className="wfsc-quiz__back"
-              onClick={() => {
-                onTaxGuessChange?.(null);
-                setDraftGuess(null);
-                setStage("guess");
-              }}
-            >
-              Volver a responder
-            </button>
           </div>
         ) : (
         <div className="wfsc-intro__headline" aria-live="polite">
