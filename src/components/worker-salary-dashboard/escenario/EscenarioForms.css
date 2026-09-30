@@ -629,3 +629,8 @@
   .fwd.fwd--escenario .wir.wir--embedded .wir-sim .wir-kpi strong,
   .fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .wir-kpi strong { font-size: min(1.875rem, 17cqi); }
 }
+
+/* Paso 5 · al engancharse el simulador encoge ~400 px; el anclaje de scroll del navegador compensaba ese
+   cambio moviendo la página, el centinela volvía a quedar debajo de la línea y el panel saltaba entre
+   grande y pequeño. Sin anclaje dentro del explicador, el cambio ocurre una sola vez. */
+.fwd.fwd--escenario .wir.wir--embedded { overflow-anchor: none; }

@@ -109,7 +109,8 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Paso 2 v2: el selector de grupo y el conmutador Mensual/Anual comparten eje vertical (centro del trigger); más separación entre el círculo G y el nombre.
 - Paso 4 v2: en móvil (bajo 900 px) la cabecera sin número (`--no-num`) ya no hereda la rejilla del hueco de la cifra gigante; el título y el párrafo de «Cotiza entero…» usan todo el ancho (2026-09-30).
 - Paso 4 v2: exención / reducción / deducción como tres filas (término grande en su color, explicación y etiqueta del paso). Paso 3 v2: los tipos del selector AT/EP empiezan bajo el nombre (2026-09-30).
-- Paso 5 v2: aviso «no aplica» oscuro con franja amarilla (roja si está bloqueada); tramos como lista de filas con el tuyo resaltado; cifras del simulador ajustadas a su celda (enganchado y móvil) y escala del deslizador con tres marcas en móvil (2026-09-30).
+- Paso 5 v2: aviso «no aplica» oscuro con franja amarilla (roja si está bloqueada); tramos como lista de filas con el tuyo resaltado; cifras del simulador ajustadas a su celda (enganchado y móvil) y escala del deslizador con tres marcas en móvil; sin anclaje de scroll para que no salte al engancharse (2026-09-30).
+- Paso 6 v2: las cuatro cifras del resultado en una línea (2 × 2 con el total arriba en móvil) (2026-09-30).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
 «Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
 
