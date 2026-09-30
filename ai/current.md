@@ -96,27 +96,10 @@ movimiento y patrones) para aplicarlo paso a paso.
   filas de carrera, escalera, aguja, ecuación, cifras que cuentan, interruptor segmentado).
 - **Todos los pasos:** barra de progreso con 12 segmentos, título a todo el ancho, textos sin
   tarjeta, nómina en panel y navegación en píldoras con el nombre del paso.
-- **Piezas comunes de D:** el primer párrafo de cada paso queda alineado a la izquierda; la
-  nómina de los pasos 1-6 y 8-9 ya se muestra en panel oscuro con las mismas cifras en vivo y
-  resaltados por paso. `EscQuestion` y `EscChapter` están preparados y documentados en
-  `/componentes` para los pasos 5, 7 y 9; su integración llegará con el rediseño de esos pasos.
 - **Paso 3 completo como la maqueta D** (consola, casillas + párrafo en vivo, trabajador/empresa
   con barras desplegables, paneles MEI y AT/EP, resumen en ecuación).
-- **Pasos 0-2:** completos en D: las dos preguntas y el resultado con duelo y 100 casillas; el
-  reparto en 12/14 pagas y complementos; y el pasillo entre bases mínima y máxima. Sus estados
-  siguen conectados a los cálculos existentes y las tres piezas se pueden revisar en `/componentes`.
-- **Pasos 4-12:** tienen una primera integración de sus protagonistas D sin alterar el cálculo:
-  preguntas Sí/No y capítulos en 4, 5 y 7; escalones por tramo en 6; cesta horizontal para el IVA
-  en 8; preguntas y relojes de vivienda/coche en 9; cien casillas en el resumen 10; escalera de
-  apartados en 11; y fuentes numeradas en 12. **No se deben dar por terminados todavía**: hace falta
-  reemplazar las composiciones genéricas por cada maqueta y comparar cada paso a 1280 y 390 px.
-- **Auditoría de fidelidad abierta (2026-09-26):** el paso 4 ya recupera el orden, el título, el
-  subtítulo y el texto de la maqueta; su pregunta se muestra antes de la bifurcación fiscal. Las
-  cabeceras de los pasos 5-9 y 11 eliminan en v2 la numeración propia de la v1 y usan los textos de
-  las maquetas. El patrón de capítulos 01–04/01–02 ya reserva la columna de 200 px y permite que
-  sus títulos se partan en la columna restante, evitando el corte detectado en «Ventajas del
-  trabajo». Sigue pendiente una revisión visual real: el navegador local no inicia y no hay
-  captura móvil verificable en esta sesión.
+- **Pendiente:** el cuerpo interactivo de los pasos 1-2 y 4-12 sigue siendo el de la v1 en oscuro.
+  Siguiente: darle su protagonista de D paso a paso, y llevar las piezas a `/componentes`.
 - **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
   (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
   (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que

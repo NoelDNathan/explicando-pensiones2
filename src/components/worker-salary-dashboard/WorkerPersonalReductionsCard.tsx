@@ -29,12 +29,9 @@ import {
   workBenefitsCouldApply,
 } from "../fiscal-worker-dashboard/irpf2025Calc";
 import { InfoButton } from "../ui/InfoButton";
-import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
-import { EscQuestion } from './escenario/EscenarioCommon'
 import { getRegionDeductionLink } from "./regionDeductionLinks";
 import "./Irpf2025StructuredAdjustmentsForm.css";
 import "./WorkerPersonalReductionsCard.css";
-import './escenario/EscenarioPersonalReductions.css'
 
 export type MaritalStatus = "single" | "married" | "divorced" | "widowed";
 export type SelectOption = { value: string; label: string };
@@ -372,7 +369,6 @@ function FamilyQuestion({
   onYes?: () => void;
   onNo: () => void;
 }) {
-  const variant = useFiscalVariant()
   const [answer, setAnswer] = useState<"unanswered" | "yes" | "no">(() =>
     initiallyRelevant ? "yes" : "no",
   );
@@ -384,19 +380,6 @@ function FamilyQuestion({
     onNo();
     setAnswer("no");
   };
-
-  if (variant === 'escenario') {
-    return (
-      <EscQuestion
-        question={question}
-        help={description}
-        value={answer === 'yes'}
-        onChange={(next) => next ? chooseYes() : chooseNo()}
-      >
-        {children}
-      </EscQuestion>
-    )
-  }
 
   return (
     <section className={`irpf-reduction-question is-${answer}`} aria-label={question}>
@@ -1101,7 +1084,6 @@ export function WorkerPersonalReductionsCard({
   engineWarnings = [],
   onResultChange,
 }: WorkerPersonalReductionsCardProps) {
-  const variant = useFiscalVariant()
   const showReductionsSection = focus === "reductions";
   const showInKindSection = focus === "in-kind";
   const showDeductionsSection = focus === "deductions-benefits";
@@ -1474,7 +1456,7 @@ export function WorkerPersonalReductionsCard({
   );
 
   return (
-    <section className={`wprc wprc--${focus}${variant === 'escenario' ? ' wprc--escenario' : ''}`} aria-labelledby="wprc-title">
+    <section className={`wprc wprc--${focus}`} aria-labelledby="wprc-title">
       <div className="wprc-hero">
         <header className="wprc-header">
           <div className="wprc-step-orb" aria-hidden="true">
@@ -1486,57 +1468,20 @@ export function WorkerPersonalReductionsCard({
             </span>
             <h2 id="wprc-title">
               {showReductionsSection
-                ? variant === 'escenario'
-                  ? <>Base <span className="wprc-title__accent">liquidable</span></>
-                  : "Responde unas preguntas y ajustamos tu IRPF"
+                ? "Responde unas preguntas y ajustamos tu IRPF"
                 : showInKindSection
-                  ? variant === 'escenario'
-                    ? <>Retribución en <span className="wprc-title__accent">especie</span></>
-                    : "¿Tu empresa te paga algo que no es dinero?"
-                  : variant === 'escenario'
-                    ? <>Deducciones <span className="wprc-title__accent">de cuota</span></>
-                    : "Responde y restamos de tu cuota"}
+                  ? "¿Tu empresa te paga algo que no es dinero?"
+                  : "Responde y restamos de tu cuota"}
             </h2>
-            {showReductionsSection && variant === 'escenario' ? (
-              <>
-                <p className="wprc-title__subtitle">Calculando las reducciones y el mínimo personal y familiar</p>
-                <p>
-                  Ya tenemos tu bruto del paso 1, lo que pagas a la Seguridad Social del paso 3 y la
-                  parte de especie que queda exenta del paso 4.
-                </p>
-              </>
-            ) : showInKindSection && variant === 'escenario' ? (
-              <>
-                <p className="wprc-title__subtitle">Lo que la empresa te paga sin darte dinero</p>
-                <p>
-                  Algunas empresas pagan parte de lo que ganas en forma de beneficios, no de dinero:
-                  ticket restaurante, abono de transporte, seguro médico o guardería. Si no tienes
-                  ninguno, responde «No» y continúa. Es un paso de una sola pregunta.
-                </p>
-              </>
-            ) : showDeductionsSection && variant === 'escenario' ? (
-              <>
-                <p className="wprc-title__subtitle">Bajan el impuesto, no lo que ganas</p>
-                <p>En el paso 6 hemos calculado la cuota: lo que te sale a pagar de IRPF según los tramos.</p>
-              </>
-            ) : (
-              <p>
-                {showReductionsSection
-                  ? "No necesitas saber de impuestos: responde solo a lo que se parezca a tu situación. Si algo no te aplica, elige No o déjalo cerrado."
-                  : showInKindSection
-                    ? "Una sola pregunta. Si no tienes ticket restaurante, transporte, seguro médico ni guardería de empresa, responde No y continúa."
-                    : "No hace falta el BOE: responde solo a lo que se parezca a tu situación. Mira los importes en tu nómina o certificado de retenciones. Si algo no te aplica, elige No."}
-              </p>
-            )}
+            <p>
+              {showReductionsSection
+                ? "No necesitas saber de impuestos: responde solo a lo que se parezca a tu situación. Si algo no te aplica, elige No o déjalo cerrado."
+                : showInKindSection
+                  ? "Una sola pregunta. Si no tienes ticket restaurante, transporte, seguro médico ni guardería de empresa, responde No y continúa."
+                  : "No hace falta el BOE: responde solo a lo que se parezca a tu situación. Mira los importes en tu nómina o certificado de retenciones. Si algo no te aplica, elige No."}
+            </p>
           </div>
         </header>
-
-        {variant === 'escenario' && showDeductionsSection ? (
-          <div className="wprc-deduction-coins" aria-hidden="true">
-            <span className="wprc-deduction-coin wprc-deduction-coin--full"><strong>1 €</strong><small>deducción</small></span>
-            <span className="wprc-deduction-coin wprc-deduction-coin--partial"><strong>0,30 €</strong><small>reducción</small></span>
-          </div>
-        ) : null}
  
       </div>
 
@@ -1544,7 +1489,7 @@ export function WorkerPersonalReductionsCard({
         <>
           <section className="wprc-net-income" aria-labelledby="wprc-net-income-title">
             <header className="wprc-net-income__head">
-              <span className="wprc-net-income__num" aria-hidden="true">{variant === 'escenario' ? '01' : '1'}</span>
+              <span className="wprc-net-income__num" aria-hidden="true">1</span>
               <div>
                 <h3 id="wprc-net-income-title">Gastos deducibles</h3>
                 <p>
@@ -1656,7 +1601,7 @@ export function WorkerPersonalReductionsCard({
             onChange={setAdjustments}
           />
           <section className="wprc-question-intro" aria-labelledby="wprc-work-benefits">
-            <span aria-hidden="true">{variant === 'escenario' ? '02' : '2'}</span>
+            <span aria-hidden="true">2</span>
             <div>
               <h3 id="wprc-work-benefits">Ventajas del trabajo</h3>
               <p>
@@ -1858,7 +1803,7 @@ export function WorkerPersonalReductionsCard({
             </div>
           </section>
           <section className="wprc-question-intro" aria-labelledby="wprc-declared-reductions">
-            <span aria-hidden="true">{variant === 'escenario' ? '03' : '3'}</span>
+            <span aria-hidden="true">3</span>
             <div>
               <h3 id="wprc-declared-reductions">Aportaciones que reducen tu base</h3>
               <p>
@@ -1877,7 +1822,7 @@ export function WorkerPersonalReductionsCard({
             onChange={setAdjustments}
           />
           <section className="wprc-question-intro" aria-labelledby="wprc-family-questions">
-            <span aria-hidden="true">{variant === 'escenario' ? '04' : '4'}</span>
+            <span aria-hidden="true">4</span>
             <div>
               <h3 id="wprc-family-questions">Cómo tu situación familiar afecta a tu IRPF</h3>
               <p>
@@ -2255,7 +2200,7 @@ export function WorkerPersonalReductionsCard({
           </section>
 
           <section className="wprc-question-intro" aria-labelledby="wprc-quota-deductions">
-            <span aria-hidden="true">{variant === 'escenario' ? '01' : '1'}</span>
+            <span aria-hidden="true">1</span>
             <div>
               <h3 id="wprc-quota-deductions">Deducciones de cuota</h3>
               <p>
@@ -2279,7 +2224,7 @@ export function WorkerPersonalReductionsCard({
           />
 
           <section className="wprc-question-intro" aria-labelledby="wprc-refundable">
-            <span aria-hidden="true">{variant === 'escenario' ? '02' : '2'}</span>
+            <span aria-hidden="true">2</span>
             <div>
               <h3 id="wprc-refundable">Reembolsables</h3>
               <p>

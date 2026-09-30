@@ -45,7 +45,6 @@ import type {
 } from './workerKnowledgeCheckQuestions'
 import { sendKnowledgeCheckReport } from './knowledgeCheckReporting'
 import type { KnowledgeCheckReport, ReportStatus } from './knowledgeCheckReporting'
-import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import './WorkerKnowledgeCheckCard.css'
 
 const STORAGE_KEY = 'fwd-knowledge-check-2025-v2'
@@ -201,7 +200,6 @@ function readStoredState(): StoredState | null {
 }
 
 export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: WorkerKnowledgeCheckCardProps) {
-  const variant = useFiscalVariant()
   const stored = useMemo(() => readStoredState(), [])
   const [phase, setPhase] = useState<Phase>(stored?.phase ?? 'intro')
   const [sectionIndex, setSectionIndex] = useState(stored?.sectionIndex ?? 0)
@@ -815,17 +813,11 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
             <span aria-hidden="true" />
             Paso 11 de 12
           </span>
-          <h2 id="wkcc-title">{variant === 'escenario' ? 'Comprueba lo aprendido' : '11. Comprueba lo aprendido'}</h2>
+          <h2 id="wkcc-title">11. Comprueba lo aprendido</h2>
           <p>
             Un repaso por apartados para ver qué se te ha quedado del recorrido. No hay nota que valga para nada:
             sirve para detectar lo que aún no está claro.
           </p>
-          {variant === 'escenario' ? (
-            <div className="wkcc-scenario-metrics" aria-label={`${KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas en ${KNOWLEDGE_CHECK_SECTIONS.length} apartados`}>
-              <span><strong>{KNOWLEDGE_CHECK_TOTAL_QUESTIONS}</strong><small>preguntas</small></span>
-              <span><strong>{KNOWLEDGE_CHECK_SECTIONS.length}</strong><small>apartados</small></span>
-            </div>
-          ) : null}
         </div>
         <div className="wkcc-badges">
           <span className="wkcc-badge wkcc-badge--optional">

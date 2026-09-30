@@ -12,9 +12,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts'
 import { InfoButton } from '../ui/InfoButton'
-import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
-import { EscVatBasket } from './escenario/EscenarioParts'
 import './WorkerTaxStepShell.css'
 import './WorkerConsumptionTaxesCard.css'
 
@@ -359,7 +357,6 @@ type ConsumptionSpendDonutProps = {
 }
 
 function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutProps) {
-  const variant = useFiscalVariant()
   const slices = useMemo<SpendChartSlice[]>(() => (
     lines
       .filter((line) => line.sharePercent > 0.005)
@@ -375,26 +372,6 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
   const chartSummary = slices.length > 0
     ? slices.map((slice) => `${slice.name}: ${formatNumber(slice.sharePercent)} %`).join('; ')
     : 'Sin gasto asignado'
-  const vatBuckets = useMemo(() => {
-    const values = { zero: 0, reduced: 0, intermediate: 0, general: 0, special: 0 }
-    lines.forEach((line) => {
-      if (line.specialRate && line.specialRate > 0) values.special += line.sharePercent
-      else if (line.vatRate <= 0) values.zero += line.sharePercent
-      else if (line.vatRate <= 4) values.reduced += line.sharePercent
-      else if (line.vatRate <= 10) values.intermediate += line.sharePercent
-      else values.general += line.sharePercent
-    })
-    const assigned = Object.values(values).reduce((total, value) => total + value, 0)
-    return [
-      // texto nuevo D: rótulos de la escala visual de IVA.
-      { id: 'zero' as const, label: '0 %', value: values.zero },
-      { id: 'reduced' as const, label: '4 %', value: values.reduced },
-      { id: 'intermediate' as const, label: '10 %', value: values.intermediate },
-      { id: 'general' as const, label: '21 %', value: values.general },
-      { id: 'special' as const, label: '21 % + especial', value: values.special },
-      { id: 'missing' as const, label: 'Falta', value: Math.max(0, 100 - assigned) },
-    ]
-  }, [lines])
 
   if (slices.length === 0) {
     return (
@@ -410,10 +387,7 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
       <figcaption className="wctc-spend-chart__title">Distribución del gasto</figcaption>
       <div className="wctc-spend-chart__body">
         <div className="wctc-spend-chart__viz">
-          {variant === 'escenario' ? (
-            <EscVatBasket segments={vatBuckets} label={`Distribución del gasto por tipo de IVA: ${chartSummary}`} />
-          ) : (
-            <ResponsiveContainer width="100%" height={210}>
+          <ResponsiveContainer width="100%" height={210}>
             <PieChart>
               <Pie
                 data={slices}
@@ -433,8 +407,7 @@ function ConsumptionSpendDonut({ lines, monthlyTotal }: ConsumptionSpendDonutPro
               </Pie>
               <Tooltip content={<SpendDonutTooltip />} />
             </PieChart>
-            </ResponsiveContainer>
-          )}
+          </ResponsiveContainer>
           <div className="wctc-spend-chart__center" aria-hidden="true">
             <strong>{formatEuro(monthlyTotal)}</strong>
             <span>al mes</span>
@@ -486,7 +459,6 @@ export function WorkerConsumptionTaxesCard({
   onResultChange,
   onDraftChange,
 }: WorkerConsumptionTaxesCardProps) {
-  const variant = useFiscalVariant()
   const storedIntroChoice = introChoiceMode === 'once' ? readIntroChoice() : null
   const [budgetAnnual, setBudgetAnnual] = useState(
     initialDraft?.budgetAnnual ?? initialBudgetAnnual,
@@ -623,13 +595,8 @@ export function WorkerConsumptionTaxesCard({
       <header className="wctc-header">
         <div className="wctc-heading">
           <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 12</span>
-          <h2 id="wctc-title">{variant === 'escenario' ? 'IVA y consumo diario' : '8. IVA y consumo diario'}</h2>
-          {variant === 'escenario' ? (
-            <>
-              <p className="wctc-heading__subtitle">El impuesto sobre lo que compras</p>
-              <p>El IVA es el Impuesto sobre el Valor Añadido: el impuesto que pagas al comprar bienes o servicios. Va incluido en el precio; no se descuenta de la nómina como el IRPF. Los impuestos especiales se suman en consumos concretos, como carburantes, alcohol, tabaco o energía.</p>
-            </>
-          ) : <p>Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>}
+          <h2 id="wctc-title">8. IVA y consumo diario</h2>
+          <p>Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>
         </div>
 
         <div className="wctc-header-actions">
