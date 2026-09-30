@@ -104,8 +104,9 @@ movimiento y patrones) para aplicarlo paso a paso.
   y CSS de la v2.
 - Nómina de ejemplo en la v2: `EscenarioPayroll` (filas del paso encendidas, resto atenuado). El líquido total escala con el ancho de la columna de 300 px para que el euro no se salga de la esquina del panel.
 - Pregunta 1 del paso 0: el círculo del deslizador lo pinta la página (no el tirador nativo), porque en Chrome/Edge con la escala de Windows y en Firefox el nativo no sigue al cursor. El del salario sigue siendo el `input` nativo.
-- Cuestionarios v2 (pasos 4, 5, 7): una fila por campo, cifra grande, contador con − y + (solo v2). Paso 9 con «Sí»: cada vivienda o coche es un capítulo sin paneles anidados. Paso 2: escala propia por tramos en el pasillo y selector de grupo en estilo D.
+- Cuestionarios v2 (pasos 4, 5, 7): una fila por campo, cifra grande, contador con − y + (solo v2). Paso 9 con «Sí»: cada vivienda o coche es un capítulo sin paneles anidados. Paso 2: escala propia por tramos en el pasillo y selector de grupo en estilo D (trigger en rejilla G | nombre | min/máx, alineación vertical centrada). Las tres cifras del pasillo (mínima / tu base / máxima) se apilan bajo 900 px y el importe escala al ancho de su columna para no taparse; `/ mes` y `/ año` van en un span más pequeño, como en la maqueta.
 - Paso 1 v2: los complementos salariales anuales van **encima** del gráfico de 12/14 pagas (pedido 2026-09-30; en la maqueta Paso01 iban debajo).
+- Paso 2 v2: el selector de grupo y el conmutador Mensual/Anual comparten eje vertical (centro del trigger); más separación entre el círculo G y el nombre.
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
 «Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
 

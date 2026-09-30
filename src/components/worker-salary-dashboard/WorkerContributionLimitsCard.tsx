@@ -192,8 +192,7 @@ function getSummaryConnectorLabel(status: ContributionStatus) {
   return 'Cotizas por tu base real'
 }
 
-function getDisplayValue(result: ContributionLimitResult, mode: ContributionViewMode, key: 'min' | 'user' | 'max' | 'used') {
-  const suffix = mode === 'monthly' ? '/ mes' : '/ año'
+function getFigureAmount(result: ContributionLimitResult, mode: ContributionViewMode, key: 'min' | 'user' | 'max' | 'used') {
   const value = key === 'min'
     ? mode === 'monthly' ? result.minBaseMonthly : result.minBaseAnnual
     : key === 'max'
@@ -202,7 +201,15 @@ function getDisplayValue(result: ContributionLimitResult, mode: ContributionView
         ? mode === 'monthly' ? result.baseUsedMonthly : result.baseUsedAnnual
         : mode === 'monthly' ? result.userBaseMonthly : result.userBaseAnnual
 
-  return `${formatEuro(value)} ${suffix}`
+  return formatEuro(value)
+}
+
+function getFigurePeriod(mode: ContributionViewMode) {
+  return mode === 'monthly' ? '/ mes' : '/ año'
+}
+
+function getDisplayValue(result: ContributionLimitResult, mode: ContributionViewMode, key: 'min' | 'user' | 'max' | 'used') {
+  return `${getFigureAmount(result, mode, key)} ${getFigurePeriod(mode)}`
 }
 
 function getGroupBaseValue(group: ContributionGroup, mode: ContributionViewMode, key: 'min' | 'max') {
@@ -597,9 +604,27 @@ export function WorkerContributionLimitsCard({
                 ))}
               </div>
               <div className="esc-cl__figures">
-                <div><span className="d-lab">Base mínima</span><strong className="d-fig d-fig-s">{getDisplayValue(result, viewMode, 'min')}</strong></div>
-                <div className="esc-cl__user"><span className="d-lab">Tu base</span><strong className="d-fig d-fig-m d-acc">{getDisplayValue(result, viewMode, 'user')}</strong></div>
-                <div className="esc-cl__maxfig"><span className="d-lab">Base máxima</span><strong className="d-fig d-fig-s">{getDisplayValue(result, viewMode, 'max')}</strong></div>
+                <div>
+                  <span className="d-lab">Base mínima</span>
+                  <strong className="d-fig d-fig-s">
+                    {getFigureAmount(result, viewMode, 'min')}{' '}
+                    <span className="esc-cl__period">{getFigurePeriod(viewMode)}</span>
+                  </strong>
+                </div>
+                <div className="esc-cl__user">
+                  <span className="d-lab">Tu base</span>
+                  <strong className="d-fig d-fig-m d-acc">
+                    {getFigureAmount(result, viewMode, 'user')}{' '}
+                    <span className="esc-cl__period">{getFigurePeriod(viewMode)}</span>
+                  </strong>
+                </div>
+                <div className="esc-cl__maxfig">
+                  <span className="d-lab">Base máxima</span>
+                  <strong className="d-fig d-fig-s">
+                    {getFigureAmount(result, viewMode, 'max')}{' '}
+                    <span className="esc-cl__period">{getFigurePeriod(viewMode)}</span>
+                  </strong>
+                </div>
               </div>
             </section>
 
