@@ -377,3 +377,72 @@
 .fwd.fwd--escenario .esc-wscc__field > span { font-size: 1rem; font-weight: 700; color: var(--fiscal-stage-text); }
 .fwd.fwd--escenario .esc-wscc__field .esc-select { min-width: 220px; min-height: 76px; padding: 0 56px 0 28px; border: 2px solid transparent; border-radius: 999px; background-color: var(--fiscal-stage-raised); background-position: calc(100% - 32px) 55%, calc(100% - 26px) 55%; color: var(--fiscal-stage-text); font-size: 1.125rem; font-weight: 700; }
 .fwd.fwd--escenario .esc-wscc__field .esc-select:focus-visible { border-color: var(--fiscal-stage-positive); outline: none; }
+
+/* Opciones de la lista AT/EP: altura libre, nombre arriba y los tres tipos en una línea debajo
+   (antes la altura fija de 64 px hacía que se solaparan). */
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__option { height: auto; min-height: 64px; align-items: center; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__option .atep-select__preview { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 14px; width: 100%; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__option .atep-select__code { grid-row: 1 / span 2; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__option .atep-select__rates { grid-column: 2; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; margin: 0; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__option .atep-select__rate strong { font-size: 0.875rem; }
+
+/* Bloque de controles: Contrato y Actividad en la primera fila; vista y base usada en la segunda,
+   separadas por una línea, y los avisos debajo a todo el ancho. */
+.fwd.fwd--escenario .esc-wscc__controls {
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+  align-items: end;
+  gap: 24px;
+}
+.fwd.fwd--escenario .esc-wscc__field .esc-select { width: 100%; min-width: 0; }
+.fwd.fwd--escenario .esc-wscc__atep { max-width: none; min-width: 0; }
+.fwd.fwd--escenario .esc-wscc__controls > .esc-segmented { grid-column: 1; grid-row: 2; justify-self: start; align-self: center; }
+.fwd.fwd--escenario .esc-wscc__controls > .esc-wscc__base {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  align-self: center;
+  margin: 0;
+  gap: 2px;
+}
+.fwd.fwd--escenario .esc-wscc__controls > .esc-wscc__base > span { font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .esc-wscc__console { gap: 24px; }
+
+/* Avisos de base mínima y máxima: sobre el fondo oscuro, con una franja de color a la izquierda. */
+.fwd.fwd--escenario .esc-alert {
+  padding: 18px 24px;
+  border: 0;
+  border-left: 6px solid var(--esc-alert-tone);
+  border-radius: 6px 20px 20px 6px;
+  background: color-mix(in srgb, var(--esc-alert-tone) 12%, transparent);
+  color: var(--fiscal-stage-copy);
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: 1.5;
+}
+.fwd.fwd--escenario .esc-alert strong { color: var(--esc-alert-tone); font-weight: 700; }
+.fwd.fwd--escenario .esc-alert em { font-style: normal; font-weight: 700; color: var(--fiscal-stage-text); white-space: nowrap; }
+.fwd.fwd--escenario .esc-alert--minimum { --esc-alert-tone: var(--fiscal-stage-blue); }
+.fwd.fwd--escenario .esc-alert--maximum { --esc-alert-tone: var(--fiscal-stage-yellow); }
+
+@media (max-width: 720px) {
+  .fwd.fwd--escenario .esc-wscc__controls { grid-template-columns: minmax(0, 1fr); }
+  .fwd.fwd--escenario .esc-wscc__controls > .esc-segmented,
+  .fwd.fwd--escenario .esc-wscc__controls > .esc-wscc__base { grid-column: 1; grid-row: auto; justify-self: start; }
+  .fwd.fwd--escenario .esc-wscc__controls > .esc-wscc__base { align-items: flex-start; text-align: left; }
+}
+
+/* Cerrado también: nombre arriba y tipos debajo, para que el nombre no se parta en cuatro líneas. */
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__preview { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 14px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__identity { display: contents; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__code { grid-row: 1 / span 2; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rates { grid-column: 2; flex-direction: row; gap: 2px 16px; margin: 0; }
+.fwd.fwd--escenario .esc-wscc__controls { align-items: start; }
+@media (max-width: 720px) {
+  .fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rates { margin-left: 0; }
+}
+
+/* Lupa dentro de la caja de búsqueda y códigos de ancho fijo para que los nombres queden alineados. */
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__search { position: relative; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__search svg { position: absolute; top: 50%; left: 22px; width: 18px; height: 18px; transform: translateY(-50%); color: var(--fiscal-stage-muted); pointer-events: none; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__search input { padding-left: 52px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__option .atep-select__code { width: 60px; min-width: 60px; padding: 0 6px; font-size: 0.875rem; }
