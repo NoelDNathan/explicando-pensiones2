@@ -1,0 +1,141 @@
+/* Paso 9 (Vivienda y coche) en la v2. Maqueta: Paso09.dc.html */
+.fwd.fwd--escenario .wctc {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 8vw, 120px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--fiscal-stage-text);
+  font-family: var(--fiscal-font-body);
+}
+.fwd.fwd--escenario .wctc-header { padding: 0; border: 0; background: transparent; }
+.fwd.fwd--escenario .wctc-heading :is(.wctc-step, h2) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.fwd.fwd--escenario .wctc-heading p { margin: 0; max-width: 980px; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); line-height: 1.5; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wctc-heading p b { color: var(--fiscal-stage-text); }
+
+/* Dos relojes */
+.esc-wt__clocks { display: grid; grid-template-columns: 220px minmax(0, 1fr) 220px; gap: clamp(24px, 4vw, 48px); align-items: center; }
+.esc-wt__clock { width: 100%; max-width: 220px; height: auto; }
+.esc-wt__ring { fill: none; stroke-width: 14; }
+.esc-wt__ring--every { stroke: var(--fiscal-stage-positive); stroke-dasharray: 40 12; }
+.esc-wt__ring--once { stroke: var(--fiscal-stage-line); }
+.esc-wt__hand { transform-origin: 100px 100px; animation: esc-wt-spin 6s linear infinite; }
+.esc-wt__hand line { stroke: var(--fiscal-stage-text); stroke-width: 8; stroke-linecap: round; }
+.esc-wt__pin { fill: var(--fiscal-stage-text); }
+.esc-wt__arc { fill: none; stroke: var(--fiscal-stage-company); stroke-width: 14; stroke-linecap: round; }
+.esc-wt__once-hand { stroke: var(--fiscal-stage-company); stroke-width: 8; stroke-linecap: round; }
+.esc-wt__once-pin { fill: var(--fiscal-stage-company); }
+@keyframes esc-wt-spin { to { transform: rotate(360deg); } }
+
+/* Preguntas de propiedad: dos paneles grandes; el que se abre ocupa todo el ancho */
+.fwd.fwd--escenario .wctc-layout { display: flex; flex-direction: column; gap: clamp(56px, 8vw, 120px); }
+.fwd.fwd--escenario .wctc-left { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.fwd.fwd--escenario .wctc-home-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  padding: clamp(24px, 3vw, 40px);
+  border: 0;
+  border-radius: 40px;
+  background: var(--fiscal-stage-raised);
+}
+.fwd.fwd--escenario .wctc-home-strip:has(.wctc-ownership-gate.is-yes) { grid-column: 1 / -1; }
+.fwd.fwd--escenario .wctc-home-strip__title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fwd.fwd--escenario .wctc-home-strip__title svg { display: none; }
+.fwd.fwd--escenario .wctc-home-strip__title h3 { margin: 0; font-family: var(--fiscal-font-body); font-size: 0.875rem; font-weight: 600; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wctc-home-strip__title h3 span { font-weight: 600; }
+.fwd.fwd--escenario .wctc-strip-state { padding: 6px 14px; border: 0; border-radius: 999px; background: var(--fiscal-stage); color: var(--fiscal-stage-muted); font-size: 0.875rem; }
+.fwd.fwd--escenario .wctc-ownership-gate { padding: 0; border: 0; background: transparent; box-shadow: none; }
+.fwd.fwd--escenario .wctc-ownership-gate__top { display: flex; flex-direction: column; gap: 18px; }
+.fwd.fwd--escenario .wctc-ownership-gate__prompt > span { display: none; }
+.fwd.fwd--escenario .wctc-ownership-gate__prompt h4 {
+  margin: 0 0 12px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem);
+  line-height: 1.05;
+  font-weight: 900;
+  font-stretch: 115%;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wctc-ownership-gate__prompt p { margin: 0; font-size: 1.0625rem; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wctc-ownership-gate__choices { display: inline-flex; gap: 8px; }
+.fwd.fwd--escenario .wctc-ownership-gate__choices button {
+  min-width: 120px;
+  min-height: 64px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+.fwd.fwd--escenario .wctc-ownership-gate__choices button:is(.is-selected, [aria-pressed='true']) { border-color: var(--fiscal-stage-positive); background: var(--fiscal-stage-positive); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wctc-ownership-gate__skip { color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario :is(.wctc-home-card, .wctc-home-card__now, .wctc-oneoff) { border: 0; border-radius: 24px; background: var(--fiscal-stage); box-shadow: none; }
+.fwd.fwd--escenario :is(.wctc-purchase-field, .wctc-ibi-field) input,
+.fwd.fwd--escenario :is(.wctc-purchase-field, .wctc-ibi-field) select { border: 0; border-radius: 999px; background: var(--fiscal-stage-raised); color: var(--fiscal-stage-text); }
+
+/* Resumen: «Lo que suma a tu mes» y «Fuera de tu mes» */
+.fwd.fwd--escenario .wctc-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 0 40px;
+  align-items: start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wctc-summary > * { grid-column: 1; }
+.fwd.fwd--escenario .wctc-summary-title { display: flex; gap: 0; margin-bottom: 12px; }
+.fwd.fwd--escenario .wctc-summary-title svg { display: none; }
+.fwd.fwd--escenario .wctc-summary-title h3 { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); font-weight: 900; font-stretch: 115%; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wctc-summary-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 24px;
+  align-items: baseline;
+  padding: 18px 0;
+  border: 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wctc-summary-card > svg { display: none; }
+.fwd.fwd--escenario .wctc-summary-card span b { display: block; font-size: 1.1875rem; font-weight: 600; }
+.fwd.fwd--escenario .wctc-summary-card span small { font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wctc-summary-card strong { display: flex; flex-direction: column; align-items: flex-end; font-family: var(--fiscal-font-display); font-size: clamp(1.625rem, 1.1rem + 1.6vw, 2.25rem); font-weight: 800; white-space: nowrap; }
+.fwd.fwd--escenario .wctc-summary-card strong small { font-family: var(--fiscal-font-body); font-size: 0.875rem; font-weight: 500; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wctc-summary-card.is-muted { opacity: 0.6; }
+.fwd.fwd--escenario .wctc-summary-card--total { border-top: 3px solid var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wctc-summary-card--total span b { font-size: 1.375rem; font-weight: 700; }
+.fwd.fwd--escenario .wctc-summary-card--total strong { font-size: clamp(2.25rem, 1.3rem + 3vw, 4rem); font-weight: 900; color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wctc-summary-split { grid-column: 2; grid-row: 1; margin: 0; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fiscal-stage-company); }
+.fwd.fwd--escenario .wctc-summary-card--aside {
+  grid-column: 2;
+  grid-row: 2 / span 3;
+  grid-template-columns: minmax(0, 1fr);
+  padding: clamp(22px, 3vw, 32px);
+  border: 2px dashed var(--fiscal-stage-company);
+  border-radius: var(--fiscal-radius-stage-panel);
+}
+.fwd.fwd--escenario .wctc-summary-card--aside strong { align-items: flex-start; color: var(--fiscal-stage-company); }
+.fwd.fwd--escenario .wctc-summary-note { grid-column: 1 / -1; margin: 24px 0 0; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); color: var(--fiscal-stage-yellow); }
+
+@media (max-width: 900px) {
+  .esc-wt__clocks { grid-template-columns: 110px minmax(0, 1fr); }
+  .esc-wt__clocks > svg:last-child { display: none; }
+  .fwd.fwd--escenario .wctc-left { grid-template-columns: minmax(0, 1fr); }
+  .fwd.fwd--escenario .wctc-summary { grid-template-columns: minmax(0, 1fr); }
+  .fwd.fwd--escenario .wctc-summary > *, .fwd.fwd--escenario :is(.wctc-summary-split, .wctc-summary-card--aside) { grid-column: 1; grid-row: auto; }
+  .fwd.fwd--escenario .wctc-summary-split { margin-top: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .esc-wt__hand { animation: none; }
+}
+.fwd.fwd--escenario .wctc-summary-note { padding: 0; border: 0; background: transparent; }

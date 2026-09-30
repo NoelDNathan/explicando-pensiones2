@@ -14,6 +14,10 @@ import { InfoButton } from '../ui/InfoButton'
 import { clampNumber, formatEuro, formatNumber } from './workerTaxesFormat'
 import './WorkerTaxStepShell.css'
 import './WorkerWealthTaxesCard.css'
+import type { CSSProperties } from 'react'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import './escenario/D.css'
+import './escenario/EscenarioWealth.css'
 
 const CATASTRO_URL = 'https://www.sedecatastro.gob.es/'
 
@@ -684,6 +688,7 @@ export function WorkerWealthTaxesCard({
   onResultChange,
   onDraftChange,
 }: WorkerWealthTaxesCardProps) {
+  const isEscenario = useFiscalVariant() === 'escenario'
   const [hasOwnedHome, setHasOwnedHome] = useState<OwnershipAnswer>(() => (
     initialDraft?.hasOwnedHome
     ?? (initialHasOwnedHome || initialCadastralValue > 0 ? 'yes' : 'unanswered')
@@ -809,6 +814,31 @@ export function WorkerWealthTaxesCard({
         </div>
       </header>
 
+      {isEscenario ? (
+        <aside className="esc-wt__clocks" role="note" aria-labelledby="esc-wt-clocks">
+          <svg viewBox="0 0 200 200" className="esc-wt__clock" aria-hidden="true">
+            <circle cx="100" cy="100" r="88" className="esc-wt__ring esc-wt__ring--every" />
+            <g className="esc-wt__hand"><line x1="100" y1="100" x2="100" y2="34" /></g>
+            <circle cx="100" cy="100" r="10" className="esc-wt__pin" />
+          </svg>
+          <div className="d-stack">
+            <p id="esc-wt-clocks" className="d-h2 d-h2--big" style={{ '--d-chars': 16 } as CSSProperties}>
+              Dos relojes <span className="d-acc">distintos.</span>
+            </p>
+            <p className="d-txt">
+              El IBI y el IVTM <span className="d-sweep d-sweep--positive">se repiten cada año</span>, así que
+              se reparten al mes y entran en el resumen. El IVA, el ITP o el AJD de la compra fueron
+              <span className="d-sweep d-sweep--company"> un pago único de entonces</span>: se guardan plegados como contexto y no se suman a tu mes.
+            </p>
+          </div>
+          <svg viewBox="0 0 200 200" className="esc-wt__clock" aria-hidden="true">
+            <circle cx="100" cy="100" r="88" className="esc-wt__ring esc-wt__ring--once" />
+            <path d="M100 12 A88 88 0 0 1 176 56" className="esc-wt__arc" />
+            <line x1="100" y1="100" x2="152" y2="56" className="esc-wt__once-hand" />
+            <circle cx="100" cy="100" r="10" className="esc-wt__once-pin" />
+          </svg>
+        </aside>
+      ) : (
       <aside className="wctc-tip" role="note">
         <Landmark size={20} aria-hidden="true" />
         <p>
@@ -817,6 +847,7 @@ export function WorkerWealthTaxesCard({
           un pago único de entonces: se guardan plegados como contexto y no se suman a tu mes.
         </p>
       </aside>
+      )}
 
       <div className="wctc-layout">
         <section className="wctc-left" aria-label="Impuestos de vivienda y coche">
