@@ -23,6 +23,20 @@ type QuizStage = "guess" | "salary" | "reveal";
 
 /** Tope del deslizador de la pregunta: el cálculo real no llega a 70 € de cada 100. */
 const GUESS_MAX = 70;
+/** Diámetro del tirador, en px. Tiene que coincidir con `--d-thumb` del CSS. */
+const GUESS_THUMB_PX = 40;
+
+/**
+ * El `input range` nativo pinta el tirador fuera del cursor en Chrome y Edge
+ * con la escala de Windows, y en Firefox con este borde. El valor se calcula
+ * aquí, en píxeles CSS, para que el círculo quede bajo el puntero.
+ */
+function guessFromClientX(slider: HTMLElement, clientX: number) {
+  const rect = slider.getBoundingClientRect();
+  const usable = rect.width - GUESS_THUMB_PX;
+  const ratio = usable <= 0 ? 0 : Math.min(1, Math.max(0, (clientX - rect.left - GUESS_THUMB_PX / 2) / usable));
+  return Math.round(ratio * GUESS_MAX);
+}
 /** Diferencia, en euros de cada 100, que todavía cuenta como «casi exacto». */
 const GUESS_TOLERANCE = 3;
 
@@ -96,6 +110,7 @@ export function WorkerFiscalSummaryCard({
   );
   const [draftGuess, setDraftGuess] = useState<number | null>(taxGuess);
   const quizHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const guessRangeRef = useRef<HTMLInputElement | null>(null);
   const previousStage = useRef(stage);
 
   // Al cambiar de pantalla, el foco va al nuevo titular: quien usa lector de
@@ -186,19 +201,38 @@ export function WorkerFiscalSummaryCard({
                     />
                   ))}
                 </div>
-                <input
-                  type="range"
+                <div
                   className="d-range"
-                  min={0}
-                  max={GUESS_MAX}
-                  step={1}
-                  value={sliderValue}
-                  style={{ "--d-fill": `${(sliderValue / GUESS_MAX) * 100}%` } as CSSProperties}
-                  onChange={(event) => setDraftGuess(Number(event.target.value))}
-                  onPointerUp={(event) => setDraftGuess(Number(event.currentTarget.value))}
-                  aria-label="Euros de cada 100 que crees que acaban en Hacienda y la Seguridad Social"
-                  aria-valuetext={isPending ? "Sin responder" : `${draftGuess} euros de cada 100`}
-                />
+                  style={{ "--d-p": sliderValue / GUESS_MAX } as CSSProperties}
+                  onPointerDown={(event) => {
+                    if (event.button !== 0) return;
+                    const slider = event.currentTarget;
+                    setDraftGuess(guessFromClientX(slider, event.clientX));
+                    slider.setPointerCapture(event.pointerId);
+                    guessRangeRef.current?.focus();
+                  }}
+                  onPointerMove={(event) => {
+                    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+                    setDraftGuess(guessFromClientX(event.currentTarget, event.clientX));
+                  }}
+                >
+                  <div className="d-range__track" aria-hidden="true">
+                    <div className="d-range__fill" />
+                  </div>
+                  <div className="d-range__thumb" aria-hidden="true" />
+                  <input
+                    ref={guessRangeRef}
+                    type="range"
+                    className="d-range__input"
+                    min={0}
+                    max={GUESS_MAX}
+                    step={1}
+                    value={sliderValue}
+                    onChange={(event) => setDraftGuess(Number(event.target.value))}
+                    aria-label="Euros de cada 100 que crees que acaban en Hacienda y la Seguridad Social"
+                    aria-valuetext={isPending ? "Sin responder" : `${draftGuess} euros de cada 100`}
+                  />
+                </div>
                 <div className="esc-q__scale d-num" aria-hidden="true">
                   <span>0 €</span>
                   <span>{GUESS_MAX / 2} €</span>

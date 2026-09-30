@@ -182,3 +182,19 @@
 }
 .fwd.fwd--escenario .salary-slider__value-shell > span { font-size: inherit; color: inherit; }
 .fwd.fwd--escenario .salary-slider__value-input { width: auto; field-sizing: content; min-width: 3ch; }
+
+.fwd--escenario .fwd-legal {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+.fwd--escenario .fwd-legal a {
+  color: var(--fiscal-stage-muted);
+  opacity: 0.8;
+}
+.fwd--escenario .fwd-legal a:hover {
+  color: var(--fiscal-stage-text);
+  opacity: 1;
+}
+.fwd--escenario .fwd-legal a:focus-visible {
+  outline-color: var(--fiscal-stage-positive);
+}

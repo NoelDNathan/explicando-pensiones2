@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-26
+Fecha: 2026-09-30
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -101,7 +101,10 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Pasos 4, 5, 7 (`WorkerPersonalReductionsCard`), 6 y 9: mismos formularios de la v1 con piezas D
   añadidas (bifurcación, cascada, escalera de la cuota, monedas, escalones del IRPF, dos relojes)
   y CSS de la v2.
-- Nómina de ejemplo en la v2: `EscenarioPayroll` (filas del paso encendidas, resto atenuado).
+- Nómina de ejemplo en la v2: `EscenarioPayroll` (filas del paso encendidas, resto atenuado). El líquido total escala con el ancho de la columna de 300 px para que el euro no se salga de la esquina del panel.
+- Pregunta 1 del paso 0: el círculo del deslizador lo pinta la página (no el tirador nativo), porque en Chrome/Edge con la escala de Windows y en Firefox el nativo no sigue al cursor. El del salario sigue siendo el `input` nativo.
+- Cuestionarios v2 (pasos 4, 5, 7): una fila por campo, cifra grande, contador con − y + (solo v2). Paso 9 con «Sí»: cada vivienda o coche es un capítulo sin paneles anidados. Paso 2: escala propia por tramos en el pasillo y selector de grupo en estilo D.
+- Paso 1 v2: los complementos salariales anuales van **encima** del gráfico de 12/14 pagas (pedido 2026-09-30; en la maqueta Paso01 iban debajo).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
 «Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
 

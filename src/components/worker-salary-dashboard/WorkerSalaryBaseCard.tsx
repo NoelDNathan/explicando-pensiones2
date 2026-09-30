@@ -248,29 +248,6 @@ export function WorkerSalaryBaseCard({
           </div>
         </div>
 
-        <section className="d-stack" aria-labelledby="esc-sb-pays">
-          <DH2 id="esc-sb-pays">÷ {pays} <span className="d-muted">pagas</span></DH2>
-          <div className="esc-sb__pays" aria-hidden="true" style={{ gridTemplateColumns: `repeat(${pays}, minmax(0, 1fr))` }}>
-            {Array.from({ length: pays }, (_, index) => {
-              const extra = pays === 14 && (index === 5 || index === 13)
-              return (
-                <div key={`${pays}-${index}`} className="esc-sb__pay d-growy" style={{ animationDelay: `${index * 50}ms` }}>
-                  <span className="esc-sb__comp" style={{ flexGrow: complementShare }} />
-                  <span className={`esc-sb__base ${extra ? 'd-paint-worker' : 'd-paint-positive-light'}`}>
-                    <span>{perPay.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-          {/* texto nuevo D (aprobado): leyenda del gráfico */}
-          <div className="d-row esc-sb__legend">
-            <span><span className="d-swatch d-paint-positive-light" aria-hidden="true" />Nómina ordinaria</span>
-            {pays === 14 ? <span><span className="d-swatch d-paint-worker" aria-hidden="true" />Paga extra</span> : null}
-            <span><span className="d-swatch d-paint-yellow" aria-hidden="true" />Complementos salariales anuales</span>
-          </div>
-        </section>
-
         <section className="d-grid2" aria-label="Complementos salariales anuales">
           <div className="d-stack">
             <label className="d-h3" htmlFor="wsbc-complements">Complementos salariales anuales</label>
@@ -305,6 +282,29 @@ export function WorkerSalaryBaseCard({
             <span className="d-lab">Base real calculada</span>
             <strong className="d-fig d-fig-l d-pop">{formatNumber(realBase)} €</strong>
           </output>
+        </section>
+
+        <section className="d-stack" aria-labelledby="esc-sb-pays">
+          <DH2 id="esc-sb-pays">÷ {pays} <span className="d-muted">pagas</span></DH2>
+          <div className="esc-sb__pays" aria-hidden="true" style={{ gridTemplateColumns: `repeat(${pays}, minmax(0, 1fr))` }}>
+            {Array.from({ length: pays }, (_, index) => {
+              const extra = pays === 14 && (index === 5 || index === 13)
+              return (
+                <div key={`${pays}-${index}`} className="esc-sb__pay d-growy" style={{ animationDelay: `${index * 50}ms` }}>
+                  <span className="esc-sb__comp" style={{ flexGrow: complementShare }} />
+                  <span className={`esc-sb__base ${extra ? 'd-paint-worker' : 'd-paint-positive-light'}`}>
+                    <span>{perPay.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+          {/* texto nuevo D (aprobado): leyenda del gráfico */}
+          <div className="d-row esc-sb__legend">
+            <span><span className="d-swatch d-paint-positive-light" aria-hidden="true" />Nómina ordinaria</span>
+            {pays === 14 ? <span><span className="d-swatch d-paint-worker" aria-hidden="true" />Paga extra</span> : null}
+            <span><span className="d-swatch d-paint-yellow" aria-hidden="true" />Complementos salariales anuales</span>
+          </div>
         </section>
       </section>
     )

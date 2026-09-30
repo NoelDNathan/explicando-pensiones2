@@ -69,22 +69,66 @@
 .esc-q__dot--company { background: var(--fiscal-stage-company-fill); }
 .esc-q__dot--consumption { background: var(--fiscal-stage-blue); }
 
-/* Deslizador del diseño D (pista gruesa, tirador blanco con anillo verde). */
-.d-range { -webkit-appearance: none; appearance: none; width: 100%; height: 48px; margin: 0; background: transparent; cursor: pointer; }
-.d-range::-webkit-slider-runnable-track { height: 14px; border-radius: 99px; background: linear-gradient(90deg, var(--fiscal-stage-positive) var(--d-fill), var(--fiscal-stage-raised) var(--d-fill)); }
-.d-range::-moz-range-track { height: 14px; border-radius: 99px; background: linear-gradient(90deg, var(--fiscal-stage-positive) var(--d-fill), var(--fiscal-stage-raised) var(--d-fill)); }
-.d-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 40px;
-  height: 40px;
-  margin-top: -13px;
+/*
+ * Deslizador del diseño D. El círculo no es el tirador nativo: en Chrome y Edge
+ * con la escala de Windows, y en Firefox, ese tirador se pinta lejos del cursor.
+ * La pista y el círculo se colocan con --d-p (0–1); el input solo sirve al teclado.
+ */
+.d-range {
+  --d-thumb: 40px;
+  position: relative;
+  height: 48px;
+  margin: 0;
+  touch-action: none;
+  cursor: pointer;
+  user-select: none;
+}
+.d-range__track {
+  position: absolute;
+  left: calc(var(--d-thumb) / 2);
+  right: calc(var(--d-thumb) / 2);
+  top: 50%;
+  height: 14px;
+  transform: translateY(-50%);
+  border-radius: 99px;
+  background: var(--fiscal-stage-raised);
+  pointer-events: none;
+}
+.d-range__fill {
+  width: calc(var(--d-p) * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--fiscal-stage-positive);
+}
+.d-range__thumb {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--d-thumb) / 2 + (100% - var(--d-thumb)) * var(--d-p));
+  width: var(--d-thumb);
+  height: var(--d-thumb);
+  box-sizing: border-box;
   border: 6px solid var(--fiscal-stage-positive-fill);
   border-radius: 50%;
   background: var(--fiscal-stage-text);
   box-shadow: 0 0 0 8px color-mix(in srgb, var(--fiscal-stage-positive) 18%, transparent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
-.d-range::-moz-range-thumb { width: 28px; height: 28px; border: 6px solid var(--fiscal-stage-positive-fill); border-radius: 50%; background: var(--fiscal-stage-text); }
-.d-range:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 4px; }
+.d-range__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.d-range:has(.d-range__input:focus-visible) {
+  outline: 3px solid var(--fiscal-stage-positive);
+  outline-offset: 4px;
+}
 
 @media (max-width: 900px) {
   .esc-q__answer, .esc-q__verdict, .esc-q__split, .esc-q__console { grid-template-columns: minmax(0, 1fr); }
