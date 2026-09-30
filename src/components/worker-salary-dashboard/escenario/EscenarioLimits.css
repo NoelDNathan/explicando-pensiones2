@@ -79,18 +79,67 @@
   .esc-cl__ghost { top: 42px; width: 26px; height: 26px; margin-left: -13px; }
   .esc-cl__marker.is-at-min { margin-left: 5px; }
   .esc-cl__marker.is-at-max { margin-left: -41px; }
-  .esc-cl__figures {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+  .esc-cl__refs {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: auto;
+    min-height: 0;
+    gap: 8px;
+    padding: 0 2px;
   }
-  .esc-cl__user, .esc-cl__maxfig { align-items: flex-start; }
+  .esc-cl__refs span {
+    position: static;
+    transform: none;
+    flex: 0 1 auto;
+    max-width: 46%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .esc-cl__figures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "hero hero"
+      "min max";
+    gap: 10px 14px;
+    padding-top: 12px;
+  }
+  .esc-cl__figures > div {
+    container-type: normal;
+    overflow: visible;
+  }
+  .esc-cl__figures > div:first-child {
+    grid-area: min;
+    align-items: flex-start;
+  }
+  .esc-cl__figures > .esc-cl__user {
+    grid-area: hero;
+    align-items: center;
+    text-align: center;
+    padding: 18px 14px;
+    border-radius: 22px;
+    background: var(--fiscal-stage-raised);
+    gap: 6px;
+  }
+  .esc-cl__figures > .esc-cl__maxfig {
+    grid-area: max;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .esc-cl__figures .d-lab { font-size: 0.8125rem; }
+  .esc-cl__user .d-lab {
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
   .esc-cl__figures .d-fig {
     font-stretch: 90%;
-    font-size: clamp(1.5rem, 18cqi, 2.125rem);
+    font-size: clamp(1.125rem, 4.6vw, 1.5rem);
   }
   .esc-cl__user .d-fig {
     font-stretch: 85%;
-    font-size: clamp(1.875rem, 22cqi, 2.75rem);
+    font-size: clamp(1.625rem, 6.8vw, 2.375rem);
   }
 }
 

@@ -323,8 +323,13 @@
 
 @media (max-width: 900px) {
   .esc-pr__cascade { grid-template-columns: minmax(0, 1fr); }
-  .fwd.fwd--escenario .wprc-net-income__head { grid-template-columns: clamp(64px, 18vw, 120px) minmax(0, 1fr); }
-  .fwd.fwd--escenario .wprc-net-income__pill { grid-column: 2; justify-self: start; }
+  .fwd.fwd--escenario .wprc-net-income__head:not(.wprc-net-income__head--no-num) {
+    grid-template-columns: clamp(64px, 18vw, 120px) minmax(0, 1fr);
+  }
+  .fwd.fwd--escenario .wprc-net-income__head:not(.wprc-net-income__head--no-num) .wprc-net-income__pill {
+    grid-column: 2;
+    justify-self: start;
+  }
 }
 @media (max-width: 560px) {
   .fwd.fwd--escenario .irpf-reduction-question { grid-template-columns: minmax(0, 1fr); }
