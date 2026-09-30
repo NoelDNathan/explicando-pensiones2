@@ -1031,7 +1031,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
   const progress = useMemo(() => activeStep.id / detailStepCount * 100, [activeStep.id, detailStepCount])
   const nextStep = WORKER_FISCAL_STEPS[activeIndex + 1]
   const ActiveIcon = activeStep.Icon
-  const showPayrollHelp = activeStep.id !== 0 && activeStep.id !== 7 && activeStep.id < 10
+  const showPayrollHelp = activeStep.id >= 1 && activeStep.id <= 6
   const isSummaryStep = activeStep.id === 0
   const isCompactStep = activeStep.id >= 10
   const heroIsSingle = !showPayrollHelp

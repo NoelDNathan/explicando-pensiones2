@@ -298,9 +298,33 @@
 .esc-coin--big { left: 0; top: 0; width: clamp(200px, 30vw, 380px); aspect-ratio: 1; background: var(--fiscal-stage-positive); box-shadow: inset 0 0 0 14px color-mix(in srgb, var(--fiscal-stage) 12%, transparent); }
 .esc-coin--big strong { font-size: clamp(4rem, 2rem + 7vw, 9.375rem); line-height: 0.9; }
 .esc-coin--big small { font-size: 1.125rem; }
-.esc-coin--small { left: clamp(210px, 31.5vw, 400px); bottom: 20px; width: clamp(80px, 9vw, 114px); aspect-ratio: 1; background: var(--fiscal-stage-yellow); animation-delay: 0.4s; }
-.esc-coin--small strong { font-size: clamp(1.25rem, 0.9rem + 1vw, 1.875rem); line-height: 0.9; }
-.esc-coin--small small { font-size: 0.6875rem; }
+.esc-coin--small {
+  left: clamp(210px, 31.5vw, 400px);
+  bottom: 20px;
+  width: clamp(80px, 9vw, 114px);
+  aspect-ratio: 1;
+  padding: 0.35em;
+  box-sizing: border-box;
+  overflow: hidden;
+  container-type: inline-size;
+  background: var(--fiscal-stage-yellow);
+  animation-delay: 0.4s;
+}
+/* Escala con el diámetro (maqueta: 30px / 114px ≈ 26cqi) para que «0,30 €» no desborde en móvil */
+.esc-coin--small strong {
+  max-width: 100%;
+  font-size: clamp(0.75rem, 26cqi, 1.875rem);
+  line-height: 0.95;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'wdth' 95;
+}
+.esc-coin--small small {
+  max-width: 100%;
+  font-size: clamp(0.5rem, 9.5cqi, 0.6875rem);
+  line-height: 1.1;
+  text-align: center;
+}
 .esc-refund { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 20px; font-family: var(--fiscal-font-display); font-weight: 900; font-size: clamp(2.5rem, 1.5rem + 3vw, 4rem); white-space: nowrap; }
 .esc-refund strong { font-size: clamp(3rem, 1.6rem + 4.5vw, 5.5rem); animation: d-pop 0.7s var(--fiscal-ease-spring) 0.6s both; }
 .esc-refund__op { color: var(--fiscal-stage-faint); }
