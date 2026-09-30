@@ -23,6 +23,14 @@
   transition: left 0.8s var(--fiscal-ease-spring);
 }
 .esc-cl__excess { position: absolute; top: 58px; height: 34px; border: 3px dashed var(--fiscal-stage-company); border-left: 0; border-radius: 0 99px 99px 0; }
+/* Más allá del doble del máximo la línea queda abierta: sigue fuera de la escala. */
+.esc-cl__excess.is-open { border-right: 0; border-radius: 0; mask-image: linear-gradient(90deg, var(--fiscal-stage) 70%, transparent); }
+/* Debajo del mínimo: tu base real (círculo hueco) y la distancia hasta la base mínima, que es por la que cotizas. */
+.esc-cl__shortfall { position: absolute; top: 58px; height: 34px; border: 3px dashed var(--fiscal-stage-yellow); border-right: 0; border-radius: 99px 0 0 99px; }
+.esc-cl__ghost { position: absolute; top: 61px; width: 28px; height: 28px; margin-left: -14px; border: 4px solid var(--fiscal-stage-yellow); border-radius: 50%; background: var(--fiscal-stage); }
+/* En los límites, la cápsula se apoya dentro del rango para no tapar la pared. */
+.esc-cl__marker.is-at-min { margin-left: 6px; }
+.esc-cl__marker.is-at-max { margin-left: -58px; }
 .esc-cl__ref { position: absolute; bottom: 24px; width: 2px; height: 16px; margin-left: -1px; background: var(--fiscal-stage-faint); }
 .esc-cl__refs { position: relative; height: 18px; font-size: 0.8125rem; color: var(--fiscal-stage-faint); }
 .esc-cl__refs span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
@@ -39,7 +47,99 @@
   .esc-cl__track { height: 110px; }
   .esc-cl__hatch, .esc-cl__range { top: 24px; bottom: 24px; }
   .esc-cl__marker { top: 14px; width: 36px; height: 82px; margin-left: -18px; }
-  .esc-cl__excess { top: 40px; height: 30px; }
+  .esc-cl__excess, .esc-cl__shortfall { top: 40px; height: 30px; }
+  .esc-cl__ghost { top: 42px; width: 26px; height: 26px; margin-left: -13px; }
+  .esc-cl__marker.is-at-min { margin-left: 5px; }
+  .esc-cl__marker.is-at-max { margin-left: -41px; }
   .esc-cl__figures { grid-template-columns: minmax(0, 1fr); }
   .esc-cl__user, .esc-cl__maxfig { align-items: flex-start; }
+}
+
+/* Selector de grupo de cotización en estilo D: una cápsula grande y una lista sin cajas
+   dentro de un único panel; las bases van como texto, no como pastillas. */
+.fwd.fwd--escenario .esc-cl .wclc-group-select { display: flex; flex-direction: column; gap: 10px; flex: 1 1 520px; max-width: 720px; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__label { font-size: 1rem; font-weight: 700; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__trigger {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 76px;
+  padding: 10px 14px 10px 12px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+  color: var(--fiscal-stage-text);
+  text-align: left;
+}
+.fwd.fwd--escenario .esc-cl :is(.wclc-group-select__trigger:focus-visible, .wclc-group-select--open .wclc-group-select__trigger) { border-color: var(--fiscal-stage-positive); outline: none; box-shadow: none; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__preview { display: flex; align-items: center; gap: 16px; flex: 1 1 auto; min-width: 0; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__preview--trigger { display: flex; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__identity { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__badge {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fiscal-stage-positive);
+  color: var(--fiscal-stage);
+  font-family: var(--fiscal-font-display);
+  font-size: 1.125rem;
+  font-weight: 900;
+}
+.fwd.fwd--escenario .esc-cl .wclc-group-select__name { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); font-weight: 700; line-height: 1.25; color: var(--fiscal-stage-text); white-space: normal; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__bases { display: flex; flex-wrap: wrap; gap: 2px 14px; margin-left: auto; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__base { display: inline-flex; align-items: baseline; gap: 6px; padding: 0; border: 0; border-radius: 0; background: transparent; font-size: 0.9375rem; white-space: nowrap; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__base > span { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__base strong { font-weight: 700; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__base em { font-style: normal; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__chevron {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border-radius: 50%;
+  background: var(--fiscal-stage);
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .esc-cl .wclc-group-select__panel {
+  top: calc(100% + 10px);
+  gap: 0;
+  max-height: min(440px, 60vh);
+  padding: 8px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 28px;
+  background: var(--fiscal-stage);
+  box-shadow: 0 24px 48px color-mix(in srgb, var(--fiscal-stage) 70%, transparent);
+  scrollbar-color: var(--fiscal-stage-line) transparent;
+}
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option {
+  display: flex;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 14px 10px 10px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--fiscal-stage-text);
+  text-align: left;
+}
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option + .wclc-group-select__option { margin-top: 2px; }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option .wclc-group-select__badge { min-width: 44px; height: 44px; font-size: 0.9375rem; background: var(--fiscal-stage-raised); color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option--active { background: var(--fiscal-stage-raised); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option--selected { background: color-mix(in srgb, var(--fiscal-stage-positive) 16%, transparent); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option--selected .wclc-group-select__badge { background: var(--fiscal-stage-positive); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .esc-cl .wclc-group-select__option:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: -3px; }
+@media (max-width: 720px) {
+  .fwd.fwd--escenario .esc-cl .wclc-group-select { flex-basis: 100%; }
+  .fwd.fwd--escenario .esc-cl .wclc-group-select__trigger { border-radius: 32px; }
+  .fwd.fwd--escenario .esc-cl :is(.wclc-group-select__preview, .wclc-group-select__preview--trigger) { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .fwd.fwd--escenario .esc-cl .wclc-group-select__bases { margin-left: 66px; }
+  .fwd.fwd--escenario .esc-cl .wclc-group-select__option .wclc-group-select__bases { margin-left: 58px; }
 }

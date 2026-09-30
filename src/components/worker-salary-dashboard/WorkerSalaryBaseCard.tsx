@@ -263,7 +263,7 @@ export function WorkerSalaryBaseCard({
               )
             })}
           </div>
-          {/* texto nuevo D: leyenda del gráfico */}
+          {/* texto nuevo D (aprobado): leyenda del gráfico */}
           <div className="d-row esc-sb__legend">
             <span><span className="d-swatch d-paint-positive-light" aria-hidden="true" />Nómina ordinaria</span>
             {pays === 14 ? <span><span className="d-swatch d-paint-worker" aria-hidden="true" />Paga extra</span> : null}

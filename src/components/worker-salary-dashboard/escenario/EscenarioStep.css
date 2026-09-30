@@ -145,7 +145,7 @@
 .esc-nom--positive { --esc-nom-tone: var(--fiscal-stage-positive); }
 .esc-nom--blue { --esc-nom-tone: var(--fiscal-stage-blue); }
 .esc-nom__code { font-family: ui-monospace, 'Courier New', monospace; font-size: 0.8125rem; color: var(--fiscal-stage-muted); }
-.esc-nom__concept { font-size: 1rem; font-weight: 500; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.esc-nom__concept { font-size: 1rem; font-weight: 500; letter-spacing: 0.02em; overflow-wrap: break-word; hyphens: none; }
 .esc-nom__row.is-on .esc-nom__concept { font-weight: 700; }
 .esc-nom__price { text-align: right; font-size: 0.9375rem; color: var(--fiscal-stage-muted); font-variant-numeric: tabular-nums; }
 .esc-nom__amount { text-align: right; font-family: var(--fiscal-font-display); font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -167,7 +167,7 @@
 .esc-nom__net strong { font-family: var(--fiscal-font-display); font-size: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .esc-nom__net.is-on { opacity: 1; }
 .esc-nom__net.is-on strong { color: var(--esc-nom-tone); }
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .esc-nom__sheet { grid-template-columns: minmax(0, 1fr); gap: 24px; }
 }
 @media (max-width: 560px) {

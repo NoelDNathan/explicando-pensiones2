@@ -409,3 +409,80 @@
   .fwd.fwd--escenario :is(.wprc-net-income__num, .wprc-question-intro > span) { font-size: 4rem; }
   .fwd.fwd--escenario :is(.wprc-net-income__head h3, .wprc-question-intro h3) { font-size: clamp(1.75rem, 1rem + 5vw, 2.5rem); }
 }
+
+/* Paso 4: beneficios en especie. Una fila por beneficio, sin paneles: nombre a la izquierda,
+   cifra grande editable a la derecha y el reparto exento/tributa debajo, en texto legible. */
+.fwd.fwd--escenario .wprc--in-kind .irpf-marital-subflow { display: flex; flex-direction: column; gap: 0; padding: 0; border: 0; background: transparent; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-marital-subflow > .irpf-marital-note { margin: 0 0 24px; max-width: 860px; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-grid,
+.fwd.fwd--escenario .wprc--in-kind .irpf-health-block { display: flex; flex-direction: column; gap: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-health-block__people { display: contents; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+  gap: 8px 40px;
+  align-items: center;
+  padding: 26px 0;
+  border: 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+  border-radius: 0;
+  background: transparent;
+}
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field > * { grid-column: 2; min-width: 0; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field > .irpf-rule-label { grid-column: 1; grid-row: 1 / span 4; align-self: start; display: flex; align-items: center; gap: 10px; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); line-height: 1.3; font-weight: 700; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-period-field__row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field__control {
+  display: flex;
+  flex: 1 1 240px;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 72px;
+  padding: 0 24px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--fiscal-stage-raised);
+}
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field__control:focus-within { border-color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field__control input {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 1.4vw, 2.5rem);
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field__control > span { font-size: 1rem; font-weight: 600; color: var(--fiscal-stage-muted); white-space: nowrap; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-period-toggle { display: inline-flex; gap: 4px; padding: 5px; border-radius: 999px; background: var(--fiscal-stage-raised); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-period-toggle button { min-height: 52px; padding: 0 20px; font-size: 1rem; font-weight: 700; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field small { font-size: 1rem; line-height: 1.5; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-rule-field small strong { color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-period-field__split { color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-inkind-total {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 40px;
+  align-items: end;
+  margin: 0;
+  padding: 32px 0 0;
+  border: 0;
+  border-top: 3px solid var(--fiscal-stage-text);
+  border-radius: 0;
+  background: transparent;
+}
+.fwd.fwd--escenario .wprc--in-kind .irpf-inkind-total span { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); font-weight: 700; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-inkind-total strong { grid-row: 1 / span 2; grid-column: 2; font-family: var(--fiscal-font-display); font-size: clamp(2rem, 1.2rem + 2.6vw, 3.75rem); font-weight: 900; line-height: 1; color: var(--fiscal-stage-positive); white-space: nowrap; text-align: right; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-inkind-total small { font-size: 1rem; line-height: 1.5; color: var(--fiscal-stage-muted); }
+@media (max-width: 760px) {
+  .fwd.fwd--escenario .wprc--in-kind .irpf-rule-field { grid-template-columns: minmax(0, 1fr); padding: 20px 0; }
+  .fwd.fwd--escenario .wprc--in-kind .irpf-rule-field > :is(*, .irpf-rule-label) { grid-column: 1; grid-row: auto; }
+  .fwd.fwd--escenario .wprc--in-kind .irpf-rule-field__control { min-height: 60px; flex-basis: 100%; }
+  .fwd.fwd--escenario .wprc--in-kind .irpf-inkind-total { grid-template-columns: minmax(0, 1fr); }
+  .fwd.fwd--escenario .wprc--in-kind .irpf-inkind-total strong { grid-row: auto; grid-column: 1; text-align: left; white-space: normal; }
+}

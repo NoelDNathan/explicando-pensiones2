@@ -232,8 +232,11 @@
 
 /* Ecuación. */
 .esc-equation {
+  /* Las cifras van en una sola línea: su tamaño se ajusta al ancho de cada columna. */
+  --esc-eq-cell: calc((100cqi - 12px * (var(--esc-eq-n, 3) - 1)) / var(--esc-eq-n, 3));
+  container-type: inline-size;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--esc-eq-n, 3), minmax(0, 1fr));
   align-items: end;
   gap: 12px;
 }
@@ -256,12 +259,15 @@
   font-weight: 800;
   line-height: 1.05;
   font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
-.esc-equation__value--hero { font-size: clamp(1.75rem, 1rem + 2.4vw, 3.5rem); font-weight: 900; }
+.esc-equation__cell .esc-equation__value { font-size: min(clamp(1.5rem, 1rem + 1.6vw, 2.5rem), calc((var(--esc-eq-cell) - 48px) / 7.5)); }
+.esc-equation__cell .esc-equation__value--hero { font-size: min(clamp(1.75rem, 1rem + 2.4vw, 3.5rem), calc((var(--esc-eq-cell) - 48px) / 7)); font-weight: 900; }
+/* El signo se centra con la línea de la cifra, no con la etiqueta. */
+.esc-equation__op { align-self: flex-end; margin-bottom: 0.08em; }
 
 @media (max-width: 720px) {
-  .esc-equation { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .esc-equation { --esc-eq-n: 1 !important; gap: 10px; }
   .esc-equation__op { width: 28px; }
 }
 

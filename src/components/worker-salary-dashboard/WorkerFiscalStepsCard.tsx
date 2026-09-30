@@ -893,6 +893,9 @@ function EscenarioPayroll({ stepId, payrollLiveData }: { stepId: number; payroll
   const snapshot = useMemo(() => buildPayrollSnapshot(payrollLiveData), [payrollLiveData])
   const dual = Boolean(example.highlightWorkerRows?.length || example.highlightCompanyRows?.length)
   // En el paso 3 la leyenda literal dice azul (trabajador) y verde (empresa).
+  // Los conceptos de nómina solo se parten tras un punto («TRAB.CONT.COMUNES»), nunca a mitad de palabra.
+  const nomConcept = (concept: string) =>
+    concept.split('.').flatMap((part, index, parts) => (index < parts.length - 1 ? [part, '.', <wbr key={index} />] : [part]))
   const tone = (id: string) => {
     if (example.highlightWorkerRows?.includes(id)) return 'blue'
     if (example.highlightCompanyRows?.includes(id)) return 'positive'
@@ -927,7 +930,7 @@ function EscenarioPayroll({ stepId, payrollLiveData }: { stepId: number; payroll
           {earnings.map((row) => (
             <div key={row.id} className={rowClass(row.id)}>
               <span className="esc-nom__code">{row.code}</span>
-              <span className="esc-nom__concept">{row.concept}</span>
+              <span className="esc-nom__concept">{nomConcept(row.concept)}</span>
               <span className="esc-nom__price">{row.price ?? ''}</span>
               <span className="esc-nom__amount">{row.earnings || '—'}</span>
             </div>
@@ -936,7 +939,7 @@ function EscenarioPayroll({ stepId, payrollLiveData }: { stepId: number; payroll
           {deductions.map((row) => (
             <div key={row.id} className={rowClass(row.id)}>
               <span className="esc-nom__code">{row.code}</span>
-              <span className="esc-nom__concept">{row.concept}</span>
+              <span className="esc-nom__concept">{nomConcept(row.concept)}</span>
               <span className="esc-nom__price">{row.price ? `${row.price} %` : ''}</span>
               <span className="esc-nom__amount">{row.deductions}</span>
             </div>
@@ -944,7 +947,7 @@ function EscenarioPayroll({ stepId, payrollLiveData }: { stepId: number; payroll
           <span className="esc-nom__group">APORTACION EMPRESA</span>
           {snapshot.baseRows.map((row) => (
             <div key={row.id} className={`${rowClass(row.id)} esc-nom__row--base`}>
-              <span className="esc-nom__concept">{row.concept}</span>
+              <span className="esc-nom__concept">{nomConcept(row.concept)}</span>
               <span className="esc-nom__price">{row.base ?? ''}</span>
               <span className="esc-nom__price">{row.rate ?? ''}</span>
               <span className="esc-nom__amount">{row.company ?? ''}</span>
@@ -975,7 +978,7 @@ function EscenarioPayroll({ stepId, payrollLiveData }: { stepId: number; payroll
 const ESCENARIO_CONCEPT_VISUALS: Record<string, ReactNode> = {
   'reduction-vs-deduction': (
     <div className="esc-coins">
-      {/* texto nuevo D: rótulos de las monedas */}
+      {/* texto nuevo D (aprobado): rótulos de las monedas */}
       <span className="esc-coin esc-coin--big"><strong>1 €</strong><small>deducción</small></span>
       <span className="esc-coin esc-coin--small"><strong>0,30 €</strong><small>reducción</small></span>
     </div>

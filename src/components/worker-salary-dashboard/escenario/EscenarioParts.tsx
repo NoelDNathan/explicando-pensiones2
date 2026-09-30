@@ -216,7 +216,7 @@ export function EscEquation({ terms, ops, className }: {
   className?: string
 }) {
   return (
-    <div className={`esc-equation${className ? ` ${className}` : ''}`}>
+    <div className={`esc-equation${className ? ` ${className}` : ''}`} style={{ '--esc-eq-n': terms.length } as CSSProperties}>
       {terms.map((term, index) => (
         <div key={index} className="esc-equation__cell">
           {index > 0 ? <span className="esc-equation__op" aria-hidden="true">{ops[index - 1]}</span> : null}

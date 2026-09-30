@@ -805,12 +805,13 @@ export function WorkerWealthTaxesCard({
         <div className="wctc-heading">
           <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 12</span>
           <h2 id="wwtc-title">9. Vivienda y coche</h2>
-          <p>
+          {/* v2: párrafo repetido con la introducción del paso; quitado con aprobación (2026-09-30). */}
+          {isEscenario ? null : <p>
             Aquí no pagas por gastar, sino por tener: el <b>IBI</b> (Impuesto sobre Bienes
             Inmuebles) de tu vivienda y el <b>IVTM</b> (Impuesto sobre Vehículos de Tracción
             Mecánica, el llamado «impuesto de circulación») de tu coche se cobran cada año.
             También puedes recuperar lo que pagaste al comprar, que fue un pago único.
-          </p>
+          </p>}
         </div>
       </header>
 

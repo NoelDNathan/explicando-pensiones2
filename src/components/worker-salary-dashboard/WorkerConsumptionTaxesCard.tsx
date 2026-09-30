@@ -640,7 +640,7 @@ export function WorkerConsumptionTaxesCard({
             ))}
             {missingShare > 0.05 ? (
               <span className="esc-iva__slice esc-iva__slice--missing" style={{ flexGrow: missingShare }}>
-                {/* texto nuevo D: rótulo del hueco sin repartir */}
+                {/* texto nuevo D (aprobado): rótulo del hueco sin repartir */}
                 <strong>Falta</strong>
                 <span>{formatNumber(missingShare)} %</span>
               </span>

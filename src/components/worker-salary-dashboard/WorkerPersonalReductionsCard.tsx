@@ -2099,7 +2099,7 @@ export function WorkerPersonalReductionsCard({
                 <span className="esc-pr__fork-split">
                   <span className="d-paint-company-light d-growx" style={{ flexGrow: Math.max(1, inKindTaxableGross), animationDelay: "600ms" }} />
                   {inKindExemptApplied > 0 ? (
-                    <span className="esc-pr__fork-exempt d-growx" style={{ flexGrow: Math.max(inKindExemptApplied * 6, inKindBarMax * 0.03), animationDelay: "800ms" }} />
+                    <span className="esc-pr__fork-exempt d-growx" style={{ flexGrow: Math.max(inKindExemptApplied, inKindBarMax * 0.012), animationDelay: "800ms" }} />
                   ) : null}
                 </span>
               </div>

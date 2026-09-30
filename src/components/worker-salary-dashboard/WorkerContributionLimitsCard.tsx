@@ -508,6 +508,20 @@ export function WorkerContributionLimitsCard({
       : !selectedGroup
         ? 'Selecciona tu grupo de cotización para ver los límites aplicables.'
         : 'No hay datos disponibles para este año.'
+    // Escala propia de la v2 por tramos: la zona de debajo del mínimo y la de encima del máximo
+    // tienen anchura fija para que tu base se vea siempre fuera del rango sin chocar con el borde.
+    const minBase = selectedGroup?.minBaseMonthly ?? 1
+    const maxBase = selectedGroup?.maxBaseMonthly ?? 2
+    const escPosition = (value: number) => {
+      if (value <= minBase) return 3 + 15 * clamp((value - minBase * 0.5) / (minBase * 0.5), 0, 1)
+      if (value <= maxBase) return 18 + 54 * ((value - minBase) / (maxBase - minBase))
+      return 72 + 25 * clamp((value - maxBase) / maxBase, 0, 1)
+    }
+    const escMin = 18
+    const escMax = 72
+    const escUser = result ? escPosition(result.userBaseMonthly) : 45
+    const escOverflow = result ? result.userBaseMonthly > maxBase * 2 : false
+    const escRefs = scaleReferences.map((reference) => ({ ...reference, percent: escPosition(reference.baseMonthly) }))
     return (
       <section className="d-page esc-cl" aria-labelledby="wclc-title">
         <h2 id="wclc-title" className="esc-sr">Límites de cotización</h2>
@@ -551,25 +565,34 @@ export function WorkerContributionLimitsCard({
             <section className="esc-cl__corridor" aria-label="Comparación de base mínima, base real y base máxima">
               <div className="esc-cl__zones" aria-hidden="true">
                 <span style={{ left: 0 }}>Debajo del mínimo</span>
-                <span style={{ left: `${(minPosition + maxPosition) / 2}%`, transform: 'translateX(-50%)' }}>Dentro del rango</span>
+                <span style={{ left: `${(escMin + escMax) / 2}%`, transform: 'translateX(-50%)' }}>Dentro del rango</span>
                 <span style={{ right: 0 }}>Por encima del máximo</span>
               </div>
               <div className="esc-cl__track" aria-hidden="true">
-                <span className="esc-cl__hatch" style={{ left: 0, width: `${minPosition}%` }} />
-                <span className="esc-cl__range" style={{ left: `${minPosition}%`, width: `${maxPosition - minPosition}%` }} />
-                <span className="esc-cl__hatch" style={{ left: `${maxPosition}%`, right: 0 }} />
-                <span className="esc-cl__wall" style={{ left: `${minPosition}%` }} />
-                <span className="esc-cl__wall" style={{ left: `${maxPosition}%` }} />
+                <span className="esc-cl__hatch" style={{ left: 0, width: `${escMin}%` }} />
+                <span className="esc-cl__range" style={{ left: `${escMin}%`, width: `${escMax - escMin}%` }} />
+                <span className="esc-cl__hatch" style={{ left: `${escMax}%`, right: 0 }} />
+                <span className="esc-cl__wall" style={{ left: `${escMin}%` }} />
+                <span className="esc-cl__wall" style={{ left: `${escMax}%` }} />
                 {result.status === 'above_maximum' ? (
-                  <span className="esc-cl__excess" style={{ left: `${maxPosition}%`, width: `${Math.max(0, userPosition - maxPosition)}%` }} />
+                  <span className={`esc-cl__excess${escOverflow ? ' is-open' : ''}`} style={{ left: `${escMax}%`, width: `${escUser - escMax}%` }} />
                 ) : null}
-                <span className="esc-cl__marker" style={{ left: `${result.status === 'above_maximum' ? maxPosition : result.status === 'below_minimum' ? minPosition : userPosition}%` }} />
-                {scaleReferences.map((reference) => (
+                {result.status === 'below_minimum' ? (
+                  <>
+                    <span className="esc-cl__shortfall" style={{ left: `${escUser}%`, width: `${escMin - escUser}%` }} />
+                    <span className="esc-cl__ghost" style={{ left: `${escUser}%` }} />
+                  </>
+                ) : null}
+                <span
+                  className={`esc-cl__marker${result.status === 'below_minimum' ? ' is-at-min' : result.status === 'above_maximum' ? ' is-at-max' : ''}`}
+                  style={{ left: `${result.status === 'above_maximum' ? escMax : result.status === 'below_minimum' ? escMin : escUser}%` }}
+                />
+                {escRefs.map((reference) => (
                   <span key={reference.label} className="esc-cl__ref" style={{ left: `${reference.percent}%` }} />
                 ))}
               </div>
               <div className="esc-cl__refs" aria-hidden="true">
-                {scaleReferences.map((reference) => (
+                {escRefs.map((reference) => (
                   <span key={reference.label} style={{ left: `${reference.percent}%` }} title={`${reference.title}: ${reference.display}`}>{reference.label}</span>
                 ))}
               </div>

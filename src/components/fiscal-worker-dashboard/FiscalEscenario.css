@@ -4,6 +4,11 @@
  * común a todos los pasos: márgenes, tipografía y fuera cajas. Las piezas propias de
  * D están en worker-salary-dashboard/escenario/. La v1 no lleva esta clase.
  */
+/* Sin barra lateral: la regla de 901-1180 px de la v1 reservaba 250 px y aplastaba el paso. */
+.fwd.fwd--escenario {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .fwd--escenario {
   font-family: var(--fiscal-font-body);
   background: var(--fiscal-stage);
