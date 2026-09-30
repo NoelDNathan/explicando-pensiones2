@@ -634,3 +634,149 @@
    cambio moviendo la página, el centinela volvía a quedar debajo de la línea y el panel saltaba entre
    grande y pequeño. Sin anclaje dentro del explicador, el cambio ocurre una sola vez. */
 .fwd.fwd--escenario .wir.wir--embedded { overflow-anchor: none; }
+
+/* Ficha de cada hijo o ascendiente: cabecera con número, título y estado; debajo, las preguntas como filas
+   separadas por líneas. Los botones van sobre una pista más oscura que la ficha para que se vea el control
+   entero, y el estado (suma / no suma) se lee por texto y por color. */
+.fwd.fwd--escenario .wprc-person {
+  --wprc-person-tone: var(--fiscal-stage-positive);
+  display: grid;
+  gap: 0;
+  padding: clamp(20px, 3vw, 32px);
+  border-left: 6px solid var(--wprc-person-tone);
+  border-radius: 8px 28px 28px 8px;
+  background: var(--fiscal-stage-raised);
+}
+.fwd.fwd--escenario .wprc-person.is-excluded { --wprc-person-tone: var(--fiscal-stage-yellow); }
+.fwd.fwd--escenario .wprc-person__head {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 0 0 20px;
+}
+.fwd.fwd--escenario .wprc-person__head > span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--wprc-person-tone);
+  color: var(--fiscal-stage);
+  font-family: var(--fiscal-font-display);
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+.fwd.fwd--escenario .wprc-person__head h4 {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wprc-person__head p { margin: 6px 0 0; font-size: 1rem; line-height: 1.4; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wprc-person__head > :is(.wprc-person__status, .irpf-question-effect) {
+  align-self: center;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--wprc-person-tone) 18%, transparent);
+  color: var(--wprc-person-tone);
+  font-family: var(--fiscal-font-body);
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.fwd.fwd--escenario .wprc-person__asks { display: flex; flex-direction: column; gap: 0; padding: 0; }
+.fwd.fwd--escenario .wprc-person-ask {
+  display: grid;
+  gap: 12px;
+  padding: 20px 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+}
+.fwd.fwd--escenario .wprc-person-ask:last-child { padding-bottom: 0; }
+.fwd.fwd--escenario .wprc-person-ask__prompt { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.fwd.fwd--escenario .wprc-person-ask__prompt > p { margin: 0; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); font-weight: 700; line-height: 1.35; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wprc-person-ask__status {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fiscal-stage-yellow) 16%, transparent);
+  color: var(--fiscal-stage-yellow);
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.fwd.fwd--escenario .wprc-person .irpf-reduction-question__options { justify-self: start; background: var(--fiscal-stage); }
+.fwd.fwd--escenario .wprc-person .irpf-reduction-question__options button { min-height: 46px; padding: 0 20px; font-size: 1.0625rem; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wprc-person .irpf-reduction-question__options button:is(.is-selected, [aria-pressed='true']) { background: var(--fiscal-stage-text); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wprc-person .wprc-person-note {
+  margin: 4px 0 0;
+  padding: 0 0 0 14px;
+  border-left: 3px solid var(--fiscal-stage-yellow);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--fiscal-stage-copy);
+}
+@media (max-width: 560px) {
+  .fwd.fwd--escenario .wprc-person__head { grid-template-columns: 40px minmax(0, 1fr); }
+  .fwd.fwd--escenario .wprc-person__head > span { width: 40px; height: 40px; font-size: 1.0625rem; }
+  .fwd.fwd--escenario .wprc-person__head > :is(.wprc-person__status, .irpf-question-effect) { grid-column: 2; justify-self: start; }
+}
+
+/* Desplegables nativos de toda la v2: sin la flecha del sistema pegada al borde; en su lugar un chevrón
+   dibujado con dos degradados (con tokens) y separado del borde. `:not([multiple]):not([size])` limita la
+   regla a los desplegables de una opción y le da la especificidad para ganar a los `background:` de cada paso.
+   En los navegadores que admiten `appearance: base-select`, la lista abierta también sigue el estilo
+   (fondo oscuro, filas redondeadas, la opción elegida en verde) en lugar del azul del sistema. */
+.fwd.fwd--escenario select:not([multiple]):not([size]) {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 56px;
+  border: 2px solid transparent;
+  background-color: var(--fiscal-stage-raised);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--fiscal-stage-positive) 50%),
+    linear-gradient(135deg, var(--fiscal-stage-positive) 50%, transparent 50%);
+  background-position: calc(100% - 30px) 50%, calc(100% - 23px) 50%;
+  background-size: 7px 7px, 7px 7px;
+  background-repeat: no-repeat;
+  color: var(--fiscal-stage-text);
+  cursor: pointer;
+}
+.fwd.fwd--escenario select:not([multiple]):not([size]):focus-visible { border-color: var(--fiscal-stage-positive); outline: none; }
+.fwd.fwd--escenario select:not([multiple]):not([size]):disabled { cursor: not-allowed; opacity: 0.55; }
+.fwd.fwd--escenario select:not([multiple]):not([size]) option { background: var(--fiscal-stage); color: var(--fiscal-stage-text); }
+
+@supports (appearance: base-select) {
+  .fwd.fwd--escenario select:not([multiple]):not([size]) { appearance: base-select; display: flex; align-items: center; }
+  .fwd.fwd--escenario select:not([multiple]):not([size])::picker-icon { display: none; }
+  .fwd.fwd--escenario select:not([multiple]):not([size])::picker(select) {
+    appearance: base-select;
+    margin-top: 8px;
+    padding: 8px;
+    border: 2px solid var(--fiscal-stage-line);
+    border-radius: 24px;
+    background: var(--fiscal-stage);
+    color: var(--fiscal-stage-text);
+    box-shadow: 0 24px 48px color-mix(in srgb, var(--fiscal-stage) 70%, transparent);
+  }
+  .fwd.fwd--escenario select:not([multiple]):not([size]) option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 18px;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--fiscal-stage-text);
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .fwd.fwd--escenario select:not([multiple]):not([size]) option::checkmark { color: var(--fiscal-stage-positive); }
+  .fwd.fwd--escenario select:not([multiple]):not([size]) option:is(:hover, :focus-visible) { background: var(--fiscal-stage-raised); outline: none; }
+  .fwd.fwd--escenario select:not([multiple]):not([size]) option:checked { background: color-mix(in srgb, var(--fiscal-stage-positive) 16%, transparent); color: var(--fiscal-stage-text); }
+}
