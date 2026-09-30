@@ -780,3 +780,19 @@
   .fwd.fwd--escenario select:not([multiple]):not([size]) option:is(:hover, :focus-visible) { background: var(--fiscal-stage-raised); outline: none; }
   .fwd.fwd--escenario select:not([multiple]):not([size]) option:checked { background: color-mix(in srgb, var(--fiscal-stage-positive) 16%, transparent); color: var(--fiscal-stage-text); }
 }
+/* Todos los desplegables de la v2 con la misma altura mínima y letra; las listas largas (comunidades) con scroll. */
+.fwd.fwd--escenario select:not([multiple]):not([size]) { min-height: 56px; padding-left: 22px; font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem); font-weight: 700; border-radius: 999px; }
+@supports (appearance: base-select) {
+  .fwd.fwd--escenario select:not([multiple]):not([size])::picker(select) { max-height: min(420px, 60vh); overflow-y: auto; scrollbar-color: var(--fiscal-stage-line) transparent; }
+}
+/* Algunos desplegables traen su propio chevrón en un <svg> hermano; en la v2 ya lo dibuja el propio select. */
+.fwd.fwd--escenario select:not([multiple]):not([size]) + svg.lucide-chevron-down { display: none; }
+@media (max-width: 560px) {
+  .fwd.fwd--escenario .wprc-person { padding: 18px 14px 18px 16px; border-left-width: 4px; }
+  .fwd.fwd--escenario .wprc-person .irpf-reduction-question__options { gap: 2px; padding: 4px; }
+  .fwd.fwd--escenario .wprc-person .irpf-reduction-question__options button { min-height: 42px; padding: 0 12px; font-size: 0.9375rem; }
+}
+@media (max-width: 560px) {
+  .fwd.fwd--escenario .wprc-person .irpf-reduction-question__options { flex-wrap: nowrap; max-width: 100%; }
+  .fwd.fwd--escenario .wprc-person .irpf-reduction-question__options button { flex: 1 1 auto; min-width: 0; padding: 0 10px; white-space: nowrap; }
+}

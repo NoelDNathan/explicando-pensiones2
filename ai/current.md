@@ -102,7 +102,7 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Pasos 4, 5, 7 (`WorkerPersonalReductionsCard`), 6 y 9: mismos formularios de la v1 con piezas D
   añadidas (bifurcación, cascada, escalera de la cuota, monedas, escalones del IRPF, dos relojes)
   y CSS de la v2.
-- Nómina de ejemplo en la v2: `EscenarioPayroll` (filas del paso encendidas, resto atenuado). El líquido total escala con el ancho de la columna de 300 px para que el euro no se salga de la esquina del panel.
+- Nómina de ejemplo (pasos 1–6, v1 y v2): `PayrollExamplePanel` / `EscenarioPayroll` (filas del paso encendidas, resto atenuado). A partir del IVA y consumo (paso 8) no se muestra. El líquido total escala con el ancho de la columna de 300 px para que el euro no se salga de la esquina del panel.
 - Pregunta 1 del paso 0: el círculo del deslizador lo pinta la página (no el tirador nativo), porque en Chrome/Edge con la escala de Windows y en Firefox el nativo no sigue al cursor. El del salario sigue siendo el `input` nativo.
 - Cuestionarios v2 (pasos 4, 5, 7): una fila por campo, cifra grande, contador con − y + (solo v2). Paso 9 con «Sí»: cada vivienda o coche es un capítulo sin paneles anidados. Paso 2: escala propia por tramos en el pasillo y selector de grupo en estilo D (trigger en rejilla G | nombre | min/máx, alineación vertical centrada). Las tres cifras del pasillo (mínima / tu base / máxima) se apilan bajo 900 px y el importe escala al ancho de su columna para no taparse; `/ mes` y `/ año` van en un span más pequeño, como en la maqueta. En móvil, «Tu base» va en un panel ancho arriba y mínima/máxima comparten fila debajo; las marcas SMI y salario medio dejan de solaparse.
 - Paso 1 v2: los complementos salariales anuales van **encima** del gráfico de 12/14 pagas (pedido 2026-09-30; en la maqueta Paso01 iban debajo).
@@ -111,6 +111,8 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Paso 4 v2: exención / reducción / deducción como tres filas (término grande en su color, explicación y etiqueta del paso). Paso 3 v2: los tipos del selector AT/EP empiezan bajo el nombre (2026-09-30).
 - Paso 5 v2: aviso «no aplica» oscuro con franja amarilla (roja si está bloqueada); tramos como lista de filas con el tuyo resaltado; cifras del simulador ajustadas a su celda (enganchado y móvil) y escala del deslizador con tres marcas en móvil; sin anclaje de scroll para que no salte al engancharse (2026-09-30).
 - Paso 6 v2: las cuatro cifras del resultado en una línea (2 × 2 con el total arriba en móvil) (2026-09-30).
+- v2: fichas de hijos y ascendientes con franja por estado; desplegables nativos con chevrón propio y lista con `appearance: base-select` donde se admite (2026-09-30).
+- Paso 7 v2: la moneda amarilla «0,30 € / reducción» escala el texto con el diámetro (`cqi`) para no recortarse en móvil (2026-09-30).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
 «Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
 
