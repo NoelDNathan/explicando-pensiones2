@@ -1,0 +1,45 @@
+/* Paso 2 (Límites de cotización) en la v2. Maqueta: Paso02.dc.html */
+.esc-cl__controls { align-items: center; }
+.esc-cl__controls .wclc-group-select { min-width: min(100%, 460px); }
+.esc-cl__corridor { position: relative; display: flex; flex-direction: column; gap: 14px; padding-top: 34px; }
+.esc-cl__zones { position: relative; height: 20px; font-size: 0.875rem; color: var(--fiscal-stage-muted); }
+.esc-cl__zones span { position: absolute; top: 0; white-space: nowrap; }
+.esc-cl__track { position: relative; height: 150px; }
+.esc-cl__hatch, .esc-cl__range { position: absolute; top: 30px; bottom: 30px; }
+.esc-cl__hatch { background-image: repeating-linear-gradient(135deg, var(--fiscal-stage-raised) 0 10px, var(--fiscal-stage) 10px 20px); }
+.esc-cl__hatch:first-child { border-radius: 20px 0 0 20px; }
+.esc-cl__hatch:nth-child(3) { border-radius: 0 20px 20px 0; }
+.esc-cl__range { background: var(--fiscal-stage-raised); }
+.esc-cl__wall { position: absolute; top: 0; bottom: 0; width: 6px; margin-left: -3px; border-radius: 99px; background: var(--fiscal-stage-text); }
+.esc-cl__marker {
+  position: absolute;
+  top: 20px;
+  width: 52px;
+  height: 110px;
+  margin-left: -26px;
+  border-radius: 26px;
+  background: var(--fiscal-stage-positive);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--fiscal-stage-positive) 18%, transparent);
+  transition: left 0.8s var(--fiscal-ease-spring);
+}
+.esc-cl__excess { position: absolute; top: 58px; height: 34px; border: 3px dashed var(--fiscal-stage-company); border-left: 0; border-radius: 0 99px 99px 0; }
+.esc-cl__ref { position: absolute; bottom: 24px; width: 2px; height: 16px; margin-left: -1px; background: var(--fiscal-stage-faint); }
+.esc-cl__refs { position: relative; height: 18px; font-size: 0.8125rem; color: var(--fiscal-stage-faint); }
+.esc-cl__refs span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.esc-cl__figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-top: 16px; }
+.esc-cl__figures > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.esc-cl__user { align-items: center; }
+.esc-cl__maxfig { align-items: flex-end; }
+.esc-cl__verdict { color: var(--fiscal-stage-text); }
+.esc-cl__desc { color: var(--fiscal-stage-text); }
+.esc-cl__margin { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; font-size: 1.0625rem; }
+.esc-cl__eq { align-self: center; }
+@media (max-width: 720px) {
+  .esc-cl__zones { display: none; }
+  .esc-cl__track { height: 110px; }
+  .esc-cl__hatch, .esc-cl__range { top: 24px; bottom: 24px; }
+  .esc-cl__marker { top: 14px; width: 36px; height: 82px; margin-left: -18px; }
+  .esc-cl__excess { top: 40px; height: 30px; }
+  .esc-cl__figures { grid-template-columns: minmax(0, 1fr); }
+  .esc-cl__user, .esc-cl__maxfig { align-items: flex-start; }
+}

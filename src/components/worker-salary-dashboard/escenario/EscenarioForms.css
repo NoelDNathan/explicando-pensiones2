@@ -1,0 +1,403 @@
+/*
+ * Pasos 4, 5 y 7 en la v2 (WorkerPersonalReductionsCard y sus formularios).
+ * Mismos controles y lógica que la v1; aquí solo cambia cómo se ven.
+ * Maquetas: Paso04, Paso05 y Paso07.
+ */
+.fwd.fwd--escenario .wprc {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 8vw, 120px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--fiscal-stage-text);
+  font-family: var(--fiscal-font-body);
+}
+.fwd.fwd--escenario .wprc::before { display: none; }
+.fwd.fwd--escenario .wprc-explained--sticky { display: none; }
+
+/* Cascada (paso 5) y escalera (paso 7) */
+.esc-pr__cascade { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: end; }
+.esc-pr__minimum { gap: 8px; }
+.esc-pr__ladder { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+
+/* Bifurcación (paso 4) */
+.esc-pr__fork { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 22px 28px; align-items: center; margin: 24px 0; }
+.esc-pr__fork-l { font-size: 1.125rem; font-weight: 700; }
+.esc-pr__fork-bar { display: block; height: 40px; border-radius: 99px; }
+.esc-pr__fork-split { display: flex; gap: 4px; height: 40px; }
+.esc-pr__fork-split > span:first-child { border-radius: 99px 4px 4px 99px; }
+.esc-pr__fork-split > span:only-child { border-radius: 99px; }
+.esc-pr__fork-exempt { border-radius: 4px 99px 99px 4px; background-image: repeating-linear-gradient(135deg, var(--fiscal-stage-yellow) 0 8px, var(--fiscal-stage) 8px 16px); }
+
+/* Bloques con número: capítulo con cifra gigante hueca */
+.fwd.fwd--escenario :is(.wprc-net-income, .wprc-question-intro) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wprc-net-income { display: flex; flex-direction: column; gap: 24px; }
+.fwd.fwd--escenario .wprc-net-income__head,
+.fwd.fwd--escenario .wprc-question-intro {
+  display: grid;
+  grid-template-columns: clamp(80px, 14vw, 200px) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 48px);
+  align-items: start;
+}
+.fwd.fwd--escenario :is(.wprc-net-income__head--no-num, .wprc-question-intro--no-num) { grid-template-columns: minmax(0, 1fr); }
+.fwd.fwd--escenario .wprc-net-income__head { grid-template-columns: clamp(80px, 14vw, 200px) minmax(0, 1fr) auto; }
+.fwd.fwd--escenario .wprc-net-income__head--no-num { grid-template-columns: minmax(0, 1fr) auto; }
+.fwd.fwd--escenario :is(.wprc-net-income__num, .wprc-question-intro > span) {
+  display: block;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(4.5rem, 2rem + 9vw, 10.625rem);
+  line-height: 0.8;
+  font-weight: 900;
+  font-stretch: 70%;
+  color: var(--fiscal-stage-raised);
+  -webkit-text-stroke: 2px var(--fiscal-stage-positive);
+}
+.fwd.fwd--escenario :is(.wprc-net-income__head h3, .wprc-question-intro h3) {
+  margin: 0 0 18px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2rem, 1.3rem + 3vw, 4rem);
+  line-height: 1;
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario :is(.wprc-net-income__head p, .wprc-question-intro p, .wprc-net-income__note) {
+  margin: 0;
+  max-width: 980px;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .wprc-net-income__head p strong { color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wprc-net-income__pill {
+  align-self: start;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Ecuación del bloque */
+.fwd.fwd--escenario .wprc-net-income__equation {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 20px 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.fwd.fwd--escenario .wprc-net-income__term {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 4px 12px;
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wprc-net-income__term[data-op]::before {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: end;
+  width: 36px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  color: var(--fiscal-stage-faint);
+}
+.fwd.fwd--escenario .wprc-net-income__term[data-op='minus']::before { content: '−'; }
+.fwd.fwd--escenario .wprc-net-income__term[data-op='plus']::before { content: '+'; }
+.fwd.fwd--escenario .wprc-net-income__term[data-op='equals']::before { content: '='; }
+.fwd.fwd--escenario .wprc-net-income__term > :is(dt, dd) { grid-column: 2; margin: 0; min-width: 0; }
+.fwd.fwd--escenario .wprc-net-income__term dt { display: flex; flex-direction: column; gap: 4px; font-size: 1rem; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wprc-net-income__term dt small { font-size: 0.875rem; color: var(--fiscal-stage-faint); }
+.fwd.fwd--escenario .wprc-net-income__term dd {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.375rem, 0.9rem + 1.3vw, 2rem);
+  font-weight: 800;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wprc-net-income__term > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.fwd.fwd--escenario .wprc-net-income__term.is-result dd { color: var(--fiscal-stage-positive); font-size: clamp(1.625rem, 1.1rem + 1.6vw, 2.5rem); }
+.fwd.fwd--escenario .wprc-net-income:has(.wprc-net-income__num) > :not(.wprc-net-income__head) { margin-left: calc(clamp(80px, 14vw, 200px) + clamp(20px, 4vw, 48px)); }
+.fwd.fwd--escenario .wprc--deductions-benefits .wprc-net-income:first-of-type .wprc-net-income__equation { display: none; }
+
+/* Desplegables */
+.fwd.fwd--escenario .wprc-net-income__more { border: 0; background: transparent; }
+.fwd.fwd--escenario .wprc-net-income__more summary,
+.fwd.fwd--escenario .irpf-pension-limit summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 2px solid var(--fiscal-stage-positive);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-positive);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.fwd.fwd--escenario .wprc-net-income__more ul {
+  margin: 16px 0 0;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--fiscal-stage-copy);
+}
+
+/* Preguntas Sí/No: filas con borde superior */
+.fwd.fwd--escenario .irpf-reduction-question-list { display: flex; flex-direction: column; gap: 0; }
+.fwd.fwd--escenario .irpf-reduction-question {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 32px;
+  align-items: center;
+  padding: 22px 0;
+  border: 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .irpf-reduction-question__prompt { display: block; min-width: 0; }
+.fwd.fwd--escenario .irpf-reduction-question__prompt > span { display: none; }
+.fwd.fwd--escenario .irpf-reduction-question__title-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.fwd.fwd--escenario .irpf-reduction-question__title-row h3 {
+  margin: 0;
+  font-family: var(--fiscal-font-body);
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  line-height: 1.35;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .irpf-reduction-question__prompt p { margin: 4px 0 0; font-size: 1rem; line-height: 1.5; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .irpf-reduction-question__choices { display: inline-flex; gap: 8px; }
+.fwd.fwd--escenario .irpf-reduction-question__choices button {
+  min-width: 84px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.fwd.fwd--escenario .irpf-reduction-question__choices button:is(.is-selected, [aria-pressed='true']) {
+  border-color: var(--fiscal-stage-positive);
+  background: var(--fiscal-stage-positive);
+  color: var(--fiscal-stage);
+}
+.fwd.fwd--escenario .irpf-reduction-question__body,
+.fwd.fwd--escenario .irpf-reduction-question__guide {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .irpf-reduction-question__options { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 5px; border-radius: 999px; background: var(--fiscal-stage-raised); }
+.fwd.fwd--escenario .irpf-reduction-question__options button {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font-weight: 600;
+}
+.fwd.fwd--escenario .irpf-reduction-question__options button:is(.is-selected, [aria-pressed='true']) { background: var(--fiscal-stage-text); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .irpf-question-effect { border: 0; background: var(--fiscal-stage-raised); color: var(--fiscal-stage-positive); }
+
+/* Campos de importe */
+.fwd.fwd--escenario .irpf-rule-field {
+  border: 0;
+  border-radius: 20px;
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+}
+.fwd.fwd--escenario .irpf-rule-field__control,
+.fwd.fwd--escenario .irpf-rule-field > :is(input, select),
+.fwd.fwd--escenario .irpf-rule-form select {
+  border: 0;
+  border-radius: 999px;
+  background: var(--fiscal-stage);
+  color: var(--fiscal-stage-text);
+  box-shadow: none;
+}
+.fwd.fwd--escenario .irpf-period-toggle { border: 0; border-radius: 999px; background: var(--fiscal-stage-raised); }
+.fwd.fwd--escenario .irpf-period-toggle button { border: 0; border-radius: 999px; background: transparent; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .irpf-period-toggle button.is-selected { background: var(--fiscal-stage-text); color: var(--fiscal-stage); }
+.fwd.fwd--escenario :is(.wprc-person, .irpf-marital-infobox, .irpf-inkind-total) {
+  border: 0;
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+}
+.fwd.fwd--escenario :is(.irpf-marital-note, .wprc-person-note) { border: 0; background: transparent; color: var(--fiscal-stage-muted); }
+
+/* Paso 4: la pregunta única, gigante */
+.fwd.fwd--escenario .wprc--in-kind .irpf-reduction-question { grid-template-columns: minmax(0, 1fr); gap: 24px; border-top: 0; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-reduction-question__title-row h3 {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2.25rem, 1.2rem + 4vw, 4.75rem);
+  line-height: 0.98;
+  font-weight: 900;
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+}
+.fwd.fwd--escenario .wprc--in-kind .irpf-reduction-question__prompt p { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wprc--in-kind .irpf-reduction-question__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.fwd.fwd--escenario .wprc--in-kind .irpf-reduction-question__choices button {
+  min-height: clamp(96px, 12vw, 140px);
+  border-width: 3px;
+  border-radius: 40px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  font-weight: 900;
+  font-stretch: 120%;
+}
+
+/* Avisos */
+.fwd.fwd--escenario .wprc-calculation-warnings {
+  padding: clamp(22px, 3vw, 36px);
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: transparent;
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .wprc-calculation-warnings strong {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  font-weight: 900;
+  color: var(--fiscal-stage-text);
+}
+
+/* Explicador de la reducción (paso 5) */
+.fwd.fwd--escenario .wir-panel {
+  border: 0;
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wir-panel__title { font-family: var(--fiscal-font-display); font-weight: 900; font-stretch: 115%; color: var(--fiscal-stage-text); }
+
+@media (max-width: 900px) {
+  .esc-pr__cascade { grid-template-columns: minmax(0, 1fr); }
+  .fwd.fwd--escenario .wprc-net-income__head { grid-template-columns: clamp(64px, 18vw, 120px) minmax(0, 1fr); }
+  .fwd.fwd--escenario .wprc-net-income__pill { grid-column: 2; justify-self: start; }
+}
+@media (max-width: 560px) {
+  .fwd.fwd--escenario .irpf-reduction-question { grid-template-columns: minmax(0, 1fr); }
+  .esc-pr__fork { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+}
+@media (max-width: 900px) {
+  .fwd.fwd--escenario .wprc-net-income:has(.wprc-net-income__num) > :not(.wprc-net-income__head) { margin-left: 0; }
+}
+
+/* Las preguntas de cada capítulo cuelgan bajo su texto, no a sangre. */
+.fwd.fwd--escenario .wprc:not(.wprc--in-kind) > :is(.irpf-reduction-question-list, .irpf-rule-form) {
+  margin-top: calc(-1 * clamp(28px, 5vw, 72px));
+  margin-left: calc(clamp(80px, 14vw, 200px) + clamp(20px, 4vw, 48px));
+}
+@media (max-width: 900px) {
+  .fwd.fwd--escenario .wprc:not(.wprc--in-kind) > :is(.irpf-reduction-question-list, .irpf-rule-form) { margin-left: 0; }
+}
+
+/* Explicador de la reducción empotrado (paso 5): panel grande del escenario */
+.fwd.fwd--escenario .wir--embedded {
+  --wir-header-bg: transparent;
+  --wir-panel: var(--fiscal-stage-raised);
+  --wir-panel-shadow: none;
+  --wir-surface: var(--fiscal-stage);
+  --wir-border: transparent;
+  --wir-border-soft: var(--fiscal-stage-line);
+  --wir-sticky-shadow: none;
+  padding: clamp(24px, 4vw, 56px);
+  border-radius: 40px;
+  background: color-mix(in srgb, var(--fiscal-stage-raised) 55%, var(--fiscal-stage));
+  font-size: 1.0625rem;
+}
+.fwd.fwd--escenario .wir--embedded .wir-header { padding: 0; border: 0; background: transparent; box-shadow: none; }
+.fwd.fwd--escenario .wir--embedded .wir-eyebrow { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wir--embedded .wir-header h2 {
+  margin: 10px 0 18px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  line-height: 1.05;
+  font-weight: 900;
+  font-stretch: 115%;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wir--embedded .wir-header p { font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wir--embedded .wir-header > div > p:first-of-type { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wir--embedded .wir-acronym { padding: 0; border: 0; background: transparent; }
+.fwd.fwd--escenario .wir--embedded .wir-callout {
+  border: 0;
+  border-radius: 22px;
+  background: var(--fiscal-stage-yellow);
+  color: var(--fiscal-stage);
+}
+.fwd.fwd--escenario .wir--embedded .wir-callout :is(h3, p, strong, svg) { color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wir--embedded .wir-callout h3 { font-size: 1.25rem; }
+.fwd.fwd--escenario .wir--embedded .wir-callout--blocked { background: var(--fiscal-stage-red); }
+.fwd.fwd--escenario .wir--embedded :is(.wir-kpi, .wir-tier, .wir-panel, .wir-trap) {
+  border: 0;
+  border-radius: 24px;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wir--embedded .wir-kpi strong { font-family: var(--fiscal-font-display); font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem); font-weight: 900; line-height: 1; }
+.fwd.fwd--escenario .wir--embedded .wir-tier.is-active { background: var(--fiscal-stage-positive); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wir--embedded .wir-tier.is-active :is(h3, h4, p, strong, span) { color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wir--embedded .wir-tier__badge { background: var(--fiscal-stage); color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wir--embedded .wir-panel__title,
+.fwd.fwd--escenario .wir--embedded .wir-trap h3 {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
+  font-weight: 900;
+  font-stretch: 115%;
+  color: var(--fiscal-stage-text);
+}
+/* Paso 4: primero la pregunta, después la bifurcación (orden de la maqueta). */
+.fwd.fwd--escenario .wprc--in-kind > .wprc-hero { order: -3; }
+.fwd.fwd--escenario .wprc--in-kind > .wprc-question-intro { order: -2; }
+.fwd.fwd--escenario .wprc--in-kind > .irpf-rule-form { order: -1; margin-top: calc(-1 * clamp(28px, 5vw, 72px)); }

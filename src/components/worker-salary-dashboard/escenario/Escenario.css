@@ -317,3 +317,8 @@
   }
   .esc-race__bar, .esc-needle__pin, .esc-cell { transition: none; }
 }
+
+.esc-sweep--positive {
+  background-image: linear-gradient(var(--fiscal-stage-positive-mark), var(--fiscal-stage-positive-mark));
+  animation-delay: 1s;
+}

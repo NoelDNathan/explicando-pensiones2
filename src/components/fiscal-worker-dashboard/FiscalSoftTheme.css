@@ -126,6 +126,14 @@
   --fiscal-stage-company-fill: #b96b18;
   --fiscal-stage-yellow-fill: #9a7418;
   --fiscal-stage-red-fill: #c4455b;
+  --fiscal-stage-blue-fill: #2f6fce;
+  --fiscal-stage-positive-mark: #14614f;
+  /* Escala del IVA en la v2: de menos a más impuesto. */
+  --fiscal-stage-vat-0: var(--fiscal-stage-line);
+  --fiscal-stage-vat-4: var(--fiscal-stage-yellow);
+  --fiscal-stage-vat-10: #e3a857;
+  --fiscal-stage-vat-21: var(--fiscal-stage-company-fill);
+  --fiscal-stage-vat-special: var(--fiscal-stage-red-fill);
   /* Avisos claros sobre el escenario (base máxima, base mínima). */
   --fiscal-stage-yellow-paper: #fff7d9;
   --fiscal-stage-yellow-ink: #7a5a10;

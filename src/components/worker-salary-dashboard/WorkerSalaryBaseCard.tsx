@@ -3,6 +3,9 @@ import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { InfoButton } from '../ui/InfoButton'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerSalaryBaseCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { DDisclosure, DH2 } from './escenario/EscenarioParts'
+import './escenario/EscenarioSalaryBase.css'
 
 const SALARY_COMPLEMENTS_HELP =
   'Pagos que sumas al salario fijo durante el año: plus de convenio, nocturnidad, productividad, comisiones u otros conceptos en dinero. Elige un porcentaje prefijado o escribe el importe anual; el porcentaje es la referencia y los euros se recalculan si mueves el salario fijo.'
@@ -168,6 +171,7 @@ export function WorkerSalaryBaseCard({
   initialSalaryComplements = 2000,
   onValuesChange,
 }: WorkerSalaryBaseCardProps) {
+  const variant = useFiscalVariant()
   const initialAnnual = initialAnnualSalary(initialSalary, initialPayPeriod, initialPayCount)
   const [salary, setSalary] = useState(initialSalary)
   const [payPeriod, setPayPeriod] = useState<PayPeriod>(initialPayPeriod)
@@ -208,6 +212,102 @@ export function WorkerSalaryBaseCard({
 
     setPayPeriod(nextPayPeriod)
     setSalary(clamp(Math.round(convertedSalary / nextRange.step) * nextRange.step, nextRange.min, nextRange.max))
+  }
+
+  if (variant === 'escenario') {
+    const pays = Number(payCount)
+    const perPay = annualSalary / pays
+    const complementShare = Math.min(40, complementsPercent)
+    const matched = matchingPreset(complementsPercent)
+    return (
+      <section className="d-page esc-sb" aria-labelledby="wsbc-title">
+        <h2 id="wsbc-title" className="esc-sr">Base real</h2>
+        <div className="d-stack">
+          <label className="d-lab" htmlFor="wsbc-salary">Salario anual o mensual bruto</label>
+          <SalarySlider
+            id="wsbc-salary"
+            value={salary}
+            onChange={setSalary}
+            min={salaryRange.min}
+            max={salaryRange.max}
+            step={salaryRange.step}
+            markers={salaryRange.markers}
+            scale={payPeriod === 'annual' ? 'log' : 'linear'}
+            unitLabel={payPeriod === 'annual' ? 'brutos al año' : 'brutos al mes'}
+            ariaLabel="Salario anual o mensual en euros"
+          />
+          <div className="d-row">
+            <div className="d-segs" role="group" aria-label="Periodicidad del salario">
+              <button type="button" aria-pressed={payPeriod === 'annual'} onClick={() => handlePayPeriodChange('annual')}>Anual</button>
+              <button type="button" aria-pressed={payPeriod === 'monthly'} onClick={() => handlePayPeriodChange('monthly')}>Mensual</button>
+            </div>
+            <div className="d-segs" role="group" aria-label="12 o 14 pagas">
+              <button type="button" aria-pressed={payCount === '12'} onClick={() => setPayCount('12')}>12 pagas</button>
+              <button type="button" aria-pressed={payCount === '14'} onClick={() => setPayCount('14')}>14 pagas</button>
+            </div>
+          </div>
+        </div>
+
+        <section className="d-stack" aria-labelledby="esc-sb-pays">
+          <DH2 id="esc-sb-pays">÷ {pays} <span className="d-muted">pagas</span></DH2>
+          <div className="esc-sb__pays" aria-hidden="true" style={{ gridTemplateColumns: `repeat(${pays}, minmax(0, 1fr))` }}>
+            {Array.from({ length: pays }, (_, index) => {
+              const extra = pays === 14 && (index === 5 || index === 13)
+              return (
+                <div key={`${pays}-${index}`} className="esc-sb__pay d-growy" style={{ animationDelay: `${index * 50}ms` }}>
+                  <span className="esc-sb__comp" style={{ flexGrow: complementShare }} />
+                  <span className={`esc-sb__base ${extra ? 'd-paint-worker' : 'd-paint-positive-light'}`}>
+                    <span>{perPay.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+          {/* texto nuevo D: leyenda del gráfico */}
+          <div className="d-row esc-sb__legend">
+            <span><span className="d-swatch d-paint-positive-light" aria-hidden="true" />Nómina ordinaria</span>
+            {pays === 14 ? <span><span className="d-swatch d-paint-worker" aria-hidden="true" />Paga extra</span> : null}
+            <span><span className="d-swatch d-paint-yellow" aria-hidden="true" />Complementos salariales anuales</span>
+          </div>
+        </section>
+
+        <section className="d-grid2" aria-label="Complementos salariales anuales">
+          <div className="d-stack">
+            <label className="d-h3" htmlFor="wsbc-complements">Complementos salariales anuales</label>
+            <div className="esc-sb__chips" role="group" aria-label="Porcentaje de complementos salariales sobre el salario fijo">
+              {AMOUNT_PERCENT_PRESETS.map((preset) => (
+                <button key={preset} type="button" aria-pressed={matched === preset} onClick={() => setComplementsPercent(preset)}>
+                  {percentFormatter.format(preset)} %
+                </button>
+              ))}
+            </div>
+            <label className="d-input esc-sb__euros">
+              <input
+                id="wsbc-complements"
+                type="number"
+                min={0}
+                step={100}
+                inputMode="numeric"
+                value={salaryComplements}
+                onChange={(event) => {
+                  const parsed = Number(event.target.value)
+                  if (Number.isFinite(parsed)) setComplementsPercent(percentFromEuros(Math.max(0, parsed), annualSalary))
+                }}
+                aria-label="Complementos salariales anuales en euros"
+              />
+              <span className="d-lab">EUR/año</span>
+            </label>
+            <DDisclosure label="Qué son los complementos salariales anuales" className="d-ghost">
+              <p className="d-small">{SALARY_COMPLEMENTS_HELP}</p>
+            </DDisclosure>
+          </div>
+          <output className="d-panel" aria-live="polite">
+            <span className="d-lab">Base real calculada</span>
+            <strong className="d-fig d-fig-xl d-pop">{formatNumber(realBase)} €</strong>
+          </output>
+        </section>
+      </section>
+    )
   }
 
   return (

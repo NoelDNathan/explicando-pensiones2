@@ -12,6 +12,9 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { SalarySlider } from "../ui/SalarySlider";
 import "./WorkerFiscalSummaryCard.css";
+import { useFiscalVariant } from "../fiscal-worker-dashboard/fiscalVariant";
+import { EscHundredCells, EscSweepText } from "./escenario/EscenarioParts";
+import "./escenario/EscenarioSummary.css";
 
 type SummaryDisplayMode = "absolute" | "percentage";
 type SummaryPeriod = "month" | "year";
@@ -107,6 +110,7 @@ export function WorkerFiscalSummaryCard({
 
   const [displayMode, setDisplayMode] = useState<SummaryDisplayMode>("absolute");
   const [period, setPeriod] = useState<SummaryPeriod>("month");
+  const fiscalVariant = useFiscalVariant();
   const isFinal = variant === "final";
   const workerContributionsRounded = roundEuro(workerContributionsAnnual);
   const irpfRounded = roundEuro(irpfAnnual);
@@ -143,6 +147,271 @@ export function WorkerFiscalSummaryCard({
     // Se deriva de takeHomePer100 para que las dos cifras sumen siempre 100.
     const taxesPer100 = 100 - takeHomePer100;
     const showGuessResult = quizEnabled && draftGuess !== null;
+
+    if (fiscalVariant === "escenario") {
+      const arrow = <ArrowRight size={22} strokeWidth={2.4} aria-hidden="true" />;
+
+      if (quizEnabled && stage === "guess") {
+        const isPending = draftGuess === null;
+        const sliderValue = draftGuess ?? GUESS_MAX / 2;
+        return (
+          <section className="d-page esc-q" aria-labelledby="wfsc-quiz-title">
+            <div className="d-stack">
+              <p className="d-caps">Pregunta 1 de 2</p>
+              <h2 id="wfsc-quiz-title" ref={quizHeadingRef} tabIndex={-1} className="esc-q__title">
+                De cada 100 € que cuesta tu trabajo,{" "}
+                <span className="d-acc">¿cuántos crees que acaban en Hacienda y la Seguridad Social?</span>
+              </h2>
+              <p className="d-lead d-rise">
+                Piensa en todo: lo que te descuentan en la nómina, lo que paga tu empresa por tenerte
+                contratado y los impuestos de lo que compras.
+              </p>
+            </div>
+            <div className="esc-q__answer">
+              <div className="d-stack">
+                <p className={`d-fig esc-q__value${isPending ? " is-pending" : ""}`} aria-hidden="true">
+                  {isPending ? "¿?" : `${draftGuess} €`}
+                </p>
+                <p className="d-lab esc-q__note" aria-live="polite">
+                  {isPending ? "Mueve el deslizador para responder" : "de cada 100 €"}
+                </p>
+              </div>
+              <div className="d-stack">
+                <div className="esc-q__cells" aria-hidden="true">
+                  {Array.from({ length: 100 }, (_, index) => (
+                    <span
+                      key={index}
+                      className={!isPending && index < (draftGuess ?? 0) ? "is-on" : undefined}
+                      style={{ animationDelay: `${index * 8}ms` }}
+                    />
+                  ))}
+                </div>
+                <input
+                  type="range"
+                  className="d-range"
+                  min={0}
+                  max={GUESS_MAX}
+                  step={1}
+                  value={sliderValue}
+                  style={{ "--d-fill": `${(sliderValue / GUESS_MAX) * 100}%` } as CSSProperties}
+                  onChange={(event) => setDraftGuess(Number(event.target.value))}
+                  onPointerUp={(event) => setDraftGuess(Number(event.currentTarget.value))}
+                  aria-label="Euros de cada 100 que crees que acaban en Hacienda y la Seguridad Social"
+                  aria-valuetext={isPending ? "Sin responder" : `${draftGuess} euros de cada 100`}
+                />
+                <div className="esc-q__scale d-num" aria-hidden="true">
+                  <span>0 €</span>
+                  <span>{GUESS_MAX / 2} €</span>
+                  <span>{GUESS_MAX} €</span>
+                </div>
+              </div>
+            </div>
+            <footer className="d-row esc-q__footer">
+              <button type="button" className="d-cta" disabled={isPending} onClick={() => setStage("salary")}>
+                Siguiente {arrow}
+              </button>
+              <p className="d-note">No hay respuesta mala: es para ver cuánto se acerca tu intuición al cálculo.</p>
+            </footer>
+          </section>
+        );
+      }
+
+      if (quizEnabled && stage === "salary") {
+        return (
+          <section className="d-page esc-q" aria-labelledby="wfsc-quiz-title">
+            <div className="d-stack">
+              <p className="d-caps">Pregunta 2 de 2</p>
+              <h2 id="wfsc-quiz-title" ref={quizHeadingRef} tabIndex={-1} className="d-h1" style={{ "--d-chars": 8 } as CSSProperties}>
+                ¿Cuál es tu <span className="d-acc">salario?</span>
+              </h2>
+              <p className="d-lead d-rise">
+                Bruto al año, antes de impuestos. Si no lo sabes exacto, una cifra aproximada vale. El
+                cálculo se hace en tu navegador.
+              </p>
+            </div>
+            <div className="esc-q__salary">
+              <SalarySlider
+                id="wfsc-quiz-salary"
+                value={grossSalaryAnnual}
+                onChange={onSalaryChange ?? (() => undefined)}
+                min={14_000}
+                max={500_000}
+                step={1_000}
+                markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+                scale="log"
+                unitLabel="brutos al año"
+                ariaLabel="Tu salario bruto anual"
+              />
+            </div>
+            <footer className="d-row esc-q__footer">
+              <button
+                type="button"
+                className="d-cta"
+                onClick={() => {
+                  onTaxGuessChange?.(draftGuess);
+                  setStage("reveal");
+                }}
+              >
+                Ver mi resultado {arrow}
+              </button>
+              <button type="button" className="d-ghost" onClick={() => setStage("guess")}>
+                Cambiar mi respuesta ({draftGuess} €)
+              </button>
+            </footer>
+          </section>
+        );
+      }
+
+      const tones = { net: "positive", worker: "worker", company: "company", consumption: "state" } as const;
+      const toneClass = { net: "d-acc", worker: "d-worker", company: "d-company", consumption: "d-blue" } as const;
+      const segments = [
+        { id: "net", label: "Te lo quedas tú", value: remainingAfterConsumption, detail: "Lo que puedes gastar o ahorrar después de todo" },
+        { id: "worker", label: "IRPF y cotizaciones tuyas", value: workerContributionsRounded + irpfRounded, detail: "Lo que se descuenta directamente de tu nómina" },
+        { id: "company", label: "Cotizaciones de tu empresa", value: roundEuro(employerContributionsAnnual), detail: "No sale de tu nómina, pero tu empresa lo paga por ti" },
+        { id: "consumption", label: "IVA y otros al gastar", value: vatRounded + otherTaxesRounded, detail: "Se te van poco a poco cada vez que compras algo" },
+      ].filter((segment) => segment.value > 0) as { id: keyof typeof tones; label: string; value: number; detail: string }[];
+      const guessDiff = draftGuess !== null ? draftGuess - taxesPer100 : 0;
+
+      return (
+        <section className="d-page esc-q" aria-labelledby="wfsc-summary-title">
+          <div className="d-stack">
+            <h2
+              id="wfsc-summary-title"
+              ref={quizHeadingRef}
+              tabIndex={quizEnabled ? -1 : undefined}
+              className="d-h1 esc-q__h1"
+              style={{ "--d-chars": 10 } as CSSProperties}
+            >
+              {showGuessResult ? <>Tu respuesta, <span className="d-acc">frente al cálculo</span></> : "¿Cuántos impuestos pagas?"}
+            </h2>
+            <p className="d-lead d-rise">
+              {showGuessResult
+                ? "Mueve tu sueldo para ver cómo cambia. Debajo tienes a dónde va cada parte; después lo afinamos paso a paso."
+                : "Mueve tu sueldo y verás, en un vistazo, cuánto acaba en tu bolsillo y cuánto se reparte entre impuestos y cotizaciones. Después lo iremos afinando paso a paso."}
+            </p>
+          </div>
+
+          <div className="esc-q__console d-close">
+            <SalarySlider
+              id="wfsc-summary-salary"
+              value={grossSalaryAnnual}
+              onChange={onSalaryChange ?? (() => undefined)}
+              min={14_000}
+              max={500_000}
+              step={1_000}
+              markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+              scale="log"
+              unitLabel="brutos al año"
+              ariaLabel="Salario bruto anual para el resumen fiscal"
+            />
+            <div className="d-segs" role="group" aria-label="Ver las cifras al mes o al año">
+              <button type="button" aria-pressed={period === "month"} onClick={() => setPeriod("month")}>Al mes</button>
+              <button type="button" aria-pressed={period === "year"} onClick={() => setPeriod("year")}>Al año</button>
+            </div>
+          </div>
+
+          {showGuessResult ? (
+            <section className="d-stack esc-q__duel" aria-live="polite" aria-labelledby="esc-q-duel">
+              <p id="esc-q-duel" className="d-small esc-q__duel-title">
+                De cada <strong>100 €</strong> que cuesta tu trabajo, acaban en Hacienda y la Seguridad
+                Social
+              </p>
+              <dl className="esc-q__rows">
+                <div>
+                  <dt>Tú dijiste</dt>
+                  <dd>
+                    <span className="d-track esc-q__track"><span className="d-bar d-paint-worker" style={{ width: `${draftGuess}%` }} /></span>
+                    <strong className="d-fig d-fig-l d-worker">{draftGuess} €</strong>
+                  </dd>
+                </div>
+                <div>
+                  <dt>El cálculo</dt>
+                  <dd>
+                    <span className="d-track esc-q__track"><span className="d-bar d-paint-positive-light" style={{ width: `${taxesPer100}%`, animationDelay: "250ms" }} /></span>
+                    <strong className="d-fig d-fig-l d-acc">{taxesPer100} €</strong>
+                  </dd>
+                </div>
+              </dl>
+              <div className="esc-q__verdict">
+                <strong className="d-fig d-fig-xl d-yellow d-pop" aria-hidden="true">
+                  {Math.abs(guessDiff) <= GUESS_TOLERANCE ? "≈" : guessDiff < 0 ? `−${-guessDiff} €` : `+${guessDiff} €`}
+                </strong>
+                <div className="d-stack">
+                  <p className="d-txt esc-q__verdict-text">
+                    <EscSweepText
+                      text={guessVerdict(draftGuess ?? 0, taxesPer100)}
+                      marks={[
+                        { phrase: "la cotización que paga tu empresa", tone: "company" },
+                        { phrase: "el IVA de lo que compras", tone: "worker" },
+                      ]}
+                    />
+                  </p>
+                  <p className="d-txt">
+                    A tu bolsillo llegan <strong className="d-acc">{takeHomePer100} €</strong>: son {formatPeriodEuro(remainingAfterConsumption)}{" "}
+                    {periodSuffix} de los {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu
+                    puesto.
+                  </p>
+                  <button
+                    type="button"
+                    className="d-outline"
+                    onClick={() => {
+                      onTaxGuessChange?.(null);
+                      setDraftGuess(null);
+                      setStage("guess");
+                    }}
+                  >
+                    Volver a responder
+                  </button>
+                </div>
+              </div>
+            </section>
+          ) : (
+            <div className="d-stack" aria-live="polite">
+              <p className="d-txt">
+                De cada <strong>100 €</strong> que le cuestas a tu empresa, a tu bolsillo llegan
+              </p>
+              <p className="d-fig d-fig-xxl d-acc">{takeHomePer100} €</p>
+              <p className="d-txt">
+                Son {formatPeriodEuro(remainingAfterConsumption)} {periodSuffix} de los{" "}
+                {formatPeriodEuro(companyCostAnnual)} {periodSuffix} que cuesta tu puesto.
+              </p>
+            </div>
+          )}
+
+          <section className="esc-q__split" aria-label="A dónde va cada parte">
+            <EscHundredCells
+              label={`Reparto del coste total de tu puesto: ${segments.map((segment) => `${segment.label}, ${Math.round(shareOfCost(segment.value))} por ciento`).join("; ")}`}
+              parts={segments.map((segment) => ({ value: segment.value, tone: tones[segment.id] }))}
+            />
+            <ul className="esc-q__list">
+              {segments.map((segment) => (
+                <li key={segment.id}>
+                  <span className={`d-swatch esc-q__dot esc-q__dot--${segment.id}`} aria-hidden="true" />
+                  <span className="esc-q__list-text">
+                    <strong>{segment.label}</strong>
+                    <span>{segment.detail}</span>
+                  </span>
+                  <span className="esc-q__list-value">
+                    <strong className={`d-fig d-fig-m ${toneClass[segment.id]}`}>{formatPeriodEuro(segment.value)}</strong>
+                    <span className="d-num">{Math.round(shareOfCost(segment.value))} %</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <footer className="d-stack">
+            <button type="button" className="d-cta d-cta--big" onClick={onExploreDetails}>
+              Ver cómo se calcula, paso a paso {arrow}
+            </button>
+            <p className="d-note">
+              Son cifras aproximadas: tu nómina real cambia según el contrato, tu situación personal y
+              tu comunidad autónoma. En los siguientes pasos lo ajustamos contigo.
+            </p>
+          </footer>
+        </section>
+      );
+    }
 
     if (quizEnabled && stage === "guess") {
       const isPending = draftGuess === null;

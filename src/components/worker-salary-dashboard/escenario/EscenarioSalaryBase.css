@@ -1,0 +1,35 @@
+/* Paso 1 (Base real) en la v2. Maqueta: ai/rediseno-calculadora/maquetas-d/Paso01.dc.html */
+.esc-sb__pays { display: grid; gap: clamp(3px, 0.6vw, 8px); height: clamp(160px, 22vw, 260px); align-items: stretch; }
+.esc-sb__pay { display: flex; flex-direction: column; min-width: 0; border-radius: 14px; overflow: hidden; }
+.esc-sb__comp { flex-basis: 0; background: var(--fiscal-stage-yellow); transition: flex-grow var(--fiscal-duration-base) var(--fiscal-ease-out); }
+.esc-sb__base { flex: 100 1 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px; min-height: 0; }
+.esc-sb__base span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--fiscal-stage);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.esc-sb__legend { font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+.esc-sb__legend > span { display: inline-flex; align-items: center; gap: 8px; }
+.esc-sb__chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.esc-sb__chips button {
+  min-width: 72px;
+  min-height: 52px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.esc-sb__chips button[aria-pressed='true'] { border-color: var(--fiscal-stage-yellow); background: var(--fiscal-stage-yellow); color: var(--fiscal-stage); }
+.esc-sb__chips button:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 3px; }
+.esc-sb__euros { max-width: 260px; }
+@media (max-width: 560px) {
+  .esc-sb__base span { display: none; }
+}

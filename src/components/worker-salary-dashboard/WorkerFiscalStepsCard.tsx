@@ -887,15 +887,122 @@ function PayrollExamplePanel({ stepId, payrollLiveData }: { stepId: number; payr
   )
 }
 
+/** Nómina de ejemplo en la v2: mismas filas y datos que el papel de la v1, dibujadas en el escenario. */
+function EscenarioPayroll({ stepId, payrollLiveData }: { stepId: number; payrollLiveData?: PayrollLiveData }) {
+  const example = PAYROLL_EXAMPLES[stepId] ?? PAYROLL_EXAMPLES[1]
+  const snapshot = useMemo(() => buildPayrollSnapshot(payrollLiveData), [payrollLiveData])
+  const dual = Boolean(example.highlightWorkerRows?.length || example.highlightCompanyRows?.length)
+  // En el paso 3 la leyenda literal dice azul (trabajador) y verde (empresa).
+  const tone = (id: string) => {
+    if (example.highlightWorkerRows?.includes(id)) return 'blue'
+    if (example.highlightCompanyRows?.includes(id)) return 'positive'
+    if (example.highlightRows?.includes(id)) return 'positive'
+    return null
+  }
+  const rowClass = (id: string) => {
+    const t = tone(id)
+    return t ? `esc-nom__row is-on esc-nom--${t}` : 'esc-nom__row'
+  }
+  const earnings = snapshot.rows.filter((row) => row.deductions === undefined)
+  const deductions = snapshot.rows.filter((row) => row.deductions !== undefined)
+  const netTone = tone('net-pay')
+
+  return (
+    <figure className="esc-nom" aria-label="Nómina simplificada con la parte de este paso resaltada">
+      <figcaption>Nómina simplificada: lo resaltado es la parte que se trata en este paso.</figcaption>
+      {dual ? (
+        <ul className="esc-nom__legend" aria-label="Leyenda de colores en la nómina">
+          <li><span className="d-swatch d-paint-blue-light" aria-hidden="true" />Azul: cotización del trabajador</li>
+          <li><span className="d-swatch d-paint-positive-light" aria-hidden="true" />Verde: aportación de la empresa</li>
+        </ul>
+      ) : null}
+      <div className="esc-nom__sheet">
+        <div className="esc-nom__main">
+          <div className="esc-nom__head">
+            <span>RECIBO INDIVIDUAL JUSTIFICATIVO DEL PAGO DE SALARIOS</span>
+            <span>01.05.2025 - 31.05.2025 · [DATOS PERSONALES OCULTOS]</span>
+          </div>
+          <p className="esc-nom__meta">CENTRO DE TRABAJO BARCELONA · CATEGORIA PROFESIONAL Technical Analyst · G.C. 03</p>
+          <span className="esc-nom__group esc-nom__group--earn">DEVENGOS</span>
+          {earnings.map((row) => (
+            <div key={row.id} className={rowClass(row.id)}>
+              <span className="esc-nom__code">{row.code}</span>
+              <span className="esc-nom__concept">{row.concept}</span>
+              <span className="esc-nom__price">{row.price ?? ''}</span>
+              <span className="esc-nom__amount">{row.earnings || '—'}</span>
+            </div>
+          ))}
+          <span className="esc-nom__group esc-nom__group--ded">DEDUCCIONES</span>
+          {deductions.map((row) => (
+            <div key={row.id} className={rowClass(row.id)}>
+              <span className="esc-nom__code">{row.code}</span>
+              <span className="esc-nom__concept">{row.concept}</span>
+              <span className="esc-nom__price">{row.price ? `${row.price} %` : ''}</span>
+              <span className="esc-nom__amount">{row.deductions}</span>
+            </div>
+          ))}
+          <span className="esc-nom__group">APORTACION EMPRESA</span>
+          {snapshot.baseRows.map((row) => (
+            <div key={row.id} className={`${rowClass(row.id)} esc-nom__row--base`}>
+              <span className="esc-nom__concept">{row.concept}</span>
+              <span className="esc-nom__price">{row.base ?? ''}</span>
+              <span className="esc-nom__price">{row.rate ?? ''}</span>
+              <span className="esc-nom__amount">{row.company ?? ''}</span>
+            </div>
+          ))}
+        </div>
+        <div className="esc-nom__side">
+          {snapshot.totals.map((total) => {
+            const t = tone(total.id)
+            return (
+              <div key={total.id} className={t ? `esc-nom__total is-on esc-nom--${t}` : 'esc-nom__total'}>
+                <span>{total.label}</span>
+                <strong>{total.value || '—'}</strong>
+              </div>
+            )
+          })}
+          <div className={netTone ? `esc-nom__net is-on esc-nom--${netTone}` : 'esc-nom__net'}>
+            <span>LIQUIDO TOTAL</span>
+            <strong>{snapshot.netPay} €</strong>
+          </div>
+        </div>
+      </div>
+    </figure>
+  )
+}
+
+/** Dibujos de la v2 que acompañan a algunos conceptos (decorativos: el texto ya lo dice). */
+const ESCENARIO_CONCEPT_VISUALS: Record<string, ReactNode> = {
+  'reduction-vs-deduction': (
+    <div className="esc-coins">
+      {/* texto nuevo D: rótulos de las monedas */}
+      <span className="esc-coin esc-coin--big"><strong>1 €</strong><small>deducción</small></span>
+      <span className="esc-coin esc-coin--small"><strong>0,30 €</strong><small>reducción</small></span>
+    </div>
+  ),
+  refundable: (
+    <p className="esc-refund">
+      <span>0 €</span><span className="esc-refund__op">−</span><span className="d-red">1.200 €</span><span className="esc-refund__op">=</span><strong className="d-acc">1.200 €</strong>
+    </p>
+  ),
+}
+
 /**
  * Extras de la v2 por paso. Las frases marcadas y las palabras de la cinta salen
  * literalmente del texto del paso; aquí solo se elige qué resaltar.
  */
 const ESCENARIO_STEP_EXTRAS: Record<number, {
-  marks?: { phrase: string; tone: 'worker' | 'company' }[]
+  marks?: { phrase: string; tone: 'worker' | 'company' | 'positive' }[]
   ribbon?: string[]
   liveParagraphInCard?: boolean
 }> = {
+  1: { marks: [{ phrase: 'salario fijo, pagas extra, complementos y retribuciones en especie', tone: 'positive' }] },
+  2: { marks: [{ phrase: 'la base mínima', tone: 'worker' }, { phrase: 'la base máxima', tone: 'company' }] },
+  4: { marks: [{ phrase: 'Si no tienes ninguno, responde «No» y continúa.', tone: 'positive' }] },
+  5: { marks: [{ phrase: 'base liquidable', tone: 'positive' }] },
+  6: { marks: [{ phrase: 'una escala estatal', tone: 'worker' }, { phrase: 'otra autonómica', tone: 'company' }] },
+  7: { marks: [{ phrase: 'reduce el impuesto', tone: 'positive' }] },
+  8: { marks: [{ phrase: 'Va incluido en el precio', tone: 'positive' }] },
   3: {
     marks: [
       { phrase: 'cotización del trabajador', tone: 'worker' },
@@ -967,8 +1074,8 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
       <section
         ref={sectionRef}
         className="wfsc esc-step"
-        aria-labelledby={isCompactStep ? undefined : 'wfsc-title'}
-        aria-label={isCompactStep ? statusLabel : undefined}
+        aria-labelledby={isCompactStep || isSummaryStep ? undefined : 'wfsc-title'}
+        aria-label={isCompactStep || isSummaryStep ? statusLabel : undefined}
       >
         <div className="esc-step__bar">
           <p className="esc-step__status">{statusLabel}</p>
@@ -995,7 +1102,7 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           </span>
         </div>
 
-        {!isCompactStep ? (
+        {!isCompactStep && !isSummaryStep ? (
           <>
             <div className="esc-step__hero" key={activeStep.id}>
               <EscTitle id="wfsc-title" text={activeStep.title} />
@@ -1020,16 +1127,26 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
             ) : null}
             {escenario?.ribbon ? <EscRibbon words={escenario.ribbon} /> : null}
             {showPayrollHelp ? (
-              <aside className="wfsc-help esc-step__payroll" aria-label="Ayuda del paso activo">
-                <PayrollExamplePanel stepId={activeStep.id} payrollLiveData={payrollLiveData} />
+              <aside className="esc-step__payroll" aria-label="Ayuda del paso activo">
+                <EscenarioPayroll stepId={activeStep.id} payrollLiveData={payrollLiveData} />
               </aside>
             ) : null}
-            {stepConcepts.map((concept) => (
-              <section key={concept.id} className="wfsc-concept esc-step__concept" aria-labelledby={`wfsc-concept-${concept.id}`}>
-                <h3 id={`wfsc-concept-${concept.id}`}>{concept.title}</h3>
-                {concept.body}
-              </section>
-            ))}
+            {stepConcepts.map((concept) => {
+              const visual = ESCENARIO_CONCEPT_VISUALS[concept.id]
+              return (
+                <section
+                  key={concept.id}
+                  className={`wfsc-concept esc-step__concept${visual ? ' esc-step__concept--visual' : ''}`}
+                  aria-labelledby={`wfsc-concept-${concept.id}`}
+                >
+                  {visual ? <div className="esc-step__concept-visual" aria-hidden="true">{visual}</div> : null}
+                  <div className="esc-step__concept-body">
+                    <h3 id={`wfsc-concept-${concept.id}`}>{concept.title}</h3>
+                    {concept.body}
+                  </div>
+                </section>
+              )
+            })}
           </>
         ) : null}
 

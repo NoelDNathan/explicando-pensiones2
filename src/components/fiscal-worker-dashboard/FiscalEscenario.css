@@ -103,3 +103,77 @@
     transition: none !important;
   }
 }
+
+/* Deslizador de salario (componente compartido) con el aspecto de la maqueta D:
+   la cifra editable es la cifra grande y la pista es gruesa con tirador blanco. */
+.fwd.fwd--escenario .salary-slider {
+  gap: 6px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .salary-slider__top { align-items: baseline; justify-content: flex-start; flex-wrap: wrap; gap: 4px 16px; }
+.fwd.fwd--escenario .salary-slider__value-shell {
+  gap: 8px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2.5rem, 1.4rem + 4vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--fiscal-stage-positive);
+}
+.fwd.fwd--escenario .salary-slider__value-input {
+  width: 7.2ch;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 3px dashed var(--fiscal-stage-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--fiscal-stage-positive);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+}
+.fwd.fwd--escenario .salary-slider__value-input:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 4px; }
+.fwd.fwd--escenario .salary-slider__top > span:last-child { font-size: 1rem; font-weight: 600; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .salary-slider__track { height: 48px; }
+.fwd.fwd--escenario .salary-slider input[type='range'] { height: 48px; }
+.fwd.fwd--escenario .salary-slider:not(.salary-slider--ramp) input[type='range']::-webkit-slider-runnable-track {
+  height: 14px;
+  border: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--fiscal-stage-positive) var(--salary-slider-value), var(--fiscal-stage-raised) var(--salary-slider-value));
+}
+.fwd.fwd--escenario .salary-slider:not(.salary-slider--ramp) input[type='range']::-moz-range-track {
+  height: 14px;
+  border: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--fiscal-stage-positive) var(--salary-slider-value), var(--fiscal-stage-raised) var(--salary-slider-value));
+}
+.fwd.fwd--escenario .salary-slider input[type='range']::-webkit-slider-thumb {
+  width: 40px;
+  height: 40px;
+  margin-top: -13px;
+  border: 6px solid var(--fiscal-stage-positive-fill);
+  border-radius: 50%;
+  background: var(--fiscal-stage-text);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--fiscal-stage-positive) 18%, transparent);
+}
+.fwd.fwd--escenario .salary-slider input[type='range']::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border: 6px solid var(--fiscal-stage-positive-fill);
+  border-radius: 50%;
+  background: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .salary-slider__scale-marker { font-size: 0.875rem; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .salary-slider__ref-label {
+  border-color: var(--fiscal-stage-line);
+  color: var(--fiscal-stage-muted);
+  background: var(--fiscal-stage);
+}
+.fwd.fwd--escenario .salary-slider__value-shell > span { font-size: inherit; color: inherit; }
+.fwd.fwd--escenario .salary-slider__value-input { width: auto; field-sizing: content; min-width: 3ch; }

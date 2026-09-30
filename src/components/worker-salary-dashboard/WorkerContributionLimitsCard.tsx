@@ -5,6 +5,9 @@ import { SalarySlider } from '../ui/SalarySlider'
 import { AVERAGE_SALARY_ANNUAL, SMI_ANNUAL } from '../ui/salaryReferences'
 import { useSpreadLabels } from '../ui/useSpreadLabels'
 import './WorkerContributionLimitsCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import './escenario/D.css'
+import './escenario/EscenarioLimits.css'
 
 const SALARY_RANGE = { min: 14000, max: 500000, markers: [14000, 50000, 120000, 250000, 500000] }
 
@@ -424,6 +427,7 @@ export function WorkerContributionLimitsCard({
   onGroupChange,
   onResultChange,
 }: WorkerContributionLimitsCardProps) {
+  const variant = useFiscalVariant()
   const [selectedGroupId, setSelectedGroupId] = useState<number | undefined>(initialGroupId)
   const [viewMode, setViewMode] = useState<ContributionViewMode>(initialViewMode)
   const [simulationMode, setSimulationMode] = useState<SimulationMode>('case')
@@ -497,6 +501,134 @@ export function WorkerContributionLimitsCard({
 
   const hasBase = activeUserBaseAnnual != null && Number.isFinite(activeUserBaseAnnual)
   const isEmpty = !hasBase || !selectedGroup || !dataAvailable
+
+  if (variant === 'escenario') {
+    const emptyText = !hasBase
+      ? 'Primero calcula tu base real en el paso 1.'
+      : !selectedGroup
+        ? 'Selecciona tu grupo de cotización para ver los límites aplicables.'
+        : 'No hay datos disponibles para este año.'
+    return (
+      <section className="d-page esc-cl" aria-labelledby="wclc-title">
+        <h2 id="wclc-title" className="esc-sr">Límites de cotización</h2>
+        {showSalaryControl ? (
+          <div className="d-stack">
+            <label className="d-lab" htmlFor="wclc-salary-range">Salario bruto anual</label>
+            <SalarySlider
+              id="wclc-salary-range"
+              value={localBaseAnnual}
+              onChange={handleSalaryChange}
+              min={SALARY_RANGE.min}
+              max={SALARY_RANGE.max}
+              markers={SALARY_RANGE.markers}
+              scale="log"
+              unitLabel="brutos al año"
+              ariaLabel="Salario bruto anual en euros"
+            />
+          </div>
+        ) : null}
+        <div className="d-row esc-cl__controls d-close">
+          <ContributionGroupSelect
+            groups={groups}
+            selectedGroupId={selectedGroupId}
+            viewMode={viewMode}
+            onChange={(nextGroupId) => {
+              setSelectedGroupId(nextGroupId)
+              onGroupChange?.(nextGroupId)
+              setSimulationMode('case')
+            }}
+          />
+          <div className="d-segs" role="group" aria-label="Unidad de visualización">
+            <button type="button" aria-pressed={viewMode === 'monthly'} onClick={() => setViewMode('monthly')}>Mensual</button>
+            <button type="button" aria-pressed={viewMode === 'annual'} onClick={() => setViewMode('annual')}>Anual</button>
+          </div>
+        </div>
+
+        {isEmpty || !result || !statusCopy ? (
+          <p className="d-txt">{emptyText}</p>
+        ) : (
+          <>
+            <section className="esc-cl__corridor" aria-label="Comparación de base mínima, base real y base máxima">
+              <div className="esc-cl__zones" aria-hidden="true">
+                <span style={{ left: 0 }}>Debajo del mínimo</span>
+                <span style={{ left: `${(minPosition + maxPosition) / 2}%`, transform: 'translateX(-50%)' }}>Dentro del rango</span>
+                <span style={{ right: 0 }}>Por encima del máximo</span>
+              </div>
+              <div className="esc-cl__track" aria-hidden="true">
+                <span className="esc-cl__hatch" style={{ left: 0, width: `${minPosition}%` }} />
+                <span className="esc-cl__range" style={{ left: `${minPosition}%`, width: `${maxPosition - minPosition}%` }} />
+                <span className="esc-cl__hatch" style={{ left: `${maxPosition}%`, right: 0 }} />
+                <span className="esc-cl__wall" style={{ left: `${minPosition}%` }} />
+                <span className="esc-cl__wall" style={{ left: `${maxPosition}%` }} />
+                {result.status === 'above_maximum' ? (
+                  <span className="esc-cl__excess" style={{ left: `${maxPosition}%`, width: `${Math.max(0, userPosition - maxPosition)}%` }} />
+                ) : null}
+                <span className="esc-cl__marker" style={{ left: `${result.status === 'above_maximum' ? maxPosition : result.status === 'below_minimum' ? minPosition : userPosition}%` }} />
+                {scaleReferences.map((reference) => (
+                  <span key={reference.label} className="esc-cl__ref" style={{ left: `${reference.percent}%` }} />
+                ))}
+              </div>
+              <div className="esc-cl__refs" aria-hidden="true">
+                {scaleReferences.map((reference) => (
+                  <span key={reference.label} style={{ left: `${reference.percent}%` }} title={`${reference.title}: ${reference.display}`}>{reference.label}</span>
+                ))}
+              </div>
+              <div className="esc-cl__figures">
+                <div><span className="d-lab">Base mínima</span><strong className="d-fig d-fig-s">{getDisplayValue(result, viewMode, 'min')}</strong></div>
+                <div className="esc-cl__user"><span className="d-lab">Tu base</span><strong className="d-fig d-fig-m d-acc">{getDisplayValue(result, viewMode, 'user')}</strong></div>
+                <div className="esc-cl__maxfig"><span className="d-lab">Base máxima</span><strong className="d-fig d-fig-s">{getDisplayValue(result, viewMode, 'max')}</strong></div>
+              </div>
+            </section>
+
+            <section className="d-stack" aria-live="polite">
+              <span className="d-chip d-chip--on">{statusCopy.title}</span>
+              <p className="d-h2 d-h2--big esc-cl__verdict" style={{ '--d-chars': 10 } as CSSProperties}>{getSummaryConnectorLabel(result.status)}</p>
+              <p className="d-txt esc-cl__desc">{statusCopy.description}</p>
+            </section>
+
+            <section className="d-grid2 esc-cl__bottom">
+              <div className="d-panel">
+                {result.status === 'below_minimum' ? (
+                  <>
+                    <strong className="d-h3">Te faltan para el mínimo</strong>
+                    <span className="d-fig d-fig-l d-yellow">{formatEuro(Math.abs(result.distanceToMinimum))}</span>
+                    <span className="d-lab">al mes</span>
+                  </>
+                ) : null}
+                {result.status === 'within_range' ? (
+                  <>
+                    <strong className="d-h3">Margen dentro del rango</strong>
+                    <span className="esc-cl__margin"><strong className="d-fig d-fig-m d-acc">{formatEuro(result.distanceToMinimum)}</strong> sobre el mínimo</span>
+                    <span className="esc-cl__margin"><strong className="d-fig d-fig-m d-company">{formatEuro(result.distanceToMaximum)}</strong> bajo el máximo</span>
+                  </>
+                ) : null}
+                {result.status === 'above_maximum' ? (
+                  <>
+                    <strong className="d-h3">Exceso sobre el máximo</strong>
+                    <span className="d-fig d-fig-l d-company">{formatEuro(result.excessOverMaximum)}</span>
+                    <span className="d-lab">al mes</span>
+                  </>
+                ) : null}
+              </div>
+              <div className="d-eq esc-cl__eq">
+                <div className="d-eq__term">
+                  <span className="d-eq__l">Tu base real</span>
+                  <strong className="d-eq__v">{formatEuro(result.userBaseMonthly)} / mes</strong>
+                  <span className="d-eq__l">{formatEuro(result.userBaseAnnual)} / año</span>
+                </div>
+                <span className="d-eq__op" aria-hidden="true">→</span>
+                <output className="d-eq__term">
+                  <span className="d-eq__l">Base usada para cotizar</span>
+                  <strong className="d-eq__v d-acc">{formatEuro(result.baseUsedMonthly)} / mes</strong>
+                  <span className="d-eq__l">{formatEuro(result.baseUsedAnnual)} / año</span>
+                </output>
+              </div>
+            </section>
+          </>
+        )}
+      </section>
+    )
+  }
 
   return (
     <section className="wclc" aria-labelledby="wclc-title">

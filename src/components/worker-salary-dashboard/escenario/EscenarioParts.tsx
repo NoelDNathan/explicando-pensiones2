@@ -6,6 +6,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import './Escenario.css'
+import './D.css'
 
 export type EscTone = 'worker' | 'company' | 'positive' | 'state' | 'neutral'
 
@@ -66,12 +67,12 @@ export function EscTitle({ text, id, as: Tag = 'h2' }: { text: string; id?: stri
 }
 
 /** Texto literal con frases marcadas por un barrido de color (quién paga). */
-export function EscSweepText({ text, marks }: { text: string; marks: { phrase: string; tone: 'worker' | 'company' }[] }) {
+export function EscSweepText({ text, marks }: { text: string; marks: { phrase: string; tone: 'worker' | 'company' | 'positive' }[] }) {
   const parts: ReactNode[] = []
   let rest = text
   let key = 0
   while (rest) {
-    let hit: { index: number; phrase: string; tone: 'worker' | 'company' } | null = null
+    let hit: { index: number; phrase: string; tone: 'worker' | 'company' | 'positive' } | null = null
     for (const mark of marks) {
       const index = rest.indexOf(mark.phrase)
       if (index >= 0 && (!hit || index < hit.index)) hit = { index, ...mark }
@@ -122,7 +123,7 @@ function toHundred(values: number[]) {
 export function EscHundredCells({ parts, label, caption }: {
   parts: { value: number; tone: EscTone }[]
   label: string
-  caption: ReactNode
+  caption?: ReactNode
 }) {
   const counts = toHundred(parts.map((part) => part.value))
   const cells: EscTone[] = []
@@ -136,7 +137,7 @@ export function EscHundredCells({ parts, label, caption }: {
           <span key={index} className={`esc-cell esc-cell--${tone}`} style={{ animationDelay: `${index * 12}ms` }} />
         ))}
       </div>
-      <figcaption>{caption}</figcaption>
+      {caption ? <figcaption>{caption}</figcaption> : null}
     </figure>
   )
 }
@@ -244,5 +245,146 @@ export function EscSegmented<T extends string>({ label, value, options, onChange
         </button>
       ))}
     </div>
+  )
+}
+
+/** Título de sección en display. El tamaño se ajusta a la palabra más larga. */
+export function DH2({ children, accent, id, big = false, className = '' }: {
+  children: ReactNode
+  accent?: ReactNode
+  id?: string
+  big?: boolean
+  className?: string
+}) {
+  const text = `${typeof children === 'string' ? children : ''} ${typeof accent === 'string' ? accent : ''}`
+  const longest = Math.max(...text.split(/\s+/).map((word) => word.length), 6)
+  return (
+    <h2 id={id} className={`d-h2${big ? ' d-h2--big' : ''}${className ? ` ${className}` : ''}`} style={{ '--d-chars': longest } as CSSProperties}>
+      {children}
+      {accent ? <> <span className="d-acc">{accent}</span></> : null}
+    </h2>
+  )
+}
+
+/** Pregunta Sí/No en fila. `value` es true (Sí), false (No) o null (sin responder). */
+export function DQuestion({ question, help, value, onChange, children, yesLabel = 'Sí', noLabel = 'No' }: {
+  question: ReactNode
+  help?: ReactNode
+  value: boolean | null | undefined
+  onChange: (value: boolean) => void
+  children?: ReactNode
+  yesLabel?: string
+  noLabel?: string
+}) {
+  const id = useId()
+  return (
+    <div className="d-q">
+      <div className="d-q__t">
+        <strong id={id}>{question}</strong>
+        {help ? <p>{help}</p> : null}
+      </div>
+      <div className="d-yn" role="group" aria-labelledby={id}>
+        <button type="button" aria-pressed={value === true} onClick={() => onChange(true)}>{yesLabel}</button>
+        <button type="button" aria-pressed={value === false} onClick={() => onChange(false)}>{noLabel}</button>
+      </div>
+      {children ? <div className="d-q__more d-unfold">{children}</div> : null}
+    </div>
+  )
+}
+
+/** Capítulo con número gigante hueco a la izquierda. */
+export function DChapter({ n, title, id, children }: { n: string; title: ReactNode; id?: string; children: ReactNode }) {
+  const autoId = useId()
+  const headingId = id ?? autoId
+  return (
+    <section className="d-chap" aria-labelledby={headingId}>
+      <span className="d-chap__n" aria-hidden="true">{n}</span>
+      <div className="d-chap__body">
+        {typeof title === 'string' ? <DH2 id={headingId}>{title}</DH2> : <div id={headingId}>{title}</div>}
+        {children}
+      </div>
+    </section>
+  )
+}
+
+/** Botón que despliega un bloque (sustituye a details/summary y a ayudas con hover). */
+export function DDisclosure({ label, children, className = 'd-outline' }: { label: ReactNode; children: ReactNode; className?: string }) {
+  const [open, setOpen] = useState(false)
+  const id = useId()
+  return (
+    <>
+      <button type="button" className={className} aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+        {label} <span aria-hidden="true">{open ? '−' : '+'}</span>
+      </button>
+      <div id={id} className="d-unfold" hidden={!open}>{children}</div>
+    </>
+  )
+}
+
+export type DChainStep = {
+  label: ReactNode
+  note?: ReactNode
+  /** Importe que mide la columna (0 si no aplica). */
+  value: number
+  /** Texto de la cifra (con signo o estado). */
+  display: ReactNode
+  kind: 'total' | 'minus' | 'plus' | 'sub' | 'result'
+  tone?: 'worker' | 'company' | 'positive' | 'blue' | 'yellow' | 'neutral'
+}
+
+/** Cascada: columnas que bajan desde el primer total hasta el resultado. */
+export function DWaterfall({ steps, label }: { steps: DChainStep[]; label: string }) {
+  const max = Math.max(...steps.map((step) => step.value), 1)
+  let level = 0
+  return (
+    <div className="d-wf" role="img" aria-label={label}>
+      {steps.map((step, index) => {
+        let bottom = 0
+        let height = step.value
+        if (step.kind === 'minus') {
+          bottom = Math.max(0, level - step.value)
+          level = bottom
+        } else if (step.kind === 'plus') {
+          bottom = level
+          level += step.value
+        } else {
+          level = step.value
+          height = step.value
+        }
+        const tone = step.tone ?? (step.kind === 'result' ? 'positive' : step.kind === 'minus' ? 'yellow' : 'neutral')
+        return (
+          <div key={index} className={`d-wf__col d-wf__col--${step.kind}`}>
+            <span className={`d-wf__v d-wf--${tone}`}>{step.display}</span>
+            <span className="d-wf__track">
+              <span
+                className={`d-wf__bar d-wf--${tone} d-growy`}
+                style={{ bottom: `${(bottom / max) * 100}%`, height: `${(height / max) * 100}%`, animationDelay: `${index * 120}ms` }}
+              />
+            </span>
+            <span className="d-wf__l">
+              <strong>{step.label}</strong>
+              {step.note ? <span>{step.note}</span> : null}
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/** Escalera: filas que suman o restan hasta el resultado final. */
+export function DLadder({ steps }: { steps: DChainStep[] }) {
+  return (
+    <dl className="d-ladder">
+      {steps.map((step, index) => (
+        <div key={index} className={`d-ladder__row d-ladder__row--${step.kind}`}>
+          <dt>
+            {step.label}
+            {step.note ? <small>{step.note}</small> : null}
+          </dt>
+          <dd className={`d-wf--${step.tone ?? (step.kind === 'result' ? 'positive' : 'neutral')}`}>{step.display}</dd>
+        </div>
+      ))}
+    </dl>
   )
 }

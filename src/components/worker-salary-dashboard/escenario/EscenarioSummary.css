@@ -1,0 +1,94 @@
+/* Paso 0 (pregunta y resultado) en la v2. Maquetas: Paso00Pregunta y Paso00Resultado. */
+.esc-q__title {
+  margin: 0;
+  max-width: 1120px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2.25rem, 1.2rem + 4vw, 5.25rem);
+  line-height: 0.98;
+  font-weight: 900;
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+  animation: d-stretch var(--fiscal-duration-slow) var(--fiscal-ease-out) both;
+}
+.esc-q__title:focus, .esc-q .d-h1:focus { outline: none; }
+.esc-q__answer {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: clamp(28px, 6vw, 72px);
+  align-items: center;
+}
+.esc-q__value { margin: 0; font-size: clamp(5rem, 2rem + 12vw, 11.875rem); font-stretch: 90%; color: var(--fiscal-stage-worker); animation: d-pop 0.7s var(--fiscal-ease-spring) both; }
+.esc-q__value.is-pending { color: var(--fiscal-stage-line); }
+.esc-q__note { font-size: 1rem; }
+.esc-q__cells { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: clamp(3px, 0.45vw, 5px); }
+.esc-q__cells span {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: var(--fiscal-stage-raised);
+  transition: background-color var(--fiscal-duration-quick) ease;
+  animation: esc-cell 0.5s var(--fiscal-ease-out) both;
+}
+.esc-q__cells span.is-on { background: var(--fiscal-stage-worker); }
+.esc-q__scale { display: flex; justify-content: space-between; font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+.esc-q__footer { align-items: center; }
+.esc-q__footer .d-note { font-size: 1.0625rem; }
+.esc-q__footer .d-cta:disabled { opacity: 0.45; cursor: not-allowed; }
+.esc-q__salary { max-width: 1120px; }
+.esc-q__h1 { font-size: min(clamp(3rem, 1.5rem + 6vw, 7.5rem), calc(100cqi / (0.92 * var(--d-chars, 12)))); }
+
+.esc-q__console { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 40px; align-items: end; }
+.esc-q__duel { gap: clamp(24px, 3vw, 36px); }
+.esc-q__duel-title { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); color: var(--fiscal-stage-text); }
+.esc-q__rows { margin: 0; display: flex; flex-direction: column; gap: 16px; }
+.esc-q__rows > div { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 12px 32px; align-items: center; }
+.esc-q__rows dt { font-size: 1.375rem; font-weight: 700; }
+.esc-q__rows dd { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 32px; align-items: center; }
+.esc-q__track { height: 34px; }
+.esc-q__rows strong { text-align: right; }
+.esc-q__verdict { display: grid; grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center; padding-top: 24px; }
+.esc-q__verdict-text { color: var(--fiscal-stage-text); }
+
+.esc-q__split { display: grid; grid-template-columns: minmax(0, 480px) minmax(0, 1fr); gap: clamp(32px, 6vw, 72px); align-items: center; }
+.esc-q__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.esc-q__list li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  gap: 6px 18px;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+}
+.esc-q__list-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.esc-q__list-text strong { font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem); }
+.esc-q__list-text span { font-size: 1rem; color: var(--fiscal-stage-muted); }
+.esc-q__list-value { display: flex; flex-direction: column; align-items: flex-end; }
+.esc-q__list-value span { font-size: 1rem; color: var(--fiscal-stage-muted); }
+.esc-q__dot { width: 16px; height: 16px; border-radius: 5px; }
+.esc-q__dot--net { background: var(--fiscal-stage-positive-fill); }
+.esc-q__dot--worker { background: var(--fiscal-stage-worker); }
+.esc-q__dot--company { background: var(--fiscal-stage-company-fill); }
+.esc-q__dot--consumption { background: var(--fiscal-stage-blue); }
+
+/* Deslizador del diseño D (pista gruesa, tirador blanco con anillo verde). */
+.d-range { -webkit-appearance: none; appearance: none; width: 100%; height: 48px; margin: 0; background: transparent; cursor: pointer; }
+.d-range::-webkit-slider-runnable-track { height: 14px; border-radius: 99px; background: linear-gradient(90deg, var(--fiscal-stage-positive) var(--d-fill), var(--fiscal-stage-raised) var(--d-fill)); }
+.d-range::-moz-range-track { height: 14px; border-radius: 99px; background: linear-gradient(90deg, var(--fiscal-stage-positive) var(--d-fill), var(--fiscal-stage-raised) var(--d-fill)); }
+.d-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 40px;
+  height: 40px;
+  margin-top: -13px;
+  border: 6px solid var(--fiscal-stage-positive-fill);
+  border-radius: 50%;
+  background: var(--fiscal-stage-text);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--fiscal-stage-positive) 18%, transparent);
+}
+.d-range::-moz-range-thumb { width: 28px; height: 28px; border: 6px solid var(--fiscal-stage-positive-fill); border-radius: 50%; background: var(--fiscal-stage-text); }
+.d-range:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 4px; }
+
+@media (max-width: 900px) {
+  .esc-q__answer, .esc-q__verdict, .esc-q__split, .esc-q__console { grid-template-columns: minmax(0, 1fr); }
+  .esc-q__rows > div { grid-template-columns: minmax(0, 1fr); }
+  .esc-q__rows dd { grid-template-columns: minmax(0, 1fr) auto; gap: 16px; }
+  .esc-q__cells { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+}
