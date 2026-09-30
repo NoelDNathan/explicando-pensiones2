@@ -1153,7 +1153,10 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           </>
         ) : null}
 
-        <nav className="esc-step__nav" aria-label="Navegación del recorrido fiscal">
+        <nav
+          className={`esc-step__nav${nextStep ? '' : ' esc-step__nav--terminal'}`}
+          aria-label="Navegación del recorrido fiscal"
+        >
           <button
             type="button"
             className="esc-step__back"
@@ -1164,16 +1167,17 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
             <ChevronLeft size={20} aria-hidden="true" />
             <span>{previousStep ? previousStep.title : 'Anterior'}</span>
           </button>
-          <button
-            type="button"
-            className="esc-step__next"
-            onClick={goToNext}
-            disabled={!nextStep}
-            aria-label={nextStep ? `Ir al siguiente paso: ${nextStep.title}` : 'No hay más pasos'}
-          >
-            <span>{nextStep ? nextStep.title : 'Continuar'}</span>
-            <ChevronRight size={22} aria-hidden="true" />
-          </button>
+          {nextStep ? (
+            <button
+              type="button"
+              className="esc-step__next"
+              onClick={goToNext}
+              aria-label={`Ir al siguiente paso: ${nextStep.title}`}
+            >
+              <span>{nextStep.title}</span>
+              <ChevronRight size={22} aria-hidden="true" />
+            </button>
+          ) : null}
         </nav>
       </section>
     )
@@ -1275,19 +1279,20 @@ export function WorkerFiscalStepsCard({ activeStepId, onStepChange, payrollLiveD
           </nav>
         </div>
 
-        <button
-          className="wfsc-nav wfsc-nav--next"
-          type="button"
-          onClick={goToNext}
-          disabled={!nextStep}
-          aria-label={nextStep ? `Ir al siguiente paso: ${nextStep.title}` : 'No hay más pasos'}
-        >
-          <span className="wfsc-nav__next-text">
-            <strong>{activeStep.id === 0 ? 'Empezar' : 'Continuar'}</strong>
-            {nextStep ? <em>{nextStep.title}</em> : null}
-          </span>
-          <ChevronRight size={22} aria-hidden="true" />
-        </button>
+        {nextStep ? (
+          <button
+            className="wfsc-nav wfsc-nav--next"
+            type="button"
+            onClick={goToNext}
+            aria-label={`Ir al siguiente paso: ${nextStep.title}`}
+          >
+            <span className="wfsc-nav__next-text">
+              <strong>{activeStep.id === 0 ? 'Empezar' : 'Continuar'}</strong>
+              <em>{nextStep.title}</em>
+            </span>
+            <ChevronRight size={22} aria-hidden="true" />
+          </button>
+        ) : null}
 
         <div
           className="wfsc-progress"

@@ -209,6 +209,10 @@
   padding: 14px var(--fiscal-space-gutter) 18px;
   background: linear-gradient(transparent, var(--fiscal-stage) 38%);
 }
+
+.esc-step__nav--terminal {
+  justify-content: flex-start;
+}
 .esc-step__back,
 .esc-step__next {
   display: inline-flex;

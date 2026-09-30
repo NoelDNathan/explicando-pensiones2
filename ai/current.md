@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-09-30
+Fecha: 2026-10-01
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
