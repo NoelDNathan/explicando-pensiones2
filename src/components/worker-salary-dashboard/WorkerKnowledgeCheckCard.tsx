@@ -15,7 +15,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { PointerEvent as ReactPointerEvent } from 'react'
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import {
   ArrowRight,
   Check,
@@ -46,6 +46,9 @@ import type {
 import { sendKnowledgeCheckReport } from './knowledgeCheckReporting'
 import type { KnowledgeCheckReport, ReportStatus } from './knowledgeCheckReporting'
 import './WorkerKnowledgeCheckCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import './escenario/D.css'
+import './escenario/EscenarioKnowledge.css'
 
 const STORAGE_KEY = 'fwd-knowledge-check-2025-v2'
 /** Pixeles que hay que recorrer antes de tratar un clic como arrastre. */
@@ -201,6 +204,7 @@ function readStoredState(): StoredState | null {
 
 export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: WorkerKnowledgeCheckCardProps) {
   const stored = useMemo(() => readStoredState(), [])
+  const isEscenario = useFiscalVariant() === 'escenario'
   const [phase, setPhase] = useState<Phase>(stored?.phase ?? 'intro')
   const [sectionIndex, setSectionIndex] = useState(stored?.sectionIndex ?? 0)
   const [answers, setAnswers] = useState<AnswerMap>(stored?.answers ?? {})
@@ -804,6 +808,113 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
   }
 
   const progressPercent = Math.round((answeredCount / KNOWLEDGE_CHECK_TOTAL_QUESTIONS) * 100)
+
+  if (isEscenario && phase === 'intro') {
+    const maxQuestions = Math.max(...KNOWLEDGE_CHECK_SECTIONS.map((item) => item.questions.length), 1)
+    return (
+      <section className="d-page esc-kc" aria-labelledby="wkcc-title">
+        <div className="d-stack">
+          <p className="esc-sr">Paso 11 de 12</p>
+          <div className="d-row">
+            <span className="d-chip">Paso opcional</span>
+            <span className="d-chip">10–15 min</span>
+          </div>
+          <h2 id="wkcc-title" className="d-h1" style={{ '--d-chars': 10 } as CSSProperties}>
+            <span className="esc-sr">11. </span>Comprueba lo <span className="d-acc">aprendido</span>
+          </h2>
+          <p className="d-lead d-rise">
+            Un repaso por apartados para ver qué se te ha quedado del recorrido. No hay nota que valga para nada:
+            sirve para detectar lo que aún no está claro.
+          </p>
+        </div>
+
+        <div className="esc-kc__numbers" aria-label={`${KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas · ${KNOWLEDGE_CHECK_SECTIONS.length} apartados`}>
+          <span><strong className="d-fig d-acc d-pop">{KNOWLEDGE_CHECK_TOTAL_QUESTIONS}</strong><span className="d-sub">preguntas</span></span>
+          <span><strong className="d-fig d-company d-pop">{KNOWLEDGE_CHECK_SECTIONS.length}</strong><span className="d-sub">apartados</span></span>
+        </div>
+
+        <div className="d-grid2 d-close">
+          <p className="d-txt"><strong>Este paso es opcional.</strong> Puedes saltártelo y seguir con el recorrido sin perder nada de lo calculado.</p>
+          <p className="d-txt esc-kc__ask">
+            Pero si tienes 10 o 15 minutos, <span className="d-sweep d-sweep--positive">para nosotros es muy importante que lo hagas</span>. Cada
+            pregunta está atada a un paso concreto: cuando muchas personas fallan en el mismo sitio, sabemos que ese
+            apartado no está bien explicado y lo reescribimos. Es la mejor forma de decirnos dónde nos hemos
+            explicado mal.
+          </p>
+        </div>
+
+        <div className="d-row d-close">
+          <button type="button" className="d-cta d-cta--big" onClick={() => setPhase('quiz')}>
+            Empezar el repaso
+            <ArrowRight size={22} aria-hidden="true" />
+          </button>
+          <button type="button" className="d-ghost esc-kc__skip" onClick={() => onGoToStep?.(nextStepId)}>Saltar este paso</button>
+        </div>
+        {answeredCount > 0 ? (
+          <p className="d-note d-tight">
+            Tienes {answeredCount} de {KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas respondidas de una vez anterior.
+            Al entrar seguirás donde lo dejaste.
+          </p>
+        ) : null}
+
+        <section className="d-stack" aria-labelledby="esc-kc-rep">
+          <h3 id="esc-kc-rep" className="d-h2">Qué vas a <span className="d-acc">repasar</span></h3>
+          <ol className="esc-kc__stairs">
+            {KNOWLEDGE_CHECK_SECTIONS.map((item, index) => (
+              <li key={item.id} className={`esc-kc__col esc-kc__col--${index % 5}`}>
+                <span className="d-fig esc-kc__count" aria-hidden="true">{item.questions.length}</span>
+                <span className="esc-kc__bar d-growy" style={{ height: `${(item.questions.length / maxQuestions) * 170}px`, animationDelay: `${index * 70}ms` }} aria-hidden="true" />
+                <span className="d-lab">Paso {item.stepId}</span>
+                <strong className="esc-kc__name">{item.title}</strong>
+                <span className="d-note">{item.questions.length} preguntas</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="d-grid2">
+          <div className="d-panel">
+            <strong className="d-h3 d-acc">Qué se envía.</strong>
+            <p>
+              Al terminar, tus respuestas viajan a nuestra base de datos <strong>de forma anónima</strong>, solo para
+              entender cómo mejorar el contenido: cuántas acertaste en cada apartado y cuáles marcaste como mal
+              explicadas.
+            </p>
+          </div>
+          <div className="d-panel">
+            <strong className="d-h3 d-red">Qué no se envía.</strong>
+            <p>
+              Nada de tu información personal ni ninguna de las cifras que hayas puesto en la calculadora: ni
+              salario, ni comunidad, ni situación familiar. Y si prefieres no hacerlo, el cuestionario es opcional.
+            </p>
+          </div>
+        </section>
+
+        <ul className="esc-kc__facts d-close">
+          <li>
+            <strong>{KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas</strong> repartidas en{' '}
+            {KNOWLEDGE_CHECK_SECTIONS.length} apartados, uno por cada bloque del recorrido.
+          </li>
+          <li>
+            <strong>No hay que escribir nada</strong>: se responde eligiendo, arrastrando piezas para ordenarlas
+            o emparejarlas, clasificando o moviendo un deslizador.
+          </li>
+          <li>
+            <strong>Se corrige apartado a apartado</strong>, con la explicación al momento y un enlace para volver
+            al paso correspondiente.
+          </li>
+          <li>
+            <strong>Puedes marcar cualquier pregunta</strong> con «Esto no estaba bien explicado», aunque la hayas
+            acertado.
+          </li>
+          <li>
+            <strong>Se guarda en tu navegador</strong>: puedes salir, seguir con el recorrido y volver donde lo
+            dejaste.
+          </li>
+        </ul>
+      </section>
+    )
+  }
 
   return (
     <section className={`wkcc${drag ? ' is-dragging' : ''}`} aria-labelledby="wkcc-title">

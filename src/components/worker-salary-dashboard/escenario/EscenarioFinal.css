@@ -1,5 +1,5 @@
 /* Paso 10 (Resumen) en la v2. Maqueta: Paso10.dc.html */
-.esc-fin__title { font-size: min(clamp(3rem, 1.5rem + 5.4vw, 7rem), calc(100cqi / (0.92 * var(--d-chars, 12)))); }
+.esc-fin__title { font-size: min(clamp(3rem, 1.5rem + 5.4vw, 7rem), calc(100cqi / (1.02 * var(--d-chars, 12)))); }
 .esc-fin__console { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 40px; align-items: end; }
 .esc-fin__split { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: clamp(32px, 6vw, 72px); align-items: start; }
 .esc-fin__per100 { color: var(--fiscal-stage-text); }
@@ -91,3 +91,13 @@
 .fwd.fwd--escenario .wsc-btn--yes,
 .fwd.fwd--escenario .wsc-btn.is-selected { background: var(--fiscal-stage); color: var(--fiscal-stage-text); }
 .fwd.fwd--escenario .wsc-btn:focus-visible { outline: 3px solid var(--fiscal-stage); outline-offset: 4px; }
+
+.fwd.fwd--escenario .wsc h3 { overflow-wrap: break-word; hyphens: auto; }
+@media (max-width: 560px) {
+  .esc-fin__fig-line { grid-template-columns: minmax(0, 1fr) 24px; }
+  .esc-fin__fig-name { grid-column: 1; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(2) { grid-column: 1; grid-row: 2; align-items: flex-start; }
+  .esc-fin__fig-num small { text-align: left; }
+  .esc-fin__fig-sign { grid-column: 2; grid-row: 1; }
+  .fwd.fwd--escenario .wsc h3 { font-size: clamp(1.75rem, 1rem + 5vw, 2.5rem); }
+}

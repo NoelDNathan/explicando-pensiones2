@@ -1,0 +1,40 @@
+/* Paso 12 (Fuentes) en la v2. Maqueta: Paso12.dc.html */
+.esc-src__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 40px; align-items: end; }
+.esc-src__seal { display: flex; flex-direction: column; align-items: flex-end; }
+.esc-src__seal .d-fig { font-size: clamp(6rem, 3rem + 10vw, 15rem); line-height: 0.8; }
+.esc-src__seal .d-sub { color: var(--fiscal-stage-text); }
+.esc-src__list { display: flex; flex-direction: column; }
+.esc-src__item { display: grid; grid-template-columns: clamp(80px, 12vw, 170px) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); padding: clamp(28px, 4vw, 48px) 0; border-top: 1px solid var(--fiscal-stage-line); }
+.esc-src__n {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(3.5rem, 1.5rem + 6vw, 8.125rem);
+  line-height: 0.8;
+  font-weight: 900;
+  font-stretch: 70%;
+  color: var(--fiscal-stage-raised);
+  -webkit-text-stroke: 2px var(--esc-src-tone);
+}
+.esc-src__item--worker { --esc-src-tone: var(--fiscal-stage-worker); }
+.esc-src__item--company { --esc-src-tone: var(--fiscal-stage-company); }
+.esc-src__item--red { --esc-src-tone: var(--fiscal-stage-red); }
+.esc-src__item--blue { --esc-src-tone: var(--fiscal-stage-blue); }
+.esc-src__title { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.esc-src__status { flex-shrink: 0; color: var(--fiscal-stage); }
+.esc-src__status--official { background: var(--fiscal-stage-positive); }
+.esc-src__status--estimated { background: var(--fiscal-stage-yellow); }
+.esc-src__values { margin: 8px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 24px; }
+.esc-src__values > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.esc-src__values dd { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(1.25rem, 1rem + 0.8vw, 1.625rem); font-weight: 800; line-height: 1.15; overflow-wrap: break-word; color: var(--fiscal-stage-text); }
+.esc-src__values dd.esc-src__long { font-family: var(--fiscal-font-body); font-size: 1.0625rem; font-weight: 700; line-height: 1.35; }
+.esc-src__links a { display: inline-flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 700; }
+@media (max-width: 900px) {
+  .esc-src__head { grid-template-columns: minmax(0, 1fr); }
+  .esc-src__seal { flex-direction: row; align-items: baseline; gap: 16px; }
+  .esc-src__values { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .esc-src__title { flex-direction: column; }
+}
+.esc-src__title h3 { min-width: 0; overflow-wrap: break-word; hyphens: auto; }
+@media (max-width: 560px) {
+  .esc-src__item { grid-template-columns: 56px minmax(0, 1fr); gap: 14px; }
+  .esc-src__title h3 { font-size: 1.5rem; }
+}

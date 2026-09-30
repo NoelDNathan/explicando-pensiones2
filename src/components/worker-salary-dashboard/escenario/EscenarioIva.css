@@ -56,3 +56,13 @@
   .esc-iva__head { grid-template-columns: minmax(0, 1fr); }
   .esc-iva__total { align-items: flex-start; }
 }
+
+
+@media (max-width: 560px) {
+  .esc-iva__slice { padding: 10px 6px; }
+  .esc-iva__slice strong { font-size: 0.875rem; }
+  .esc-iva__slice span { font-size: 0.75rem; }
+}
+@media (max-width: 900px) {
+  .esc-iva__n { font-size: 1.25rem; }
+}

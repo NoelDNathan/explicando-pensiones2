@@ -1,0 +1,27 @@
+/* Paso 11 (Comprueba lo aprendido) en la v2. Maqueta: Paso11.dc.html */
+.esc-kc__numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: end; }
+.esc-kc__numbers > span { display: flex; align-items: baseline; gap: 20px; min-width: 0; }
+.esc-kc__numbers .d-fig { font-size: clamp(5rem, 2rem + 13vw, 16.25rem); line-height: 0.8; }
+.esc-kc__numbers .d-sub { color: var(--fiscal-stage-text); }
+.esc-kc__ask { color: var(--fiscal-stage-text); }
+.esc-kc__skip { min-height: 76px; padding: 0 32px; }
+.esc-kc__stairs { margin: 0; padding: 0; list-style: none; display: flex; align-items: flex-end; gap: 10px; min-height: 360px; }
+.esc-kc__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; }
+.esc-kc__count { font-size: 1.875rem; color: var(--esc-kc-tone); }
+.esc-kc__bar { display: block; border-radius: 16px 16px 4px 4px; background: var(--esc-kc-tone); transform-origin: bottom; }
+.esc-kc__name { min-height: 60px; font-size: 1rem; line-height: 1.25; }
+.esc-kc__col--0 { --esc-kc-tone: var(--fiscal-stage-positive); }
+.esc-kc__col--1 { --esc-kc-tone: var(--fiscal-stage-worker); }
+.esc-kc__col--2 { --esc-kc-tone: var(--fiscal-stage-yellow); }
+.esc-kc__col--3 { --esc-kc-tone: var(--fiscal-stage-blue); }
+.esc-kc__col--4 { --esc-kc-tone: var(--fiscal-stage-red); }
+.esc-kc__facts { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 64px; }
+.esc-kc__facts li { padding-left: 28px; border-left: 4px solid var(--fiscal-stage-positive); font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.5; color: var(--fiscal-stage-copy); }
+.esc-kc__facts strong { color: var(--fiscal-stage-text); }
+@media (max-width: 900px) {
+  .esc-kc__numbers, .esc-kc__facts { grid-template-columns: minmax(0, 1fr); }
+  .esc-kc__stairs { flex-direction: column; align-items: stretch; min-height: 0; }
+  .esc-kc__col { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 10px 0; border-top: 1px solid var(--fiscal-stage-line); }
+  .esc-kc__col .esc-kc__bar, .esc-kc__col > .d-lab { display: none; }
+  .esc-kc__name { min-height: 0; }
+}

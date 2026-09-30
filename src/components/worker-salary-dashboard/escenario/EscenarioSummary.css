@@ -34,7 +34,7 @@
 .esc-q__footer .d-note { font-size: 1.0625rem; }
 .esc-q__footer .d-cta:disabled { opacity: 0.45; cursor: not-allowed; }
 .esc-q__salary { max-width: 1120px; }
-.esc-q__h1 { font-size: min(clamp(3rem, 1.5rem + 6vw, 7.5rem), calc(100cqi / (0.92 * var(--d-chars, 12)))); }
+.esc-q__h1 { font-size: min(clamp(3rem, 1.5rem + 6vw, 7.5rem), calc(100cqi / (1.02 * var(--d-chars, 12)))); }
 
 .esc-q__console { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 40px; align-items: end; }
 .esc-q__duel { gap: clamp(24px, 3vw, 36px); }

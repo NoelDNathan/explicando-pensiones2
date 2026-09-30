@@ -401,3 +401,11 @@
 .fwd.fwd--escenario .wprc--in-kind > .wprc-hero { order: -3; }
 .fwd.fwd--escenario .wprc--in-kind > .wprc-question-intro { order: -2; }
 .fwd.fwd--escenario .wprc--in-kind > .irpf-rule-form { order: -1; margin-top: calc(-1 * clamp(28px, 5vw, 72px)); }
+.fwd.fwd--escenario :is(.wprc-net-income__head h3, .wprc-question-intro h3) { overflow-wrap: break-word; hyphens: auto; }
+@media (max-width: 560px) {
+  .fwd.fwd--escenario .wprc-net-income__head,
+  .fwd.fwd--escenario .wprc-question-intro { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .fwd.fwd--escenario .wprc-net-income__pill { grid-column: 1; }
+  .fwd.fwd--escenario :is(.wprc-net-income__num, .wprc-question-intro > span) { font-size: 4rem; }
+  .fwd.fwd--escenario :is(.wprc-net-income__head h3, .wprc-question-intro h3) { font-size: clamp(1.75rem, 1rem + 5vw, 2.5rem); }
+}

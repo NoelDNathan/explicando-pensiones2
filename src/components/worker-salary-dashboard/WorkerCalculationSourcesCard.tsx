@@ -1,5 +1,9 @@
 import { ExternalLink, FileCheck2, Landmark } from 'lucide-react'
 import './WorkerCalculationSourcesCard.css'
+import type { CSSProperties } from 'react'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import './escenario/D.css'
+import './escenario/EscenarioSources.css'
 
 export type CalculationSourceItem = {
   id: string
@@ -47,7 +51,77 @@ const DEMO_ITEMS: CalculationSourceItem[] = [
   },
 ]
 
+const SOURCE_TONES = ['worker', 'company', 'red', 'red', 'blue'] as const
+
 export function WorkerCalculationSourcesCard({ year = 2025, items = DEMO_ITEMS }: WorkerCalculationSourcesCardProps) {
+  const isEscenario = useFiscalVariant() === 'escenario'
+
+  if (isEscenario) {
+    return (
+      <section className="d-page esc-src" aria-labelledby="wcsc-title">
+        <div className="esc-src__head">
+          <div className="d-stack">
+            <span className="d-caps">Trazabilidad del cálculo</span>
+            <h2 id="wcsc-title" className="d-h1" style={{ '--d-chars': 11 } as CSSProperties}>
+              Fuentes y valores <span className="d-acc">utilizados</span>
+            </h2>
+          </div>
+          <div className="esc-src__seal" aria-label={`${items.length} fuentes documentadas`}>
+            <strong className="d-fig d-acc d-pop">{items.length}</strong>
+            <span className="d-sub">fuentes</span>
+          </div>
+        </div>
+        <p className="d-lead d-rise d-close">
+          Este es el origen de cada parámetro aplicado al resultado de {year}. Los valores reflejan tus selecciones actuales; los enlaces llevan al documento oficial.
+        </p>
+
+        <div className="esc-src__list">
+          {items.map((item, index) => (
+            <article key={item.id} className={`esc-src__item esc-src__item--${SOURCE_TONES[index % SOURCE_TONES.length]}`}>
+              <span className="esc-src__n" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <div className="d-stack">
+                <div className="esc-src__title">
+                  <h3 className="d-h3 d-h3--big">{item.name}</h3>
+                  <span className={`d-chip esc-src__status esc-src__status--${item.status ?? 'official'}`}>
+                    {item.status === 'estimated' ? 'Estimación' : 'Oficial'}
+                  </span>
+                </div>
+                <p className="d-note"><strong>{item.officialSource}</strong> · {item.sourceDetail}</p>
+                <dl className="esc-src__values">
+                  {item.values.map((entry) => (
+                    <div key={`${item.id}-${entry.name}`}>
+                      <dt className="d-lab">{entry.name}</dt>
+                      <dd className={entry.value.length > 18 ? 'esc-src__long' : undefined}>{entry.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <div className="d-row esc-src__links">
+                  {item.url ? (
+                    <a href={item.url} target="_blank" rel="noreferrer">
+                      {item.urlLabel} <ExternalLink size={16} aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <p className="d-note">Sin enlace registrado para este parámetro.</p>
+                  )}
+                  {item.supportingUrl ? (
+                    <a href={item.supportingUrl} target="_blank" rel="noreferrer">
+                      Norma complementaria <ExternalLink size={16} aria-hidden="true" />
+                    </a>
+                  ) : null}
+                </div>
+                {item.note ? <p className="d-note">{item.note}</p> : null}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <p className="d-txt d-close">
+          La calculadora es didáctica. Los enlaces permiten comprobar los parámetros, pero el resultado no sustituye una nómina, una liquidación tributaria ni asesoramiento profesional.
+        </p>
+      </section>
+    )
+  }
+
   return (
     <section className="wcsc" aria-labelledby="wcsc-title">
       <header className="wcsc-header">

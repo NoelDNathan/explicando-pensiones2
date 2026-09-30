@@ -303,7 +303,7 @@ export function WorkerSalaryBaseCard({
           </div>
           <output className="d-panel" aria-live="polite">
             <span className="d-lab">Base real calculada</span>
-            <strong className="d-fig d-fig-xl d-pop">{formatNumber(realBase)} €</strong>
+            <strong className="d-fig d-fig-l d-pop">{formatNumber(realBase)} €</strong>
           </output>
         </section>
       </section>

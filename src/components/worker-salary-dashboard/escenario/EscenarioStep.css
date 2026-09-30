@@ -127,7 +127,7 @@
 }
 .esc-nom__main, .esc-nom__side { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .esc-nom__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; color: var(--fiscal-stage-muted); }
-.esc-nom__meta { margin: 0 0 8px; font-size: 0.75rem; letter-spacing: 0.04em; color: var(--fiscal-stage-faint); }
+.esc-nom__meta { margin: 0 0 8px; font-size: 0.75rem; letter-spacing: 0.04em; color: var(--fiscal-stage-muted); }
 .esc-nom__group { padding: 12px 16px 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; color: var(--fiscal-stage-muted); }
 .esc-nom__group--earn { color: var(--fiscal-stage-positive); }
 .esc-nom__group--ded { color: var(--fiscal-stage-worker); }
@@ -138,7 +138,7 @@
   align-items: baseline;
   padding: 10px 16px;
   border-radius: 14px;
-  opacity: 0.38;
+  opacity: 0.55;
 }
 .esc-nom__row--base { grid-template-columns: minmax(0, 1fr) 90px 60px 110px; }
 .esc-nom__row.is-on { opacity: 1; background: color-mix(in srgb, var(--fiscal-stage-text) 6%, transparent); box-shadow: inset 4px 0 0 var(--esc-nom-tone); }
@@ -157,7 +157,7 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: 12px;
-  opacity: 0.45;
+  opacity: 0.6;
 }
 .esc-nom__total span { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; }
 .esc-nom__total strong { font-family: var(--fiscal-font-display); font-size: 1.125rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }

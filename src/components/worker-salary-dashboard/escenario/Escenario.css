@@ -32,7 +32,7 @@
   margin: 0;
   font-family: var(--fiscal-font-display);
   /* Cada letra ocupa hasta 0,9 em con wdth 130: la palabra más larga cabe en su columna. */
-  font-size: min(var(--fiscal-text-hero), calc(100cqi / (0.92 * var(--esc-title-chars, 12))));
+  font-size: min(var(--fiscal-text-hero), calc(100cqi / (1.02 * var(--esc-title-chars, 12))));
   font-weight: 900;
   font-stretch: 130%;
   line-height: 0.86;

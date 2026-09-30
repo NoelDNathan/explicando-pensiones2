@@ -1565,7 +1565,7 @@ export function WorkerPersonalReductionsCard({
               <DWaterfall steps={reductionSteps} label={`De tu salario bruto a tu base liquidable de ${formatEuro(explainedTaxableBase)}`} />
               <div className="d-panel esc-pr__minimum">
                 <span className="d-lab">Mínimo personal y familiar</span>
-                <strong className="d-fig d-fig-m d-blue">{formatEuro(appliedFamilyMinimum)}</strong>
+                <strong className="d-fig d-fig-s d-blue">{formatEuro(appliedFamilyMinimum)}</strong>
                 <span className="d-note">
                   {appliedRegionalFamilyMinimum > 0
                     ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`

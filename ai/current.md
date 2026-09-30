@@ -89,25 +89,21 @@ existen como tokens: si se eligen, habrá que crear sus `--fiscal-*` antes de im
 **Elegida la dirección D (Escenario)** el 2026-09-26. La skill del proyecto
 `.claude/skills/diseno-escenario/` recoge su lenguaje (tokens de escenario, tipografía,
 movimiento y patrones) para aplicarlo paso a paso.
-**v2 en `/calculadora-fiscal/v2`** (2026-09-26): la misma calculadora con el diseño D;
-`/calculadora-fiscal` sigue siendo la v1 para comparar (comparten el escenario guardado).
-- Contexto `fiscalVariant.ts`: cada componente sabe si pinta la v1 (`clasica`) o la v2 (`escenario`).
-- Piezas de D en `worker-salary-dashboard/escenario/` (título display, barrido, cinta, 100 casillas,
-  filas de carrera, escalera, aguja, ecuación, cifras que cuentan, interruptor segmentado).
-- **Todos los pasos:** barra de progreso con 12 segmentos, título a todo el ancho, textos sin
-  tarjeta, nómina en panel y navegación en píldoras con el nombre del paso.
-- **Paso 3 completo como la maqueta D** (consola, casillas + párrafo en vivo, trabajador/empresa
-  con barras desplegables, paneles MEI y AT/EP, resumen en ecuación).
-- **Pendiente:** el cuerpo interactivo de los pasos 1-2 y 4-12 sigue siendo el de la v1 en oscuro.
-  Siguiente: darle su protagonista de D paso a paso, y llevar las piezas a `/componentes`.
-- **Maquetas D de todas las pantallas** (2026-09-26) en el lienzo privado
-  (https://claude.ai/artifact/WAvcAeqfPNxihpQbAxkMxo, fila «D en todas las pantallas»): paso 0
-  (pregunta y resultado), 1, 2 y 4-12, escritorio, con todo el texto de la v1. Pendiente de que
-  la persona usuaria las revise antes de implementarlas en la v2.
-- **Aprobadas con ajustes.** Copias en `ai/rediseno-calculadora/maquetas-d/` (visor:
-  `python -m http.server 8765 --directory ai/rediseno-calculadora/maquetas-d` →
-  `preview.html?f=Paso05.dc.html`). Plan de implementación en
-  `ai/rediseno-calculadora/02-plan-v2-escenario.md`; lo ejecuta Codex.
+**v2 en `/calculadora-fiscal/v2`** (2026-09-30): implementada según las maquetas D de
+`ai/rediseno-calculadora/maquetas-d/` (la implementación previa de Codex se deshizo en `80d84f7`).
+`/calculadora-fiscal` sigue siendo la v1, idéntica. Estructura:
+- `fiscalVariant.ts`: cada tarjeta decide si pinta la v1 o la v2 (`useFiscalVariant`).
+- `worker-salary-dashboard/escenario/`: `D.css` (hoja común de la maqueta con tokens y tamaños
+  fluidos), `EscenarioParts.tsx` (título, barrido, cinta, casillas, filas de carrera, escalera,
+  aguja, ecuación, pregunta Sí/No, capítulo, desplegable, cascada `DWaterfall`, escalera `DLadder`)
+  y un CSS por paso.
+- Pasos 0, 1, 2, 3, 8, 10, 11 y 12: rama v2 propia en su tarjeta con los mismos estados y textos.
+- Pasos 4, 5, 7 (`WorkerPersonalReductionsCard`), 6 y 9: mismos formularios de la v1 con piezas D
+  añadidas (bifurcación, cascada, escalera de la cuota, monedas, escalones del IRPF, dos relojes)
+  y CSS de la v2.
+- Nómina de ejemplo en la v2: `EscenarioPayroll` (filas del paso encendidas, resto atenuado).
+Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
+«Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
 
 ### Base de datos (Supabase)
 
