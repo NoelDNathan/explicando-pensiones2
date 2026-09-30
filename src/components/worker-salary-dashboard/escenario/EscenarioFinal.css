@@ -20,17 +20,32 @@
 
 .esc-fin__state { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
 .esc-fin__fig { border-top: 1px solid var(--fiscal-stage-line); }
-.esc-fin__fig-btn { display: flex; flex-direction: column; gap: 14px; width: 100%; padding: 22px 16px; border: 0; border-radius: 18px; background: transparent; color: var(--fiscal-stage-text); text-align: left; cursor: pointer; }
-.esc-fin__fig-btn[aria-expanded='true'] { background: var(--fiscal-stage-raised); }
-.esc-fin__fig-line { display: grid; grid-template-columns: minmax(0, 1fr) 200px 170px 110px 24px; gap: 20px; align-items: baseline; width: 100%; }
+.esc-fin__fig-btn { display: flex; flex-direction: column; gap: 14px; width: 100%; padding: 22px 16px; border: 0; border-radius: 18px; background: transparent; color: var(--fiscal-stage-text); text-align: left; cursor: pointer; align-items: center; }
+.esc-fin__fig-btn[aria-expanded='true'] {
+  background: transparent;
+  box-shadow: inset 3px 0 0 var(--esc-fin-tone, var(--fiscal-stage-positive));
+}
+.esc-fin__fig-line {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(9.5rem, max-content)
+    minmax(8.5rem, max-content)
+    minmax(7rem, max-content)
+    1.5rem;
+  gap: clamp(12px, 2vw, 28px);
+  align-items: baseline;
+  width: min(100%, 1040px);
+  margin-inline: auto;
+}
 .esc-fin__fig-name { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .esc-fin__fig-name strong { font-family: var(--fiscal-font-display); font-size: clamp(1.25rem, 1rem + 0.9vw, 1.75rem); font-weight: 900; font-stretch: 115%; }
 .esc-fin__fig-name span { font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
 .esc-fin__fig-num { display: flex; flex-direction: column; align-items: flex-end; }
 .esc-fin__fig-num small { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fiscal-stage-muted); text-align: right; }
-.esc-fin__fig-num strong { font-family: var(--fiscal-font-display); font-size: clamp(1.25rem, 1rem + 0.9vw, 2rem); font-weight: 900; white-space: nowrap; }
-.esc-fin__fig-sign { font-size: 1.5rem; color: var(--fiscal-stage-positive); }
-.esc-fin__fig-track { height: 12px; }
+.esc-fin__fig-num strong { font-family: var(--fiscal-font-display); font-size: clamp(1.25rem, 0.85rem + 1.1vw, 1.875rem); font-weight: 900; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.esc-fin__fig-sign { justify-self: end; font-size: 1.5rem; color: var(--fiscal-stage-positive); }
+.esc-fin__fig-track { height: 12px; width: min(100%, 1040px); margin-inline: auto; }
 .esc-fin__fig--social_contributions { --esc-fin-tone: var(--fiscal-stage-company); }
 .esc-fin__fig--irpf { --esc-fin-tone: var(--fiscal-stage-red); }
 .esc-fin__fig--vat { --esc-fin-tone: var(--fiscal-stage-blue); }
@@ -39,7 +54,7 @@
 .esc-fin__fig--vehicle_tax { --esc-fin-tone: var(--fiscal-stage-worker); }
 .esc-fin__fig-bar { background: var(--esc-fin-tone); }
 .esc-fin__fig-share { color: var(--esc-fin-tone); }
-.esc-fin__fig-more { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; padding: 0 16px 24px; font-size: 1.0625rem; line-height: 1.55; color: var(--fiscal-stage-copy); }
+.esc-fin__fig-more { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; width: min(100%, 1040px); margin-inline: auto; padding: 0 16px 24px; font-size: 1.0625rem; line-height: 1.55; color: var(--fiscal-stage-copy); }
 .esc-fin__fig-more[hidden] { display: none; }
 .esc-fin__fig-more p { margin: 0; }
 .esc-fin__fig-more b { color: var(--fiscal-stage-text); }
@@ -47,8 +62,18 @@
 
 @media (max-width: 900px) {
   .esc-fin__console, .esc-fin__split { grid-template-columns: minmax(0, 1fr); }
-  .esc-fin__fig-line { grid-template-columns: minmax(0, 1fr) auto 24px; }
-  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(3), .esc-fin__fig-line > .esc-fin__fig-num:nth-child(4) { display: none; }
+  .esc-fin__fig-line {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 1.5rem;
+    grid-template-rows: auto auto;
+    align-items: start;
+  }
+  .esc-fin__fig-name { grid-column: 1 / 4; grid-row: 1; }
+  .esc-fin__fig-sign { grid-column: 4; grid-row: 1; align-self: start; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(2) { grid-column: 1; grid-row: 2; align-items: flex-start; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(3) { grid-column: 2; grid-row: 2; align-items: flex-start; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(4) { grid-column: 3; grid-row: 2; align-items: flex-start; }
+  .esc-fin__fig-num small { text-align: left; line-height: 1.25; }
+  .esc-fin__fig-num strong { font-size: clamp(1.125rem, 0.95rem + 0.7vw, 1.5rem); }
   .esc-fin__fig-more { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -93,11 +118,18 @@
 .fwd.fwd--escenario .wsc-btn:focus-visible { outline: 3px solid var(--fiscal-stage); outline-offset: 4px; }
 
 .fwd.fwd--escenario .wsc h3 { overflow-wrap: break-word; hyphens: auto; }
-@media (max-width: 560px) {
-  .esc-fin__fig-line { grid-template-columns: minmax(0, 1fr) 24px; }
-  .esc-fin__fig-name { grid-column: 1; }
-  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(2) { grid-column: 1; grid-row: 2; align-items: flex-start; }
-  .esc-fin__fig-num small { text-align: left; }
+@media (max-width: 480px) {
+  .esc-fin__fig-line {
+    grid-template-columns: minmax(0, 1fr) 1.5rem;
+    grid-template-rows: auto repeat(3, auto);
+  }
+  .esc-fin__fig-name { grid-column: 1; grid-row: 1; }
   .esc-fin__fig-sign { grid-column: 2; grid-row: 1; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(3) { grid-column: 1 / -1; grid-row: 3; }
+  .esc-fin__fig-line > .esc-fin__fig-num:nth-child(4) { grid-column: 1 / -1; grid-row: 4; }
+  .esc-fin__fig-line > .esc-fin__fig-num { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; align-items: baseline; }
+  .esc-fin__fig-line > .esc-fin__fig-num small { grid-column: 1; }
+  .esc-fin__fig-line > .esc-fin__fig-num strong { grid-column: 2; justify-self: end; }
   .fwd.fwd--escenario .wsc h3 { font-size: clamp(1.75rem, 1rem + 5vw, 2.5rem); }
 }

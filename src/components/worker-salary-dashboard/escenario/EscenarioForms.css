@@ -20,7 +20,14 @@
 /* Cascada (paso 5) y escalera (paso 7) */
 .esc-pr__cascade { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: end; }
 .esc-pr__minimum { gap: 8px; }
-.esc-pr__ladder { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+.esc-pr__ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+}
 
 /* Bifurcación (paso 4) */
 .esc-pr__fork { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 22px 28px; align-items: center; margin: 24px 0; }

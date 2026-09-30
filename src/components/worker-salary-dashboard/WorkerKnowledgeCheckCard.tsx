@@ -861,7 +861,11 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
           <h3 id="esc-kc-rep" className="d-h2">Qué vas a <span className="d-acc">repasar</span></h3>
           <ol className="esc-kc__stairs">
             {KNOWLEDGE_CHECK_SECTIONS.map((item, index) => (
-              <li key={item.id} className={`esc-kc__col esc-kc__col--${index % 5}`}>
+              <li
+                key={item.id}
+                className={`esc-kc__col esc-kc__col--${index % 5}`}
+                style={{ '--esc-kc-h': `${(item.questions.length / maxQuestions) * 170}px` } as CSSProperties}
+              >
                 <span className="d-fig esc-kc__count" aria-hidden="true">{item.questions.length}</span>
                 <span className="esc-kc__bar d-growy" style={{ height: `${(item.questions.length / maxQuestions) * 170}px`, animationDelay: `${index * 70}ms` }} aria-hidden="true" />
                 <span className="d-lab">Paso {item.stepId}</span>

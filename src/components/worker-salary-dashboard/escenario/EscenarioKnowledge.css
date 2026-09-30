@@ -376,3 +376,38 @@
   .fwd.fwd--escenario .wkcc-rail__item { min-height: 44px; }
   .fwd.fwd--escenario .wkcc-rail__index { width: 40px; height: 40px; font-size: 0.9375rem; }
 }
+
+/* «Qué vas a repasar»: las columnas comparten filas (subgrid). Todas las barras nacen de la misma línea
+   y «Paso N», el nombre y «N preguntas» quedan alineados aunque un nombre ocupe tres líneas. */
+@media (min-width: 901px) {
+  .esc-kc__stairs {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-rows: auto 170px auto auto auto;
+    column-gap: 10px;
+    row-gap: 10px;
+    align-items: start;
+    min-height: 0;
+  }
+  .esc-kc__col { display: grid; grid-row: span 5; grid-template-rows: subgrid; gap: 0; }
+  .esc-kc__col > .esc-kc__count { align-self: end; }
+  .esc-kc__col > .esc-kc__bar { align-self: end; }
+  .esc-kc__col > .esc-kc__name { min-height: 0; }
+}
+/* La cifra va en la misma fila que la barra, justo encima de ella (la altura llega en --esc-kc-h). */
+@media (min-width: 901px) {
+  .esc-kc__stairs { grid-template-rows: 0 calc(170px + 3rem) auto auto auto; }
+  .esc-kc__col > .esc-kc__count { grid-row: 2; align-self: end; margin-bottom: calc(var(--esc-kc-h, 0px) + 8px); line-height: 1; }
+  .esc-kc__col > .esc-kc__bar { grid-row: 2; }
+  .esc-kc__col > .d-lab { margin-top: 12px; }
+  .esc-kc__col > .esc-kc__name { margin-top: 6px; }
+  .esc-kc__col > .d-note { margin-top: 10px; }
+}
+@media (min-width: 901px) {
+  .esc-kc__col > .d-lab { grid-row: 3; }
+  .esc-kc__col > .esc-kc__name { grid-row: 4; }
+  .esc-kc__col > .d-note { grid-row: 5; }
+}
+@media (min-width: 901px) {
+  .esc-kc__col > * { grid-column: 1; }
+}
