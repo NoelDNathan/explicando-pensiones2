@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { SalarySlider } from "../ui/SalarySlider";
 import { WorkerFamilyMinimumExplainer } from "./WorkerFamilyMinimumExplainer";
 import "./WorkerIrpfTranchesCard.css";
+import { useFiscalVariant } from "../fiscal-worker-dashboard/fiscalVariant";
+import "./escenario/EscenarioIrpf.css";
 
 export type WorkerIrpfBracketTone = "green" | "purple" | "blue" | "orange" | "yellow" | "red";
 
@@ -194,6 +196,7 @@ export function WorkerIrpfTranchesCard({
   onRegionChange,
   onResultChange,
 }: WorkerIrpfTranchesCardProps) {
+  const isEscenario = useFiscalVariant() === "escenario";
   const [uncontrolledRegion, setUncontrolledRegion] = useState(initialRegion);
   const [uncontrolledSalary, setUncontrolledSalary] = useState(grossSalary ?? 0);
   const salary = grossSalary ?? uncontrolledSalary;
@@ -487,7 +490,50 @@ export function WorkerIrpfTranchesCard({
         </div>
       )}
 
-      {hasScales ? (
+      {hasScales && isEscenario ? (
+        <div className="esc-it">
+          {[
+            { key: "state", tag: "Escala estatal", lines: stateLines },
+            { key: "region", tag: `Escala autonómica · ${regionLabel}`, lines: regionalLines },
+          ].map((scale) => (
+            <div key={scale.key} className={`esc-it__scale esc-it__scale--${scale.key}`}>
+              <span className="esc-it__tag">{scale.tag}</span>
+              <div className="esc-it__stairs" aria-label={`Tramos de la ${scale.tag.toLowerCase()}`}>
+                {scale.lines.map((line) => {
+                  const cap = 70_000;
+                  const end = Math.min(line.to ?? Number.POSITIVE_INFINITY, cap);
+                  const width = Math.max(0, end - line.from);
+                  const fill = width > 0 ? Math.min(100, (Math.min(line.taxableAmount, width) / width) * 100) : 0;
+                  const isActive = line.taxableAmount > 0;
+                  return (
+                    <div
+                      key={`${scale.key}-${line.from}`}
+                      className={`esc-it__step${isActive ? " is-active" : ""}`}
+                      style={{ flexGrow: Math.max(width, cap * 0.08), height: `${line.rate * 1000}px` }}
+                      aria-label={`${formatRange(line)}, ${formatRate(line.rate)}%, ${isActive ? "alcanzado" : "no alcanzado"}`}
+                    >
+                      <span className="esc-it__fill" style={{ width: `${fill}%` }} />
+                      <strong className="esc-it__rate">{formatRate(line.rate)}%</strong>
+                      {isActive ? <span className="esc-it__amount">{formatEuro(line.quota, 2)}</span> : null}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="esc-it__ranges" aria-hidden="true">
+                {scale.lines.map((line) => {
+                  const cap = 70_000;
+                  const end = Math.min(line.to ?? Number.POSITIVE_INFINITY, cap);
+                  return (
+                    <span key={`${scale.key}-r-${line.from}`} style={{ flexGrow: Math.max(end - line.from, cap * 0.08) }}>
+                      {formatRange(line)}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : hasScales ? (
         <div className="witc-scales">
           <div className="witc-scale-group">
             <span className="witc-scale-tag witc-scale-tag--state">Escala estatal</span>
