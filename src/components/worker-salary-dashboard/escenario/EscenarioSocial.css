@@ -448,3 +448,21 @@
 .fwd.fwd--escenario .esc-wscc__atep .atep-select__search svg { position: absolute; top: 50%; left: 22px; width: 18px; height: 18px; transform: translateY(-50%); color: var(--fiscal-stage-muted); pointer-events: none; }
 .fwd.fwd--escenario .esc-wscc__atep .atep-select__search input { padding-left: 52px; }
 .fwd.fwd--escenario .esc-wscc__atep .atep-select__option .atep-select__code { width: 60px; min-width: 60px; padding: 0 6px; font-size: 0.875rem; }
+
+/* Selector AT/EP cerrado, compacto: nombre algo menor y los tres tipos siempre en una sola línea.
+   «Contrato» y «Actividad AT/EP» se estiran a la misma altura para que las dos cápsulas casen. */
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger { min-height: 88px; padding: 12px 14px 12px 14px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__preview { gap: 6px 14px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__name { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.2; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rates { flex-wrap: nowrap; gap: 0 14px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rate { gap: 5px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rate > span { font-size: 0.75rem; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rate strong { font-size: 0.875rem; }
+.fwd.fwd--escenario .esc-wscc__controls > :is(.esc-wscc__field, .esc-wscc__atep) { align-self: stretch; display: flex; flex-direction: column; }
+.fwd.fwd--escenario .esc-wscc__controls > .esc-wscc__field { gap: 10px; }
+.fwd.fwd--escenario .esc-wscc__controls > .esc-wscc__field > .esc-select { flex: 1 1 auto; height: auto; min-height: 76px; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select { flex: 1 1 auto; }
+.fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger { flex: 1 1 auto; }
+@media (max-width: 520px) {
+  .fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rates { flex-wrap: wrap; gap: 2px 12px; }
+}
