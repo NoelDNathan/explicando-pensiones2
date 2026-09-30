@@ -390,6 +390,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
   // se guarda aparte y no viaja en los enlaces compartidos.
   const [taxGuess, setTaxGuess] = useState(loadTaxGuess)
   const handleTaxGuessChange = useCallback((value: number | null) => {
+    if (value === null) return
     setTaxGuess(value)
     saveTaxGuess(value)
   }, [])
@@ -668,9 +669,19 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
     setPayCount(values.payCount)
   }, [])
 
-  const handleUserBaseAnnualChange = useCallback((baseAnnual: number) => {
-    setSalary(Math.max(0, baseAnnual - salaryComplements))
+  // Los deslizadores de salario muestran el bruto anual total (salario + complementos).
+  // Al moverlos se guarda el salario base restando los complementos; si el bruto elegido
+  // queda por debajo de los complementos, estos bajan hasta ese bruto y el salario queda en 0.
+  const handleGrossAnnualChange = useCallback((grossAnnual: number) => {
+    const gross = Math.max(0, grossAnnual)
+    if (gross >= salaryComplements) {
+      setSalary(gross - salaryComplements)
+    } else {
+      setSalary(0)
+      setSalaryComplements(gross)
+    }
   }, [salaryComplements])
+  const handleUserBaseAnnualChange = handleGrossAnnualChange
 
   const handlePersonalResultChange = useCallback((personalResult: PersonalReductionResult) => {
     setPersonalAdjustments(personalResult)
@@ -1236,7 +1247,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
             workerContributionsAnnual={socialContributions.workerContributionsAnnual}
             irpfAnnual={result.irpf}
             vatAnnual={result.vat}
-            onSalaryChange={setSalary}
+            onSalaryChange={handleGrossAnnualChange}
             onExploreDetails={() => setActiveWorkerStepId(1)}
             taxGuess={taxGuess}
             onTaxGuessChange={handleTaxGuessChange}
@@ -1349,8 +1360,8 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
               stateGeneralQuotaDeductions={result.stateGeneralQuotaDeductions}
               regionalGeneralQuotaDeductions={result.regionalGeneralQuotaDeductions}
               regionalTaxLabel={result.regionalTaxLabel}
-              grossSalary={salary}
-              onSalaryChange={setSalary}
+              grossSalary={result.grossSalaryAnnual}
+              onSalaryChange={handleGrossAnnualChange}
               regions={regionOptions}
               onRegionChange={setRegion}
               onResultChange={handleIrpfResultChange}
@@ -1396,7 +1407,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
               vehicleTaxAnnual={wealthTaxes?.vehicleTaxAnnual ?? 0}
               propertyPurchaseTaxTotal={wealthTaxes?.propertyPurchaseTaxTotal ?? 0}
               vehiclePurchaseTaxTotal={wealthTaxes?.vehiclePurchaseTaxTotal ?? 0}
-              onSalaryChange={setSalary}
+              onSalaryChange={handleGrossAnnualChange}
               onGoToWealthStep={() => setActiveWorkerStepId(9)}
               onContinue={() => setActiveWorkerStepId(12)}
             />
