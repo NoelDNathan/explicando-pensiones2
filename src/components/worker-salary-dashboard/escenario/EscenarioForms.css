@@ -376,15 +376,6 @@
 .fwd.fwd--escenario .wir--embedded .wir-header p { font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; color: var(--fiscal-stage-copy); }
 .fwd.fwd--escenario .wir--embedded .wir-header > div > p:first-of-type { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); color: var(--fiscal-stage-text); }
 .fwd.fwd--escenario .wir--embedded .wir-acronym { padding: 0; border: 0; background: transparent; }
-.fwd.fwd--escenario .wir--embedded .wir-callout {
-  border: 0;
-  border-radius: 22px;
-  background: var(--fiscal-stage-yellow);
-  color: var(--fiscal-stage);
-}
-.fwd.fwd--escenario .wir--embedded .wir-callout :is(h3, p, strong, svg) { color: var(--fiscal-stage); }
-.fwd.fwd--escenario .wir--embedded .wir-callout h3 { font-size: 1.25rem; }
-.fwd.fwd--escenario .wir--embedded .wir-callout--blocked { background: var(--fiscal-stage-red); }
 .fwd.fwd--escenario .wir--embedded :is(.wir-kpi, .wir-tier, .wir-panel, .wir-trap) {
   border: 0;
   border-radius: 24px;
@@ -533,3 +524,108 @@
 /* En el contador, cifra y unidad se juntan en el centro, entre − y +. */
 .fwd.fwd--escenario .irpf-rule-field__control--count input { flex: 1 1 0; text-align: right; }
 .fwd.fwd--escenario .irpf-rule-field__control--count > span { flex: 1 1 0; text-align: left; }
+
+/* Paso 5 · aviso «no aplica / bloqueada»: sobre el fondo oscuro con una franja de color, como los avisos del paso 3. */
+.fwd.fwd--escenario .wir.wir--embedded .wir-callout {
+  --wir-callout-tone: var(--fiscal-stage-yellow);
+  gap: 16px;
+  padding: 20px 24px;
+  border: 0;
+  border-left: 6px solid var(--wir-callout-tone);
+  border-radius: 6px 20px 20px 6px;
+  background: color-mix(in srgb, var(--wir-callout-tone) 12%, transparent);
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .wir.wir--embedded .wir-callout--blocked { --wir-callout-tone: var(--fiscal-stage-red); background: color-mix(in srgb, var(--fiscal-stage-red) 12%, transparent); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-callout svg { margin-top: 4px; color: var(--wir-callout-tone); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-callout h3 {
+  margin: 0 0 8px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--wir-callout-tone);
+}
+.fwd.fwd--escenario .wir.wir--embedded .wir-callout p { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.55; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-callout strong { color: var(--fiscal-stage-text); }
+
+/* Paso 5 · cifras del simulador: cada cifra se ajusta al ancho de su celda y no se corta. */
+.fwd.fwd--escenario .wir.wir--embedded .wir-kpi { container-type: inline-size; min-width: 0; padding: 14px 16px; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-kpi span { font-size: 0.75rem; line-height: 1.3; letter-spacing: 0.03em; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-kpi strong { font-size: min(clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem), 15cqi); white-space: nowrap; }
+
+/* Enganchado arriba: tira compacta. Cifra y valor del deslizador pequeños para que quepan las cuatro cifras. */
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck { border-radius: 24px; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .wir-kpis { gap: 8px; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .wir-kpi { gap: 2px; padding: 8px 12px; border-radius: 16px; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .wir-kpi span { font-size: 0.6875rem; line-height: 1.25; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .wir-kpi strong { font-size: min(1.625rem, 15cqi); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .salary-slider__value-input { font-size: clamp(1.75rem, 1.2rem + 1.4vw, 2.5rem); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .salary-slider__value-shell > span { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem); }
+
+/* Paso 5 · regla de tramos: 17.673,52 € y 19.747,50 € están muy juntos; el penúltimo baja a una segunda línea. */
+.fwd.fwd--escenario .wir.wir--embedded .wir-ruler__labels { height: 2.7em; font-size: 0.8125rem; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-ruler__labels span:nth-child(3) { top: 1.4em; }
+
+/* Paso 5 · tramos: una lista de filas en lugar de cuatro cajas. El tuyo, resaltado con una franja verde. */
+.fwd.fwd--escenario .wir.wir--embedded .wir-tiers { display: flex; flex-direction: column; gap: 0; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 4px 28px;
+  padding: 18px 20px;
+  border: 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--fiscal-stage-muted);
+}
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier:last-child { border-bottom: 1px solid var(--fiscal-stage-line); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier header { grid-column: 1; grid-row: 1; align-items: center; justify-content: flex-start; gap: 12px; flex-wrap: wrap; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier h4 { flex: 0 1 auto; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); font-weight: 700; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier .wir-tier__range { grid-column: 1; grid-row: 2; margin: 0; font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier .wir-tier__formula {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+  font-family: var(--fiscal-font-body);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier .wir-tier__applied { grid-column: 1 / -1; margin: 6px 0 0; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier.is-active {
+  border-top-color: transparent;
+  border-left: 6px solid var(--fiscal-stage-positive);
+  border-radius: 6px 20px 20px 6px;
+  background: color-mix(in srgb, var(--fiscal-stage-positive) 14%, transparent);
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier.is-active + .wir-tier { border-top-color: transparent; }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier.is-active :is(h4, .wir-tier__formula) { color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier.is-active .wir-tier__range { color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier.is-active .wir-tier__formula { color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier.is-active .wir-tier__badge {
+  padding: 4px 12px;
+  background: var(--fiscal-stage-positive);
+  color: var(--fiscal-stage);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .fwd.fwd--escenario .wir.wir--embedded .wir-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .fwd.fwd--escenario .wir.wir--embedded .wir-kpi { padding: 12px 14px; }
+  .fwd.fwd--escenario .wir.wir--embedded .wir-kpi strong { font-size: min(2rem, 16cqi); }
+  .fwd.fwd--escenario .wir.wir--embedded .wir-tier { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .fwd.fwd--escenario .wir.wir--embedded .wir-tier .wir-tier__formula { grid-column: 1; grid-row: auto; margin-top: 6px; }
+  .fwd.fwd--escenario .wir.wir--embedded .wir-callout { padding: 16px 18px; }
+}
+.fwd.fwd--escenario .wir.wir--embedded .wir-tier:not(.is-active) { opacity: 0.78; }
+/* En móvil la escala del deslizador del paso 5 no cabe con cinco cifras: se quedan la primera, la central y la última. */
+@media (max-width: 720px) {
+  .fwd.fwd--escenario .wir.wir--embedded .wir-sim .salary-slider__scale-marker:is(:nth-child(2), :nth-child(4)) { visibility: hidden; }
+  .fwd.fwd--escenario .wir.wir--embedded .wir-sim .wir-kpi strong,
+  .fwd.fwd--escenario .wir.wir--embedded .wir-sim.is-stuck .wir-kpi strong { font-size: min(1.875rem, 17cqi); }
+}
