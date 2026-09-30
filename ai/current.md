@@ -108,6 +108,7 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Paso 1 v2: los complementos salariales anuales van **encima** del gráfico de 12/14 pagas (pedido 2026-09-30; en la maqueta Paso01 iban debajo).
 - Paso 2 v2: el selector de grupo y el conmutador Mensual/Anual comparten eje vertical (centro del trigger); más separación entre el círculo G y el nombre.
 - Paso 4 v2: en móvil (bajo 900 px) la cabecera sin número (`--no-num`) ya no hereda la rejilla del hueco de la cifra gigante; el título y el párrafo de «Cotiza entero…» usan todo el ancho (2026-09-30).
+- Paso 4 v2: exención / reducción / deducción como tres filas (término grande en su color, explicación y etiqueta del paso). Paso 3 v2: los tipos del selector AT/EP empiezan bajo el nombre (2026-09-30).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
 «Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
 
