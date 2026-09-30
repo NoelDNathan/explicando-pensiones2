@@ -1,0 +1,25 @@
+# 2026-10-01 · Preguntas del repaso en v2 (paso 11)
+
+- **Objetivo:** mejorar el aspecto de las preguntas de «Comprueba si lo has entendido» en la v2. Hasta ahora solo la portada tenía estilo de v2; el cuestionario seguía con el de v1.
+- **Archivos:** `escenario/EscenarioKnowledge.css`.
+- **Cambios:**
+  - **Apartados:**
+    - Tira de círculos numerados; solo el actual muestra su nombre, y los demás lo conservan para lectores de pantalla.
+    - Hechos en verde; barra de progreso fina en verde.
+  - **Cabecera del apartado:** sin tarjeta, con titular grande y «Repasar el paso N» como botón de contorno.
+  - **Preguntas:**
+    - Sin tarjeta, separadas por una línea, con número en círculo y enunciado más grande.
+    - Las respuestas quedan alineadas bajo el enunciado.
+  - **Tipos de respuesta:**
+    - Elección única y múltiple: filas grandes con marca redonda o cuadrada.
+    - Verdadero/falso: frase y par de botones en una pista oscura.
+    - Ordenar, emparejar y clasificar: mismas filas redondeadas. En clasificar, el concepto va encima y las columnas debajo.
+    - Deslizador: «Tu respuesta» pequeña y la cifra grande.
+  - **Tras corregir:**
+    - Acierto en verde y error en rojo, con el texto «Correcto» / «Repasa esto».
+    - La respuesta equivocada que elegiste en verdadero/falso, en rojo.
+    - Explicación con raya amarilla.
+  - **«Esto no estaba bien explicado»:** botón discreto; en amarillo cuando está marcado.
+  - **Móvil:** todo en una columna.
+- **Comprobado:** en pantalla a unos 810 px, con los tipos de pregunta de los apartados 1, 3, 4 y 5 y la corrección del apartado 1. A 375 px los 10 apartados sin nada fuera de pantalla. `verify:styles` pasa. Textos sin cambios.
+- **Siguiente:** revisión del usuario.

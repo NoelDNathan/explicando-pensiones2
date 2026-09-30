@@ -25,3 +25,354 @@
   .esc-kc__col .esc-kc__bar, .esc-kc__col > .d-lab { display: none; }
   .esc-kc__name { min-height: 0; }
 }
+
+/* ─── Cuestionario del repaso (v2) ──────────────────────────────────────────────────────────────
+   Menos cajas: el apartado es un titular, cada pregunta una fila separada por una línea y las
+   respuestas filas grandes que se pueden tocar. Acierto y error se leen por texto («Correcto» /
+   «Repasa esto») y además por color: verde y rojo. */
+.fwd.fwd--escenario .wkcc-quiz { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+
+/* Apartados: una tira de círculos numerados; solo el actual muestra su nombre.
+   Los demás lo guardan para lectores de pantalla. */
+.fwd.fwd--escenario .wkcc-rail { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0; border: 0; background: transparent; }
+.fwd.fwd--escenario .wkcc-rail__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-copy);
+  box-shadow: none;
+  cursor: pointer;
+}
+.fwd.fwd--escenario .wkcc-rail__index {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fiscal-stage-copy);
+  font-family: var(--fiscal-font-display);
+  font-size: 1rem;
+  font-weight: 900;
+}
+.fwd.fwd--escenario .wkcc-rail__item:not(.is-active) .wkcc-rail__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.fwd.fwd--escenario .wkcc-rail__item.is-done .wkcc-rail__index { border-color: var(--fiscal-stage-positive); background: color-mix(in srgb, var(--fiscal-stage-positive) 18%, transparent); color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-rail__item.is-active { padding-right: 20px; background: var(--fiscal-stage-raised); }
+.fwd.fwd--escenario .wkcc-rail__item.is-active .wkcc-rail__index { border-color: var(--fiscal-stage-text); background: var(--fiscal-stage-text); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wkcc-rail__item.is-active .wkcc-rail__label { font-size: 1.0625rem; font-weight: 700; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wkcc-rail__item:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 2px; }
+
+.fwd.fwd--escenario .wkcc-progress { height: 6px; border: 0; border-radius: 999px; background: var(--fiscal-stage-raised); overflow: hidden; }
+.fwd.fwd--escenario .wkcc-progress > span { display: block; height: 100%; border-radius: inherit; background: var(--fiscal-stage-positive); transition: width 0.3s ease-out; }
+.fwd.fwd--escenario .wkcc-progress__label { margin: -8px 0 0; font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+
+/* Cabecera del apartado: sin tarjeta, titular grande. */
+.fwd.fwd--escenario .wkcc-section { display: flex; flex-direction: column; gap: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.fwd.fwd--escenario .wkcc-section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin: 12px 0 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.fwd.fwd--escenario .wkcc-section__eyebrow { margin: 0 0 8px; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wkcc-section__head h3 {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wkcc-section__subtitle { margin: 8px 0 0; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wkcc-section__score { color: var(--fiscal-stage-text); }
+
+/* Botones secundarios y principal */
+.fwd.fwd--escenario .wkcc-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.fwd.fwd--escenario .wkcc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fiscal-stage-positive);
+  color: var(--fiscal-stage);
+  font-size: 1.125rem;
+  font-weight: 800;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wkcc-cta:disabled { opacity: 0.45; cursor: not-allowed; }
+.fwd.fwd--escenario :is(.wkcc-ghost, .wkcc-cta):focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 3px; }
+.fwd.fwd--escenario .wkcc-section__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 28px; padding: 0; border: 0; background: transparent; }
+
+/* Cada pregunta: sin tarjeta, una fila con línea arriba. */
+.fwd.fwd--escenario .wkcc-questions { display: flex; flex-direction: column; gap: 0; }
+.fwd.fwd--escenario .wkcc-question {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 32px 0;
+  border: 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wkcc-question__head { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: start; gap: 14px; margin: 0; }
+.fwd.fwd--escenario .wkcc-question__index {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-text);
+  font-family: var(--fiscal-font-display);
+  font-size: 1rem;
+  font-weight: 900;
+}
+.fwd.fwd--escenario .wkcc-question__title h4 {
+  margin: 4px 0 0;
+  font-family: var(--fiscal-font-body);
+  font-size: clamp(1.1875rem, 1.05rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wkcc-question__hint { margin: 6px 0 0; font-size: 1rem; line-height: 1.45; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wkcc-question__body { padding-left: 54px; }
+
+.fwd.fwd--escenario .wkcc-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-copy);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.fwd.fwd--escenario .wkcc-verdict--ok { background: color-mix(in srgb, var(--fiscal-stage-positive) 18%, transparent); color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-verdict--ko { background: color-mix(in srgb, var(--fiscal-stage-red) 18%, transparent); color: var(--fiscal-stage-red); }
+
+/* Respuestas de elección (única y múltiple) */
+.fwd.fwd--escenario .wkcc-choices { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.fwd.fwd--escenario .wkcc-choice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 60px;
+  padding: 14px 20px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-text);
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  box-shadow: none;
+  cursor: pointer;
+}
+.fwd.fwd--escenario .wkcc-choice__mark {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--fiscal-stage-muted);
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wkcc-choice--multi .wkcc-choice__mark { border-radius: 7px; }
+.fwd.fwd--escenario .wkcc-choice.is-selected { border-color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wkcc-choice.is-selected .wkcc-choice__mark { border-color: var(--fiscal-stage-text); background: var(--fiscal-stage-text); box-shadow: inset 0 0 0 4px var(--fiscal-stage-raised); }
+.fwd.fwd--escenario .wkcc-choice:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 2px; }
+.fwd.fwd--escenario .wkcc-choice:disabled { cursor: default; opacity: 1; }
+.fwd.fwd--escenario .wkcc-choice:disabled:not(.is-right, .is-wrong) { opacity: 0.55; }
+.fwd.fwd--escenario .wkcc-choice.is-right { border-color: var(--fiscal-stage-positive); background: color-mix(in srgb, var(--fiscal-stage-positive) 14%, transparent); }
+.fwd.fwd--escenario .wkcc-choice.is-right .wkcc-choice__mark { border-color: var(--fiscal-stage-positive); background: var(--fiscal-stage-positive); box-shadow: inset 0 0 0 4px var(--fiscal-stage); }
+.fwd.fwd--escenario .wkcc-choice.is-wrong { border-color: var(--fiscal-stage-red); background: color-mix(in srgb, var(--fiscal-stage-red) 14%, transparent); }
+.fwd.fwd--escenario .wkcc-choice.is-wrong .wkcc-choice__mark { border-color: var(--fiscal-stage-red); background: var(--fiscal-stage-red); box-shadow: inset 0 0 0 4px var(--fiscal-stage); }
+
+/* Verdadero / falso: frase a la izquierda y el par de botones a la derecha. */
+.fwd.fwd--escenario .wkcc-statements { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.fwd.fwd--escenario .wkcc-statement {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 14px 14px 14px 20px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: var(--fiscal-stage-raised);
+}
+.fwd.fwd--escenario .wkcc-statement__text { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); font-weight: 600; line-height: 1.4; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wkcc-statement.is-right { border-color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-statement.is-wrong { border-color: var(--fiscal-stage-red); }
+.fwd.fwd--escenario .wkcc-tf { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--fiscal-stage); }
+.fwd.fwd--escenario .wkcc-tf__btn {
+  min-width: 88px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-copy);
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wkcc-tf__btn.is-selected { background: var(--fiscal-stage-text); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wkcc-tf__btn.is-right { box-shadow: inset 0 0 0 2px var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-tf__btn.is-selected.is-right { background: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-tf__btn:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 2px; }
+
+/* Ordenar, emparejar y clasificar: mismas filas redondeadas que las respuestas. */
+.fwd.fwd--escenario .wkcc-order__edge,
+.fwd.fwd--escenario .wkcc-match__note { margin: 0; font-size: 0.875rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wkcc-order__list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; padding: 0; list-style: none; }
+.fwd.fwd--escenario :is(.wkcc-order__item, .wkcc-match__left, .wkcc-match__right, .wkcc-classify__row) {
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-text);
+  box-shadow: none;
+}
+.fwd.fwd--escenario :is(.wkcc-order__item, .wkcc-match__left, .wkcc-classify__row).is-right { border-color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario :is(.wkcc-order__item, .wkcc-match__left, .wkcc-classify__row).is-wrong { border-color: var(--fiscal-stage-red); }
+.fwd.fwd--escenario :is(.wkcc-match__left, .wkcc-match__right).is-active { border-color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wkcc-match__right.is-used { opacity: 0.55; }
+.fwd.fwd--escenario .wkcc-order__label,
+.fwd.fwd--escenario .wkcc-classify__label { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); font-weight: 600; }
+.fwd.fwd--escenario .wkcc-order__position { font-family: var(--fiscal-font-display); font-weight: 900; color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-order__grip,
+.fwd.fwd--escenario .wkcc-match__grip { color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wkcc-order__moves button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fiscal-stage);
+  color: var(--fiscal-stage-text);
+}
+.fwd.fwd--escenario .wkcc-classify { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.fwd.fwd--escenario .wkcc-classify__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 20px; padding: 14px 14px 14px 20px; }
+.fwd.fwd--escenario .wkcc-classify__buckets { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 999px; background: var(--fiscal-stage); }
+.fwd.fwd--escenario .wkcc-bucket {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-copy);
+  font-weight: 700;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wkcc-bucket.is-selected { background: var(--fiscal-stage-text); color: var(--fiscal-stage); }
+.fwd.fwd--escenario .wkcc-slider__value { font-family: var(--fiscal-font-display); font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); font-weight: 900; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wkcc-slider__target { color: var(--fiscal-stage-positive); font-weight: 700; }
+
+/* Explicación tras comprobar y botón «Esto no estaba bien explicado» */
+.fwd.fwd--escenario .wkcc-explanation {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 0 54px;
+  padding: 14px 18px;
+  border: 0;
+  border-left: 4px solid var(--fiscal-stage-yellow);
+  border-radius: 4px 16px 16px 4px;
+  background: color-mix(in srgb, var(--fiscal-stage-yellow) 10%, transparent);
+  color: var(--fiscal-stage-copy);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.fwd.fwd--escenario .wkcc-explanation svg { flex: 0 0 auto; margin-top: 4px; color: var(--fiscal-stage-yellow); }
+.fwd.fwd--escenario .wkcc-unclear {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin-left: 54px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+.fwd.fwd--escenario .wkcc-unclear.is-active { background: color-mix(in srgb, var(--fiscal-stage-yellow) 16%, transparent); color: var(--fiscal-stage-yellow); }
+.fwd.fwd--escenario .wkcc-unclear:focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .fwd.fwd--escenario .wkcc-question { padding: 24px 0; }
+  .fwd.fwd--escenario .wkcc-question__head { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+  .fwd.fwd--escenario .wkcc-question__index { width: 34px; height: 34px; font-size: 0.875rem; }
+  .fwd.fwd--escenario .wkcc-question__head > .wkcc-verdict { grid-column: 2; justify-self: start; margin-top: 0; }
+  .fwd.fwd--escenario .wkcc-question__body { padding-left: 0; }
+  .fwd.fwd--escenario :is(.wkcc-explanation, .wkcc-unclear) { margin-left: 0; }
+  .fwd.fwd--escenario .wkcc-choice { padding: 12px 16px; gap: 12px; }
+  .fwd.fwd--escenario :is(.wkcc-statement, .wkcc-classify__row) { grid-template-columns: minmax(0, 1fr); padding: 14px 16px; }
+  .fwd.fwd--escenario :is(.wkcc-tf, .wkcc-classify__buckets) { justify-self: start; }
+  .fwd.fwd--escenario .wkcc-section__head { flex-direction: column; align-items: flex-start; }
+}
+.fwd.fwd--escenario .wkcc-question__body { margin: 0; }
+.fwd.fwd--escenario .wkcc-question__head { padding: 0; border: 0; }
+.fwd.fwd--escenario .wkcc-statement.is-wrong .wkcc-tf__btn.is-selected { background: var(--fiscal-stage-red); color: var(--fiscal-stage); }
+/* Clasificar: el nombre del concepto arriba y las columnas debajo, para que los botones no lo aplasten. */
+.fwd.fwd--escenario .wkcc-classify__row { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 16px 20px; }
+.fwd.fwd--escenario .wkcc-classify__buckets { justify-self: start; max-width: 100%; }
+.fwd.fwd--escenario .wkcc-bucket { white-space: normal; text-align: center; line-height: 1.25; }
+/* Deslizador: la etiqueta «Tu respuesta» pequeña encima y la cifra grande debajo. */
+.fwd.fwd--escenario .wkcc-slider { display: flex; flex-direction: column; gap: 10px; }
+.fwd.fwd--escenario .wkcc-slider input[type='range'] { width: 100%; height: 32px; accent-color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-slider__scale { display: flex; justify-content: space-between; font-size: 0.875rem; font-weight: 700; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wkcc-slider__value { display: flex; flex-direction: column; gap: 4px; margin: 6px 0 0; font-family: var(--fiscal-font-body); font-size: 1rem; font-weight: 400; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wkcc-slider__value > span { font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.fwd.fwd--escenario .wkcc-slider__value > strong { font-family: var(--fiscal-font-display); font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem); font-weight: 900; line-height: 1.05; color: var(--fiscal-stage-text); }
+.fwd.fwd--escenario .wkcc-slider__target { margin: 0; font-size: 1rem; font-weight: 400; color: var(--fiscal-stage-copy); }
+.fwd.fwd--escenario .wkcc-slider__target strong { color: var(--fiscal-stage-positive); }
+.fwd.fwd--escenario .wkcc-match__note { margin-top: 12px; font-size: 0.9375rem; font-weight: 400; letter-spacing: 0; line-height: 1.5; text-transform: none; color: var(--fiscal-stage-muted); }
+@media (max-width: 640px) {
+  .fwd.fwd--escenario .wkcc-rail { gap: 6px; }
+  .fwd.fwd--escenario .wkcc-rail__item { min-height: 44px; }
+  .fwd.fwd--escenario .wkcc-rail__index { width: 40px; height: 40px; font-size: 0.9375rem; }
+}

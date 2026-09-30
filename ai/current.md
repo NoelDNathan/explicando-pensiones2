@@ -111,6 +111,7 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Paso 4 v2: exención / reducción / deducción como tres filas (término grande en su color, explicación y etiqueta del paso). Paso 3 v2: los tipos del selector AT/EP empiezan bajo el nombre (2026-09-30).
 - Paso 5 v2: aviso «no aplica» oscuro con franja amarilla (roja si está bloqueada); tramos como lista de filas con el tuyo resaltado; cifras del simulador ajustadas a su celda (enganchado y móvil) y escala del deslizador con tres marcas en móvil; sin anclaje de scroll para que no salte al engancharse (2026-09-30).
 - Paso 6 v2: las cuatro cifras del resultado en una línea (2 × 2 con el total arriba en móvil) (2026-09-30).
+- Paso 11 v2: preguntas del repaso sin tarjetas, respuestas en filas grandes y aciertos/errores en verde/rojo con texto (2026-10-01).
 - v2: fichas de hijos y ascendientes con franja por estado; desplegables nativos con chevrón propio y lista con `appearance: base-select` donde se admite (2026-09-30).
 - Paso 7 v2: la moneda amarilla «0,30 € / reducción» escala el texto con el diámetro (`cqi`) para no recortarse en móvil (2026-09-30).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
