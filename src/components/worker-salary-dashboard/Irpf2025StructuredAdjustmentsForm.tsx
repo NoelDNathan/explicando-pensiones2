@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Minus, Plus } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import {
   calculateAdditionalWorkExpenses2025,
@@ -18,6 +18,7 @@ import {
   workBenefitsCouldApply,
 } from '../fiscal-worker-dashboard/irpf2025Calc'
 import { InfoButton } from '../ui/InfoButton'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
 import './Irpf2025StructuredAdjustmentsForm.css'
 
 type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed'
@@ -192,6 +193,7 @@ function NumberField({ label, value, onChange, help, hint, max, min = 0, step = 
           min={min}
           step={step}
           type="number"
+          placeholder="0"
           value={value === 0 ? '' : value}
           onChange={(event) => onChange(Math.max(min, Number(event.target.value) || 0))}
         />
@@ -203,10 +205,18 @@ function NumberField({ label, value, onChange, help, hint, max, min = 0, step = 
 }
 
 function CountField({ label, value, onChange, max = 12, help, hint, unit }: NumberFieldProps) {
+  // v2: botones − y + grandes en lugar de las flechas del navegador, más fáciles de tocar.
+  const isEscenario = useFiscalVariant() === 'escenario'
+  const setCount = (next: number) => onChange(Math.min(max, Math.max(0, Math.trunc(next))))
   return (
     <label className="irpf-rule-field">
       <HelpLabel label={label} help={help} />
       <span className="irpf-rule-field__control irpf-rule-field__control--count">
+        {isEscenario ? (
+          <button type="button" className="irpf-stepper" aria-label={`Quitar uno: ${label}`} disabled={value <= 0} onClick={(event) => { event.preventDefault(); setCount(value - 1) }}>
+            <Minus size={20} aria-hidden="true" />
+          </button>
+        ) : null}
         <input
           aria-label={label}
           inputMode="numeric"
@@ -218,6 +228,11 @@ function CountField({ label, value, onChange, max = 12, help, hint, unit }: Numb
           onChange={(event) => onChange(Math.min(max, Math.max(0, Math.trunc(Number(event.target.value) || 0))))}
         />
         <span>{unit ?? (max === 12 ? 'meses' : 'uds.')}</span>
+        {isEscenario ? (
+          <button type="button" className="irpf-stepper" aria-label={`Añadir uno: ${label}`} disabled={value >= max} onClick={(event) => { event.preventDefault(); setCount(value + 1) }}>
+            <Plus size={20} aria-hidden="true" />
+          </button>
+        ) : null}
       </span>
       {hint ? <small>{hint}</small> : null}
     </label>
