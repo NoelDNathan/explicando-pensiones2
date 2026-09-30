@@ -313,3 +313,57 @@
 .fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula { padding: 0; border: 0; background: transparent; box-shadow: none; }
 .esc-step__concept--visual:has(.esc-refund) { grid-template-columns: minmax(0, 1fr); }
 .esc-step__concept--visual:has(.esc-refund) .esc-step__concept-visual { order: 2; }
+
+/* Paso 4: exención, reducción y deducción como una secuencia de tres filas.
+   Término grande a la izquierda, qué hace en el centro y en qué paso actúa a la derecha. */
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formulas:has(.wfsc-concept__formula > b) { display: flex; flex-direction: column; gap: 0; margin-top: 12px; counter-reset: esc-term; }
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula:has(> b) {
+  --esc-term-tone: var(--fiscal-stage-positive);
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 6px 28px;
+  padding: 22px 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula:has(> b):last-child { border-bottom: 1px solid var(--fiscal-stage-line); }
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula:has(> b):nth-child(2) { --esc-term-tone: var(--fiscal-stage-blue); }
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula:has(> b):nth-child(3) { --esc-term-tone: var(--fiscal-stage-yellow); }
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula > b {
+  display: block;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--esc-term-tone);
+  text-transform: none;
+}
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula > span {
+  display: block;
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--fiscal-stage-copy);
+}
+.fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula > em {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--esc-term-tone) 16%, transparent);
+  color: var(--esc-term-tone);
+  font-style: normal;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula:has(> b) { grid-template-columns: minmax(0, 1fr) auto; padding: 18px 0; }
+  .fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula > b { grid-column: 1; grid-row: 1; }
+  .fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula > em { grid-column: 2; grid-row: 1; align-self: center; }
+  .fwd.fwd--escenario .esc-step__concept .wfsc-concept__formula > span { grid-column: 1 / -1; }
+}

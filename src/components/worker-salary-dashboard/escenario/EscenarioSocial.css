@@ -436,6 +436,8 @@
 .fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__identity { display: contents; }
 .fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__code { grid-row: 1 / span 2; }
 .fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rates { grid-column: 2; flex-direction: row; gap: 2px 16px; margin: 0; }
+/* La base de v1 empuja los tipos a la derecha; en v2 empiezan donde empieza el nombre. */
+.fwd.fwd--escenario .esc-wscc__atep :is(.atep-select__trigger, .atep-select__option) .atep-select__rates { justify-content: flex-start; justify-self: start; }
 .fwd.fwd--escenario .esc-wscc__controls { align-items: start; }
 @media (max-width: 720px) {
   .fwd.fwd--escenario .esc-wscc__atep .atep-select__trigger .atep-select__rates { margin-left: 0; }
