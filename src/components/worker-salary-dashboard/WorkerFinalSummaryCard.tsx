@@ -1,10 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { ArrowRight, Car, Home, Landmark, ShieldCheck } from 'lucide-react'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts'
 import stateRevenueJson from '../../../data/processed/fiscal/2026-09-01_igae-recaudacion-por-figura-aapp-2024.json'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerFinalSummaryCard.css'
+import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
+import { EscHundredCells, type EscTone } from './escenario/EscenarioParts'
+import './escenario/EscenarioFinal.css'
 
 /** Identificadores de las porciones del grafico de coste laboral. */
 type CostSliceId =
@@ -172,6 +176,40 @@ function CostTooltip({ active, payload }: CostTooltipProps) {
   )
 }
 
+/** v2: una figura de recaudación como fila de carrera que se abre al tocar. */
+function StateFigureRow({ id, label, yours, revenue, shareOfRevenue, shareOfGdp, bar, destination, effect }: {
+  id: string
+  label: string
+  yours: string
+  revenue: string
+  shareOfRevenue: string
+  shareOfGdp: string
+  bar: number
+  destination: string
+  effect: string
+}) {
+  const [open, setOpen] = useState(false)
+  const panelId = useId()
+  return (
+    <li className={`esc-fin__fig esc-fin__fig--${id}`}>
+      <button type="button" className="esc-fin__fig-btn" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(!open)}>
+        <span className="esc-fin__fig-line">
+          <span className="esc-fin__fig-name"><strong>{label}</strong><span>{yours}</span></span>
+          <span className="esc-fin__fig-num"><small>Recaudación</small><strong>{revenue}</strong></span>
+          <span className="esc-fin__fig-num"><small>De los ingresos públicos</small><strong className="esc-fin__fig-share">{shareOfRevenue}</strong></span>
+          <span className="esc-fin__fig-num"><small>Del PIB</small><strong>{shareOfGdp}</strong></span>
+          <span className="esc-fin__fig-sign" aria-hidden="true">{open ? '−' : '+'}</span>
+        </span>
+        <span className="d-track esc-fin__fig-track" aria-hidden="true"><span className="d-bar esc-fin__fig-bar" style={{ width: `${bar}%` }} /></span>
+      </button>
+      <div id={panelId} className="esc-fin__fig-more d-unfold" hidden={!open}>
+        <p><b>En qué se gasta.</b> {destination}</p>
+        <p><b>Qué efecto tiene.</b> {effect}</p>
+      </div>
+    </li>
+  )
+}
+
 export function WorkerFinalSummaryCard({
   grossSalaryAnnual = 35_000,
   employerContributionsAnnual = 10_700,
@@ -187,6 +225,7 @@ export function WorkerFinalSummaryCard({
   onGoToWealthStep,
   onContinue,
 }: WorkerFinalSummaryCardProps) {
+  const isEscenario = useFiscalVariant() === 'escenario'
   const [period, setPeriod] = useState<'month' | 'year'>('year')
 
   const laborCostAnnual = grossSalaryAnnual + employerContributionsAnnual
@@ -271,6 +310,179 @@ export function WorkerFinalSummaryCard({
 
   const hasWealthTaxes = wealthTaxesAnnual > 0
   const purchaseTaxTotal = propertyPurchaseTaxTotal + vehiclePurchaseTaxTotal
+
+  if (isEscenario) {
+    const tones: Record<CostSliceId, { cell: EscTone; text: string }> = {
+      'take-home': { cell: 'positive', text: 'd-acc' },
+      'employer-contributions': { cell: 'company', text: 'd-company' },
+      'worker-contributions': { cell: 'worker', text: 'd-worker' },
+      irpf: { cell: 'red', text: 'd-red' },
+      vat: { cell: 'state', text: 'd-blue' },
+      'special-taxes': { cell: 'yellow', text: 'd-yellow' },
+      'wealth-taxes': { cell: 'neutral', text: '' },
+    }
+    const maxRevenue = Math.max(...STATE_FIGURES.map((figure) => REVENUE_BY_ID.get(figure.id)?.revenue_million_eur ?? 0), 1)
+    return (
+      <section className="d-page esc-fin" aria-labelledby="wfin-title">
+        <div className="d-stack">
+          <p className="esc-sr">Paso 10 · Resumen</p>
+          <h2 id="wfin-title" className="d-h1 esc-fin__title" style={{ '--d-chars': 12 } as CSSProperties}>
+            A dónde va el dinero <span className="d-acc">que cuesta tu trabajo</span>
+          </h2>
+          <p className="d-lead d-rise">
+            Todo lo que has calculado, junto. Primero, cómo se reparte el coste de tu puesto entre
+            lo que te llevas y cada impuesto. Después, cuánto recauda el Estado por esas mismas
+            figuras y qué hace con ellas.
+          </p>
+        </div>
+
+        <div className="esc-fin__console d-close">
+          <SalarySlider
+            id="wfin-salary"
+            value={grossSalaryAnnual}
+            onChange={onSalaryChange ?? (() => undefined)}
+            min={14_000}
+            max={500_000}
+            step={1_000}
+            markers={[14_000, 50_000, 120_000, 250_000, 500_000]}
+            scale="log"
+            unitLabel="brutos al año"
+            ariaLabel="Salario bruto anual para el resumen final"
+          />
+          <div className="d-segs" role="group" aria-label="Ver las cifras al mes o al año">
+            <button type="button" aria-pressed={period === 'month'} onClick={() => setPeriod('month')}>Al mes</button>
+            <button type="button" aria-pressed={period === 'year'} onClick={() => setPeriod('year')}>Al año</button>
+          </div>
+        </div>
+
+        <section className="esc-fin__split" aria-labelledby="esc-fin-rep">
+          <div className="d-stack">
+            <p id="esc-fin-rep" className="d-caps">Reparto del coste laboral</p>
+            <EscHundredCells
+              label={`Reparto del coste laboral. ${chartSummary}`}
+              parts={slices.map((slice) => ({ value: slice.amountAnnual, tone: tones[slice.id].cell }))}
+            />
+            <p className="d-note">Coste total de tu puesto: {formatPeriodEuro(laborCostAnnual)} {periodSuffix}</p>
+          </div>
+          <div className="d-stack">
+            <p className="d-fig d-fig-xxl d-acc d-pop">{takeHomePer100} €</p>
+            <p className="d-sub esc-fin__per100">de cada 100 € son para ti</p>
+            <ul className="esc-fin__list">
+              {slices.map((slice) => (
+                <li key={slice.id}>
+                  <span className={`d-swatch esc-cell--${tones[slice.id].cell}`} aria-hidden="true" />
+                  <span className="esc-fin__list-text">
+                    <strong>{slice.label}</strong>
+                    <span>{slice.detail}</span>
+                  </span>
+                  <span className="esc-fin__list-value">
+                    <strong className={`d-fig d-fig-s ${tones[slice.id].text}`}>{formatPeriodEuro(slice.amountAnnual)}</strong>
+                    <span>{formatPercent(slice.sharePercent)}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="d-stack" aria-live="polite">
+          <p className="d-txt esc-fin__white">
+            De los {formatPeriodEuro(laborCostAnnual)} {periodSuffix} que cuesta tu puesto,
+            se van en impuestos y cotizaciones
+          </p>
+          <div className="esc-fin__big">
+            <strong className="d-fig d-fig-xl d-red">{formatPeriodEuro(totalTaxesAnnual)}</strong>
+            <span className="d-txt">
+              {formatPercent(laborCostAnnual > 0 ? (totalTaxesAnnual / laborCostAnnual) * 100 : 0)}{' '}
+              del coste laboral · te quedan <strong className="d-acc">{formatPeriodEuro(takeHomeAnnual)}</strong> {periodSuffix}
+            </span>
+          </div>
+        </section>
+
+        <section className="d-panel d-panel--dash esc-fin__home d-close" aria-labelledby="wfin-home-title">
+          <h3 id="wfin-home-title" className="d-h3">Tu casa y tu coche</h3>
+          {hasWealthTaxes || purchaseTaxTotal > 0 ? (
+            <>
+              <div className="d-line"><span>IBI de tu vivienda<br /><small className="d-note">Cada año, mientras seas propietario</small></span><strong className="d-fig d-fig-s">{formatPeriodEuro(propertyTaxAnnual)}</strong></div>
+              <div className="d-line"><span>IVTM de tu coche<br /><small className="d-note">El impuesto de circulación del ayuntamiento</small></span><strong className="d-fig d-fig-s">{formatPeriodEuro(vehicleTaxAnnual)}</strong></div>
+              <p>
+                Son el {formatPercent(laborCostAnnual > 0 ? (wealthTaxesAnnual / laborCostAnnual) * 100 : 0, 2)}{' '}
+                del coste de tu puesto, pero los pagas aunque ese año no ganes nada: gravan
+                lo que tienes, no lo que ingresas.
+              </p>
+              {purchaseTaxTotal > 0 ? (
+                <p>
+                  <strong>{formatEuro(purchaseTaxTotal)}</strong> pagaste una sola vez al comprar
+                  ({formatEuro(propertyPurchaseTaxTotal)} de vivienda y{' '}
+                  {formatEuro(vehiclePurchaseTaxTotal)} de coche). No entra en el gráfico porque
+                  no se repite cada año.
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <div className="esc-fin__home-empty">
+              <p>
+                No has declarado vivienda ni coche en propiedad, así que el gráfico no incluye
+                IBI ni IVTM. Si los tienes, el paso 9 los añade al reparto.
+              </p>
+              {onGoToWealthStep ? (
+                <button type="button" className="d-outline" onClick={onGoToWealthStep}>Volver al paso 9</button>
+              ) : null}
+            </div>
+          )}
+        </section>
+
+        <section className="d-stack" aria-labelledby="wfin-state-title">
+          <h3 id="wfin-state-title" className="d-h2 d-h2--big" style={{ '--d-chars': 16 } as CSSProperties}>
+            La otra cara: qué recauda <span className="d-acc">el Estado con esos impuestos</span>
+          </h3>
+          <p className="d-txt">
+            Cifras del conjunto de Administraciones Públicas en {REVENUE.reference_year}, en
+            contabilidad nacional. El PIB de ese año fue de{' '}
+            {formatMillionEuro(REVENUE.denominators.gdp_million_eur)} y los ingresos públicos
+            totales, {formatMillionEuro(REVENUE.denominators.public_revenue_non_financial_million_eur)}.
+          </p>
+          <ul className="esc-fin__state">
+            {STATE_FIGURES.map((figure) => {
+              const data = REVENUE_BY_ID.get(figure.id)
+              if (!data) return null
+              const revenue = data.revenue_million_eur
+              return (
+                <StateFigureRow
+                  key={figure.id}
+                  id={figure.id}
+                  label={figure.label}
+                  yours={figure.yours}
+                  revenue={formatMillionEuro(revenue)}
+                  shareOfRevenue={formatPercent((revenue / REVENUE.denominators.public_revenue_non_financial_million_eur) * 100)}
+                  shareOfGdp={formatPercent((revenue / REVENUE.denominators.gdp_million_eur) * 100, 2)}
+                  bar={(revenue / maxRevenue) * 100}
+                  destination={figure.destination}
+                  effect={figure.effect}
+                />
+              )
+            })}
+          </ul>
+          <p className="d-note">
+            Fuente: IGAE, «Impuestos y cotizaciones sociales de las Administraciones públicas»
+            (SEC 2010, {REVENUE.reference_year} provisional), y serie BDMACRO de PIB y gasto
+            público. Las seis figuras no suman el total de ingresos: quedan fuera Sociedades,
+            sucesiones, plusvalía municipal, tasas y transferencias.
+          </p>
+        </section>
+
+        <footer className="d-stack">
+          <p className="d-note">
+            El reparto es una estimación construida con tus datos: la nómina real cambia según
+            contrato, situación personal y comunidad autónoma, y el IVA depende de cómo gastes.
+          </p>
+          {onContinue ? (
+            <button type="button" className="d-outline" onClick={onContinue}>Ver fuentes del cálculo</button>
+          ) : null}
+        </footer>
+      </section>
+    )
+  }
 
   return (
     <section className="wfin" aria-labelledby="wfin-title">

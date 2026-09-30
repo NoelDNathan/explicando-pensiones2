@@ -322,3 +322,5 @@
   background-image: linear-gradient(var(--fiscal-stage-positive-mark), var(--fiscal-stage-positive-mark));
   animation-delay: 1s;
 }
+.esc-cell--red { background: var(--fiscal-stage-red-fill); }
+.esc-cell--yellow { background: var(--fiscal-stage-yellow); }

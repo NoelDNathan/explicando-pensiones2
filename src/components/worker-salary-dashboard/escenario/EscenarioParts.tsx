@@ -8,7 +8,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import './Escenario.css'
 import './D.css'
 
-export type EscTone = 'worker' | 'company' | 'positive' | 'state' | 'neutral'
+export type EscTone = 'worker' | 'company' | 'positive' | 'state' | 'neutral' | 'red' | 'yellow'
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches

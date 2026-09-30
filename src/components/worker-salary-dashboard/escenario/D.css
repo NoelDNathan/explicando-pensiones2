@@ -17,14 +17,14 @@
 
 .d-D { font-family: var(--fiscal-font-display); }
 .d-num { font-variant-numeric: tabular-nums; }
-.d-acc { color: var(--fiscal-stage-positive); }
-.d-worker { color: var(--fiscal-stage-worker); }
-.d-company { color: var(--fiscal-stage-company); }
-.d-blue { color: var(--fiscal-stage-blue); }
-.d-yellow { color: var(--fiscal-stage-yellow); }
-.d-red { color: var(--fiscal-stage-red); }
-.d-muted { color: var(--fiscal-stage-muted); }
-.d-faint { color: var(--fiscal-stage-faint); }
+.d-page .d-acc, .d-acc { color: var(--fiscal-stage-positive); }
+.d-page .d-worker, .d-worker { color: var(--fiscal-stage-worker); }
+.d-page .d-company, .d-company { color: var(--fiscal-stage-company); }
+.d-page .d-blue, .d-blue { color: var(--fiscal-stage-blue); }
+.d-page .d-yellow, .d-yellow { color: var(--fiscal-stage-yellow); }
+.d-page .d-red, .d-red { color: var(--fiscal-stage-red); }
+.d-page .d-muted, .d-muted { color: var(--fiscal-stage-muted); }
+.d-page .d-faint, .d-faint { color: var(--fiscal-stage-faint); }
 
 /* Tipografía */
 .d-h1 {
