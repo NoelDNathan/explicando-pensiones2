@@ -147,6 +147,14 @@ Pendiente de configurar a mano en el panel de Supabase: la lista de redireccione
 propio, porque el correo integrado de Supabase solo envia a miembros del proyecto y con un
 limite muy bajo.
 
+### Promoción
+
+`promo/tiktok/`: vídeo vertical de ~54 s con voz para TikTok (gancho del paso 0, pirámide INE
+1975/2025/2070 y llamada a la calculadora). Se regenera con `python promo/tiktok/build.py`; el
+.mp4 no se versiona. Única cifra real: personas de 20-64 por cada una de 65+ (5,3 / 2,9 / 1,8),
+calculada en `promo/tiktok/piramide.py` desde `data/processed/ine/`. El reparto de casillas es
+ilustrativo y está rotulado. Falta decidir la URL pública que irá en la bio.
+
 ### Datos
 
 `data/` separa `raw/` (204 archivos de evidencia, sin editar), `processed/` (102 datasets),

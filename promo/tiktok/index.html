@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TikTok · Explicando pensiones</title>
+<style>
+  @font-face { font-family: "Anybody Variable"; src: url(fonts/anybody-latin-wdth-normal.woff2) format("woff2"); font-weight: 100 900; font-stretch: 50% 150%; }
+  @font-face { font-family: "Instrument Sans"; src: url(fonts/instrument-sans-latin-400-normal.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Instrument Sans"; src: url(fonts/instrument-sans-latin-600-normal.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Instrument Sans"; src: url(fonts/instrument-sans-latin-700-normal.woff2) format("woff2"); font-weight: 700; }
+
+  /* Mismos tokens que el escenario de la calculadora (FiscalSoftTheme.css) */
+  :root {
+    --fiscal-stage: #172033;
+    --fiscal-stage-raised: #23364e;
+    --fiscal-stage-line: #4f5f70;
+    --fiscal-stage-text: #ffffff;
+    --fiscal-stage-copy: #dbe4ec;
+    --fiscal-stage-muted: #c4d2df;
+    --fiscal-stage-faint: #718096;
+    --fiscal-stage-blue: #bdd4ef;
+    --fiscal-stage-violet: #d5c9ee;
+    --fiscal-stage-orange: #efd2a9;
+    --fiscal-stage-yellow: #efd7a0;
+    --fiscal-stage-red: #efc5cc;
+    --fiscal-stage-green: #b6ded3;
+    --fiscal-stage-worker-mark: #5d469c;
+    --fiscal-stage-positive-fill: #18865b;
+    --fiscal-stage-company-fill: #b96b18;
+    --fiscal-stage-yellow-fill: #9a7418;
+    --fiscal-stage-red-fill: #c4455b;
+    --fiscal-stage-blue-fill: #2f6fce;
+    --fiscal-stage-shadow: #0b111c;
+    --fiscal-font-display: "Anybody Variable", "Anybody", system-ui, sans-serif;
+    --fiscal-font-body: "Instrument Sans", system-ui, sans-serif;
+  }
+  html, body { margin: 0; height: 100%; background: var(--fiscal-stage-shadow); overflow: hidden; }
+  #wrap { position: absolute; inset: 0; display: grid; place-items: center; }
+  #stage {
+    position: relative; width: 1080px; height: 1920px; overflow: hidden; flex: none;
+    background: var(--fiscal-stage); color: var(--fiscal-stage-text);
+    font-family: var(--fiscal-font-body); transform-origin: center center;
+  }
+  .abs { position: absolute; }
+  .glow { position: absolute; width: 1500px; height: 1500px; border-radius: 50%; filter: blur(140px); opacity: 0; left: -210px; top: 200px; }
+  #grain { position: absolute; inset: -200px; opacity: .08; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .h { position: absolute; left: 50px; right: 50px; margin: 0; text-align: center;
+    font-family: var(--fiscal-font-display); font-weight: 900; text-transform: uppercase;
+    line-height: .9; letter-spacing: -0.03em; opacity: 0; }
+  .y { color: var(--fiscal-stage-yellow); }
+  .g { color: var(--fiscal-stage-green); }
+  .sub { position: absolute; left: 60px; right: 60px; text-align: center; font-size: 44px; font-weight: 600; color: var(--fiscal-stage-muted); opacity: 0; }
+
+  #grid { position: absolute; left: 214px; top: 430px; width: 652px; height: 652px; }
+  .cell { position: absolute; width: 58px; height: 58px; border-radius: 12px; background: var(--fiscal-stage-positive-fill); }
+  #bigq { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-family: var(--fiscal-font-display);
+    font-weight: 900; font-size: 720px; line-height: 1; color: var(--fiscal-stage-yellow); opacity: 0; text-shadow: 0 20px 60px var(--fiscal-stage-shadow); }
+  .gridlab { position: absolute; left: 0; right: 0; top: 1105px; text-align: center; font-size: 30px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--fiscal-stage-muted); opacity: 0; }
+
+  #gnum { position: absolute; left: 0; right: 0; top: 560px; text-align: center; font-family: var(--fiscal-font-display); font-weight: 900;
+    font-size: 330px; line-height: 1; font-variant-numeric: tabular-nums; opacity: 0; }
+  #gnum small { font-size: 150px; color: var(--fiscal-stage-muted); }
+  #slider { position: absolute; left: 140px; width: 800px; top: 1040px; height: 20px; border-radius: 10px; background: var(--fiscal-stage-raised); opacity: 0; }
+  #sfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px; background: var(--fiscal-stage-yellow-fill); }
+  #sthumb { position: absolute; top: -26px; width: 72px; height: 72px; margin-left: -36px; border-radius: 50%; background: var(--fiscal-stage-text); box-shadow: 0 0 0 10px var(--fiscal-stage-yellow-fill); }
+  .slab { position: absolute; top: 60px; font-size: 34px; font-weight: 700; color: var(--fiscal-stage-muted); }
+  #stamp { position: absolute; left: 140px; right: 140px; top: 720px; text-align: center; font-family: var(--fiscal-font-display); font-weight: 900;
+    font-size: 84px; text-transform: uppercase; color: var(--fiscal-stage-red); border: 10px solid var(--fiscal-stage-red); border-radius: 22px; padding: 16px 0 10px;
+    background: var(--fiscal-stage); opacity: 0; }
+
+  #legend { position: absolute; left: 110px; right: 110px; top: 1110px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 30px; }
+  .leg { display: flex; align-items: center; gap: 18px; font-size: 36px; font-weight: 700; opacity: 0; }
+  .leg i { width: 44px; height: 44px; border-radius: 10px; flex: none; }
+  #note { position: absolute; left: 0; right: 0; top: 1265px; text-align: center; font-size: 26px; color: var(--fiscal-stage-muted); opacity: 0; }
+
+  #year { position: absolute; left: 0; right: 0; top: 150px; text-align: center; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 200px;
+    line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; opacity: 0; }
+  #badge { position: absolute; left: 50%; top: 350px; transform: translateX(-50%); padding: 10px 26px; border-radius: 999px; font-size: 28px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; opacity: 0; border: 3px solid currentColor; }
+  #pyr { position: absolute; left: 0; top: 420px; width: 1080px; height: 520px; opacity: 0; }
+  #pyr text { font-family: var(--fiscal-font-body); font-weight: 700; }
+  #src { position: absolute; left: 60px; right: 60px; top: 950px; text-align: center; font-size: 24px; color: var(--fiscal-stage-muted); opacity: 0; }
+  #ratio { position: absolute; left: 90px; right: 90px; top: 1000px; display: flex; align-items: center; gap: 34px; opacity: 0; }
+  #rnum { font-family: var(--fiscal-font-display); font-weight: 900; font-size: 190px; line-height: .9; color: var(--fiscal-stage-green); font-variant-numeric: tabular-nums; min-width: 370px; text-align: right; }
+  #rtxt { font-size: 38px; line-height: 1.25; font-weight: 600; color: var(--fiscal-stage-copy); }
+  #icons { position: absolute; left: 0; right: 0; top: 1200px; height: 100px; display: flex; justify-content: center; align-items: flex-end; gap: 12px; opacity: 0; }
+  .ic { position: relative; width: 66px; height: 96px; }
+  .ic svg { position: absolute; left: 0; top: 0; width: 66px; height: 96px; }
+  .ic .fillwrap { position: absolute; left: 0; top: 0; height: 96px; overflow: hidden; }
+  .vs { font-family: var(--fiscal-font-display); font-weight: 900; font-size: 44px; color: var(--fiscal-stage-muted); margin: 0 14px 20px; }
+
+  #card { position: absolute; left: 70px; right: 70px; top: 390px; border-radius: 40px; background: var(--fiscal-stage-raised); border: 3px solid var(--fiscal-stage-line);
+    padding: 46px 50px 54px; opacity: 0; box-shadow: 0 40px 80px var(--fiscal-stage-shadow); }
+  #card .caps { font-size: 26px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+  #card .q { margin-top: 22px; font-family: var(--fiscal-font-display); font-weight: 800; font-stretch: 105%; font-size: 48px; line-height: 1.08; }
+  #card .mini { position: relative; margin: 50px 6px 0; height: 16px; border-radius: 8px; background: var(--fiscal-stage); }
+  #card .mini b { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px; background: var(--fiscal-stage-yellow-fill); }
+  #card .mini i { position: absolute; top: -20px; width: 56px; height: 56px; margin-left: -28px; border-radius: 50%; background: var(--fiscal-stage-text); }
+  #btn { margin-top: 56px; display: flex; justify-content: center; align-items: center; height: 108px; border-radius: 999px; background: var(--fiscal-stage-yellow);
+    color: var(--fiscal-stage); font-size: 42px; font-weight: 700; }
+  #chips { position: absolute; left: 50px; right: 50px; top: 1085px; display: flex; justify-content: center; gap: 18px; }
+  .chip { padding: 16px 24px; border-radius: 999px; border: 3px solid var(--fiscal-stage-green); color: var(--fiscal-stage-green); font-size: 29px; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+  #bio { position: absolute; left: 0; right: 0; top: 1080px; text-align: center; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 84px;
+    text-transform: uppercase; color: var(--fiscal-stage-yellow); line-height: 1; opacity: 0; }
+  #arrow { position: absolute; left: 0; right: 0; top: 1170px; text-align: center; font-size: 90px; line-height: 1; color: var(--fiscal-stage-yellow); opacity: 0; }
+
+  #caps { position: absolute; left: 50px; right: 50px; top: 1340px; height: 220px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  #capline { font-family: var(--fiscal-font-display); font-weight: 900; font-stretch: 115%; font-size: 82px; line-height: 1.02; text-transform: uppercase;
+    -webkit-text-stroke: 14px var(--fiscal-stage-shadow); paint-order: stroke fill; }
+  #capline span { display: inline-block; margin: 0 .14em; }
+  #capline .on { color: var(--fiscal-stage-yellow); }
+
+  #play { position: fixed; inset: 0; display: grid; place-items: center; background: none; border: 0; cursor: pointer; font: 700 28px var(--fiscal-font-body); color: var(--fiscal-stage-text); }
+  #play span { padding: 22px 40px; border-radius: 999px; background: var(--fiscal-stage-blue-fill); }
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+  <div class="glow" id="glow-yellow" style="background: var(--fiscal-stage-yellow-fill)"></div>
+  <div class="glow" id="glow-blue" style="background: var(--fiscal-stage-blue-fill)"></div>
+  <div class="glow" id="glow-orange" style="background: var(--fiscal-stage-company-fill)"></div>
+  <div class="glow" id="glow-red" style="background: var(--fiscal-stage-red-fill)"></div>
+  <div class="glow" id="glow-green" style="background: var(--fiscal-stage-positive-fill)"></div>
+
+  <!-- 1 · gancho -->
+  <h1 class="h" id="para" style="top:700px;font-size:270px">Para.</h1>
+  <h2 class="h" id="h100" style="top:200px;font-size:132px">De cada <span class="y">100&nbsp;€</span></h2>
+  <h2 class="h" id="hq" style="top:150px;font-size:64px">¿Cuántos acaban en <span class="y">Hacienda</span> y la <span class="y">Seguridad Social</span>?</h2>
+  <div id="grid"></div>
+  <div class="gridlab" id="gridlab">1 casilla = 1 €</div>
+  <div id="bigq">?</div>
+
+  <!-- 2 · apuesta -->
+  <h2 class="h" id="hguess" style="top:230px;font-size:120px">Piensa un<br><span class="y">número</span></h2>
+  <div id="gnum"><span id="gval">0</span><small> €</small></div>
+  <div id="slider"><div id="sfill"></div><div id="sthumb"></div><span class="slab" style="left:0">0 €</span><span class="slab" style="right:0">70 €</span></div>
+  <div id="stamp">Sin trampas</div>
+
+  <!-- 3 · lo que no se ve -->
+  <h2 class="h" id="hhidden" style="top:190px;font-size:86px">Lo que tu nómina<br><span class="y">no te cuenta</span></h2>
+  <div id="legend">
+    <div class="leg" id="leg0"><i style="background:var(--fiscal-stage-company-fill)"></i>Paga tu empresa</div>
+    <div class="leg" id="leg1"><i style="background:var(--fiscal-stage-worker-mark)"></i>Sale de tu sueldo</div>
+    <div class="leg" id="leg2"><i style="background:var(--fiscal-stage-blue-fill)"></i>IRPF</div>
+    <div class="leg" id="leg3"><i style="background:var(--fiscal-stage-red-fill)"></i>IVA de cada café</div>
+  </div>
+  <div id="note">Reparto ilustrativo · el tuyo depende de tu sueldo</div>
+
+  <!-- 4 · ¿para qué? -->
+  <h2 class="h" id="hwhy" style="top:580px;font-size:220px">¿Para<br>qué?</h2>
+  <p class="sub" id="hwhysub" style="top:1100px;font-size:56px">mira esto ↓</p>
+
+  <!-- 5 · pirámide -->
+  <div id="year">1975</div>
+  <div id="badge">Dato observado · INE</div>
+  <svg id="pyr" viewBox="0 0 1080 520"></svg>
+  <div id="src">INE · Estadística Continua de Población (1975, 2025) y Proyecciones de Población 2024-2074 (2070)</div>
+  <div id="ratio"><div id="rnum">5,3</div><div id="rtxt">personas de <b class="g">20 a 64 años</b> por cada una de <b class="y">65 o más</b></div></div>
+  <div id="icons"></div>
+
+  <!-- 6 · llamada -->
+  <h2 class="h" id="hcta" style="top:200px;font-size:124px">¿Acer<span class="y">taste</span>?</h2>
+  <div id="card">
+    <div class="caps">explicando pensiones · calculadora fiscal</div>
+    <div class="q">De cada 100 € que cuesta tu trabajo, ¿cuántos crees que acaban en Hacienda y la Seguridad Social?</div>
+    <div class="mini"><b id="minib"></b><i id="minii"></i></div>
+    <div id="btn">Calcular con mi sueldo →</div>
+  </div>
+  <div id="chips"><div class="chip" id="chip0">13 pasos</div><div class="chip" id="chip1">Datos oficiales</div><div class="chip" id="chip2">En tu navegador</div></div>
+  <div id="bio">Enlace en la bio</div>
+  <div id="arrow">↓</div>
+
+  <div id="caps"><div id="capline"></div></div>
+  <div id="grain"></div>
+</div></div>
+
+<script src="timeline.js"></script>
+<script>
+const TL = window.TIMELINE;
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const prog = (t, a, d) => clamp((t - a) / d);
+const eOut = (p) => 1 - Math.pow(1 - p, 3);
+const eInOut = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const eBack = (p) => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+const SC = {};
+TL.scenes.forEach((s, i) => { SC[s.key] = { ...s, end: TL.scenes[i + 1] ? TL.scenes[i + 1].start : TL.total }; });
+// Momento absoluto en que se dice una palabra de una escena
+function W(key, word, nth = 0) {
+  const s = SC[key];
+  const hits = s.words.filter((w) => w.w === word);
+  if (!hits[nth]) throw new Error(`palabra ${word} no está en ${key}`);
+  return s.start + hits[nth].t;
+}
+// Visibilidad de un elemento entre a y b con entrada y salida
+function win(t, a, b, fin = 0.3, fout = 0.25) { return Math.min(prog(t, a, fin), 1 - prog(t, b - fout, fout)); }
+function set(el, o, tf = '') { el.style.opacity = o; el.style.transform = tf; el.style.visibility = o <= 0.001 ? 'hidden' : 'visible'; }
+// Entrada «estirada»: la tipografía pasa de estrecha a ancha, como en la calculadora
+function stretchIn(el, t, a, b, max = 140) {
+  const p = prog(t, a, 0.45), o = win(t, a, b, 0.12, 0.22);
+  el.style.fontStretch = lerp(55, max, eOut(p)) + '%';
+  set(el, o, `scale(${lerp(1.18, 1, eOut(p))}) translateY(${(1 - prog(t, b - 0.22, 0.22)) < 1 ? -60 * prog(t, b - 0.22, 0.22) : 0}px)`);
+}
+
+/* ---------- casillas ---------- */
+const cells = [];
+for (let i = 0; i < 100; i++) {
+  const d = document.createElement('div'); d.className = 'cell';
+  const r = Math.floor(i / 10), c = i % 10;
+  d.style.left = c * 66 + 'px'; d.style.top = r * 66 + 'px';
+  $('grid').appendChild(d); cells.push({ el: d, r, c });
+}
+const CAT = [
+  { from: 0, n: 9, word: 'empresa', color: 'var(--fiscal-stage-company-fill)' },
+  { from: 9, n: 6, word: 'sueldo', color: 'var(--fiscal-stage-worker-mark)' },
+  { from: 15, n: 9, word: 'IRPF', color: 'var(--fiscal-stage-blue-fill)' },
+  { from: 24, n: 6, word: 'IVA', color: 'var(--fiscal-stage-red-fill)' },
+];
+// Orden de relleno: desde la esquina inferior derecha, para que «lo tuyo» quede arriba
+const order = cells.map((_, i) => 99 - i);
+
+/* ---------- pirámide ---------- */
+const PY = TL.pyr, YEARS = ['1975', '2025', '2070'];
+const share = {};
+let maxShare = 0;
+for (const y of YEARS) {
+  const tot = PY[y].Hombres.reduce((a, b) => a + b, 0) + PY[y].Mujeres.reduce((a, b) => a + b, 0);
+  share[y] = { H: PY[y].Hombres.map((v) => v / tot), M: PY[y].Mujeres.map((v) => v / tot) };
+  maxShare = Math.max(maxShare, ...share[y].H, ...share[y].M);
+}
+const NG = 18, ROWH = 26.5, PTOP = 36, CX = 540, GAPX = 52, MAXW = 400;
+const svgNS = 'http://www.w3.org/2000/svg';
+const bars = [];
+const groupColor = (g) => (g >= 13 ? 'var(--fiscal-stage-yellow-fill)' : g >= 4 ? 'var(--fiscal-stage-positive-fill)' : 'var(--fiscal-stage-line)');
+for (let g = 0; g < NG; g++) {
+  const y = PTOP + (NG - 1 - g) * ROWH;
+  for (const side of ['H', 'M']) {
+    const r = document.createElementNS(svgNS, 'rect');
+    r.setAttribute('y', y); r.setAttribute('height', ROWH - 4); r.setAttribute('rx', 5); r.setAttribute('fill', groupColor(g));
+    $('pyr').appendChild(r); bars.push({ r, g, side });
+  }
+}
+for (const [g, lab] of [[0, '0'], [4, '20'], [13, '65'], [17, '85+']]) {
+  const tx = document.createElementNS(svgNS, 'text');
+  tx.setAttribute('x', CX); tx.setAttribute('y', PTOP + (NG - 1 - g) * ROWH + 20); tx.setAttribute('text-anchor', 'middle');
+  tx.setAttribute('font-size', 22); tx.setAttribute('fill', 'var(--fiscal-stage-muted)'); tx.textContent = lab;
+  $('pyr').appendChild(tx);
+}
+for (const [x, lab, anchor] of [[CX - GAPX / 2 - 10, 'Hombres', 'end'], [CX + GAPX / 2 + 10, 'Mujeres', 'start']]) {
+  const tx = document.createElementNS(svgNS, 'text');
+  tx.setAttribute('x', x); tx.setAttribute('y', 12); tx.setAttribute('text-anchor', anchor);
+  tx.setAttribute('font-size', 24); tx.setAttribute('fill', 'var(--fiscal-stage-muted)'); tx.textContent = lab;
+  $('pyr').appendChild(tx);
+}
+const RATIO = { 1975: 5.31, 2025: 2.94, 2070: 1.82 };
+const PERSON = (fill) => `<svg viewBox="0 0 66 96"><circle cx="33" cy="17" r="15" fill="${fill}"/><path d="M8 96 V54 Q8 36 33 36 Q58 36 58 54 V96 Z" fill="${fill}"/></svg>`;
+const icons = [];
+for (let i = 0; i < 6; i++) {
+  const d = document.createElement('div'); d.className = 'ic';
+  d.innerHTML = PERSON('var(--fiscal-stage-raised)') + `<div class="fillwrap">${PERSON('var(--fiscal-stage-green)')}</div>`;
+  $('icons').appendChild(d); icons.push(d);
+}
+const vs = document.createElement('div'); vs.className = 'vs'; vs.textContent = 'x 1'; $('icons').appendChild(vs);
+const elder = document.createElement('div'); elder.className = 'ic'; elder.innerHTML = PERSON('var(--fiscal-stage-yellow)'); $('icons').appendChild(elder);
+
+/* ---------- subtítulos ---------- */
+const chunks = [];
+for (const s of TL.scenes) {
+  let cur = null;
+  s.words.forEach((w, i) => {
+    const t = s.start + w.t, prev = s.words[i - 1];
+    const pause = prev ? w.t - (prev.t + prev.d) : 1;
+    const len = cur ? cur.words.reduce((a, x) => a + x.w.length + 1, 0) : 0;
+    if (!cur || cur.words.length >= 3 || pause > 0.18 || len + w.w.length > 16) {
+      cur = { t, words: [] }; chunks.push(cur);
+    }
+    cur.words.push({ w: w.w, t, end: t + w.d });
+  });
+}
+chunks.forEach((c, i) => { const last = c.words[c.words.length - 1]; c.end = Math.min(chunks[i + 1] ? chunks[i + 1].t : 1e9, last.end + 0.45); });
+let lastChunk = -1;
+function captions(t) {
+  const i = chunks.findIndex((c) => t >= c.t && t < c.end);
+  const line = $('capline');
+  if (i !== lastChunk) {
+    line.innerHTML = i < 0 ? '' : chunks[i].words.map((w) => `<span>${w.w}</span>`).join(' ');
+    lastChunk = i;
+  }
+  if (i < 0) return;
+  const c = chunks[i];
+  [...line.children].forEach((sp, k) => sp.classList.toggle('on', t >= c.words[k].t));
+  const p = eBack(prog(t, c.t, 0.14));
+  line.style.transform = `scale(${lerp(0.82, 1, p)})`;
+}
+
+/* ---------- fotograma ---------- */
+function renderAt(t) {
+  const { hook, guess, hidden, why, pyr, cta } = SC;
+
+  // Fondo: un halo de color por escena
+  const glows = { yellow: [hook, cta], blue: [guess], orange: [hidden], red: [why], green: [pyr] };
+  for (const [k, ss] of Object.entries(glows)) {
+    const o = Math.max(...ss.map((s) => win(t, s.start - 0.2, s.end + 0.2, 0.6, 0.6))) * 0.42;
+    const el = $('glow-' + k);
+    el.style.opacity = o;
+    el.style.transform = `translate(${Math.sin(t * 0.4) * 120}px, ${Math.cos(t * 0.33) * 160 - 300}px)`;
+  }
+  $('grain').style.transform = `translate(${Math.floor(rnd(Math.floor(t * 24)) * 180)}px, ${Math.floor(rnd(Math.floor(t * 24) + 9) * 180)}px)`;
+
+  /* 1 · gancho */
+  const tDe = W('hook', 'De'), tCu = W('hook', 'cuántos'), t100 = W('hook', '100 euros'), tHac = W('hook', 'Hacienda');
+  {
+    const p = prog(t, hook.start, 0.35), out = prog(t, tDe - 0.25, 0.25);
+    $('para').style.fontStretch = lerp(50, 125, eOut(p)) + '%';
+    set($('para'), Math.min(prog(t, hook.start, 0.08), 1 - out), `scale(${lerp(1.6, 1, eBack(p)) + 0.02 * Math.sin(t * 30) * (1 - p)}) translateY(${-300 * eInOut(out)}px)`);
+  }
+  stretchIn($('h100'), t, tDe, tCu);
+  stretchIn($('hq'), t, tCu, guess.start, 112);
+  set($('gridlab'), win(t, t100 + 0.6, tHac));
+  {
+    const p = prog(t, tHac, 0.5);
+    set($('bigq'), win(t, tHac, guess.start + 0.2, 0.1, 0.3), `scale(${lerp(2.2, 1, eBack(p))}) rotate(${lerp(-25, -6, eOut(p)) + Math.sin(t * 3) * 3}deg)`);
+  }
+
+  /* casillas: aparecen, se esconden, se colorean y caen */
+  const gridVis = Math.max(win(t, t100, guess.start + 0.35, 0.01, 0.35), win(t, hidden.start, why.start + 2, 0.4, 0.01));
+  const gridScale = t < guess.start + 0.35 ? lerp(1, 0.85, prog(t, guess.start, 0.35)) : lerp(0.85, 1, eOut(prog(t, hidden.start, 0.4)));
+  set($('grid'), gridVis, `scale(${gridScale})`);
+  for (let k = 0; k < 100; k++) {
+    const { el, r, c } = cells[k];
+    let tf = '', bg = 'var(--fiscal-stage-positive-fill)', o = 1;
+    if (t < guess.start + 1) {
+      const p = prog(t, t100 + (r + c) * 0.028, 0.35);
+      tf = `scale(${eBack(p)})`;
+      o = t > tHac ? lerp(1, 0.35, prog(t, tHac, 0.4)) : 1;
+    } else {
+      const idx = order.indexOf(k);
+      for (const cat of CAT) {
+        if (idx >= cat.from && idx < cat.from + cat.n) {
+          const p = prog(t, W('hidden', cat.word) + (idx - cat.from) * 0.05, 0.22);
+          if (p > 0.5) bg = cat.color;
+          tf = `rotateY(${Math.sin(p * Math.PI) * 90}deg)`;
+        }
+      }
+      const tail = W('hidden', 'café') + 0.6;
+      if (idx >= 30 && t > tail && t < why.start) o = 0.75 + 0.25 * Math.sin((t - tail) * 9 + k * 0.4);
+      if (t > why.start) {
+        const d = t - why.start - rnd(k) * 0.45;
+        if (d > 0) tf = `translate(${(rnd(k + 50) - 0.5) * 300 * d}px, ${2600 * d * d - 120 * d}px) rotate(${(rnd(k + 7) - 0.5) * 500 * d}deg)`;
+      }
+    }
+    el.style.background = bg; el.style.opacity = o; el.style.transform = tf;
+  }
+
+  /* 2 · apuesta */
+  const tYa = W('guess', 'Ya'), tNo = W('guess', 'No');
+  stretchIn($('hguess'), t, guess.start + 0.15, hidden.start);
+  {
+    const tt = Math.min(t, tYa) - guess.start;
+    const pos = clamp(0.5 + 0.38 * Math.sin(tt * 2.6) + 0.12 * Math.sin(tt * 6.1));
+    const enter = eOut(prog(t, guess.start + 0.2, 0.4));
+    set($('gnum'), win(t, guess.start + 0.2, hidden.start), `translateY(${40 * (1 - enter)}px)`);
+    $('gval').textContent = Math.round(pos * 70);
+    $('gnum').style.filter = `blur(${lerp(0, 34, eOut(prog(t, tYa, 0.35)))}px)`;
+    set($('slider'), win(t, guess.start + 0.3, hidden.start));
+    $('sfill').style.width = pos * 100 + '%';
+    $('sthumb').style.left = pos * 100 + '%';
+    const ps = prog(t, tNo, 0.22);
+    set($('stamp'), win(t, tNo, hidden.start, 0.05, 0.2), `rotate(-8deg) scale(${lerp(2.4, 1, eOut(ps))})`);
+  }
+
+  /* 3 · lo que no se ve */
+  stretchIn($('hhidden'), t, hidden.start + 0.1, why.start, 104);
+  CAT.forEach((cat, i) => {
+    const a = W('hidden', cat.word);
+    set($('leg' + i), win(t, a, why.start + 0.3), `translateX(${-40 * (1 - eOut(prog(t, a, 0.3)))}px)`);
+  });
+  set($('note'), win(t, W('hidden', 'empresa'), why.start + 0.3));
+
+  /* 4 · ¿para qué? */
+  {
+    const p = prog(t, why.start + 0.25, 0.5);
+    $('hwhy').style.fontStretch = lerp(50, 118, eOut(p)) + '%';
+    set($('hwhy'), win(t, why.start + 0.25, pyr.start, 0.1, 0.3), `scale(${lerp(1.5, 1, eBack(p))}) rotate(${lerp(8, 0, eOut(p))}deg)`);
+    set($('hwhysub'), win(t, W('why', 'Mira'), pyr.start, 0.2, 0.3), `translateY(${Math.sin(t * 8) * 10}px)`);
+  }
+
+  /* 5 · pirámide */
+  {
+    const tHoy = W('pyr', 'Hoy'), t70 = W('pyr', '2070');
+    const a = eInOut(prog(t, tHoy, 0.9)), b = eInOut(prog(t, t70, 0.9));
+    const yearNum = Math.round(t < t70 ? lerp(1975, 2025, a) : lerp(2025, 2070, b));
+    const mix = (g, side) => (t < t70 ? lerp(share['1975'][side][g], share['2025'][side][g], a) : lerp(share['2025'][side][g], share['2070'][side][g], b));
+    const vis = win(t, pyr.start, cta.start, 0.3, 0.3);
+    const grow = (g) => eOut(prog(t, pyr.start + 0.1 + g * 0.03, 0.5));
+    set($('year'), vis, `scale(${1 + 0.08 * Math.max(0, 1 - Math.abs(t - tHoy - 0.9) * 4) + 0.08 * Math.max(0, 1 - Math.abs(t - t70 - 0.9) * 4)})`);
+    $('year').textContent = yearNum;
+    $('year').style.color = yearNum > 2025 ? 'var(--fiscal-stage-yellow)' : 'var(--fiscal-stage-text)';
+    const proj = t > t70 + 0.45;
+    $('badge').textContent = proj ? 'Proyección oficial · INE' : 'Dato observado · INE';
+    $('badge').style.color = proj ? 'var(--fiscal-stage-yellow)' : 'var(--fiscal-stage-green)';
+    set($('badge'), vis, 'translateX(-50%)');
+    set($('pyr'), vis);
+    set($('src'), vis);
+    for (const { r, g, side } of bars) {
+      const w = (mix(g, side) / maxShare) * MAXW * grow(g);
+      r.setAttribute('width', Math.max(0, w));
+      r.setAttribute('x', side === 'H' ? CX - GAPX / 2 - w : CX + GAPX / 2);
+    }
+    const ratio = t < t70 ? lerp(RATIO[1975], RATIO[2025], a) : lerp(RATIO[2025], RATIO[2070], b);
+    const shown = lerp(0, ratio, eOut(prog(t, W('pyr', 'cinco'), 0.7)));
+    $('rnum').textContent = shown.toFixed(1).replace('.', ',');
+    $('rnum').style.color = ratio < 2.5 ? 'var(--fiscal-stage-yellow)' : 'var(--fiscal-stage-green)';
+    set($('ratio'), win(t, W('pyr', 'cinco') - 0.1, cta.start, 0.3, 0.3));
+    set($('icons'), win(t, W('pyr', 'cinco'), cta.start, 0.3, 0.3));
+    icons.forEach((d, i) => { d.querySelector('.fillwrap').style.width = clamp(shown - i) * 66 + 'px'; });
+  }
+
+  /* 6 · llamada */
+  {
+    const tComp = W('cta', 'Compruébalo'), tBio = W('cta', 'Enlace');
+    stretchIn($('hcta'), t, cta.start + 0.05, TL.total + 5, 112);
+    const pc = eOut(prog(t, tComp, 0.5));
+    set($('card'), win(t, tComp, TL.total + 5, 0.3), `translateY(${lerp(260, 0, pc)}px) scale(${t > tBio ? lerp(1, 0.97, prog(t, tBio, 0.3)) : 1})`);
+    const sp = clamp(0.5 + 0.3 * Math.sin((t - tComp) * 2.2));
+    $('minib').style.width = sp * 100 + '%'; $('minii').style.left = sp * 100 + '%';
+    $('btn').style.transform = `scale(${1 + 0.035 * Math.max(0, Math.sin((t - tComp) * 7))})`;
+    ['13 pasos', 'datos', 'todo'].forEach((w, i) => {
+      const a = W('cta', w);
+      set($('chip' + i), win(t, a, tBio + 0.1, 0.2, 0.25), `translateY(${30 * (1 - eBack(prog(t, a, 0.3)))}px)`);
+    });
+    const pb = prog(t, tBio, 0.4);
+    $('bio').style.fontStretch = lerp(55, 108, eOut(pb)) + '%';
+    set($('bio'), prog(t, tBio, 0.1), `scale(${lerp(1.4, 1, eBack(pb))})`);
+    set($('arrow'), prog(t, tBio + 0.3, 0.2), `translateY(${Math.abs(Math.sin((t - tBio) * 5)) * 30}px)`);
+  }
+
+  captions(t);
+}
+window.renderAt = renderAt;
+
+/* ---------- modo vista previa ---------- */
+function fit() {
+  const s = Math.min(innerWidth / 1080, innerHeight / 1920);
+  $('stage').style.transform = `scale(${s})`;
+}
+document.fonts.ready.then(() => {
+  renderAt(0);
+  window.READY = true;
+  if (new URLSearchParams(location.search).has('render')) return;
+  fit(); addEventListener('resize', fit);
+  const q = new URLSearchParams(location.search).get('t');
+  if (q) { renderAt(+q); return; }
+  const btn = document.createElement('button'); btn.id = 'play'; btn.innerHTML = '<span>▶ Reproducir con sonido</span>';
+  document.body.appendChild(btn);
+  const audio = new Audio('audio.m4a');
+  btn.onclick = () => {
+    btn.remove(); audio.play();
+    const loop = () => { renderAt(audio.currentTime); if (!audio.ended) requestAnimationFrame(loop); };
+    loop();
+  };
+});
+</script>
+</body>
+</html>

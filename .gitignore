@@ -25,3 +25,7 @@ dist-ssr
 
 # Variables de entorno (.env.local ya lo cubre *.local)
 .env
+
+# Vídeo promocional: se regenera con promo/tiktok/build.py
+promo/tiktok/*.mp4
+promo/tiktok/musica.wav
