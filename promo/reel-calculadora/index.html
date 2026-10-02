@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Calculadora fiscal · reel</title>
+<!--
+  Reel de 15 s (1080×1920, 128 bpm) de la calculadora fiscal. Sin voz y sin ninguna cifra.
+  Hilo: el punto de la «?» es una moneda que rebota por la nómina, la compra, la gasolina,
+  la luz, la casa y el coche; cada sitio la sella con su impuesto; «en todo»; nadie te da el
+  ticket completo; el total es «¿?» y la moneda acaba siendo el punto de la «i» de «fiscal».
+  window.renderAt(t, frame) pinta un instante de forma determinista; build.py lo graba.
+-->
+<style>
+@font-face { font-family: "Anybody"; src: url("../tiktok/fonts/anybody-latin-wdth-normal.woff2") format("woff2"); font-weight: 100 900; font-stretch: 50% 150%; }
+@font-face { font-family: "Instrument Sans"; src: url("../tiktok/fonts/instrument-sans-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+@font-face { font-family: "Instrument Sans"; src: url("../tiktok/fonts/instrument-sans-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+
+/* Tokens copiados de src/components/fiscal-worker-dashboard/FiscalSoftTheme.css */
+:root {
+  --fiscal-stage: #172033;
+  --fiscal-stage-raised: #23364e;
+  --fiscal-stage-line: #4f5f70;
+  --fiscal-stage-text: #ffffff;
+  --fiscal-stage-copy: #dbe4ec;
+  --fiscal-stage-blue: #bdd4ef;
+  --fiscal-stage-violet: #d5c9ee;
+  --fiscal-stage-yellow: #efd7a0;
+  --fiscal-stage-red: #efc5cc;
+  --fiscal-stage-green: #b6ded3;
+  --fiscal-stage-positive-fill: #18865b;
+  --fiscal-stage-yellow-fill: #9a7418;
+  --fiscal-stage-red-fill: #c4455b;
+  --fiscal-stage-blue-fill: #2f6fce;
+  --fiscal-stage-vat-10: #e3a857;
+  --fiscal-stage-yellow-paper: #fff7d9;
+  --fiscal-stage-yellow-ink: #7a5a10;
+  --fiscal-violet: #7557c8;
+  --fiscal-paper: #ffffff;
+  --fiscal-paper-ink: #050505;
+}
+
+html, body { margin: 0; background: var(--fiscal-stage); }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--fiscal-stage); }
+#cam, .layer { position: absolute; inset: 0; }
+.line { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
+.in { display: inline-block; }
+.ch { display: inline-block; line-height: 1; font-family: "Anybody"; font-variation-settings: 'wdth' 100, 'wght' 900; will-change: transform; }
+.white { color: var(--fiscal-stage-text); }
+.yellow { color: var(--fiscal-stage-yellow); }
+.ring { position: absolute; border-radius: 50%; border: solid var(--fiscal-stage-yellow); box-sizing: border-box; }
+.qdot { position: absolute; border-radius: 50%; background: var(--fiscal-stage-text); }
+.bl { display: inline-block; width: 0; height: 0; vertical-align: baseline; }
+
+.coin { position: absolute; left: 0; top: 0; width: 144px; height: 144px; }
+.coin .face { position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, var(--fiscal-stage-yellow-paper) 0 14%, var(--fiscal-stage-yellow) 46%, var(--fiscal-stage-vat-10) 100%);
+  box-shadow: inset 0 0 0 9px var(--fiscal-stage-yellow-fill), inset 0 0 0 15px var(--fiscal-stage-yellow), 0 0 0 4px var(--fiscal-stage-yellow-ink); }
+.coin .face b { position: absolute; inset: 0; display: grid; place-items: center; font: 900 86px/1 "Anybody"; font-variation-settings: 'wdth' 90, 'wght' 900; color: var(--fiscal-stage-yellow-ink); padding-bottom: 6px; box-sizing: border-box; }
+.coin .cover { position: absolute; inset: -2px; border-radius: 50%; background: var(--fiscal-stage-text); }
+.coin .shine { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+.coin .shine i { position: absolute; top: -20%; width: 34%; height: 140%; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--fiscal-paper) 75%, transparent), transparent); transform: rotate(20deg); }
+
+.wipe { position: absolute; border-radius: 50%; }
+.icon { position: absolute; left: 240px; top: 760px; width: 600px; height: 600px; overflow: visible; transform-origin: 50% 100%; }
+.icon path { fill: none; stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
+.mask { position: absolute; left: 0; width: 1080px; overflow: hidden; text-align: center; white-space: nowrap; }
+
+.stamp { position: absolute; left: 0; top: 0; border: 12px solid currentColor; border-radius: 30px; padding: 9px; box-sizing: border-box; text-align: center;
+  -webkit-mask-size: 420px 420px; mask-size: 420px 420px; }
+.stamp .in2 { border: 4px solid currentColor; border-radius: 18px; padding: 14px 34px 16px; }
+.stamp .s { font: 700 26px/1 "Instrument Sans"; letter-spacing: .14em; white-space: nowrap; }
+.stamp .bg { font-family: "Anybody"; font-variation-settings: 'wdth' 76, 'wght' 900; font-size: 118px; line-height: .98; white-space: nowrap; margin-top: 8px; }
+.dot { position: absolute; left: 0; top: 0; border-radius: 50%; background: currentColor; }
+
+.slot { position: absolute; left: 175px; width: 730px; height: 44px; border-radius: 22px; background: var(--fiscal-stage-raised);
+  box-shadow: inset 0 0 0 3px var(--fiscal-stage-line), 0 18px 40px color-mix(in srgb, var(--fiscal-paper-ink) 45%, transparent); }
+.slot::after { content: ""; position: absolute; left: 40px; right: 40px; top: 17px; height: 10px; border-radius: 5px; background: var(--fiscal-paper-ink); }
+.pwrap { position: absolute; left: 0; top: 0; width: 1080px; overflow: hidden; }
+.paper { position: absolute; left: 225px; width: 630px; background: var(--fiscal-paper); color: var(--fiscal-paper-ink); box-sizing: border-box; padding: 34px 40px 0;
+  clip-path: polygon(0 18px, 4% 0, 8% 18px, 12% 0, 16% 18px, 20% 0, 24% 18px, 28% 0, 32% 18px, 36% 0, 40% 18px, 44% 0, 48% 18px, 52% 0, 56% 18px, 60% 0, 64% 18px, 68% 0, 72% 18px, 76% 0, 80% 18px, 84% 0, 88% 18px, 92% 0, 96% 18px, 100% 0, 100% 100%, 0 100%);
+  background-image: linear-gradient(90deg, color-mix(in srgb, var(--fiscal-paper-ink) 7%, transparent), transparent 12%, transparent 88%, color-mix(in srgb, var(--fiscal-paper-ink) 7%, transparent)); }
+.row { display: flex; align-items: baseline; font-family: "Anybody"; font-variation-settings: 'wdth' 72, 'wght' 750; font-size: 36px; line-height: 1; letter-spacing: .03em; box-sizing: border-box; }
+.row .lead { flex: 1; border-bottom: 5px dotted var(--fiscal-paper-ink); margin: 0 12px 6px; opacity: .55; }
+.row .q { display: inline-block; width: 40px; text-align: center; font-variation-settings: 'wdth' 100, 'wght' 900; }
+.row.center { justify-content: center; }
+.row.sep { border-bottom: 4px dashed var(--fiscal-paper-ink); opacity: .6; }
+.row.total { font-variation-settings: 'wdth' 80, 'wght' 900; font-size: 76px; }
+
+.pill { position: absolute; display: flex; align-items: center; gap: 18px; padding: 26px 44px; border-radius: 999px; background: var(--fiscal-stage-green); color: var(--fiscal-stage); font: 700 46px/1 "Instrument Sans"; white-space: nowrap; }
+.pill svg { width: 40px; height: 40px; }
+.word { display: inline-block; }
+.bokeh { position: absolute; left: 0; top: 0; border-radius: 50%; filter: blur(14px); }
+
+.flash { position: absolute; inset: 0; background: var(--fiscal-stage-text); opacity: 0; pointer-events: none; }
+.vign { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 48%, transparent 62%, color-mix(in srgb, var(--fiscal-paper-ink) 22%, transparent) 100%); }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: overlay; }
+#play { position: fixed; right: 12px; top: 12px; z-index: 9; font: 700 18px "Instrument Sans"; padding: 10px 16px; }
+</style>
+</head>
+<body>
+<div id="stage"><div id="cam"></div></div>
+<button id="play" type="button">▶ Reproducir</button>
+<script>
+'use strict';
+const W = 1080, H = 1920, DUR = 15, B = 60 / 128;
+const b = n => n * B;
+const stage = document.getElementById('stage'), cam = document.getElementById('cam');
+const clamp = (x, a = 0, c = 1) => Math.min(c, Math.max(a, x));
+const lerp = (a, c, t) => a + (c - a) * t;
+const P = (t, a, d) => clamp((t - a) / d);
+const E = {
+  outExpo: x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x),
+  inExpo: x => x <= 0 ? 0 : Math.pow(2, 10 * x - 10),
+  inQuad: x => x * x,
+  inCubic: x => x * x * x,
+  outCubic: x => 1 - Math.pow(1 - x, 3),
+  outQuart: x => 1 - Math.pow(1 - x, 4),
+  inOutCubic: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  outBack: (x, s = 1.9) => 1 + (s + 1) * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2),
+};
+const wob = (tau, amp, f = 38, d = 13) => tau < 0 ? 0 : amp * Math.exp(-tau * d) * Math.cos(tau * f);
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function el(tag, cls, parent, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; (parent || cam).appendChild(e); return e; }
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const vf = (s, w, g) => { s.style.fontVariationSettings = `'wdth' ${w.toFixed(1)}, 'wght' ${Math.round(g)}`; };
+const show = (e, on) => { e.style.display = on ? '' : 'none'; return on; };
+
+function letters(parent, text, cls) {
+  const line = el('div', 'line ' + (cls || ''), parent);
+  const inn = el('span', 'in', line);
+  const L = [...text].map(ch => { const s = el('span', 'ch', inn); s.textContent = ch === ' ' ? ' ' : ch; return s; });
+  return { line, inn, L };
+}
+function fit(o, width, max, w = 100, g = 900) {
+  o.L.forEach(s => vf(s, w, g));
+  o.line.style.fontSize = '100px';
+  const m = o.inn.getBoundingClientRect().width;
+  o.size = Math.min(max, 100 * width / m);
+  o.line.style.fontSize = o.size + 'px';
+  return o.size;
+}
+// Mide en un lienzo una parte de un glifo (el punto de «?», el de «i») respecto a su origen y su línea base.
+function scanGlyph(ch, size, part) {
+  const c = document.createElement('canvas'); c.width = Math.ceil(size * 1.6); c.height = Math.ceil(size * 2.2);
+  const x = c.getContext('2d'); x.font = `900 ${size}px Anybody`; x.fillStyle = tok('--fiscal-paper-ink');
+  const ox = size * 0.3, by = size * 1.5; x.fillText(ch, ox, by);
+  const d = x.getImageData(0, 0, c.width, c.height).data, Wc = c.width;
+  const runs = []; let cur = null;
+  for (let y = 0; y < c.height; y++) {
+    let mn = 1e9, mx = -1;
+    for (let xx = 0; xx < Wc; xx++) if (d[(y * Wc + xx) * 4 + 3] > 128) { if (xx < mn) mn = xx; mx = xx; }
+    if (mx >= 0) { if (!cur) { cur = { y0: y, y1: y, mn, mx }; runs.push(cur); } else { cur.y1 = y; cur.mn = Math.min(cur.mn, mn); cur.mx = Math.max(cur.mx, mx); } }
+    else cur = null;
+  }
+  const R = part === 'bottom' ? runs[runs.length - 1] : runs[0];
+  return { cx: (R.mn + R.mx + 1) / 2 - ox, cy: (R.y0 + R.y1 + 1) / 2 - by, r: (R.mx - R.mn + 1) / 2, top: R.y0 - by };
+}
+// Posición en el escenario del punto de un glifo dentro de su span (con marcador de línea base).
+function anchorDot(span, g) {
+  const m = el('i', 'bl', span);
+  const sr = stage.getBoundingClientRect(), r = span.getBoundingClientRect(), mr = m.getBoundingClientRect();
+  return { x: r.left - sr.left + g.cx, y: mr.top - sr.top + g.cy, local: { x: g.cx, y: mr.top - r.top + g.cy } };
+}
+function makeCoin(parent) {
+  const c = el('div', 'coin', parent), face = el('div', 'face', c);
+  const sign = el('b', '', face, '€'), shine = el('div', 'shine', face), sh = el('i', '', shine), cover = el('div', 'cover', c);
+  return { c, face, sign, sh, cover };
+}
+function drawCoin(k, x, y, scale, sx, sy, rot, flip, white, shineP) {
+  k.c.style.transform = `translate(${x - 72}px, ${y - 72}px) rotate(${rot}deg) scale(${scale * sx}, ${scale * sy})`;
+  const c = Math.cos(flip);
+  k.face.style.transform = `scaleX(${Math.max(0.07, Math.abs(c)).toFixed(3)})`;
+  k.face.style.filter = `brightness(${(0.72 + 0.28 * Math.abs(c)).toFixed(3)})`;
+  k.sign.style.opacity = c > 0 ? 1 : 0;
+  k.cover.style.opacity = white;
+  k.sh.style.left = `${lerp(-60, 130, shineP)}%`;
+}
+// Grano de película y textura de tampón: ruido generado con semilla, sin colores escritos.
+function noiseURL(size, seed, fn) {
+  const c = document.createElement('canvas'); c.width = c.height = size; const x = c.getContext('2d');
+  const img = x.createImageData(size, size), r = rng(seed);
+  for (let i = 0; i < size * size; i++) { const v = fn(r); img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = v[0]; img.data[i * 4 + 3] = v[1]; }
+  x.putImageData(img, 0, 0); return c.toDataURL();
+}
+function grungeURL(seed) {
+  const s = 420, c = document.createElement('canvas'); c.width = c.height = s; const x = c.getContext('2d'), r = rng(seed);
+  x.fillStyle = tok('--fiscal-paper-ink'); x.fillRect(0, 0, s, s);
+  x.globalCompositeOperation = 'destination-out';
+  for (let i = 0; i < 900; i++) { x.globalAlpha = 0.5 + r() * 0.5; x.beginPath(); x.arc(r() * s, r() * s, 0.6 + Math.pow(r(), 3) * 7, 0, 7); x.fill(); }
+  for (let i = 0; i < 14; i++) { x.globalAlpha = 0.35; x.lineWidth = 1 + r() * 3; x.beginPath(); const a = r() * s, bb = r() * s; x.moveTo(a, bb); x.lineTo(a + (r() - .5) * 160, bb + (r() - .5) * 40); x.stroke(); }
+  return c.toDataURL();
+}
+
+/* ---------------------------------------------------------------- tiempos */
+const LAND = [b(4), b(6), b(8), b(9), b(10), b(11)];
+const ICON_Y = 760;
+const STN = [
+  { word: 'NÓMINA',   bg: '--fiscal-violet',             fg: '--fiscal-stage-text', top: 60 },
+  { word: 'COMPRA',   bg: '--fiscal-stage-blue-fill',    fg: '--fiscal-stage-text', top: 190 },
+  { word: 'GASOLINA', bg: '--fiscal-stage-red-fill',     fg: '--fiscal-stage-text', top: 90 },
+  { word: 'LUZ',      bg: '--fiscal-stage-vat-10',       fg: '--fiscal-stage',      top: 90 },
+  { word: 'CASA',     bg: '--fiscal-stage-positive-fill', fg: '--fiscal-stage-text', top: 90 },
+  { word: 'COCHE',    bg: '--fiscal-stage',              fg: '--fiscal-stage-text', top: 225 },
+];
+const STAMPS = [
+  { st: 0, t: b(5),    s: 'IMPUESTO SOBRE LA RENTA', big: 'IRPF', ink: '--fiscal-stage-yellow', x: 560, y: 1140, rot: -8, k: 1 },
+  { st: 0, t: b(5.5),  s: 'SEGURIDAD SOCIAL', big: 'COTIZACIONES', ink: '--fiscal-stage-red', x: 530, y: 1360, rot: 5, k: .78 },
+  { st: 1, t: b(7),    s: 'IMPUESTO SOBRE EL VALOR AÑADIDO', big: 'IVA', ink: '--fiscal-stage-yellow', x: 560, y: 1220, rot: -6, k: 1.1 },
+  { st: 2, t: b(8.5),  s: 'IMPUESTO SOBRE', big: 'HIDROCARBUROS', ink: '--fiscal-stage', x: 540, y: 1250, rot: 7, k: .74 },
+  { st: 3, t: b(9.5),  s: 'IMPUESTO SOBRE LA', big: 'ELECTRICIDAD', ink: '--fiscal-stage', x: 540, y: 1250, rot: -7, k: .78 },
+  { st: 4, t: b(10.5), s: 'BIENES INMUEBLES', big: 'IBI', ink: '--fiscal-stage-yellow', x: 600, y: 1230, rot: 8, k: 1.1 },
+  { st: 5, t: b(11.5), s: 'IMPUESTO DE CIRCULACIÓN', big: 'IVTM', ink: '--fiscal-stage-red', x: 520, y: 1230, rot: -6, k: 1 },
+];
+const HITS = [[0, 1.1], [b(1), .7], [b(2), .8], [b(4), .55], [b(16), 1.6], [b(16.5), .6], [b(17), .7], [b(17.5), .7], [b(22.5), .9], [b(25), .35], [b(30), .2]];
+STAMPS.forEach(s => HITS.push([s.t, .5]));
+
+/* ------------------------------------------------------------- escena A */
+const hook = el('div', 'layer', cam);
+const rings = [0, 1, 2].map(() => el('div', 'ring', hook));
+const H1 = letters(hook, '¿CUÁNTOS', 'white'), H2 = letters(hook, 'IMPUESTOS', 'yellow'), H3 = letters(hook, 'PAGAS?', 'white');
+const HL = [H1, H2, H3];
+const Q = H3.L[5]; Q.style.position = 'relative';
+const qdot = el('i', 'qdot', Q);
+const hookFall = []; { const r = rng(7); HL.forEach(o => o.L.forEach(() => hookFall.push({ d: r() * .16, vx: (r() - .5) * 900, vy: -400 - r() * 700, vr: (r() - .5) * 900 }))); }
+
+/* ------------------------------------------------------------ estaciones */
+const stn = el('div', 'layer', cam);
+const groups = STN.map(s => { const g = el('div', 'layer', stn); const a = el('div', 'wipe', g), w = el('div', 'wipe', g); a.style.background = 'var(--fiscal-stage-yellow)'; w.style.background = `var(${s.bg})`; return { g, a, w }; });
+const iconBox = el('div', '', stn);
+iconBox.innerHTML = '<svg class="icon" viewBox="0 0 600 600"><path pathLength="1"/><path pathLength="1"/><path pathLength="1"/><path pathLength="1"/></svg>';
+const iconSvg = iconBox.firstChild, iconPaths = [...iconSvg.querySelectorAll('path')];
+const kick = letters(stn, 'EN TU', ''); kick.line.style.top = '238px';
+const words = STN.map(s => { const m = el('div', 'mask', stn); const o = letters(m, s.word, ''); o.mask = m; o.line.style.position = 'static'; o.line.style.width = '1080px'; return o; });
+
+const circ = (cx, cy, r) => `M${cx - r} ${cy} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z`;
+const ICONS = [
+  [['M130 60 L400 60 L470 130 L470 540 L130 540 Z', 1], ['M400 60 L400 130 L470 130', 0], ['M190 250 L410 250', 0], ['M190 345 L360 345', 0]],
+  [['M60 110 L140 110 L210 400 L475 400 L525 190 L160 190', 0], [circ(230, 505, 38), 1], [circ(450, 505, 38), 1], ['M210 400 L195 448 L480 448', 0]],
+  [['M140 90 L380 90 L380 520 L140 520 Z', 1], ['M185 150 L335 150 L335 260 L185 260 Z', 1], ['M380 210 L440 210 Q470 210 470 240 L470 420 Q470 450 500 450 Q530 450 530 420 L530 180 L490 140', 0], ['M95 545 L425 545', 0]],
+  [['M230 420 C230 360 160 320 160 230 A140 140 0 1 1 440 230 C440 320 370 360 370 420 Z', 1], ['M235 468 L365 468', 0], ['M255 515 L345 515', 0], ['M255 330 L280 268 L300 318 L320 268 L345 330', 0]],
+  [['M70 300 L300 90 L530 300', 0], ['M130 250 L130 530 L470 530 L470 250', 0], ['M255 530 L255 410 L345 410 L345 530', 0], ['M400 180 L400 115 L450 115 L450 222', 0]],
+  [['M70 425 L70 345 L135 325 L195 225 L405 225 L465 325 L530 345 L530 425 Z', 1], [circ(170, 432, 50), 1], [circ(430, 432, 50), 1], ['M222 318 L252 258 L348 258 L378 318 Z', 1]],
+];
+const NPT = 96;
+let SHAPES = [];
+function sampleIcons() {
+  const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); tmp.style.position = 'absolute'; tmp.style.visibility = 'hidden'; document.body.appendChild(tmp);
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); tmp.appendChild(p);
+  const raw = ICONS.map(ic => ic.map(([d, closed]) => {
+    p.setAttribute('d', d); const L = p.getTotalLength(); const pts = [];
+    for (let i = 0; i < NPT; i++) { const q = p.getPointAtLength(L * i / (NPT - 1)); pts.push([q.x, q.y]); }
+    return { pts, closed };
+  }));
+  tmp.remove();
+  // Alinea cada trazo cerrado con el anterior (giro y sentido) para que el morph no se retuerza.
+  SHAPES = [raw[0].map(s => s.pts)];
+  for (let k = 1; k < raw.length; k++) {
+    SHAPES.push(raw[k].map((s, j) => {
+      const src = SHAPES[k - 1][j];
+      if (!s.closed || !raw[k - 1][j].closed) return s.pts;
+      const u = s.pts.slice(0, NPT - 1); let best = null, bc = 1e18;
+      for (const rev of [false, true]) {
+        const v = rev ? u.slice().reverse() : u;
+        for (let o = 0; o < u.length; o++) {
+          let c = 0; for (let i = 0; i < u.length; i++) { const q = v[(i + o) % u.length]; c += (q[0] - src[i][0]) ** 2 + (q[1] - src[i][1]) ** 2; }
+          if (c < bc) { bc = c; best = { v, o }; }
+        }
+      }
+      const out = []; for (let i = 0; i < u.length; i++) out.push(best.v[(i + best.o) % u.length]); out.push(out[0]); return out;
+    }));
+  }
+}
+const dPts = pts => 'M' + pts.map(q => q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' L');
+
+function makeStamp(parent, o, seed) {
+  const s = el('div', 'stamp', parent); s.style.color = `var(${o.ink})`;
+  const u = `url(${grungeURL(seed)})`; s.style.webkitMaskImage = u; s.style.maskImage = u;
+  const i2 = el('div', 'in2', s); el('div', 's', i2, o.s); el('div', 'bg', i2, o.big);
+  const r = rng(seed * 3 + 1);
+  const dots = Array.from({ length: 10 }, () => { const d = el('div', 'dot', parent); d.style.color = `var(${o.ink})`; const a = r() * Math.PI * 2; return { d, a, v: 260 + r() * 420, sz: 8 + r() * 16 }; });
+  return { s, dots, o, w: 0, h: 0 };
+}
+function drawStamp(S, t, extra) {
+  const o = S.o, tau = t - o.t;
+  const on = tau > -0.09;
+  show(S.s, on); S.dots.forEach(d => show(d.d, on && tau > 0 && tau < 0.45));
+  if (!on) return;
+  let k = o.k, rot = o.rot, op = 1;
+  if (tau < 0) { const p = (tau + 0.09) / 0.09; k *= lerp(2.5, 1, E.inQuad(p)); rot += 14 * (1 - p); op = clamp(p * 2.5); }
+  else k *= 1 + wob(tau, 0.06, 48, 16);
+  let x = o.x, y = o.y;
+  if (extra) { x += extra.x; y += extra.y; rot += extra.r; op *= extra.op; }
+  S.s.style.opacity = op;
+  S.s.style.transform = `translate(${x - S.w / 2}px, ${y - S.h / 2}px) rotate(${rot}deg) scale(${k})`;
+  if (tau > 0) S.dots.forEach(d => {
+    const q = (1 - Math.exp(-tau * 11)) / 11, R = Math.max(S.w, S.h) * o.k * 0.42;
+    const px = x + Math.cos(d.a) * (R + d.v * q), py = y + Math.sin(d.a) * (R * .6 + d.v * q);
+    const sz = d.sz * (1 - tau / 0.45);
+    d.d.style.transform = `translate(${px - sz / 2}px, ${py - sz / 2}px)`; d.d.style.width = d.d.style.height = sz + 'px';
+  });
+}
+const stStamps = STAMPS.map((o, i) => makeStamp(groups[o.st].g, o, 11 + i));
+
+/* ------------------------------------------------------------- tormenta */
+const storm = el('div', 'layer', cam);
+const todo = letters(storm, 'EN TODO.', 'yellow');
+const STORM = [];
+{
+  const ts = [12.5, 13, 13.5, 14, 14.25, 14.5, 14.75, 15, 15.0625, 15.125, 15.1875, 15.25, 15.3125, 15.375, 15.4375, 15.5];
+  const names = [['IMPUESTO SOBRE EL VALOR AÑADIDO', 'IVA'], ['SEGURIDAD SOCIAL', 'COTIZACIONES'], ['IMPUESTO SOBRE LA RENTA', 'IRPF'], ['IMPUESTO ESPECIAL', 'ALCOHOL'], ['IMPUESTO ESPECIAL', 'TABACO'], ['BIENES INMUEBLES', 'IBI'], ['IMPUESTO SOBRE', 'HIDROCARBUROS'], ['IMPUESTO DE CIRCULACIÓN', 'IVTM'], ['IMPUESTO SOBRE LA', 'ELECTRICIDAD']];
+  const inks = ['--fiscal-stage-yellow', '--fiscal-stage-red', '--fiscal-stage-blue', '--fiscal-stage-green', '--fiscal-stage-violet', '--fiscal-stage-red-fill', '--fiscal-stage-blue-fill', '--fiscal-stage-vat-10'];
+  const r = rng(99);
+  ts.forEach((bt, i) => {
+    const n = names[i % names.length];
+    const o = { t: b(bt), s: n[0], big: n[1], ink: inks[i % inks.length], x: 170 + r() * 740, y: 330 + r() * 1220, rot: (r() - .5) * 50, k: (n[1].length > 6 ? .5 : .75) + r() * .3 };
+    STORM.push(makeStamp(storm, o, 200 + i));
+    HITS.push([o.t, .32]);
+  });
+}
+
+/* --------------------------------------------------------------- ticket */
+const rec = el('div', 'layer', cam);
+const recHead = [letters(rec, 'NADIE TE DA', 'white'), letters(rec, 'EL TICKET', 'white'), letters(rec, 'COMPLETO.', 'yellow')];
+const recGroup = el('div', 'layer', rec);
+const SLOT_Y = 1555;
+const pwrap = el('div', 'pwrap', recGroup); pwrap.style.height = SLOT_Y + 'px';
+const paper = el('div', 'paper', pwrap);
+const slot = el('div', 'slot', recGroup); slot.style.top = (SLOT_Y - 22) + 'px';
+const RROWS = [];
+function rrow(cls, h, tb, build) { const r = el('div', 'row ' + cls, paper); r.style.height = h + 'px'; build(r); RROWS.push({ r, h, t: b(tb) }); return r; }
+rrow('center', 62, 18, r => { r.textContent = 'TICKET DE IMPUESTOS'; r.style.fontVariationSettings = "'wdth' 80, 'wght' 900"; r.style.fontSize = '44px'; });
+rrow('center', 48, 18.25, r => { r.textContent = 'CLIENTE: TÚ'; r.style.fontSize = '30px'; });
+rrow('sep', 22, 18.4, () => {});
+const QS = [];
+['IRPF', 'COTIZACIONES', 'IVA', 'HIDROCARBUROS', 'ELECTRICIDAD', 'ALCOHOL Y TABACO', 'IBI', 'IVTM'].forEach((n, i) => rrow('', 60, 18.5 + i * .5, r => {
+  r.style.paddingTop = '18px'; el('span', '', r, n); el('span', 'lead', r); const q = el('span', 'q', r, '?'); el('span', '', r, '€'); QS.push(q);
+}));
+rrow('sep', 30, 22.25, () => {});
+let totQ;
+rrow('total', 118, 22.5, r => { r.style.paddingTop = '30px'; el('span', '', r, 'TOTAL'); el('span', 'lead', r); el('span', '', r, '¿'); totQ = el('span', '', r, '?'); el('span', '', r, ' €'); });
+rrow('', 40, 22.6, () => {});
+const PAPER_H = 34 + RROWS.reduce((a, r) => a + r.h, 0);
+paper.style.height = PAPER_H + 'px';
+totQ.style.position = 'relative'; totQ.style.fontVariationSettings = "'wdth' 100, 'wght' 900";
+const totDot = el('i', 'qdot', totQ); totDot.style.background = 'var(--fiscal-stage-vat-10)';
+const markBox = el('div', '', recGroup);
+markBox.innerHTML = '<svg style="position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible"><path pathLength="1" fill="none" stroke-width="10" stroke-linecap="round"/></svg>';
+const markPath = markBox.querySelector('path'); markPath.style.stroke = 'var(--fiscal-stage-red-fill)';
+
+/* ---------------------------------------------------------------- marca */
+const brand = el('div', 'layer', cam);
+const bokeh = []; { const r = rng(5); const cs = ['--fiscal-stage-yellow', '--fiscal-stage-violet', '--fiscal-stage-blue', '--fiscal-stage-green', '--fiscal-stage-red']; for (let i = 0; i < 16; i++) { const d = el('div', 'bokeh', brand); const s = 40 + r() * 160; d.style.width = d.style.height = s + 'px'; d.style.background = `var(${cs[i % 5]})`; bokeh.push({ d, x: r() * W, y: r() * H, s, z: .3 + r(), ph: r() * 6 }); } }
+const BR1 = letters(brand, 'Calculadora', 'white'), BR2 = letters(brand, 'fıscal', 'white');
+const tag1 = el('div', 'line', brand), tag2 = el('div', 'line', brand);
+const TW = [];
+[[tag1, 'Descubre cuántos', '--fiscal-stage-copy'], [tag2, 'impuestos pagas', '--fiscal-stage-yellow']].forEach(([ln, txt, c]) => {
+  ln.style.font = '600 70px/1.25 "Instrument Sans"'; ln.style.color = `var(${c})`; ln.style.overflow = 'hidden';
+  txt.split(' ').forEach((w, i) => { const s = el('span', 'word', ln, w); TW.push(s); if (i === 0) el('span', '', ln, ' '); });
+});
+const pill = el('div', 'pill', brand);
+el('span', '', pill, 'Gratis · enlace en la bio');
+pill.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 40 40"><path d="M10 30 L30 10 M14 10 L30 10 L30 26" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+const bcoin = makeCoin(cam);
+const hero = makeCoin(cam);
+
+const fx = el('div', 'layer', stage);
+const flash = el('div', 'flash', fx), vign = el('div', 'vign', fx), grain = el('div', 'grain', fx);
+
+/* -------------------------------------------------------------- medidas */
+const G = {};
+function layout() {
+  // Gancho: tres líneas justificadas a 900 px.
+  const sz = HL.map(o => fit(o, 900, 330));
+  let y = 880 - sz.reduce((a, s) => a + s * .9, 0) / 2;
+  HL.forEach((o, i) => { o.line.style.top = y + 'px'; y += sz[i] * .9; });
+  const gq = scanGlyph('?', H3.size, 'bottom');
+  const a = anchorDot(Q, gq);
+  G.qdot = { x: a.x, y: a.y, r: gq.r, local: a.local, top: gq.top };
+  qdot.style.width = qdot.style.height = (gq.r * 2 + 2) + 'px';
+  qdot.style.left = (a.local.x - gq.r - 1) + 'px'; qdot.style.top = (a.local.y - gq.r - 1) + 'px';
+  G.qclip = a.local.y - gq.r - 4;
+  // Estaciones
+  fit(kick, 600, 64, 125, 700); kick.L.forEach(s => s.style.letterSpacing = '.12em');
+  words.forEach(o => { const s = fit(o, 880, 250, 112, 900); o.mask.style.top = (330 + (250 - s) * .5) + 'px'; o.mask.style.height = (s * 1.22) + 'px'; o.line.style.paddingTop = (s * .2) + 'px'; });
+  STAMPS.forEach((o, i) => { const S = stStamps[i]; S.w = S.s.offsetWidth; S.h = S.s.offsetHeight; });
+  STORM.forEach(S => { S.w = S.s.offsetWidth; S.h = S.s.offsetHeight; });
+  fit(todo, 920, 330); todo.line.style.top = (960 - todo.size * .5) + 'px';
+  // Ticket
+  const rs = recHead.map(o => fit(o, 820, 200));
+  let ry = 215; recHead.forEach((o, i) => { o.line.style.top = ry + 'px'; ry += rs[i] * .93; });
+  const gt = scanGlyph('?', 76, 'bottom');
+  // el «?» del total va en Anybody 900 al 80 % de ancho: se mide con su caja real
+  totDot.style.width = totDot.style.height = (gt.r * 2 + 3) + 'px';
+  G.totR = gt.r + 1.5; G.totG = gt;
+  // Marca
+  const s1 = fit(BR1, 860, 190), s2 = fit(BR2, 860, 300);
+  BR1.line.style.top = '560px'; BR2.line.style.top = (560 + s1 * .98) + 'px';
+  const ty = 560 + s1 * .98 + s2 * 1.02 + 30;
+  tag1.style.top = ty + 'px'; tag2.style.top = (ty + 88) + 'px';
+  pill.style.top = (ty + 250) + 'px'; pill.style.left = ((W - pill.offsetWidth) / 2) + 'px';
+  const gi = scanGlyph('i', BR2.size, 'top');
+  const ai = anchorDot(BR2.L[1], gi);
+  G.idot = { x: ai.x, y: ai.y, r: gi.r * 1.45 };
+  sampleIcons();
+}
+function measureTotal() {
+  // Coloca el punto amarillo sobre el del «?» del total, con el ticket ya impreso.
+  receiptR(b(23.2));
+  const a = anchorDot(totQ, G.totG);
+  totDot.style.left = (a.local.x - G.totR) + 'px'; totDot.style.top = (a.local.y - G.totR) + 'px';
+  const sr = stage.getBoundingClientRect();
+  const dr = totDot.getBoundingClientRect();
+  G.tot = { x: dr.left - sr.left + dr.width / 2, y: dr.top - sr.top + dr.height / 2, r: dr.width / 2 };
+}
+
+/* ------------------------------------------------------------- render */
+function shake(t) {
+  let x = 0, y = 0, r = 0;
+  HITS.forEach(([h, s], i) => { const tau = t - h; if (tau < 0 || tau > .6) return; const e = s * Math.exp(-tau * 11); x += e * 16 * Math.sin(tau * 73 + i); y += e * 16 * Math.cos(tau * 61 + i * 2); r += e * .5 * Math.sin(tau * 47 + i); });
+  return { x, y, r };
+}
+
+function hookR(t) {
+  if (!show(hook, t < b(4) + .4)) return;
+  const fallT = b(3.25);
+  const env = Math.pow(Math.sin(Math.PI * P(t, b(2.55), b(3.2) - b(2.55))), 2);
+  let gi = 0;
+  HL.forEach((o, li) => {
+    let lineX = 0, lineS = 1, skew = 0, ghost = 0;
+    if (li === 0) { const e = E.outExpo(P(t, 0, .42)); lineS = 1 + .55 * (1 - e); ghost = 24 * (1 - e); }
+    if (li === 2) { const e = E.outExpo(P(t, b(2), .4)); lineX = 1300 * (1 - e); skew = -28 * (1 - e); ghost = 30 * (1 - e); }
+    o.line.style.transform = `translateX(${lineX}px) scale(${lineS}) skewX(${skew}deg)`;
+    o.line.style.textShadow = ghost > .3 ? `${ghost}px 0 var(--fiscal-stage-red-fill), ${-ghost}px 0 var(--fiscal-stage-blue-fill)` : 'none';
+    const n = o.L.length;
+    o.L.forEach((s, j) => {
+      let w = 100, g = 900, x = 0, y = 0, rot = 0, sx = 1, sy = 1, op = 1;
+      if (li === 0) w += 50 * (1 - E.outExpo(P(t, 0, .42)));
+      if (li === 1) {
+        const tau = t - (b(1) + j * .028);
+        if (tau < 0) op = 0;
+        else if (tau < .2) y = -900 * (1 - Math.pow(tau / .2, 2));
+        else { const u = tau - .2; y = -46 * Math.abs(Math.sin(Math.PI * Math.min(u, .16) / .16)) * Math.exp(-u * 6); sy = 1 - wob(u, .28, 42, 15); sx = 1 + wob(u, .2, 42, 15); }
+      }
+      if (li === 2 && j === 5) rot = -540 * (1 - E.outBack(P(t, b(2) + .05, .5), 1.4));
+      const ph = 2 * Math.PI * 1.9 * t - j * .62 - li * .95;
+      w += 42 * Math.sin(ph) * env; g -= 260 * Math.max(0, Math.sin(ph)) * env; y += 16 * Math.cos(ph) * env;
+      const f = hookFall[gi++], tf = t - (fallT + f.d);
+      if (tf > 0) { x += f.vx * tf; y += f.vy * tf + 2600 * tf * tf; rot += f.vr * tf; }
+      vf(s, w, g); s.style.opacity = op;
+      s.style.transformOrigin = '50% 100%';
+      s.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(${sx}, ${sy})`;
+    });
+  });
+  // «?»: su punto es la moneda; al soltarse se recorta el punto del glifo.
+  const loose = t >= fallT;
+  show(qdot, !loose);
+  Q.style.clipPath = loose ? `inset(-50% -50% calc(100% - ${G.qclip}px) -50%)` : 'none';
+  if (!loose) { const j = P(t, b(3), .25); qdot.style.transform = j > 0 ? `translate(${Math.sin(t * 160) * 5 * j}px, ${Math.cos(t * 130) * 3 * j}px)` : 'none'; }
+  [0, b(1), b(2)].forEach((h, i) => {
+    const p = P(t, h, .55), ring = rings[i];
+    if (!show(ring, p > 0 && p < 1)) return;
+    const o = HL[i], cy = parseFloat(o.line.style.top) + o.size * .5, r = 60 + 820 * E.outCubic(p);
+    ring.style.left = (540 - r) + 'px'; ring.style.top = (cy - r) + 'px'; ring.style.width = ring.style.height = 2 * r + 'px';
+    ring.style.borderWidth = (34 * (1 - p) + 1) + 'px'; ring.style.opacity = 1 - p;
+  });
+}
+
+const landY = k => ICON_Y + STN[k].top - 80;
+function heroR(t) {
+  const t0 = b(3.25);
+  if (!show(hero.c, t >= t0 && t < b(12.3))) return;
+  let x = 540, y, sx = 1, sy = 1, scale = 1, flip = 0, white = 0, rot = 0;
+  const g = 4200;
+  if (t < LAND[0]) {
+    const T = LAND[0] - t0, tau = t - t0, gg = 6000, D = G.qdot;
+    const v0 = (landY(0) - D.y - .5 * gg * T * T) / T;
+    y = D.y + v0 * tau + .5 * gg * tau * tau; x = lerp(D.x, 540, E.inOutCubic(tau / T));
+    scale = lerp((D.r + 1) / 72, 1, E.outBack(clamp(tau / .3), 1.6));
+    white = 1 - P(tau, .04, .18); flip = 4 * Math.PI * tau / T;
+    const v = v0 + gg * tau, st = clamp(Math.abs(v) / 9000, 0, .22); sy = 1 + st; sx = 1 - st * .6;
+  } else {
+    let k = LAND.length - 1; while (k > 0 && t < LAND[k]) k--;
+    const tau = t - LAND[k], y0 = landY(k);
+    let v0, T;
+    if (k < LAND.length - 1) { T = LAND[k + 1] - LAND[k]; v0 = (landY(k + 1) - y0 - .5 * g * T * T) / T; }
+    else { T = .5; v0 = -3000; }
+    y = y0 + v0 * tau + .5 * g * tau * tau;
+    flip = 2 * Math.PI * Math.round(T / B) * tau / T;
+    const v = v0 + g * tau, st = clamp(Math.abs(v) / 9000, 0, .22) * clamp(tau / .05);
+    sy = (1 + st) * (1 - wob(tau, .34, 38, 13)); sx = (1 - st * .6) * (1 + wob(tau, .27, 38, 13));
+    rot = Math.sin(tau * 7) * 6;
+  }
+  drawCoin(hero, x, y + 72 * (1 - sy) * .5, scale, sx, sy, rot, flip, white, P(t % B, 0, .3));
+}
+
+function stationR(t) {
+  if (!show(stn, t >= LAND[0] - .03 && t < b(12) + .05)) return;
+  // apagado de televisor al final
+  const p1 = P(t, b(12) - .17, .1), p2 = P(t, b(12) - .07, .08);
+  stn.style.transform = p1 > 0 ? `scale(${(1 + .15 * p1) * (1 - E.inCubic(p2))}, ${Math.max(.004, 1 - E.inCubic(p1))})` : 'none';
+  stn.style.filter = p1 > 0 ? `brightness(${1 + 2.5 * p1})` : 'none';
+  let k = 0; while (k < STN.length - 1 && t >= LAND[k + 1] - .02) k++;
+  STN.forEach((s, i) => {
+    const gr = groups[i], tau = t - LAND[i];
+    show(gr.g, tau > 0 && (i >= k - 1));
+    const cx = 540, cy = landY(i) + 72;
+    [[gr.a, tau], [gr.w, tau - .05]].forEach(([d, u]) => { const r = 2300 * E.outQuart(clamp(u / .5)); d.style.left = (cx - r) + 'px'; d.style.top = (cy - r) + 'px'; d.style.width = d.style.height = (2 * r) + 'px'; });
+  });
+  stStamps.forEach(S => drawStamp(S, t));
+  // color de primer plano: cambia cuando la cortina alcanza el texto
+  const fgk = (t - LAND[k] > .07) ? k : Math.max(0, k - 1);
+  const fg = `var(${STN[fgk].fg})`;
+  kick.line.style.color = fg; iconSvg.style.color = fg;
+  iconPaths.forEach(p => p.style.stroke = fg);
+  kick.L.forEach((s, j) => { const e = E.outBack(P(t, LAND[0] + .04 + j * .03, .35)); s.style.transform = `translateY(${(1 - e) * 120}px)`; s.style.opacity = e > 0 ? 1 : 0; });
+  // palabra del sitio
+  words.forEach((o, i) => {
+    const tin = LAND[i] - .05, tout = i < STN.length - 1 ? LAND[i + 1] - .1 : b(12) - .2;
+    const on = t >= tin - .01 && t < tout + .3;
+    if (!show(o.mask, on)) return;
+    o.line.style.color = `var(${STN[i].fg})`;
+    o.L.forEach((s, j) => {
+      const a = E.outBack(P(t, tin + j * .025, .3), 1.5), c = E.inCubic(P(t, tout + j * .015, .16));
+      const w = 112 + 38 * (1 - E.outCubic(P(t, tin + j * .025, .4)));
+      vf(s, w, 900);
+      s.style.transform = `translateY(${(-1 + a) * 125 + c * 125}%)`;
+    });
+  });
+  // icono: se dibuja con el primer golpe y luego se transforma en cada rebote
+  let ki = 0; while (ki < STN.length - 1 && t >= LAND[ki + 1] - .24) ki++;
+  const A = SHAPES[Math.max(0, ki - 1)], Bs = SHAPES[ki];
+  const e = ki === 0 ? 1 : E.inOutCubic(P(t, LAND[ki] - .24, .3));
+  iconPaths.forEach((p, j) => {
+    const pts = Bs[j].map((q, i) => [lerp(A[j][i][0], q[0], e), lerp(A[j][i][1], q[1], e)]);
+    p.setAttribute('d', dPts(pts));
+    const dr = E.outCubic(P(t, LAND[0] + j * .07, .45));
+    p.style.strokeDasharray = dr < 1 ? `${dr} 2` : 'none';
+  });
+  let kl = 0; while (kl < LAND.length - 1 && t >= LAND[kl + 1]) kl++;
+  const u = t - LAND[kl];
+  iconSvg.style.transform = `scale(${1 + wob(u, .07, 30, 10)}, ${1 - wob(u, .1, 30, 10)})`;
+}
+
+function stormR(t) {
+  if (!show(storm, t >= b(12) - .02 && t < b(16) + .45)) return;
+  const boom = P(t, b(16), .38), bq = E.inQuad(boom);
+  const zoom = lerp(1, .9, E.inOutCubic(P(t, b(12), b(15.5) - b(12)))) * (1 + .03 * Math.sin(Math.PI * P(t, b(15.5), B)));
+  storm.style.transform = `scale(${zoom}) rotate(${-3 * P(t, b(12), b(4))}deg)`;
+  const e = E.outExpo(P(t, b(12), .42));
+  todo.line.style.transform = `scale(${(1 + .5 * (1 - e)) * (1 + 2.2 * bq)})`;
+  todo.line.style.opacity = 1 - boom;
+  todo.L.forEach((s, j) => vf(s, 100 + 50 * (1 - e) + 14 * Math.sin(t * 9 - j * .7) * P(t, b(12.5), 1), 900));
+  STORM.forEach(S => {
+    const dx = S.o.x - 540, dy = S.o.y - 960, d = Math.hypot(dx, dy) || 1;
+    drawStamp(S, t, { x: dx / d * 2600 * bq, y: dy / d * 2600 * bq, r: Math.sign(dx) * 260 * bq, op: 1 });
+  });
+}
+
+function receiptR(t) {
+  if (!show(rec, t >= b(16) - .01 && t < b(24))) return;
+  recHead.forEach((o, i) => {
+    const h = [b(16), b(17), b(17.5)][i];
+    const e = E.outExpo(P(t, h, .38)), gst = 26 * (1 - e);
+    o.line.style.opacity = t >= h ? 1 : 0;
+    o.line.style.transform = `scale(${1 + .6 * (1 - e)})`;
+    o.line.style.textShadow = gst > .3 ? `${gst}px 0 var(--fiscal-stage-red-fill), ${-gst}px 0 var(--fiscal-stage-blue-fill)` : 'none';
+    o.L.forEach((s, j) => vf(s, 100 + 45 * (1 - e) + 6 * Math.sin(t * 6 - j * .5 - i), 900));
+  });
+  const se = E.outBack(P(t, b(17.6), .35));
+  slot.style.transform = `translateY(${(1 - se) * 300}px)`;
+  // avance del papel: cada línea sale del rodillo con un tirón
+  let feed = 34 * E.outCubic(P(t, b(18), .1)), top = 34, ly = [];
+  RROWS.forEach(r => { ly.push(top); top += r.h; feed += r.h * E.outCubic(P(t, r.t, .06)); });
+  paper.style.top = (SLOT_Y - feed) + 'px';
+  RROWS.forEach(r => { r.r.style.visibility = t >= r.t ? 'visible' : 'hidden'; });
+  const qi = Math.floor(t * 14);
+  QS.forEach((q, i) => { const r = rng(qi * 31 + i)(); vf(q, 70 + r * 80, 900); q.style.transform = `rotate(${(rng(qi * 17 + i)() - .5) * 26}deg)`; });
+  recGroup.style.transformOrigin = `540px ${SLOT_Y}px`;
+  recGroup.style.transform = 'rotate(-3deg) scale(1.1)';
+  // rotulador alrededor del total
+  const mp = E.inOutCubic(P(t, b(22.75), .55));
+  show(markBox, mp > 0);
+  if (mp > 0 && G.tot) {
+    const c = G.tot, rx = 190, ry = 82, cx = c.x - 70, cy = c.y - 22, pts = [];
+    for (let i = 0; i <= 60; i++) { const a = -2.2 + i / 60 * Math.PI * 2.15; const w = 1 + .06 * Math.sin(i * .9); pts.push([cx + Math.cos(a) * rx * w, cy + Math.sin(a) * ry * w]); }
+    markPath.setAttribute('d', dPts(pts)); markPath.style.strokeDasharray = `${mp} 2`;
+  }
+  // zoom hacia el punto del «?»
+  const zp = P(t, b(23.25), b(24) - b(23.25));
+  if (zp > 0 && G.tot) {
+    const S = Math.exp(Math.log(1900 / G.tot.r) * E.inCubic(zp));
+    rec.style.transformOrigin = `${G.tot.x}px ${G.tot.y}px`;
+    rec.style.transform = `scale(${S})`;
+    show(rec, S < 14);
+  } else rec.style.transform = 'none';
+}
+
+function brandR(t) {
+  const on = t >= b(23.25);
+  show(brand, t >= b(24) - .02);
+  show(bcoin.c, on);
+  if (!on) return;
+  const ID = G.idot;
+  // moneda: viene llenando la pantalla y se encoge hasta el punto de la «ı»
+  if (t < b(24)) {
+    const zp = P(t, b(23.25), b(24) - b(23.25)), S = Math.exp(Math.log(1900 / G.tot.r) * E.inCubic(zp));
+    const r = G.tot.r * S;
+    drawCoin(bcoin, G.tot.x, G.tot.y, r / 72, 1, 1, 0, 0, 0, 0);
+  } else {
+    const p = P(t, b(24), B), e = E.outExpo(p);
+    let r = Math.exp(lerp(Math.log(1900), Math.log(ID.r), e));
+    let x = lerp(G.tot.x, ID.x, E.outCubic(p)), y = lerp(G.tot.y, ID.y, E.outCubic(p));
+    const tau = t - b(25);
+    // saltito en el compás 30
+    const hp = P(t, b(29.5), B); if (hp > 0 && hp < 1) y -= 150 * 4 * hp * (1 - hp);
+    const u = t >= b(30) ? t - b(30) : tau;
+    const sy = 1 - wob(u, .3, 38, 12), sx = 1 + wob(u, .24, 38, 12);
+    const flip = hp > 0 && hp < 1 ? 2 * Math.PI * hp : 0;
+    drawCoin(bcoin, x, y + r * (1 - sy) * .5, r / 72, sx, sy, 0, flip, 0, P(t, b(28), .6));
+  }
+  // letras que se inflan desde la moneda
+  [BR1, BR2].forEach((o, li) => o.L.forEach((s, j) => {
+    const c = li === 0 ? Math.abs(j - 5) : Math.abs(j - 1) + 2;
+    const tt = t - (b(24) + .12 + c * .035 + li * .05), p = clamp(tt / .45);
+    const e = E.outBack(p, 2.2);
+    vf(s, lerp(50, 100, E.outCubic(p)) + 4 * Math.sin(t * 3 - j * .6) * P(t, b(26), 1), lerp(200, 900, E.outCubic(p)));
+    s.style.opacity = p > 0 ? 1 : 0;
+    s.style.transform = `translateY(${(1 - E.outCubic(p)) * 60}px) scale(${Math.max(0, e)})`;
+  }));
+  TW.forEach((s, i) => { const e = E.outBack(P(t, b(26) + i * .1, .4), 1.3); s.style.transform = `translateY(${(1 - e) * 110}%)`; });
+  const pe = E.outBack(P(t, b(28), .4), 2.4);
+  pill.style.transform = `scale(${pe}) rotate(${(1 - pe) * -8}deg)`;
+  const arrow = pill.querySelector('svg');
+  arrow.style.transform = `translate(${4 * Math.sin(t * 2 * Math.PI / B / 2) * P(t, b(28.5), .3)}px, ${-4 * Math.sin(t * 2 * Math.PI / B / 2) * P(t, b(28.5), .3)}px)`;
+  bokeh.forEach(k => {
+    const x = (k.x + t * 30 * k.z) % (W + 200) - 100, y = k.y - t * 50 * k.z + Math.sin(t + k.ph) * 20;
+    k.d.style.transform = `translate(${x}px, ${((y % (H + 200)) + H + 200) % (H + 200) - 100}px)`;
+    k.d.style.opacity = .16 * k.z * P(t, b(24.2), .8);
+  });
+}
+
+const FLASH = [[b(4), .3, .12], [b(16), .9, .16], [b(24), .35, .14]];
+let GRAIN = [];
+function renderAt(t, frame) {
+  if (frame == null) frame = Math.round(t * 30);
+  const sk = shake(t);
+  cam.style.transform = `translate(${sk.x}px, ${sk.y}px) rotate(${sk.r}deg)`;
+  hookR(t); stationR(t); stormR(t); receiptR(t); brandR(t); heroR(t);
+  let f = 0; FLASH.forEach(([h, a, d]) => { const u = t - h; if (u >= 0 && u < d) f = Math.max(f, a * (1 - u / d)); });
+  flash.style.opacity = f;
+  const r = rng(frame * 7 + 3);
+  grain.style.backgroundPosition = `${Math.floor(r() * 256)}px ${Math.floor(r() * 256)}px`;
+}
+// Muestras de obturador por fotograma (desenfoque de movimiento): más donde hay barridos.
+function SAMPLES(t) {
+  const fast = [[0, .45], [b(3.2), b(4.3)], [b(11.6), b(12.3)], [b(15.9), b(16.6)], [b(23.4), b(24.9)]];
+  if (fast.some(([a, c]) => t >= a && t < c)) return 12;
+  if (t > b(28.6)) return 3;
+  return 6;
+}
+
+async function boot() {
+  await document.fonts.load('900 100px Anybody'); await document.fonts.load('600 40px "Instrument Sans"'); await document.fonts.load('700 40px "Instrument Sans"');
+  await document.fonts.ready;
+  grain.style.backgroundImage = `url(${noiseURL(256, 9, r => [Math.floor(r() * 255), 255])})`;
+  layout();
+  measureTotal();
+  renderAt(0, 0);
+  window.READY = true;
+}
+window.renderAt = renderAt; window.SAMPLES = SAMPLES; window.DUR = DUR;
+boot();
+
+document.getElementById('play').onclick = () => {
+  const a = new Audio('audio.m4a'); a.play().catch(() => {});
+  const t0 = performance.now();
+  const loop = () => { const t = (performance.now() - t0) / 1000; renderAt(Math.min(t, DUR)); if (t < DUR) requestAnimationFrame(loop); };
+  loop();
+};
+</script>
+</body>
+</html>

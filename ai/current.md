@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-10-02
+Fecha: 2026-10-03
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -167,6 +167,12 @@ siembra la duda y no revela ningún resultado: billete de 100 € roto en trozos
 «¿Seguridad Social?», «¿Hacienda?», «¿Cada compra?», «¿Tu bolsillo?»; «¿Cuánto te queda?»;
 tragaperras que frena en «¿ ?»; «¿Lo sabes? ¿Seguro?»; la pregunta real del paso 0 con el
 deslizador que no se decide y «Haz tu apuesta». `python promo/tiktok-duda/build.py`.
+
+`promo/reel-calculadora/`: reel de motion graphics de **15 s** (128 bpm, sin voz, sin cifras):
+moneda que rebota por nómina, compra, gasolina, luz, casa y coche, sellos de cada impuesto,
+«Nadie te da el ticket completo», ticket con «¿? €» y cierre «Calculadora fiscal · Descubre
+cuántos impuestos pagas · Gratis · enlace en la bio». Desenfoque de movimiento real.
+`python promo/reel-calculadora/build.py` (`--sheet` hace una hoja de contactos).
 
 ### Datos
 
