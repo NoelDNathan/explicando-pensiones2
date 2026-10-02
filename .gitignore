@@ -29,3 +29,6 @@ dist-ssr
 # Vídeo promocional: se regenera con promo/tiktok/build.py
 promo/tiktok/*.mp4
 promo/tiktok/musica.wav
+promo/tiktok-calculadora/*.mp4
+promo/tiktok-calculadora/musica.wav
+promo/tiktok-calculadora/frame-*.png

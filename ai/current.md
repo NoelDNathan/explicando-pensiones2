@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-10-01
+Fecha: 2026-10-02
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -154,6 +154,12 @@ limite muy bajo.
 .mp4 no se versiona. Única cifra real: personas de 20-64 por cada una de 65+ (5,3 / 2,9 / 1,8),
 calculada en `promo/tiktok/piramide.py` desde `data/processed/ine/`. El reparto de casillas es
 ilustrativo y está rotulado. Falta decidir la URL pública que irá en la bio.
+
+`promo/tiktok-calculadora/`: segundo vídeo vertical (~59 s, voz) solo sobre la calculadora v2:
+nómina de 30.000 € → coste del puesto (2.500 + 802 = 3.302 €/mes) → 100 casillas (54 / 16 / 24 / 6)
+→ 46 € de cada 100 → móvil con capturas reales de `/calculadora-fiscal/v2` → llamada. Las cifras
+son las que da la v2 con 30.000 € brutos y valores por defecto (rotulado en el vídeo). Se
+regenera con `python promo/tiktok-calculadora/build.py` (`--frames t1,t2` para ver instantes).
 
 ### Datos
 

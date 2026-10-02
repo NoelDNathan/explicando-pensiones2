@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TikTok · Calculadora fiscal</title>
+<style>
+  @font-face { font-family: "Anybody Variable"; src: url(../tiktok/fonts/anybody-latin-wdth-normal.woff2) format("woff2"); font-weight: 100 900; font-stretch: 50% 150%; }
+  @font-face { font-family: "Instrument Sans"; src: url(../tiktok/fonts/instrument-sans-latin-400-normal.woff2) format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Instrument Sans"; src: url(../tiktok/fonts/instrument-sans-latin-600-normal.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Instrument Sans"; src: url(../tiktok/fonts/instrument-sans-latin-700-normal.woff2) format("woff2"); font-weight: 700; }
+
+  /* Mismos tokens que el escenario de la calculadora (FiscalSoftTheme.css) */
+  :root {
+    --fiscal-stage: #172033;
+    --fiscal-stage-raised: #23364e;
+    --fiscal-stage-line: #4f5f70;
+    --fiscal-stage-text: #ffffff;
+    --fiscal-stage-copy: #dbe4ec;
+    --fiscal-stage-muted: #c4d2df;
+    --fiscal-stage-faint: #718096;
+    --fiscal-stage-blue: #bdd4ef;
+    --fiscal-stage-violet: #d5c9ee;
+    --fiscal-stage-orange: #efd2a9;
+    --fiscal-stage-yellow: #efd7a0;
+    --fiscal-stage-green: #b6ded3;
+    --fiscal-stage-worker: var(--fiscal-stage-violet);
+    --fiscal-stage-company: var(--fiscal-stage-orange);
+    --fiscal-stage-positive: var(--fiscal-stage-green);
+    --fiscal-stage-worker-mark: #5d469c;
+    --fiscal-stage-company-mark: #8b5418;
+    --fiscal-stage-positive-fill: #18865b;
+    --fiscal-stage-company-fill: #b96b18;
+    --fiscal-stage-yellow-fill: #9a7418;
+    --fiscal-stage-blue-fill: #2f6fce;
+    --fiscal-stage-shadow: #0b111c;
+    --fiscal-font-display: "Anybody Variable", "Anybody", system-ui, sans-serif;
+    --fiscal-font-body: "Instrument Sans", system-ui, sans-serif;
+  }
+  html, body { margin: 0; height: 100%; background: var(--fiscal-stage-shadow); overflow: hidden; }
+  #wrap { position: absolute; inset: 0; display: grid; place-items: center; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; flex: none;
+    background: var(--fiscal-stage); color: var(--fiscal-stage-text); font-family: var(--fiscal-font-body); transform-origin: center center; }
+  .o { position: absolute; opacity: 0; visibility: hidden; }
+  .glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; filter: blur(150px); opacity: 0; left: -160px; top: 260px; }
+  #grain { position: absolute; inset: -200px; opacity: .07; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .disp { font-family: var(--fiscal-font-display); font-weight: 900; text-transform: uppercase; line-height: .9; letter-spacing: -0.03em; }
+  .fig { font-family: var(--fiscal-font-display); font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.02em; }
+  .caps { font-size: 30px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+  .acc { color: var(--fiscal-stage-positive); }
+  .wk { color: var(--fiscal-stage-worker); }
+  .co { color: var(--fiscal-stage-company); }
+  .bl { color: var(--fiscal-stage-blue); }
+  .y { color: var(--fiscal-stage-yellow); }
+  .mark { padding: 0 .12em; border-radius: 8px; background-repeat: no-repeat; background-size: var(--sweep, 0%) 100%; }
+  .mark--company { background-image: linear-gradient(var(--fiscal-stage-company-mark), var(--fiscal-stage-company-mark)); }
+
+  /* Progreso del escenario, como la cabecera de los pasos */
+  #prog { position: absolute; left: 60px; right: 60px; top: 96px; display: flex; gap: 10px; align-items: center; }
+  #prog i { flex: 1; height: 8px; border-radius: 4px; background: var(--fiscal-stage-line); }
+  #prog i.on { background: var(--fiscal-stage-positive); }
+  #prog b { margin-left: 18px; font-family: var(--fiscal-font-display); font-size: 40px; font-weight: 900; color: var(--fiscal-stage-positive); font-variant-numeric: tabular-nums; }
+
+  /* 1 · nómina */
+  #nomcap { left: 80px; top: 360px; }
+  #nomfig { left: 80px; top: 420px; font-size: 230px; }
+  #nomfig small { font-size: 120px; }
+  #nomunit { left: 86px; top: 660px; font-size: 44px; font-weight: 600; color: var(--fiscal-stage-muted); }
+  #nomline { left: 86px; top: 652px; width: 900px; height: 6px; background-image: repeating-linear-gradient(90deg, var(--fiscal-stage-muted) 0 10px, transparent 10px 18px); transform-origin: left; }
+  #pero { left: 60px; right: 60px; top: 860px; font-size: 150px; }
+
+  /* 2 · coste */
+  #costcol { left: 120px; top: 380px; width: 300px; height: 880px; }
+  .seg { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 26px; }
+  #segB { background: var(--fiscal-stage-worker-mark); }
+  #segE { background: var(--fiscal-stage-company-fill); }
+  .clab { position: absolute; left: 480px; right: 60px; }
+  .clab .fig { font-size: 120px; }
+  .clab p { margin: 8px 0 0; font-size: 40px; font-weight: 600; color: var(--fiscal-stage-copy); line-height: 1.2; }
+  #cB { top: 720px; } #cE { top: 400px; }
+  #cT { left: 60px; right: 60px; top: 1150px; text-align: center; }
+  #cT .fig { font-size: 190px; color: var(--fiscal-stage-yellow); }
+  #cT p { margin: 6px 0 0; font-size: 42px; font-weight: 600; color: var(--fiscal-stage-copy); }
+
+  /* 3 · casillas, igual que EscHundredCells */
+  #splitT { left: 60px; right: 60px; top: 190px; text-align: center; font-size: 96px; }
+  #grid { left: 180px; top: 330px; width: 720px; height: 720px; }
+  .cell { position: absolute; width: 63px; height: 63px; border-radius: 12px; background: var(--fiscal-stage-raised); }
+  #legend { left: 90px; right: 90px; top: 1090px; display: grid; gap: 8px; }
+  .leg { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 22px; font-size: 38px; font-weight: 700; opacity: 0; }
+  .leg i { width: 40px; height: 40px; border-radius: 10px; }
+  .leg .fig { font-size: 58px; }
+
+  /* 4 · total */
+  #totcap { left: 30px; right: 30px; top: 270px; text-align: center; font-size: 52px; white-space: nowrap; font-weight: 600; color: var(--fiscal-stage-copy); }
+  #totfig { left: 0; right: 0; top: 400px; text-align: center; font-size: 520px; color: var(--fiscal-stage-yellow); }
+  #totfig small { font-size: 220px; }
+  #totsub { left: 70px; right: 70px; top: 920px; text-align: center; font-size: 84px; }
+  #totbar { left: 90px; right: 90px; top: 1290px; height: 64px; border-radius: 32px; background: var(--fiscal-stage-raised); overflow: hidden; display: flex; }
+  #totbar b { display: block; height: 100%; }
+
+  /* 5 · el móvil con la calculadora real */
+  #demoT { left: 40px; right: 40px; top: 130px; text-align: center; font-size: 72px; white-space: nowrap; }
+  #phone { left: 260px; top: 250px; width: 560px; height: 1212px; border-radius: 64px; border: 14px solid var(--fiscal-stage-raised);
+    background: var(--fiscal-stage); overflow: hidden; box-shadow: 0 50px 120px var(--fiscal-stage-shadow); }
+  #screen { position: absolute; left: 0; top: 0; width: 560px; height: 1212px; overflow: hidden; }
+  .shot { position: absolute; left: 0; top: 0; width: 560px; opacity: 0; }
+  #touch { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 6px solid var(--fiscal-stage-text);
+    background: var(--fiscal-stage-shadow); opacity: 0; }
+  .tag { position: absolute; padding: 14px 26px; border-radius: 999px; background: var(--fiscal-stage-positive); color: var(--fiscal-stage);
+    font-size: 34px; font-weight: 700; white-space: nowrap; opacity: 0; box-shadow: 0 20px 40px var(--fiscal-stage-shadow); }
+
+  /* 6 · llamada */
+  #ctaT { left: 60px; right: 60px; top: 230px; text-align: center; font-size: 150px; }
+  #ctaBtn { left: 120px; right: 120px; top: 640px; height: 150px; border-radius: 999px; background: var(--fiscal-stage-positive); color: var(--fiscal-stage);
+    display: flex; align-items: center; justify-content: center; font-family: var(--fiscal-font-display); font-weight: 800; font-size: 54px; font-stretch: 110%; }
+  #chips { position: absolute; left: 40px; right: 40px; top: 870px; display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+  .chip { padding: 16px 26px; border-radius: 999px; border: 3px solid var(--fiscal-stage-positive); color: var(--fiscal-stage-positive); font-size: 32px; font-weight: 700;
+    letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+  #bio { left: 0; right: 0; top: 1060px; text-align: center; font-size: 96px; color: var(--fiscal-stage-yellow); }
+  #arrow { left: 0; right: 0; top: 1170px; text-align: center; font-size: 90px; line-height: 1; color: var(--fiscal-stage-yellow); }
+
+  #foot { left: 60px; right: 60px; top: 140px; text-align: center; font-size: 24px; color: var(--fiscal-stage-muted); }
+  #caps { position: absolute; left: 50px; right: 50px; top: 1500px; height: 220px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  #capline { font-family: var(--fiscal-font-display); font-weight: 900; font-stretch: 115%; font-size: 76px; line-height: 1.02; text-transform: uppercase;
+    -webkit-text-stroke: 14px var(--fiscal-stage-shadow); paint-order: stroke fill; }
+  #capline span { display: inline-block; margin: 0 .14em; }
+  #capline .on { color: var(--fiscal-stage-positive); }
+
+  #play { position: fixed; inset: 0; display: grid; place-items: center; background: none; border: 0; cursor: pointer; font: 700 28px var(--fiscal-font-body); color: var(--fiscal-stage-text); }
+  #play span { padding: 22px 40px; border-radius: 999px; background: var(--fiscal-stage-blue-fill); }
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+  <div class="glow" id="glow-green" style="background: var(--fiscal-stage-positive-fill)"></div>
+  <div class="glow" id="glow-orange" style="background: var(--fiscal-stage-company-fill)"></div>
+  <div class="glow" id="glow-yellow" style="background: var(--fiscal-stage-yellow-fill)"></div>
+  <div class="glow" id="glow-violet" style="background: var(--fiscal-stage-worker-mark)"></div>
+
+  <div id="prog" class="o"></div>
+
+  <!-- 1 · lo que dice la nómina -->
+  <div class="o caps" id="nomcap">Lo que dice tu nómina</div>
+  <div class="o fig" id="nomfig"><span id="nomval">0</span><small> €</small></div>
+  <div class="o" id="nomline"></div>
+  <div class="o" id="nomunit">brutos al año</div>
+  <h1 class="o disp" id="pero">Pero tu trabajo cuesta <span class="mark mark--company" id="peromark">más</span></h1>
+
+  <!-- 2 · coste del puesto -->
+  <div class="o" id="costcol"><div class="seg" id="segB"></div><div class="seg" id="segE"></div></div>
+  <div class="o clab" id="cB"><div class="fig wk">2.500 €</div><p>tu bruto al mes</p></div>
+  <div class="o clab" id="cE"><div class="fig co">+ 802 €</div><p>cotizaciones que paga <b>tu empresa</b></p></div>
+  <div class="o" id="cT"><div class="fig"><span id="ctval">0</span> €</div><p>al mes cuesta tu puesto</p></div>
+
+  <!-- 3 · las 100 casillas -->
+  <h2 class="o disp" id="splitT">De cada <span class="acc">100&nbsp;€</span></h2>
+  <div class="o" id="grid"></div>
+  <div class="o" id="legend"></div>
+
+  <!-- 4 · el total -->
+  <p class="o" id="totcap">De cada 100 € que cuesta tu trabajo</p>
+  <div class="o fig" id="totfig"><span id="totval">0</span><small> €</small></div>
+  <h2 class="o disp" id="totsub">acaban en <span class="y">Hacienda</span> y la <span class="y">Seguridad Social</span></h2>
+  <div class="o" id="totbar"></div>
+
+  <!-- 5 · la calculadora de verdad -->
+  <h2 class="o disp" id="demoT">Calculadora <span class="acc">fiscal</span></h2>
+  <div class="o" id="phone"><div id="screen">
+    <img class="shot" id="sh-pregunta" src="pantallas/pregunta.jpg" alt="" />
+    <img class="shot" id="sh-salario" src="pantallas/salario.jpg" alt="" />
+    <img class="shot" id="sh-resultado" src="pantallas/resultado.jpg" alt="" />
+    <img class="shot" id="sh-paso03" src="pantallas/paso03.jpg" alt="" />
+    <img class="shot" id="sh-paso06" src="pantallas/paso06.jpg" alt="" />
+    <img class="shot" id="sh-paso07" src="pantallas/paso07.jpg" alt="" />
+    <img class="shot" id="sh-paso01" src="pantallas/paso01.jpg" alt="" />
+    <div id="touch"></div>
+  </div></div>
+  <div class="tag" id="tag0" style="left:60px;top:560px">1 · Apuestas</div>
+  <div class="tag" id="tag1" style="right:60px;top:760px">2 · Tu sueldo</div>
+  <div class="tag" id="tag2" style="left:60px;top:960px">3 · A dónde va</div>
+  <div class="tag" id="tag3" style="right:40px;top:560px">Paso a paso</div>
+
+  <!-- 6 · llamada -->
+  <h2 class="o disp" id="ctaT">¿Y en tu <span class="acc">caso</span>?</h2>
+  <div class="o" id="ctaBtn">Calcular con mi sueldo →</div>
+  <div id="chips"><div class="chip" id="chip0">Datos oficiales</div><div class="chip" id="chip1">En tu navegador</div><div class="chip" id="chip2">Paso a paso</div></div>
+  <div class="o disp" id="bio">Enlace en la bio</div>
+  <div class="o" id="arrow">↓</div>
+
+  <div class="o" id="foot">Ejemplo: 30.000 € brutos al año · ejercicio 2025 · valores por defecto · cifras aproximadas de la calculadora</div>
+  <div id="caps"><div id="capline"></div></div>
+  <div id="grain"></div>
+</div></div>
+
+<script src="timeline.js"></script>
+<script>
+const TL = window.TIMELINE;
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const prog = (t, a, d) => clamp((t - a) / d);
+const eOut = (p) => 1 - Math.pow(1 - p, 3);
+const eInOut = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const eBack = (p) => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const fmt = (n) => Math.round(n).toLocaleString('es-ES').replace(/(\d)(?=(\d{3})+$)/, '$1.');
+
+const SC = {};
+TL.scenes.forEach((s, i) => { SC[s.key] = { ...s, end: TL.scenes[i + 1] ? TL.scenes[i + 1].start : TL.total }; });
+// Momento absoluto en que empieza una palabra (edge-tts junta a veces «802 euros» en un solo bloque)
+function W(key, word, nth = 0) {
+  const hits = SC[key].words.filter((w) => w.w === word || w.w.startsWith(word + ' '));
+  if (!hits[nth]) throw new Error(`palabra ${word} no está en ${key}`);
+  return SC[key].start + hits[nth].t;
+}
+function win(t, a, b, fin = 0.3, fout = 0.25) { return Math.min(prog(t, a, fin), 1 - prog(t, b - fout, fout)); }
+function set(el, o, tf = '') { el.style.opacity = o; el.style.transform = tf; el.style.visibility = o <= 0.001 ? 'hidden' : 'visible'; }
+// Título que se estira, como en la calculadora: de wdth 55 a 130
+function stretchIn(el, t, a, b, max = 130) {
+  const p = prog(t, a, 0.5), out = prog(t, b - 0.25, 0.25);
+  el.style.fontStretch = lerp(55, max, eOut(p)) + '%';
+  set(el, win(t, a, b, 0.14, 0.25), `scale(${lerp(1.15, 1, eOut(p))}) translateY(${-60 * out}px)`);
+}
+const countUp = (t, a, d, to) => to * eOut(prog(t, a, d));
+
+/* progreso de 12 segmentos, como la cabecera de los pasos */
+for (let i = 0; i < 12; i++) $('prog').appendChild(document.createElement('i'));
+const pnum = document.createElement('b'); $('prog').appendChild(pnum);
+
+/* casillas: mismo orden y colores que EscHundredCells en el paso 0 de la v2 */
+const PARTS = [
+  { n: 54, color: 'var(--fiscal-stage-positive-fill)', label: 'Te lo quedas tú', cls: 'acc', word: ['split', '54'] },
+  { n: 16, color: 'var(--fiscal-stage-worker)', label: 'IRPF y cotizaciones tuyas', cls: 'wk', word: ['split', '16'] },
+  { n: 24, color: 'var(--fiscal-stage-company-fill)', label: 'Cotizaciones de tu empresa', cls: 'co', word: ['split', '24'] },
+  { n: 6, color: 'var(--fiscal-stage-blue)', label: 'IVA y otros al gastar', cls: 'bl', word: ['split', '6'] },
+];
+const cells = [];
+let idx = 0;
+PARTS.forEach((p, k) => {
+  p.from = idx; idx += p.n;
+  const row = document.createElement('div'); row.className = 'leg';
+  row.innerHTML = `<i style="background:${p.color}"></i><span>${p.label}</span><span class="fig ${p.cls}">${p.n}&nbsp;€</span>`;
+  $('legend').appendChild(row); p.row = row;
+});
+for (let i = 0; i < 100; i++) {
+  const d = document.createElement('div'); d.className = 'cell';
+  d.style.left = (i % 10) * 72 + 'px'; d.style.top = Math.floor(i / 10) * 72 + 'px';
+  $('grid').appendChild(d); cells.push(d);
+}
+const partOf = (i) => PARTS.find((p) => i >= p.from && i < p.from + p.n);
+['positive-fill', 'worker', 'company-fill', 'blue'].forEach((tone, k) => {
+  const b = document.createElement('b'); b.style.width = PARTS[k].n + '%'; b.style.background = `var(--fiscal-stage-${tone})`; $('totbar').appendChild(b); PARTS[k].bar = b;
+});
+
+/* subtítulos: tres o cuatro palabras por línea */
+const LINES = [];
+for (const s of TL.scenes) {
+  let cur = [];
+  let pos = 0;
+  s.words.forEach((w, i) => {
+    cur.push({ ...w, t: s.start + w.t });
+    const at = s.text.indexOf(w.w, pos);
+    if (at >= 0) pos = at + w.w.length;
+    const stop = /[.,:?]/.test(s.text[pos] || '');
+    const long = cur.map((x) => x.w).join(' ').length;
+    if (stop || cur.length >= 4 || long > 18 || i === s.words.length - 1) { LINES.push(cur); cur = []; }
+  });
+}
+let lastLine = null;
+function captions(t) {
+  const line = LINES.find((l, i) => t >= l[0].t - 0.05 && (LINES[i + 1] ? t < LINES[i + 1][0].t - 0.05 : t < l[l.length - 1].t + l[l.length - 1].d + 0.6));
+  if (line !== lastLine) {
+    $('capline').innerHTML = line ? line.map((w) => `<span>${w.w}</span>`).join('') : '';
+    lastLine = line;
+  }
+  if (!line) return;
+  const p = prog(t, line[0].t - 0.05, 0.15);
+  $('caps').style.transform = `scale(${lerp(0.85, 1, eBack(p))})`;
+  [...$('capline').children].forEach((sp, i) => sp.classList.toggle('on', t >= line[i].t && t < line[i].t + Math.max(line[i].d, 0.25)));
+}
+
+function glow(id, o, x = -160, y = 260) { const g = $(id); g.style.opacity = o; g.style.transform = `translate(${x}px, ${y - 260}px)`; }
+
+function renderAt(t) {
+  const H = SC.hook, C = SC.cost, S = SC.split, T = SC.total, D = SC.demo, A = SC.cta;
+
+  // fondo
+  glow('glow-green', 0.35 * Math.max(win(t, H.start, H.end, 0.6, 0.4), win(t, S.start, T.end, 0.6, 0.4), win(t, A.start, TL.total, 0.6, 0.4)), lerp(-300, 0, prog(t, 0, TL.total)), 500);
+  glow('glow-orange', 0.3 * win(t, C.start, C.end, 0.6, 0.4), 0, -200);
+  glow('glow-yellow', 0.3 * win(t, T.start, T.end, 0.5, 0.4), 0, 400);
+  glow('glow-violet', 0.4 * win(t, D.start, D.end, 0.6, 0.4), -100, 300);
+
+  // progreso: un segmento más por escena hasta llegar al 12 en la llamada
+  const keys = ['hook', 'cost', 'split', 'total', 'demo', 'cta'];
+  const k = keys.findIndex((kk) => t < SC[kk].end);
+  const step = Math.min(12, Math.round(((k < 0 ? 5 : k) + prog(t, SC[keys[Math.max(0, k)]].start, SC[keys[Math.max(0, k)]].end - SC[keys[Math.max(0, k)]].start)) * 2) || 1);
+  [...$('prog').children].forEach((el, i) => el.tagName === 'I' && el.classList.toggle('on', i < step));
+  pnum.textContent = String(step).padStart(2, '0') + '/12';
+  set($('prog'), win(t, 0.2, D.start + 0.2, 0.4, 0.3) + win(t, A.start, TL.total, 0.4, 0.2));
+
+  // 1 · nómina
+  const tNum = W('hook', 'ganas');
+  set($('nomcap'), win(t, H.start, H.end, 0.3), `translateY(${lerp(30, 0, eOut(prog(t, H.start, 0.4)))}px)`);
+  set($('nomfig'), win(t, H.start + 0.2, H.end), `translateY(${lerp(40, 0, eOut(prog(t, H.start + 0.2, 0.4)))}px)`);
+  $('nomval').textContent = fmt(countUp(t, tNum - 0.3, 0.9, 30000));
+  $('nomfig').style.textShadow = t > tNum + 0.6 && t < tNum + 1.1 ? '0 0 40px var(--fiscal-stage-positive-fill)' : 'none';
+  set($('nomline'), win(t, H.start + 0.2, H.end), `scaleX(${eOut(prog(t, tNum, 0.8))})`);
+  set($('nomunit'), win(t, tNum + 0.4, H.end));
+  const tPero = W('hook', 'Pero');
+  stretchIn($('pero'), t, tPero - 0.1, H.end + 0.1);
+  $('peromark').style.setProperty('--sweep', eOut(prog(t, W('hook', 'más') - 0.1, 0.5)) * 100 + '%');
+
+  // 2 · coste: columna apilada que crece
+  const tEmp = W('cost', '802'), tTot = W('cost', 'total');
+  set($('costcol'), win(t, C.start, C.end, 0.2));
+  const unit = 870 / 3302;
+  const hB = 2500 * unit * eOut(prog(t, C.start, 0.8));
+  const hE = 802 * unit * eBack(prog(t, tEmp - 0.2, 0.7));
+  $('segB').style.height = hB + 'px';
+  $('segE').style.height = hE + 'px'; $('segE').style.bottom = hB + 8 + 'px';
+  $('segE').style.opacity = hE > 2 ? 1 : 0;
+  set($('cB'), win(t, C.start + 0.3, C.end), `translateX(${lerp(40, 0, eOut(prog(t, C.start + 0.3, 0.4)))}px)`);
+  $('cB').style.top = 1260 - hB / 2 - 70 + 'px';
+  set($('cE'), win(t, tEmp, C.end), `translateX(${lerp(40, 0, eOut(prog(t, tEmp, 0.4)))}px)`);
+  set($('cT'), win(t, tTot, C.end), `scale(${lerp(0.8, 1, eBack(prog(t, tTot, 0.5)))})`);
+  $('ctval').textContent = fmt(countUp(t, tTot, 1.3, 3302));
+  $('costcol').style.transform = `translateY(${-160 * eInOut(prog(t, tTot - 0.2, 0.6))}px)`;
+  $('cB').style.transform += ` translateY(${-160 * eInOut(prog(t, tTot - 0.2, 0.6))}px)`;
+  $('cE').style.transform += ` translateY(${-160 * eInOut(prog(t, tTot - 0.2, 0.6))}px)`;
+
+  // 3 · casillas que aparecen girando y se colorean al nombrar cada parte
+  stretchIn($('splitT'), t, S.start, S.end + 0.1, 120);
+  set($('grid'), win(t, S.start, S.end + 0.1, 0.2, 0.3), `scale(${lerp(1, 0.92, prog(t, S.end - 0.2, 0.3))})`);
+  cells.forEach((c, i) => {
+    const pin = eBack(prog(t, S.start + 0.1 + i * 0.012, 0.35));
+    const part = partOf(i);
+    const [sk, sw] = part.word;
+    const on = prog(t, W(sk, sw) - 0.15 + (i - part.from) * 0.008, 0.25);
+    c.style.transform = `rotate(${lerp(-90, 0, pin)}deg) scale(${pin})`;
+    c.style.background = on > 0.5 ? part.color : 'var(--fiscal-stage-raised)';
+    c.style.opacity = on > 0 && on < 1 ? 0.4 + 0.6 * on : 1;
+  });
+  set($('legend'), win(t, S.start, S.end + 0.2, 0.2, 0.3));
+  PARTS.forEach((p) => {
+    const a = W(...p.word) - 0.1;
+    p.row.style.opacity = prog(t, a, 0.3);
+    p.row.style.transform = `translateX(${lerp(-40, 0, eOut(prog(t, a, 0.4)))}px)`;
+  });
+  // las 46 que no te quedas, al terminar
+  // 4 · total
+  const t46 = W('total', '46');
+  set($('totcap'), win(t, T.start, T.end + 0.1));
+  set($('totfig'), win(t, t46 - 0.15, T.end + 0.1, 0.15), `scale(${lerp(0.6, 1, eBack(prog(t, t46 - 0.15, 0.5)))})`);
+  $('totval').textContent = Math.round(countUp(t, t46 - 0.15, 0.7, 46));
+  stretchIn($('totsub'), t, W('total', 'acaban') - 0.1, T.end + 0.1, 115);
+  set($('totbar'), win(t, T.start + 0.2, T.end + 0.1));
+  PARTS.forEach((p, i) => { p.bar.style.opacity = i === 0 ? lerp(1, 0.25, prog(t, t46, 0.4)) : 1; });
+
+  // 5 · móvil con las pantallas reales de la v2
+  stretchIn($('demoT'), t, D.start, D.end + 0.1, 120);
+  set($('phone'), win(t, D.start, D.end + 0.1, 0.4), `translateY(${lerp(600, 0, eOut(prog(t, D.start, 0.7)))}px) rotate(${lerp(8, 0, eOut(prog(t, D.start, 0.7)))}deg)`);
+  const tAp = W('demo', 'Apuestas'), tSu = W('demo', 'sueldo'), tVe = W('demo', 'ves'), tPa = W('demo', 'Después');
+  const tCo = W('demo', 'cotizaciones'), tIr = W('demo', 'IRPF'), tDe = W('demo', 'deducciones');
+  const S2 = 560 / 780;
+  const show = { 'sh-pregunta': [D.start, tSu - 0.2], 'sh-salario': [tSu - 0.2, tVe - 0.1], 'sh-resultado': [tVe - 0.1, tPa + 0.3],
+    'sh-paso01': [tPa + 0.3, tCo - 0.05], 'sh-paso03': [tCo - 0.05, tIr - 0.05], 'sh-paso06': [tIr - 0.05, tDe - 0.05], 'sh-paso07': [tDe - 0.05, D.end + 0.2] };
+  for (const [id, [a, b]] of Object.entries(show)) {
+    const el = $(id), o = t >= a && t < b ? 1 : 0;
+    const pin = eOut(prog(t, a, 0.3));
+    let y = 0;
+    if (id === 'sh-pregunta') y = -620 * S2 * eInOut(prog(t, tAp, 0.8));
+    if (id === 'sh-salario') y = -300 * S2 * eInOut(prog(t, a + 0.2, 0.6));
+    if (id === 'sh-resultado') y = -(1450 * eInOut(prog(t, a + 0.6, 0.9)) + 1100 * eInOut(prog(t, a + 2.0, 0.9))) * S2;
+    set(el, o, `translateY(${y}px) translateX(${a > D.start ? lerp(80, 0, pin) : 0}px)`);
+  }
+  // dedo que toca el deslizador de la pregunta
+  const tt = $('touch');
+  const tap = win(t, tAp + 0.6, tSu - 0.3, 0.2, 0.2);
+  const slide = eInOut(prog(t, tAp + 0.8, 0.8));
+  tt.style.opacity = tap * 0.8;
+  tt.style.left = lerp(150, 230, slide) + 'px'; tt.style.top = 1120 - 620 * S2 + 'px';
+  ['tag0', 'tag1', 'tag2'].forEach((id, i) => {
+    const a = [tAp, tSu, tVe][i];
+    set($(id), win(t, a, [tSu, tVe, tPa][i] + 0.2, 0.25, 0.2), `scale(${eBack(prog(t, a, 0.4))})`);
+  });
+  set($('tag3'), win(t, tPa, D.end + 0.1, 0.25, 0.2), `scale(${eBack(prog(t, tPa, 0.4))})`);
+
+  // 6 · llamada
+  stretchIn($('ctaT'), t, A.start, TL.total + 1, 125);
+  set($('ctaBtn'), win(t, A.start + 0.1, TL.total + 1), `translateY(${lerp(80, 0, eOut(prog(t, A.start + 0.1, 0.5)))}px)`);
+  ['datos', 'navegador', 'caso'].forEach((w, i) => set($('chip' + i), prog(t, W('cta', w) - 0.15, 0.25), `scale(${eBack(prog(t, W('cta', w) - 0.15, 0.4))})`));
+  set($('bio'), prog(t, W('cta', 'Enlace') - 0.1, 0.3), `scale(${lerp(1.3, 1, eOut(prog(t, W('cta', 'Enlace') - 0.1, 0.4)))})`);
+  set($('arrow'), prog(t, W('cta', 'Enlace') + 0.2, 0.3), `translateY(${Math.sin(t * 6) * 14}px)`);
+  set($('foot'), win(t, H.start + 0.5, T.end + 0.2, 0.4, 0.3));
+
+  captions(t);
+}
+
+/* escalar el escenario a la ventana cuando se previsualiza */
+const RENDER = location.search.includes('render=1');
+function fit() { if (!RENDER) $('stage').style.transform = `scale(${Math.min(innerWidth / 1080, innerHeight / 1920)})`; }
+addEventListener('resize', fit); fit();
+
+window.renderAt = renderAt;
+Promise.all([document.fonts.ready, ...[...document.images].map((i) => i.decode().catch(() => null))]).then(() => {
+  renderAt(0);
+  window.READY = true;
+  if (RENDER) return;
+  const btn = document.createElement('button'); btn.id = 'play'; btn.innerHTML = '<span>▶ Reproducir con sonido</span>';
+  document.body.appendChild(btn);
+  btn.onclick = () => {
+    btn.remove();
+    const audio = new Audio('audio.m4a'); audio.play();
+    const loop = () => { renderAt(audio.currentTime); if (!audio.ended) requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  };
+});
+</script>
+</body>
+</html>
