@@ -160,6 +160,13 @@ nómina de 30.000 € → coste del puesto (2.500 + 802 = 3.302 €/mes) → 100
 → 46 € de cada 100 → móvil con capturas reales de `/calculadora-fiscal/v2` → llamada. Las cifras
 son las que da la v2 con 30.000 € brutos y valores por defecto (rotulado en el vídeo). Se
 regenera con `python promo/tiktok-calculadora/build.py` (`--frames t1,t2` para ver instantes).
+A la persona usuaria **no le gustó** este enfoque (voz, cifras reveladas). No tomarlo como referencia.
+
+`promo/tiktok-duda/`: vídeo **sin voz** (24 s, 120 bpm, música y efectos sintetizados) que solo
+siembra la duda y no revela ningún resultado: billete de 100 € roto en trozos que vuelan a
+«¿Seguridad Social?», «¿Hacienda?», «¿Cada compra?», «¿Tu bolsillo?»; «¿Cuánto te queda?»;
+tragaperras que frena en «¿ ?»; «¿Lo sabes? ¿Seguro?»; la pregunta real del paso 0 con el
+deslizador que no se decide y «Haz tu apuesta». `python promo/tiktok-duda/build.py`.
 
 ### Datos
 

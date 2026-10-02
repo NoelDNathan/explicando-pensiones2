@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TikTok · ¿A dónde va?</title>
+<style>
+  @font-face { font-family: "Anybody Variable"; src: url(../tiktok/fonts/anybody-latin-wdth-normal.woff2) format("woff2"); font-weight: 100 900; font-stretch: 50% 150%; }
+  @font-face { font-family: "Instrument Sans"; src: url(../tiktok/fonts/instrument-sans-latin-600-normal.woff2) format("woff2"); font-weight: 600; }
+  @font-face { font-family: "Instrument Sans"; src: url(../tiktok/fonts/instrument-sans-latin-700-normal.woff2) format("woff2"); font-weight: 700; }
+
+  /* Tokens del escenario de la calculadora (FiscalSoftTheme.css) */
+  :root {
+    --fiscal-stage: #172033;
+    --fiscal-stage-raised: #23364e;
+    --fiscal-stage-line: #4f5f70;
+    --fiscal-stage-text: #ffffff;
+    --fiscal-stage-copy: #dbe4ec;
+    --fiscal-stage-muted: #c4d2df;
+    --fiscal-stage-blue: #bdd4ef;
+    --fiscal-stage-yellow: #efd7a0;
+    --fiscal-stage-red: #efc5cc;
+    --fiscal-stage-green: #b6ded3;
+    --fiscal-stage-positive: var(--fiscal-stage-green);
+    --fiscal-stage-positive-fill: #18865b;
+    --fiscal-stage-positive-mark: #14614f;
+    --fiscal-stage-yellow-fill: #9a7418;
+    --fiscal-stage-red-fill: #c4455b;
+    --fiscal-stage-blue-fill: #2f6fce;
+    --fiscal-stage-shadow: #0b111c;
+    --fiscal-font-display: "Anybody Variable", "Anybody", system-ui, sans-serif;
+    --fiscal-font-body: "Instrument Sans", system-ui, sans-serif;
+  }
+  html, body { margin: 0; height: 100%; background: var(--fiscal-stage-shadow); overflow: hidden; }
+  #wrap { position: absolute; inset: 0; display: grid; place-items: center; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; flex: none; background: var(--fiscal-stage);
+    color: var(--fiscal-stage-text); font-family: var(--fiscal-font-body); transform-origin: center center; }
+  #bgflash { position: absolute; inset: 0; opacity: 0; }
+  #cam { position: absolute; inset: 0; }
+  .o { position: absolute; opacity: 0; visibility: hidden; }
+  .disp { font-family: var(--fiscal-font-display); font-weight: 900; text-transform: uppercase; line-height: .88; letter-spacing: -0.03em; text-align: center; }
+  .acc { color: var(--fiscal-stage-positive); }
+  .glow { position: absolute; width: 1300px; height: 1300px; border-radius: 50%; filter: blur(160px); left: -110px; top: 300px; opacity: 0; }
+  #grain { position: absolute; inset: -200px; opacity: .09; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  #flash { position: absolute; inset: 0; background: var(--fiscal-stage-text); opacity: 0; pointer-events: none; }
+  #scan { position: absolute; inset: 0; pointer-events: none; opacity: .06;
+    background: repeating-linear-gradient(0deg, var(--fiscal-stage-shadow) 0 2px, transparent 2px 6px); }
+
+  /* --- El billete --- */
+  #billzone { position: absolute; left: 110px; top: 700px; width: 860px; height: 430px; }
+  .piece { position: absolute; inset: 0; will-change: transform; }
+  .bill { position: absolute; inset: 0; border-radius: 30px; overflow: hidden;
+    background:
+      repeating-linear-gradient(115deg, var(--fiscal-stage-positive-mark) 0 3px, transparent 3px 22px),
+      radial-gradient(circle at 74% 50%, var(--fiscal-stage-positive-fill) 0 120px, var(--fiscal-stage-positive-mark) 121px 126px, transparent 127px),
+      var(--fiscal-stage-positive-fill); }
+  .bill::before { content: ""; position: absolute; inset: 22px; border: 6px solid var(--fiscal-stage-green); border-radius: 18px; }
+  .bill b { position: absolute; left: 60px; top: 70px; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 300px; line-height: .9;
+    color: var(--fiscal-stage-green); letter-spacing: -0.04em; font-stretch: 120%; }
+  .bill i { position: absolute; right: 120px; top: 100px; width: 230px; height: 230px; border-radius: 50%; display: grid; place-items: center;
+    font-style: normal; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 170px; color: var(--fiscal-stage-positive-fill);
+    background: var(--fiscal-stage-green); }
+  .bill span { position: absolute; left: 66px; bottom: 44px; font-weight: 700; letter-spacing: .4em; font-size: 26px; color: var(--fiscal-stage-green); }
+  .bill em { position: absolute; right: 60px; bottom: 44px; font-style: normal; font-weight: 700; letter-spacing: .2em; font-size: 22px; color: var(--fiscal-stage-green); }
+  #cuts { position: absolute; left: 110px; top: 690px; width: 860px; height: 450px; overflow: visible; }
+  #cuts polyline { fill: none; stroke: var(--fiscal-stage-text); stroke-width: 6; stroke-dasharray: 16 12; stroke-linejoin: round; }
+
+  #hTop { left: 50px; right: 50px; top: 330px; font-size: 92px; }
+  #hAsk { left: 30px; right: 30px; top: 290px; font-size: 98px; }
+  .dest { left: 30px; right: 30px; top: 1250px; font-size: 118px; }
+
+  .slam { left: 0; right: 0; top: 760px; font-size: 300px; }
+
+  /* --- Tragaperras --- */
+  #slotHead { left: 70px; right: 70px; top: 360px; text-align: center; font-size: 56px; font-weight: 700; line-height: 1.2; color: var(--fiscal-stage-copy); }
+  #slot { left: 40px; right: 170px; top: 600px; height: 520px; display: flex; justify-content: center; align-items: center; gap: 28px; }
+  .reel { position: relative; width: 300px; height: 460px; border-radius: 36px; background: var(--fiscal-stage-raised); overflow: hidden;
+    box-shadow: inset 0 30px 40px var(--fiscal-stage-shadow), inset 0 -30px 40px var(--fiscal-stage-shadow); }
+  .reel div { position: absolute; left: 0; right: 0; height: 460px; display: grid; place-items: center; font-family: var(--fiscal-font-display);
+    font-weight: 900; font-size: 380px; line-height: 1; color: var(--fiscal-stage-text); font-variant-numeric: tabular-nums; }
+  .reel .q { color: var(--fiscal-stage-yellow); }
+  #euro { font-family: var(--fiscal-font-display); font-weight: 900; font-size: 200px; color: var(--fiscal-stage-muted); }
+  #slotFoot { left: 0; right: 0; top: 1180px; text-align: center; font-size: 56px; font-weight: 700; color: var(--fiscal-stage-copy); }
+  #lever { left: 900px; top: 560px; width: 30px; height: 300px; transform-origin: 50% 100%; }
+  #lever::before { content: ""; position: absolute; left: 8px; top: 40px; bottom: 0; width: 14px; border-radius: 7px; background: var(--fiscal-stage-line); }
+  #lever::after { content: ""; position: absolute; left: -15px; top: 0; width: 60px; height: 60px; border-radius: 50%; background: var(--fiscal-stage-red-fill); }
+
+  /* --- Pregunta del paso 0, como en la app --- */
+  #card { left: 70px; right: 70px; top: 230px; }
+  #card .step { font-size: 30px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+  #card h2 { margin: 22px 0 0; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 84px; line-height: .98; letter-spacing: -0.02em; font-stretch: 118%; }
+  #val { left: 0; right: 0; top: 960px; text-align: center; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 230px; line-height: 1; color: var(--fiscal-stage-yellow); }
+  #range { left: 110px; right: 110px; top: 1230px; height: 18px; border-radius: 9px; background: var(--fiscal-stage-raised); }
+  #rfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 9px; background: var(--fiscal-stage-positive); }
+  #thumb { position: absolute; top: -27px; width: 72px; height: 72px; margin-left: -36px; border-radius: 50%; background: var(--fiscal-stage-positive);
+    box-shadow: 0 0 0 10px var(--fiscal-stage-positive-mark); }
+  .rlab { position: absolute; white-space: nowrap; top: 46px; font-size: 32px; font-weight: 700; color: var(--fiscal-stage-muted); transform: translateX(-50%); }
+  #bet { left: 150px; right: 150px; top: 1360px; height: 130px; border-radius: 999px; background: var(--fiscal-stage-positive); color: var(--fiscal-stage);
+    display: flex; align-items: center; justify-content: center; font-family: var(--fiscal-font-display); font-weight: 900; font-size: 62px; font-stretch: 115%; text-transform: uppercase; }
+  #brand { left: 0; right: 0; top: 1530px; text-align: center; font-size: 34px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+
+  #play { position: fixed; inset: 0; display: grid; place-items: center; background: none; border: 0; cursor: pointer; font: 700 28px var(--fiscal-font-body); color: var(--fiscal-stage-text); }
+  #play span { padding: 22px 40px; border-radius: 999px; background: var(--fiscal-stage-blue-fill); }
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+  <div id="bgflash"></div>
+  <div class="glow" id="glowA"></div>
+  <div class="glow" id="glowB"></div>
+  <div id="cam">
+    <h1 class="o disp" id="hTop">De cada <span class="acc">100&nbsp;€</span><br>que cuesta<br>tu trabajo…</h1>
+    <h2 class="o disp" id="hAsk">¿A dónde<br>va cada <span class="acc">trozo</span>?</h2>
+    <div id="billzone"></div>
+    <svg id="cuts" viewBox="0 0 860 450"></svg>
+    <div class="o disp dest" id="d0" style="color:var(--fiscal-stage-blue)">¿Seguridad<br>Social?</div>
+    <div class="o disp dest" id="d1" style="color:var(--fiscal-stage-yellow)">¿Hacienda?</div>
+    <div class="o disp dest" id="d2" style="color:var(--fiscal-stage-red)">¿Cada<br>compra?</div>
+    <div class="o disp dest" id="d3" style="color:var(--fiscal-stage-green)">¿Tu<br>bolsillo?</div>
+
+    <div class="o disp slam" id="s0" style="font-size:210px">¿Cuánto</div>
+    <div class="o disp slam" id="s1" style="font-size:420px;top:680px">te</div>
+    <div class="o disp slam acc" id="s2" style="font-size:220px">queda?</div>
+
+    <p class="o" id="slotHead">Hacienda y la Seguridad Social<br>se llevan…</p>
+    <div class="o" id="slot">
+      <div class="reel" id="r0"><div></div><div></div></div>
+      <div class="reel" id="r1"><div></div><div></div></div>
+      <span id="euro">€</span>
+    </div>
+    <div class="o" id="lever"></div>
+    <p class="o" id="slotFoot">de cada 100 €</p>
+
+    <div class="o disp slam" id="k0" style="font-size:190px">¿Lo<br>sabes?</div>
+    <div class="o disp slam" id="k1" style="font-size:210px">¿Se<br>guro?</div>
+
+    <div class="o" id="card">
+      <div class="step">Pregunta 1 de 2</div>
+      <h2>De cada 100 € que cuesta tu trabajo, <span class="acc">¿cuántos crees que acaban en Hacienda y la Seguridad Social?</span></h2>
+    </div>
+    <div class="o" id="val">¿?</div>
+    <div class="o" id="range"><div id="rfill"></div><div id="thumb"></div>
+      <span class="rlab" style="left:0">0 €</span><span class="rlab" style="left:50%">35 €</span><span class="rlab" style="left:100%">70 €</span></div>
+    <div class="o" id="bet">Haz tu apuesta →</div>
+    <div class="o" id="brand">Calculadora fiscal · enlace en la bio</div>
+  </div>
+  <div id="scan"></div>
+  <div id="grain"></div>
+  <div id="flash"></div>
+</div></div>
+
+<script>
+/* 120 bpm: un pulso cada 0,5 s. Todos los cortes caen en pulso. */
+const TOTAL = 24;
+const EV = {
+  slam: 0.0, cut: 2.0, tear: [3.0, 4.0, 5.0, 6.0], words: [7.0, 7.5, 8.0],
+  slot: 9.0, brake: 12.5, stop: 14.0, k: [15.0, 16.0], card: 17.0, bet: 20.0,
+};
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const prog = (t, a, d) => clamp((t - a) / d);
+const eOut = (p) => 1 - Math.pow(1 - p, 3);
+const eIn = (p) => p * p * p;
+const eInOut = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const eBack = (p) => { const c = 2.2; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const win = (t, a, b, fin = 0.12, fout = 0.12) => Math.min(prog(t, a, fin), 1 - prog(t, b - fout, fout));
+function set(el, o, tf = '') { el.style.opacity = o; el.style.transform = tf; el.style.visibility = o <= 0.001 ? 'hidden' : 'visible'; }
+// Golpe: aparece grande, se asienta con rebote y deja un fantasma de color un instante
+function slam(el, t, a, b, from = 1.8, maxW = 125) {
+  const p = prog(t, a, 0.22);
+  set(el, win(t, a, b, 0.04, 0.08), `scale(${lerp(from, 1, eOut(p))}) rotate(${lerp(-4, 0, eOut(p))}deg)`);
+  el.style.fontStretch = lerp(60, maxW, eOut(prog(t, a, 0.3))) + '%';
+  const g = 1 - prog(t, a, 0.25);
+  el.style.textShadow = g > 0 ? `${-14 * g}px 0 var(--fiscal-stage-red-fill), ${14 * g}px 0 var(--fiscal-stage-blue-fill)` : 'none';
+}
+
+/* --- billete en cuatro trozos con bordes rotos --- */
+const W = 860, H = 430, BASE = [215, 430, 645];
+const zig = (x, seed) => { const pts = []; for (let y = -10, k = 0; y <= H + 10; y += 36, k++) pts.push([x + (k % 2 ? 12 : -12) + (rnd(seed + k) - 0.5) * 10, y]); return pts; };
+const EDGES = [null, zig(BASE[0], 10), zig(BASE[1], 40), zig(BASE[2], 70), null];
+const pieces = [];
+for (let i = 0; i < 4; i++) {
+  const left = EDGES[i] ? EDGES[i] : [[-20, -20], [-20, H + 20]];
+  const right = EDGES[i + 1] ? EDGES[i + 1] : [[W + 20, -20], [W + 20, H + 20]];
+  const poly = [...left, ...[...right].reverse()].map(([x, y]) => `${x}px ${y}px`).join(',');
+  const d = document.createElement('div'); d.className = 'piece';
+  d.innerHTML = '<div class="bill"><b>100</b><i>€</i><span>EURO</span><em>TU TRABAJO</em></div>';
+  d.style.clipPath = `polygon(${poly})`;
+  $('billzone').appendChild(d); pieces.push(d);
+}
+const cutLines = [1, 2, 3].map(() => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'); $('cuts').appendChild(p); return p; });
+// Orden en que salen y hacia dónde: Seguridad Social, Hacienda, cada compra, tu bolsillo
+const FLY = [
+  { piece: 0, dx: -900, dy: -1100, rot: -70 },
+  { piece: 3, dx: 900, dy: -1000, rot: 80 },
+  { piece: 1, dx: -1000, dy: 700, rot: -110 },
+  { piece: 2, dx: 120, dy: 1500, rot: 40 },
+];
+
+/* --- carretes --- */
+const REELS = [{ el: $('r0'), speed: 26, q: '¿' }, { el: $('r1'), speed: 33, q: '?' }];
+
+function camera(t) {
+  let x = 0, y = 0, r = 0;
+  const hits = [[EV.slam, 30], ...EV.tear.map((a) => [a, 18]), ...EV.words.map((a) => [a, 34]), [EV.stop, 50], ...EV.k.map((a) => [a, 26]), [EV.bet, 22]];
+  for (const [a, amp] of hits) {
+    if (t < a) continue;
+    const k = Math.exp(-(t - a) * 9) * amp;
+    x += Math.sin((t - a) * 70) * k; y += Math.cos((t - a) * 53) * k; r += Math.sin((t - a) * 40) * k * 0.02;
+  }
+  // temblor leve mientras giran los carretes
+  const sp = win(t, EV.slot, EV.stop, 0.4, 0.01) * 4;
+  x += Math.sin(t * 90) * sp; y += Math.cos(t * 77) * sp;
+  $('cam').style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
+}
+
+function flash(t) {
+  let f = 0;
+  for (const [a, k] of [[EV.slam, 0.7], [EV.stop, 0.85], [EV.k[0], 0.25], [EV.k[1], 0.25], [EV.card, 0.4]]) if (t >= a) f = Math.max(f, k * (1 - prog(t, a, 0.25)));
+  $('flash').style.opacity = f;
+  // fondo que cambia de color en «¿Lo sabes? ¿Seguro?»
+  const bg = $('bgflash');
+  if (t >= EV.k[0] && t < EV.card) { bg.style.opacity = 1; bg.style.background = t < EV.k[1] ? 'var(--fiscal-stage-yellow-fill)' : 'var(--fiscal-stage-red-fill)'; }
+  else bg.style.opacity = 0;
+}
+
+function glows(t) {
+  const A = $('glowA'), B = $('glowB');
+  let ca = 'var(--fiscal-stage-positive-fill)', oa = 0.35 * win(t, 0, EV.words[0], 0.3, 0.3);
+  if (t >= EV.slot && t < EV.k[0]) { ca = 'var(--fiscal-stage-yellow-fill)'; oa = 0.25 + 0.25 * prog(t, EV.slot, EV.stop - EV.slot); }
+  if (t >= EV.card) { ca = 'var(--fiscal-stage-positive-fill)'; oa = 0.3 * prog(t, EV.card, 0.6); }
+  A.style.background = ca; A.style.opacity = oa;
+  A.style.transform = `translate(${Math.sin(t * 0.7) * 160}px, ${Math.cos(t * 0.5) * 200}px)`;
+  B.style.background = 'var(--fiscal-stage-blue-fill)';
+  B.style.opacity = 0.25 * win(t, EV.cut, EV.words[0], 0.4, 0.3);
+  B.style.transform = `translate(${Math.cos(t * 0.6) * 200}px, ${400 + Math.sin(t * 0.8) * 160}px)`;
+}
+
+function renderAt(t) {
+  camera(t); flash(t); glows(t);
+
+  // 1 · el billete entra de golpe
+  const pIn = prog(t, EV.slam, 0.3);
+  const zone = $('billzone');
+  const breath = t < EV.cut ? 1 + Math.sin(t * Math.PI * 4) * 0.012 * prog(t, 0.4, 0.3) : 1;
+  zone.style.transform = `scale(${lerp(2.8, 1, eOut(pIn)) * breath}) rotate(${lerp(14, -3, eOut(pIn))}deg)`;
+  zone.style.opacity = t < EV.slam ? 0 : 1;
+  set($('hTop'), win(t, 0.35, EV.cut, 0.1, 0.1), `translateY(${lerp(40, 0, eOut(prog(t, 0.35, 0.3)))}px)`);
+  $('hTop').style.fontStretch = lerp(60, 115, eOut(prog(t, 0.35, 0.5))) + '%';
+
+  // 2 · líneas de corte que tiemblan: no se sabe dónde va a romperse
+  const cutOn = win(t, EV.cut, EV.tear[0] + 0.05, 0.1, 0.05);
+  $('cuts').style.opacity = cutOn;
+  const jit = 1 - prog(t, EV.tear[0] - 0.35, 0.3);
+  cutLines.forEach((pl, k) => {
+    const off = (rnd(Math.floor(t * 12) + k * 9) - 0.5) * 260 * jit;
+    pl.setAttribute('points', EDGES[k + 1].map(([x, y]) => `${x + off},${y + 10}`).join(' '));
+    pl.style.strokeDashoffset = -t * 120;
+  });
+  slam($('hAsk'), t, EV.cut, EV.words[0], 1.4);
+
+  // 3 · cada trozo sale volando hacia una pregunta
+  pieces.forEach((pc, i) => { pc.style.transform = ''; });
+  FLY.forEach((f, k) => {
+    const a = EV.tear[k];
+    const pc = pieces[f.piece];
+    const sep = t >= EV.cut ? Math.sin(t * 30 + k) * 3 * prog(t, EV.cut, 0.3) : 0;
+    const p = prog(t, a, 0.75);
+    const e = eIn(p);
+    const tug = Math.sin(prog(t, a - 0.25, 0.25) * Math.PI) * 18;
+    pc.style.transform = `translate(${f.dx * e + sep + (f.dx > 0 ? tug : -tug)}px, ${f.dy * e}px) rotate(${f.rot * e}deg)`;
+    slam($('d' + k), t, a, k < 3 ? EV.tear[k + 1] : EV.words[0], 1.6);
+  });
+  if (t >= EV.words[0]) zone.style.opacity = 0;
+
+  // 4 · ¿Cuánto / te / queda?
+  slam($('s0'), t, EV.words[0], EV.words[1], 2.2, 105);
+  slam($('s1'), t, EV.words[1], EV.words[2], 2.2);
+  slam($('s2'), t, EV.words[2], EV.slot, 2.2, 105);
+
+  // 5 · tragaperras que frena y no da el número
+  const inSlot = win(t, EV.slot, EV.k[0], 0.15, 0.08);
+  set($('slotHead'), inSlot, `translateY(${lerp(-60, 0, eOut(prog(t, EV.slot, 0.3)))}px)`);
+  set($('slot'), inSlot, `scale(${lerp(0.7, 1, eBack(prog(t, EV.slot, 0.35)))})`);
+  set($('slotFoot'), inSlot);
+  set($('lever'), inSlot, `rotate(${Math.sin(prog(t, EV.slot, 0.5) * Math.PI) * 38}deg)`);
+  REELS.forEach((R, k) => {
+    const stopAt = EV.stop - (1 - k) * 0.0;
+    // posición = integral de la velocidad; frena entre brake y stop
+    const tt = clamp(t, EV.slot, stopAt);
+    const run = Math.min(tt, EV.brake) - EV.slot;
+    const dB = Math.max(0, tt - EV.brake), DB = stopAt - EV.brake;
+    const brakeDist = R.speed * (dB - (dB * dB) / (2 * DB) * 0.92);
+    const pos = R.speed * run + brakeDist + k * 0.37;
+    const speedNow = t < EV.brake ? R.speed : R.speed * (1 - 0.92 * clamp(dB / DB));
+    const [a, b] = R.el.children;
+    const frac = pos - Math.floor(pos);
+    if (t < stopAt) {
+      a.textContent = Math.floor(pos) % 10; b.textContent = (Math.floor(pos) + 1) % 10;
+      a.className = b.className = '';
+      a.style.transform = `translateY(${frac * 460}px)`; b.style.transform = `translateY(${frac * 460 - 460}px)`;
+      R.el.style.filter = `blur(${Math.min(12, speedNow * 0.35)}px)`;
+    } else {
+      // al parar cae el signo de pregunta con rebote
+      a.textContent = R.q; a.className = 'q'; b.textContent = '';
+      const p = prog(t, stopAt, 0.35);
+      a.style.transform = `translateY(${lerp(-460, 0, eBack(p))}px)`;
+      R.el.style.filter = 'none';
+    }
+  });
+
+  // 6 · ¿Lo sabes? ¿Seguro?
+  slam($('k0'), t, EV.k[0], EV.k[1], 2);
+  slam($('k1'), t, EV.k[1], EV.card, 2);
+  $('k0').style.color = 'var(--fiscal-stage-shadow)'; $('k1').style.color = 'var(--fiscal-stage-text)';
+
+  // 7 · la pregunta real del paso 0 con el deslizador que no se decide
+  const cardOn = prog(t, EV.card, 0.25);
+  set($('card'), cardOn, `translateY(${lerp(80, 0, eOut(cardOn))}px)`);
+  set($('val'), prog(t, EV.card + 0.5, 0.2), `scale(${1 + Math.sin(t * Math.PI * 4) * 0.04})`);
+  set($('range'), prog(t, EV.card + 0.5, 0.25));
+  const wander = 0.5 + 0.28 * Math.sin((t - EV.card) * 2.3) + 0.14 * Math.sin((t - EV.card) * 5.1 + 1) + 0.06 * Math.sin((t - EV.card) * 11.7);
+  const v = clamp(wander, 0.04, 0.96) * 100;
+  $('thumb').style.left = v + '%'; $('rfill').style.width = v + '%';
+  // el valor parpadea entre cifras borrosas y «¿?»: nunca se fija
+  const flick = Math.floor(t * 8);
+  const showNum = t > EV.card + 1 && rnd(flick) > 0.7;
+  $('val').textContent = showNum ? `${Math.round(v * 0.7)}?` : '¿?';
+  $('val').style.filter = showNum ? 'blur(10px)' : 'none';
+  const pb = prog(t, EV.bet, 0.3);
+  set($('bet'), pb, `scale(${lerp(0.4, 1, eBack(pb)) * (1 + Math.max(0, Math.sin((t - EV.bet) * Math.PI * 2)) * 0.04 * prog(t, EV.bet + 0.5, 0.2))})`);
+  set($('brand'), prog(t, EV.bet + 0.8, 0.3));
+}
+
+const RENDER = location.search.includes('render=1');
+function fit() { if (!RENDER) $('stage').style.transform = `scale(${Math.min(innerWidth / 1080, innerHeight / 1920)})`; }
+addEventListener('resize', fit); fit();
+window.TOTAL = TOTAL;
+window.EV = EV;
+window.renderAt = renderAt;
+document.fonts.ready.then(() => {
+  renderAt(0);
+  window.READY = true;
+  if (RENDER) return;
+  const btn = document.createElement('button'); btn.id = 'play'; btn.innerHTML = '<span>▶ Reproducir con sonido</span>';
+  document.body.appendChild(btn);
+  btn.onclick = () => {
+    btn.remove();
+    const audio = new Audio('audio.m4a'); audio.play();
+    const loop = () => { renderAt(audio.currentTime); if (!audio.ended) requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  };
+});
+</script>
+</body>
+</html>
