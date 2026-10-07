@@ -1,0 +1,7 @@
+# Analisis conductual de la finalizacion de la calculadora fiscal v2
+
+- Fecha: 2026-10-07.
+- Objetivo: analizar por que se abandona la v2 (motivacion, friccion, progreso, confianza, engagement, cierre) y proponer un flujo redisenado pantalla a pantalla con prioridades.
+- Archivos modificados: `ai/rediseno-calculadora/04-psicologia-finalizacion-v2.md`, `ai/current.md` (una linea de estado) y este archivo.
+- Resumen: recorrido real en el navegador como visitante nuevo (movil 375 x 812 y escritorio, 35.000 EUR). Medidas en movil: pasos 1-10 suman ~83.000 px y ~7.400 palabras. Hallazgos nuevos frente a `03-retencion-v2.md`: boton siguiente truncado a «L...» en movil; revelacion del paso 0 bajo el pliegue; deslizador de la apuesta a 1,6 pantallas; supuestos invisibles (Madrid, G7, CNAE 62, consumo medio) y comunidad autonoma solo en el paso 6; RNT 30.732 / 32.732 EUR rotulados igual en el paso 5; «Falta 100 %» al entrar en el paso 8; el paso 10 da la misma cifra que el paso 0 y su boton siguiente lleva a Fuentes. Propuesta: dos velocidades (4 bloques + ticket, y modo Aprender), supuestos visibles como bucle abierto honesto, predicciones en vez de examen, tabla de prioridades con quick wins, cambios estructurales y experimentos A/B. Sin cambios en la aplicacion ni en datos; sin datos reales de abandono (no hay eventos de embudo).
+- Estado siguiente: decidir si se instrumenta el embudo y se aplican los quick wins de movil, repaso no bloqueante, CTA y supuestos visibles; despues disenar la revelacion y el ticket con la skill `diseno-escenario`.
