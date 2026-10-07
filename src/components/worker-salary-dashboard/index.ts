@@ -68,7 +68,7 @@ export type {
   ConsumptionTaxesIntroChoice,
   ConsumptionTaxesResult,
 } from './WorkerConsumptionTaxesCard'
-export { ConsumptionTaxesIntroDialog } from './WorkerConsumptionTaxesCard'
+export { ConsumptionTaxesIntroDialog, averageConsumptionDraft } from './WorkerConsumptionTaxesCard'
 export type {
   OwnershipAnswer,
   PropertyIbi,

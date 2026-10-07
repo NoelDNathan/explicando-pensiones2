@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-10-07
+Fecha: 2026-10-08
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -124,6 +124,23 @@ movimiento y patrones) para aplicarlo paso a paso.
 - Paso 7 v2: la moneda amarilla «0,30 € / reducción» escala el texto con el diámetro (`cqi`) para no recortarse en móvil (2026-09-30).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
 «Falta» en la cesta), llevar las piezas a `/componentes` y la revisión de la persona usuaria.
+
+### Calculadora v3 (recorrido de dos velocidades)
+
+`/calculadora-fiscal/v3` (2026-10-08), publica como la v2. Aplica
+`ai/rediseno-calculadora/04-psicologia-finalizacion-v2.md`; la v1 y la v2 no cambian.
+- Mismo dashboard con `v3`: mismo estado, motor y autoguardado. Lo propio de la v3 vive en
+  `fiscal-worker-dashboard/v3/`; por donde va la persona se guarda aparte en `fwd-v3-flow-v1`.
+- Recorrido: apuesta → salario → primera respuesta con supuestos visibles → bloques Tu nómina
+  (comunidad + prediccion de lo que paga la empresa), Tu situación (filtro de fichas),
+  Lo que compras (media del INE o ajuste) y Lo que tienes (tarjeta del paso 9 en modo
+  `compact`) → Tu ticket fiscal. Los pasos 1-10 son el modo «Aprender» (repaso voluntario).
+- `fiscalResult.ts` es el calculo anual sin React (lo usa tambien la v1/v2); la v3 lo usa para
+  la aproximacion inicial, la atribucion por capas y los «¿y si…?».
+- El «dia de liberacion fiscal» es una lectura del mismo reparto (parte del coste que va a
+  impuestos × 365), no un dato nuevo; la pantalla dice como se cuenta.
+- Textos nuevos pendientes de aprobacion. Sin instrumentar el embudo todavia.
+- Pendiente de revisar en pantalla: escritorio y movimiento reducido.
 
 ### Base de datos (Supabase)
 

@@ -16,6 +16,7 @@ import { estimateVatFromNetSalary } from './components/fiscal-worker-dashboard/v
 import { FiscalPersonalDataCard } from './components/fiscal-worker-dashboard/FiscalPersonalDataCard'
 import { ConsumptionTaxesIntroDialog, WorkerCalculationSourcesCard, WorkerConsumptionTaxesCard, WorkerContributionLimitsCard, WorkerFinalSummaryCard, WorkerFiscalStepsCard, WorkerFiscalSummaryCard, WorkerIrpfTranchesCard, WorkerKnowledgeCheckCard, WorkerPersonalReductionsCard, WorkerStatsConsent, WorkerSalaryBaseCard, WorkerSocialContributionsCard, WorkerWealthTaxesCard } from './components/worker-salary-dashboard'
 import { PrivacyTermsPage } from './pages/PrivacyTermsPage'
+import { V3Showcase } from './components/fiscal-worker-dashboard/v3/V3Showcase'
 import type { DisabilityMode } from './components/fiscal-worker-dashboard/types'
 import { PensionOverviewPage } from './components/pension-overview/PensionOverviewPage'
 import { AccountProvider } from './lib/supabase/auth/AccountProvider'
@@ -946,6 +947,19 @@ function ComponentLab() {
         </div>
       </section>
 
+      <section className="component-section component-section--wide" aria-labelledby="v3-pieces-title">
+        <div className="component-section__intro">
+          <p className="eyebrow">Calculadora v3</p>
+          <h2 id="v3-pieces-title">Piezas del recorrido corto</h2>
+          <p>
+            Progreso por bloques, cifra viva, supuestos, descubrimientos, prediccion,
+            campos y navegacion de <a href="/calculadora-fiscal/v3">/calculadora-fiscal/v3</a>,
+            con sus estados. Cifras de ejemplo.
+          </p>
+        </div>
+        <V3Showcase />
+      </section>
+
       <IndicatorInfoModal
         open={indicatorInfoOpen}
         onClose={() => setIndicatorInfoOpen(false)}
@@ -1171,6 +1185,7 @@ function Routes() {
   }
 
   if (path === '/calculadora-fiscal/v2') return <FiscalWorkerDashboard variant="escenario" />
+  if (path === '/calculadora-fiscal/v3') return <FiscalWorkerDashboard variant="escenario" v3 />
   return <FiscalWorkerDashboard />
 }
 

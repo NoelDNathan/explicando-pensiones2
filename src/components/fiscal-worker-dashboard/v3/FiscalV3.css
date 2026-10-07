@@ -1,0 +1,538 @@
+/*
+ * v3 de la calculadora (/calculadora-fiscal/v3). Mismo escenario que la v2
+ * (FiscalEscenario.css, D.css): aquí solo van las piezas nuevas del recorrido
+ * corto. Solo tokens --fiscal-*.
+ */
+.v3-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Marco del laboratorio de componentes (/componentes): el escenario sin la altura de página. */
+.fwd.v3-preview { min-height: 0; padding: clamp(20px, 3vw, 40px); gap: 48px; }
+
+/* Entrada: promesa y pregunta en una pantalla también en móvil. */
+.v3-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: clamp(20px, 3vw, 32px);
+  border-bottom: 1px solid var(--fiscal-stage-line);
+}
+.v3-hero__promise strong { color: var(--fiscal-stage-text); }
+.v3-hero__promise {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: 1.45;
+  color: var(--fiscal-stage-copy);
+}
+.v3-hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.v3-hero__trust li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-copy);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.v3-q__title {
+  margin: 0;
+  max-width: 1120px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.1rem + 3vw, 4.25rem);
+  line-height: 1;
+  font-weight: 900;
+  font-stretch: 112%;
+  letter-spacing: -0.015em;
+  color: var(--fiscal-stage-text);
+  animation: d-stretch var(--fiscal-duration-slow) var(--fiscal-ease-out) both;
+}
+/* El foco se mueve al titular de cada pantalla para el lector de pantalla; no es un control. */
+.fwd :is(.v3-q__title, .v3-block__title, .v3-ticket__h1):is(:focus, :focus-visible) { outline: none; }
+.v3-q__answer {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: clamp(20px, 5vw, 64px);
+  align-items: center;
+}
+.v3-q__figure { display: flex; flex-direction: column; gap: 6px; }
+.v3-q__value {
+  margin: 0;
+  font-size: clamp(3.5rem, 2rem + 8vw, 9rem);
+  font-stretch: 90%;
+  color: var(--fiscal-stage-worker);
+}
+.v3-q__value.is-pending { color: var(--fiscal-stage-line); }
+.v3-q__cells { grid-template-columns: repeat(20, minmax(0, 1fr)); }
+.v3-entry .d-cta:disabled { opacity: 0.45; cursor: not-allowed; }
+.v3-entry__actions { align-items: center; }
+
+/* Primera respuesta */
+.v3-reveal__verdict { color: var(--fiscal-stage-text); }
+.v3-reveal__duel .esc-q__rows > div { grid-template-columns: 160px minmax(0, 1fr); }
+.v3-reveal__duel .esc-q__rows dd { grid-template-columns: minmax(0, 1fr) 140px; }
+.v3-reveal__duel .esc-q__track { height: 22px; }
+.v3-reveal__actions { align-items: center; }
+.v3-cta__text { white-space: nowrap; }
+.v3-cta__meta {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--fiscal-stage);
+  color: var(--fiscal-stage-positive);
+  font-family: var(--fiscal-font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.v3-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: clamp(20px, 3vw, 36px);
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+}
+.v3-more { padding-top: 16px; }
+
+/* Supuestos */
+.v3-assume { display: flex; flex-direction: column; gap: 10px; }
+.v3-assume__title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fiscal-stage-muted);
+}
+.v3-assume__list { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.fwd .v3-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.fwd .v3-chip--supuesto {
+  border: 2px dashed var(--fiscal-stage-yellow);
+  background: transparent;
+  color: var(--fiscal-stage-yellow);
+}
+.fwd .v3-chip--tuyo {
+  border: 2px solid var(--fiscal-stage-positive);
+  background: transparent;
+  color: var(--fiscal-stage-positive);
+}
+.fwd .v3-chip:disabled { cursor: default; }
+
+/* Bloques: progreso y cifra viva, fijos arriba. */
+.v3-blockbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 32px;
+  align-items: center;
+  margin-inline: calc(var(--fiscal-space-gutter) * -1);
+  padding: 12px var(--fiscal-space-gutter);
+  background: var(--fiscal-stage);
+  border-bottom: 1px solid var(--fiscal-stage-line);
+}
+.v3-progress { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.v3-progress__label { margin: 0; font-size: 0.9375rem; color: var(--fiscal-stage-copy); }
+.v3-progress__label strong { color: var(--fiscal-stage-text); }
+.v3-progress__segments { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; max-width: 420px; }
+.v3-progress__segments li { height: 6px; border-radius: 99px; background: var(--fiscal-stage-raised); }
+.v3-progress__segments li.is-done { background: var(--fiscal-stage-positive-fill); }
+.v3-progress__segments li.is-active { background: var(--fiscal-stage-positive); }
+.v3-progress__rest { margin: 0; font-size: 0.875rem; color: var(--fiscal-stage-muted); }
+
+.v3-live { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right; }
+.v3-live__label { margin: 0; font-size: 0.8125rem; color: var(--fiscal-stage-muted); }
+.v3-live__label span { color: var(--fiscal-stage-positive); font-weight: 700; }
+.v3-live__value { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+.v3-live__figure {
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--fiscal-stage-positive);
+}
+.v3-live__delta {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  animation: d-pop 0.7s var(--fiscal-ease-spring) both;
+}
+.v3-live__delta.is-up { background: var(--fiscal-stage-positive); color: var(--fiscal-stage); }
+.v3-live__delta.is-down { background: var(--fiscal-stage-company); color: var(--fiscal-stage); }
+.v3-live__note { margin: 0; font-size: 0.8125rem; color: var(--fiscal-stage-muted); }
+
+.v3-block { padding-top: clamp(24px, 4vw, 56px); padding-bottom: 120px; }
+.v3-block__title {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: min(clamp(2.5rem, 1.2rem + 5vw, 5.5rem), calc(100cqi / (1.02 * var(--d-chars, 12))));
+  line-height: 0.92;
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--fiscal-stage-text);
+  animation: d-stretch var(--fiscal-duration-slow) var(--fiscal-ease-out) both;
+}
+.v3-block__content { gap: clamp(28px, 4vw, 48px); }
+
+/* Filas de formulario */
+.v3-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 32px;
+  align-items: center;
+  padding: 18px 0;
+  border-top: 1px solid var(--fiscal-stage-line);
+}
+.v3-field--big { border-top: 0; padding-top: 0; }
+.v3-field__text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.v3-field__label { font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem); font-weight: 600; line-height: 1.35; color: var(--fiscal-stage-text); }
+.v3-field__help { font-size: 1rem; line-height: 1.5; color: var(--fiscal-stage-muted); }
+.v3-counter { display: inline-flex; align-items: center; gap: 6px; }
+.fwd .v3-counter button {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.fwd .v3-counter button:disabled { opacity: 0.35; cursor: default; }
+.v3-counter output {
+  min-width: 56px;
+  font-family: var(--fiscal-font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--fiscal-stage-text);
+}
+.v3-amount { min-width: 220px; }
+.v3-amount span { flex: 0 0 auto; font-size: 0.9375rem; color: var(--fiscal-stage-muted); }
+
+/* Filtro de situación */
+.v3-filter { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 16px; }
+.v3-filter__legend { padding: 0; margin-bottom: 4px; font-size: 1.125rem; font-weight: 700; color: var(--fiscal-stage-text); }
+.v3-filter__chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.fwd .v3-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-stage-text);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.fwd .v3-toggle[aria-pressed='true'] {
+  border-color: var(--fiscal-stage-positive);
+  background: var(--fiscal-stage-positive);
+  color: var(--fiscal-stage);
+}
+.fwd .v3-toggle--none[aria-pressed='true'] {
+  border-color: var(--fiscal-stage-text);
+  background: var(--fiscal-stage-text);
+}
+.v3-situacion { gap: clamp(32px, 4vw, 48px); }
+.v3-detail { display: flex; flex-direction: column; }
+.v3-detail__title {
+  margin: 0 0 8px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  font-weight: 900;
+  font-stretch: 115%;
+  color: var(--fiscal-stage-positive);
+}
+
+/* Predicción */
+.v3-predict {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(20px, 3vw, 36px);
+  border: 2px dashed var(--fiscal-stage-line);
+  border-radius: var(--fiscal-radius-stage-panel);
+}
+.v3-predict__kicker { margin: 0; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.v3-predict__q { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2.25rem); font-weight: 800; font-stretch: 112%; line-height: 1.1; color: var(--fiscal-stage-text); }
+.v3-predict__answer { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px; align-items: center; }
+.v3-predict__value { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(2.25rem, 1.5rem + 3vw, 4rem); font-weight: 900; font-variant-numeric: tabular-nums; color: var(--fiscal-stage-worker); }
+.v3-predict__value.is-pending { color: var(--fiscal-stage-line); }
+.v3-predict__actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.v3-predict .d-cta:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Descubrimiento */
+.v3-discovery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(20px, 3vw, 36px);
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+  border-left: 6px solid var(--fiscal-stage-positive);
+  animation: d-rise 0.8s var(--fiscal-ease-out) both;
+}
+.v3-discovery--company { border-left-color: var(--fiscal-stage-company); }
+.v3-discovery--worker { border-left-color: var(--fiscal-stage-worker); }
+.v3-discovery--blue { border-left-color: var(--fiscal-stage-blue); }
+.v3-discovery--yellow { border-left-color: var(--fiscal-stage-yellow); }
+.v3-discovery__kicker { margin: 0; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.v3-discovery__figure { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(2.25rem, 1.4rem + 3vw, 4.25rem); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.v3-discovery__text { display: flex; flex-direction: column; gap: 8px; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.5; color: var(--fiscal-stage-copy); }
+.v3-discovery__text p { margin: 0; }
+
+/* Tarjetas reutilizadas dentro de un bloque */
+.v3-embed > section { padding-inline: 0; border: 0; background: transparent; box-shadow: none; }
+
+/* Navegación inferior: «seguir» nunca se trunca. */
+.v3-nav {
+  position: fixed;
+  z-index: 70;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px var(--fiscal-space-gutter) 18px;
+  background: linear-gradient(transparent, var(--fiscal-stage) 38%);
+}
+.v3-nav--static { position: static; padding-inline: 0; background: none; }
+.fwd .v3-nav__back {
+  flex: 0 0 auto;
+  min-height: 56px;
+  padding: 0 20px;
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: 999px;
+  background: var(--fiscal-stage);
+  color: var(--fiscal-stage-muted);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.fwd .v3-nav__next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fiscal-stage-positive);
+  color: var(--fiscal-stage);
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.0625rem, 1rem + 0.5vw, 1.375rem);
+  font-weight: 800;
+  font-stretch: 112%;
+  text-align: left;
+  cursor: pointer;
+}
+.v3-nav :is(button):focus-visible { outline: 3px solid var(--fiscal-stage-positive); outline-offset: 4px; }
+
+/* Aviso de retomar */
+.v3-resume {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 16px 20px;
+  border-radius: var(--fiscal-radius-stage-panel);
+  margin-bottom: clamp(20px, 3vw, 32px);
+  background: var(--fiscal-stage-raised);
+  color: var(--fiscal-stage-text);
+}
+.v3-resume p { margin: 0; font-size: 1.0625rem; }
+
+/* Ticket */
+.v3-ticket { padding-bottom: 40px; }
+.v3-ticket__h1 {
+  margin: 0;
+  max-width: 1200px;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(2rem, 1.1rem + 4vw, 5rem);
+  line-height: 0.98;
+  font-weight: 900;
+  font-stretch: 115%;
+  letter-spacing: -0.02em;
+  color: var(--fiscal-stage-text);
+  animation: d-stretch var(--fiscal-duration-slow) var(--fiscal-ease-out) both;
+}
+.v3-ticket__closures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 3vw, 32px); }
+.v3-closure {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: var(--fiscal-radius-stage-panel);
+  background: var(--fiscal-stage-raised);
+}
+.v3-closure__title { margin: 0; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fiscal-stage-muted); }
+.v3-closure__duel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; }
+.v3-closure__duel div { display: flex; flex-direction: column; gap: 4px; }
+.v3-closure__duel dt { font-size: 0.9375rem; color: var(--fiscal-stage-copy); }
+.v3-closure__duel dd { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(2rem, 1.4rem + 2vw, 3.25rem); font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; }
+.v3-closure__moves { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.v3-closure__moves li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--fiscal-stage-line); font-size: 1.0625rem; color: var(--fiscal-stage-copy); }
+.v3-closure__moves strong { font-variant-numeric: tabular-nums; }
+
+.v3-section-title {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+  font-weight: 900;
+  font-stretch: 120%;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--fiscal-stage-text);
+}
+
+.v3-receipt { display: flex; flex-direction: column; gap: 24px; }
+.v3-receipt__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+.v3-receipt__title {
+  margin: 0;
+  font-family: var(--fiscal-font-display);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+  font-weight: 900;
+  font-stretch: 120%;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.v3-receipt__body { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; }
+.v3-receipt__lines {
+  margin: 0;
+  padding: clamp(18px, 3vw, 28px);
+  border: 2px dashed var(--fiscal-stage-line);
+  border-radius: var(--fiscal-radius-stage-panel);
+}
+.v3-receipt__line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 20px; align-items: baseline; padding: 10px 0; }
+.v3-receipt__line + .v3-receipt__line { border-top: 1px dashed var(--fiscal-stage-line); }
+.v3-receipt__line dt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 1.0625rem; color: var(--fiscal-stage-copy); }
+.v3-receipt__line dd { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fiscal-stage-text); }
+.v3-receipt__line.is-sub dt { font-weight: 700; color: var(--fiscal-stage-text); }
+.v3-receipt__line.is-total { border-top: 3px solid var(--fiscal-stage-positive); margin-top: 6px; }
+.v3-receipt__line.is-total dt { font-size: 1.25rem; font-weight: 800; color: var(--fiscal-stage-text); }
+.v3-receipt__line.is-total dd { font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.5rem); font-weight: 900; }
+.v3-tone--company { color: var(--fiscal-stage-company); }
+.v3-receipt__line dd.v3-tone--company { color: var(--fiscal-stage-company); }
+.v3-receipt__line dd.v3-tone--worker { color: var(--fiscal-stage-worker); }
+.v3-receipt__line dd.v3-tone--blue { color: var(--fiscal-stage-blue); }
+.v3-receipt__line dd.v3-tone--yellow { color: var(--fiscal-stage-yellow); }
+
+.fwd .v3-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--fiscal-stage-positive);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.v3-discoveries { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
+.v3-lab { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
+.v3-lab__card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(20px, 3vw, 32px);
+  border: 2px solid var(--fiscal-stage-line);
+  border-radius: var(--fiscal-radius-stage-panel);
+}
+.v3-lab__q { margin: 0; font-family: var(--fiscal-font-display); font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); font-weight: 800; font-stretch: 112%; color: var(--fiscal-stage-text); }
+.v3-lab__rows { display: flex; flex-direction: column; margin: 0; }
+.v3-lab__rows div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 10px 0; border-top: 1px solid var(--fiscal-stage-line); }
+.v3-lab__rows dt { font-size: 1rem; color: var(--fiscal-stage-copy); }
+.v3-lab__rows dd { margin: 0; font-family: var(--fiscal-font-display); font-size: 1.375rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.v3-lab__rows small { font-family: var(--fiscal-font-body); font-size: 0.875rem; font-weight: 600; color: var(--fiscal-stage-muted); }
+.v3-keep { align-items: center; }
+.v3-notice { margin: 0; padding: 12px 16px; border-radius: 16px; background: var(--fiscal-stage-raised); color: var(--fiscal-stage-text); }
+
+/* Modo «Aprender»: barra para volver. */
+.v3-learnbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  color: var(--fiscal-stage-muted);
+  font-size: 0.9375rem;
+}
+/* En «Aprender» el siguiente paso tiene que leerse entero en móvil. */
+@media (max-width: 720px) {
+  .fwd--v3 .esc-step__nav .esc-step__sources { display: none; }
+}
+
+@media (max-width: 900px) {
+  .v3-q__answer, .v3-predict__answer, .v3-receipt__body, .v3-ticket__closures, .v3-lab { grid-template-columns: minmax(0, 1fr); }
+  .v3-discoveries { grid-template-columns: minmax(0, 1fr); }
+  .v3-q__cells { grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 3px; }
+}
+@media (max-width: 720px) {
+  .v3-hero { gap: 10px; padding-bottom: 16px; }
+  .v3-hero__promise { font-size: 1rem; }
+  .v3-hero__trust li { padding: 4px 10px; font-size: 0.8125rem; }
+  .v3-entry > .d-close { --d-gap: 24px; }
+  .v3-entry .v3-q__title { font-size: clamp(1.5rem, 1rem + 3.4vw, 1.875rem); }
+  .v3-blockbar { grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; }
+  .v3-progress__rest, .v3-live__label, .v3-live__note { display: none; }
+  .v3-live__figure { font-size: 1.75rem; }
+  .v3-field { grid-template-columns: minmax(0, 1fr); }
+  .v3-amount { min-width: 0; }
+  .fwd .v3-nav__next { flex: 1; min-height: 58px; padding: 0 20px; font-size: 1rem; line-height: 1.15; }
+  .fwd .v3-nav__back { padding: 0 16px; }
+  .fwd .v3-cta { width: 100%; justify-content: space-between; gap: 10px; padding: 0 22px; font-size: 1.1875rem; }
+  .v3-cta__meta { white-space: nowrap; }
+  .v3-q__figure { flex-direction: row; align-items: baseline; gap: 14px; }
+  .v3-q__value { font-size: 3.5rem; }
+  .v3-reveal__duel .esc-q__rows > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .v3-reveal__duel .esc-q__rows dd { grid-template-columns: minmax(0, 1fr) auto; gap: 16px; }
+  .v3-reveal__duel .esc-q__rows dt { font-size: 1.0625rem; }
+  .v3-closure__duel { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-q__title, .v3-block__title, .v3-ticket__h1, .v3-discovery, .v3-live__delta { animation: none; }
+}

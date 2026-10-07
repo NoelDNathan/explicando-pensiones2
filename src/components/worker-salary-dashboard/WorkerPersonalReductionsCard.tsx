@@ -33,6 +33,7 @@ import { getRegionDeductionLink } from "./regionDeductionLinks";
 import "./Irpf2025StructuredAdjustmentsForm.css";
 import "./WorkerPersonalReductionsCard.css";
 import { useFiscalVariant } from "../fiscal-worker-dashboard/fiscalVariant";
+import { buildPersonalReductionResult, withoutChildSupport } from "../fiscal-worker-dashboard/personalReductionResult";
 import { DLadder, type DChainStep } from "./escenario/EscenarioParts";
 import "./escenario/EscenarioForms.css";
 
@@ -287,10 +288,6 @@ function isMinimumExcludedByChildSupport(profile: DependentProfile) {
   return profile.childSupportAnnual > 0 && profile.childSupportFormalized;
 }
 
-function withoutChildSupport(profile: DependentProfile): DependentProfile {
-  if (profile.childSupportAnnual === 0 && !profile.childSupportFormalized) return profile;
-  return { ...profile, childSupportAnnual: 0, childSupportFormalized: false };
-}
 
 function dependentAgeIncrement(
   type: "descendant" | "ascendant",
@@ -1207,101 +1204,22 @@ export function WorkerPersonalReductionsCard({
     );
   };
 
-  const result = useMemo<PersonalReductionResult>(() => {
-    const selectedDescendants = descendantProfiles.slice(0, Number(children));
-    const selectedAscendants = ascendantProfiles.slice(0, Number(ascendants));
-    const eligibleDescendants = selectedDescendants.filter((profile) =>
-      qualifiesDependent(profile, "descendant"),
-    );
-    const eligibleAscendants = selectedAscendants.filter((profile) =>
-      qualifiesDependent(profile, "ascendant"),
-    );
-    const effectiveAdjustments: Irpf2025AdjustmentInput = {
-      ...adjustments,
-      childSupportPaid: 0,
-      childSupportFormalized: false,
-      childSupportMinimumExcluded: false,
-    };
-    const dependentDisabilityMinimum = [...eligibleDescendants, ...eligibleAscendants].reduce(
-      (sum, profile) => {
-        const base =
-          profile.disabilityPercent === "65"
-            ? 9_000
-            : profile.disabilityPercent === "33"
-              ? 3_000
-              : 0;
-        const assistance =
-          base > 0 && (profile.assistance === "yes" || profile.disabilityPercent === "65")
-            ? 3_000
-            : 0;
-        return sum + (base + assistance) * Number(profile.entitlementShare);
-      },
-      0,
-    );
-    const taxpayerDisabilityAssistanceMinimum =
-      Number(disabilityPercent) > 0 && (taxpayerAssistance === "yes" || disabilityPercent === "65")
-        ? 3_000
-        : 0;
-    const baseBeforeReductions = Math.max(0, initialBaseBeforeReductions);
-    const netWorkIncomeForReductions = Math.max(0, initialNetWorkIncome || baseBeforeReductions);
-    const reductionsTotal = calculateBaseReductions2025(
-      effectiveAdjustments,
-      netWorkIncomeForReductions,
-      baseBeforeReductions,
-      0,
-      0,
-      declaredGrossWorkIncome,
-    ).totalApplied;
-    const deductionsTotal =
-      effectiveAdjustments.donationAmount +
-      effectiveAdjustments.rentPaid +
-      effectiveAdjustments.homeInvestmentPaid +
-      effectiveAdjustments.newCompanyInvestment;
-
-    return {
-      children: Number(children),
-      eligibleChildren: eligibleDescendants.length,
-      childrenUnder3: eligibleDescendants.filter((profile) => profile.ageBand === "under3").length,
-      disabilityPercent: Number(disabilityPercent) as DisabilityPercent,
-      taxpayerAssistance,
-      taxpayerDisabilityAssistanceMinimum,
-      maritalStatus,
-      ascendants: Number(ascendants),
-      eligibleAscendants: eligibleAscendants.length,
-      ascendantsOver75: eligibleAscendants.filter((profile) => profile.ageBand === "75_plus")
-        .length,
-      dependentDisabilityMinimum,
-      descendantProfiles: descendantProfiles.map(withoutChildSupport),
-      ascendantProfiles,
-      adjustments: effectiveAdjustments,
-      reductionsTotal,
-      deductionsTotal,
-      calculationWarnings: [],
-      reductionLines: {
-        pensionPlans: effectiveAdjustments.personalPensionContribution,
-        companyPensionPlan:
-          effectiveAdjustments.employerPensionContribution +
-          effectiveAdjustments.workerEmploymentPensionContribution,
-        mutualities: effectiveAdjustments.mutualityContribution,
-        compensatoryPension: effectiveAdjustments.compensatoryPensionPaid,
-        childSupport: 0,
-        jointTaxation: effectiveAdjustments.jointTaxationType !== "individual",
-        protectedAssets: effectiveAdjustments.protectedAssetsContribution,
-        unionAndProfessionalFees:
-          effectiveAdjustments.unionDues + effectiveAdjustments.professionalDues,
-      },
-      deductionLines: {
-        maternity: effectiveAdjustments.maternityEligible ? "applies" : "none",
-        daycare: String(effectiveAdjustments.daycareTotalExpense),
-        largeFamily: effectiveAdjustments.largeFamilyCategory,
-        dependentDisability: effectiveAdjustments.disabilityEligiblePersonMonths > 0 ? "yes" : "no",
-        donations: String(effectiveAdjustments.donationAmount),
-        rent: String(effectiveAdjustments.rentPaid),
-        oldHomePurchase: String(effectiveAdjustments.homeInvestmentPaid),
-        newCompanyInvestment: String(effectiveAdjustments.newCompanyInvestment),
-      },
-    };
-  }, [
+  const result = useMemo<PersonalReductionResult>(
+    () =>
+      buildPersonalReductionResult({
+        children: Number(children),
+        ascendants: Number(ascendants),
+        disabilityPercent: Number(disabilityPercent) as DisabilityPercent,
+        taxpayerAssistance,
+        maritalStatus,
+        descendantProfiles,
+        ascendantProfiles,
+        adjustments,
+        baseBeforeReductions: initialBaseBeforeReductions,
+        netWorkIncome: initialNetWorkIncome,
+        declaredGrossWorkIncome,
+      }),
+    [
     adjustments,
     ascendantProfiles,
     ascendants,

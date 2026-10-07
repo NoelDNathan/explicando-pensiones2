@@ -52,6 +52,68 @@ export function EscFigure({ value, format, className }: { value: number; format:
   )
 }
 
+/** Diámetro del tirador de EscGuessRange, en px. Tiene que coincidir con `--d-thumb` del CSS. */
+const GUESS_THUMB_PX = 40
+
+/**
+ * Deslizador del diseño D para contestar con una cifra (la apuesta del paso 0 o las
+ * predicciones de la v3). El `input range` nativo pinta el tirador fuera del cursor
+ * en Chrome y Edge con la escala de Windows, y en Firefox con este borde: el valor
+ * se calcula aquí, en píxeles CSS, y el input solo sirve al teclado.
+ */
+export function EscGuessRange({ value, max, step = 1, onChange, ariaLabel, valueText }: {
+  /** `null` mientras no se ha contestado: el círculo se pinta en el centro. */
+  value: number | null
+  max: number
+  step?: number
+  onChange: (value: number) => void
+  ariaLabel: string
+  valueText: string
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const shown = value ?? max / 2
+  const fromClientX = (slider: HTMLElement, clientX: number) => {
+    const rect = slider.getBoundingClientRect()
+    const usable = rect.width - GUESS_THUMB_PX
+    const ratio = usable <= 0 ? 0 : Math.min(1, Math.max(0, (clientX - rect.left - GUESS_THUMB_PX / 2) / usable))
+    return Math.round((ratio * max) / step) * step
+  }
+  return (
+    <div
+      className="d-range"
+      style={{ '--d-p': shown / max } as CSSProperties}
+      onPointerDown={(event) => {
+        if (event.button !== 0) return
+        const slider = event.currentTarget
+        onChange(fromClientX(slider, event.clientX))
+        slider.setPointerCapture(event.pointerId)
+        inputRef.current?.focus()
+      }}
+      onPointerMove={(event) => {
+        if (!event.currentTarget.hasPointerCapture(event.pointerId)) return
+        onChange(fromClientX(event.currentTarget, event.clientX))
+      }}
+    >
+      <div className="d-range__track" aria-hidden="true">
+        <div className="d-range__fill" />
+      </div>
+      <div className="d-range__thumb" aria-hidden="true" />
+      <input
+        ref={inputRef}
+        type="range"
+        className="d-range__input"
+        min={0}
+        max={max}
+        step={step}
+        value={shown}
+        onChange={(event) => onChange(Number(event.target.value))}
+        aria-label={ariaLabel}
+        aria-valuetext={valueText}
+      />
+    </div>
+  )
+}
+
 /** Título display: la última palabra en verde, como en la maqueta. */
 export function EscTitle({ text, id, as: Tag = 'h2' }: { text: string; id?: string; as?: 'h1' | 'h2' | 'h3' }) {
   const words = text.trim().split(/\s+/)

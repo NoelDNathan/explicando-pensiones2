@@ -323,6 +323,14 @@ const AVERAGE_SPAIN_SHARE_PRESETS: Record<string, number> = {
   alcohol: 1.5,
 }
 
+/**
+ * Borrador con el reparto orientativo ya aplicado: punto de partida para quien
+ * quiere ajustar su gasto sin empezar desde «Falta 100 %» (bloque de compras de la v3).
+ */
+export function averageConsumptionDraft(budgetAnnual: number): ConsumptionTaxesDraft {
+  return { budgetAnnual, sharePercents: { ...AVERAGE_SPAIN_SHARE_PRESETS } }
+}
+
 type SpendChartSlice = {
   id: string
   name: string

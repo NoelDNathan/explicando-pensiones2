@@ -106,6 +106,12 @@ type WorkerWealthTaxesCardProps = {
   initialDraft?: WealthTaxesDraft | null
   onResultChange?: (result: WealthTaxesResult) => void
   onDraftChange?: (draft: WealthTaxesDraft) => void
+  /**
+   * Para incrustarla en otro recorrido (bloque «Lo que tienes» de la v3): sin la
+   * etiqueta «Paso 9 de 10», con el titulo solo para lectores de pantalla y sin
+   * los dos relojes de la introduccion.
+   */
+  compact?: boolean
 }
 
 const DEFAULT_IBI_RATE_PERCENT = 0.6
@@ -687,6 +693,7 @@ export function WorkerWealthTaxesCard({
   initialDraft = null,
   onResultChange,
   onDraftChange,
+  compact = false,
 }: WorkerWealthTaxesCardProps) {
   const isEscenario = useFiscalVariant() === 'escenario'
   const [hasOwnedHome, setHasOwnedHome] = useState<OwnershipAnswer>(() => (
@@ -803,8 +810,8 @@ export function WorkerWealthTaxesCard({
     <section className="wctc" aria-labelledby="wwtc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
-          <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 10</span>
-          <h2 id="wwtc-title">9. Vivienda y coche</h2>
+          {compact ? null : <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 10</span>}
+          <h2 id="wwtc-title" className={compact ? 'esc-sr' : undefined}>9. Vivienda y coche</h2>
           {/* v2: párrafo repetido con la introducción del paso; quitado con aprobación (2026-09-30). */}
           {isEscenario ? null : <p>
             Aquí no pagas por gastar, sino por tener: el <b>IBI</b> (Impuesto sobre Bienes
@@ -815,7 +822,7 @@ export function WorkerWealthTaxesCard({
         </div>
       </header>
 
-      {isEscenario ? (
+      {compact ? null : isEscenario ? (
         <aside className="esc-wt__clocks" role="note" aria-labelledby="esc-wt-clocks">
           <svg viewBox="0 0 200 200" className="esc-wt__clock" aria-hidden="true">
             <circle cx="100" cy="100" r="88" className="esc-wt__ring esc-wt__ring--every" />
