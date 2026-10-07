@@ -383,6 +383,7 @@ y `/resumen` tras la extraccion de `DashboardSidebar`.
 
 ### Frontend e infraestructura
 
+- Auditoria de retencion v2 en `ai/rediseno-calculadora/03-retencion-v2.md`: recorrido actual revisado en navegador, propuestas priorizadas y plan de medicion. Pendiente elegir cambios: repaso voluntario sin bloquear avance, filtro de relevancia en paso 5 y cierre con ticket fiscal. Solo analisis; la aplicacion no cambia en esta sesion.
 - Vercel Web Analytics esta montado en `src/main.tsx` con `@vercel/analytics/react`
   (Vite, no Next). Hay que tenerlo activado en el panel del proyecto de Vercel.
 - Al reorganizar componentes: separar los reutilizables, mantener tokens compartidos y evitar
