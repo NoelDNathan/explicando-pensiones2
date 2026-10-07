@@ -12,11 +12,13 @@ import {
   WorkerCalculationSourcesCard,
   WorkerContributionLimitsCard,
   WorkerFinalSummaryCard,
+  FISCAL_SOURCES_STEP_ID,
+  KNOWLEDGE_CHECK_EMBED_ID,
   WorkerFiscalStepsCard,
   WorkerFiscalSummaryCard,
-  WorkerIrpfRegionComparison,
   WorkerKnowledgeCheckCard,
-  WorkerStatsConsent,
+  isKnowledgeSectionResolved,
+  normalizeWorkerStepId,
   WorkerIrpfTranchesCard,
   WorkerPersonalReductionsCard,
   WorkerSalaryBaseCard,
@@ -427,7 +429,10 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
   const [wealthTaxes, setWealthTaxes] = useState<WealthTaxesResult | null>(savedScenario.wealthTaxes)
   const [wealthTaxesDraft, setWealthTaxesDraft] =
     useState<WealthTaxesDraft | null>(savedScenario.wealthTaxesDraft)
-  const [activeWorkerStepId, setActiveWorkerStepId] = useState(savedScenario.activeWorkerStepId)
+  const [activeWorkerStepId, setActiveWorkerStepId] = useState(
+    normalizeWorkerStepId(savedScenario.activeWorkerStepId),
+  )
+  const [quizNudge, setQuizNudge] = useState(0)
 
   /* Sube cada vez que se carga un escenario de fuera; se usa como `key` para
    * remontar las tarjetas, que solo leen sus props `initial*` al montarse. */
@@ -550,7 +555,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
     setConsumptionTaxesDraft(next.consumptionTaxesDraft)
     setWealthTaxes(next.wealthTaxes)
     setWealthTaxesDraft(next.wealthTaxesDraft)
-    setActiveWorkerStepId(next.activeWorkerStepId)
+    setActiveWorkerStepId(normalizeWorkerStepId(next.activeWorkerStepId))
     setScenarioEpoch((epoch) => epoch + 1)
   }, [])
 
@@ -1237,6 +1242,17 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
     contractType,
   }), [contractType, contributionRates, personalAdjustments, result.contributionBase, result.grossSalaryAnnual, result.irpf, result.netSalary, salary, salaryComplements, socialContributions])
 
+  useEffect(() => {
+    setQuizNudge(0)
+  }, [activeWorkerStepId])
+
+  const handleBeforeNext = useCallback(() => {
+    if (isKnowledgeSectionResolved(activeWorkerStepId)) return true
+    setQuizNudge((count) => count + 1)
+    document.getElementById(KNOWLEDGE_CHECK_EMBED_ID)?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    return false
+  }, [activeWorkerStepId])
+
   const activeWorkerStepCard = (() => {
     switch (activeWorkerStepId) {
       case 0:
@@ -1305,7 +1321,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
                   : 'deductions-benefits'
             }
             stepNumber={activeWorkerStepId}
-            totalSteps={12}
+            totalSteps={10}
             initialChildren={selectedChildren}
             initialAscendants={selectedAscendants}
             initialDisabilityPercent={disability === 'none' ? 0 : disability === '33_64' ? 33 : 65}
@@ -1366,13 +1382,6 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
               onRegionChange={setRegion}
               onResultChange={handleIrpfResultChange}
             />
-            {taxYear !== '2005' && (
-              <WorkerIrpfRegionComparison
-                regions={regionOptions}
-                selectedRegion={result.effectiveRegion}
-                currentSalary={result.grossSalaryAnnual}
-              />
-            )}
           </div>
         )
       }
@@ -1411,11 +1420,8 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
               onGoToWealthStep={() => setActiveWorkerStepId(9)}
               onContinue={() => setActiveWorkerStepId(12)}
             />
-            <WorkerStatsConsent />
           </div>
         )
-      case 11:
-        return <WorkerKnowledgeCheckCard onGoToStep={setActiveWorkerStepId} nextStepId={12} />
       case 12:
         return <WorkerCalculationSourcesCard year={Number(taxYear)} items={calculationSources} />
       default:
@@ -1538,6 +1544,7 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
             activeStepId={activeWorkerStepId}
             onStepChange={setActiveWorkerStepId}
             payrollLiveData={payrollLiveData}
+            onBeforeNext={handleBeforeNext}
           />
         ) : null}
 
@@ -1547,8 +1554,33 @@ export function FiscalWorkerDashboard({ variant = 'clasica' }: { variant?: Fisca
               escenario nuevo. */}
           <div className="fwd-worker-card" key={scenarioEpoch}>
             {activeWorkerStepCard}
+            <WorkerKnowledgeCheckCard
+              embedStepId={activeWorkerStepId}
+              onGoToStep={setActiveWorkerStepId}
+              nextStepId={activeWorkerStepId >= 10 ? FISCAL_SOURCES_STEP_ID : activeWorkerStepId + 1}
+              nudge={quizNudge}
+            />
           </div>
         </section>
+
+        {activeWorkerStepId === 0 ? (
+          <nav
+            className={
+              variant === 'escenario'
+                ? 'esc-step__nav esc-step__nav--sources-only'
+                : 'fwd-sources-bar'
+            }
+            aria-label="Acceso a fuentes del cálculo"
+          >
+            <button
+              type="button"
+              className={variant === 'escenario' ? 'esc-step__sources' : 'fwd-sources-bar__link'}
+              onClick={() => setActiveWorkerStepId(FISCAL_SOURCES_STEP_ID)}
+            >
+              Fuentes del cálculo
+            </button>
+          </nav>
+        ) : null}
 
         <p className="fwd-legal">
           <a href="/privacidad">Términos y privacidad</a>

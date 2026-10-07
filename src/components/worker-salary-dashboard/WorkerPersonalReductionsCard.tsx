@@ -33,7 +33,7 @@ import { getRegionDeductionLink } from "./regionDeductionLinks";
 import "./Irpf2025StructuredAdjustmentsForm.css";
 import "./WorkerPersonalReductionsCard.css";
 import { useFiscalVariant } from "../fiscal-worker-dashboard/fiscalVariant";
-import { DLadder, DWaterfall, type DChainStep } from "./escenario/EscenarioParts";
+import { DLadder, type DChainStep } from "./escenario/EscenarioParts";
 import "./escenario/EscenarioForms.css";
 
 export type MaritalStatus = "single" | "married" | "divorced" | "widowed";
@@ -1055,7 +1055,7 @@ function useStickyBarHeight(enabled: boolean) {
 export function WorkerPersonalReductionsCard({
   focus = "reductions",
   stepNumber = 5,
-  totalSteps = 12,
+  totalSteps = 10,
   initialChildren = 1,
   initialDisabilityPercent = 0,
   initialMaritalStatus = "married",
@@ -1459,62 +1459,7 @@ export function WorkerPersonalReductionsCard({
     declaredGrossWorkIncome - inKindExemptApplied + inKindLive.paymentOnAccountAdded,
   );
 
-  // v2 «Escenario»: la cadena se dibuja como cascada (paso 5) o escalera (paso 7).
   const isEscenario = fiscalVariant === "escenario";
-  const reductionSteps: DChainStep[] = [];
-  if (showNetIncomeEquation) {
-    reductionSteps.push({ label: "Salario bruto anual", value: declaredGrossWorkIncome, display: formatEuro(declaredGrossWorkIncome), kind: "total" });
-    if (inKindExemptApplied > 0.5) {
-      reductionSteps.push({ label: "Salario en especie", note: "exenta, paso 4", value: inKindExemptApplied, display: `−${formatEuro(inKindExemptApplied)}`, kind: "minus" });
-      reductionSteps.push({ label: "Bruto que tributa", value: taxableWorkIncome, display: formatEuro(taxableWorkIncome), kind: "sub" });
-    }
-    reductionSteps.push({ label: "Seguridad Social", note: "tu parte, paso 3", value: socialSecurityWorkExpense, display: `−${formatEuro(socialSecurityWorkExpense)}`, kind: "minus", tone: "worker" });
-    reductionSteps.push({
-      label: "Gastos deducibles",
-      note: extraDeductibleExpenses > 0
-        ? `${formatEuroRounded(generalOtherExpenses)} fijos + ${formatEuroRounded(extraDeductibleExpenses)} tuyos`
-        : "iguales para todo el mundo",
-      value: otherDeductibleWorkExpenses,
-      display: `−${formatEuro(otherDeductibleWorkExpenses)}`,
-      kind: "minus",
-      tone: "company",
-    });
-  }
-  reductionSteps.push({ label: "Rendimiento neto del trabajo", value: explainedNetWorkIncome, display: formatEuro(explainedNetWorkIncome), kind: "sub", tone: "blue" });
-  if (showWorkReductionStep) {
-    reductionSteps.push({
-      label: "Reducción por rendimientos del trabajo",
-      note: workReductionStatus === "pending"
-        ? "confirma otras rentas"
-        : workReductionStatus === "over-threshold"
-          ? `otras rentas > ${formatEuroRounded(WORK_BENEFITS_OTHER_INCOME_LIMIT_EUR)}`
-          : undefined,
-      value: workReductionStatus === "applied" ? workReductionApplied : 0,
-      display: workReductionStatus === "applied" ? `− ${formatEuro(workReductionApplied)}` : workReductionStatus === "pending" ? "Pendiente" : "No aplica",
-      kind: "minus",
-    });
-  }
-  if (showBaseReductionStep) {
-    reductionSteps.push({ label: "Reducciones de base", value: displayedBaseReductions, display: `−${formatEuro(displayedBaseReductions)}`, kind: "minus" });
-  }
-  if (!showChainSteps) {
-    reductionSteps.push({
-      label: "Reducciones de base",
-      note: extraDeductibleExpenses > 0
-        ? `tus ${formatEuroRounded(extraDeductibleExpenses)} de gastos ya restan en el rendimiento neto`
-        : "no tienes ninguna",
-      value: 0,
-      display: `−${formatEuro(0)}`,
-      kind: "minus",
-    });
-  }
-  reductionSteps.push({
-    label: "Base liquidable",
-    note: !showChainSteps ? "sin reducciones: es tu rendimiento neto del trabajo" : undefined,
-    value: explainedTaxableBase,
-    display: formatEuro(explainedTaxableBase),
-    kind: "result",
-  });
   const deductionSteps: DChainStep[] = [
     { label: "Cuota íntegra", value: 0, display: formatEuro(grossQuota || explainedQuotaBefore + familyMinimumQuota), kind: "total" },
     { label: "Mínimo personal y familiar", note: "deja sin pagar la cuota de esa parte de renta; el detalle está en el paso 6", value: 0, display: `− ${formatEuro(familyMinimumQuota)}`, kind: "minus", tone: "blue" },
@@ -1560,25 +1505,6 @@ export function WorkerPersonalReductionsCard({
 
       {showReductionsSection ? (
         <>
-          {isEscenario ? (
-            <section className="esc-pr__cascade" aria-label="Cómo cambian la base y el IRPF" aria-live="polite">
-              <DWaterfall steps={reductionSteps} label={`De tu salario bruto a tu base liquidable de ${formatEuro(explainedTaxableBase)}`} />
-              <div className="d-panel esc-pr__minimum">
-                <span className="d-lab">Mínimo personal y familiar</span>
-                <strong className="d-fig d-fig-s d-blue">{formatEuro(appliedFamilyMinimum)}</strong>
-                <span className="d-note">
-                  {appliedRegionalFamilyMinimum > 0
-                    ? `${formatEuro(appliedRegionalFamilyMinimum)} en la escala autonómica`
-                    : "no resta base · se aplica en la cuota"}
-                </span>
-                {lowWorkIncomeDeductionApplied > 0 ? (
-                  <span className="d-note">
-                    Deducción por rentas del trabajo bajas: − {formatEuro(lowWorkIncomeDeductionApplied)} en la cuota (paso 6)
-                  </span>
-                ) : null}
-              </div>
-            </section>
-          ) : null}
           <section className="wprc-net-income" aria-labelledby="wprc-net-income-title">
             <header className="wprc-net-income__head">
               <span className="wprc-net-income__num" aria-hidden="true">1</span>
@@ -1717,9 +1643,8 @@ export function WorkerPersonalReductionsCard({
             />
           ) : null}
           {/*
-            * Se muestra siempre: cuando el sueldo deja la reduccion fuera de
-            * rango el propio panel lo dice en cabecera, y sigue explicando como
-            * afecta a las rentas mas bajas.
+            * Resumen plegado por defecto; la explicacion larga (simulador, graficos)
+            * se abre al tocar. Fuera de rango el resumen lo indica sin abrir el bloque.
             */}
           <WorkIncomeReductionExplainer
             variant="embedded"

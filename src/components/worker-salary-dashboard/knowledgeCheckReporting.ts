@@ -1,5 +1,5 @@
 /*
- * Envio anonimo de los resultados del paso 11 «Comprueba lo aprendido».
+ * Envio anonimo de los resultados de «Comprueba lo aprendido» (al final de cada paso).
  *
  * Que se envia: solo el resultado del cuestionario (aciertos por apartado y las
  * preguntas marcadas como mal explicadas). Nunca el salario, la comunidad, la

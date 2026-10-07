@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import atEpParams2025Json from '../../../data/processed/fiscal/2026-07-12_boe-tarifa-at-ep-2025-seleccion.json'
 import meiEvolutionJson from '../../../data/processed/fiscal/2026-07-12_mei-evolucion-programada.json'
@@ -439,6 +439,35 @@ function ContributionRows<Key extends string>({
   )
 }
 
+function EscNotePanel({
+  title,
+  children,
+}: {
+  title: ReactNode
+  children: ReactNode
+}) {
+  const [open, setOpen] = useState(false)
+  const panelId = useId()
+  const titleId = useId()
+  return (
+    <section className={open ? 'esc-panel is-open' : 'esc-panel'} aria-labelledby={titleId}>
+      <button
+        type="button"
+        className="esc-panel__trigger"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen(!open)}
+      >
+        <strong id={titleId} className="esc-panel__title">{title}</strong>
+        <span className="esc-panel__sign" aria-hidden="true">{open ? '−' : '+'}</span>
+      </button>
+      <div id={panelId} className="esc-panel__body" hidden={!open}>
+        {children}
+      </div>
+    </section>
+  )
+}
+
 export function WorkerSocialContributionsCard({
   grossSalaryAnnual = 37_500,
   grossSalaryMonthly = grossSalaryAnnual / 12,
@@ -777,8 +806,9 @@ export function WorkerSocialContributionsCard({
         </div>
 
         <div className="esc-wscc__panels">
-          <section className="esc-panel" aria-label="MEI">
-            <strong className="esc-panel__title">MEI 2025: {formatSchedulePercent(meiCurrentScheduleEntry.total_percent)} total</strong>
+          <EscNotePanel
+            title={<>MEI 2025: {formatSchedulePercent(meiCurrentScheduleEntry.total_percent)} total</>}
+          >
             <p>Cotización adicional para reforzar las pensiones públicas. Sube 0,1 puntos porcentuales al año hasta 2030.</p>
             <EscStairs columns={meiColumns} />
             <table className="esc-table">
@@ -845,10 +875,11 @@ export function WorkerSocialContributionsCard({
             >
               {meiNoteExpanded ? 'Ver menos' : 'Ver más detalle'}
             </button>
-          </section>
+          </EscNotePanel>
 
-          <section className="esc-panel" aria-label="AT/EP">
-            <strong className="esc-panel__title">AT/EP 2025: {formatPercent(selectedAtEpRate)}</strong>
+          <EscNotePanel
+            title={<>AT/EP 2025: {formatPercent(selectedAtEpRate)}</>}
+          >
             <EscNeedle value={selectedAtEpRate * 100} min={1} max={7} minLabel="1 %" maxLabel="7 %" />
             <p>
               AT/EP es como un seguro que paga la empresa para proteger al trabajador frente a accidentes o
@@ -877,7 +908,7 @@ export function WorkerSocialContributionsCard({
               base de contingencias profesionales.
             </p>
             {selectedAtEpCategory.note ? <em>{selectedAtEpCategory.note}</em> : null}
-          </section>
+          </EscNotePanel>
         </div>
 
         <section className="esc-wscc__summary" aria-labelledby="esc-wscc-summary">

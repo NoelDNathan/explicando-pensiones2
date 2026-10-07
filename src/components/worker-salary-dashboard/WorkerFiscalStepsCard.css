@@ -95,6 +95,36 @@
   max-width: 100%;
 }
 
+.wfsc-sources-link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fiscal-blue-ink);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.wfsc-sources-link:hover:not(:disabled) {
+  color: var(--fiscal-ink);
+}
+
+.wfsc-sources-link.is-current {
+  color: var(--fiscal-ink);
+  text-decoration: none;
+  cursor: default;
+}
+
+.wfsc-sources-link:focus-visible {
+  outline: 2px solid var(--fiscal-blue);
+  outline-offset: 2px;
+}
+
 .wfsc-nav {
   z-index: 3;
   display: inline-flex;

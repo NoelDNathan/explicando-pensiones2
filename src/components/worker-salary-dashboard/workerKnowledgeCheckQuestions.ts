@@ -1,12 +1,12 @@
 /*
- * Banco de preguntas del paso «Comprueba lo aprendido».
+ * Banco de preguntas embebidas al final de cada paso didáctico.
  *
  * Reglas del cuestionario:
  * - Ninguna pregunta se responde escribiendo: todo es clic, seleccion, orden,
  *   emparejado, clasificacion o deslizador. Ordenar y emparejar se resuelven
  *   arrastrando (con alternativa de flechas y de clic para teclado y raton).
- * - Cada apartado apunta al paso del recorrido que lo explica (`stepId`), para
- *   poder volver a repasarlo desde la correccion.
+ * - Cada apartado apunta al paso del recorrido que lo explica (`stepId`) y se
+ *   muestra al cerrar ese paso, no en una pantalla aparte.
  * - Los datos numericos salen de los mismos parametros que usa el motor 2025
  *   (Orden PJC/178/2025 para cotizacion, AEAT para IRPF e IVA).
  */
@@ -694,3 +694,7 @@ export const KNOWLEDGE_CHECK_TOTAL_QUESTIONS = KNOWLEDGE_CHECK_SECTIONS.reduce(
   (total, section) => total + section.questions.length,
   0,
 )
+
+export function getKnowledgeSectionForStep(stepId: number) {
+  return KNOWLEDGE_CHECK_SECTIONS.find((section) => section.stepId === stepId)
+}

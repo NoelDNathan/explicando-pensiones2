@@ -803,7 +803,7 @@ export function WorkerWealthTaxesCard({
     <section className="wctc" aria-labelledby="wwtc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
-          <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 12</span>
+          <span className="wctc-step"><span aria-hidden="true" />Paso 9 de 10</span>
           <h2 id="wwtc-title">9. Vivienda y coche</h2>
           {/* v2: párrafo repetido con la introducción del paso; quitado con aprobación (2026-09-30). */}
           {isEscenario ? null : <p>

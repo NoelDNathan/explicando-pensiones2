@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-10-03
+Fecha: 2026-10-07
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -14,7 +14,7 @@ Aplicacion React + TypeScript + Vite, sin backend. Rutas en `src/App.tsx`:
 
 | Ruta | Estado |
 | --- | --- |
-| `/calculadora-fiscal` | La pieza principal. Recorrido de 13 pasos sobre datasets trazables. |
+| `/calculadora-fiscal` | La pieza principal. Recorrido de 10 pasos didácticos + fuentes, sobre datasets trazables. |
 | `/poblacion` | Piramide poblacional observada 1975-2025 y modelizada 2026-2070. |
 | `/gasto-sanitario` | Perfil de gasto sanitario por edad y sexo. |
 | `/resumen` | **Prototipo.** Los datos estan escritos a mano en el componente. |
@@ -25,11 +25,13 @@ Aplicacion React + TypeScript + Vite, sin backend. Rutas en `src/App.tsx`:
 
 ### Calculadora fiscal
 
-Paso 0 de entrada mas 13 pasos: base real, limites de cotizacion, cotizaciones sociales,
-retribucion en especie, base liquidable, IRPF por tramos, deducciones de cuota, IVA y consumo
-diario, vivienda y coche, resumen del calculo (paso 10, con el permiso opcional de
-estadisticas), comprueba lo aprendido, preguntas frecuentes y
-fuentes del calculo.
+Paso 0 de entrada mas 10 pasos didácticos (1–10) y fuentes (id 12): base real, limites de
+cotizacion, cotizaciones sociales, retribucion en especie, base liquidable, IRPF por tramos,
+deducciones de cuota, IVA y consumo diario, vivienda y coche, y resumen del calculo.
+Las preguntas de «Comprueba lo aprendido» van al final de cada paso 1–10, no en una
+pantalla aparte. El antiguo paso 11 se elimina; un escenario guardado ahí vuelve al 10.
+El componente `WorkerStatsConsent` ya no se muestra en el paso 10 (sigue en `/componentes`
+si hace falta revisarlo).
 
 - Ejercicios conectados: **2025** y **2005** (rama legacy). `TaxYear` solo admite esos dos,
   aunque en `data/` hay paquetes de parametros de 2015 y 2018-2024 listos.
@@ -53,7 +55,9 @@ fuentes del calculo.
   compartido muestra ese caso y avisa de que es ajeno: **no pisa lo que el visitante tuviera
   guardado** hasta que cambie algo. Compartir advierte de que quien reciba el enlace vera el
   salario, la comunidad y la situacion familiar.
-- El paso 13 lee las fuentes de los propios datasets (`fiscalSourceRefs.ts`), no de constantes.
+- «Fuentes del cálculo» (id 12) no es un paso del contador ni de los segmentos superiores:
+  se abre con el enlace fijo de la barra inferior (también en el paso 0). Lee los datasets
+  vía `fiscalSourceRefs.ts`, no constantes sueltas.
 - El simulador de la reduccion del paso 5 muestra una cajita *bruto − especie =
   lo que tributa*. El slider sigue siendo el salario de nomina; la Seguridad Social
   cotiza sobre ese bruto y el IRPF usa el resto.
@@ -100,18 +104,22 @@ movimiento y patrones) para aplicarlo paso a paso.
   y un CSS por paso.
 - Pasos 0, 1, 2, 3, 8, 10, 11 y 12: rama v2 propia en su tarjeta con los mismos estados y textos.
 - Pasos 4, 5, 7 (`WorkerPersonalReductionsCard`), 6 y 9: mismos formularios de la v1 con piezas D
-  añadidas (bifurcación, cascada, escalera de la cuota, monedas, escalones del IRPF, dos relojes)
-  y CSS de la v2.
-- Nómina de ejemplo (pasos 1–6, v1 y v2): `PayrollExamplePanel` / `EscenarioPayroll` (filas del paso encendidas, resto atenuado). A partir del IVA y consumo (paso 8) no se muestra. El líquido total escala con el ancho de la columna de 300 px para que el euro no se salga de la esquina del panel.
+  añadidas (bifurcación, escalera de la cuota en paso 7, monedas, escalones del IRPF, dos relojes)
+  y CSS de la v2. Paso 5 escenario: sin cascada `DWaterfall` arriba (2026-10-07); la ecuación de gastos deducibles sigue en `wprc-net-income`.
+- Nómina de ejemplo retirada de la UI (2026-10-07): ya no se muestra `PayrollExamplePanel` ni `EscenarioPayroll` en v1 ni en la columna de texto v2. Se mantienen `formatPayrollNumber` y el párrafo vivo del paso 3 en la tarjeta de cotizaciones.
+- Comparador IRPF por comunidad retirado del paso 6 (2026-10-07): el componente `WorkerIrpfRegionComparison` sigue en el repo pero no se monta en el recorrido.
 - Pregunta 1 del paso 0: el círculo del deslizador lo pinta la página (no el tirador nativo), porque en Chrome/Edge con la escala de Windows y en Firefox el nativo no sigue al cursor. El del salario sigue siendo el `input` nativo.
 - Cuestionarios v2 (pasos 4, 5, 7): una fila por campo, cifra grande, contador con − y + (solo v2). Paso 9 con «Sí»: cada vivienda o coche es un capítulo sin paneles anidados. Paso 2: escala propia por tramos en el pasillo y selector de grupo en estilo D (trigger en rejilla G | nombre | min/máx, alineación vertical centrada). Las tres cifras del pasillo (mínima / tu base / máxima) se apilan bajo 900 px y el importe escala al ancho de su columna para no taparse; `/ mes` y `/ año` van en un span más pequeño, como en la maqueta. En móvil, «Tu base» va en un panel ancho arriba y mínima/máxima comparten fila debajo; las marcas SMI y salario medio dejan de solaparse.
-- Paso 1 v2: los complementos salariales anuales van **encima** del gráfico de 12/14 pagas (pedido 2026-09-30; en la maqueta Paso01 iban debajo).
+- Paso 1 v2 (2026-10-07): solo el control de salario (deslizador, anual/mensual, 12/14 pagas) junto al texto del paso; sin complementos, base real calculada ni gráfico de pagas en escenario. La v1 conserva complementos y el resultado.
+- Contador escenario (2026-10-07): `esc-step__count` y «Paso X de Y» cuentan 10 pasos didácticos (1–10); «Fuentes del cálculo» (12) no suma en el denominador (en fuentes se muestra `10/10`). El paso 11 de repaso ya no existe: cada apartado del cuestionario se embebe al final de su paso.
 - Paso 2 v2: el selector de grupo y el conmutador Mensual/Anual comparten eje vertical (centro del trigger); más separación entre el círculo G y el nombre.
 - Paso 4 v2: en móvil (bajo 900 px) la cabecera sin número (`--no-num`) ya no hereda la rejilla del hueco de la cifra gigante; el título y el párrafo de «Cotiza entero…» usan todo el ancho (2026-09-30).
 - Paso 4 v2: exención / reducción / deducción como tres filas (término grande en su color, explicación y etiqueta del paso). Paso 3 v2: los tipos del selector AT/EP empiezan bajo el nombre (2026-09-30).
+- Paso 3 v2 (2026-10-07): los paneles MEI y AT/EP van cerrados por defecto y se abren al tocar (desplegable con +/−). El texto, la escalera, la tabla y «Ver más detalle» no cambian.
 - Paso 5 v2: aviso «no aplica» oscuro con franja amarilla (roja si está bloqueada); tramos como lista de filas con el tuyo resaltado; cifras del simulador ajustadas a su celda (enganchado y móvil) y escala del deslizador con tres marcas en móvil; sin anclaje de scroll para que no salte al engancharse (2026-09-30).
+- Paso 5 (reducciones de base): `WorkIncomeReductionExplainer` empotrado arranca plegado con resumen de tu caso; «Ver explicación completa» despliega simulador y gráficos sin cambiar el contenido extendido (2026-10-07).
 - Paso 6 v2: las cuatro cifras del resultado en una línea (2 × 2 con el total arriba en móvil) (2026-09-30).
-- Paso 11 v2: preguntas del repaso sin tarjetas, respuestas en filas grandes y aciertos/errores en verde/rojo con texto (2026-10-01).
+- Preguntas de repaso (2026-10-07): al final de cada paso 1–10, con «Corregir apartado» y «Saltar estas preguntas». «Siguiente» no avanza hasta corregir o saltar: baja hasta el bloque. Mismo estilo v2 (filas grandes, acierto/error en verde/rojo con texto).
 - v2: fichas de hijos y ascendientes con franja por estado; desplegables nativos con chevrón propio y lista con `appearance: base-select` donde se admite (2026-09-30).
 - Paso 7 v2: la moneda amarilla «0,30 € / reducción» escala el texto con el diámetro (`cqi`) para no recortarse en móvil (2026-09-30).
 Pendiente: textos nuevos a aprobar (leyenda de pagas, «deducción/reducción» de las monedas,
@@ -233,7 +241,7 @@ LF; `.gitattributes` impide que git reescriba sus bytes al hacer checkout.
   proyecto (el MEI 2026-2050 no es ninguno de los dos, es proyectado); citar el archivo de
   `data/processed` y su fecha de descarga junto al enlace normativo, que es lo que cierra la
   cadena con `verify:data`; anclar cada bloque a su paso con enlace de vuelta, como hace el
-  paso 11; quitar `DEMO_ITEMS` del valor por defecto de `WorkerCalculationSourcesCard` (dos
+  el paso; quitar `DEMO_ITEMS` del valor por defecto de `WorkerCalculationSourcesCard` (dos
   fuentes inventadas que viajan en el bundle y se renderizan tal cual en `/componentes`); y
   hacer el paso copiable o imprimible como justificante.
 - Antes de mostrar `scope.excluded` y `data_gaps_before_ui_use` de los paquetes fiscales en la

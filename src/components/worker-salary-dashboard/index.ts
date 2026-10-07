@@ -8,8 +8,17 @@ export { WorkerFamilyMinimumExplainer } from './WorkerFamilyMinimumExplainer'
 export { WorkerIrpfRegionComparison } from './WorkerIrpfRegionComparison'
 export { WorkerConsumptionTaxesCard } from './WorkerConsumptionTaxesCard'
 export { WorkerWealthTaxesCard } from './WorkerWealthTaxesCard'
-export { WorkerFiscalStepsCard } from './WorkerFiscalStepsCard'
-export { WorkerKnowledgeCheckCard } from './WorkerKnowledgeCheckCard'
+export {
+  FISCAL_SOURCES_STEP_ID,
+  LEGACY_KNOWLEDGE_CHECK_STEP_ID,
+  WorkerFiscalStepsCard,
+  normalizeWorkerStepId,
+} from './WorkerFiscalStepsCard'
+export {
+  KNOWLEDGE_CHECK_EMBED_ID,
+  WorkerKnowledgeCheckCard,
+  isKnowledgeSectionResolved,
+} from './WorkerKnowledgeCheckCard'
 export { WorkerStatsConsent } from './WorkerPrivacyNotice'
 export type { StatsConsent } from './WorkerPrivacyNotice'
 export { WorkerFinalSummaryCard } from './WorkerFinalSummaryCard'

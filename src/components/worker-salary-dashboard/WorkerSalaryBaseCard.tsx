@@ -4,7 +4,6 @@ import { InfoButton } from '../ui/InfoButton'
 import { SalarySlider } from '../ui/SalarySlider'
 import './WorkerSalaryBaseCard.css'
 import { useFiscalVariant } from '../fiscal-worker-dashboard/fiscalVariant'
-import { DDisclosure, DH2 } from './escenario/EscenarioParts'
 import './escenario/EscenarioSalaryBase.css'
 
 const SALARY_COMPLEMENTS_HELP =
@@ -215,10 +214,6 @@ export function WorkerSalaryBaseCard({
   }
 
   if (variant === 'escenario') {
-    const pays = Number(payCount)
-    const perPay = annualSalary / pays
-    const complementShare = Math.min(40, complementsPercent)
-    const matched = matchingPreset(complementsPercent)
     return (
       <section className="d-page esc-sb" aria-labelledby="wsbc-title">
         <h2 id="wsbc-title" className="esc-sr">Base real</h2>
@@ -247,65 +242,6 @@ export function WorkerSalaryBaseCard({
             </div>
           </div>
         </div>
-
-        <section className="d-grid2" aria-label="Complementos salariales anuales">
-          <div className="d-stack">
-            <label className="d-h3" htmlFor="wsbc-complements">Complementos salariales anuales</label>
-            <div className="esc-sb__chips" role="group" aria-label="Porcentaje de complementos salariales sobre el salario fijo">
-              {AMOUNT_PERCENT_PRESETS.map((preset) => (
-                <button key={preset} type="button" aria-pressed={matched === preset} onClick={() => setComplementsPercent(preset)}>
-                  {percentFormatter.format(preset)} %
-                </button>
-              ))}
-            </div>
-            <label className="d-input esc-sb__euros">
-              <input
-                id="wsbc-complements"
-                type="number"
-                min={0}
-                step={100}
-                inputMode="numeric"
-                value={salaryComplements}
-                onChange={(event) => {
-                  const parsed = Number(event.target.value)
-                  if (Number.isFinite(parsed)) setComplementsPercent(percentFromEuros(Math.max(0, parsed), annualSalary))
-                }}
-                aria-label="Complementos salariales anuales en euros"
-              />
-              <span className="d-lab">EUR/año</span>
-            </label>
-            <DDisclosure label="Qué son los complementos salariales anuales" className="d-ghost">
-              <p className="d-small">{SALARY_COMPLEMENTS_HELP}</p>
-            </DDisclosure>
-          </div>
-          <output className="d-panel" aria-live="polite">
-            <span className="d-lab">Base real calculada</span>
-            <strong className="d-fig d-fig-l d-pop">{formatNumber(realBase)} €</strong>
-          </output>
-        </section>
-
-        <section className="d-stack" aria-labelledby="esc-sb-pays">
-          <DH2 id="esc-sb-pays">÷ {pays} <span className="d-muted">pagas</span></DH2>
-          <div className="esc-sb__pays" aria-hidden="true" style={{ gridTemplateColumns: `repeat(${pays}, minmax(0, 1fr))` }}>
-            {Array.from({ length: pays }, (_, index) => {
-              const extra = pays === 14 && (index === 5 || index === 13)
-              return (
-                <div key={`${pays}-${index}`} className="esc-sb__pay d-growy" style={{ animationDelay: `${index * 50}ms` }}>
-                  <span className="esc-sb__comp" style={{ flexGrow: complementShare }} />
-                  <span className={`esc-sb__base ${extra ? 'd-paint-worker' : 'd-paint-positive-light'}`}>
-                    <span>{perPay.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-          {/* texto nuevo D (aprobado): leyenda del gráfico */}
-          <div className="d-row esc-sb__legend">
-            <span><span className="d-swatch d-paint-positive-light" aria-hidden="true" />Nómina ordinaria</span>
-            {pays === 14 ? <span><span className="d-swatch d-paint-worker" aria-hidden="true" />Paga extra</span> : null}
-            <span><span className="d-swatch d-paint-yellow" aria-hidden="true" />Complementos salariales anuales</span>
-          </div>
-        </section>
       </section>
     )
   }

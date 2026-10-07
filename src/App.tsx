@@ -918,16 +918,15 @@ function ComponentLab() {
           <p className="eyebrow">Componente 26</p>
           <h2 id="worker-knowledge-check-title">Comprueba lo aprendido</h2>
           <p>
-            Paso 11 de la calculadora, opcional y de 10 a 15 minutos: 35 preguntas
-            repartidas en diez apartados, uno por bloque del recorrido. Ninguna se
-            responde escribiendo (opcion unica, opcion multiple, verdadero o falso,
-            ordenar, emparejar, clasificar y deslizador) y cada una se puede marcar
-            como mal explicada.
+            Preguntas al final de cada paso didáctico: el mismo banco, embebido
+            aquí como en el paso 3. Ninguna se responde escribiendo (opción única,
+            opción múltiple, verdadero o falso, ordenar, emparejar, clasificar y
+            deslizador) y cada una se puede marcar como mal explicada.
           </p>
         </div>
 
         <div className="component-preview component-preview--calculadora fwd--soft fwd-worker-card component-preview--dashboard">
-          <WorkerKnowledgeCheckCard />
+          <WorkerKnowledgeCheckCard embedStepId={3} />
         </div>
       </section>
 

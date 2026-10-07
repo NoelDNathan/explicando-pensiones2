@@ -127,6 +127,45 @@
   min-width: 0;
 }
 
+.fwd-sources-bar {
+  position: fixed;
+  z-index: 70;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding: 14px var(--fiscal-space-gutter) 18px;
+  background: linear-gradient(transparent, var(--fiscal-surface) 38%);
+}
+
+.fwd-sources-bar__link {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fiscal-blue-ink);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.fwd-sources-bar__link:hover {
+  color: var(--fiscal-ink);
+}
+
+.fwd-sources-bar__link:focus-visible {
+  outline: 2px solid var(--fiscal-blue);
+  outline-offset: 3px;
+}
+
+.fwd:has(.fwd-sources-bar) .fwd-main {
+  padding-bottom: calc(72px + 28px);
+}
+
 .fwd-legal {
   margin: 2px 0 0;
   font-size: 0.68rem;

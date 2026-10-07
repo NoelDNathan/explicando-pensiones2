@@ -211,7 +211,55 @@
 }
 
 .esc-step__nav--terminal {
-  justify-content: flex-start;
+  justify-content: space-between;
+}
+
+.esc-step__nav-spacer {
+  flex: 1;
+  max-width: 30%;
+}
+
+.esc-step__sources {
+  flex-shrink: 0;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--fiscal-stage-muted);
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--fiscal-stage-line);
+}
+
+.esc-step__sources:hover:not(:disabled) {
+  color: var(--fiscal-stage-text);
+  text-decoration-color: var(--fiscal-stage-positive);
+}
+
+.esc-step__sources.is-current {
+  color: var(--fiscal-stage-positive);
+  text-decoration: none;
+  cursor: default;
+}
+
+.esc-step__sources:focus-visible {
+  outline: 3px solid var(--fiscal-stage-positive);
+  outline-offset: 4px;
+}
+
+.esc-step__nav--sources-only {
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .esc-step__sources {
+    padding: 0 10px;
+    font-size: 0.8125rem;
+  }
 }
 .esc-step__back,
 .esc-step__next {

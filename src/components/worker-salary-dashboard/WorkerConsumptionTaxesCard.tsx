@@ -769,7 +769,7 @@ export function WorkerConsumptionTaxesCard({
     <section className="wctc" aria-labelledby="wctc-title">
       <header className="wctc-header">
         <div className="wctc-heading">
-          <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 12</span>
+          <span className="wctc-step"><span aria-hidden="true" />Paso 8 de 10</span>
           <h2 id="wctc-title">8. IVA y consumo diario</h2>
           <p>Distribuye tu gasto y calcula cuánto pagas al mes en IVA e impuestos especiales.</p>
         </div>

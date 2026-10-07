@@ -1,4 +1,4 @@
-/* Paso 11 (Comprueba lo aprendido) en la v2. Maqueta: Paso11.dc.html */
+/* Comprueba lo aprendido en la v2, embebido al final de cada paso. */
 .esc-kc__numbers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: end; }
 .esc-kc__numbers > span { display: flex; align-items: baseline; gap: 20px; min-width: 0; }
 .esc-kc__numbers .d-fig { font-size: clamp(5rem, 2rem + 13vw, 16.25rem); line-height: 0.8; }
@@ -410,4 +410,29 @@
 }
 @media (min-width: 901px) {
   .esc-kc__col > * { grid-column: 1; }
+}
+
+.fwd.fwd--escenario .wkcc--embed {
+  scroll-margin-top: 24px;
+  margin-top: clamp(48px, 7vw, 88px);
+  padding-top: clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--fiscal-stage-line);
+  border-radius: 24px;
+}
+.fwd.fwd--escenario .wkcc-section__privacy {
+  margin: 12px 0 0;
+  max-width: 42rem;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  line-height: 1.5;
+  color: var(--fiscal-stage-muted);
+}
+@keyframes esc-kc-nudge {
+  0%, 100% { background-color: transparent; }
+  30% { background-color: color-mix(in srgb, var(--fiscal-stage-positive) 14%, transparent); }
+}
+.fwd.fwd--escenario .wkcc--embed.is-nudge {
+  animation: esc-kc-nudge 0.9s var(--fiscal-ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fwd.fwd--escenario .wkcc--embed.is-nudge { animation: none; }
 }

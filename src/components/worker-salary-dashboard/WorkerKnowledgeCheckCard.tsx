@@ -1,17 +1,17 @@
 /*
- * Paso 11 «Comprueba lo aprendido»: repaso opcional del recorrido.
+ * Preguntas de «Comprueba lo aprendido»: van al final de cada paso didáctico.
  *
  * - Ninguna respuesta se escribe: opcion unica, opcion multiple, verdadero o
  *   falso, ordenar, emparejar, clasificar y deslizador.
  * - Ordenar y emparejar se arrastran con eventos de puntero (raton y dedo).
  *   Las flechas de «ordenar» y el clic de «emparejar» siguen ahi como
  *   alternativa accesible con teclado.
- * - Se corrige apartado a apartado y cada pregunta lleva un boton «No me quedo
+ * - Se corrige el apartado del paso y cada pregunta lleva un boton «No me quedo
  *   claro» para senalar que la explicacion del paso no funciona.
- * - El progreso se guarda en el navegador (localStorage). Al terminar, el
- *   resultado se envia solo y de forma anonima (ver `knowledgeCheckReporting`):
- *   aciertos por apartado y preguntas marcadas, nada de la calculadora ni de la
- *   persona.
+ * - El progreso se guarda en el navegador (localStorage). Al completar o
+ *   saltar todos los apartados, el resultado se envia solo y de forma anonima
+ *   (ver `knowledgeCheckReporting`): aciertos por apartado y preguntas
+ *   marcadas, nada de la calculadora ni de la persona.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -36,6 +36,7 @@ import {
   KNOWLEDGE_CHECK_SECTIONS,
   KNOWLEDGE_CHECK_TOTAL_QUESTIONS,
   KNOWLEDGE_CHECK_VERSION,
+  getKnowledgeSectionForStep,
 } from './workerKnowledgeCheckQuestions'
 import type {
   KnowledgeMatchPair,
@@ -51,6 +52,7 @@ import './escenario/D.css'
 import './escenario/EscenarioKnowledge.css'
 
 const STORAGE_KEY = 'fwd-knowledge-check-2025-v2'
+export const KNOWLEDGE_CHECK_EMBED_ID = 'fwd-step-quiz'
 /** Pixeles que hay que recorrer antes de tratar un clic como arrastre. */
 const ORDER_DRAG_THRESHOLD = 4
 
@@ -88,7 +90,9 @@ type StoredState = {
   sectionIndex: number
   answers: AnswerMap
   checkedSections: Record<string, boolean>
+  skippedSections: Record<string, boolean>
   unclear: Record<string, boolean>
+  reportSent: boolean
 }
 
 type Phase = 'intro' | 'quiz' | 'results'
@@ -96,8 +100,12 @@ type Phase = 'intro' | 'quiz' | 'results'
 type WorkerKnowledgeCheckCardProps = {
   /** Salta a otro paso del recorrido (repasar un apartado o continuar). */
   onGoToStep?: (stepId: number) => void
-  /** Paso al que lleva «Saltar este paso» y «Continuar». */
+  /** Paso al que lleva «Saltar estas preguntas» y «Continuar». */
   nextStepId?: number
+  /** Si está definido, solo pinta el apartado de ese paso, al final de la tarjeta. */
+  embedStepId?: number
+  /** Cambia para llamar la atención cuando «Siguiente» llega aquí. */
+  nudge?: number
 }
 
 const percentFormatter = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 })
@@ -195,20 +203,47 @@ function readStoredState(): StoredState | null {
       sectionIndex: typeof parsed.sectionIndex === 'number' ? parsed.sectionIndex : 0,
       answers: (parsed.answers ?? {}) as AnswerMap,
       checkedSections: parsed.checkedSections ?? {},
+      skippedSections: parsed.skippedSections ?? {},
       unclear: parsed.unclear ?? {},
+      reportSent: parsed.reportSent === true,
     }
   } catch {
     return null
   }
 }
 
-export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: WorkerKnowledgeCheckCardProps) {
+function writeStoredState(payload: StoredState) {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+  } catch {
+    /* almacenamiento no disponible: el repaso sigue funcionando en memoria */
+  }
+}
+
+export function isKnowledgeSectionResolved(stepId: number) {
+  const section = getKnowledgeSectionForStep(stepId)
+  if (!section) return true
+  const stored = readStoredState()
+  if (!stored) return false
+  return Boolean(stored.checkedSections[section.id] || stored.skippedSections[section.id])
+}
+
+export function WorkerKnowledgeCheckCard({
+  onGoToStep,
+  nextStepId = 10,
+  embedStepId,
+  nudge = 0,
+}: WorkerKnowledgeCheckCardProps) {
   const stored = useMemo(() => readStoredState(), [])
   const isEscenario = useFiscalVariant() === 'escenario'
+  const isEmbed = embedStepId != null
+  const embedSection = isEmbed ? getKnowledgeSectionForStep(embedStepId) : undefined
   const [phase, setPhase] = useState<Phase>(stored?.phase ?? 'intro')
   const [sectionIndex, setSectionIndex] = useState(stored?.sectionIndex ?? 0)
   const [answers, setAnswers] = useState<AnswerMap>(stored?.answers ?? {})
   const [checkedSections, setCheckedSections] = useState<Record<string, boolean>>(stored?.checkedSections ?? {})
+  const [skippedSections, setSkippedSections] = useState<Record<string, boolean>>(stored?.skippedSections ?? {})
   const [unclear, setUnclear] = useState<Record<string, boolean>>(stored?.unclear ?? {})
   const [missingWarning, setMissingWarning] = useState(false)
   const [activeMatchLeft, setActiveMatchLeft] = useState<Record<string, string | null>>({})
@@ -224,20 +259,43 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
     x: number
     y: number
   } | null>(null)
-  const [reportStatus, setReportStatus] = useState<ReportStatus>(stored?.phase === 'results' ? 'queued' : 'idle')
+  const [reportStatus, setReportStatus] = useState<ReportStatus>(
+    stored?.reportSent ? 'sent' : stored?.phase === 'results' ? 'queued' : 'idle',
+  )
+  const reportSentRef = useRef(stored?.reportSent === true)
+
+  const section = embedSection
+    ?? KNOWLEDGE_CHECK_SECTIONS[Math.min(sectionIndex, KNOWLEDGE_CHECK_SECTIONS.length - 1)]
+  const isSectionChecked = Boolean(checkedSections[section.id])
+  const isSectionSkipped = Boolean(skippedSections[section.id])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      const payload: StoredState = { phase, sectionIndex, answers, checkedSections, unclear }
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
-    } catch {
-      /* almacenamiento no disponible: el repaso sigue funcionando en memoria */
+    const payload: StoredState = {
+      phase,
+      sectionIndex,
+      answers,
+      checkedSections,
+      skippedSections,
+      unclear,
+      reportSent: reportSentRef.current,
     }
-  }, [phase, sectionIndex, answers, checkedSections, unclear])
+    writeStoredState(payload)
+  }, [phase, sectionIndex, answers, checkedSections, skippedSections, unclear])
 
-  const section = KNOWLEDGE_CHECK_SECTIONS[Math.min(sectionIndex, KNOWLEDGE_CHECK_SECTIONS.length - 1)]
-  const isSectionChecked = Boolean(checkedSections[section.id])
+  useEffect(() => {
+    if (!isEmbed || nudge < 1) return
+    const el = document.getElementById(KNOWLEDGE_CHECK_EMBED_ID)
+    if (!el) return
+    el.classList.remove('is-nudge')
+    void el.offsetWidth
+    el.classList.add('is-nudge')
+  }, [isEmbed, nudge])
+
+  useEffect(() => {
+    setMissingWarning(false)
+    setDrag(null)
+    setActiveMatchLeft({})
+  }, [embedStepId])
 
   const setAnswer = useCallback((questionId: string, value: AnswerValue) => {
     setAnswers((current) => ({ ...current, [questionId]: value }))
@@ -267,16 +325,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
 
   const pendingInSection = section.questions.filter((question) => !isAnswered(question, answers[question.id])).length
 
-  const handleCheckSection = () => {
-    if (pendingInSection > 0) {
-      setMissingWarning(true)
-      return
-    }
-    setMissingWarning(false)
-    setCheckedSections((current) => ({ ...current, [section.id]: true }))
-  }
-
-  const buildReport = (): KnowledgeCheckReport => ({
+  const buildReport = useCallback((): KnowledgeCheckReport => ({
     quizVersion: KNOWLEDGE_CHECK_VERSION,
     completedAt: new Date().toISOString(),
     score: totalScore,
@@ -288,18 +337,56 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
       total: item.questions.length,
       unclearQuestionIds: item.questions.filter((question) => unclear[question.id]).map((question) => question.id),
     })),
-  })
+  }), [scoreOf, totalScore, unclear])
 
-  /** Cerrar el repaso envia el resultado solo, una vez y de forma anonima. */
-  const finishQuiz = () => {
-    setPhase('results')
-    setReportStatus('sending')
-    sendKnowledgeCheckReport(buildReport()).then(setReportStatus)
+  const maybeSendReport = useCallback(
+    (nextChecked: Record<string, boolean>, nextSkipped: Record<string, boolean>) => {
+      if (reportSentRef.current) return
+      const anyChecked = KNOWLEDGE_CHECK_SECTIONS.some((item) => nextChecked[item.id])
+      const allResolved = KNOWLEDGE_CHECK_SECTIONS.every(
+        (item) => nextChecked[item.id] || nextSkipped[item.id],
+      )
+      if (!anyChecked || !allResolved) return
+      reportSentRef.current = true
+      setPhase('results')
+      setReportStatus('sending')
+      sendKnowledgeCheckReport(buildReport()).then(setReportStatus)
+    },
+    [buildReport],
+  )
+
+  const handleCheckSection = () => {
+    if (pendingInSection > 0) {
+      setMissingWarning(true)
+      return
+    }
+    setMissingWarning(false)
+    const nextChecked = { ...checkedSections, [section.id]: true }
+    const nextSkipped = { ...skippedSections, [section.id]: false }
+    setCheckedSections(nextChecked)
+    setSkippedSections(nextSkipped)
+    maybeSendReport(nextChecked, nextSkipped)
+  }
+
+  const handleSkipSection = () => {
+    const nextSkipped = { ...skippedSections, [section.id]: true }
+    setSkippedSections(nextSkipped)
+    setMissingWarning(false)
+    maybeSendReport(checkedSections, nextSkipped)
+    if (isEmbed) onGoToStep?.(nextStepId)
   }
 
   const handleNextSection = () => {
+    if (isEmbed) {
+      onGoToStep?.(nextStepId)
+      return
+    }
     if (sectionIndex >= KNOWLEDGE_CHECK_SECTIONS.length - 1) {
-      finishQuiz()
+      maybeSendReport(
+        { ...checkedSections, [section.id]: true },
+        skippedSections,
+      )
+      setPhase('results')
       return
     }
     setSectionIndex(sectionIndex + 1)
@@ -307,8 +394,10 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
   }
 
   const handleRestart = () => {
+    reportSentRef.current = false
     setAnswers({})
     setCheckedSections({})
+    setSkippedSections({})
     setUnclear({})
     setSectionIndex(0)
     setMissingWarning(false)
@@ -809,7 +898,9 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
 
   const progressPercent = Math.round((answeredCount / KNOWLEDGE_CHECK_TOTAL_QUESTIONS) * 100)
 
-  if (isEscenario && phase === 'intro') {
+  if (isEmbed && !embedSection) return null
+
+  if (isEscenario && phase === 'intro' && !isEmbed) {
     const maxQuestions = Math.max(...KNOWLEDGE_CHECK_SECTIONS.map((item) => item.questions.length), 1)
     return (
       <section className="d-page esc-kc" aria-labelledby="wkcc-title">
@@ -848,7 +939,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
             Empezar el repaso
             <ArrowRight size={22} aria-hidden="true" />
           </button>
-          <button type="button" className="d-ghost esc-kc__skip" onClick={() => onGoToStep?.(nextStepId)}>Saltar este paso</button>
+          <button type="button" className="d-ghost esc-kc__skip" onClick={() => onGoToStep?.(nextStepId)}>Saltar estas preguntas</button>
         </div>
         {answeredCount > 0 ? (
           <p className="d-note d-tight">
@@ -921,7 +1012,13 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
   }
 
   return (
-    <section className={`wkcc${drag ? ' is-dragging' : ''}`} aria-labelledby="wkcc-title">
+    <section
+      id={isEmbed ? KNOWLEDGE_CHECK_EMBED_ID : undefined}
+      className={`wkcc${isEmbed ? ' wkcc--embed' : ''}${nudge ? ' is-nudge' : ''}${drag ? ' is-dragging' : ''}`}
+      aria-labelledby="wkcc-title"
+      data-nudge={nudge || undefined}
+    >
+      {isEmbed ? null : (
       <header className="wkcc-header">
         <div className="wkcc-heading">
           <span className="wkcc-step">
@@ -949,8 +1046,9 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
           </span>
         </div>
       </header>
+      )}
 
-      {phase === 'intro' ? (
+      {!isEmbed && phase === 'intro' ? (
         <div className="wkcc-intro">
           <div className="wkcc-intro__main">
             <p className="wkcc-intro__lead">
@@ -1009,7 +1107,7 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                 Empezar el repaso
               </button>
               <button type="button" className="wkcc-ghost" onClick={() => onGoToStep?.(nextStepId)}>
-                Saltar este paso
+                Saltar estas preguntas
                 <ArrowRight size={16} aria-hidden="true" />
               </button>
             </div>
@@ -1036,8 +1134,9 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
         </div>
       ) : null}
 
-      {phase === 'quiz' ? (
+      {isEmbed || phase === 'quiz' ? (
         <div className="wkcc-quiz">
+          {isEmbed ? null : (
           <nav className="wkcc-rail" aria-label="Apartados del repaso">
             {KNOWLEDGE_CHECK_SECTIONS.map((item, index) => {
               const done = Boolean(checkedSections[item.id])
@@ -1061,28 +1160,42 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
               )
             })}
           </nav>
+          )}
 
-          <div className="wkcc-progress" aria-hidden="true">
-            <span style={{ width: `${progressPercent}%` }} />
-          </div>
-          <p className="wkcc-progress__label">
-            {answeredCount} de {KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas respondidas
-          </p>
+          {isEmbed ? null : (
+            <>
+              <div className="wkcc-progress" aria-hidden="true">
+                <span style={{ width: `${progressPercent}%` }} />
+              </div>
+              <p className="wkcc-progress__label">
+                {answeredCount} de {KNOWLEDGE_CHECK_TOTAL_QUESTIONS} preguntas respondidas
+              </p>
+            </>
+          )}
 
           <div className="wkcc-section">
             <header className="wkcc-section__head">
               <div>
                 <p className="wkcc-section__eyebrow">
-                  Apartado {sectionIndex + 1} de {KNOWLEDGE_CHECK_SECTIONS.length} · se explica en el paso{' '}
-                  {section.stepId}
+                  {isEmbed
+                    ? 'Comprueba lo aprendido'
+                    : `Apartado ${sectionIndex + 1} de ${KNOWLEDGE_CHECK_SECTIONS.length} · se explica en el paso ${section.stepId}`}
                 </p>
-                <h3>{section.title}</h3>
+                <h3 id={isEmbed ? 'wkcc-title' : undefined}>{section.title}</h3>
                 <p className="wkcc-section__subtitle">{section.subtitle}</p>
+                {isEmbed ? (
+                  <p className="wkcc-section__privacy">
+                    Tus respuestas se envían de forma anónima, solo para saber qué apartados explicamos mal. No se envía tu
+                    información personal ni ninguna cifra de la calculadora.
+                  </p>
+                ) : null}
               </div>
-              <button type="button" className="wkcc-ghost wkcc-ghost--small" onClick={() => onGoToStep?.(section.stepId)}>
-                Repasar el paso {section.stepId}
-                <ArrowRight size={15} aria-hidden="true" />
-              </button>
+              {isEmbed ? null : (
+                <button type="button" className="wkcc-ghost wkcc-ghost--small" onClick={() => onGoToStep?.(section.stepId)}>
+                  Repasar el paso {section.stepId}
+                  <ArrowRight size={15} aria-hidden="true" />
+                </button>
+              )}
             </header>
 
             <div className="wkcc-questions">
@@ -1107,20 +1220,31 @@ export function WorkerKnowledgeCheckCard({ onGoToStep, nextStepId = 12 }: Worker
                     {scoreOf(section)} de {section.questions.length} correctas en este apartado
                   </p>
                   <button type="button" className="wkcc-cta" onClick={handleNextSection}>
-                    {sectionIndex >= KNOWLEDGE_CHECK_SECTIONS.length - 1 ? 'Ver resultados' : 'Siguiente apartado'}
+                    {isEmbed
+                      ? 'Continuar'
+                      : sectionIndex >= KNOWLEDGE_CHECK_SECTIONS.length - 1
+                        ? 'Ver resultados'
+                        : 'Siguiente apartado'}
                     <ArrowRight size={18} aria-hidden="true" />
                   </button>
                 </>
               )}
-              <button type="button" className="wkcc-ghost wkcc-ghost--small" onClick={() => onGoToStep?.(nextStepId)}>
-                Salir del cuestionario
-              </button>
+              {isEmbed && !isSectionChecked && !isSectionSkipped ? (
+                <button type="button" className="wkcc-ghost wkcc-ghost--small" onClick={handleSkipSection}>
+                  Saltar estas preguntas
+                </button>
+              ) : null}
+              {isEmbed ? null : (
+                <button type="button" className="wkcc-ghost wkcc-ghost--small" onClick={() => onGoToStep?.(nextStepId)}>
+                  Salir del cuestionario
+                </button>
+              )}
             </footer>
           </div>
         </div>
       ) : null}
 
-      {phase === 'results' ? (
+      {!isEmbed && phase === 'results' ? (
         <div className="wkcc-results">
           <div className="wkcc-results__score">
             <p className="wkcc-results__eyebrow">Resultado del repaso</p>

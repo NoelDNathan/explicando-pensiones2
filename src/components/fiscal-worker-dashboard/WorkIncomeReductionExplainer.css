@@ -1401,3 +1401,290 @@
 .wir--embedded .wir-kpi strong {
   font-size: 1.3rem;
 }
+
+.wir--embedded.wir--folded .wir-shell {
+  gap: 0;
+}
+
+.wir-compact {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--wir-border-soft);
+  border-radius: var(--fiscal-radius-panel);
+  background: var(--wir-panel);
+  box-shadow: var(--fiscal-shadow-control, var(--wir-panel-shadow));
+}
+
+.wir-compact--applied {
+  border-color: var(--wir-green-line);
+}
+
+.wir-compact--pending {
+  border-color: var(--wir-orange-line);
+}
+
+.wir-compact--blocked {
+  border-color: var(--wir-red-line);
+}
+
+.wir-compact--muted {
+  border-color: var(--wir-border);
+}
+
+.wir-compact__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+  padding: 16px 18px 14px;
+  background: var(--wir-header-bg);
+  border-bottom: 1px solid var(--wir-border-soft);
+}
+
+.wir-compact__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  color: var(--wir-text);
+  background: var(--wir-surface);
+  border: 1px solid var(--wir-border-soft);
+}
+
+.wir-compact--applied .wir-compact__icon {
+  color: var(--wir-green);
+  background: var(--wir-green-tint);
+  border-color: var(--wir-green-line);
+}
+
+.wir-compact--pending .wir-compact__icon {
+  color: var(--wir-orange);
+  background: var(--wir-orange-tint);
+  border-color: var(--wir-orange-line);
+}
+
+.wir-compact--blocked .wir-compact__icon {
+  color: var(--wir-red);
+  background: var(--wir-red-tint);
+  border-color: var(--wir-red-line);
+}
+
+.wir-compact--muted .wir-compact__icon {
+  color: var(--wir-muted);
+  background: var(--wir-muted-tint);
+  border-color: var(--wir-muted-line);
+}
+
+.wir-compact__titles {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 0;
+}
+
+.wir-compact__titles .wir-eyebrow {
+  margin-bottom: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.wir-compact__titles h2 {
+  margin: 0;
+  font-size: clamp(1.02rem, 1.5vw, 1.22rem);
+  line-height: 1.2;
+  color: var(--wir-text);
+}
+
+.wir-compact__pill {
+  align-self: start;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--wir-border-soft);
+  background: var(--wir-surface);
+  color: var(--wir-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wir-compact--applied .wir-compact__pill {
+  color: var(--wir-green);
+  background: var(--wir-green-tint);
+  border-color: var(--wir-green-line);
+}
+
+.wir-compact--pending .wir-compact__pill {
+  color: var(--wir-orange);
+  background: var(--wir-orange-tint);
+  border-color: var(--wir-orange-line);
+}
+
+.wir-compact--blocked .wir-compact__pill {
+  color: var(--wir-red);
+  background: var(--wir-red-tint);
+  border-color: var(--wir-red-line);
+}
+
+.wir-compact__hero {
+  display: grid;
+  gap: 4px;
+  padding: 16px 18px 12px;
+  background: linear-gradient(
+    165deg,
+    var(--wir-green-tint),
+    color-mix(in srgb, var(--wir-panel) 88%, var(--wir-green-tint))
+  );
+  border-bottom: 1px solid var(--wir-border-soft);
+}
+
+.wir-compact__hero-label {
+  color: var(--wir-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.wir-compact__hero-value {
+  color: var(--wir-green);
+  font-size: clamp(1.65rem, 3.2vw, 2.05rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.wir-compact__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 12px 18px 14px;
+  border-bottom: 1px solid var(--wir-border-soft);
+}
+
+.wir-compact__stats > div {
+  display: grid;
+  gap: 4px;
+  padding: 10px 10px 9px;
+  border-radius: var(--fiscal-radius-small);
+  background: var(--wir-surface);
+  border: 1px solid var(--wir-border-soft);
+}
+
+.wir-compact__stats dt {
+  margin: 0;
+  color: var(--wir-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.wir-compact__stats dd {
+  margin: 0;
+  color: var(--wir-text);
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.wir-compact__body {
+  display: grid;
+  gap: 10px;
+  padding: 14px 18px 16px;
+  color: var(--wir-text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.wir-compact__body p {
+  margin: 0;
+}
+
+.wir-compact__muted {
+  padding: 10px 12px;
+  border-radius: var(--fiscal-radius-small);
+  border: 1px solid var(--wir-border-soft);
+  background: var(--wir-surface);
+  color: var(--wir-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.wir-compact__expand,
+.wir-compact__collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 13px 18px;
+  border: 0;
+  border-top: 1px solid var(--wir-border-soft);
+  background: var(--wir-surface);
+  color: var(--wir-blue);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.wir-compact__expand:hover,
+.wir-compact__collapse:hover {
+  background: var(--wir-blue-tint);
+  color: var(--wir-info-text);
+}
+
+.wir-compact__expand:focus-visible,
+.wir-compact__collapse:focus-visible {
+  outline: 2px solid var(--wir-blue);
+  outline-offset: -2px;
+}
+
+.wir-compact__collapse {
+  margin-bottom: 10px;
+  width: auto;
+  border: 1px solid var(--wir-border-soft);
+  border-radius: var(--fiscal-radius-control);
+  background: var(--wir-panel);
+}
+
+.wir-compact__collapse:hover {
+  border-color: var(--wir-blue-line);
+}
+
+@media (max-width: 640px) {
+  .wir-compact__head {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "icon titles"
+      "pill pill";
+  }
+
+  .wir-compact__icon {
+    grid-area: icon;
+  }
+
+  .wir-compact__titles {
+    grid-area: titles;
+  }
+
+  .wir-compact__pill {
+    grid-area: pill;
+    justify-self: start;
+  }
+
+  .wir-compact__stats {
+    grid-template-columns: 1fr;
+  }
+}

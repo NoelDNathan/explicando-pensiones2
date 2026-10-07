@@ -158,9 +158,9 @@
 .esc-panel {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   min-width: 0;
-  padding: clamp(22px, 3vw, 36px);
+  padding: clamp(18px, 2.4vw, 28px) clamp(22px, 3vw, 36px);
   border-radius: var(--fiscal-radius-stage-panel);
   background: var(--fiscal-stage-raised);
   font-size: 1.0625rem;
@@ -170,13 +170,48 @@
 .esc-panel p { margin: 0; }
 .esc-panel strong { color: var(--fiscal-stage-text); }
 .esc-panel em { font-size: 0.875rem; color: var(--fiscal-stage-muted); }
+.esc-panel__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.esc-panel__trigger:focus-visible {
+  outline: 3px solid var(--fiscal-stage-positive);
+  outline-offset: 4px;
+}
 .esc-panel__title {
+  min-width: 0;
   font-family: var(--fiscal-font-display);
   font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
   font-weight: 900;
   font-stretch: 120%;
   line-height: 1.1;
 }
+.esc-panel__sign {
+  flex: 0 0 auto;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--fiscal-stage-positive);
+}
+.esc-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+  animation: esc-unfold var(--fiscal-duration-quick) var(--fiscal-ease-out) both;
+}
+.esc-panel__body[hidden] { display: none; }
 .esc-panel__extra {
   display: flex;
   justify-content: space-between;
@@ -256,6 +291,11 @@
 }
 
 @keyframes esc-unfold { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .esc-panel__body,
+  .esc-panel__more { animation: none; }
+}
 
 /* Los títulos de cada lado llevan su color: gana a la regla general de títulos de tarjeta. */
 .esc-wscc .esc-side-title.esc-tone--worker { color: var(--fiscal-stage-worker); }

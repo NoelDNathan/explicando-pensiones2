@@ -10,6 +10,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle,
   Calculator,
+  ChevronDown,
+  ChevronUp,
   ChevronsDownUp,
   CircleSlash,
   Eye,
@@ -584,6 +586,11 @@ export type WorkIncomeReductionExplainerProps = {
   /** Respuesta del usuario sobre otras rentas: decide si la reduccion aplica. */
   otherNonExemptNonWorkIncome?: number
   otherIncomeKnown?: boolean
+  /**
+   * En `embedded`: empieza con un resumen y el detalle (simulador, gráficos…) se abre al tocar.
+   * En `page` siempre se muestra todo.
+   */
+  collapsible?: boolean
 }
 
 export function WorkIncomeReductionExplainer({
@@ -596,8 +603,11 @@ export function WorkIncomeReductionExplainer({
   regionalMinimum,
   otherNonExemptNonWorkIncome = 0,
   otherIncomeKnown = true,
+  collapsible: collapsibleProp,
 }: WorkIncomeReductionExplainerProps = {}) {
   const embedded = variant === 'embedded'
+  const collapsible = collapsibleProp ?? embedded
+  const [detailOpen, setDetailOpen] = useState(() => !collapsible)
   const inKindExempt = Math.max(0, inKindExemptAnnual)
   // "Tu caso" se calcula siempre con el salario real, aunque quede fuera del
   // rango del simulador; el slider solo controla el escenario que se explora.
@@ -674,9 +684,14 @@ export function WorkIncomeReductionExplainer({
   }, [core.irpf, gross, profile])
 
   // Caso real del usuario, independiente de donde este el slider.
-  const realCore = useMemo(
-    () => computeBaseProfileIrpf2025Detail(realGross, profile).core,
+  const realDetail = useMemo(
+    () => computeBaseProfileIrpf2025Detail(realGross, profile),
     [profile, realGross],
+  )
+  const realCore = realDetail.core
+  const realSavings = useMemo(
+    () => Math.max(0, irpfWithoutWorkReduction(realDetail) - realDetail.core.irpf),
+    [realDetail],
   )
   const reductionWithoutOtherIncome = useMemo(
     () =>
@@ -794,10 +809,161 @@ export function WorkIncomeReductionExplainer({
   const rulerPosition = Math.min(100, (Math.min(basis, REDUCTION_LIMIT) / REDUCTION_LIMIT) * 100)
   const capApplies = core.workReductionApplied < core.workReductionTheoretical - 0.5
   const hasReduction = core.workReductionApplied > 0.5
+  const realHasReduction = realCore.workReductionApplied > 0.5
+  const realActiveTier = realBlocked
+    ? 0
+    : realOutOfRange
+      ? 4
+      : realBasis <= TIER_1_TOP
+        ? 1
+        : realBasis <= TIER_2_TOP
+          ? 2
+          : 3
+  const realReductionPending =
+    collapsible &&
+    !otherIncomeKnown &&
+    !realOutOfRange &&
+    reductionWithoutOtherIncome > 0.5
+  const showDetail = !collapsible || detailOpen
+  const compactTone = realHasReduction
+    ? 'applied'
+    : realReductionPending
+      ? 'pending'
+      : realBlocked
+        ? 'blocked'
+        : 'muted'
+  const compactPill =
+    compactTone === 'applied'
+      ? 'Te aplica'
+      : compactTone === 'pending'
+        ? 'Por confirmar'
+        : compactTone === 'blocked'
+          ? 'Bloqueada'
+          : 'Fuera de rango'
 
   return (
-    <section className={`wir${embedded ? ' wir--embedded' : ''}`} aria-labelledby="wir-title">
+    <section
+      className={`wir${embedded ? ' wir--embedded' : ''}${collapsible && !detailOpen ? ' wir--folded' : ''}`}
+      aria-labelledby="wir-title"
+    >
       <div className="wir-shell">
+        {collapsible && !detailOpen ? (
+          <article className={`wir-compact wir-compact--${compactTone}`}>
+            <header className="wir-compact__head">
+              <div className="wir-compact__icon" aria-hidden="true">
+                {compactTone === 'applied' ? (
+                  <TrendingDown size={22} strokeWidth={2.25} />
+                ) : compactTone === 'pending' ? (
+                  <Info size={22} strokeWidth={2.25} />
+                ) : compactTone === 'blocked' ? (
+                  <TriangleAlert size={22} strokeWidth={2.25} />
+                ) : (
+                  <CircleSlash size={22} strokeWidth={2.25} />
+                )}
+              </div>
+              <div className="wir-compact__titles">
+                <span className="wir-eyebrow">Opcional · art. 20 LIRPF</span>
+                <h2 id="wir-title">Reducción por rendimientos del trabajo</h2>
+              </div>
+              <span className="wir-compact__pill">{compactPill}</span>
+            </header>
+
+            {realHasReduction ? (
+              <>
+                <div className="wir-compact__hero">
+                  <span className="wir-compact__hero-label">Resta de tu base imponible</span>
+                  <strong className="wir-compact__hero-value">
+                    − {euro(realCore.workReductionApplied)}
+                  </strong>
+                </div>
+                <dl className="wir-compact__stats">
+                  <div>
+                    <dt>Tu RNT</dt>
+                    <dd>{euro(realBasis)}</dd>
+                  </div>
+                  <div>
+                    <dt>Tramo</dt>
+                    <dd>{realActiveTier}</dd>
+                  </div>
+                  <div>
+                    <dt>Ahorro en IRPF</dt>
+                    <dd>{euro(realSavings)}</dd>
+                  </div>
+                </dl>
+              </>
+            ) : null}
+
+            <div className="wir-compact__body">
+              {realHasReduction ? (
+                <>
+                  <p>
+                    No es una devolución en metálico: el impuesto se calcula sobre una base más baja.
+                    Con tu salario, eso se traduce en unos <strong>{euro(realSavings)}</strong> menos
+                    de IRPF que si no existiera esta reducción.
+                  </p>
+                  <p className="wir-compact__muted">
+                    Hasta {euro(MAX_REDUCTION)} para los sueldos más bajos; va bajando al subir el
+                    RNT y desaparece por encima de {euro(REDUCTION_LIMIT, 2)}.
+                  </p>
+                </>
+              ) : realReductionPending ? (
+                <p>
+                  Si solo cobras este trabajo, podrían restarte hasta{' '}
+                  <strong>{euro(reductionWithoutOtherIncome)}</strong> de base. Confirma arriba si
+                  tienes otras rentas por encima de {euro(OTHER_INCOME_LIMIT)}: si las hay, no aplica.
+                </p>
+              ) : realBlocked ? (
+                <p>
+                  {otherIncomeKnown ? (
+                    <>
+                      Con {euro(otherNonExemptNonWorkIncome)} de otras rentas superas el umbral de{' '}
+                      {euro(OTHER_INCOME_LIMIT)} y la reducción cae a cero. Con tu bruto de{' '}
+                      {euro(realGross)} te habrían correspondido{' '}
+                      <strong>{euro(reductionWithoutOtherIncome)}</strong> sin esas rentas.
+                    </>
+                  ) : (
+                    <>
+                      Otras rentas por encima de {euro(OTHER_INCOME_LIMIT)} bloquean esta reducción
+                      por completo.
+                    </>
+                  )}
+                </p>
+              ) : (
+                <p>
+                  Tu RNT ({euro(realBasis)}) supera {euro(REDUCTION_LIMIT, 2)}: no te resta nada. Aun
+                  así conviene conocerla: explica sueldos bajos con poco IRPF y la «joroba» de tipos
+                  marginales en rentas medias.
+                </p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="wir-compact__expand"
+              aria-expanded={false}
+              aria-controls="wir-detail"
+              onClick={() => setDetailOpen(true)}
+            >
+              <span>Ver explicación completa</span>
+              <ChevronDown size={18} aria-hidden="true" />
+            </button>
+          </article>
+        ) : null}
+
+        {showDetail ? (
+          <div id="wir-detail">
+            {collapsible ? (
+              <button
+                type="button"
+                className="wir-compact__collapse"
+                aria-expanded={true}
+                aria-controls="wir-detail"
+                onClick={() => setDetailOpen(false)}
+              >
+                <ChevronUp size={18} aria-hidden="true" />
+                <span>Volver al resumen</span>
+              </button>
+            ) : null}
         <header className="wir-header">
           <div>
             <span className="wir-eyebrow">Reducción por rendimientos del trabajo</span>
@@ -1390,6 +1556,8 @@ export function WorkIncomeReductionExplainer({
             </article>
           </div>
         </section>
+          </div>
+        ) : null}
       </div>
     </section>
   )
