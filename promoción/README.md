@@ -4,10 +4,6 @@ El personaje animado **Clara** se guarda en el proyecto de animaciones, en:
 
 `D:\noel\folders\projects\animaciones\personajes\clara\`
 
-La ficha `personaje.json` ya está creada con la descripción de una chica pelirroja con chaqueta amarilla. La pose base `poses/explicando.png` todavía falta: el generador no la produjo en esta ejecución. Para generarla desde una terminal de Windows:
+Ya están creadas las 20 poses de cuerpo entero, con fondo transparente, 9 formas de boca y parpadeo. La pose base está en `poses/explicando.png`. La ficha `personaje.json` contiene la descripción y las posiciones de la boca; la pose `riendo` mantiene los ojos cerrados y no necesita parpadeo.
 
-```powershell
-npm --prefix "D:/noel/folders/projects/animaciones" run nuevo-personaje -- --nombre "Clara" --descripcion "Chica joven adulta de estilo ilustrado limpio para videos explicativos. Pelo pelirrojo visible, chaqueta amarilla, camiseta sencilla clara. Expresión amable y segura, vista frontal de cintura para arriba, brazos y manos en pose natural de explicar. Fondo transparente, sin texto ni objetos." --poses explicando
-```
-
-Cuando aparezca la pose, revisar boca y parpadeo antes de dar el personaje por terminado.
+La revisión visual detectó la boca alta en `encogiendo_hombros` y `triste`; se bajó su posición y se regeneró la hoja. También se comprobó manualmente `riendo`, cuya boca queda alineada pese a que la detección automática no encuentra sus ojos cerrados. Las hojas están en `revision/ajuste_bocas.png` y `revision/parpadeo.png`.

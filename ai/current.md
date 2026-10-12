@@ -428,7 +428,7 @@ y `/resumen` tras la extraccion de `DashboardSidebar`.
 
 ## Promoción
 
-Se creó `promoción/README.md` con la ruta y el comando para generar a Clara, una chica pelirroja con chaqueta amarilla. Su ficha está en el proyecto `D:\noel\folders\projects\animaciones`, pero falta generar `poses/explicando.png` y revisar boca y parpadeo.
+Se creó `promoción/README.md` con la ruta y el comando para generar a Clara, una chica pelirroja con chaqueta amarilla. Su ficha está en el proyecto `D:\noel\folders\projects\animaciones`, con 20 poses, bocas y parpadeo generados. La revisión manual corrigió la altura de boca de las poses inclinadas y comprobó la pose de risa; quedan avisos automáticos en `revision/revisar_bocas.txt` para esas poses.
 
 ## Nota operativa
 
