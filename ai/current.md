@@ -1,6 +1,6 @@
 # Estado actual
 
-Fecha: 2026-10-08
+Fecha: 2026-10-12
 
 Este archivo es **estado, no diario**: que es hoy el proyecto, que queda pendiente y como se
 trabaja. El detalle de cada sesion vive en `ai/history/`, una nota por sesion y por fecha.
@@ -425,6 +425,10 @@ y `/resumen` tras la extraccion de `DashboardSidebar`.
   y controles de grafico. Integrar `InfoButton` en cabeceras de graficos como la piramide cuando
   se definan los textos metodologicos finales.
 - Valorar si se compactan los CSV de poblacion para reducir el bundle de `/poblacion`.
+
+## Promoción
+
+Se creó `promoción/README.md` con la ruta y el comando para generar a Clara, una chica pelirroja con chaqueta amarilla. Su ficha está en el proyecto `D:\noel\folders\projects\animaciones`, pero falta generar `poses/explicando.png` y revisar boca y parpadeo.
 
 ## Nota operativa
 
